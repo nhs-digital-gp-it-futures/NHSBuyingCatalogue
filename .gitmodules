@@ -1,0 +1,3 @@
+[submodule "supplier"]
+	path = supplier
+	url = http://github.com/AlanParker12/beta-docker
