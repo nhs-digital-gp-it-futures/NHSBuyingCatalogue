@@ -1,3 +1,6 @@
 [submodule "supplier"]
 	path = supplier
 	url = http://github.com/AlanParker12/beta-docker
+[submodule "api"]
+	path = api
+	url = git@github.com:AlanParker12/BuyWOLF.git
