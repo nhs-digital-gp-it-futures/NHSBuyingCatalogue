@@ -11,6 +11,7 @@ services:
     ports:
       - "8000:8000"
     environment:
+      - NODE_ENV
       - API_BASE_URL
       - OIDC_ISSUER_URL
       - OIDC_CLIENT_ID
