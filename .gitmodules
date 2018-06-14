@@ -1,6 +1,6 @@
 [submodule "supplier"]
 	path = supplier
-	url = git@github.com:NHSDBC/beta-frontend-prototype.git
+	url = git@github.com:NHSDBC/beta-prototype-frontend.git
 	branch = master
 [submodule "api"]
 	path = api
