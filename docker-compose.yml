@@ -28,7 +28,7 @@ services:
     volumes:
       - api_data:/app/Data
     ports:
-      - "8001:8000"
+      - "8001:8001"
 
   nginx:
     build: ./nginx
