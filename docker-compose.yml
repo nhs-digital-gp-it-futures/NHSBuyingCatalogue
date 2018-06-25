@@ -12,6 +12,7 @@ services:
       - "8000:8000"
     environment:
       - NODE_ENV
+      - BASE_URL
       - API_BASE_URL
       - API_AUTHORISATION_METHOD
       - OIDC_ISSUER_URL
