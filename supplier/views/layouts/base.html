@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- framework and vendor styles and scripts -->
+    <link rel="stylesheet"
+          href="/css/vendor/dialog-polyfill.css">
+    <script type="text/javascript"
+            src="/js/vendor/dialog-polyfill.js"></script>
+
+    <link rel="stylesheet"
+          href="/css/vendor/glide.core.min.css">
+    <link rel="stylesheet"
+          href="/css/vendor/glide.theme.min.css">
+    <script type="text/javascript"
+            src="/js/vendor/glide.min.js"></script>
+
+    <!-- application foundation styles and scripts -->
+    <link rel="stylesheet"
+          href="/css/app.css">
+    <script type="text/javascript"
+            src="/js/app.js"></script>
+
+    <title>{{#title}}{{ . }}{{else}}Hello, world!{{/title}}</title>
+</head>
+<body>
+    <div class="notification-banner">
+      <p><strong>Beta</strong> This new product is under development.
+      <a href="{{{feedbackLink}}}">Your feedback</a> will help us improve it.</p>
+    </div>
+    <header>
+        <a class="logo" href="/">
+            <picture>
+                <source srcset="/img/nhs-digital.svg" %}">
+                <img src="/img/nhs-digital.png" %}">
+            </picture>
+        </a>
+        <h1>Buying<br>Catalogue</h1>
+        <nav class="controls">
+            <ul>
+                <li class="search">
+                    <a href="#">&#x1f50e;</a>
+                {{#if user.is_authenticated }}
+                <li class="user">
+                    <a href="#">
+                        Hi, {{#if user.first_name}}{{user.first_name}}
+                            {{else}}
+                               {{#if user.email}}{{user.email}}
+                               {{else}}you?
+                               {{/if}}
+                            {{/if}} &#x2304;
+                    </a>
+                <li class="logout">
+                    <a href="/logout">Log out</a>
+                {{else}}
+                <li class="login">
+                    <a href="/oidc/authenticate">Log in</a>
+                {{/if}}
+            </ul>
+        </nav>
+        <nav class="main">
+            <ul>
+                <li>
+                    <a href="#">About</a>
+                <li>
+                    <a href="#">Standards &amp; Compliance</a>
+                <li>
+                    <a class="button">Buy</a>
+            </ul>
+        </nav>
+    </header>
+    <main id="content">
+      {{#if breadcrumbs}}
+      <nav class="breadcrumbs">
+        <ul>
+          {{#breadcrumbs}}
+          <li>{{#if url}}<a href="{{url}}">{{label}}</a>{{else}}{{label}}{{/if}}</li>
+          {{/breadcrumbs}}
+        </ul>
+      </nav>
+      {{/if}}
+      {{{body}}}
+    </main>
+    <footer>
+    </footer>
+</body>
+</html>

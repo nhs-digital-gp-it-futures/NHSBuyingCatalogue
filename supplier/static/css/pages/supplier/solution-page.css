@@ -1,0 +1,492 @@
+#solution-page fieldset {
+  border: 0;
+  margin: 0 0 1em;
+  padding: 0;
+}
+
+#solution-page form > fieldset {
+  margin-bottom: 2em;
+}
+
+#solution-page form > fieldset > legend,
+#solution-page form > fieldset > h3 {
+  color: var(--color-fg);
+  font-size: var(--font-size-subsubtitle);
+}
+
+#solution-page form > fieldset > h3 {
+  margin-top: 0;
+}
+
+#solution-page label {
+  font-size: var(--font-size-button-label);
+}
+
+#solution-page input[type=text],
+#solution-page textarea,
+#solution-page select {
+  display: block;
+  font-size: var(--font-size-input);
+  font-weight: var(--font-weight-input);
+  margin-bottom: 0.25em;
+  padding: 0.5em 1em;
+  width: 80%;  
+}
+
+#solution-page input[type=text],
+#solution-page textarea {
+  border: 1px solid var(--color-input-border);
+  border-radius: 2px;
+}
+
+#solution-page fieldset .help {
+  margin-bottom: 1em;
+}
+
+#solution-page form .has-errors input[type=text],
+#solution-page form .has-errors textarea {
+  border-color: var(--color-input-val-error);
+  border-width: 2px;
+}
+
+#solution-page form .errorlist {
+  color: var(--color-input-val-error);
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+#solution-page a.add {
+  display: block;
+  font-size: var(--font-size-input);
+  font-weight: var(--font-weight-input);
+  cursor: pointer;
+  position: relative;
+  padding-left: 1.25em;
+  margin-top: 0.5em;
+}
+
+#solution-page a.add::before {
+  background-color: blue;
+  content: '';
+  display: block;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  position: absolute;
+  top: 0.1em;
+  left: 0;
+}
+
+#solution-page a.add::after {
+  content: '+';
+  color: white;
+  display: block;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+  left: 0.21em;
+  top: -0.1em;
+}
+
+#solution-page fieldset.collapsible > legend {
+  margin-bottom: 0.5em;
+  margin-left: 2em;
+  position: relative;
+  cursor: pointer;
+}
+
+#solution-page fieldset.collapsible > legend::before {
+  content: '▲';
+  display: inline-block;
+  position: absolute;
+  left: -2em;
+}
+
+#solution-page fieldset.collapsible.collapsed > legend::before {
+  content: '▼';
+}
+
+#solution-page fieldset.collapsible.collapsed > *:not(legend) {
+  display: none;
+}
+
+#solution-page fieldset.optional {
+  margin-left: 2em;
+}
+
+#solution-page fieldset.optional legend {
+  font-size: var(--font-size-input);
+  font-weight: var(--font-weight-input);
+}
+
+#solution-page fieldset.optional label {
+  padding-right: 1.5em;
+}
+
+#solution-page fieldset.case-study {
+  border: 1px solid var(--color-fg);
+  border-radius: 2px;
+  padding: 0.75em;
+  width: 80%;
+}
+
+#solution-page fieldset.capabilities table {
+  border-collapse: collapse;
+  font-size: var(--font-size-button-label);
+  width: 80%;
+}
+
+#solution-page fieldset.capabilities table tbody tr {
+  height: 2em;
+}
+
+#solution-page fieldset.capabilities table tbody tr:not(:first-child) {
+  border-top: 2px solid var(--color-nhs-pale-grey);
+}
+
+#solution-page fieldset.capabilities table .capability,
+#solution-page fieldset.capabilities table .video {
+  text-align: left;
+  width: 40%;
+}
+
+#solution-page fieldset.capabilities table td.input {
+  text-align: center;
+}
+
+#solution-page .specs .value {
+  font-size: var(--font-size-input);
+  font-weight: var(--font-weight-input);
+}
+
+#solution-page .specs .remove {
+  text-decoration: none;
+}
+
+#solution-page fieldset.spec-template input.other {
+  display: none;
+}
+
+#solution-page fieldset.spec-template input.other.active {
+  display: inherit;
+}
+
+#solution-page fieldset.contact,
+#solution-page fieldset.about {
+  border: solid 1px var(--color-fg);
+  border-radius: 3px;
+  padding: 1em 2em;
+}
+
+#solution-page .message {
+  background-color: var(--color-message-bg);
+  border-radius: 10px;
+  color: var(--color-message-fg);
+  font-size: var(--font-size-message);
+  margin: 0 0 1em 0;
+  padding: 1.5em 1em;
+}
+
+#solution-page .message .text {
+  margin: 0 0 1em 0;
+}
+
+#solution-page .message.assessment-team {
+  background-color: var(--color-message-nhsd-bg);
+  color: var(--color-message-nhsd-fg);
+}
+
+#solution-page .message .metadata {
+  font-size: var(--font-size-message-metadata);
+  font-weight: var(--font-weight-message-metadata);
+  margin: 0;
+  text-align: right;
+}
+
+#solution-page .message .metadata .originator {
+  display: block;
+}
+
+#solution-page .message.assessment-team .metadata {
+  text-align: left;
+}
+
+#solution-page .message.assessment-team .metadata .originator::before {
+  content: 'Submitted by ';
+}
+
+#solution-page .controls {
+  display: flex;
+  justify-content: space-between;
+}
+
+#solution-page .company-logo {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 0.5em;
+}
+
+#solution-page .company-logo #logo-realfile {
+  display: none;
+}
+
+#solution-page .company-logo #logo-preview {
+  position: relative;
+  visibility: hidden;
+}
+
+#solution-page .company-logo #logo-preview.loaded {
+  visibility: visible;
+}
+
+#solution-page .company-logo #logo-preview img {
+  max-height: 4em;
+  width: inherit;
+}
+
+#solution-page .company-logo #logo-preview a {
+  background-color: var(--color-fg);
+  color: var(--color-bg);
+  display: block;
+  height: 1em;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 1em;
+}
+
+#solution-page .company-logo #logo-fakefile {
+  border: 1px solid var(--color-input-border);
+  border-radius: 3px;
+  display: inline-block;
+  flex-shrink: 0;
+  font: var(--font-face-input);
+  font-weight: var(--font-weight-input);
+  padding: 0.3em 1em;
+  width: 50%;
+}
+
+#solution-page-preview .preview-header {
+  background-color: #F9A181;
+  color: white;
+  font-size: var(--font-size-page-title);
+  padding: 0.5em 0;
+  text-align: center;
+}
+
+#solution-page-preview .preview-header.published {
+  background-color: rgba(120, 190, 32, 0.45);
+}
+
+#solution-page-preview .toc {
+  float: right;
+  margin-top: 3em;
+  width: 25%;
+}
+
+#solution-page-preview .toc h3 {
+  border-bottom: 2px solid var(--color-fg);
+  color: var(--color-fg);
+  font-weight: 300;
+  margin: 0 0 0.5em 0;
+  padding-bottom: 0.1em;
+}
+
+#solution-page-preview .toc ul {
+  padding: 0;
+}
+
+#solution-page-preview .toc li {
+  display: block;
+  font-size: var(--font-size-navigation);
+  margin: 0 0 0.5em 0;
+  padding: 0;
+}
+
+#solution-page-preview #capabilities-and-standards {
+  clear: both;
+}
+
+#solution-page-preview details.explanation {
+  margin: 1em 0;
+  padding-left: 1.25em;
+}
+
+#solution-page-preview details.explanation summary {
+  color: var(--color-nhs-blue);
+  font-size: smaller;
+}
+
+#solution-page-preview details.explanation .help {
+  background-color: var(--color-bg);
+  border-left: 5px solid var(--color-nhs-mid-grey);
+  color: var(--color-fg);
+  padding-left: 1em;
+  margin-bottom: 1em;
+  margin-top: 1em;
+  width: 60%;
+}
+
+#solution-page-preview details.explanation .help p {
+  padding-bottom: 0.5em;
+  padding-top: 0.5em;
+}
+
+#solution-page-preview .product-data {
+  border: 0;
+  border-collapse: collapse;
+  font-size: var(--font-size-button-label);
+  width: 70%;
+}
+
+#solution-page-preview .product-data ul {
+  padding-left: 1.25em;
+}
+
+#solution-page-preview .product-data h3 {
+  background-color: var(--color-nhs-pale-grey);
+  color: var(--color-fg);
+  font-size: var(--font-size-navigation);
+  margin: 0 0 0.25em 0;
+  padding: 0.5em 1em;
+}
+
+#solution-page-preview .product-data th {
+  text-align: left;
+}
+
+#solution-page-preview .product-data td {
+  padding: 0.5em 0 0.5em 1.25em;
+  vertical-align: top;
+}
+
+#solution-page-preview .product-data .benefits {
+  margin: 0 0 1em 0;
+  font-size: var(--font-size-navigation);
+  font-weight: 600;
+}
+
+#solution-page-preview .product-data .interop {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+#solution-page-preview .product-data .interop li {
+  padding: 0;
+}
+
+#solution-page-preview .product-data .interop li::before {
+  content: '\2713';
+  display: inline-block;
+  padding-right: 0.25em;
+}
+
+#solution-page-preview .controls .primary {
+  float: right;
+}
+
+#solution-page-preview .capabilities .capability {
+  display: flex;
+}
+
+#solution-page-preview .capabilities .capability .details {
+  flex: 1;
+  padding: 1em;
+}
+
+#solution-page-preview .capabilities .capability .details .name {
+  margin: 0 0 1em 0;
+}
+
+#solution-page-preview .capabilities .capability .details .description {
+  font-size: var(--font-size-button-label);
+  font-weight: var(--font-weight-input);
+}
+
+#solution-page-preview .capabilities .capability .video {
+  flex: 1;
+}
+
+#solution-page-preview .carousel {
+  margin-left: 1.25em;
+}
+
+#solution-page-preview .glide {
+  border: 1px solid var(--color-nhs-blue);
+}
+
+#solution-page-preview .glide__arrow--left {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+  left: -2em;
+}
+
+#solution-page-preview .glide__arrow--right {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+  right: -2em;
+}
+
+#solution-page-preview .glide__bullets {
+  left: unset;
+  right: 25%;
+}
+
+#solution-page-preview .list-view {
+  margin-left: 1em;
+}
+
+#solution-page-preview .list-view .capabilities ul,
+#solution-page-preview .list-view .standards ul,
+#solution-page-preview section.optional ul {
+  font-size: var(--font-size-help);
+  font-weight: var(--font-weight-help);
+  list-style-type: none;
+  margin-top: 0;
+}
+
+#solution-page-preview .list-view .capabilities > ul > li,
+#solution-page-preview .list-view .standards > ul > li,
+#solution-page-preview section.optional ul li {
+  border-bottom: 2px solid var(--color-nhs-pale-grey);
+  padding: 0.75em 0;
+}
+
+#solution-page-preview #requirements ul li {
+  font-size: var(--font-size-navigation);
+  font-weight: 300;
+}
+
+#solution-page-preview section.optional ul {
+  padding: 0;
+}
+
+#solution-page-preview section.optional li .label {
+  display: inline-block;
+  width: 50%;
+}
+
+#solution-page-preview > section > h3 {
+  border-bottom: 2px solid var(--color-nhs-pale-grey);
+  color: var(--color-fg);
+  font-weight: 300;
+  margin-bottom: 0;
+  margin-top: 2em;
+  padding-bottom: 0.25em;
+}
+
+#solution-page-preview p.description,
+#solution-page-preview ul.benefits li,
+#solution-page-preview p.about {
+  font-weight: 300;
+}
+
+#solution-page-preview #about img {
+  float: right;
+  max-height: 4em;
+  width: inherit;
+}

@@ -1,0 +1,40 @@
+<h1>Invite Users</h1>
+{{#error}}
+<p class="error">{{.}}</p>
+{{/error}}
+<form method="POST">
+  <fieldset>
+    <legend>Select or Create Supplier Account</legend>
+    <select name="supplierId">
+      <option value="">-- Select Existing Supplier --</option>
+      {{#suppliers}}
+      <option value="{{id}}">{{name}}</option>
+      {{/suppliers}}
+    </select>
+    <label>
+      Create new supplier named:
+      <input type="text" name="supplier" value="{{supplier}}">
+    </label>
+    <label>
+      With ODS code:
+      <input type="text" name="odsCode" value="{{odsCode}}">
+    </label>
+  </fieldset>
+  <fieldset>
+    <legend>New User Details</legend>
+    <label>
+      First name:
+      <input type="text" name="firstName" required value="{{firstName}}">
+    </label>
+    <label>
+      Last name:
+      <input type="text" name="lastName" required value="{{lastName}}">
+    </label>
+    <label>
+      Email address:
+      <input type="email" name="emailAddress" required value="{{emailAddress}}">
+    </label>
+  <input type="submit">
+  <input type="hidden" name="_csrf" value="{{csrfToken}}">
+</form>
+<a href="{{cancelUrl}}">Cancel</a>

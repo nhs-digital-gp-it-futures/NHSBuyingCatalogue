@@ -1,0 +1,43 @@
+<div id="compliance" class="supplier">
+  {{> onboarding-progress-header
+        title="Standards Compliance"
+        subtitle="Stage 3—Standards Compliance"}}
+
+  {{> solution-info solution}}
+
+  {{#if errors.general}}
+  <div class="errors">
+    {{#errors.general}}
+    <p>{{ . }}</p>
+    {{/errors.general}}
+  </div>
+  {{/if}}
+
+  <p class="help">
+    Your solution must achieve compliance with all of the Standards below in order to be purchasable on the catalogue. At the top of the page, you’ll see the context-based Standards that relate to the Capabilities your solution provides. Further down, you’ll see the overarching Standards with which all solutions must comply.
+  </p>
+
+  {{#if solution.capabilities}}
+  <section class="capabilities">
+    <header>
+      <h2>Capability Standards</h2>
+    </header>
+    {{#solution.capabilities}}
+    <details class="capability">
+      {{> compliance-capability-summary . in-details=true}}
+    </details>
+    {{/solution.capabilities}}
+  </section>
+  {{/if}}
+
+  {{#if solution.standards}}
+  <section class="overarching">
+    <header>
+      <h2>Overarching Standards</h2>
+    </header>
+    {{#solution.standards}}
+    {{> compliance-standard .}}
+    {{/solution.standards}}
+  </section>
+  {{/if}}
+</div>

@@ -1,0 +1,29 @@
+<h1>Assessment Dashboard</h1>
+<a href="{{inviteUrl}}">Invite Users</a>
+<table>
+  <thead>
+    <tr>
+      <th>Organisation</th>
+      <th>Solution Name</th>
+      <th>Version</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each solutions as |items group|}}
+    <tr>
+      <th colspan="4">{{group}}</th>
+    </tr>
+    {{#items}}
+    <tr>
+      <td>{{orgName}}</td>
+      <td>{{name}}</td>
+      <td>{{version}}</td>
+      <td>
+        <a href="{{assessUrl}}">Assess</a>
+      </td>
+    </tr>
+    {{/items}}
+    {{/each}}
+  </tbody>
+</table>

@@ -1,0 +1,34 @@
+.button {
+  text-decoration: none;
+}
+
+button,
+.button {
+  color: var(--color-button-fg);
+  background-color: var(--color-button-bg);
+  border-radius: 2px;
+  padding: 0.4em 1em;
+}
+
+button.primary,
+.button.primary {
+  color: var(--color-button-primary-fg);
+  background-color: var(--color-button-primary-bg);
+}
+
+button:active, button:hover,
+.button:active, .button:hover {
+  box-shadow: 2px 2px 3px 0.5px var(--color-button-active-shadow);
+}
+
+button:disabled,
+.button:disabled {
+  background-color: var(--color-button-disabled-bg);
+  color: var(--color-button-disabled-fg);
+}
+
+button.primary:disabled,
+.button.primary:disabled {
+  background-color: var(--color-button-primary-disabled-bg);
+  color: var(--color-button-primary-disabled-fg);
+}

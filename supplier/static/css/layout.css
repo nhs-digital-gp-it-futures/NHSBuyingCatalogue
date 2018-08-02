@@ -1,0 +1,84 @@
+body > .notification-banner {
+  font-size: var(--font-size-high-density);
+  font-weight: var(--font-weight-high-dentity);
+  margin: 0;
+}
+
+body > .notification-banner > p {
+  background-color: var(--color-notification-banner-bg);
+  color: var(--color-notification-banner-fg);
+  margin: 0;
+  padding: 0.1em 0;
+  text-align: center;
+}
+
+body > .notification-banner > p strong {
+  font-weight: bold;
+}
+
+body > header {
+  position: relative;
+  margin-top: 0.5em;
+}
+
+body > header .logo {
+  display: inline-block;
+  margin-left: 1em;
+  padding-top: 4px; /* bring logo top level with adacent heading glyphs */
+  width: 64px; /* essentially arbitrary, looks good against the adjacent heading */
+}
+
+body > header .logo + h1 {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  padding-left: 5px;
+  vertical-align: top;
+  border-left: solid 2px var(--color-heading);
+  font-size: var(--font-size-subsubtitle);
+}
+
+body > header nav * {
+  font-size: var(--font-size-navigation);
+  font-weight: var(--font-weight-navigation);
+}
+
+body > header nav.controls {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  right: 1em;
+}
+
+body > header nav.main {
+  display: block;
+  background-color: var(--color-nhs-blue);
+  text-align: right;
+  height: 2em;
+  padding-top: 0.8em;
+  padding-right: 48px;
+  margin-top: 0.5em;
+}
+
+body > header nav.main li a {
+  color: var(--color-nhs-white);
+}
+
+body > header nav.main li a.button {
+  background-color: var(--color-nhs-white);
+  color: var(--color-nhs-dark-blue);
+  font-weight: bold;
+  border: 1px solid var(--color-nhs-white);
+  padding: 0.25em 0.75em;
+  border-radius: 4px;
+}
+
+body > footer {
+  background-color: var(--color-nhs-blue);
+  margin-top: 1em;
+  min-height: 2em;
+}
+
+#content {
+  margin: 0 4%;
+}

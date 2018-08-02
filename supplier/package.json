@@ -1,0 +1,32 @@
+{
+  "name": "beta-prototype",
+  "version": "0.1.0",
+  "description": "GP IT Futures Buying Catalogue Beta Prototype",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Paul Mitchell <paul.mitchell@bjss.com>",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "catalogue-api": "./lib/catalogue-api",
+    "catalogue-authn-authz": "./lib/catalogue-authn-authz",
+    "catalogue-utils": "./lib/catalogue-utils",
+    "csurf": "^1.9.0",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.3",
+    "express-fileupload": "^0.4.0",
+    "express-handlebars": "^3.0.0",
+    "express-session": "^1.15.6",
+    "express-validator": "^5.2.0",
+    "lodash": "^4.17.10",
+    "node-uuid-generator": "^1.0.0",
+    "serve-static": "^1.13.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.5",
+    "session-file-store": "^1.2.0"
+  }
+}

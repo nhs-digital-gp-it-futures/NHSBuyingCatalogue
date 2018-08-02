@@ -1,0 +1,35 @@
+#page-landing {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+#page-landing section.welcome {
+  width: 100%;
+}
+
+#page-landing section.welcome h1 {
+  color: var(--color-text-fg);
+  margin-bottom: 0;
+}
+
+#page-landing section.welcome hr {
+  color: var(--color-nhs-warm-yellow);
+  background-color: var(--color-nhs-warm-yellow);
+  height: 3px;
+  width: 25%;
+  margin-left: 0;
+}
+
+#page-landing section.welcome p {
+  color: var(--color-nhs-mid-grey);
+  font-size: smaller;
+}
+
+#page-landing section.search {
+  width: 50%;
+}
+
+#page-landing section.buying {
+  width: 50%;
+}
