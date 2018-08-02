@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  nhsd.gpitf.buyingcatalog:
+    image: nhsd.gpitf.buyingcatalog
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8000"

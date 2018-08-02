@@ -1,0 +1,91 @@
+
+https://koukia.ca/create-a-kubernetes-cluster-in-azure-container-service-28e281896
+
+az group create --name KubeResourceGroup01 --location westeurope
+
+az aks create --resource-group KubeResourceGroup01 --name KubeCluster01 --node-count 2 --generate-ssh-keys
+
+az aks install-cli
+
+-- Make sure you delete contents of C:\Users\<username>\.kube\config
+az aks get-credentials --resource-group KubeResourceGroup01 --name KubeCluster01
+
+kubectl get nodes (to confirm)
+
+--create kubernetes manifest file kubernetes-manifest.yml
+
+--Azure Container Registry login server name (use in manifest file):
+
+az acr list --resource-group NHSD --query "[].{acrLoginServer:loginServer}" --output table
+== nhsbuyingcatalog.azurecr.io
+
+--Create static ip
+
+az resource show --resource-group KubeResourceGroup01 --name KubeCluster01 --resource-type Microsoft.ContainerService/managedClusters --query properties.nodeResourceGroup -o tsv
+== MC_KubeResourceGroup01_KubeCluster01_westeurope
+
+az network public-ip create --resource-group MC_KubeResourceGroup01_KubeCluster01_westeurope --name BuyCatPublicIP --allocation-method static
+==
+{
+  "publicIp": {
+    "dnsSettings": null,
+    "etag": "W/\"dd1dc846-fdee-4130-b285-4189d949c495\"",
+    "id": "/subscriptions/5fd2a364-e6b1-4aeb-b087-c6adb8f49d0d/resourceGroups/MC_KubeResourceGroup01_KubeCluster01_westeurope/providers/Microsoft.Network/publicIPAddresses/BuyCatPublicIP",
+    "idleTimeoutInMinutes": 4,
+    "ipAddress": "xxx.xxx.xxx.xxx",
+    "ipConfiguration": null,
+    "ipTags": [],
+    "location": "westeurope",
+    "name": "BuyCatPublicIP",
+    "provisioningState": "Succeeded",
+    "publicIpAddressVersion": "IPv4",
+    "publicIpAllocationMethod": "Static",
+    "resourceGroup": "MC_KubeResourceGroup01_KubeCluster01_westeurope",
+    "resourceGuid": "e314ecb2-3170-4d4f-8587-bdb191184461",
+    "sku": {
+      "name": "Basic",
+      "tier": "Regional"
+    },
+    "tags": null,
+    "type": "Microsoft.Network/publicIPAddresses",
+    "zones": null
+  }
+}
+
+-- Add <loadBalancerIP: xxx.xxx.xxx.xxx> to loadbalancer in manifest
+
+--create secret for repository access to access ACR
+
+kubectl create secret docker-registry regcred --docker-server nhsbuyingcatalog.azurecr.io --docker-email projects4u.net@gmail.com --docker-username=NHSBuyingCatalog --docker-password E6GKeDKphJ3D1LHya2pTYolCOu4U+aBZ
+
+kubectl create -f kubernetes-manifest.yml
+
+
+----------Persistent volumes with Azure files-------------
+az resource show --resource-group KubeResourceGroup01 --name KubeCluster01 --resource-type Microsoft.ContainerService/managedClusters --query properties.nodeResourceGroup -o tsv
+==MC_KubeResourceGroup01_KubeCluster01_westeurope
+
+az storage account create --resource-group MC_KubeResourceGroup01_KubeCluster01_westeurope --name bckubestorageaccount01 --location westeurope --sku Standard_LRS
+
+kubectl apply -f azure-file-sc.yaml
+
+kubectl apply -f azure-file-pvc.yaml
+
+
+----------Repository-------------
+
+az acr create --resource-group NHSD --name NHSBuyingCatalog --sku Basic --admin-enabled true
+
+az acr repository list --name NHSBuyingCatalog --output table
+
+---------- KUBE Web Interface -------------
+
+az aks browse --resource-group KubeResourceGroup01 --name KubeCluster01
+
+---------- KUBE Command Prompt -------------
+
+kubectl exec -it buywolf-deployment-nginx-5d8c5b494f-gpdqq  -- sh
+
+---------- Azure shutdown machines -------------
+az vm stop --ids $(az vm list -g MC_KUBERESOURCEGROUP01_KUBECLUSTER01_WESTEUROPE --query "[].id" -o tsv)
+az vm stop --ids $(az vm list -g Development --query "[].id" -o tsv)

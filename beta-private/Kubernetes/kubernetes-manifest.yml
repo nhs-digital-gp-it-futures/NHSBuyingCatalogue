@@ -1,0 +1,150 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: buywolf-deployment-frontend
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: buywolf-app-frontend
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: buywolfsupplier
+        image: nhsbuyingcatalog.azurecr.io/gpitf/buywolf-supplier:latest
+        ports:
+        - containerPort: 8000
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+        - name: dev
+          value: "buywolf-supplier"		
+        - name: NODE_ENV
+          value: ""
+        - name: BASE_URL
+          value: "http://40.118.23.230"
+        - name: API_BASE_URL
+          value: "https://api:8001/api/"
+        - name: API_AUTHORISATION_METHOD
+          value: "access_token"
+        - name: OIDC_ISSUER_URL
+          value: "https://buying-catalogue-beta-prototype.eu.auth0.com"
+        - name: OIDC_CLIENT_ID
+          value: "K2sJ2DHvPbznAulrSEtcPNoknS3c98w2"
+        - name: OIDC_CLIENT_SECRET
+          value: "gSeXQiedzibPXtw_l8eB6s6EdjmnMcbMESnq2DyGjxG7wO-pX2ZNaX_nakffCNkB"
+        - name: SESSION_SECRET
+          value: 'bv"$)B7v5[new9urn;]'
+---		  
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: buywolf-deployment-api
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: buywolf-app-api
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: buywolfapi
+        image: nhsbuyingcatalog.azurecr.io/gpitf/buywolf-api:latest
+        volumeMounts:
+        - mountPath: "/app/data"
+          name: volume
+        ports:
+        - containerPort: 8001
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+        - name: dev
+          value: "buywolf-api"	
+      volumes:
+        - name: volume
+          persistentVolumeClaim:
+            claimName: azurefile
+---		  
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: buywolf-deployment-nginx
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: buywolf-app-nginx
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: buywolfnginx
+        image: nhsbuyingcatalog.azurecr.io/gpitf/buywolf-nginx:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+        - name: dev
+          value: "buywolf-nginx"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+spec:
+  ports:
+  - port: 8001
+  selector:
+    app: buywolf-app-api
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  ports:
+  - port: 8000
+  selector:
+    app: buywolf-app-frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: buywolf-lb-nginx
+spec:
+  loadBalancerIP: 40.118.23.230
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: buywolf-app-nginx
