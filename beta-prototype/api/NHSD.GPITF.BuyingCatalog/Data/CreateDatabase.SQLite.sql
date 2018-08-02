@@ -40,7 +40,7 @@ CREATE TABLE Contact
   OrganisationId TEXT NOT NULL,
   FirstName TEXT,
   LastName TEXT,
-  EmailAddress1 TEXT NOT NULL,
+  EmailAddress1 TEXT NOT NULL UNIQUE COLLATE NOCASE,
   PhoneNumber1 TEXT,
   FOREIGN KEY (OrganisationId) REFERENCES Organisation(Id) ON DELETE CASCADE,
   PRIMARY KEY (Id)

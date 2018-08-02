@@ -47,7 +47,7 @@ CREATE TABLE Contact
   OrganisationId NVARCHAR(36) NOT NULL,
   FirstName NVARCHAR(MAX),
   LastName NVARCHAR(MAX),
-  EmailAddress1 NVARCHAR(MAX) NOT NULL,
+  EmailAddress1 NVARCHAR(512) NOT NULL UNIQUE,
   PhoneNumber1 NVARCHAR(MAX),
   FOREIGN KEY (OrganisationId) REFERENCES Organisation(Id) ON DELETE CASCADE,
   PRIMARY KEY (Id)

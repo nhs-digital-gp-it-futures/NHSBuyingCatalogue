@@ -43,7 +43,7 @@ CREATE TABLE Contact
   OrganisationId CHAR(38) NOT NULL,
   FirstName TEXT,
   LastName TEXT,
-  EmailAddress1 TEXT NOT NULL,
+  EmailAddress1 CHAR(128) NOT NULL UNIQUE,
   PhoneNumber1 TEXT,
   FOREIGN KEY (OrganisationId) REFERENCES Organisation(Id) ON DELETE CASCADE,
   PRIMARY KEY (Id)
