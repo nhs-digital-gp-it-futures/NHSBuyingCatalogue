@@ -26,11 +26,16 @@ namespace NHSD.GPITF.BuyingCatalog
 {
   internal sealed class Startup
   {
-    public IConfiguration Configuration { get; }
+    private IConfiguration Configuration { get; }
+    private IHostingEnvironment CurrentEnvironment { get; set; }
 
-    public Startup(IConfiguration configuration)
+    public Startup(IConfiguration configuration, IHostingEnvironment env)
     {
       Configuration = configuration;
+
+      // Environment variable:
+      //    ASPNETCORE_ENVIRONMENT == Development
+      CurrentEnvironment = env;
     }
 
     // This method gets called by the runtime. Use this method to add services to the container.
@@ -64,66 +69,69 @@ namespace NHSD.GPITF.BuyingCatalog
         options.Filters.Add(new RequireHttpsAttribute());
       });
 
-      // Register the Swagger generator, defining one or more Swagger documents
-      services.AddSwaggerGen(options =>
+      if (CurrentEnvironment.IsDevelopment())
       {
-        options.SwaggerDoc("v1",
-          new Info
-          {
-            Title = "Buying Catalog API",
-            Version = "v1",
-            Description = "NHS Digital GP IT Futures Buying Catalog API"
-          });
-        options.SwaggerDoc("porcelain",
-          new Info
-          {
-            Title = "Buying Catalog API",
-            Version = "porcelain",
-            Description = "NHS Digital GP IT Futures Buying Catalog API"
-          });
-
-        options.DocInclusionPredicate((docName, apiDesc) =>
+        // Register the Swagger generator, defining one or more Swagger documents
+        services.AddSwaggerGen(options =>
         {
-          var controllerActionDescriptor = apiDesc.ActionDescriptor as ControllerActionDescriptor;
-          if (controllerActionDescriptor == null)
+          options.SwaggerDoc("v1",
+            new Info
+            {
+              Title = "Buying Catalog API",
+              Version = "v1",
+              Description = "NHS Digital GP IT Futures Buying Catalog API"
+            });
+          options.SwaggerDoc("porcelain",
+            new Info
+            {
+              Title = "Buying Catalog API",
+              Version = "porcelain",
+              Description = "NHS Digital GP IT Futures Buying Catalog API"
+            });
+
+          options.DocInclusionPredicate((docName, apiDesc) =>
           {
-            return false;
-          }
+            var controllerActionDescriptor = apiDesc.ActionDescriptor as ControllerActionDescriptor;
+            if (controllerActionDescriptor == null)
+            {
+              return false;
+            }
 
-          var versions = controllerActionDescriptor.MethodInfo.DeclaringType
-              .GetCustomAttributes(true)
-              .OfType<ApiVersionAttribute>()
-              .SelectMany(attr => attr.Versions);
-          var tags = controllerActionDescriptor.MethodInfo.DeclaringType
-              .GetCustomAttributes(true)
-              .OfType<ApiTagAttribute>();
+            var versions = controllerActionDescriptor.MethodInfo.DeclaringType
+                .GetCustomAttributes(true)
+                .OfType<ApiVersionAttribute>()
+                .SelectMany(attr => attr.Versions);
+            var tags = controllerActionDescriptor.MethodInfo.DeclaringType
+                .GetCustomAttributes(true)
+                .OfType<ApiTagAttribute>();
 
-          return versions.Any(
-            v => $"v{v.ToString()}" == docName) ||
-            tags.Any(tag => tag.Tag == docName);
+            return versions.Any(
+              v => $"v{v.ToString()}" == docName) ||
+              tags.Any(tag => tag.Tag == docName);
+          });
+
+          // Set the comments path for the Swagger JSON and UI.
+          var xmlPath = Path.Combine(AppContext.BaseDirectory, "NHSD.GPITF.BuyingCatalog.xml");
+          options.IncludeXmlComments(xmlPath);
+          options.DescribeAllEnumsAsStrings();
+          options.OperationFilter<ExamplesOperationFilter>();
         });
 
-        // Set the comments path for the Swagger JSON and UI.
-        var xmlPath = Path.Combine(AppContext.BaseDirectory, "NHSD.GPITF.BuyingCatalog.xml");
-        options.IncludeXmlComments(xmlPath);
-        options.DescribeAllEnumsAsStrings();
-        options.OperationFilter<ExamplesOperationFilter>();
-      });
-
-      services
-        .AddAuthentication(BasicAuthenticationDefaults.AuthenticationScheme)
-        .AddBasicAuthentication(
-            options =>
-            {
-              options.Realm = "NHSD.GPITF.BuyingCatalog";
-              options.Events = new BasicAuthenticationEvents
+        services
+          .AddAuthentication(BasicAuthenticationDefaults.AuthenticationScheme)
+          .AddBasicAuthentication(
+              options =>
               {
-                OnValidatePrincipal = context =>
+                options.Realm = "NHSD.GPITF.BuyingCatalog";
+                options.Events = new BasicAuthenticationEvents
                 {
-                  return BasicAuthentication.Authenticate(context);
-                }
-              };
-            });
+                  OnValidatePrincipal = context =>
+                  {
+                    return BasicAuthentication.Authenticate(context);
+                  }
+                };
+              });
+      }
 
       services
         .AddAuthentication(options =>
@@ -146,9 +154,9 @@ namespace NHSD.GPITF.BuyingCatalog
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory logging)
+    public void Configure(IApplicationBuilder app, ILoggerFactory logging)
     {
-      if (env.IsDevelopment())
+      if (CurrentEnvironment.IsDevelopment())
       {
         app.UseDeveloperExceptionPage();
       }
@@ -161,15 +169,20 @@ namespace NHSD.GPITF.BuyingCatalog
 
       app.UseRewriter(options);
 
-      // Enable middleware to serve generated Swagger as a JSON endpoint.
-      app.UseSwagger();
-
-      // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
-      app.UseSwaggerUI(opts =>
+      if (CurrentEnvironment.IsDevelopment())
       {
-        opts.SwaggerEndpoint("/swagger/v1/swagger.json", "Buying Catalog API V1");
-        opts.SwaggerEndpoint("/swagger/porcelain/swagger.json", "Buying Catalog API V1 Porcelain");
-      });
+        // Enable middleware to serve generated Swagger as a JSON endpoint.
+        app.UseSwagger();
+
+        // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
+        app.UseSwaggerUI(opts =>
+        {
+          opts.SwaggerEndpoint("/swagger/v1/swagger.json", "Buying Catalog API V1");
+          opts.SwaggerEndpoint("/swagger/porcelain/swagger.json", "Buying Catalog API V1 Porcelain");
+
+          opts.DocExpansion(DocExpansion.None);
+        });
+      }
 
       app.UseStaticFiles();
       app.UseMvc();
