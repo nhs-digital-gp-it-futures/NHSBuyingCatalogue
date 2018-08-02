@@ -1,0 +1,16 @@
+load data local infile 'C:/Dev/BuyWOLF/NHSD.GPITF.BuyingCatalog/Data/Organisation.csv' into table Organisation fields terminated by ',' enclosed by '"' lines terminated by '\r\n';
+load data local infile 'C:/Dev/BuyWOLF/NHSD.GPITF.BuyingCatalog/Data/Contact.csv' into table Contact fields terminated by ',' enclosed by '"' lines terminated by '\r\n';
+load data local infile 'C:/Dev/BuyWOLF/NHSD.GPITF.BuyingCatalog/Data/Solution.csv' into table Solution fields terminated by ',' enclosed by '"' lines terminated by '\r\n';
+load data local infile 'C:/Dev/BuyWOLF/NHSD.GPITF.BuyingCatalog/Data/TechnicalContact.csv' into table TechnicalContact fields terminated by ',' enclosed by '"' lines terminated by '\r\n';
+load data local infile 'C:/Dev/BuyWOLF/NHSD.GPITF.BuyingCatalog/Data/Capability.csv' into table Capability fields terminated by ',' enclosed by '"' lines terminated by '\r\n';
+load data local infile 'C:/Dev/BuyWOLF/NHSD.GPITF.BuyingCatalog/Data/Framework.csv' into table Framework fields terminated by ',' enclosed by '"' lines terminated by '\r\n';
+load data local infile 'C:/Dev/BuyWOLF/NHSD.GPITF.BuyingCatalog/Data/Standard.csv' into table Standard fields terminated by ',' enclosed by '"' lines terminated by '\r\n';
+load data local infile 'C:/Dev/BuyWOLF/NHSD.GPITF.BuyingCatalog/Data/ClaimedCapability.csv' into table ClaimedCapability fields terminated by ',' enclosed by '"' lines terminated by '\r\n';
+load data local infile 'C:/Dev/BuyWOLF/NHSD.GPITF.BuyingCatalog/Data/ClaimedStandard.csv' into table ClaimedStandard fields terminated by ',' enclosed by '"' lines terminated by '\r\n';
+load data local infile 'C:/Dev/BuyWOLF/NHSD.GPITF.BuyingCatalog/Data/AssessmentMessage.csv' into table AssessmentMessage fields terminated by ',' enclosed by '"' lines terminated by '\r\n';
+load data local infile 'C:/Dev/BuyWOLF/NHSD.GPITF.BuyingCatalog/Data/CapabilityFramework.csv' into table CapabilityFramework fields terminated by ',' enclosed by '"' lines terminated by '\r\n';
+load data local infile 'C:/Dev/BuyWOLF/NHSD.GPITF.BuyingCatalog/Data/FrameworkSolution.csv' into table FrameworkSolution fields terminated by ',' enclosed by '"' lines terminated by '\r\n';
+load data local infile 'C:/Dev/BuyWOLF/NHSD.GPITF.BuyingCatalog/Data/FrameworkStandard.csv' into table FrameworkStandard fields terminated by ',' enclosed by '"' lines terminated by '\r\n';
+load data local infile 'C:/Dev/BuyWOLF/NHSD.GPITF.BuyingCatalog/Data/CapabilityStandard.csv' into table CapabilityStandard fields terminated by ',' enclosed by '"' lines terminated by '\r\n';
+load data local infile 'C:/Dev/BuyWOLF/NHSD.GPITF.BuyingCatalog/Data/ClaimedCapabilityStandard.csv' into table ClaimedCapabilityStandard fields terminated by ',' enclosed by '"' lines terminated by '\r\n';
+load data local infile 'C:/Dev/BuyWOLF/NHSD.GPITF.BuyingCatalog/Data/AssessmentMessageContact.csv' into table AssessmentMessageContact fields terminated by ',' enclosed by '"' lines terminated by '\r\n';

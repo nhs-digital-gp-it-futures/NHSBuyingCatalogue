@@ -1,0 +1,223 @@
+#assessment fieldset {
+  border: none;
+  margin: 0 0 1em 0;
+}
+
+#assessment form fieldset.capability {
+  min-height: 1em;
+  position: relative;
+}
+
+#assessment form fieldset.capability > legend {
+  background-color: var(--color-capability-bg);
+  border: 1px solid var(--color-capability-border);
+  border-radius: 2px;
+  color: var(--color-capability-fg);
+  padding-left: 0.4em;
+  padding-top: 0.4em;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+#assessment form fieldset.capability.submitted > legend,
+#assessment form fieldset.capability.approved > legend {
+  background-color: var(--color-nhs-dark-green);
+  color: var(--color-nhs-white);
+  border: 1px solid var(--color-nhs-dark-green);
+}
+
+#assessment form fieldset.capability.remediation > legend,
+#assessment form fieldset.capability.rejected > legend {
+  background-color: var(--color-nhs-dark-red);
+  color: var(--color-nhs-white);
+  border: 1px solid var(--color-nhs-dark-red);
+}
+
+#assessment form fieldset.capability > legend .status {
+  float: right;
+  padding-right: 1em;
+}
+
+#assessment form fieldset.capability > legend::before {
+  content: '\25BC'; /* ▼ BLACK DOWN-POINTING TRIANGLE */
+  display: inline-block;
+  padding-right: 0.5em;
+}
+
+#assessment form fieldset.capability > *:not(legend) {
+  display: none;
+}
+
+#assessment form fieldset.capability.expanded {
+  border: 1px solid var(--color-capability-border);
+  border-radius: 2px;
+  padding-top: 1.5em;
+}
+
+#assessment form fieldset.capability.submitted.expanded,
+#assessment form fieldset.capability.approved.expanded {
+  border-color: var(--color-nhs-dark-green);
+}
+
+#assessment form fieldset.capability.remediation.expanded,
+#assessment form fieldset.capability.rejected.expanded {
+  border-color: var(--color-nhs-dark-red);
+}
+
+#assessment form fieldset.capability.expanded > legend {
+  background-color: var(--color-capability-hover-bg);
+  bottom: inherit;
+  color: var(--color-capability-hover-fg);
+  height: 1.5em;
+}
+
+#assessment form fieldset.capability.submitted.expanded > legend,
+#assessment form fieldset.capability.approved.expanded > legend {
+  background-color: var(--color-nhs-dark-green);
+}
+
+#assessment form fieldset.capability.remediation.expanded > legend,
+#assessment form fieldset.capability.rejected.expanded > legend {
+  background-color: var(--color-nhs-dark-red);
+}
+
+#assessment form fieldset.capability.expanded > legend::before {
+  content: '\25B2'; /* ▲ BLACK UP-POINTING TRIANGLE */
+}
+
+#assessment form fieldset.capability.expanded > *:not(legend) {
+  display: inherit;
+}
+
+#assessment form fieldset.evidence {
+  background-color: var(--color-standout-bg);
+  color: var(--color-standout-fg);
+  margin-bottom: 0.5em;
+}
+
+#assessment form fieldset.evidence label {
+  display: block;
+}
+
+#assessment form fieldset.evidence input {
+  border: 1px solid var(--color-capability-border);
+  display: none;
+  height: 2.5em;
+  padding-left: 1em;
+  margin-top: 1em;
+  margin-left: 1em;
+  width: 90%;
+}
+
+#assessment form fieldset.capability.editing fieldset.evidence input {
+  display: inline-block;
+}
+
+#assessment form fieldset.capability.editing fieldset.evidence .evidenceLink {
+  display: none;
+}
+
+#assessment form fieldset.capability .controls {
+  padding: 0 3em;
+}
+
+#assessment form fieldset.capability .controls > * {
+  display: inline-block;
+}
+
+#assessment form fieldset.capability .controls > span {
+  float: right;
+  width: 80%;
+}
+
+#assessment form fieldset.capability:not(.editing) .controls.editing {
+  display: none;
+}
+
+#assessment form fieldset.capability.editing .controls:not(.editing) {
+  display: none;
+}
+
+#assessment form fieldset.capability .remove {
+  clear: both;
+  margin-top: 1.5em;
+}
+
+#assessment form fieldset.capability .remove .remove-capability {
+  font-size: var(--font-size-help);
+  float: right;
+}
+
+#assessment form .controls {
+  margin-top: 1em;
+}
+
+#assessment form .controls .primary {
+  float: right;
+}
+
+#assessment form .messaging {
+  margin-top: 4em;
+}
+
+#assessment form .messaging,
+#assessment .message-history {
+  padding-left: 2em;
+  padding-right: 2em;
+}
+
+#assessment form .messaging textarea {
+  border: solid 1.5px var(--color-capability-border);
+  padding: 0.25em;
+  width: 100%;
+}
+
+#assessment .messages {
+  list-style-type: none;
+  padding: 0;
+}
+
+#assessment .messages .message {
+  background-color: var(--color-message-bg);
+  border-radius: 10px;
+  color: var(--color-message-fg);
+  font-size: var(--font-size-message);
+  margin: 0 0 1em 0;
+  padding: 1.5em 1em;
+}
+
+#assessment .messages .message .text {
+  margin: 0 0 1em 0;
+}
+
+#assessment .messages .message.assessment-team {
+  background-color: var(--color-message-nhsd-bg);
+  color: var(--color-message-nhsd-fg);
+}
+
+#assessment .messages .message .metadata {
+  font-size: var(--font-size-message-metadata);
+  font-weight: var(--font-weight-message-metadata);
+  margin: 0;
+  text-align: right;
+}
+
+#assessment .messages .message .metadata .originator {
+  display: block;
+}
+
+#assessment .messages .message .metadata .originator::before {
+  content: 'Capability Assessment Submitted By ';
+}
+
+#assessment .messages .message.assessment-team .metadata {
+  text-align: left;
+}
+
+#assessment .messages .message.assessment-team .metadata .originator::before {
+  content: 'Submitted by ';
+}

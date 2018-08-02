@@ -1,0 +1,28 @@
+@import 'fonts.css';
+@import 'palette.css';
+@import 'layout.css';
+@import 'controls.css';
+
+html,
+body,
+header,
+img {
+  margin: 0;
+  width: 100%;
+}
+
+nav ul,
+nav ol {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav li {
+  display: inline-block;
+  margin-left: 2em;
+}
+
+nav li a {
+  text-decoration: none;
+}

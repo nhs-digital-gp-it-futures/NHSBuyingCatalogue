@@ -1,0 +1,168 @@
+{{#*inline "evidence-form"}}
+<fieldset class="standard-evidence{{#statusClass}} {{.}}{{/statusClass}}" id="std-{{id}}">
+  <legend>
+    <span class="name">{{name}}</span>
+    <span class="status">{{status}}</span>
+  </legend>
+  {{#if isWithAssessmentTeam}}
+  <p class="in-assessment"><span>Standard with Assessment Team</span></p>
+  {{/if}}
+  <h4>Standard Requirements</h4>
+  <section class="requirements">
+    <p>View &amp; download evidence requirements from this link.</p>
+    <p><a download href="/Dummy TraceabilityMatrix.xlsx">{{name}} Requirements Traceability Matrix (RTM)</a></p>
+  </section>
+  <h4>Provide Evidence against Requirements</h4>
+  {{#if editUrl}}
+  <section class="evidence{{^saved}} editing{{/saved}}">
+    <div class="editable">
+      <label>
+        Provide a link to the completed RTM, and any additional evidence. RTM should be an editable Excel file. 
+        <input type="text"
+               placeholder="Provide link to folder or file"
+               name="evidence[{{id}}]"
+               value="{{evidence.savedLink}}">
+      </label>
+      <textarea placeholder="Include a message with the link (optional). 300 character limit."
+                name="message[{{id}}]">{{evidence.savedMessage}}</textarea>
+    </div>
+    <div class="controls">
+      <a class="saved-link" href="{{evidence.savedLink}}" target="_blank">{{evidence.savedLink}}</a>
+      <p class="saved-message">{{evidence.savedMessage}}</p>
+      <a href="#" class="edit">edit</a>
+    </div>
+  </section>
+  {{/if}}
+  {{#if evidence.submissions}}
+  <ul class="submissions">
+    {{#evidence.submissions}}
+    <li class="submission {{originatorClass}}">
+      <p class="link"><a href="{{link}}" target="_blank">{{link}}</a></p>
+      <pre class="text">{{message}}</pre>
+      <p class="metadata">
+        <span class="originator">{{contact.firstName}} {{contact.lastName}}</span>
+        <span class="timestamp">{{displayTimestamp}}</span>
+      </p>
+    </li>
+    {{/evidence.submissions}}
+  </ul>
+  {{/if}}
+  {{#if editUrl}}
+  {{#if owners}}
+  <section class="owner">
+    <label>
+      <h4>Select Owner</h4>
+      <select name="owner[{{id}}]">
+        <option value="">-- Select Owner --</option>
+        {{#owners}}
+        <option value="{{id}}"{{#selected}} selected{{/selected}}>{{lastName}}, {{firstName}}</option>
+        {{/owners}}
+      </select>
+    </label>
+  </section>
+  {{/if}}
+  <section class="controls">
+    <input type="submit"
+           class="button primary"
+           name="save[{{id}}]"
+           value="Save">
+    {{#if submittable}}
+    <input type="submit"
+           class="button"
+           name="submit[{{id}}]"
+           value="Submit">
+    {{/if}}
+  </section>
+  {{/if}}
+</fieldset>
+{{/inline}}
+
+<div id="compliance" class="supplier edit">
+  {{> onboarding-progress-header
+        title=subtitle
+        subtitle="Stage 2—Standards Compliance"}}
+
+  {{> solution-info solution}}
+
+  {{#if errors.general}}
+  <div class="errors">
+    {{#errors.general}}
+    <p>{{ . }}</p>
+    {{/errors.general}}
+  </div>
+  {{/if}}
+
+  <p class="help">
+    For each Standard, view and download the requirements from the link provided to the Requirements Traceability Matrix (RTM). When you have completed the RTM, upload it to a platform of your choice and provide a link to it, from which it can be downloaded. Examples of these platforms include
+    <a href="https://www.google.com/drive/" target="_blank">Google Drive</a>,
+    <a href="https://dropbox.com" target="_blank">Dropbox</a>, and
+    <a href="https://onedrive.live.com" target="_blank">OneDrive</a>.
+  </p>
+
+  {{#capability}}
+  <section class="summary">
+    <header>
+      <h2>{{name}} Capability</h2>
+    </header>
+    <p class="description">{{description}}</p>
+    <a href="{{url}}" target="_blank">View full Capability description</a>
+  </section>
+  <section class="status">
+    {{> compliance-capability-summary . name="Status"}}
+  </section>
+  {{/capability}}
+
+  <form method="POST" class="standards">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    {{#standards.mandatory}}
+    {{> evidence-form . submittable=../submittable}}
+    {{/standards.mandatory}}
+    {{#standards.optional}}
+    {{> evidence-form . submittable=../submittable}}
+    {{/standards.optional}}
+
+    {{#if standards.interop}}
+    <h3>Interoperability</h3>
+      {{#standards.interop}}
+      {{> evidence-form . interopClass="interop" submittable=../submittable}}
+      {{/standards.interop}}
+    {{/if}}
+  </form>
+</div>
+
+<script>
+/* global $, $$ */
+document.addEventListener('DOMContentLoaded', () => {
+  $$('fieldset.standard-evidence > legend').forEach(el => {
+    el.addEventListener('click', toggleFieldsetCollapse)
+  })
+
+  function toggleFieldsetCollapse (ev) {
+    ev.target.closest('fieldset').classList.toggle('collapsed')
+  }
+
+  $$('fieldset.standard-evidence .evidence .controls .edit').forEach(el => {
+    el.addEventListener('click', ev => {
+      ev.preventDefault()
+      el.closest('.evidence').classList.add('editing')
+    })
+  })
+
+  // if the URL has a target, collapse fieldsets that aren't the target
+  function handleLocationHashChange () {
+    if (window.location.hash) {
+      const elToLeaveExpanded = $(window.location.hash)
+      $$('fieldset.standard-evidence').forEach(el => {
+        if (el !== elToLeaveExpanded) {
+          el.classList.add('collapsed')
+        } else {
+          el.classList.remove('collapsed')
+        }
+      })
+    }
+  }
+
+  window.addEventListener('hashchange', handleLocationHashChange, false)
+  handleLocationHashChange()
+})
+</script>

@@ -1,0 +1,50 @@
+{{#*inline "stage"}}
+<li class="stage{{#complete}} complete{{/complete}}{{#continueUrl}} active{{/continueUrl}}{{#stageClass}} {{.}}{{/stageClass}}">
+  <p class="name">{{name}}</p>
+  <p class="instructions">{{instructions}}</p>
+  <p class="status">
+    {{#getStartedUrl}}<a class="button" href="{{.}}">Get Started</a>{{/getStartedUrl}}
+    {{#continueUrl}}<a class="button" href="{{.}}">Continue</a>{{/continueUrl}}
+    {{#viewUrl}}<a class="view" href="{{.}}">View</a>{{/viewUrl}}
+    {{#complete}}<span class="complete">Complete</span>{{/complete}}
+  </p>
+</li>
+{{/inline}}
+
+<div id="onboarding-status" class="supplier">
+  {{> onboarding-progress-header
+        title="Onboarding A Solution" }}
+
+  {{#if solution}}
+  {{> solution-info solution}}
+  <p class="help">Continue on-boarding your solution to the catalogue by accessing the relevant stage below.</p>
+  {{else}}
+  <p class="help">There are 4 stages to on-boarding a solution to the catalogue. Start with Register Solution.</p>
+  {{/if}}
+
+  <ol class="stages">
+    {{> stage
+          stages.register 
+          name="Register Solution"
+          instructions="Provide basic details about your solution and organisation contacts. Review the full menu of capabilities against which you’ll be asked to provide evidence in stage 2, along with all associated standards against which you’ll be asked to demonstrate compliance in stage 3."
+    }}
+
+    {{> stage
+          stages.assessment
+          name="Capabilities Assessment"
+          instructions="Provide evidence that demonstrates how your Solution meets the Capabilities selected in Stage 1."
+    }}
+
+    {{> stage
+          stages.compliance
+          name="Standards Compliance"
+          instructions="Provide evidence that your solution meets the standards under each capability, as well as the over-arching and context-specific standards. Once you pass Stage 1, you can view all the standards you are responsible for & their requirements. You can provide evidence until you pass Stage 2."
+    }}
+
+    {{> stage
+          stages.solution_page
+          name="Solution Page"
+          instructions="Add additional information to your solution’s catalogue page to help buyers make an informed evaluation of your solution during procurement. Preview, submit for moderation, and publish your page once approved."
+    }}
+  </ol>
+</div>

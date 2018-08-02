@@ -1,0 +1,34 @@
+<h1>Assessing: {{solution.name}} {{solution.version}}</h1>
+<p>{{solution.description}}</p>
+<form method="POST">
+  <input type="hidden" name="_csrf" value="{{csrfToken}}">
+  <label>Overall status:
+    <select name="overall">
+      <option value="">No change</option>
+      <option value="approve">Approve, Allow Supplier to build Product Page</option>
+      <option value="reject">Reject, Send back to supplier</option>
+    </select>
+  </label>
+  <input type="submit" name="save" value="Save overall assessment">
+
+  {{#standards}}
+  <fieldset>
+    <legend>{{name}}</legend>
+    <p>{{description}}</p>
+    <select name="standard[{{standardId}}][status]">
+      {{#statuses}}
+      <option value="{{@index}}"{{#selected}} selected{{/selected}}>{{label}}</option>
+      {{/statuses}}
+    </select>
+    <textarea name="standard[{{standardId}}][message]"></textarea>
+    <input type="submit" name="save[{{standardId}}]" value="Save Assessment">
+    <ul>
+    {{#evidence.submissions}}
+    <li>
+      <p>{{#link}}<a href="{{.}}" target="_blank">{{.}}</a><br>{{/link}}{{message}}</p>
+    </li>
+    {{/evidence.submissions}}
+    </ul>
+  </fieldset>
+  {{/standards}}
+</form>

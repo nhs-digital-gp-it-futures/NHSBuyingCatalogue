@@ -1,0 +1,63 @@
+#onboarding-status ol.stages {
+  counter-reset: stage;
+  list-style-type: none;
+  padding-left: 2em;
+}
+
+#onboarding-status ol.stages li.stage {
+  color: var(--color-nhs-dark-grey);
+  counter-increment: stage;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: 1.5em;
+  position: relative;
+}
+
+#onboarding-status ol.stages li.stage.active {
+  color: var(--color-nhs-dark-blue);
+}
+
+#onboarding-status ol.stages li.stage.complete {
+  color: var(--color-nhs-black);
+}
+
+#onboarding-status ol.stages li.stage::before {
+  content: counter(stage);
+  font-size: var(--font-size-subtitle);
+  left: -1em;
+  position: absolute;
+}
+
+#onboarding-status ol.stages li.stage .name {
+  margin: 0 0 1em 0;
+  padding-top: 0.5em;
+  width: 100%;
+}
+
+#onboarding-status ol.stages li.stage .instructions {
+  font-size: var(--font-size-help);
+  margin: 0;
+  width: 70%;
+}
+
+#onboarding-status ol.stages li.stage .status {
+  margin: 0 0 0 2em;
+  text-align: center;
+  width: 20%;
+}
+
+#onboarding-status ol.stages li.stage .status a.view {
+  color: var(--color-link-fg);
+  text-decoration: none;
+}
+
+#onboarding-status ol.stages li.stage .status .complete {
+  color: var(--color-nhs-dark-green);
+}
+
+#onboarding-status ol.stages li.stage .status .complete::after {
+  content: '✔︎';
+  font-size: larger;
+  padding-left: 0.5em;
+}

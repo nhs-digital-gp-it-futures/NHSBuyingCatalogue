@@ -1,0 +1,200 @@
+{{#*inline "errors"}}
+{{#if errors}}
+<ul class="errorlist">
+  {{#errors}}
+  <li>{{.}}
+  {{/errors}}
+</ul>
+{{/if}}
+{{/inline}}
+
+{{#*inline "contact"}}
+<fieldset class="contact">
+  <legend>{{contactType}}{{#required}} (required){{/required}}</legend>
+  {{#help}}
+  <details>
+    <summary>Help - Who is this?</summary>
+    <p class="help">{{.}}</p>
+  </details>
+  {{/help}}
+  <label{{#if errors.firstName}} class="has-errors"{{/if}}>
+    First Name
+    <input type="text"
+           name="contacts[{{contactType}}][firstName]"
+           value="{{ firstName }}"
+           placeholder="Enter first name">
+  </label>
+  {{> errors errors=errors.firstName }}
+  <label{{#if errors.lastName}} class="has-errors"{{/if}}>
+    Last Name
+    <input type="text"
+           name="contacts[{{contactType}}][lastName]"
+           value="{{ lastName }}"
+           placeholder="Enter last name">
+  </label>
+  {{> errors errors=errors.lastName }}
+  <label{{#if errors.emailAddress}} class="has-errors"{{/if}}>
+    Email
+    <input type="text"
+           name="contacts[{{contactType}}][emailAddress]"
+           value="{{ emailAddress }}"
+           placeholder="Enter email">
+  </label>
+  {{> errors errors=errors.emailAddress }}
+  <label{{#if errors.phoneNumber}} class="has-errors"{{/if}}>
+    Phone Number
+    <input type="text"
+           name="contacts[{{contactType}}][phoneNumber]"
+           value="{{ phoneNumber }}"
+           placeholder="Enter phone number">
+  </label>
+  {{> errors errors=errors.phoneNumber }}
+</fieldset>
+{{/inline}}
+
+{{#*inline "secondaryContact"}}
+<fieldset class="contact secondary">
+  <label{{#if errors.contactType}} class="has-errors"{{/if}}>
+    Contact Type
+    <input type="text"
+           name="secondaryContacts[contactType]"
+           value="{{ contactType }}"
+           placeholder="Enter type of contact">
+  </label>
+  {{> errors errors=errors.contactType }}
+  <label{{#if errors.firstName}} class="has-errors"{{/if}}>
+    First Name
+    <input type="text"
+           name="secondaryContacts[firstName]"
+           value="{{ firstName }}"
+           placeholder="Enter first name">
+  </label>
+  {{> errors errors=errors.firstName }}
+  <label{{#if errors.lastName}} class="has-errors"{{/if}}>
+    Last Name
+    <input type="text"
+           name="secondaryContacts[lastName]"
+           value="{{ lastName }}"
+           placeholder="Enter last name">
+  </label>
+  {{> errors errors=errors.lastName }}
+  <label{{#if errors.emailAddress}} class="has-errors"{{/if}}>
+    Email
+    <input type="text"
+           name="secondaryContacts[emailAddress]"
+           value="{{ emailAddress }}"
+           placeholder="Enter email">
+  </label>
+  {{> errors errors=errors.emailAddress }}
+  <label{{#if errors.phoneNumber}} class="has-errors"{{/if}}>
+    Phone Number
+    <input type="text"
+           name="secondaryContacts[phoneNumber]"
+           value="{{ phoneNumber }}"
+           placeholder="Enter phone number">
+  </label>
+  {{> errors errors=errors.phoneNumber }}
+</fieldset>
+{{/inline}}
+
+<div id="add-edit-solution">
+  {{> onboarding-progress-header
+        title="Enter Solution Details"
+        subtitle="Stage 1—Register Solution (1 of 2)"}}
+  <div class="help">
+    <p>Enter basic details about your Solution and contact details from your organisation below. On the next page, you can choose Capabilities to complete Solution Registration. 
+
+    <p>The contacts entered on this page will be used to enable contact with NHS Digital during the on-boarding process. These contacts will not be shared publicly. In Stage 4—Solution Page, you’ll be able to enter public contact details. 
+
+    <p>All fields optional unless otherwise indicated. 
+  </div>
+
+    {{> errors errors=errors.general }}
+    <form action="" method="post" novalidate>
+        <fieldset>
+            <legend>
+              <small>Step 1 (of 2)</small>
+              Enter Name, Version &amp; Description
+            </legend>
+            <label{{#if errors.name}} class="has-errors"{{/if}}>
+                Solution Name (Required)
+                <input type="text" name="name" value="{{ name }}"
+                       placeholder="Enter solution name (max 60 characters)">
+            </label>
+            {{> errors errors=errors.name }}
+            <label{{#if errors.description}} class="has-errors"{{/if}}>
+                Description (Required)
+                <textarea name="description"
+                          rows="4"
+                          placeholder="Enter solution description (max 300 characters). This description will be displayed on your solution page and solution search result. However, descriptions will not affect search ranking.">{{ description }}</textarea>
+            </label>
+            {{> errors errors=errors.description }}
+            <label{{#if errors.version}} class="has-errors"{{/if}}>
+                Version
+                <details class="version-help">
+                  <summary>Help - What is this?</summary>
+                  <div class="help">
+                    <p>Solution version is used to distinguish between instances of a solution. On the Catalogue, Solution version is intended to be used to describe Solutions with significant feature developments. In other words, when the ‘major number’ has changed, in standard semantic versioning schemes.
+                    <p>Version might be used, for example, to describe a new version of a Solution with expanded functionality or additional Capabilities.
+                  </div>
+                </details>
+                <input type="text" name="version" value="{{ version }}"
+                       placeholder="Enter solution version">
+            </label>
+            {{> errors errors=errors.version }}
+        </fieldset>
+        <fieldset class="contacts">
+          <legend>
+            <small>Step 2 (of 2)</small>
+            Enter Contacts
+          </legend>
+          <h3>Primary Contacts</h3>
+          <p class="help">Provide the following contacts from your organisation to enable communication with NHS Digital during the on-boarding process. These contacts will not be shared publicly. The Lead Contact is required to complete registration.</p>
+          {{#each primaryContactTypes}}
+            {{> contact (lookup ../primaryContacts this)
+                        contactType=this
+                        required=@first
+                        help=(lookup ../primaryContactHelp this)
+                        errors=(lookup ../errors.contacts this)}}
+          {{/each}}
+          <h3>Secondary Contacts (optional)</h3>
+          <p class="help">Some organisations work with multiple people in similar roles, for example when working with cohort organisations. Please add any additional contacts, as relevant.</p>
+          <div id="secondary-contacts">
+          {{#secondaryContacts}}
+            {{> secondaryContact . errors=(lookup ../errors.secondaryContacts @index)}}
+          {{/secondaryContacts}}
+          </div>
+          <p><a href="#" class="add-contact">⊕ Add Contact</a></p>
+          <template id="contact-template">
+            {{>secondaryContact}}
+          </template>
+        </fieldset>
+        <fieldset class="controls">
+            <button name="action" value="save" type="submit">Save &amp; Exit</button>
+            <button class="primary" name="action" value="continue" type="submit">Continue</button>
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        </fieldset>
+    </form>
+</div>
+
+<script>
+/* global $, $$ */
+document.addEventListener('DOMContentLoaded', () => {
+  $$('form > fieldset > legend').forEach(el => {
+    el.addEventListener('click', toggleFieldsetCollapse)
+  })
+
+  function toggleFieldsetCollapse (ev) {
+    ev.target.closest('fieldset').classList.toggle('collapsed')
+  }
+
+  $('fieldset.contacts a.add-contact').addEventListener('click', ev => {
+    ev.preventDefault()
+    const newContact = $('#secondary-contacts').appendChild(
+      document.importNode($('#contact-template').content, true)
+    )
+
+    $('#secondary-contacts fieldset:last-of-type input[type=text]').focus()
+  })
+})
+</script>

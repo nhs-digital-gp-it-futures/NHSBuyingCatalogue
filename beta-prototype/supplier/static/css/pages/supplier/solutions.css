@@ -1,0 +1,46 @@
+#supplier-solutions table.solutions {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#supplier-solutions table.solutions td {
+  font-size: var(--font-size-high-density);
+  font-weight: var(--font-weight-high-density);
+  padding: 0.25em 0;
+  text-align: left;
+  vertical-align: middle;
+}
+
+#supplier-solutions table.solutions th {
+  font-size: var(--font-size-high-density);
+  font-weight: var(--font-weight-high-density-bold);
+  padding: 1em 0;
+  text-align: left;
+  vertical-align: middle;
+}
+
+#supplier-solutions table.solutions .solution-id {
+  text-align: center;
+  width: 20%;
+}
+
+#supplier-solutions table.solutions .name {
+  width: 30%;
+}
+
+#supplier-solutions table.solutions .version {
+  text-align: center;
+  width: 15%;
+}
+
+#supplier-solutions table.solutions .status {
+  width: 15%;
+}
+
+#supplier-solutions table.solutions thead {
+  border: 1px solid var(--color-nhs-blue);
+}
+
+#supplier-solutions table.solutions tbody tr:nth-child(even) {
+  background-color: var(--color-nhs-pale-grey);
+}

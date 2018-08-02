@@ -1,0 +1,58 @@
+<h1>Assessing: {{solution.solution.name}} {{solution.solution.version}}</h1>
+<p>{{solution.solution.description}}</p>
+<h2>Capabilities</h2>
+<form method="POST">
+  {{#solution.claimedCapability}}
+  <fieldset>
+    <legend>{{#with (lookup ../capabilities capabilityId)}}{{name}}{{/with}}</legend>
+    {{#with (lookup ../questions capabilityId)}}
+    <p>{{lede}}</p>
+    <ul>
+      {{#points}}
+      <li>{{.}}</li>
+      {{/points}}
+    </ul>
+    {{/with}}
+    <p>
+    {{#if evidence}}
+    <div class="evidence">
+      <a href="{{evidence}}" target="_blank">{{evidence}}</a>
+    </div>
+    {{else}}
+    <p>No evidence submitted</p>
+    {{/if}}
+    <label>Status:
+      <select name="status[{{id}}]">
+        {{#statuses}}
+        <option value="{{value}}"{{#selected}} selected{{/selected}}>{{label}}</option>
+        {{/statuses}}
+      </select>
+    </label>
+  </fieldset>
+  {{/solution.claimedCapability}}
+  <fieldset>
+    <legend>Messages</legend>
+    <label>
+      New Message
+      <textarea name="message" rows="5"></textarea>
+    </label>
+
+    {{#messages}}
+    <p class="message">
+      On {{displayTimestamp}}, {{contact.firstName}} {{contact.lastName}} said: {{message}}
+    </p>
+    {{/messages}}
+  </fieldset>
+  <label>Overall status:
+    <select name="overall">
+      <option value="">No change</option>
+      <option value="approve">Approve, Send to Standards Compliance</option>
+      <option value="reject">Reject, Send back to supplier</option>
+    </select>
+  </label>
+  <div class="controls">
+    <input type="submit" value="Save assessment">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+  </div>
+</form>
+<a href="{{assessBaseUrl}}">Cancel</a>

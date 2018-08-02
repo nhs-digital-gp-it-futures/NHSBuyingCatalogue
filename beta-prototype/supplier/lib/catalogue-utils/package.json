@@ -1,0 +1,11 @@
+{
+  "name": "catalogue-utils",
+  "version": "0.1.0",
+  "description": "Shared utility module",
+  "main": "index.js",
+  "private": true,
+  "dependencies": {
+    "catalogue-api": "../catalogue-api",
+    "lodash": "^4.17.10"
+  }
+}

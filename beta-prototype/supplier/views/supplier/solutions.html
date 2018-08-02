@@ -1,0 +1,50 @@
+<div id="supplier-solutions" class="supplier">
+  <h2>My Solutions</h2>
+  {{#if created }}
+  <p class="created">Solution created successfully</p>
+  {{/if}}
+  {{#errors.general}}
+  <p class="error">{{.}}</p>
+  {{/errors.general}}
+  {{#each groupedSolutions as |solutions group|}}
+  <section class="solution-group">
+    <header><h3>{{group}}</h3></header>
+    <table class="solutions">
+      <thead>
+        <tr>
+          <th class="solution-id">solution ID #</th>
+          <th class="name">Name</th>
+          <th class="version">Version</th>
+          <th class="status">Status</th>
+          <th class="notifications">Notifications</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#solutions}}
+        <tr>
+          <td class="solution-id">
+            {{#continueUrl}}<a href="{{.}}">{{/continueUrl}}
+            {{id}}
+            {{#continueUrl}}</a>{{/continueUrl}}
+          </td>
+          <td class="name">
+            {{#continueUrl}}<a href="{{.}}">{{/continueUrl}}
+            {{name}}
+            {{#continueUrl}}</a>{{/continueUrl}}
+          </td>
+          <td class="version">{{ version }}</td>
+          <td class="status">{{ computedStatus }}</td>
+          <td class="notifications">
+            {{#notificationUrl}}<a href="{{.}}">{{/notificationUrl}}
+            {{notification}}
+            {{#notificationUrl}}</a>{{/notificationUrl}}
+          </td>
+        </tr>
+        {{/solutions}}
+      </tbody>
+    </table>
+  </section>
+  {{else}}
+  <p>No solutions registered. <a href="{{addSolutionUrl}}">Start onboarding a solution</a>.</p>
+  {{/each}}
+</div>

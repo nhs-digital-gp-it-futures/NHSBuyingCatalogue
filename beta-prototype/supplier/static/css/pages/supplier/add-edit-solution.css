@@ -1,0 +1,378 @@
+#add-edit-solution {
+  margin: 0 auto;
+  width: 80%;
+}
+
+#add-edit-solution form > fieldset {
+  border: none;
+  margin: 3em 0 0 0;
+  padding: 0;
+}
+
+#add-edit-solution form > fieldset > legend {
+  border: solid 2px var(--color-heading);
+  border-radius: 2px;
+  color: var(--color-heading);
+  cursor: pointer;
+  font-size: var(--font-size-subsubtitle);
+  font-weight: 600;
+  padding: 0.3em 1em;
+  position: relative;
+  width: 97%;
+}
+
+#add-edit-solution form > fieldset > legend small {
+  font-size: smaller;
+  font-weight: normal;
+  padding-right: 1em;
+}
+
+#add-edit-solution form > fieldset > legend::after {
+  content: '▲';
+  position: absolute;
+  right: 0.5em;
+}
+
+#add-edit-solution form > fieldset.collapsed > *:not(legend) {
+  display: none;
+}
+
+#add-edit-solution form > fieldset.collapsed > legend::after {
+  content: '▼';
+}
+
+#add-edit-solution form label {
+  font-size: var(--font-size-body);
+  display: block;
+  margin-top: 0.5em;
+}
+
+#add-edit-solution form input[type=text],
+#add-edit-solution form textarea {
+  display: block;
+  width: 80%;
+  max-width: 60em;
+
+  font-size: var(--font-size-body);
+  padding: 0.5em 1em 0.5em 1em;
+  margin: 0.1em 0 0 0;
+  border: 1px solid var(--color-input-border);
+  border-radius: 2px;
+}
+
+#add-edit-solution form .has-errors input[type=text],
+#add-edit-solution form .has-errors textarea {
+  border-color: var(--color-input-val-error);
+  border-width: 2px;
+}
+
+#add-edit-solution form .errorlist {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  color: var(--color-input-val-error);
+}
+
+#add-edit-solution form ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+#add-edit-solution fieldset.contact {
+  background-color: var(--color-contact-form-bg);
+  border: none;
+  margin-top: -1em;
+  padding-left: 4em;
+}
+
+#add-edit-solution fieldset.contact legend {
+  color: var(--color-contact-form-fg);
+  font-size: larger;
+  font-weight: 600;
+  padding-top: 1.5em;
+}
+
+#add-edit-solution #secondary-contacts {
+  margin-top: 2em;
+}
+
+#add-edit-solution fieldset.contact.secondary {
+  margin-bottom: 2em;
+}
+
+#add-edit-solution fieldset details {
+  margin: 0.3em 0;
+}
+
+#add-edit-solution fieldset details summary {
+  color: var(--color-nhs-blue);
+  font-size: smaller;
+}
+
+#add-edit-solution fieldset details .help {
+  background-color: var(--color-bg);
+  border-left: 5px solid var(--color-nhs-mid-grey);
+  color: var(--color-fg);
+  padding: 1em;
+  width: 80%;
+}
+
+#add-edit-solution fieldset details .help p {
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+}
+
+#add-edit-solution fieldset details.version-help .help {
+  margin-bottom: 1em;
+  margin-top: 1em;
+  padding: 0 0 0 1em;
+}
+
+#add-edit-solution fieldset.contacts a.add-contact {
+  text-decoration: none;
+}
+
+#add-edit-solution ul.capabilities {
+  align-content: center;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  max-height: 50em;
+}
+
+#add-edit-solution ul.capabilities li.capability {
+  position: relative;
+  display: block;
+  flex: 30%;
+  border: 2px solid var(--color-capability-border);
+  border-radius: 12.5px;
+  box-shadow: 0 2.5px 1px 0 var(--color-capability-shadow);
+  background-color: var(--color-capability-bg);
+  color: var(--color-capability-fg);
+  width: 12em;
+  height: 6em;
+  overflow: hidden;
+  margin: 0 0.3em 1em 0.3em;
+  transform: none;
+  transition: opacity 0.25s, transform 0.25s;
+  opacity: 1;
+}
+
+#add-edit-solution ul.capabilities li.capability.selected {
+  background-color: var(--color-capability-fg);
+  color: var(--color-capability-bg);
+}
+
+#add-edit-solution ul.capabilities li.capability label {
+  font-size: var(--font-size-capability-label);
+  font-weight: normal;
+  padding: 0.5em 1em 0 1em;
+  text-align: center;
+}
+
+#add-edit-solution ul.capabilities li.capability input {
+  display: none;
+}
+
+#add-edit-solution ul.capabilities li.capability .description {
+  font-size: var(--font-size-capability-description);
+  font-weight: var(--font-weight-capability-description);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  visibility: hidden;
+  background-color: var(--color-capability-hover-bg);
+  color: var(--color-capability-hover-fg);
+  text-align: center;
+  padding: 0.5em 1em;
+  margin: 1.3em 0 0 0;
+}
+
+#add-edit-solution ul.capabilities li.capability:hover {
+  transform: scale(1.25);
+  transition: transform 0.25s ease-out;
+  z-index: 2;
+}
+
+#add-edit-solution ul.capabilities li.capability:hover .description {
+  visibility: visible;
+}
+
+#add-edit-solution ul.capabilities li.capability:hover::before {
+  background-color: #86B1DA;
+  color: var(--color-nhs-blue);
+  content: 'View capability';
+  display: block;
+  font-size: var(--font-size-capability-description);
+  font-weight: var(--font-weight-capability-description);
+  height: 1.3em;
+  text-align: center;
+}
+
+#add-edit-solution ul.capabilities li.capability:hover label {
+  visibility: hidden;
+}
+
+#add-edit-solution ul.capabilities.filtered li.capability {
+  opacity: 0.25;
+}
+
+#add-edit-solution ul.capabilities.filtered.core li.capability.core,
+#add-edit-solution ul.capabilities.filtered.citizen li.capability.citizen,
+#add-edit-solution ul.capabilities.filtered.practice li.capability.practice {
+  opacity: 1;
+}
+
+#add-edit-solution section.filter p {
+  font-size: smaller;
+  margin: 0.2em 0;
+}
+
+#add-edit-solution section.filter ul {
+  background-color: var(--color-nhs-pale-grey);
+  height: 2em;
+  list-style-type: none;
+  margin-top: 0;
+  padding: 0;
+}
+
+#add-edit-solution section.filter ul li {
+  display: inline-block;
+  padding-left: 1em;
+  padding-top: 0.25em;
+}
+
+#add-edit-solution section.filter ul li label {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#add-edit-solution .summary {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+#add-edit-solution .summary > header {
+  width: 100%;
+}
+
+#add-edit-solution .summary > .capabilities,
+#add-edit-solution .summary > .standards {
+  width: 48%;
+}
+
+#add-edit-solution .summary > .capabilities ul,
+#add-edit-solution .summary > .standards ul {
+  list-style-type: none;
+}
+
+#add-edit-solution .summary > .capabilities li,
+#add-edit-solution .summary > .standards li,
+#add-edit-solution .summary > .capabilities li .optional {
+  display: none;
+}
+
+#add-edit-solution .summary > .capabilities li.selected,
+#add-edit-solution .summary > .standards li.selected {
+  display: block;
+}
+
+#add-edit-solution .summary > .capabilities li .optional.selected {
+  display: inline;
+}
+
+#add-edit-solution .controls .primary {
+  float: right;
+}
+
+#capability-popup-content {
+  display: none;
+}
+
+#capability-popup {
+  border: none;
+  border-radius: 12.5px;
+  box-shadow: 0 2.5px 2px 0 rgba(0, 0, 0, 0.5);
+  font-size: smaller;
+  padding: 2em;
+  top: 5%;
+  transform: none;
+  width: 60%;
+}
+
+#capability-popup fieldset {
+  border: none;
+  padding: 0.5em 0;
+}
+
+#capability-popup h3 {
+  margin-top: 0;
+}
+
+#capability-popup .standards {
+  margin-left: 1em;
+}
+
+#capability-popup ul.interop {
+  columns: 3;
+  list-style-type: none;
+  padding: 0;
+}
+
+#capability-popup ul.interop li {
+  padding-bottom: 0.25em;
+}
+
+#capability-popup ul.interop li,
+#capability-popup p.interop {
+  font-size: var(--font-size-help);
+  font-weight: var(--font-weight-help);
+}
+
+#capability-popup .controls button {
+  float: right;
+}
+
+#capability-popup nav {
+  position: absolute;
+  top: -2em;
+  left: 0;
+  right: 0;
+}
+
+#capability-popup nav ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#capability-popup nav li {
+  color: var(--color-bg);
+  cursor: pointer;
+  display: block;
+  margin: 0;
+}
+
+#capability-popup nav li.previous::before {
+  content: '\2B05'; /* LEFTWARDS BLACK ARROW ⬅︎ */
+  display: inline-block;
+  margin-right: 0.25em;
+}
+
+#capability-popup nav li.next::after {
+  content: '\2B05'; /* LEFTWARDS BLACK ARROW ⬅︎ */
+  display: inline-block;
+  margin-left: 0.25em;
+  transform: rotate(180deg); /* because BLACK RIGHTWARDS ARROW ➡︎ looks different */
+}
+
+dialog::backdrop {
+  background: rgba(66, 85, 99, 0.8);
+}
+dialog + .backdrop {
+  background: rgba(66, 85, 99, 0.8);
+}

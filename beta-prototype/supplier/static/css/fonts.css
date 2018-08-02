@@ -1,0 +1,55 @@
+@import url('https://assets.nhs.uk/fonts/nhsuk-fonts-1.3.0.css');
+
+:root {
+  --font-size-body: 20px;
+  --font-size-page-title: calc(2.4 * var(--font-size-body));
+  --font-size-subtitle: calc(1.8 * var(--font-size-body));
+  --font-size-subsubtitle: calc(1.2 * var(--font-size-body));
+  --font-size-navigation: calc(0.9 * var(--font-size-body));
+  --font-weight-navigation: 300;
+  --font-size-button-label: calc(0.75 * var(--font-size-body));
+  --font-size-capability-label: var(--font-size-navigation);
+  --font-size-capability-description: calc(0.6 * var(--font-size-body));
+  --font-weight-capability-description: 300;
+  --font-size-help: var(--font-size-button-label);
+  --font-weight-help: 300;
+  --font-size-message: var(--font-size-help); 
+  --font-size-message-metadata: var(--font-size-capability-description);
+  --font-weight-message-metadata: 300;
+  --font-size-input: var(--font-size-navigation);
+  --font-weight-input: var(--font-weight-navigation);
+  --font-size-high-density: var(--font-size-button-label);
+  --font-weight-high-density: 300;
+  --font-weight-high-density-bold: 600;
+}
+
+* {
+  font-family: 'Frutiger W01', Arial;
+  font-weight: normal;
+}
+
+body {
+  font-size: var(--font-size-body);
+}
+
+h1 {
+  font-size: var(--font-size-page-title);
+}
+
+h2 {
+  font-size: var(--font-size-subtitle);
+}
+
+h3 {
+  font-size: var(--font-size-subsubtitle);
+}
+
+button,
+.button {
+  font-size: var(--font-size-button-label);
+}
+
+input[type=text], textarea {
+  font-size: var(--font-size-input);
+  font-weight: var(--font-weight-input);
+}

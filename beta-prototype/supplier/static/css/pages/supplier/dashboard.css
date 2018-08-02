@@ -1,0 +1,66 @@
+#supplier-dashboard .sections {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  list-style-type: none;
+  margin: 3em 0 0 0;
+  padding: 0;
+}
+
+#supplier-dashboard .sections > * {
+  position: relative;
+  flex: 45%;
+  width: 40%;
+  margin-right: 4%;
+  margin-bottom: 2em;
+  height: 10em;
+  border: 1px solid var(--color-nhs-black);
+  border-radius: 3px;
+}
+
+#supplier-dashboard .sections > * h3 {
+  text-align: center;
+  height: 100%;
+}
+
+#supplier-dashboard .sections > * h3 a {
+  display: block;
+  height: 100%;
+  text-decoration: none;
+  color: var(--color-heading);
+}
+
+#supplier-dashboard .sections > * h3 a:visited {
+  color: var(--color-heading);
+}
+
+#supplier-dashboard .sections > .add-solution {
+  border-bottom: 2em solid #c14e91;
+}
+
+#supplier-dashboard .sections > .my-solutions {
+  border-bottom: 2em solid #5d2f91;
+}
+
+#supplier-dashboard .sections > .transactions {
+  border-bottom: 2em solid #006747;
+}
+
+#supplier-dashboard .sections > .analytics {
+  border-bottom: 2em solid #f85b1c;
+}
+
+#supplier-dashboard .sections > .transactions:after,
+#supplier-dashboard .sections > .analytics:after {
+  content: 'Coming Soon';
+  position: absolute;
+  top: -0.25em;
+  bottom: -1.3em;
+  left: -0.25em;
+  right: -0.25em;
+  background-color: rgba(0, 48, 135, 0.25);
+  font-size: var(--font-size-subtitle);
+  color: var(--color-fg);
+  text-align: center;
+  padding-top: 20%;
+}

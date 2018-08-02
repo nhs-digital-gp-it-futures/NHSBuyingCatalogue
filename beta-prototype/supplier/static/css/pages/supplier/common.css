@@ -1,0 +1,48 @@
+.solution-info {
+  background-color: var(--color-standout-bg);
+  color: var(--color-standout-fg);
+  padding: 0.5em;
+}
+
+p.help, div.help p {
+  color: var(--color-help-fg);
+  font-size: var(--font-size-help);
+  font-weight: var(--font-weight-help);
+}
+
+header.onboarding-progress h1 small {
+  color: var(--color-heading-small);
+  display: block;
+  font-size: var(--font-size-navigation);
+  margin-bottom: -0.25em;
+}
+
+nav.breadcrumbs ul {
+  list-style-type: none;
+  margin: 0.5em 0 0.5em 0;
+  padding: 0;
+}
+
+nav.breadcrumbs ul li {
+  color: var(--color-breadcrumbs-fg);
+  display: inline-block;
+  font-size: var(--font-size-navigation);
+  font-weight: var(--font-weight-navigation);
+  margin: 0;
+  padding: 0;
+}
+
+nav.breadcrumbs ul li:not(:last-child)::after {
+  color: var(--color-breadcrumbs-fg);
+  content: ' >';
+  font-size: var(--font-size-navigation);
+  font-weight: var(--font-weight-navigation);
+  padding: 0 0.5em;
+}
+
+nav.breadcrumbs ul li a {
+  color: var(--color-breadcrumbs-fg);
+  font-size: var(--font-size-navigation);
+  font-weight: var(--font-weight-navigation);
+  text-decoration: underline;
+}

@@ -1,0 +1,529 @@
+const _ = require('lodash')
+const fetch = require('node-fetch')
+const https = require('https')
+
+// create a custom HTTPS agent to deal with self-signed certificate at the API
+const agent = new https.Agent({
+  rejectUnauthorized: false
+})
+
+const {
+  API_BASE_URL = 'https://localhost:8001/api/'
+} = process.env
+
+const defaultHeaders = {
+}
+
+function api_endpoint (endpoint) {
+  return API_BASE_URL + endpoint
+}
+
+function api (endpoint, options = {}) {
+  const opts = {
+    agent,
+    ...options,
+    headers: {
+      ...defaultHeaders,
+      ...options.headers
+    }
+  }
+
+  return fetch(
+    api_endpoint(endpoint),
+    opts
+  ).then(response => {
+    if (response.ok) {
+      return response.json()
+        .catch(() => undefined)
+    }
+
+    return response.text()
+      .then(err => {
+        const error = new Error(`API ${endpoint} returned error ${response.status}: ${err}`)
+        error.status = response.status
+        return Promise.reject(error)
+      })
+  })
+}
+
+function get_api (endpoint) {
+  return api(endpoint)
+}
+
+function put_api (endpoint, payload) {
+  return api(endpoint, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+}
+
+function post_api (endpoint, payload) {
+  return api(endpoint, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+}
+
+function delete_api (endpoint, payload) {
+  return api(endpoint, {
+    method: 'DELETE',
+    body: JSON.stringify(payload),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+}
+
+function decodeSolutionEx (solutionEx) {
+  // decode the product page JSON prior to returning to client
+  try {
+    solutionEx.solution.productPage = JSON.parse(solutionEx.solution.productPage)
+  } catch (err) {
+    solutionEx.solution.productPage = {}
+  }
+
+  return solutionEx
+}
+
+class API {
+  set_authorisation (auth_header_value) {
+    defaultHeaders.Authorization = auth_header_value
+  }
+
+  async get_contact_for_user (user) {
+    return get_api(`Contact/ByEmail/${user.email}`)
+  }
+
+  async get_org_by_id (orgId) {
+    return get_api(`Organisation/ById/${orgId}`)
+  }
+
+  async get_org_for_user (user) {
+    const contact = await this.get_contact_for_user(user)
+    const org = contact
+              ? await this.get_org_by_id(contact.organisationId)
+              : {}
+    org.isSupplier = org.primaryRoleId === 'RO92'
+    org.isNHSDigital = org.primaryRoleId === 'RO126'
+    return { org, contact }
+  }
+
+  async get_solutions_for_user (user) {
+    const { org } = await this.get_org_for_user(user)
+    const paged = await get_api(`Solution/ByOrganisation/${org.id}?pageSize=100`)
+    return paged ? paged.items : []
+  }
+
+  async get_solution_by_id (solutionId) {
+    return decodeSolutionEx(await get_api(`porcelain/SolutionEx/BySolution/${solutionId}`))
+  }
+
+  async update_solution (solutionEx) {
+    // fill in id and solutionId fields for embedded entities
+    const defaults = {
+      id: '00000000-0000-0000-0000-000000000000',
+      solutionId: solutionEx.solution.id
+    }
+    _.each(solutionEx.claimedCapability, e => _.defaults(e, defaults))
+    _.each(solutionEx.claimedStandard, e => _.defaults(e, defaults))
+    _.each(solutionEx.technicalContact, e => _.defaults(e, defaults))
+
+    // encode product page before update
+    solutionEx.solution.productPage = JSON.stringify(solutionEx.solution.productPage)
+
+    await put_api('porcelain/SolutionEx/Update', solutionEx)
+
+    return decodeSolutionEx(solutionEx)
+  }
+
+  async create_solution_for_user (solution, user) {
+    const contact = await this.get_contact_for_user(user)
+    solution.id = '00000000-0000-0000-0000-000000000000'
+    solution.organisationId = contact.organisationId
+    return post_api('Solution/Create', solution)
+  }
+
+  async get_all_capabilities () {
+    const mappings = await get_api('porcelain/CapabilityMappings')
+    const standards = _.keyBy(mappings.standard, 'id')
+
+    function groupStandards (standards) {
+      return _.groupBy(
+        _.sortBy(standards, 'name'),
+        std => _.startsWith(std.standardId || std.id, 'CSS')
+          ? ((std.isOptional || std.id === 'CSS3') ? 'optional' : 'mandatory')
+          : _.startsWith(std.standardId || std.id, 'INT')
+            ? 'interop' : 'overarching'
+      )
+    }
+
+    const capabilityTypes = {
+      CAP1: 'citizen',
+      CAP2: 'core practice',
+      CAP3: 'practice',
+      CAP4: 'citizen',
+      CAP5: 'practice',
+      CAP6: 'core practice',
+      CAP7: 'practice',
+      CAP8: 'core practice',
+      CAP9: 'core practice',
+      CAP10: 'core practice',
+      CAP11: 'core practice',
+      CAP12: 'citizen',
+      CAP13: 'core practice',
+      CAP14: 'practice',
+      CAP15: 'practice',
+      CAP16: 'practice',
+      CAP17: 'practice',
+      CAP18: 'citizen',
+      CAP19: 'practice'
+    }
+
+    for (const mapping of mappings.capabilityMapping) {
+      // for each capability there are potentially three classes of standard
+      // associated; mandatory context-specific, interoperability and optional context-specific
+      // overarching standards are ignored
+      // HACK until the API can return this data, the ID of each standard is inspected
+      //      to classify it
+      mapping.capability.standards = groupStandards(mapping.optionalStandard)
+
+      // merge the optional standards next to each capability into the capability
+      mapping.capability.standards = _.mapValues(
+        mapping.capability.standards,
+        stds => _.map(stds, std => standards[std.standardId])
+      )
+
+      // HACK hard-coded capability types for now
+      mapping.capability.types = capabilityTypes[mapping.capability.id]
+    }
+
+    return {
+      capabilities: _.sortBy(
+        _.map(mappings.capabilityMapping, 'capability'),
+        cap => cap.name.toLowerCase()
+      ),
+      standards: mappings.standard,
+      groupedStandards: groupStandards(mappings.standard)
+    }
+  }
+
+  async get_solution_capabilities (solutionId) {
+    try {
+      const claimed = await get_api(`ClaimedCapability/BySolution/${solutionId}?pageSize=100`)
+      return claimed.items || []
+    } catch (err) {
+      return []
+    }
+  }
+
+  async set_solution_capabilities (solution, capabilities) {
+    const solutionId = solution.id
+
+    // as there's no evidence for now, delete all the current capabilities
+    // and replace them
+    const current = await this.get_solution_capabilities(solutionId)
+    for (let cap of current) {
+      await delete_api('ClaimedCapability/Delete', cap).catch(() => true)
+    }
+
+    for (let cap of capabilities) {
+      cap.id = '00000000-0000-0000-0000-000000000000'
+      cap.solutionId = solutionId
+      cap.evidence = ''
+      await post_api('ClaimedCapability/Create', cap)
+    }
+
+    return true
+  }
+
+  async get_solution_standards (solutionId) {
+    try {
+      const claimed = await get_api(`ClaimedStandard/BySolution/${solutionId}?pageSize=100`)
+      return claimed.items || []
+    } catch (err) {
+      return []
+    }
+  }
+
+  async set_solution_standards (solution, standards) {
+    const solutionId = solution.id
+
+    // as there's no evidence for now, delete all the current standards
+    // and replace them
+    const current = await this.get_solution_standards(solutionId)
+    for (let std of current) {
+      await delete_api('ClaimedStandard/Delete', std).catch(() => true)
+    }
+
+    for (let std of standards) {
+      std.id = '00000000-0000-0000-0000-000000000000'
+      std.solutionId = solutionId
+      std.evidence = ''
+      await post_api('ClaimedStandard/Create', std)
+    }
+
+    return true
+  }
+
+  async get_solutions_for_assessment () {
+    // very inefficient but as this will be handled by CRM there's no value in
+    // building an API to do this properly
+    const allOrgs = await get_api('Organisation?pageSize=100')
+    const hasQualifyingStatus = item =>
+      item.status === this.SOLUTION_STATUS.CAPABILITIES_ASSESSMENT ||
+      item.status === this.SOLUTION_STATUS.STANDARDS_COMPLIANCE ||
+      item.status === this.SOLUTION_STATUS.SOLUTION_PAGE
+
+    return Promise.all(
+      _.map(allOrgs.items, org =>
+        get_api(`Solution/ByOrganisation/${org.id}?pageSize=100`)
+          .then(solns => _.filter(solns.items, hasQualifyingStatus))
+          .then(solns => _.map(solns, soln => ({
+            ...soln,
+            orgName: org.name
+          })))
+          .catch(() => [])
+      )
+    ).then(allSolns => _.flatten(allSolns))
+  }
+
+  async get_assessment_messages_for_solution (solutionId) {
+    return get_api(`AssessmentMessage/BySolution/${solutionId}?pageSize=100`)
+      .then(result => result.items)
+      .catch(() => [])
+  }
+
+  async post_assessment_message (message) {
+    message.id = '00000000-0000-0000-0000-000000000000'
+    return post_api('AssessmentMessage/Create', message)
+  }
+
+  async get_contacts_for_org (orgId) {
+    return get_api(`Contact/ByOrganisation/${orgId}?pageSize=100`)
+      .then(result => result.items)
+      .catch(() => [])
+  }
+
+  async get_contact_by_id (contactId) {
+    return get_api(`Contact/ById/${contactId}`)
+  }
+
+  async get_supplier_orgs () {
+    return get_api(`Organisation?pageSize=100`)
+      .then(result => result.items)
+      .then(orgs => orgs.filter(org => org.primaryRoleId === 'RO92'))
+  }
+
+  async create_supplier_org (supplier) {
+    return post_api(`Organisation/Create`, {
+      ...supplier,
+      id: '00000000-0000-0000-0000-000000000000',
+      primaryRoleId: 'RO92',
+      status: 'Active',
+      description: ''
+    })
+  }
+
+  async create_contact (contact) {
+    return post_api(`Contact/Create`, {
+      ...contact,
+      id: '00000000-0000-0000-0000-000000000000'
+    })
+  }
+
+  async get_capability_assessment_questions () {
+    return {
+      // Appointments Management - Citizen
+      'CAP1': [
+        'Share a video demonstrating that the solution:',
+        'supports Level 1 (Online Service Users), with users managing their own appointments',
+        'supports Level 2 (Registered Online Service Users), with users managing their Patients appointments'
+      ],
+
+      // Appointments Management - GP
+      'CAP2': [
+        'Share a video demonstrating that the solution allows users to:',
+        'manage all aspects of Patient encounters, both planned and unplanned, and be able to record and report these encounters',
+        'book, rearrange, cancel and update the status of the patient appointment',
+        'maintain waiting lists, and show how cancelled appointment slots can be offered to the next patient on the list',
+        'manage and schedule workload, to help assist with the audit and planning of resource and processes'
+      ],
+
+      // Clinical Decision Support
+      'CAP3': [
+        'Share a video demonstrating that the solution allows users to:',
+        'provide a full audit trail of decision support activity, including detail of traceability to the source documentation, authority of decision and reasoning',
+        'provide reactions in real time to data in clinical systems, and how reactions can only be provided by authorised users',
+        'provide regular standardised reports that are configurable by the user'
+      ],
+
+      // Communicate With Practice - Citizen
+      'CAP4': [
+        'Share a video demonstrating that the solution:',
+        'allows a ROSU to create, receive and respond to a Patient\'s Practice'
+      ],
+
+      // Digital Diagnostics
+      'CAP5': [
+        'Share a video demonstrating that the solution allows clinicians to:',
+        'access a Patient\'s full diagnostic history, make requests for assisting with diagnosis and view the status of a test',
+        'receive test results, return test results and store test results against a patient record'
+      ],
+
+      // Document Management
+      'CAP6': [
+        'Share a video demonstrating that the solution allows users to:',
+        'classify documents, both automatically and manually',
+        'record characteristics of the document and allow for filing and review by an authorised practice user',
+        'access, annotate, delete, search and trigger workflow',
+        'provide, categorise and print reports on outcomes'
+      ],
+
+      // GP Extracts Verification
+      'CAP7': [
+        'Share a video demonstrating that the solution:',
+        'supports reports by the General Practice Extraction Service (GPES) and sent to the Calculating Quality Reporting Service (CQRS) and its replacement',
+        'helps the user identify, search and extract information about patients'
+      ],
+
+      // GP Referral Management
+      'CAP8': [
+        'Share a video demonstrating that the solution:',
+        'supports e-Referrals',
+        'records information specific to referrals, and confirm that this will be stored against the Patient record'
+      ],
+
+      // GP Resource Management
+      'CAP9': [
+        'Share a video demonstrating that the solution allows users to:',
+        'view information about the General Practice, staff members working in the General Practice and related organisations and staff',
+        'manage groups and teams, including working and non-working dates and times'
+      ],
+
+      // Patient Information Management
+      'CAP10': [
+        'Share a video demonstrating that the solution allows users to:',
+        'register patients, with the ability to record patient demographics, preferences and personal details',
+        'search, access and organise a patient record',
+        'transfer records, both as a single transfer and as a bulk transfer',
+        'create and update ROSU accounts, store ROSU demographics and store ROSU-Patient relationships'
+      ],
+
+      // Prescribing
+      'CAP11': [
+        'Share a video demonstrating that the solution:',
+        'contains a comprehensive database of prescribable items to support authorised prescribers to create and record the issuing of medication, and that the database abides by the NHS Data Dictionary of Medicines and Devices (dm+t)',
+        'allows for prescriptions to be printed in the correct form accepted by the NHS Prescription Services and pharmacies',
+        'supports all types of prescriptions by all prescriber types and that appropriate validation is applied',
+        'allows patients medication regimen reviews to be recorded and prompted',
+        'handles dm+d items that are invalid or have limited availability',
+        'supports nation prescribing guidance'
+      ],
+
+      // Prescription Ordering - Citizen
+      'CAP12': [
+        'Share a video demonstrating that the solution allows GPS\'s to view, request, amend and cancel:',
+        'Patient repeat medication',
+        'Recent acute medication',
+        'Electronic Prescription Service (EPS) nominated pharmacy'
+      ],
+
+      // Recording Consultations
+      'CAP13': [
+        'Share a video demonstrating that the form:',
+        'is able to auto-populate based on information already contained within the Practice Users time',
+        'includes clinical calculations',
+        'is able to save a template part way through and come back to it',
+        'is able to have field validation'
+      ],
+
+      // Reporting
+      'CAP14': [
+        'Share a video demonstrating that the solution:',
+        'has an intuitive reporting user interface',
+        'helps users to query data for the reporting needs, present data in a usable format and consume include reporting data that can made available by other capabilities'
+      ],
+
+      // Scanning
+      'CAP15': [
+        'Share a video demonstrating that the solution allows users to:',
+        'scan into digital form, whilst maintaining interfaces and integrates with other capabilities'
+      ],
+
+      // Telecare
+      'CAP16': [
+        'Share a video demonstrating that the solution:',
+        'allows the patient to have access to the service, and manage the level of data both the patient and staff members can access',
+        'allows users to actively manage patient care, and able to manage alert trigger at patient level',
+        'allows the user to link to clinical apps, medical devices and data entry forms'
+      ],
+
+      // Unstructured Data Extraction
+      'CAP17': [
+        'Share a video demonstrating that the solution:',
+        'fully manages Unstructured Data Extraction in an effective manner, both automatically and manually'
+      ],
+
+      // View Record - Citizen
+      'CAP18': [
+        'Share a video demonstrating that the solution allows patients to:',
+        'access their own records, with elements being automatically mark for patient review, but also with the ability for users to restrict or approve other areas of the patient record',
+        'view different levels of Record Access, such as Core SCR (summary care report), Medications, Test Results, Full Clinical Record etc.'
+      ],
+
+      // Workflow
+      'CAP19': [
+        'Share a video demonstrating that the solution:',
+        'allows creation and management tasks both automatically and manually',
+        'supports Practices with efficient management of tasks throughout Primary Care'
+      ]
+    }
+  }
+}
+
+API.prototype.solutionStatuses = [
+  'Draft', 'Registered', 'Capabilities Assessment', 'Standards Compliance',
+  'Product Page', 'Approved'
+]
+
+API.prototype.SOLUTION_STATUS = {
+  DRAFT: 0,
+  REGISTERED: 1,
+  CAPABILITIES_ASSESSMENT: 2,
+  STANDARDS_COMPLIANCE: 3,
+  SOLUTION_PAGE: 4,
+  APPROVED: 5
+}
+
+API.prototype.capabilityStatuses = [
+  'Submitted', 'Remediation', 'Approved', 'Rejected'
+]
+
+API.prototype.CAPABILITY_STATUS = {
+  SUBMITTED: 0,
+  REMEDIATION: 1,
+  APPROVED: 2,
+  REJECTED: 3
+}
+
+API.prototype.standardStatuses = [
+  'Submitted', 'Remediation', 'Approved', 'Rejected', 'Partially Approved'
+]
+
+API.prototype.STANDARD_STATUS = {
+  SUBMITTED: 0,
+  REMEDIATION: 1,
+  APPROVED: 2,
+  REJECTED: 3,
+  PARTIALLY_APPROVED: 4
+}
+
+API.prototype.NHS_DIGITAL_ORG_ID = 'D6BC9186-5C8E-4638-A7B8-6F7CE7BC6946'
+
+module.exports = new API()

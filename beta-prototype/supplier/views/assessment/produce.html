@@ -1,0 +1,24 @@
+<form method="POST">
+  <label>Overall status:
+    <select name="overall">
+      <option value="">No change</option>
+      <option value="product_approve">Approve Supplier's Product Page</option>
+      <option value="product_reject">Reject Supplier's Product Page</option>
+      <option value="publish">TESTING ONLY, Publish Solution To Catalogue</option>
+    </select>
+  </label>
+  <textarea name="message">{{productPage.message.message}}</textarea>
+  <div class="controls">
+    <input type="submit" value="Save assessment">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+  </div>
+</form>
+
+<div id="solution-page-preview" class="supplier">
+  {{> product-page-preview}}
+</div>
+
+<script>
+  /* global Glide */
+  new Glide('.glide').mount()
+</script>

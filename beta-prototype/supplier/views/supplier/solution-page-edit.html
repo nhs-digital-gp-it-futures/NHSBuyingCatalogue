@@ -1,0 +1,419 @@
+{{#*inline "errors"}}
+{{#if errors}}
+<ul class="errorlist">
+  {{#errors}}
+  <li>{{.}}
+  {{/errors}}
+</ul>
+{{/if}}
+{{/inline}}
+
+{{#*inline "optional"}}
+<fieldset class="optional">
+  <legend>{{label}}</legend>
+  <label><input type="radio" name="{{name}}" value="" checked>&nbsp;N/A</label>
+  <label><input type="radio" name="{{name}}" value="yes"{{#if enabled}} checked{{/if}}>&nbsp;Yes</label>
+  <label><input type="radio" name="{{name}}" value="no"{{#if disabled}} checked{{/if}}>&nbsp;No</label>
+</fieldset>
+{{/inline}}
+
+{{#*inline "spec-item-template"}}
+  <li>
+    <span class="value">{{value}}</span>
+    <a href="#" class="remove">&times;</a>
+    <input type="hidden" name="[{{name}}]" value="{{value}}">
+  </li>
+{{/inline}}
+
+{{#*inline "spec-template"}}
+<ul class="specs {{name}}">
+  {{#items}}
+  {{> spec-item-template name=../name value=.}}
+  {{/items}}
+</ul>
+<template id="{{template-id}}-item">
+  {{> spec-item-template name=name value=""}}
+</template>
+<template id="{{template-id}}">
+  <fieldset class="spec-template">
+    <select>
+      <option value="">-- Select --</option>
+      {{#each options}}
+      {{#if this.group}}
+      <optgroup label="{{this.group}}">
+        {{#each this.items}}
+        <option value="{{this}}">{{this}}</option>
+        {{/each}}
+      </optgroup>
+      {{else}}
+      <option value="{{this}}">{{this}}</option>
+      {{/if}}
+      {{/each}}
+      <option value="other">Other...</option>
+    </select>
+    <input class="other" type="text">
+  </fieldset>
+</template>
+{{/inline}}
+
+<div id="solution-page" class="supplier">
+  {{#message}}
+  <div class="message {{originatorClass}}">
+    <pre class="text">{{message}}</pre>
+    <p class="metadata">
+      <span class="originator">{{contact.firstName}} {{contact.lastName}}</span>
+      <span class="timestamp">{{displayTimestamp}}</span>
+    </p>
+  </div>
+  {{/message}}
+  {{> onboarding-progress-header
+        title="Edit & Preview Page"
+        subtitle="Stage 4—Build Solution Page"}}
+
+  {{> solution-info solution}}
+
+  {{> errors errors=errors.general}}
+
+  <p class="help">Enter more information about your solution as indicated below to help buyers learn more about your solution, contact you, and make an informed evalution during procurement. Most fields are optional. You can preview your page before submitting it for moderation. After publishing, you can submit further edits for moderation or unpublish your solution immediately, at any time.</p>
+
+  <form method="POST" enctype="multipart/form-data">
+    <fieldset class="basic-info">
+      <legend>Basic Product Information</legend>
+      <p class="help">Solution name, description, and version, which were entered during Registration, are shown below. You can edit these fields as you wish. As a reminder, solution description has a maxiumum length of 300 characters. This description will be displayed to buyers on your solution page and in the search results. However, descriptions will not affect search ranking.</p>
+
+      {{#solution}}      
+      <label{{#if ../errors.name}} class="has-errors"{{/if}}>
+          Solution Name
+          <input type="text" name="name" value="{{ name }}">
+      </label>
+      {{> errors errors=../errors.name }}
+      <label{{#if ../errors.description}} class="has-errors"{{/if}}>
+          Description
+          <textarea name="description" rows="5">{{ description }}</textarea>
+      </label>
+      {{> errors errors=../errors.description }}
+      <label{{#if ../errors.version}} class="has-errors"{{/if}}>
+          Version
+          <input type="text" name="version" value="{{ version }}">
+      </label>
+      {{> errors errors=../errors.version }}
+      {{/solution}}
+    </fieldset>
+
+    {{#productPage}}
+{{!--
+    <fieldset class="benefits">
+      <legend>Benefits</legend>
+      {{> spec-template items=benefits options=../benefitOptions template-id="benefits-spec" name="benefits"}}
+      <a class="add benefit" data-template-id="benefits-spec">Add benefit</a>
+    </fieldset>
+--}}
+    <fieldset class="interop">
+      <legend>Interoperability</legend>
+      <p class="help">Select the system(s) your solution is interoperable with</p>
+      {{> spec-template items=interop options=../interopOptions template-id="interop-spec" name="interop"}}
+      <a class="add interop" data-template-id="interop-spec">Add system</a>
+    </fieldset>
+
+    <fieldset class="capabilities">
+      <legend>Capabilities</legend>
+      <table>
+        <thead>
+          <tr>
+            <th class="capability"></th>
+            <th class="video">Evidence Video</th>
+            <th class="input">Yes, display video in carousel?</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#capabilities}}
+          <tr>
+            <td class="capability">{{name}}</td>
+            <td class="video"><a href="{{videoUrl}}" target="_blank">{{videoUrl}}</a></td>
+            <td class="input">
+              <input type="checkbox" name="capabilities" value="{{id}}"
+                     {{#selected}}checked{{/selected}}>
+            </td>
+          </tr>
+          {{/capabilities}}
+        </tbody>
+      </table>
+    </fieldset>
+
+    <fieldset class="requirements">
+      <legend>System Requirements (up to 10)</legend>
+      {{> spec-template items=requirements options=../requirementOptions template-id="requirement-spec" name="requirements"}}
+      <a class="add requirement" data-template-id="requirement-spec">Add system requirement</a>
+    </fieldset>
+
+    <fieldset class="post-deployment">
+      <legend>Case Studies</legend>
+      <fieldset class="case-study">
+        <label>
+          Case study title
+          <input type="text"
+                 name="case-study[title]"
+                 value="{{case-study.[0].title}}">
+        </label>
+        <label>
+          Case study file
+          <input type="file"
+                 name="case-study[file]">
+        </label>
+      </fieldset>
+      <a class="add case-study">Add case study</a>
+    </fieldset>
+    {{/productPage}}
+
+    <fieldset class="additional-services collapsible">
+      <legend>Optional Additional Services</legend>
+      {{#each optionals.additional-services}}
+        {{> optional this}}
+      {{/each}}
+    </fieldset>
+
+    <fieldset class="service-support collapsible collapsed">
+      <legend>Service Support</legend>
+    </fieldset>
+
+    <fieldset class="analytics collapsible collapsed">
+      <legend>Analytics</legend>
+    </fieldset>
+
+    <fieldset class="hosting collapsible collapsed">
+      <legend>Hosting</legend>
+    </fieldset>
+
+    <fieldset class="standards-certifications collapsible collapsed">
+      <legend>Standards &amp; Certifications</legend>
+    </fieldset>
+
+    {{#productPage}}
+    <fieldset class="contact">
+      <h3>Solution Contact</h3>
+      <p class="help">Solution’s Lead Contact from Registration is shown below. Edit and add details as needed to display publicly.</p>
+
+      <label{{#if errors.contact.firstName}} class="has-errors"{{/if}}>
+        First Name
+        <input type="text"
+               name="contact[firstName]"
+               value="{{ contact.firstName }}"
+               placeholder="Enter first name">
+      </label>
+      {{> errors errors=errors.contact.firstName }}
+      <label{{#if errors.contact.lastName}} class="has-errors"{{/if}}>
+        Last Name
+        <input type="text"
+               name="contact[lastName]"
+               value="{{ contact.lastName }}"
+               placeholder="Enter last name">
+      </label>
+      {{> errors errors=errors.contact.lastName }}
+      <label{{#if errors.contact.emailAddress}} class="has-errors"{{/if}}>
+        Email
+        <input type="text"
+               name="contact[emailAddress]"
+               value="{{ contact.emailAddress }}"
+               placeholder="Enter email">
+      </label>
+      {{> errors errors=errors.contact.emailAddress }}
+      <label{{#if errors.contact.phoneNumber}} class="has-errors"{{/if}}>
+        Phone Number
+        <input type="text"
+               name="contact[phoneNumber]"
+               value="{{ contact.phoneNumber }}"
+               placeholder="Enter phone number">
+      </label>
+      {{> errors errors=errors.contact.phoneNumber }}
+      <label{{#if errors.contact.url}} class="has-errors"{{/if}}>
+        URL
+        <input type="text"
+               name="contact[url]"
+               value="{{ contact.url }}"
+               placeholder="Enter Product URL, e.g., www.apple.com">
+      </label>
+      {{> errors errors=errors.contact.url }}
+    </fieldset>
+
+    <fieldset class="about">
+      <h3>About {{../organisationName}}</h3>
+      <textarea name="about" placeholder="Enter your company information here. 400 characters max." rows="5">{{about}}</textarea>
+      {{> errors errors=../errors.about}}
+      <label>Company logo</label>
+      <div class="company-logo">
+        <input type="file" id="logo-realfile"
+               name="logo" accept=".png, image/png, .jpg, .jpeg, image/jpeg">
+        <label id="logo-fakefile" for="logo-realfile" x-placeholder>Choose a file (must be PNG or JPEG)</label>
+        <button id="logo-upload">Upload</button>
+        {{#if logoUrl}}
+        <div id="logo-preview" class="loaded">
+          <img src="{{logoUrl}}">
+          <a>&times;</a>
+          <input type="hidden" name="preserveLogo" value="1">
+        </div>
+        {{else}}
+        <div id="logo-preview">
+          <img>
+          <a>&times;</a>
+          <input type="hidden" name="preserveLogo" value="">
+        </div>
+        {{/if}}
+      </div>
+    </fieldset>
+    {{/productPage}}
+
+    <div class="controls">
+      <input type="submit" class="button" name="action[save]" value="Save &amp; exit">
+      <input type="submit" class="button" name="action[preview]" value="Preview">
+      {{#if allowSubmit}}
+      <input type="submit" class="primary button" name="action[submit]" value="Submit for Review">
+      {{/if}}
+    </div>
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+  </form>
+</div>
+
+<script>
+/* global $, $$ */
+document.addEventListener('DOMContentLoaded', () => {
+  $$('fieldset.collapsible > legend').forEach(el => {
+    el.addEventListener('click', () => {
+      el.closest('fieldset').classList.toggle('collapsed')
+    })
+  })
+
+  // click handlers for file uploading
+  const elLogoFile = $('#logo-realfile')
+  const elLogoPlaceholder = $('#logo-fakefile')
+  $('#logo-upload').addEventListener('click', ev => {
+    ev.preventDefault()
+    elLogoFile.click()
+  })
+
+  elLogoFile.addEventListener('change', logoFileUploadHandler)
+
+  const elPreviewContainer = $('#logo-preview')
+  const elPreview = $('img', elPreviewContainer)
+  const elPreserveLogo = $('input', elPreviewContainer)
+
+  $('a', elPreviewContainer).addEventListener('click', () => {
+    elPreviewContainer.classList.remove('loaded')
+    elPreview.src = ''
+    elPreserveLogo.value = ''
+    const placeholder = elLogoPlaceholder.getAttribute('x-placeholder')
+    if (placeholder) {
+      elLogoPlaceholder.textContent = placeholder
+    }
+  })
+
+  // handle "Add <<spec>>" buttons and templates
+  $$('a.add[data-template-id]').forEach(
+    el => el.addEventListener('click', specTemplateHandler)
+  )
+
+  // handle removal of spec items
+  $$('.specs').forEach(
+    el => el.addEventListener('click', specRemovalHandler)
+  )
+
+  function specTemplateHandler (evAddClick) {
+    const elInsertionPoint = evAddClick.currentTarget
+    const elInsertionParent = elInsertionPoint.parentElement
+
+    // if there's already an active spec template, don't add a new one
+    if ($('fieldset.spec-template', elInsertionParent)) return
+
+    const templateId = elInsertionPoint.dataset.templateId
+    const elTemplate = document.getElementById(templateId)
+    const elImported = document.importNode(elTemplate.content, true)
+    const elInjected = elInsertionParent.insertBefore(elImported.children[0], elInsertionPoint)
+
+    const elDropdown = $('select', elInjected)
+    const elOtherInput = $('input.other', elInjected)
+
+    elInjected.addEventListener('keyup', ev => {
+      // on Esc, remove the template and cancel the input
+      if (ev.keyCode === 27) {
+        elInsertionParent.removeChild(elInjected)
+      }
+    })
+
+    function addNewSpecItem (value) {
+      const elSpecList = $('.specs', elInsertionParent)
+      const elNewItemTemplate = document.importNode(
+        document.getElementById(templateId + '-item').content
+        , true
+      ).children[0]
+      const elNewItem = elSpecList.insertAdjacentElement('beforeend', elNewItemTemplate)
+      $('input', elNewItem).value = value
+      $('span.value', elNewItem).textContent = value
+
+      elInsertionParent.removeChild(elInjected)
+    }
+
+    elOtherInput.addEventListener('keypress', ev => {
+      // on Enter, remove the template and add the input to the list
+      if (ev.key === 'Enter') {
+        ev.preventDefault()
+        addNewSpecItem(ev.target.value)
+      }
+    })
+
+    elDropdown.addEventListener('change', ev => {
+      const newValue = ev.currentTarget.value
+      if (newValue === 'other') {
+        elOtherInput.classList.add('active')
+        elOtherInput.focus()
+      } else {
+        elOtherInput.classList.remove('active')
+
+        if (newValue) {
+          addNewSpecItem(newValue)
+        }
+      }
+    })
+
+    elDropdown.addEventListener('keypress', ev => {
+      if (ev.key === 'Enter') {
+        ev.preventDefault()
+
+        const newValue = ev.currentTarget.value
+
+        if (newValue === 'other') {
+          elOtherInput.focus()
+        } else if (newValue) {
+          addNewSpecItem(newValue)
+        }
+      }
+    })
+
+    elDropdown.focus()
+  }
+
+  function specRemovalHandler (ev) {
+    ev.preventDefault()
+
+    const elItemToRemove = ev.target.closest('li')
+    elItemToRemove.parentElement.removeChild(elItemToRemove)
+  }
+
+  function logoFileUploadHandler (ev) {
+    const file = elLogoFile.files[0]
+    if (!file) return
+
+    // use the ObjectURL technique to show a preview image
+    const oUrl = window.URL.createObjectURL(file)
+
+    elPreview.onload = () => {
+      elPreviewContainer.classList.add('loaded')
+      if (!elLogoPlaceholder.getAttribute('x-placeholder')) {
+        elLogoPlaceholder.setAttribute('x-placeholder', elLogoPlaceholder.textContent)
+      }
+      elLogoPlaceholder.textContent = file.name
+      elPreserveLogo.value = ''
+      window.URL.revokeObjectURL(oUrl)
+    }
+    elPreview.src = oUrl
+  }
+})
+</script>

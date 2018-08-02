@@ -1,0 +1,22 @@
+{{#if in-details}}<summary>{{/if}}
+  <span class="name">{{name}}</span> <span class="status">{{status}}</span>
+{{#if in-details}}</summary>{{/if}}
+<div class="standards">
+  {{#standards.mandatory}}
+  {{> compliance-standard .}}
+  {{/standards.mandatory}}
+  {{#standards.optional}}
+  {{> compliance-standard .}}
+  {{/standards.optional}}
+
+  {{#if standards.interop}}
+  <section class="interoperability">
+    <header>
+      <h3>Interoperability</h3>
+    </header>
+    {{#standards.interop}}
+    {{> compliance-standard . interopClass="interop"}}
+    {{/standards.interop}}
+  </section>
+  {{/if}}
+</div>
