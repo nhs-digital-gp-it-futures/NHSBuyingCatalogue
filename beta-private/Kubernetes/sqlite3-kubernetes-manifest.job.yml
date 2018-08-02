@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: buywolf-deployment-sqlite
+  labels:
+    purpose: sqlite-database
+spec:
+  template:
+    metadata:
+      labels:
+        app: buywolf-app-sqlite
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: buywolfsqlite
+        image: nhsbuyingcatalog.azurecr.io/gpitf/buywolf-sqlite:latest
+        command: ["/bin/sh"]
+        args: ["-c", "/usr/bin/sqlite3 /app/data/BuyingCatalog.sqlite3 < Docker.Sqlite.run"]
+#        args: ["-c", "tail -f /dev/null", "/usr/bin/sqlite3 /app/data/BuyingCatalog.sqlite3 < Docker.Sqlite.run"]
+#        args: ["-c", "/usr/bin/sqlite3 /app/data2/BuyingCatalog.sqlite3 < Docker.Sqlite.run"]
+#        args: [".read CreateDatabase.SQLite.sql && .read Import.SQLite.sql"]
+        volumeMounts:
+        - mountPath: "/app/data"
+          name: volume
+      restartPolicy: Never
+      volumes:
+        - name: volume
+          persistentVolumeClaim:
+            claimName: azure-managed-disk
+---

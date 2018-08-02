@@ -1,0 +1,1 @@
+docker run --rm -it -v "$(pwd)"/api/NHSD.GPITF.BuyingCatalog/Data:/opt/source -v beta_api_data:/opt/data sqlite3 /bin/sh -i -c "cd /opt/source; sqlite3 ../data/BuyingCatalog.sqlite3"
