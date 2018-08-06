@@ -95,6 +95,19 @@ async function loadEnrichedSolution (solutionId, baseUrl) {
     stdWithEvidenceParsed
   )
 
+  function relatedCapabilities (standardId) {
+    const candidateCapabilities = _.intersectionWith(
+      capabilities,
+      solutionEx.claimedCapability,
+      (cap, claimedCap) => cap.id === claimedCap.capabilityId
+    )
+
+    return _.filter(
+      candidateCapabilities,
+      cap => _.some(_.flatMap(cap.standards), ['id', standardId])
+    )
+  }
+
   // as computing the context for a standard needs information about the organisation to
   // last submit, parse and format all evidence for standards first
   await formatting.formatMessagesForDisplay(
@@ -112,6 +125,7 @@ async function loadEnrichedSolution (solutionId, baseUrl) {
     .map(context => {
       context.owners = ownersContext(context, owners)
       context.name = standardName(context)
+      context.capabilities = relatedCapabilities(context.id)
       return context
     })
     .value()
@@ -128,6 +142,7 @@ async function loadEnrichedSolution (solutionId, baseUrl) {
     .map(context => {
       context.owners = ownersContext(context, owners)
       context.name = standardName(context)
+      context.capabilities = relatedCapabilities(context.id)
       return context
     })
     .map(context => {

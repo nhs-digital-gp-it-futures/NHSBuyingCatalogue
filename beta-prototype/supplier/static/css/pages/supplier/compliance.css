@@ -81,20 +81,24 @@
   color: var(--color-compliance-rejected);
 }
 
-#compliance.edit section.summary {
+#compliance.edit .capabilities h3 {
+  color: var(--color-fg);
+}
+
+#compliance.edit .capabilities .name {
+  color: var(--color-nhs-blue);
+}
+
+#compliance.edit .capabilities .content {
+  font-size: var(--font-size-navigation);
+  margin-left: 1em;
+}
+
+#compliance.edit .capabilities .content a {
+  display: block;
+  font-size: smaller;
   margin-bottom: 1em;
-}
-
-#compliance.edit section.summary h2 {
-  font-size: var(--font-size-subsubtitle);
-}
-
-#compliance.edit section.summary .description {
-  font-size: var(--font-size-help);
-}
-
-#compliance.edit section.summary a {
-  font-size: var(--font-size-help);
+  text-decoration: none;
 }
 
 #compliance.edit fieldset.standard-evidence {

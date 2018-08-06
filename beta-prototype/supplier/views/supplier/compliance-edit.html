@@ -99,6 +99,23 @@
     <a href="https://onedrive.live.com" target="_blank">OneDrive</a>.
   </p>
 
+  {{#if standard.capabilities}}
+  <section class="capabilities">
+    <header>
+      <h3>Related Capabilities</h3>
+    </header>
+    {{#standard.capabilities}}
+    <details class="capability">
+      <summary class="name"><span class="name">{{name}} Capability</span></summary>
+      <div class="content">
+        <p class="description">{{description}}</p>
+        <a target="_blank" href="{{url}}">View full Capability description</a>
+      </div>
+    </details>
+    {{/standard.capabilities}}
+  </section>
+  {{/if}}
+
   <form method="POST" class="standards">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     {{> evidence-form standard submittable=submittable}}
