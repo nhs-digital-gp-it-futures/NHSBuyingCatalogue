@@ -99,34 +99,9 @@
     <a href="https://onedrive.live.com" target="_blank">OneDrive</a>.
   </p>
 
-  {{#capability}}
-  <section class="summary">
-    <header>
-      <h2>{{name}} Capability</h2>
-    </header>
-    <p class="description">{{description}}</p>
-    <a href="{{url}}" target="_blank">View full Capability description</a>
-  </section>
-  <section class="status">
-    {{> compliance-capability-summary . name="Status"}}
-  </section>
-  {{/capability}}
-
   <form method="POST" class="standards">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    {{#standards.mandatory}}
-    {{> evidence-form . submittable=../submittable}}
-    {{/standards.mandatory}}
-    {{#standards.optional}}
-    {{> evidence-form . submittable=../submittable}}
-    {{/standards.optional}}
-
-    {{#if standards.interop}}
-    <h3>Interoperability</h3>
-      {{#standards.interop}}
-      {{> evidence-form . interopClass="interop" submittable=../submittable}}
-      {{/standards.interop}}
-    {{/if}}
+    {{> evidence-form standard submittable=submittable}}
   </form>
 </div>
 

@@ -14,27 +14,55 @@
   {{/if}}
 
   <p class="help">
-    Your solution must achieve compliance with all of the Standards below in order to be purchasable on the catalogue. At the top of the page, you’ll see the context-based Standards that relate to the Capabilities your solution provides. Further down, you’ll see the overarching Standards with which all solutions must comply.
+    Your Solution must comply with all of the Standards below in order to be purchased from the Catalogue. There are three classes of Standards: Capability-Specific Standards, Solution-Specific Standards, and General Standards. 
   </p>
 
-  {{#if solution.capabilities}}
-  <section class="capabilities">
+  {{#if solution.capabilitySpecificStandards}}
+  <section class="standards capability-specific">
     <header>
-      <h2>Capability Standards</h2>
+      <h2>Capability-Specific Standards</h2>
     </header>
-    {{#solution.capabilities}}
-    <details class="capability">
-      {{> compliance-capability-summary . in-details=true}}
-    </details>
-    {{/solution.capabilities}}
+
+    {{#> help-reveal title="Help - What Are These?"}}
+    <p>Capability-Specific Standards are requirements related to the individual Capabilities you have selected.</p>
+    {{/help-reveal}}
+
+    {{#solution.capabilitySpecificStandards}}
+    {{> compliance-standard .}}
+    {{/solution.capabilitySpecificStandards}}
+  </section>
+  {{/if}}
+
+  {{#if solution.solutionSpecificStandards}}
+  <section class="standards solution-specific">
+    <header>
+      <h2>Solution-Specific Standards</h2>
+    </header>
+
+    {{#> help-reveal title="Help - What Are These?"}}
+    <p>Solution-Specific Standards are requirements related to one or more of the Capabilities you have selected.</p>
+    {{/help-reveal}}
+
+    {{#solution.solutionSpecificStandards}}
+    {{#if interop}}
+      {{> compliance-standard . interopClass="interop"}}
+    {{else}}
+      {{> compliance-standard .}}
+    {{/if}}
+    {{/solution.solutionSpecificStandards}}
   </section>
   {{/if}}
 
   {{#if solution.standards}}
-  <section class="overarching">
+  <section class="standards overarching">
     <header>
-      <h2>Overarching Standards</h2>
+      <h2>General Standards</h2>
     </header>
+
+    {{#> help-reveal title="Help - What Are These?"}}
+    <p>General Standards are requirements that apply to all Solutions, regardless of Capabilities selected, and cover the full scope of your Solution.</p>
+    {{/help-reveal}}
+
     {{#solution.standards}}
     {{> compliance-standard .}}
     {{/solution.standards}}

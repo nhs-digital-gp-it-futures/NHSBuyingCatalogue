@@ -1,10 +1,8 @@
 #compliance {
-  --font-size-capability: var(--font-size-body);
   --font-size-main-standard: var(--font-size-navigation);
   --font-size-sub-standard: var(--font-size-navigation);
   --font-size-evidence: var(--font-size-button-label);
 
-  --color-fg-capability: var(--color-nhs-dark-blue);
   --color-fg-main-standard: var(--color-nhs-dark-blue);
   --color-fg-sub-standard: var(--color-nhs-blue);
 
@@ -24,56 +22,17 @@
   padding: 0.5em;
 }
 
-#compliance .capabilities > details.capability,
-#compliance .overarching > section.standard {
+#compliance .standards h2 {
+  margin-bottom: 0.5em;
+}
+
+#compliance .standards > section.standard {
   border-bottom: 2px solid var(--color-nhs-pale-grey);
   padding-bottom: 0.4em;
   padding-top: 0.4em;
 }
 
-#compliance .capabilities > details.capability > summary {
-  color: var(--color-fg-capability);
-  font-size: var(--font-size-capability);
-}
-
-#compliance .capabilities > details.capability > summary .name {
-  display: inline-block;
-  width: calc(58% - 1em);
-}
-
-#compliance .capabilities .standards,
-#compliance.edit section.status .standards {
-  color: var(--color-fg-sub-standard);
-  font-size: var(--font-size-sub-standard);
-  margin-left: 2em;
-}
-
-#compliance .capabilities .standards .standard,
-#compliance.edit section.status .standards .standard {
-  margin-top: 0.4em;
-  margin-bottom: 0.4em;
-}
-
-#compliance .capabilities .standards .interoperability h3,
-#compliance.edit section.status .standards .interoperability h3 {
-  color: var(--color-fg-capability);
-  font-size: var(--font-size-sub-standard);
-  margin-bottom: 0;
-  margin-top: 0;
-}
-
-#compliance .capabilities .standards .interop,
-#compliance.edit section.status .standards .interop {
-  position: relative;
-}
-
-#compliance .capabilities .standards .interop .name,
-#compliance.edit section.status .standards .interop .name {
-  position: relative;
-  left: 1em; /* prevents following blocks being bumped and spoiling the vertical alignment */
-}
-
-#compliance .overarching > section.standard {
+#compliance .standards > section.standard {
   color: var(--color-fg-main-standard);
   font-size: var(--font-size-main-standard);
 }
@@ -81,6 +40,12 @@
 #compliance section.standard > .name {
   display: inline-block;
   width: 58%;
+}
+
+#compliance section.standard.interop > .name::before {
+  color: var(--color-fg);
+  content: 'Interop ';
+  font-weight: bold;
 }
 
 #compliance section.standard > .status,
@@ -114,24 +79,6 @@
 #compliance section.standard.rejected > .status,
 #compliance section.standard.rejected > .controls a {
   color: var(--color-compliance-rejected);
-}
-
-#compliance.edit section.status {
-  border: 1px solid var(--color-fg-sub-standard);
-  padding: 0.75em;
-}
-
-#compliance.edit section.status > .name {
-  display: inline-block;
-  width: 58%;
-}
-
-#compliance.edit section.status > .status {
-  display: inline-block;
-}
-
-#compliance.edit section.status > .standards {
-  margin-left: 1em;
 }
 
 #compliance.edit section.summary {

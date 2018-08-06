@@ -49,31 +49,27 @@ function isCapabilitySpecificStandard (stdId) {
 }
 
 function standardName (std) {
-  return isCapabilitySpecificStandard(std.id)
-       ? `${std.name} Standard` 
-       : std.name
+  return `${std.name} Standard`
 }
 
 function standardOrdering (stdA, stdB) {
-  const stdAisCapabilitySpecific = isCapabilitySpecificStandard(stdA.id)
-  const stdBisCapabilitySpecific = isCapabilitySpecificStandard(stdB.id)
-
-  // sort capability-specific standards above all others
-  if (stdAisCapabilitySpecific && !stdBisCapabilitySpecific) return -1
-  if (stdBisCapabilitySpecific && !stdAisCapabilitySpecific) return 1
+  // sort interop standards below all others
+  if (stdA.interop && !stdB.interop) return 1
+  if (stdB.interop && !stdA.interop) return -1
 
   // otherwise sort by name
   return stdA.name.localeCompare(stdB.name)
 }
 
 async function loadEnrichedSolution (solutionId, baseUrl) {
-  const [solutionEx, { capabilities, groupedStandards }] = await Promise.all([
+  const [solutionEx, { capabilities, standards, groupedStandards }] = await Promise.all([
     api.get_solution_by_id(solutionId),
     api.get_all_capabilities()
   ])
   const owners = await api.get_contacts_for_org(solutionEx.solution.organisationId)
 
   const allCapabilities = _.keyBy(capabilities, 'id')
+  const allStandards = _.keyBy(standards, 'id')
 
   // enrich the claimed capability standards with the capability ID to which they refer
   const allClaimedCapabilityStandards = _.map(
@@ -105,50 +101,43 @@ async function loadEnrichedSolution (solutionId, baseUrl) {
     _.filter(_.flatMap(allClaimedStandards, 'evidence.submissions'))
   )
 
-  // given a complete set of standards associated with a capability, return an
-  // enriched subset of standards based on those claimed by the solution
-  function enrichedCapabilityStandards (cap, capStds) {
-    const claimedStandardSubset = _.intersectionWith(
-      allClaimedStandards, capStds,
-      (claimedStd, capStd) =>
-        claimedStd.standardId === capStd.id &&
-        (claimedStd.capabilityId ? claimedStd.capabilityId === cap.capabilityId : true)
-    )
-
-    return _(claimedStandardSubset)
-      .map(claimedStd => ({
-        ...claimedStd,
-        ..._.find(capStds, ['id', claimedStd.standardId]),
-        ...standardContext(claimedStd, baseUrl, cap)
-      }))
-      .map(context => {
-        context.owners = ownersContext(context, owners)
-        context.name = standardName(context)
-        return context
-      })
-      .value()
-      .sort(standardOrdering)
-  }
-
-  // set the list of claimed capabilities for the solution
-  // this matches the design of the wireframes i.e. standards that are associated with
-  // multiple capabilities are cloned under each, with optional context-specific standards
-  // associated with the capability under which they were claimed
-
-  solutionEx.solution.capabilities = _(solutionEx.claimedCapability)
-    .map(cap => ({
-      ...cap,
-      ...allCapabilities[cap.capabilityId],
-      standards: _.mapValues(
-        allCapabilities[cap.capabilityId].standards,
-        stds => enrichedCapabilityStandards(cap, stds)
-      )
+  // set the list of capability-specific standards
+  solutionEx.solution.capabilitySpecificStandards = _(allClaimedStandards)
+    .filter(std => isCapabilitySpecificStandard(std.standardId))
+    .map(std => ({
+      ...std,
+      ...allStandards[std.standardId],
+      ...standardContext(std, baseUrl)
     }))
-    .map(cap => ({
-      ...cap,
-      ...capabilityContext(cap)
-    }))
+    .map(context => {
+      context.owners = ownersContext(context, owners)
+      context.name = standardName(context)
+      return context
+    })
     .value()
+    .sort(standardOrdering)
+
+  solutionEx.solution.solutionSpecificStandards = _(allClaimedStandards)
+    .reject(std => isCapabilitySpecificStandard(std.standardId))
+    .reject(std => _.find(groupedStandards.overarching, ['id', std.standardId]))
+    .map(std => ({
+      ...std,
+      ...allStandards[std.standardId],
+      ...standardContext(std, baseUrl)
+    }))
+    .map(context => {
+      context.owners = ownersContext(context, owners)
+      context.name = standardName(context)
+      return context
+    })
+    .map(context => {
+      if (_.find(groupedStandards.interop, ['id', context.id])) {
+        context.interop = true
+      }
+      return context
+    })
+    .value()
+    .sort(standardOrdering)
 
   // set the list of overarching claimed standards
   solutionEx.solution.standards = _
@@ -173,14 +162,6 @@ async function loadEnrichedSolution (solutionId, baseUrl) {
     .sort(standardOrdering)
 
   return solutionEx
-}
-
-function capabilityContext (cap) {
-  return {
-    status: _.some(cap.standards, stds => _.some(stds, std => !_.isEmpty(std.evidence)))
-            ? 'In Progress'
-            : 'Not Started'
-  }
 }
 
 function standardContext (std, baseUrl, cap = undefined) {
@@ -242,25 +223,15 @@ async function complianceEditHandler (req, res) {
   try {
     const solutionEx = await loadEnrichedSolution(req.params.solution_id, req.baseUrl)
 
-    // could be editing either all standards for a capability
-    // or a single overarching standard
-    if (req.params.capability_id) {
-      context.capability = _.find(
-        solutionEx.solution.capabilities,
-        ['capabilityId', req.params.capability_id]
-      )
-      context.subtitle = context.capability.name
-      context.standards = context.capability.standards
-    } else {
-      context.standard = _.find(
+    context.standard = _.find(
+      _.concat(
         solutionEx.solution.standards,
-        ['standardId', req.params.standard_id]
-      )
-      context.subtitle = context.standard.name
-      context.standards = {
-        mandatory: [context.standard]
-      }
-    }
+        solutionEx.solution.capabilitySpecificStandards,
+        solutionEx.solution.solutionSpecificStandards
+      ),
+      ['standardId', req.params.standard_id]
+    )
+    context.subtitle = context.standard.name
 
     context.breadcrumbs.push({ label: context.subtitle })
 
@@ -273,18 +244,8 @@ async function complianceEditHandler (req, res) {
   res.render('supplier/compliance-edit', context)
 }
 
-function findStandardToUpdate (solutionEx, standardId, capabilityId) {
-  // the simple case is a directly claimed standard
-  let stdToUpdate = _.find(solutionEx.claimedStandard, {standardId})
-  if (stdToUpdate) return stdToUpdate
-
-  const claimedCapability = _.find(solutionEx.claimedCapability, {capabilityId})
-
-  // otherwise it must be a standard claimed against a capability
-  return _.find(solutionEx.claimedCapabilityStandard, {
-    standardId,
-    claimedCapabilityId: claimedCapability.id
-  })
+function findStandardToUpdate (solutionEx, standardId) {
+  return _.find(solutionEx.claimedStandard, {standardId})
 }
 
 async function complianceEditPostHandler (req, res) {
@@ -294,7 +255,7 @@ async function complianceEditPostHandler (req, res) {
   ])
 
   const stdIdToUpdate = _.head(_.keys(req.body.save)) || _.head(_.keys(req.body.submit))
-  const stdToUpdate = findStandardToUpdate(solutionEx, stdIdToUpdate, req.params.capability_id)
+  const stdToUpdate = findStandardToUpdate(solutionEx, stdIdToUpdate)
   let evidence
 
   try {
@@ -345,10 +306,7 @@ async function complianceEditPostHandler (req, res) {
   res.redirect(redirect)
 }
 
-app.get('/edit/capability/:capability_id', csrfProtection, complianceEditHandler)
 app.get('/edit/standard/:standard_id', csrfProtection, complianceEditHandler)
-
-app.post('/edit/capability/:capability_id', csrfProtection, complianceEditPostHandler)
 app.post('/edit/standard/:standard_id', csrfProtection, complianceEditPostHandler)
 
 module.exports = app
