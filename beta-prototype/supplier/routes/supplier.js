@@ -613,6 +613,7 @@ app.post('/solutions/:solution_id/capabilities', csrfProtection, async (req, res
   }))
 
   // claim any optional standards associated with the claimed capabilities
+  // (now only used to track which capabilities the standards were selected against)
   solutionEx.claimedCapabilityStandard = []
   solutionEx.claimedCapability.forEach(cap => {
     const optionalStandardId = _.get(req.body.optionalStandards, cap.capabilityId)
@@ -641,6 +642,12 @@ app.post('/solutions/:solution_id/capabilities', csrfProtection, async (req, res
       std => ({standardId: std.id})
     ),
     'standardId'
+  )
+
+  // optional standards are now also claimed along with the other standards
+  solutionEx.claimedStandard = _.concat(
+    solutionEx.claimedStandard,
+    _.uniqBy(solutionEx.claimedCapabilityStandard, 'standardId')
   )
 
   try {

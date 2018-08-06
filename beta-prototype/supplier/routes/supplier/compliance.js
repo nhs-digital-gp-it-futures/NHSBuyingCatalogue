@@ -68,7 +68,6 @@ async function loadEnrichedSolution (solutionId, baseUrl) {
   ])
   const owners = await api.get_contacts_for_org(solutionEx.solution.organisationId)
 
-  const allCapabilities = _.keyBy(capabilities, 'id')
   const allStandards = _.keyBy(standards, 'id')
 
   // enrich the claimed capability standards with the capability ID to which they refer
@@ -88,10 +87,7 @@ async function loadEnrichedSolution (solutionId, baseUrl) {
   )
 
   const allClaimedStandards = _.each(
-    _.concat(
-      solutionEx.claimedStandard,
-      allClaimedCapabilityStandards
-    ),
+    solutionEx.claimedStandard,
     stdWithEvidenceParsed
   )
 
@@ -102,10 +98,14 @@ async function loadEnrichedSolution (solutionId, baseUrl) {
       (cap, claimedCap) => cap.id === claimedCap.capabilityId
     )
 
-    return _.filter(
-      candidateCapabilities,
-      cap => _.some(_.flatMap(cap.standards), ['id', standardId])
-    )
+    // related capabilities are either as chosen by the user for optional standards,
+    // or derived from the mandatory standards associated with each capability
+    const predicate = _.some(allClaimedCapabilityStandards, {standardId})
+      ? cap => _.some(allClaimedCapabilityStandards,
+                      { capabilityId: cap.id, standardId })
+      : cap => _.some(_.flatMap(cap.standards), ['id', standardId])
+
+    return _.filter(candidateCapabilities, predicate)
   }
 
   // as computing the context for a standard needs information about the organisation to
