@@ -11,12 +11,11 @@
 {{#*inline "contact"}}
 <fieldset class="contact">
   <legend>{{contactType}}{{#required}} (required){{/required}}</legend>
-  {{#help}}
-  <details>
-    <summary>Help - Who is this?</summary>
-    <p class="help">{{.}}</p>
-  </details>
-  {{/help}}
+  {{#if help}}
+  {{#> help-reveal title="Help - Who is this?"}}
+  <p>{{help}}</p>
+  {{/help-reveal}}
+  {{/if}}
   <label{{#if errors.firstName}} class="has-errors"{{/if}}>
     First Name
     <input type="text"
@@ -131,13 +130,10 @@
             {{> errors errors=errors.description }}
             <label{{#if errors.version}} class="has-errors"{{/if}}>
                 Version
-                <details class="version-help">
-                  <summary>Help - What is this?</summary>
-                  <div class="help">
-                    <p>Solution version is used to distinguish between instances of a solution. On the Catalogue, Solution version is intended to be used to describe Solutions with significant feature developments. In other words, when the ‘major number’ has changed, in standard semantic versioning schemes.
-                    <p>Version might be used, for example, to describe a new version of a Solution with expanded functionality or additional Capabilities.
-                  </div>
-                </details>
+                {{#> help-reveal title="Help - What is this?" class="version-help"}}
+                <p>Solution version is used to distinguish between instances of a solution. On the Catalogue, Solution version is intended to be used to describe Solutions with significant feature developments. In other words, when the ‘major number’ has changed, in standard semantic versioning schemes.
+                <p>Version might be used, for example, to describe a new version of a Solution with expanded functionality or additional Capabilities.
+                {{/help-reveal}}
                 <input type="text" name="version" value="{{ version }}"
                        placeholder="Enter solution version">
             </label>

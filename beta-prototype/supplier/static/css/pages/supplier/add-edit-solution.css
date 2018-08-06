@@ -110,19 +110,6 @@
   font-size: smaller;
 }
 
-#add-edit-solution fieldset details .help {
-  background-color: var(--color-bg);
-  border-left: 5px solid var(--color-nhs-mid-grey);
-  color: var(--color-fg);
-  padding: 1em;
-  width: 80%;
-}
-
-#add-edit-solution fieldset details .help p {
-  margin-bottom: 0.5em;
-  margin-top: 0.5em;
-}
-
 #add-edit-solution fieldset details.version-help .help {
   margin-bottom: 1em;
   margin-top: 1em;
