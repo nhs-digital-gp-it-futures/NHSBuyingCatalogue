@@ -320,6 +320,10 @@
   font-weight: var(--font-weight-help);
 }
 
+#capability-popup label.disabled {
+  color: var(--color-nhs-pale-grey);
+}
+
 #capability-popup .controls button {
   float: right;
 }
