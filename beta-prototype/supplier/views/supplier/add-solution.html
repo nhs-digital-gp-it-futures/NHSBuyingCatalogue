@@ -1,6 +1,6 @@
 {{#*inline "errors"}}
 {{#if errors}}
-<ul class="errorlist">
+<ul class="errorlist" id="errors">
   {{#errors}}
   <li>{{.}}
   {{/errors}}
@@ -109,7 +109,7 @@
   </div>
 
     {{> errors errors=errors.general }}
-    <form action="" method="post" novalidate>
+    <form action="#errors" method="post" novalidate>
         <fieldset>
             <legend>
               <small>Step 1 (of 2)</small>
