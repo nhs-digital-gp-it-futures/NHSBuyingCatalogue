@@ -342,146 +342,134 @@ class API {
       // Appointments Management - Citizen
       'CAP1': [
         'Share a video demonstrating that the solution:',
-        'supports Level 1 (Online Service Users), with users managing their own appointments',
-        'supports Level 2 (Registered Online Service Users), with users managing their Patients appointments'
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
       ],
 
       // Appointments Management - GP
       'CAP2': [
         'Share a video demonstrating that the solution allows users to:',
-        'manage all aspects of Patient encounters, both planned and unplanned, and be able to record and report these encounters',
-        'book, rearrange, cancel and update the status of the patient appointment',
-        'maintain waiting lists, and show how cancelled appointment slots can be offered to the next patient on the list',
-        'manage and schedule workload, to help assist with the audit and planning of resource and processes'
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
       ],
 
       // Clinical Decision Support
       'CAP3': [
         'Share a video demonstrating that the solution allows users to:',
-        'provide a full audit trail of decision support activity, including detail of traceability to the source documentation, authority of decision and reasoning',
-        'provide reactions in real time to data in clinical systems, and how reactions can only be provided by authorised users',
-        'provide regular standardised reports that are configurable by the user'
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
       ],
 
       // Communicate With Practice - Citizen
       'CAP4': [
         'Share a video demonstrating that the solution:',
-        'allows a ROSU to create, receive and respond to a Patient\'s Practice'
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
       ],
 
       // Digital Diagnostics
       'CAP5': [
         'Share a video demonstrating that the solution allows clinicians to:',
-        'access a Patient\'s full diagnostic history, make requests for assisting with diagnosis and view the status of a test',
-        'receive test results, return test results and store test results against a patient record'
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
       ],
 
       // Document Management
       'CAP6': [
         'Share a video demonstrating that the solution allows users to:',
-        'classify documents, both automatically and manually',
-        'record characteristics of the document and allow for filing and review by an authorised practice user',
-        'access, annotate, delete, search and trigger workflow',
-        'provide, categorise and print reports on outcomes'
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
       ],
 
       // GP Extracts Verification
       'CAP7': [
         'Share a video demonstrating that the solution:',
-        'supports reports by the General Practice Extraction Service (GPES) and sent to the Calculating Quality Reporting Service (CQRS) and its replacement',
-        'helps the user identify, search and extract information about patients'
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
       ],
 
       // GP Referral Management
       'CAP8': [
         'Share a video demonstrating that the solution:',
-        'supports e-Referrals',
-        'records information specific to referrals, and confirm that this will be stored against the Patient record'
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
       ],
 
       // GP Resource Management
       'CAP9': [
         'Share a video demonstrating that the solution allows users to:',
-        'view information about the General Practice, staff members working in the General Practice and related organisations and staff',
-        'manage groups and teams, including working and non-working dates and times'
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
       ],
 
       // Patient Information Management
       'CAP10': [
         'Share a video demonstrating that the solution allows users to:',
-        'register patients, with the ability to record patient demographics, preferences and personal details',
-        'search, access and organise a patient record',
-        'transfer records, both as a single transfer and as a bulk transfer',
-        'create and update ROSU accounts, store ROSU demographics and store ROSU-Patient relationships'
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
       ],
 
       // Prescribing
       'CAP11': [
         'Share a video demonstrating that the solution:',
-        'contains a comprehensive database of prescribable items to support authorised prescribers to create and record the issuing of medication, and that the database abides by the NHS Data Dictionary of Medicines and Devices (dm+t)',
-        'allows for prescriptions to be printed in the correct form accepted by the NHS Prescription Services and pharmacies',
-        'supports all types of prescriptions by all prescriber types and that appropriate validation is applied',
-        'allows patients medication regimen reviews to be recorded and prompted',
-        'handles dm+d items that are invalid or have limited availability',
-        'supports nation prescribing guidance'
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
       ],
 
       // Prescription Ordering - Citizen
       'CAP12': [
         'Share a video demonstrating that the solution allows GPS\'s to view, request, amend and cancel:',
-        'Patient repeat medication',
-        'Recent acute medication',
-        'Electronic Prescription Service (EPS) nominated pharmacy'
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
       ],
 
       // Recording Consultations
       'CAP13': [
         'Share a video demonstrating that the form:',
-        'is able to auto-populate based on information already contained within the Practice Users time',
-        'includes clinical calculations',
-        'is able to save a template part way through and come back to it',
-        'is able to have field validation'
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
       ],
 
       // Reporting
       'CAP14': [
         'Share a video demonstrating that the solution:',
-        'has an intuitive reporting user interface',
-        'helps users to query data for the reporting needs, present data in a usable format and consume include reporting data that can made available by other capabilities'
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
       ],
 
       // Scanning
       'CAP15': [
         'Share a video demonstrating that the solution allows users to:',
-        'scan into digital form, whilst maintaining interfaces and integrates with other capabilities'
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
       ],
 
       // Telecare
       'CAP16': [
         'Share a video demonstrating that the solution:',
-        'allows the patient to have access to the service, and manage the level of data both the patient and staff members can access',
-        'allows users to actively manage patient care, and able to manage alert trigger at patient level',
-        'allows the user to link to clinical apps, medical devices and data entry forms'
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
       ],
 
       // Unstructured Data Extraction
       'CAP17': [
         'Share a video demonstrating that the solution:',
-        'fully manages Unstructured Data Extraction in an effective manner, both automatically and manually'
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
       ],
 
       // View Record - Citizen
       'CAP18': [
         'Share a video demonstrating that the solution allows patients to:',
-        'access their own records, with elements being automatically mark for patient review, but also with the ability for users to restrict or approve other areas of the patient record',
-        'view different levels of Record Access, such as Core SCR (summary care report), Medications, Test Results, Full Clinical Record etc.'
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
       ],
 
       // Workflow
       'CAP19': [
         'Share a video demonstrating that the solution:',
-        'allows creation and management tasks both automatically and manually',
-        'supports Practices with efficient management of tasks throughout Primary Care'
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
       ]
     }
   }
