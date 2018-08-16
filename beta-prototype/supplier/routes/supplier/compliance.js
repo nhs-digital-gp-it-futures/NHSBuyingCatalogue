@@ -292,7 +292,7 @@ async function complianceEditPostHandler (req, res) {
     if (req.body.save) {
       evidence.savedLink = linkToSave
       evidence.savedMessage = messageToSave
-      redirect = require('url').resolve(redirect, `#std-${stdIdToUpdate}`)
+      redirect = `${req.baseUrl}#std-${stdIdToUpdate}`
     } else {
       // submitting pushes the current link and message into the submission array
       delete evidence.savedLink
