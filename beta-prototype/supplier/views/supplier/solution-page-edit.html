@@ -1,6 +1,6 @@
 {{#*inline "errors"}}
 {{#if errors}}
-<ul class="errorlist">
+<ul class="errorlist" id="errors">
   {{#errors}}
   <li>{{.}}
   {{/errors}}
@@ -76,7 +76,7 @@
 
   <p class="help">Enter more information about your solution as indicated below to help buyers learn more about your solution, contact you, and make an informed evalution during procurement. Most fields are optional. You can preview your page before submitting it for moderation. After publishing, you can submit further edits for moderation or unpublish your solution immediately, at any time.</p>
 
-  <form method="POST" enctype="multipart/form-data">
+  <form method="POST" enctype="multipart/form-data" action="#errors">
     <fieldset class="basic-info">
       <legend>Basic Product Information</legend>
       <p class="help">Solution name, description, and version, which were entered during Registration, are shown below. You can edit these fields as you wish. As a reminder, solution description has a maxiumum length of 300 characters. This description will be displayed to buyers on your solution page and in the search results. However, descriptions will not affect search ranking.</p>

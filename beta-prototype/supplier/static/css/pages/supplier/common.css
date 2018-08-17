@@ -10,6 +10,29 @@ p.help, div.help p {
   font-weight: var(--font-weight-help);
 }
 
+.help-reveal {
+  margin-bottom: 1rem;
+}
+
+.help-reveal .title {
+  color: var(--color-nhs-blue);
+  font-weight: 300;
+  text-decoration: underline;
+}
+
+.help-reveal .help {
+  background-color: var(--color-bg);
+  border-left: 5px solid var(--color-nhs-blue);
+  color: var(--color-fg);
+  padding: .5em 0 .5em 1em;
+  width: 80%;
+}
+
+.help-reveal .help p {
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+}
+
 header.onboarding-progress h1 small {
   color: var(--color-heading-small);
   display: block;

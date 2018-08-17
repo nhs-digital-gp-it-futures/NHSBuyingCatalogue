@@ -63,8 +63,8 @@ app.get('/', csrfProtection, async (req, res) => {
 })
 
 app.post('/', csrfProtection, async (req, res) => {
-  let redirectUrl = `/suppliers/solutions`
   const solutionEx = await api.get_solution_by_id(req.params.solution_id)
+  let redirectUrl = `/suppliers/solutions/${solutionEx.solution.id}`
   let updateSolution = false
 
   // only registered solutions can participate in assessment

@@ -63,12 +63,12 @@
   {{/if}}
   <section class="controls">
     <input type="submit"
-           class="button primary"
+           class="button"
            name="save[{{id}}]"
            value="Save">
     {{#if submittable}}
     <input type="submit"
-           class="button"
+           class="button primary"
            name="submit[{{id}}]"
            value="Submit">
     {{/if}}
@@ -99,34 +99,26 @@
     <a href="https://onedrive.live.com" target="_blank">OneDrive</a>.
   </p>
 
-  {{#capability}}
-  <section class="summary">
+  {{#if standard.capabilities}}
+  <section class="capabilities">
     <header>
-      <h2>{{name}} Capability</h2>
+      <h3>Related Capabilities</h3>
     </header>
-    <p class="description">{{description}}</p>
-    <a href="{{url}}" target="_blank">View full Capability description</a>
+    {{#standard.capabilities}}
+    <details class="capability">
+      <summary class="name"><span class="name">{{name}} Capability</span></summary>
+      <div class="content">
+        <p class="description">{{description}}</p>
+        <a target="_blank" href="{{url}}">View full Capability description</a>
+      </div>
+    </details>
+    {{/standard.capabilities}}
   </section>
-  <section class="status">
-    {{> compliance-capability-summary . name="Status"}}
-  </section>
-  {{/capability}}
+  {{/if}}
 
   <form method="POST" class="standards">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    {{#standards.mandatory}}
-    {{> evidence-form . submittable=../submittable}}
-    {{/standards.mandatory}}
-    {{#standards.optional}}
-    {{> evidence-form . submittable=../submittable}}
-    {{/standards.optional}}
-
-    {{#if standards.interop}}
-    <h3>Interoperability</h3>
-      {{#standards.interop}}
-      {{> evidence-form . interopClass="interop" submittable=../submittable}}
-      {{/standards.interop}}
-    {{/if}}
+    {{> evidence-form standard submittable=submittable}}
   </form>
 </div>
 
