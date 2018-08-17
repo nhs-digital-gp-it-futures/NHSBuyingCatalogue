@@ -60,65 +60,70 @@
       </li>
       {{/capabilities}}
     </ul>
+
+    <section class="summary">
+      <header>
+        <h3>Summary</h3>
+      </header>
+      <section class="capabilities">
+        <p class="counter"><span class="count"></span> selected</p>
+        <details>
+          <summary>Capabilities</summary>
+          <ul>
+            {{#capabilities}}
+            <li data-cap-id="{{id}}">
+              {{name}}
+              {{#standards.optional}}
+              <span class="optional" data-std-id="{{id}}">(+ {{name}})</span>
+              {{/standards.optional}}
+            </li>
+            {{/capabilities}}
+          </ul>
+        </details>
+      </section>
+      <section class="standards">
+        <p class="counter">Compliance with <span class="count"></span> will be required</p>
+        <ul>
+          <li class="group">
+            <details>
+              <summary>Capability-specific Standards</summary>
+              <ul>
+                {{#standards.mandatory}}
+                <li data-std-id="{{id}}">{{name}}</li>
+                {{/standards.mandatory}}
+              </ul>
+            </details>
+          </li>
+          <li class="group">
+            <details>
+              <summary>Solution-specific Standards</summary>
+              <ul>
+                {{#standards.interop}}
+                <li data-std-id="{{id}}">{{name}}</li>
+                {{/standards.interop}}
+              </ul>
+            </details>
+          </li>
+          <li class="group">
+            <details>
+              <summary>General Standards</summary>
+              <ul>
+                {{#standards.overarching}}
+                <li data-std-id="{{id}}">{{name}}</li>
+                {{/standards.overarching}}
+              </ul>
+            </details>
+          </li>
+        </ul>
+      </section>
+    </section>
+
     <fieldset class="controls">
       <button name="action" value="save" type="submit">Save &amp; Exit</button>
       <button class="primary" name="action" value="submit" type="submit">Submit</button>
       <input type="hidden" name="_csrf" value="{{csrfToken}}">
     </fieldset>
   </form>
-  <hr>
-  <section class="summary">
-    <header>
-      <h3>Summary</h3>
-    </header>
-    <section class="capabilities">
-      <header>
-        <h4>Capabilities Selected</h4>
-        <p><span class="count"></span> selected</p>
-      </header>
-      <ul>
-        {{#capabilities}}
-        <li data-cap-id="{{id}}">
-          {{name}}
-          {{#standards.optional}}
-          <span class="optional" data-std-id="{{id}}">(+ {{name}})</span>
-          {{/standards.optional}}
-        </li>
-        {{/capabilities}}
-      </ul>
-    </section>
-    <section class="standards">
-      <header>
-        <h4>Standards Required</h4>
-        <p>Compliance with <span class="count"></span> will be required</p>
-      </header>
-      <ul>
-        <li class="group">
-          <details open>
-            <summary>Overarching Standards</summary>
-            <ul>
-              {{#standards.overarching}}
-              <li data-std-id="{{id}}">{{name}}</li>
-              {{/standards.overarching}}
-            </ul>
-          </details>
-        </li>
-        <li class="group">
-          <details open>
-            <summary>Interoperability Standards</summary>
-            <ul>
-              {{#standards.interop}}
-              <li data-std-id="{{id}}">{{name}}</li>
-              {{/standards.interop}}
-            </ul>
-          </details>
-        </li>
-        {{#standards.mandatory}}
-        <li data-std-id="{{id}}">{{name}}</li>
-        {{/standards.mandatory}}
-      </ul>
-    </section>
-  </section>
 </div>
 
 <div id="capability-popup-content">
@@ -304,7 +309,9 @@ document.addEventListener('DOMContentLoaded', () => {
       summaryStandards[el.dataset.stdId] = el
     })
 
-    const standardGroups = $$('#add-edit-solution .summary .standards li.group')
+    const standardGroups = $$(`
+      #add-edit-solution .summary .standards li.group,
+      #add-edit-solution .summary .capabilities details`)
     standardGroups.forEach(deselect)
 
     let capabilityCount = 0

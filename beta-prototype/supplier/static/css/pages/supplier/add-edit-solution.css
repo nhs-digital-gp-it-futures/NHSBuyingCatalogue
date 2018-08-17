@@ -238,18 +238,25 @@
 }
 
 #add-edit-solution .summary {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  background-color: var(--color-standout-bg);
+  padding: .1em 1em;
 }
 
-#add-edit-solution .summary > header {
-  width: 100%;
+#add-edit-solution .summary .counter,
+#add-edit-solution .summary .counter * {
+  font-size: var(--font-size-help);
+  font-style: italic;
+  font-weight: var(--font-weight-help);
 }
 
-#add-edit-solution .summary > .capabilities,
-#add-edit-solution .summary > .standards {
-  width: 48%;
+#add-edit-solution .summary details {
+  color: var(--color-nhs-blue);
+  margin-bottom: 1em;
+}
+
+#add-edit-solution .summary details > :not(summary){
+  font-size: var(--font-size-navigation);
+  padding-left: 1em;
 }
 
 #add-edit-solution .summary > .capabilities ul,
@@ -257,12 +264,14 @@
   list-style-type: none;
 }
 
+#add-edit-solution .summary > .capabilities details,
 #add-edit-solution .summary > .capabilities li,
 #add-edit-solution .summary > .standards li,
 #add-edit-solution .summary > .capabilities li .optional {
   display: none;
 }
 
+#add-edit-solution .summary > .capabilities details.selected,
 #add-edit-solution .summary > .capabilities li.selected,
 #add-edit-solution .summary > .standards li.selected {
   display: block;
