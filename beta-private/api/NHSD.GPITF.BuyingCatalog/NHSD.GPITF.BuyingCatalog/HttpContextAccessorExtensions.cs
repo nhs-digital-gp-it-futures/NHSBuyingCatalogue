@@ -4,7 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 
 #pragma warning disable CS1591
-namespace NHSD.GPITF.BuyingCatalog.Logic
+namespace NHSD.GPITF.BuyingCatalog
 {
   public static class HttpContextAccessorExtensions
   {
