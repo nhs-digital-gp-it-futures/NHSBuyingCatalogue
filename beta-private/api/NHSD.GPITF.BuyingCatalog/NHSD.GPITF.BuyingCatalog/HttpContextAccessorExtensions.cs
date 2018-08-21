@@ -3,6 +3,7 @@ using NHSD.GPITF.BuyingCatalog.Models;
 using System.Linq;
 using System.Security.Claims;
 
+#pragma warning disable CS1591
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
   public static class HttpContextAccessorExtensions
@@ -28,3 +29,4 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     }
   }
 }
+#pragma warning restore CS1591
