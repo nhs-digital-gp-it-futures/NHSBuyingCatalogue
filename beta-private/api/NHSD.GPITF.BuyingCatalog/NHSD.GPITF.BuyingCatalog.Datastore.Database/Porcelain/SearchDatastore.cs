@@ -10,21 +10,21 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
 {
   public sealed class SearchDatastore : DatastoreBase<SolutionEx>, ISearchDatastore
   {
-    private readonly IFrameworkDatastore _frameworkDatastore;
-    private readonly ISolutionDatastore _solutionDatastore;
-    private readonly ICapabilityDatastore _capabilityDatastore;
-    private readonly IClaimedCapabilityDatastore _claimedCapabilityDatastore;
-    private readonly ISolutionExDatastore _solutionExDatastore;
+    private readonly IFrameworksDatastore _frameworkDatastore;
+    private readonly ISolutionsDatastore _solutionDatastore;
+    private readonly ICapabilitiesDatastore _capabilityDatastore;
+    private readonly ICapabilitiesImplementedDatastore _claimedCapabilityDatastore;
+    private readonly ISolutionsExDatastore _solutionExDatastore;
 
     public SearchDatastore(
       IDbConnectionFactory dbConnectionFactory,
       ILogger<DatastoreBase<SolutionEx>> logger,
       ISyncPolicyFactory policy,
-      IFrameworkDatastore frameworkDatastore,
-      ISolutionDatastore solutionDatastore,
-      ICapabilityDatastore capabilityDatastore,
-      IClaimedCapabilityDatastore claimedCapabilityDatastore,
-      ISolutionExDatastore solutionExDatastore) :
+      IFrameworksDatastore frameworkDatastore,
+      ISolutionsDatastore solutionDatastore,
+      ICapabilitiesDatastore capabilityDatastore,
+      ICapabilitiesImplementedDatastore claimedCapabilityDatastore,
+      ISolutionsExDatastore solutionExDatastore) :
       base(dbConnectionFactory, logger, policy)
     {
       _frameworkDatastore = frameworkDatastore;

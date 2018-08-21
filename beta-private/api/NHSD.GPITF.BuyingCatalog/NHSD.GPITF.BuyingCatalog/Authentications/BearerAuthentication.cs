@@ -58,9 +58,9 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
       if (!string.IsNullOrEmpty(email))
       {
         var servProv = context.HttpContext.RequestServices;
-        var contLog = (IContactDatastore)servProv.GetService(typeof(IContactDatastore));
+        var contLog = (IContactsDatastore)servProv.GetService(typeof(IContactsDatastore));
         var contact = contLog.ByEmail(email);
-        var orgLog = (IOrganisationDatastore)servProv.GetService(typeof(IOrganisationDatastore));
+        var orgLog = (IOrganisationsDatastore)servProv.GetService(typeof(IOrganisationsDatastore));
         var org = orgLog.ById(contact.OrganisationId);
         switch (org.PrimaryRoleId)
         {
@@ -73,7 +73,7 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
             claims.Add(new Claim(ClaimTypes.Role, Roles.Buyer));
             break;
         }
-        claims.Add(new Claim(nameof(Organisation), org.Id));
+        claims.Add(new Claim(nameof(Organisations), org.Id));
       }
 
       context.Principal.AddIdentity(new ClaimsIdentity(claims));

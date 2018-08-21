@@ -39,7 +39,7 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
       }
 
       var servProv = context.HttpContext.RequestServices;
-      var orgStore = (IOrganisationDatastore)servProv.GetService(typeof(IOrganisationDatastore));
+      var orgStore = (IOrganisationsDatastore)servProv.GetService(typeof(IOrganisationsDatastore));
       var org = orgStore.GetAll().FirstOrDefault(x => x.PrimaryRoleId == primaryRoleId);
       var claims = new List<Claim>
       {
@@ -49,7 +49,7 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
         new Claim(ClaimTypes.Role, context.UserName),
 
         // random organisation for Joe public
-        new Claim(nameof(Organisation), org?.Id ?? Guid.NewGuid().ToString())
+        new Claim(nameof(Organisations), org?.Id ?? Guid.NewGuid().ToString())
       };
 
       context.Principal = new ClaimsPrincipal(new ClaimsIdentity(claims, BasicAuthenticationDefaults.AuthenticationScheme));

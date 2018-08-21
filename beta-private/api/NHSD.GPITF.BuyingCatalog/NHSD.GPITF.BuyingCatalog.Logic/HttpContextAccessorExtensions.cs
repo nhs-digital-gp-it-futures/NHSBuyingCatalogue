@@ -10,7 +10,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     public static string ContextOrganisationId(this IHttpContextAccessor context)
     {
       return context.HttpContext.User.Claims
-        .FirstOrDefault(x => x.Type == nameof(Organisation))?.Value;
+        .FirstOrDefault(x => x.Type == nameof(Organisations))?.Value;
     }
 
     public static bool HasRole(this IHttpContextAccessor context, string role)

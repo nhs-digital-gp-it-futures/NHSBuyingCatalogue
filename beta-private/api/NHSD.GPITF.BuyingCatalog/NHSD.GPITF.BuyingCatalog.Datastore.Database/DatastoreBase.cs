@@ -35,7 +35,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
       return caller + " --> " + JArray.FromObject(infos).ToString(Formatting.None);
     }
 
-    protected string GetLogMessage(Organisation organisation, [CallerMemberName] string caller = "")
+    protected string GetLogMessage(Organisations organisation, [CallerMemberName] string caller = "")
     {
       return caller + " --> " + JObject.FromObject(organisation).ToString(Formatting.None);
     }

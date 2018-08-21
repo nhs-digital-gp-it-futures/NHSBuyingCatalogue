@@ -10,7 +10,7 @@ namespace NHSD.GPITF.BuyingCatalog.Models.Porcelain
     /// <summary>
     /// <see cref="Capability"/>
     /// </summary>
-    public Capability Capability { get; set; }
+    public Capabilities Capability { get; set; }
 
     /// <summary>
     /// A list of OptionalStandard
