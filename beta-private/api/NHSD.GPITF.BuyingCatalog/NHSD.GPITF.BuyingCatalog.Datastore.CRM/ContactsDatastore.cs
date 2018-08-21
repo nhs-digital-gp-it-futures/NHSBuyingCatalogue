@@ -31,20 +31,5 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       throw new NotImplementedException();
     }
-
-    public Contacts Create(Contacts contact)
-    {
-      throw new NotImplementedException();
-    }
-
-    public void Delete(Contacts contact)
-    {
-      throw new NotImplementedException();
-    }
-
-    public void Update(Contacts contact)
-    {
-      throw new NotImplementedException();
-    }
   }
 }

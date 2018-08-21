@@ -2,14 +2,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using NHSD.GPITF.BuyingCatalog.Attributes;
-using NHSD.GPITF.BuyingCatalog.Examples;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using Swashbuckle.AspNetCore.Examples;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
@@ -92,90 +88,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     {
       var contact = _logic.ById(id);
       return contact != null ? (IActionResult)new OkObjectResult(contact) : new NotFoundResult();
-    }
-
-    /// <summary>
-    /// Create a new Contact for an Organisation [DEVELOPMENT ONLY]
-    /// </summary>
-    /// <param name="contact">new contact information</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Organisation not found in CRM</response>
-    [HttpPost]
-    [Route("Create")]
-    [Authorize(
-      Roles = Roles.Admin,
-      AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
-    [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(Contacts), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Organisation not found in ODS")]
-    [SwaggerRequestExample(typeof(Contacts), typeof(ContactsExample), jsonConverter: typeof(StringEnumConverter))]
-    public IActionResult Create([FromBody]Contacts contact)
-    {
-      try
-      {
-        var newContact = _logic.Create(contact);
-        return newContact != null ? (IActionResult)new OkObjectResult(newContact) : new NotFoundResult();
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
-      }
-    }
-
-    /// <summary>
-    /// Update an existing Contact with new information [DEVELOPMENT ONLY]
-    /// </summary>
-    /// <param name="contact">contact with updated information</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Organisation or Contact not found in CRM</response>
-    [HttpPut]
-    [Route("Update")]
-    [Authorize(
-      Roles = Roles.Admin,
-      AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
-    [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Organisation not found in ODS")]
-    [SwaggerRequestExample(typeof(Contacts), typeof(ContactsExample), jsonConverter: typeof(StringEnumConverter))]
-    public IActionResult Update([FromBody]Contacts contact)
-    {
-      try
-      {
-        _logic.Update(contact);
-        return new OkResult();
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
-      }
-    }
-
-    /// <summary>
-    /// Delete an existing Contact [DEVELOPMENT ONLY]
-    /// </summary>
-    /// <param name="contact">existing Organisation information</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Organisation or Contact not found in CRM</response>
-    [HttpDelete]
-    [Route("Delete")]
-    [Authorize(
-      Roles = Roles.Admin,
-      AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
-    [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Organisation not found in CRM")]
-    [SwaggerRequestExample(typeof(Contacts), typeof(ContactsExample), jsonConverter: typeof(StringEnumConverter))]
-    public IActionResult Delete([FromBody]Contacts contact)
-    {
-      try
-      {
-        _logic.Delete(contact);
-        return new OkResult();
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
-      }
     }
   }
 }

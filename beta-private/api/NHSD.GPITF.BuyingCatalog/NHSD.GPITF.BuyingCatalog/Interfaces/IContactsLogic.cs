@@ -9,9 +9,6 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
     Contacts ById(string id);
     IQueryable<Contacts> ByOrganisation(string organisationId);
     Contacts ByEmail(string email);
-    Contacts Create(Contacts contact);
-    void Update(Contacts contact);
-    void Delete(Contacts contact);
   }
 #pragma warning restore CS1591
 }
