@@ -9,11 +9,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
   {
     public static DefaultHttpContext GetContext(
       string orgId = "NHS Digital",
-      string role = Roles.Admin)
+      string role = Roles.Admin,
+      string email = "NHS-GPIT@WigglyAmps.com")
     {
       var orgClaim = new Claim(nameof(Organisations), orgId);
       var roleClaim = new Claim(ClaimTypes.Role, role);
-      var claimsIdentity = new ClaimsIdentity(new[] { orgClaim, roleClaim });
+      var emailClaim = new Claim(ClaimTypes.Email, email);
+      var claimsIdentity = new ClaimsIdentity(new[] { orgClaim, roleClaim, emailClaim });
       var user = new ClaimsPrincipal(new[] { claimsIdentity });
       var ctx = new DefaultHttpContext { User = user };
 

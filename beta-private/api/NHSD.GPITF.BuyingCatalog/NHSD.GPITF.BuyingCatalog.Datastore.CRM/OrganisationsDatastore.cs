@@ -16,7 +16,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
     }
 
-    public Organisations ByODS(string odsCode)
+    public Organisations ByEmail(string email)
     {
       throw new NotImplementedException();
     }

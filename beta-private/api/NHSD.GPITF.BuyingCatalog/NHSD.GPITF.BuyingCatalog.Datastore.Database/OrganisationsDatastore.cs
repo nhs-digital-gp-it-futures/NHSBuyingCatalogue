@@ -14,11 +14,12 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
     }
 
-    public Organisations ByODS(string odsCode)
+    public Organisations ByEmail(string email)
     {
       return GetInternal(() =>
       {
-        return _dbConnection.Value.GetAll<Organisations>().SingleOrDefault(org => org.OdsCode == odsCode);
+        // TODO   change to use IOrganisationsDatastore.ByEmail
+        return _dbConnection.Value.GetAll<Organisations>().SingleOrDefault(org => org.OdsCode == email);
       });
     }
   }

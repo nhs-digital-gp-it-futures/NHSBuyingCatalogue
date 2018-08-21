@@ -119,7 +119,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var soln = GetSolution();
       _solutionDatastore.Setup(x => x.ById(It.IsAny<string>())).Returns(GetSolution());
       // TODO   change to use IOrganisationsDatastore.ByEmail
-      _organisationDatastore.Setup(x => x.ByODS(It.IsAny<string>())).Returns(new Organisations());
+      _organisationDatastore.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(new Organisations());
 
       var valres = validator.Validate(soln, ruleSet: nameof(ISolutionsLogic.Delete));
 
@@ -132,7 +132,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
       var soln = GetSolution();
       // TODO   change to use IOrganisationsDatastore.ByEmail
-      _organisationDatastore.Setup(x => x.ByODS(It.IsAny<string>())).Returns(new Organisations());
+      _organisationDatastore.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(new Organisations());
 
       var valres = validator.Validate(soln, ruleSet: nameof(ISolutionsLogic.Delete));
 

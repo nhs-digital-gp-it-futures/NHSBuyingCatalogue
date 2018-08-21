@@ -59,7 +59,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .Must(x =>
         {
           // TODO   change to use IOrganisationsDatastore.ByEmail
-          var org = _organisationDatastore.ByODS(x.OrganisationId);
+          var org = _organisationDatastore.ByEmail(x.OrganisationId);
           return org != null;
         })
         .WithMessage("Organisation not found");
