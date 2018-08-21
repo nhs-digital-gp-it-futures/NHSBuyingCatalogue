@@ -51,15 +51,18 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       var orgId = Guid.NewGuid().ToString();
       var org = Creator.GetOrganisation(id: orgId, primaryRoleId: PrimaryRole.ApplicationServiceProvider);
-      _organisationDatastore.Setup(x => x.ById(orgId)).Returns(org);
+      // TODO   change to use IOrganisationsDatastore.ByEmail
+      _organisationDatastore.Setup(x => x.ByODS(orgId)).Returns(org);
 
       var otherOrgId = Guid.NewGuid().ToString();
       var otherOrg = Creator.GetOrganisation(id: otherOrgId, primaryRoleId: PrimaryRole.ApplicationServiceProvider);
-      _organisationDatastore.Setup(x => x.ById(otherOrgId)).Returns(otherOrg);
+      // TODO   change to use IOrganisationsDatastore.ByEmail
+      _organisationDatastore.Setup(x => x.ByODS(otherOrgId)).Returns(otherOrg);
 
       var nhsdOrgId = Guid.NewGuid().ToString();
       var nhsd = Creator.GetOrganisation(id: nhsdOrgId, primaryRoleId: PrimaryRole.GovernmentDepartment);
-      _organisationDatastore.Setup(x => x.ById(nhsdOrgId)).Returns(nhsd);
+      // TODO   change to use IOrganisationsDatastore.ByEmail
+      _organisationDatastore.Setup(x => x.ByODS(nhsdOrgId)).Returns(nhsd);
 
       var ctx = Creator.GetContext(orgId: orgId, role: Roles.Supplier);
       _context.Setup(c => c.HttpContext).Returns(ctx);

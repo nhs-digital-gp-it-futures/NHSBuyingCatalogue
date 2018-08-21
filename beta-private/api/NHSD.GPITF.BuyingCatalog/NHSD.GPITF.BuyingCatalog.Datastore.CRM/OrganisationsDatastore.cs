@@ -3,7 +3,6 @@ using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System;
-using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
@@ -17,32 +16,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
     }
 
-    public Organisations ById(string id)
-    {
-      throw new NotImplementedException();
-    }
-
     public Organisations ByODS(string odsCode)
-    {
-      throw new NotImplementedException();
-    }
-
-    public Organisations Create(Organisations org)
-    {
-      throw new NotImplementedException();
-    }
-
-    public void Delete(Organisations org)
-    {
-      throw new NotImplementedException();
-    }
-
-    public IQueryable<Organisations> GetAll()
-    {
-      throw new NotImplementedException();
-    }
-
-    public void Update(Organisations org)
     {
       throw new NotImplementedException();
     }

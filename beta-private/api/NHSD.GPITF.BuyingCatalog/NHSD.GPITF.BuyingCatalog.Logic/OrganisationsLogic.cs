@@ -29,33 +29,5 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     {
       return _filter.Filter(new[] { _datastore.ByODS(odsCode) }.AsQueryable()).SingleOrDefault();
     }
-
-    public Organisations ById(string id)
-    {
-      return _filter.Filter(new[] { _datastore.ById(id) }.AsQueryable()).SingleOrDefault();
-    }
-
-    public IQueryable<Organisations> GetAll()
-    {
-      return _filter.Filter(_datastore.GetAll());
-    }
-
-    public Organisations Create(Organisations org)
-    {
-      _validator.ValidateAndThrow(org, ruleSet: nameof(IOrganisationsLogic.Create));
-      return _datastore.Create(org);
-    }
-
-    public void Update(Organisations org)
-    {
-      _validator.ValidateAndThrow(org, ruleSet: nameof(IOrganisationsLogic.Update));
-      _datastore.Update(org);
-    }
-
-    public void Delete(Organisations org)
-    {
-      _validator.ValidateAndThrow(org, ruleSet: nameof(IOrganisationsLogic.Delete));
-      _datastore.Delete(org);
-    }
   }
 }

@@ -61,7 +61,8 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
         var contLog = (IContactsDatastore)servProv.GetService(typeof(IContactsDatastore));
         var contact = contLog.ByEmail(email);
         var orgLog = (IOrganisationsDatastore)servProv.GetService(typeof(IOrganisationsDatastore));
-        var org = orgLog.ById(contact.OrganisationId);
+        // TODO   change to use IOrganisationsDatastore.ByEmail
+        var org = orgLog.ByODS(contact.OrganisationId);
         switch (org.PrimaryRoleId)
         {
           case PrimaryRole.ApplicationServiceProvider:

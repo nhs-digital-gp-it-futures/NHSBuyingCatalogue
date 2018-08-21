@@ -40,7 +40,8 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
 
       var servProv = context.HttpContext.RequestServices;
       var orgStore = (IOrganisationsDatastore)servProv.GetService(typeof(IOrganisationsDatastore));
-      var org = orgStore.GetAll().FirstOrDefault(x => x.PrimaryRoleId == primaryRoleId);
+      // TODO   change to use IOrganisationsDatastore.ByEmail
+      var org = orgStore.ByODS("email");
       var claims = new List<Claim>
       {
         new Claim(ClaimTypes.Name, context.UserName, context.Options.ClaimsIssuer),

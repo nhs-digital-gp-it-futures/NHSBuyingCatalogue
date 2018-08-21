@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
@@ -9,18 +8,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     public OrganisationsValidator(IHttpContextAccessor context) :
       base(context)
     {
-      RuleSet(nameof(IOrganisationsLogic.Create), () =>
-      {
-        MustBeAdmin();
-      });
-      RuleSet(nameof(IOrganisationsLogic.Update), () =>
-      {
-        MustBeAdmin();
-      });
-      RuleSet(nameof(IOrganisationsLogic.Delete), () =>
-      {
-        MustBeAdmin();
-      });
     }
   }
 }
