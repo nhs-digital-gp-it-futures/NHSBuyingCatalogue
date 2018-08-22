@@ -47,6 +47,7 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
       var org = orgStore.ByContact(contact.Id);
       var claims = new List<Claim>
       {
+        new Claim(ClaimTypes.Email, email, context.Options.ClaimsIssuer),
         new Claim(ClaimTypes.Name, context.UserName, context.Options.ClaimsIssuer),
 
         // use (case-sensitive) UserName for role
