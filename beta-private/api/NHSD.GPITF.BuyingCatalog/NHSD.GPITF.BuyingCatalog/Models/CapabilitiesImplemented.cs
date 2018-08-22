@@ -30,11 +30,6 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     public string CapabilityId { get; set; }
 
     /// <summary>
-    /// Serialised evidence data
-    /// </summary>
-    public string Evidence { get; set; } = string.Empty;
-
-    /// <summary>
     /// Current status of this ClaimedCapability
     /// </summary>
     public ClaimedCapabilityStatus Status { get; set; } = ClaimedCapabilityStatus.Submitted;

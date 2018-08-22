@@ -30,11 +30,6 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     public string StandardId { get; set; }
 
     /// <summary>
-    /// Serialised evidence data
-    /// </summary>
-    public string Evidence { get; set; } = string.Empty;
-
-    /// <summary>
     /// Current status of this ClaimedStandard
     /// </summary>
     public ClaimedStandardStatus Status { get; set; } = ClaimedStandardStatus.Submitted;

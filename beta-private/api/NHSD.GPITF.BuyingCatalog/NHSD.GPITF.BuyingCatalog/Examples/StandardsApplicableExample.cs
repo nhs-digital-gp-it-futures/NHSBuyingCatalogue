@@ -12,8 +12,7 @@ namespace NHSD.GPITF.BuyingCatalog.Examples
       {
         Id = "0F2614F9-2521-414A-A448-0096C0DF3ABE",
         SolutionId = "A3C6830F-2E7C-4545-A4B9-02D20C4C92E1",
-        StandardId = "INT2",
-        Evidence = "New ClaimedStandard Evidence"
+        StandardId = "INT2"
       };
     }
   }
