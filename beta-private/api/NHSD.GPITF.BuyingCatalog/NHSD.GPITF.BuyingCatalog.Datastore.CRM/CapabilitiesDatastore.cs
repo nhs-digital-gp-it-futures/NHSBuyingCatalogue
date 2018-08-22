@@ -38,17 +38,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       throw new NotImplementedException();
     }
 
-    public Capabilities Create(Capabilities capability)
-    {
-      throw new NotImplementedException();
-    }
-
     public IQueryable<Capabilities> GetAll()
-    {
-      throw new NotImplementedException();
-    }
-
-    public void Update(Capabilities capability)
     {
       throw new NotImplementedException();
     }

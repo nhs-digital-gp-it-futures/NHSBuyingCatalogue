@@ -69,39 +69,11 @@ where std.Id = '{standardId}' and cs.IsOptional = {(isOptional ? 1 : 0).ToString
       });
     }
 
-    public Capabilities Create(Capabilities capability)
-    {
-      return GetInternal(() =>
-      {
-        using (var trans = _dbConnection.Value.BeginTransaction())
-        {
-          capability.Id = Guid.NewGuid().ToString();
-          _dbConnection.Value.Insert(capability, trans);
-          trans.Commit();
-
-          return capability;
-        }
-      });
-    }
-
     public IQueryable<Capabilities> GetAll()
     {
       return GetInternal(() =>
       {
         return _dbConnection.Value.GetAll<Capabilities>().AsQueryable();
-      });
-    }
-
-    public void Update(Capabilities capability)
-    {
-      GetInternal(() =>
-      {
-        using (var trans = _dbConnection.Value.BeginTransaction())
-        {
-          _dbConnection.Value.Update(capability, trans);
-          trans.Commit();
-          return 0;
-        }
       });
     }
   }

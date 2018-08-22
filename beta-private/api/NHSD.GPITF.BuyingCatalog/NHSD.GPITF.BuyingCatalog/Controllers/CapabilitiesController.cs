@@ -118,24 +118,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     }
 
     /// <summary>
-    /// Create a new capability
-    /// </summary>
-    /// <param name="capability">new capability information</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Previous capability not found in CRM</response>
-    [HttpPost]
-    [Route("Create")]
-    [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(Capabilities), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Previous capability not found in CRM")]
-    [SwaggerRequestExample(typeof(Capabilities), typeof(CapabilitiesExample), jsonConverter: typeof(StringEnumConverter))]
-    public IActionResult Create([FromBody]Capabilities capability)
-    {
-      var newCap = _logic.Create(capability);
-      return newCap != null ? (IActionResult)new OkObjectResult(newCap) : new NotFoundResult();
-    }
-
-    /// <summary>
     /// Retrieve all current capabilities in a paged list
     /// </summary>
     /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
@@ -149,31 +131,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
       var allCaps = _logic.GetAll();
       var retval = PaginatedList<Capabilities>.Create(allCaps, pageIndex, pageSize);
       return new OkObjectResult(retval);
-    }
-
-    /// <summary>
-    /// Update an existing capability with new information
-    /// </summary>
-    /// <param name="capability">capability with updated information</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Capability or previous version not found in CRM</response>
-    [HttpPut]
-    [Route("Update")]
-    [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Capability or previous version not found in CRM")]
-    [SwaggerRequestExample(typeof(Capabilities), typeof(CapabilitiesExample), jsonConverter: typeof(StringEnumConverter))]
-    public IActionResult Update([FromBody]Capabilities capability)
-    {
-      try
-      {
-        _logic.Update(capability);
-        return new OkResult();
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
-      }
     }
   }
 }

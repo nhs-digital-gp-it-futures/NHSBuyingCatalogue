@@ -11,9 +11,7 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
     Capabilities ById(string id);
     IQueryable<Capabilities> ByIds(IEnumerable<string> ids);
     IQueryable<Capabilities> ByStandard(string standardId, bool isOptional);
-    Capabilities Create(Capabilities capability);
     IQueryable<Capabilities> GetAll();
-    void Update(Capabilities capability);
   }
 #pragma warning restore CS1591
 }

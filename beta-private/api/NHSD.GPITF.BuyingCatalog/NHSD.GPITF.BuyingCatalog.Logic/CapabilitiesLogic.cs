@@ -42,21 +42,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       return _datastore.ByStandard(standardId, isOptional);
     }
 
-    public Capabilities Create(Capabilities capability)
-    {
-      _validator.ValidateAndThrow(capability, ruleSet: nameof(ICapabilitiesLogic.Create));
-      return _datastore.Create(capability);
-    }
-
     public IQueryable<Capabilities> GetAll()
     {
       return _datastore.GetAll();
-    }
-
-    public void Update(Capabilities capability)
-    {
-      _validator.ValidateAndThrow(capability, ruleSet: nameof(ICapabilitiesLogic.Update));
-      _datastore.Update(capability);
     }
   }
 }
