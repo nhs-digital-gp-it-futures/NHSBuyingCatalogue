@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using System;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
@@ -69,39 +68,11 @@ where std.Id = '{standardId}'
       });
     }
 
-    public Frameworks Create(Frameworks framework)
-    {
-      return GetInternal(() =>
-      {
-        using (var trans = _dbConnection.Value.BeginTransaction())
-        {
-          framework.Id = Guid.NewGuid().ToString();
-          _dbConnection.Value.Insert(framework, trans);
-          trans.Commit();
-
-          return framework;
-        }
-      });
-    }
-
     public IQueryable<Frameworks> GetAll()
     {
       return GetInternal(() =>
       {
         return _dbConnection.Value.GetAll<Frameworks>().AsQueryable();
-      });
-    }
-
-    public void Update(Frameworks framework)
-    {
-      GetInternal(() =>
-      {
-        using (var trans = _dbConnection.Value.BeginTransaction())
-        {
-          _dbConnection.Value.Update(framework, trans);
-          trans.Commit();
-          return 0;
-        }
       });
     }
   }

@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System.Linq;
@@ -44,21 +43,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       return _filter.Filter(_datastore.BySolution(solutionId));
     }
 
-    public Frameworks Create(Frameworks framework)
-    {
-      _validator.ValidateAndThrow(framework, ruleSet: nameof(IFrameworksLogic.Create));
-      return _datastore.Create(framework);
-    }
-
     public IQueryable<Frameworks> GetAll()
     {
       return _datastore.GetAll();
-    }
-
-    public void Update(Frameworks framework)
-    {
-      _validator.ValidateAndThrow(framework, ruleSet: nameof(IFrameworksLogic.Create));
-      _datastore.Update(framework);
     }
   }
 }

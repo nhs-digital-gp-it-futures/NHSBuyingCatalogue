@@ -37,17 +37,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       throw new NotImplementedException();
     }
 
-    public Frameworks Create(Frameworks framework)
-    {
-      throw new NotImplementedException();
-    }
-
     public IQueryable<Frameworks> GetAll()
-    {
-      throw new NotImplementedException();
-    }
-
-    public void Update(Frameworks framework)
     {
       throw new NotImplementedException();
     }

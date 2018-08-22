@@ -10,9 +10,7 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
     Frameworks ById(string id);
     IQueryable<Frameworks> BySolution(string solutionId);
     IQueryable<Frameworks> ByStandard(string standardId);
-    Frameworks Create(Frameworks framework);
     IQueryable<Frameworks> GetAll();
-    void Update(Frameworks framework);
   }
 #pragma warning restore CS1591
 }

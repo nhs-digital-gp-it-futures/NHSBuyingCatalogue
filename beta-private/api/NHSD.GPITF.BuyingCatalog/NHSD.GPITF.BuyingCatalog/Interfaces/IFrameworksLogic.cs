@@ -7,8 +7,6 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
   public interface IFrameworksLogic
   {
     IQueryable<Frameworks> GetAll();
-    void Update(Frameworks framework);
-    Frameworks Create(Frameworks framework);
     IQueryable<Frameworks> BySolution(string solutionId);
     IQueryable<Frameworks> ByStandard(string standardId);
     Frameworks ById(string id);

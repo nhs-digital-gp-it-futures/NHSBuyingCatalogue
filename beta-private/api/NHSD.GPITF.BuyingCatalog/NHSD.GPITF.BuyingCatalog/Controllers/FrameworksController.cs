@@ -2,14 +2,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using NHSD.GPITF.BuyingCatalog.Attributes;
-using NHSD.GPITF.BuyingCatalog.Examples;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using Swashbuckle.AspNetCore.Examples;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
@@ -118,24 +114,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     }
 
     /// <summary>
-    /// Create a new framework
-    /// </summary>
-    /// <param name="framework">new framework information</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Previous framework not found in CRM</response>
-    [HttpPost]
-    [Route("Create")]
-    [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(Frameworks), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Previous framework not found in CRM")]
-    [SwaggerRequestExample(typeof(Frameworks), typeof(FrameworksExample), jsonConverter: typeof(StringEnumConverter))]
-    public IActionResult Create([FromBody]Frameworks framework)
-    {
-      var newFramework = _logic.Create(framework);
-      return newFramework != null ? (IActionResult)new OkObjectResult(newFramework) : new NotFoundResult();
-    }
-
-    /// <summary>
     /// Retrieve all current frameworks in a paged list
     /// </summary>
     /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
@@ -149,31 +127,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
       var allFrameworks = _logic.GetAll();
       var retval = PaginatedList<Frameworks>.Create(allFrameworks, pageIndex, pageSize);
       return new OkObjectResult(retval);
-    }
-
-    /// <summary>
-    /// Update an existing framework with new information
-    /// </summary>
-    /// <param name="framework">framework with updated information</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Framework or previous version not found in CRM</response>
-    [HttpPut]
-    [Route("Update")]
-    [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Framework or previous version not found in CRM")]
-    [SwaggerRequestExample(typeof(Frameworks), typeof(FrameworksExample), jsonConverter: typeof(StringEnumConverter))]
-    public IActionResult Update([FromBody]Frameworks framework)
-    {
-      try
-      {
-        _logic.Update(framework);
-        return new OkResult();
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
-      }
     }
   }
 }
