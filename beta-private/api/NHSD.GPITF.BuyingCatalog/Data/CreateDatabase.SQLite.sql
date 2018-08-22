@@ -102,19 +102,6 @@ CREATE TABLE Standards
   PRIMARY KEY (Id)
 );
 
--- Reviews.csv
-CREATE TABLE Reviews
-(
-  Id TEXT NOT NULL UNIQUE,
-  SolutionId TEXT NOT NULL,
-  ContactId TEXT NOT NULL,
-  Timestamp TEXT NOT NULL,
-  Message TEXT,
-  PRIMARY KEY (Id),
-  FOREIGN KEY (SolutionId) REFERENCES Solutions(Id) ON DELETE CASCADE,
-  FOREIGN KEY (ContactId) REFERENCES Contacts(Id) ON DELETE CASCADE
-);
-
 
 -- create relationship tables
 
