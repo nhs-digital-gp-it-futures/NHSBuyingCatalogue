@@ -112,56 +112,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       valres.Errors.Count().Should().Be(1);
     }
 
-    [Test]
-    public void Validate_Delete_Valid_ReturnsNoError()
-    {
-      var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
-      var soln = GetSolution();
-      _solutionDatastore.Setup(x => x.ById(It.IsAny<string>())).Returns(GetSolution());
-      // TODO   change to use IOrganisationsDatastore.ByEmail
-      _organisationDatastore.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(new Organisations());
-
-      var valres = validator.Validate(soln, ruleSet: nameof(ISolutionsLogic.Delete));
-
-      valres.Errors.Should().BeEmpty();
-    }
-
-    [Test]
-    public void Validate_Delete_NoSolution_ReturnsError()
-    {
-      var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
-      var soln = GetSolution();
-      // TODO   change to use IOrganisationsDatastore.ByEmail
-      _organisationDatastore.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(new Organisations());
-
-      var valres = validator.Validate(soln, ruleSet: nameof(ISolutionsLogic.Delete));
-
-      valres.Errors.Count().Should().Be(1);
-    }
-
-    [Test]
-    public void Validate_Delete_NoOrganisation_ReturnsError()
-    {
-      var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
-      var soln = GetSolution();
-      _solutionDatastore.Setup(x => x.ById(It.IsAny<string>())).Returns(GetSolution());
-
-      var valres = validator.Validate(soln, ruleSet: nameof(ISolutionsLogic.Delete));
-
-      valres.Errors.Count().Should().Be(1);
-    }
-
-    [Test]
-    public void Validate_Delete_NoSolutionNoOrganisation_ReturnsError()
-    {
-      var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
-      var soln = GetSolution();
-
-      var valres = validator.Validate(soln, ruleSet: nameof(ISolutionsLogic.Delete));
-
-      valres.Errors.Count().Should().Be(2);
-    }
-
     private static Solutions GetSolution(
       string id = null,
       string orgId = null)

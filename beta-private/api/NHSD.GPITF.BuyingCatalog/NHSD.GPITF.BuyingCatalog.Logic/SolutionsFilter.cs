@@ -26,7 +26,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       if (_context.HasRole(Roles.Supplier))
       {
         // Supplier: only own Solutions
-        return _context.ContextOrganisationId() == input.OrganisationId ? input : null;
+        return _context.OrganisationId() == input.OrganisationId ? input : null;
       }
 
       // None: hide draft Solutions

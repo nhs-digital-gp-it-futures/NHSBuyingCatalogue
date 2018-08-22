@@ -15,7 +15,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       if (_context.HasRole(Roles.Supplier))
       {
         // Supplier: everything except other Supplier
-        return input.PrimaryRoleId != PrimaryRole.ApplicationServiceProvider || _context.ContextOrganisationId() == input.Id ? input : null;
+        return input.PrimaryRoleId != PrimaryRole.ApplicationServiceProvider || _context.OrganisationId() == input.Id ? input : null;
       }
       return input;
     }

@@ -159,30 +159,5 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
         return new NotFoundObjectResult(ex);
       }
     }
-
-    /// <summary>
-    /// Delete an existing Solution
-    /// </summary>
-    /// <param name="solution">existing Solution</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Solution or Organisation not found in CRM</response>
-    [HttpDelete]
-    [Route("Delete")]
-    [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Solution or Organisation not found in CRM")]
-    [SwaggerRequestExample(typeof(Solutions), typeof(SolutionsExample), jsonConverter: typeof(StringEnumConverter))]
-    public IActionResult Delete([FromBody]Solutions solution)
-    {
-      try
-      {
-        _logic.Delete(solution);
-        return new OkResult();
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
-      }
-    }
   }
 }

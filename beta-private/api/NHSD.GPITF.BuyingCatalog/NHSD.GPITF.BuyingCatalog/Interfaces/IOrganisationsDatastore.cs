@@ -5,7 +5,7 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
 #pragma warning disable CS1591
   public interface IOrganisationsDatastore
   {
-    Organisations ByEmail(string email);
+    Organisations ByContact(string contactId);
   }
 #pragma warning restore CS1591
 }

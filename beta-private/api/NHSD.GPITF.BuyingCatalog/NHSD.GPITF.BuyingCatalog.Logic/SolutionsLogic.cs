@@ -52,12 +52,5 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
       _datastore.Update(solution);
     }
-
-    public void Delete(Solutions solution)
-    {
-      _validator.ValidateAndThrow(solution);
-      _validator.ValidateAndThrow(solution, ruleSet: nameof(ISolutionsLogic.Delete));
-      _datastore.Delete(solution);
-    }
   }
 }

@@ -8,15 +8,20 @@ namespace NHSD.GPITF.BuyingCatalog
 {
   public static class HttpContextAccessorExtensions
   {
-    public static string ContextOrganisationId(this IHttpContextAccessor context)
+    public static string OrganisationId(this IHttpContextAccessor context)
     {
       return context.HttpContext.User.Claims
         .FirstOrDefault(x => x.Type == nameof(Organisations))?.Value;
     }
 
-    public static string ContextEmail(this IHttpContextAccessor context)
+    public static string Email(this IHttpContextAccessor context)
     {
-      return context.HttpContext.User.Claims
+      return context.HttpContext.Email();
+    }
+
+    public static string Email(this HttpContext context)
+    {
+      return context.User.Claims
         .FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
     }
 

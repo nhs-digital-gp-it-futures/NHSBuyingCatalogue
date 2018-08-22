@@ -34,8 +34,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         return null;
       }
 
-      // TODO   change to use IOrganisationsDatastore.ByEmail
-      var contactOrg = _organisationDatastore.ByEmail(input.OrganisationId);
+      var contactOrg = _organisationDatastore.ByContact(input.Id);
 
       return (input.OrganisationId == orgId ||
         contactOrg.PrimaryRoleId == PrimaryRole.GovernmentDepartment)

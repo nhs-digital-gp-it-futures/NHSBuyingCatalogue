@@ -41,7 +41,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 
     public void Delete(Reviews assMess)
     {
-      // TODO   manually handle delete for MS SQL Server due to cyclic foreign key cascading delete
       throw new NotImplementedException();
     }
 

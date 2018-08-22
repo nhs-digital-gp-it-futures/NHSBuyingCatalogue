@@ -25,7 +25,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var ctx = Creator.GetContext(orgId: orgId);
       _context.Setup(c => c.HttpContext).Returns(ctx);
 
-      var ctxOrgId = _context.Object.ContextOrganisationId();
+      var ctxOrgId = _context.Object.OrganisationId();
 
       ctxOrgId.Should().Be(orgId);
     }
@@ -37,7 +37,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var ctx = Creator.GetContext(email: email);
       _context.Setup(c => c.HttpContext).Returns(ctx);
 
-      var ctxOrgId = _context.Object.ContextEmail();
+      var ctxOrgId = _context.Object.Email();
 
       ctxOrgId.Should().Be(email);
     }

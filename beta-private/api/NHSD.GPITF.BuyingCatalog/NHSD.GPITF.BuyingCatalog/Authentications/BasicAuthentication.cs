@@ -2,7 +2,6 @@
 using NHSD.GPITF.BuyingCatalog.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ZNetCS.AspNetCore.Authentication.Basic;
@@ -23,15 +22,18 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
       }
 
       var primaryRoleId = string.Empty;
+      var email = string.Empty;
       switch (context.UserName)
       {
         case Roles.Admin:
         case Roles.Buyer:
           primaryRoleId = PrimaryRole.GovernmentDepartment;
+          email = "buying.catalogue.assessment@gmail.com";
           break;
 
         case Roles.Supplier:
           primaryRoleId = PrimaryRole.ApplicationServiceProvider;
+          email = "buying.catalogue.supplier@gmail.com";
           break;
 
         default:
@@ -39,9 +41,10 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
       }
 
       var servProv = context.HttpContext.RequestServices;
+      var contStore = (IContactsDatastore)servProv.GetService(typeof(IContactsDatastore));
+      var contact = contStore.ByEmail(email);
       var orgStore = (IOrganisationsDatastore)servProv.GetService(typeof(IOrganisationsDatastore));
-      // TODO   change to use IOrganisationsDatastore.ByEmail
-      var org = orgStore.ByODS("email");
+      var org = orgStore.ByContact(contact.Id);
       var claims = new List<Claim>
       {
         new Claim(ClaimTypes.Name, context.UserName, context.Options.ClaimsIssuer),

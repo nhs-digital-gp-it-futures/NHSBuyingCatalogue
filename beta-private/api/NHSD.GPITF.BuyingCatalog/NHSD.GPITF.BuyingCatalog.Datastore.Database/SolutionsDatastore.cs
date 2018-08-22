@@ -74,18 +74,5 @@ where frame.Id = '{frameworkId}'
         }
       });
     }
-
-    public void Delete(Solutions solution)
-    {
-      GetInternal(() =>
-      {
-        using (var trans = _dbConnection.Value.BeginTransaction())
-        {
-          _dbConnection.Value.Delete(solution, trans);
-          trans.Commit();
-          return 0;
-        }
-      });
-    }
   }
 }

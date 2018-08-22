@@ -11,7 +11,6 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
     IQueryable<Solutions> ByOrganisation(string organisationId);
     Solutions Create(Solutions solution);
     void Update(Solutions solution);
-    void Delete(Solutions solution);
   }
 #pragma warning restore CS1591
 }

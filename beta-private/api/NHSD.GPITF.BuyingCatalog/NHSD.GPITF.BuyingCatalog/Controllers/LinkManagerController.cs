@@ -13,7 +13,7 @@ using ZNetCS.AspNetCore.Authentication.Basic;
 namespace NHSD.GPITF.BuyingCatalog.Controllers
 {
   /// <summary>
-  /// Manage links between Capability, Standard, Solution and Framework
+  /// Manage links between Solution and Framework
   /// </summary>
   [ApiVersion("1")]
   [Route("api/[controller]")]

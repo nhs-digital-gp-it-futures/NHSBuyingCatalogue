@@ -51,27 +51,27 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       var orgId = Guid.NewGuid().ToString();
       var org = Creator.GetOrganisation(id: orgId, primaryRoleId: PrimaryRole.ApplicationServiceProvider);
-      // TODO   change to use IOrganisationsDatastore.ByEmail
-      _organisationDatastore.Setup(x => x.ByEmail(orgId)).Returns(org);
 
       var otherOrgId = Guid.NewGuid().ToString();
       var otherOrg = Creator.GetOrganisation(id: otherOrgId, primaryRoleId: PrimaryRole.ApplicationServiceProvider);
-      // TODO   change to use IOrganisationsDatastore.ByEmail
-      _organisationDatastore.Setup(x => x.ByEmail(otherOrgId)).Returns(otherOrg);
 
       var nhsdOrgId = Guid.NewGuid().ToString();
       var nhsd = Creator.GetOrganisation(id: nhsdOrgId, primaryRoleId: PrimaryRole.GovernmentDepartment);
-      // TODO   change to use IOrganisationsDatastore.ByEmail
-      _organisationDatastore.Setup(x => x.ByEmail(nhsdOrgId)).Returns(nhsd);
+
+      var cont1 = GetContact(orgId: orgId);
+      var cont2 = GetContact(orgId: orgId);
+      var cont3 = GetContact(orgId: otherOrgId);
+      var cont4 = GetContact(orgId: nhsdOrgId);
+
+      _organisationDatastore.Setup(x => x.ByContact(cont1.Id)).Returns(org);
+      _organisationDatastore.Setup(x => x.ByContact(cont2.Id)).Returns(org);
+      _organisationDatastore.Setup(x => x.ByContact(cont3.Id)).Returns(otherOrg);
+      _organisationDatastore.Setup(x => x.ByContact(cont4.Id)).Returns(nhsd);
 
       var ctx = Creator.GetContext(orgId: orgId, role: Roles.Supplier);
       _context.Setup(c => c.HttpContext).Returns(ctx);
 
       var filter = new ContactsFilter(_context.Object, _organisationDatastore.Object);
-      var cont1 = GetContact(orgId: orgId);
-      var cont2 = GetContact(orgId: orgId);
-      var cont3 = GetContact(orgId: otherOrgId);
-      var cont4 = GetContact(orgId: nhsdOrgId);
       var contacts = new[] { cont1, cont2, cont3, cont4 };
 
 

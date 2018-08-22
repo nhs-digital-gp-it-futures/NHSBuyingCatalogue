@@ -37,11 +37,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       throw new NotImplementedException();
     }
 
-    public void Delete(Solutions solution)
-    {
-      throw new NotImplementedException();
-    }
-
     public void Update(Solutions solution)
     {
       throw new NotImplementedException();

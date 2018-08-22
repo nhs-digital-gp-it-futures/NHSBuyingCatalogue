@@ -1,4 +1,4 @@
-﻿using Dapper.Contrib.Extensions;
+﻿using Dapper;
 using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
@@ -14,12 +14,16 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
     }
 
-    public Organisations ByEmail(string email)
+    public Organisations ByContact(string contactId)
     {
       return GetInternal(() =>
       {
-        // TODO   change to use IOrganisationsDatastore.ByEmail
-        return _dbConnection.Value.GetAll<Organisations>().SingleOrDefault(org => org.OdsCode == email);
+        var sql = $@"
+select * from Organisations org
+join Contacts cont on cont.OrganisationId = org.Id
+where cont.Id = '{contactId}'";
+        var retval = _dbConnection.Value.Query<Organisations>(sql).Single();
+        return retval;
       });
     }
   }

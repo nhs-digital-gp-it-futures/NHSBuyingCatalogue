@@ -31,7 +31,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
       // Supplier: only own messages
       var soln = _solutionDatastore.ById(input.SolutionId);
-      return _context.ContextOrganisationId() == soln?.OrganisationId ? input : null;
+      return _context.OrganisationId() == soln?.OrganisationId ? input : null;
     }
   }
 }

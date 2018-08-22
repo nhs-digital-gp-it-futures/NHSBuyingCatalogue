@@ -41,7 +41,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
           if (_context.HasRole(Roles.Supplier))
           {
             var soln = _solutionDatastore.ById(x.SolutionId);
-            return _context.ContextOrganisationId() == soln.OrganisationId;
+            return _context.OrganisationId() == soln.OrganisationId;
           }
           return _context.HasRole(Roles.Admin);
         })

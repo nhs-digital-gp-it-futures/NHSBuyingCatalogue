@@ -24,10 +24,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       {
         RuleForUpdate();
       });
-      RuleSet(nameof(ISolutionsLogic.Delete), () =>
-      {
-        RuleForDelete();
-      });
 
       RuleFor(x => x.Id).NotNull().Must(id => Guid.TryParse(id, out _)).WithMessage("Invalid Id");
       RuleFor(x => x.OrganisationId).NotNull().Must(orgId => Guid.TryParse(orgId, out _)).WithMessage("Invalid OrganisationId");
@@ -45,24 +41,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
           return soln != null && x.OrganisationId == soln.OrganisationId;
         })
         .WithMessage("Cannot transfer solutions between organisations");
-    }
-
-    private void RuleForDelete()
-    {
-      RuleFor(x => x)
-        .Must(x =>
-        {
-          var soln = _solutionDatastore.ById(x.Id);
-          return soln != null;
-        })
-        .WithMessage("Solution not found")
-        .Must(x =>
-        {
-          // TODO   change to use IOrganisationsDatastore.ByEmail
-          var org = _organisationDatastore.ByEmail(x.OrganisationId);
-          return org != null;
-        })
-        .WithMessage("Organisation not found");
     }
   }
 }
