@@ -14,3 +14,4 @@
 .import FrameworkSolution.csv FrameworkSolution
 .import FrameworkStandard.csv FrameworkStandard
 .import CapabilityStandard.csv CapabilityStandard
+.import CapabilitiesImplementedEvidence.csv CapabilitiesImplementedEvidence

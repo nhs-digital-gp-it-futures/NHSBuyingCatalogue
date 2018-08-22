@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS FrameworkStandard;
 DROP TABLE IF EXISTS CapabilityStandard;
 DROP TABLE IF EXISTS CapabilitiesImplemented;
 DROP TABLE IF EXISTS StandardsApplicable;
+DROP TABLE IF EXISTS CapabilitiesImplementedEvidence;
 
 -- drop data tables
 DROP TABLE IF EXISTS Reviews;
@@ -170,4 +171,16 @@ CREATE TABLE CapabilityStandard
   PRIMARY KEY (CapabilityId, StandardId)
 );
 
+-- CapabilitiesImplementedEvidence.csv
+CREATE TABLE CapabilitiesImplementedEvidence
+(
+  Id TEXT NOT NULL UNIQUE,
+  CapabilitiesImplementedId TEXT NOT NULL,
+  CreatedById TEXT NOT NULL,
+  CreatedOn TEXT NOT NULL,
+  Evidence TEXT,
+  FOREIGN KEY (CapabilitiesImplementedId) REFERENCES CapabilitiesImplemented(Id) ON DELETE CASCADE,
+  FOREIGN KEY (CreatedById) REFERENCES Contacts(Id) ON DELETE CASCADE,
+  PRIMARY KEY (Id)
+);
 
