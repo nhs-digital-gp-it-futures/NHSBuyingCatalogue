@@ -58,19 +58,5 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         SolutionId = solutionId ?? Guid.NewGuid().ToString()
       };
     }
-
-    public static Reviews GetAssessmentMessage(
-      string id = null,
-      string solutionId = null,
-      string contactId = null
-      )
-    {
-      return new Reviews
-      {
-        Id = id ?? Guid.NewGuid().ToString(),
-        SolutionId = solutionId ?? Guid.NewGuid().ToString(),
-        ContactId = contactId ?? Guid.NewGuid().ToString()
-      };
-    }
   }
 }
