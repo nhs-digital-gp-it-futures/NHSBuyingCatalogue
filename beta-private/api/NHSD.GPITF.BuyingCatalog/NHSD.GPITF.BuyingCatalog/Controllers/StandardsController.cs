@@ -9,7 +9,6 @@ using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using Swashbuckle.AspNetCore.Examples;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -118,24 +117,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     }
 
     /// <summary>
-    /// Create a new standard
-    /// </summary>
-    /// <param name="standard">new standard information</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Previous standard not found in CRM</response>
-    [HttpPost]
-    [Route("Create")]
-    [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(Standards), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Previous standard not found in CRM")]
-    [SwaggerRequestExample(typeof(Standards), typeof(StandardsExample), jsonConverter: typeof(StringEnumConverter))]
-    public IActionResult Create([FromBody]Standards standard)
-    {
-      var newStd = _logic.Create(standard);
-      return newStd != null ? (IActionResult)new OkObjectResult(newStd) : new NotFoundResult();
-    }
-
-    /// <summary>
     /// Retrieve all current standards in a paged list
     /// </summary>
     /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
@@ -149,31 +130,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
       var allStds = _logic.GetAll();
       var retval = PaginatedList<Standards>.Create(allStds, pageIndex, pageSize);
       return new OkObjectResult(retval);
-    }
-
-    /// <summary>
-    /// Update an existing standard with new information
-    /// </summary>
-    /// <param name="standard">standard with updated information</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Standard or previous version not found in CRM</response>
-    [HttpPut]
-    [Route("Update")]
-    [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Standard or previous version not found in CRM")]
-    [SwaggerRequestExample(typeof(Standards), typeof(StandardsExample), jsonConverter: typeof(StringEnumConverter))]
-    public IActionResult Update([FromBody]Standards standard)
-    {
-      try
-      {
-        _logic.Update(standard);
-        return new OkResult();
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
-      }
     }
   }
 }

@@ -43,21 +43,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       return _datastore.ByIds(ids);
     }
 
-    public Standards Create(Standards standard)
-    {
-      _validator.ValidateAndThrow(standard, ruleSet: nameof(IStandardsLogic.Create));
-      return _datastore.Create(standard);
-    }
-
     public IQueryable<Standards> GetAll()
     {
       return _datastore.GetAll();
-    }
-
-    public void Update(Standards standard)
-    {
-      _validator.ValidateAndThrow(standard, ruleSet: nameof(IStandardsLogic.Create));
-      _datastore.Update(standard);
     }
   }
 }

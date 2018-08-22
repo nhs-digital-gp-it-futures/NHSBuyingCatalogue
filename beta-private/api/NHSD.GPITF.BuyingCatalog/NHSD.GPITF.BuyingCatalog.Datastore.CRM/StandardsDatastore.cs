@@ -65,17 +65,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       });
     }
 
-    public Standards Create(Standards standard)
-    {
-      return GetInternal(() =>
-      {
-        var request = GetPostRequest("/Standard/Create", standard);
-        var retval = GetResponse<Standards>(request);
-
-        return retval;
-      });
-    }
-
     public IQueryable<Standards> GetAll()
     {
       return GetInternal(() =>
@@ -86,17 +75,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
         var retval = GetResponse<PaginatedList<Standards>>(request);
 
         return retval.Items.AsQueryable();
-      });
-    }
-
-    public void Update(Standards standard)
-    {
-      GetInternal(() =>
-      {
-        var request = GetPutRequest("/Standard/Update", standard);
-        var resp = GetRawResponse(request);
-
-        return 0;
       });
     }
   }

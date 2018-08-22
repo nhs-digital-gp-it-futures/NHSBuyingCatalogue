@@ -11,9 +11,7 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
     IQueryable<Standards> ByFramework(string frameworkId);
     Standards ById(string id);
     IQueryable<Standards> ByIds(IEnumerable<string> ids);
-    Standards Create(Standards standard);
     IQueryable<Standards> GetAll();
-    void Update(Standards standard);
   }
 #pragma warning restore CS1591
 }
