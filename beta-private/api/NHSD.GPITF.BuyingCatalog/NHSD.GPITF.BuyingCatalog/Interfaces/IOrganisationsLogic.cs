@@ -1,5 +1,4 @@
 ﻿using NHSD.GPITF.BuyingCatalog.Models;
-using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Interfaces
 {
