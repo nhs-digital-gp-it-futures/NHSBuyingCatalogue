@@ -370,6 +370,14 @@
   transform: rotate(180deg); /* because BLACK RIGHTWARDS ARROW ➡︎ looks different */
 }
 
+#add-edit-solution.mobile h3 {
+  color: var(--color-fg);
+}
+
+#add-edit-solution.mobile .is-mobile {
+  margin-top: 0;
+}
+
 dialog::backdrop {
   background: rgba(66, 85, 99, 0.8);
 }

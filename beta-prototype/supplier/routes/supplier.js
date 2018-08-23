@@ -654,8 +654,7 @@ app.post('/solutions/:solution_id/capabilities', csrfProtection, async (req, res
     let redirectUrl = `${req.baseUrl}/solutions`
 
     if (req.body.action === 'submit') {
-      solutionEx.solution.status = api.SOLUTION_STATUS.REGISTERED
-      redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/submitted`
+      redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/mobile`
     }
 
     await api.update_solution(solutionEx)
@@ -679,6 +678,59 @@ app.post('/solutions/:solution_id/capabilities', csrfProtection, async (req, res
       errors: err,
       csrfToken: req.csrfToken()
     })
+  }
+})
+
+app.get('/solutions/:solution_id/mobile', csrfProtection, async (req, res) => {
+  const solutionEx = await api.get_solution_by_id(req.params.solution_id)
+
+  // only draft solutions can be edited
+  if (solutionEx.solution.status !== api.SOLUTION_STATUS.DRAFT) {
+    return res.redirect('/suppliers/solutions')
+  }
+
+  const context = {
+    csrfToken: req.csrfToken(),
+    isMobile: _.some(solutionEx.claimedStandard, ['standardId', 'CSS3'])
+  }
+
+  res.render('supplier/solution-mobile', context)
+})
+
+app.post('/solutions/:solution_id/mobile', csrfProtection, async (req, res) => {
+  const solutionEx = await api.get_solution_by_id(req.params.solution_id)
+
+  // only draft solutions can be edited
+  if (solutionEx.solution.status !== api.SOLUTION_STATUS.DRAFT) {
+    return res.redirect('/suppliers/solutions')
+  }
+
+  _.remove(solutionEx.claimedStandard, ['standardId', 'CSS3'])
+  if (req.body.isMobile === 'yes') {
+    solutionEx.claimedStandard.push({
+      'standardId': 'CSS3'
+    })
+  }
+
+  const context = {
+    csrfToken: req.csrfToken(),
+    isMobile: _.some(solutionEx.claimedStandard, ['standardId', 'CSS3'])
+  }
+
+  try {
+    let redirectUrl = `${req.baseUrl}/solutions`
+
+    if (req.body.action === 'submit') {
+      solutionEx.solution.status = api.SOLUTION_STATUS.REGISTERED
+      redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/submitted`
+    }
+
+    await api.update_solution(solutionEx)
+
+    res.redirect(redirectUrl)
+  } catch (err) {
+    context.errors = err
+    res.render('supplier/solution-mobile', context)
   }
 })
 
