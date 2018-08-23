@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS CapabilitiesImplemented;
 DROP TABLE IF EXISTS StandardsApplicable;
 DROP TABLE IF EXISTS CapabilitiesImplementedEvidence;
 DROP TABLE IF EXISTS CapabilitiesImplementedReviews;
+DROP TABLE IF EXISTS StandardsApplicableEvidence;
 
 -- drop data tables
 DROP TABLE IF EXISTS Reviews;
@@ -194,6 +195,19 @@ CREATE TABLE CapabilitiesImplementedReviews
   CreatedOn TEXT NOT NULL,
   Message TEXT,
   FOREIGN KEY (CapabilitiesImplementedEvidenceId) REFERENCES CapabilitiesImplementedEvidence(Id) ON DELETE CASCADE,
+  FOREIGN KEY (CreatedById) REFERENCES Contacts(Id) ON DELETE CASCADE,
+  PRIMARY KEY (Id)
+);
+
+-- StandardsApplicableEvidence.csv
+CREATE TABLE StandardsApplicableEvidence
+(
+  Id TEXT NOT NULL UNIQUE,
+  StandardsApplicableId TEXT NOT NULL,
+  CreatedById TEXT NOT NULL,
+  CreatedOn TEXT NOT NULL,
+  Evidence TEXT,
+  FOREIGN KEY (StandardsApplicableId) REFERENCES StandardsApplicable(Id) ON DELETE CASCADE,
   FOREIGN KEY (CreatedById) REFERENCES Contacts(Id) ON DELETE CASCADE,
   PRIMARY KEY (Id)
 );
