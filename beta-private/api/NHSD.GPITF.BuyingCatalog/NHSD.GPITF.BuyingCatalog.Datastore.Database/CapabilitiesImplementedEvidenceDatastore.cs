@@ -27,18 +27,18 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
       });
     }
 
-    public CapabilitiesImplementedEvidence Create(CapabilitiesImplementedEvidence capEvidenc)
+    public CapabilitiesImplementedEvidence Create(CapabilitiesImplementedEvidence evidence)
     {
       return GetInternal(() =>
       {
         using (var trans = _dbConnection.Value.BeginTransaction())
         {
-          capEvidenc.Id = Guid.NewGuid().ToString();
-          capEvidenc.CreatedOn = DateTime.UtcNow;
-          _dbConnection.Value.Insert(capEvidenc, trans);
+          evidence.Id = Guid.NewGuid().ToString();
+          evidence.CreatedOn = DateTime.UtcNow;
+          _dbConnection.Value.Insert(evidence, trans);
           trans.Commit();
 
-          return capEvidenc;
+          return evidence;
         }
       });
     }

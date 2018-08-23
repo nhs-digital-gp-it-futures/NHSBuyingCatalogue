@@ -25,11 +25,11 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       return _datastore.ByCapabilitiesImplemented(capabilitiesImplementedId);
     }
 
-    public CapabilitiesImplementedEvidence Create(CapabilitiesImplementedEvidence capEvidenc)
+    public CapabilitiesImplementedEvidence Create(CapabilitiesImplementedEvidence evidence)
     {
       var email = Context.Email();
-      capEvidenc.CreatedById = _contacts.ByEmail(email).Id;
-      return _datastore.Create(capEvidenc);
+      evidence.CreatedById = _contacts.ByEmail(email).Id;
+      return _datastore.Create(evidence);
     }
   }
 }

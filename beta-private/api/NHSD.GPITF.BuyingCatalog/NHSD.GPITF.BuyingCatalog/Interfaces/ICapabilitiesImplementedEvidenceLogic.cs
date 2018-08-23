@@ -7,7 +7,7 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
   public interface ICapabilitiesImplementedEvidenceLogic
   {
     IQueryable<CapabilitiesImplementedEvidence> ByCapabilitiesImplemented(string capabilitiesImplementedId);
-    CapabilitiesImplementedEvidence Create(CapabilitiesImplementedEvidence capEvidenc);
+    CapabilitiesImplementedEvidence Create(CapabilitiesImplementedEvidence evidence);
   }
 #pragma warning restore CS1591
 }
