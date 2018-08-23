@@ -10,16 +10,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   public sealed class CapabilitiesLogic : LogicBase, ICapabilitiesLogic
   {
     private readonly ICapabilitiesDatastore _datastore;
-    private readonly ICapabilitiesValidator _validator;
 
     public CapabilitiesLogic(
       ICapabilitiesDatastore datastore, 
-      IHttpContextAccessor context,
-      ICapabilitiesValidator validator) :
+      IHttpContextAccessor context) :
       base(context)
     {
       _datastore = datastore;
-      _validator = validator;
     }
 
     public IQueryable<Capabilities> ByFramework(string frameworkId)
