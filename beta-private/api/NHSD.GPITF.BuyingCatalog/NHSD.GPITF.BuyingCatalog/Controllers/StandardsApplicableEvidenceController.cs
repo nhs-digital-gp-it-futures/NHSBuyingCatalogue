@@ -51,7 +51,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "StandardsApplicable not found")]
     public IActionResult BySolution([FromRoute][Required]string standardsApplicableId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      var capEvidenc = _logic.ByStandardsApplicable(standardsApplicableId);
+      var capEvidenc = _logic.ByClaim(standardsApplicableId);
       var retval = PaginatedList<StandardsApplicableEvidence>.Create(capEvidenc, pageIndex, pageSize);
       return capEvidenc.Count() > 0 ? (IActionResult)new OkObjectResult(capEvidenc) : new NotFoundResult();
     }

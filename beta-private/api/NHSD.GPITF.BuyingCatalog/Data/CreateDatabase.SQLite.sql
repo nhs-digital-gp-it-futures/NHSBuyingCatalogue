@@ -178,11 +178,11 @@ CREATE TABLE CapabilityStandard
 CREATE TABLE CapabilitiesImplementedEvidence
 (
   Id TEXT NOT NULL UNIQUE,
-  CapabilitiesImplementedId TEXT NOT NULL,
+  ClaimId TEXT NOT NULL,
   CreatedById TEXT NOT NULL,
   CreatedOn TEXT NOT NULL,
   Evidence TEXT,
-  FOREIGN KEY (CapabilitiesImplementedId) REFERENCES CapabilitiesImplemented(Id) ON DELETE CASCADE,
+  FOREIGN KEY (ClaimId) REFERENCES CapabilitiesImplemented(Id) ON DELETE CASCADE,
   FOREIGN KEY (CreatedById) REFERENCES Contacts(Id) ON DELETE CASCADE,
   PRIMARY KEY (Id)
 );
@@ -204,11 +204,11 @@ CREATE TABLE CapabilitiesImplementedReviews
 CREATE TABLE StandardsApplicableEvidence
 (
   Id TEXT NOT NULL UNIQUE,
-  StandardsApplicableId TEXT NOT NULL,
+  ClaimId TEXT NOT NULL,
   CreatedById TEXT NOT NULL,
   CreatedOn TEXT NOT NULL,
   Evidence TEXT,
-  FOREIGN KEY (StandardsApplicableId) REFERENCES StandardsApplicable(Id) ON DELETE CASCADE,
+  FOREIGN KEY (ClaimId) REFERENCES StandardsApplicable(Id) ON DELETE CASCADE,
   FOREIGN KEY (CreatedById) REFERENCES Contacts(Id) ON DELETE CASCADE,
   PRIMARY KEY (Id)
 );

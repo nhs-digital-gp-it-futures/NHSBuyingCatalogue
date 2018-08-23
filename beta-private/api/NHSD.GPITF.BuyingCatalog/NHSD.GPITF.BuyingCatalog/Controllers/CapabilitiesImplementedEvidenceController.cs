@@ -51,7 +51,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "CapabilitiesImplemented not found")]
     public IActionResult BySolution([FromRoute][Required]string capabilitiesImplementedId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      var evidence = _logic.ByCapabilitiesImplemented(capabilitiesImplementedId);
+      var evidence = _logic.ByClaim(capabilitiesImplementedId);
       var retval = PaginatedList<CapabilitiesImplementedEvidence>.Create(evidence, pageIndex, pageSize);
       return evidence.Count() > 0 ? (IActionResult)new OkObjectResult(evidence) : new NotFoundResult();
     }
