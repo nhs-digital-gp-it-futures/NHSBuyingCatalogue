@@ -24,9 +24,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _filter = filter;
     }
 
-    public Organisations ByODS(string odsCode)
+    public Organisations ByEmail(string contactId)
     {
-      return _filter.Filter(new[] { _datastore.ByContact(odsCode) }.AsQueryable()).SingleOrDefault();
+      return _filter.Filter(new[] { _datastore.ByContact(contactId) }.AsQueryable()).SingleOrDefault();
     }
   }
 }

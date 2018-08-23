@@ -35,23 +35,18 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     }
 
     /// <summary>
-    /// Retrieve an organisation, given its ODS code.
-    /// If the organisation does not currently exist:
-    ///   * Retrieve ODS details from ODS API
-    ///   * Create organisation/supplier from ODS details
-    ///   * Return newly created organisation
+    /// Retrieve an Organisation for the given Contact
     /// </summary>
-    /// <param name="odsCode">ODS code of organisation to find</param>
+    /// <param name="contactId">CRM identifier of Contact</param>
     /// <response code="200">Success</response>
-    /// <response code="404">Organisation not found in ODS</response>
+    /// <response code="404">Organisation not found</response>
     [HttpGet]
-    [Route("ByODS/{odsCode}")]
     [ValidateModelState]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(Organisations), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Organisation not found in ODS")]
-    public IActionResult ByODS([FromRoute][Required]string odsCode)
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Organisation not found")]
+    public IActionResult ByODS([FromQuery][Required]string contactId)
     {
-      var org = _logic.ByODS(odsCode);
+      var org = _logic.ByEmail(contactId);
       return org != null ? (IActionResult)new OkObjectResult(org) : new NotFoundResult();
     }
   }
