@@ -36,7 +36,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     }
 
     /// <summary>
-    /// TODO
+    /// Get all Reviews for a CapabilitiesImplemented
     /// </summary>
     /// <param name="capabilitiesImplementedId">CRM identifier of CapabilitiesImplemented</param>
     /// <param name="evidenceId">CRM identifier of CapabilitiesImplementedEvidence</param>
