@@ -191,11 +191,11 @@ CREATE TABLE CapabilitiesImplementedEvidence
 CREATE TABLE CapabilitiesImplementedReviews
 (
   Id TEXT NOT NULL UNIQUE,
-  CapabilitiesImplementedEvidenceId TEXT NOT NULL,
+  EvidenceId TEXT NOT NULL,
   CreatedById TEXT NOT NULL,
   CreatedOn TEXT NOT NULL,
   Message TEXT,
-  FOREIGN KEY (CapabilitiesImplementedEvidenceId) REFERENCES CapabilitiesImplementedEvidence(Id) ON DELETE CASCADE,
+  FOREIGN KEY (EvidenceId) REFERENCES CapabilitiesImplementedEvidence(Id) ON DELETE CASCADE,
   FOREIGN KEY (CreatedById) REFERENCES Contacts(Id) ON DELETE CASCADE,
   PRIMARY KEY (Id)
 );
@@ -217,11 +217,11 @@ CREATE TABLE StandardsApplicableEvidence
 CREATE TABLE StandardsApplicableReviews
 (
   Id TEXT NOT NULL UNIQUE,
-  StandardsApplicableEvidenceId TEXT NOT NULL,
+  EvidenceId TEXT NOT NULL,
   CreatedById TEXT NOT NULL,
   CreatedOn TEXT NOT NULL,
   Message TEXT,
-  FOREIGN KEY (StandardsApplicableEvidenceId) REFERENCES StandardsApplicableEvidence(Id) ON DELETE CASCADE,
+  FOREIGN KEY (EvidenceId) REFERENCES StandardsApplicableEvidence(Id) ON DELETE CASCADE,
   FOREIGN KEY (CreatedById) REFERENCES Contacts(Id) ON DELETE CASCADE,
   PRIMARY KEY (Id)
 );
