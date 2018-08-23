@@ -33,6 +33,8 @@ services:
 
   nginx:
     build: ./nginx
+    depends_on:
+      - supplier
     image: gpitf/buywolf-nginx
     networks:
       - beta_network
