@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
+using System;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
@@ -23,6 +24,22 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
       {
         var retval = _dbConnection.Value.GetAll<CapabilitiesImplementedReviews>().Where(cir => cir.CapabilitiesImplementedEvidenceId == evidenceId);
         return retval.AsQueryable();
+      });
+    }
+
+    public CapabilitiesImplementedReviews Create(CapabilitiesImplementedReviews review)
+    {
+      return GetInternal(() =>
+      {
+        using (var trans = _dbConnection.Value.BeginTransaction())
+        {
+          review.Id = Guid.NewGuid().ToString();
+          review.CreatedOn = DateTime.UtcNow;
+          _dbConnection.Value.Insert(review, trans);
+          trans.Commit();
+
+          return review;
+        }
       });
     }
   }

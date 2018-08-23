@@ -24,5 +24,12 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     {
       return _datastore.ByEvidence(evidenceId);
     }
+
+    public CapabilitiesImplementedReviews Create(CapabilitiesImplementedReviews review)
+    {
+      var email = Context.Email();
+      review.CreatedById = _contacts.ByEmail(email).Id;
+      return _datastore.Create(review);
+    }
   }
 }

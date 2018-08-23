@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using NHSD.GPITF.BuyingCatalog.Models;
+﻿using NHSD.GPITF.BuyingCatalog.Models;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Interfaces
@@ -10,6 +7,7 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
   public interface ICapabilitiesImplementedReviewsLogic
   {
     IQueryable<CapabilitiesImplementedReviews> ByEvidence(string evidenceId);
+    CapabilitiesImplementedReviews Create(CapabilitiesImplementedReviews review);
   }
 #pragma warning restore CS1591
 }

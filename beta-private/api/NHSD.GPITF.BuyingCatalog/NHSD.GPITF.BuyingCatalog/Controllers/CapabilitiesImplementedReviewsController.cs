@@ -6,6 +6,7 @@ using NHSD.GPITF.BuyingCatalog.Attributes;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
@@ -54,6 +55,34 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
       var reviews = _logic.ByEvidence(evidenceId);
       var retval = PaginatedList<CapabilitiesImplementedReviews>.Create(reviews, pageIndex, pageSize);
       return reviews.Count() > 0 ? (IActionResult)new OkObjectResult(reviews) : new NotFoundResult();
+    }
+
+    /// <summary>
+    /// Create a new Review for a CapabilitiesImplemented
+    /// </summary>
+    /// <param name="review">new Review information</param>
+    /// <response code="200">Success</response>
+    /// <response code="404">CapabilitiesImplementedEvidence not found</response>
+    [HttpPost]
+    [Route("CapabilitiesImplemented/{capabilitiesImplementedId}/Evidence/{evidenceId}/Reviews")]
+    [ValidateModelState]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(CapabilitiesImplementedReviews), description: "Success")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "CapabilitiesImplemented not found")]
+    public IActionResult Create([FromBody]CapabilitiesImplementedReviews review)
+    {
+      try
+      {
+        var newReview = _logic.Create(review);
+        return new OkObjectResult(newReview);
+      }
+      catch (FluentValidation.ValidationException ex)
+      {
+        return new InternalServerErrorObjectResult(ex);
+      }
+      catch (Exception ex)
+      {
+        return new NotFoundObjectResult(ex);
+      }
     }
   }
 }
