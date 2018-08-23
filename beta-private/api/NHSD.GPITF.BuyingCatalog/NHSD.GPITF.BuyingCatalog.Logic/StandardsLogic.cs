@@ -10,17 +10,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   public sealed class StandardsLogic : LogicBase, IStandardsLogic
   {
     private readonly IStandardsDatastore _datastore;
-    private readonly IStandardsValidator _validator;
 
     public StandardsLogic(
       IStandardsDatastore datastore, 
-      IHttpContextAccessor context,
-      IStandardsValidator validator
-      ) :
+      IHttpContextAccessor context) :
       base(context)
     {
       _datastore = datastore;
-      _validator = validator;
     }
 
     public IQueryable<Standards> ByCapability(string capabilityId, bool isOptional)
