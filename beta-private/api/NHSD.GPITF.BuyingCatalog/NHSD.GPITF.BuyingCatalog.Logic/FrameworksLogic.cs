@@ -8,18 +8,15 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   public sealed class FrameworksLogic : LogicBase, IFrameworksLogic
   {
     private readonly IFrameworksDatastore _datastore;
-    private readonly IFrameworksValidator _validator;
     private readonly IFrameworksFilter _filter;
 
     public FrameworksLogic(
       IFrameworksDatastore datastore,
       IHttpContextAccessor context,
-      IFrameworksValidator validator,
       IFrameworksFilter filter) :
       base(context)
     {
       _datastore = datastore;
-      _validator = validator;
       _filter = filter;
     }
 
