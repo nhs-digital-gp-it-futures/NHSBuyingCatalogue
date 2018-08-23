@@ -59,19 +59,19 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// <summary>
     /// Create a new evidence
     /// </summary>
-    /// <param name="capEvidenc">new evidence information</param>
+    /// <param name="evidence">new evidence information</param>
     /// <response code="200">Success</response>
     /// <response code="404">CapabilitiesImplemented not found</response>
     [HttpPost]
     [ValidateModelState]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(CapabilitiesImplementedEvidence), description: "Success")]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "CapabilitiesImplemented not found")]
-    public IActionResult Create([FromBody]CapabilitiesImplementedEvidence capEvidenc)
+    public IActionResult Create([FromBody]CapabilitiesImplementedEvidence evidence)
     {
       try
       {
-        var newCapEvidenc = _logic.Create(capEvidenc);
-        return new OkObjectResult(newCapEvidenc);
+        var newEvidence = _logic.Create(evidence);
+        return new OkObjectResult(newEvidence);
       }
       catch (FluentValidation.ValidationException ex)
       {
