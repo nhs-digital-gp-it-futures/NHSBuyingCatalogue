@@ -73,9 +73,6 @@
             {{#capabilities}}
             <li data-cap-id="{{id}}">
               {{name}}
-              {{#standards.optional}}
-              <span class="optional" data-std-id="{{id}}">(+ {{name}})</span>
-              {{/standards.optional}}
             </li>
             {{/capabilities}}
           </ul>
@@ -149,17 +146,6 @@
       </ul>
       {{/if}}
     </section>
-    {{#if standards.optional}}
-    <fieldset>
-      {{#standards.optional}}
-      <label>
-        <input type="checkbox" name="optionalStandards" value="{{id}}">
-        {{!-- {{name}} --}}
-        Check this box if your solution has a mobile version for this capability
-      </label>
-      {{/standards.optional}}
-    </fieldset>
-    {{/if}}
   </section>
   {{/capabilities}}
 </div>
@@ -203,19 +189,6 @@ document.addEventListener('DOMContentLoaded', () => {
         dialog: elDialogCapabilityCheckbox
       }
     ]
-
-    // optional standards for the capability
-    $$(
-      'input[type=checkbox][name^=optionalStandards]',
-      elClickedCapability
-    ).forEach(elOptionalStandardCheckbox => {
-      const standardId = elOptionalStandardCheckbox.value
-      syncedCheckboxes.push({
-        main: elOptionalStandardCheckbox,
-        dialog: $(`input[type=checkbox][name=optionalStandards][value=${standardId}]`,
-                  elReplacableParent)
-      })
-    })
 
     syncedCheckboxes.forEach(cb => {
       cb.dialog.checked = cb.main.checked

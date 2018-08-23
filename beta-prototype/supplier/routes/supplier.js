@@ -584,11 +584,6 @@ app.get('/solutions/:solution_id/capabilities', csrfProtection, async (req, res)
       const claimedCapability = _.find(solutionEx.claimedCapability, ['capabilityId', cap.id])
       cap.selected = !!claimedCapability
       cap.standardIds = _.map(_.flatMap(cap.standards), 'id')
-      cap.optionalStandards = _.map(cap.standards.optional, optStd => ({
-        id: optStd.id,
-        selected: claimedCapability &&
-                  _.some(solutionEx.claimedCapabilityStandard, ['claimedCapabilityId', claimedCapability.id])
-      }))
       return cap
     }),
     standards: groupedStandards,
@@ -626,6 +621,8 @@ app.post('/solutions/:solution_id/capabilities', csrfProtection, async (req, res
   })
 
   // claim all the non-optional standards associated with all the claimed capabilities
+  const hasMobile = _.some(solutionEx.claimedStandard, ['standardId', 'CSS3'])
+
   solutionEx.claimedStandard = _.uniqBy(
     _.map(
       _.flatten(
@@ -645,10 +642,9 @@ app.post('/solutions/:solution_id/capabilities', csrfProtection, async (req, res
   )
 
   // optional standards are now also claimed along with the other standards
-  solutionEx.claimedStandard = _.concat(
-    solutionEx.claimedStandard,
-    _.uniqBy(solutionEx.claimedCapabilityStandard, 'standardId')
-  )
+  if (hasMobile) {
+    solutionEx.claimedStandard.push({'standardId': 'CSS3'})
+  }
 
   try {
     let redirectUrl = `${req.baseUrl}/solutions`
