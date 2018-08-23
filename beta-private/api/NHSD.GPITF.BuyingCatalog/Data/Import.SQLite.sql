@@ -17,3 +17,4 @@
 .import CapabilitiesImplementedEvidence.csv CapabilitiesImplementedEvidence
 .import CapabilitiesImplementedReviews.csv CapabilitiesImplementedReviews
 .import StandardsApplicableEvidence.csv StandardsApplicableEvidence
+.import StandardsApplicableReviews.csv StandardsApplicableReviews
