@@ -1,5 +1,7 @@
 <section class="solution-info">
-  {{ name }}
-  <br>Version {{ version }}
-  <br>Solution ID#: {{ id }}
+  <span class="name">{{ name }}</span>
+  {{#if version}}|
+  <span class="version">Version {{ version }}</span>{{/if}}
+  |
+  <span class="solution-id">Solution ID#: {{ id }}</span>
 </section>
