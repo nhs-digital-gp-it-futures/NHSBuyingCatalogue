@@ -55,10 +55,16 @@ CREATE TABLE Solutions
   OrganisationId TEXT NOT NULL,
   Version TEXT NOT NULL DEFAULT '',
   Status INTEGER DEFAULT 0,
+  CreatedById TEXT NOT NULL,
+  CreatedOn TEXT NOT NULL,
+  ModifiedById TEXT NOT NULL,
+  ModifiedOn TEXT NOT NULL,
   Name TEXT NOT NULL,
   Description TEXT,
   ProductPage TEXT,
   FOREIGN KEY (OrganisationId) REFERENCES Organisations(Id) ON DELETE CASCADE,
+  FOREIGN KEY (CreatedById) REFERENCES Contacts(Id) ON DELETE CASCADE,
+  FOREIGN KEY (ModifiedById) REFERENCES Contacts(Id) ON DELETE CASCADE,
   PRIMARY KEY (Id)
 );
 

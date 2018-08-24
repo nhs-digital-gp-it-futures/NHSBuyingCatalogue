@@ -9,17 +9,20 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   public sealed class SolutionsLogic : LogicBase, ISolutionsLogic
   {
     private readonly ISolutionsDatastore _datastore;
+    private readonly IContactsDatastore _contacts;
     private readonly ISolutionsValidator _validator;
     private readonly ISolutionsFilter _filter;
 
     public SolutionsLogic(
       ISolutionsDatastore datastore,
+      IContactsDatastore contacts,
       IHttpContextAccessor context,
       ISolutionsValidator validator,
       ISolutionsFilter filter) :
       base(context)
     {
       _datastore = datastore;
+      _contacts = contacts;
       _validator = validator;
       _filter = filter;
     }
@@ -42,6 +45,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     public Solutions Create(Solutions solution)
     {
       _validator.ValidateAndThrow(solution);
+
+      var email = Context.Email();
+      solution.CreatedById = _contacts.ByEmail(email).Id;
+
       return _datastore.Create(solution);
     }
 
@@ -49,6 +56,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     {
       _validator.ValidateAndThrow(solution);
       _validator.ValidateAndThrow(solution, ruleSet: nameof(ISolutionsLogic.Update));
+
+      var email = Context.Email();
+      solution.CreatedById = _contacts.ByEmail(email).Id;
 
       _datastore.Update(solution);
     }

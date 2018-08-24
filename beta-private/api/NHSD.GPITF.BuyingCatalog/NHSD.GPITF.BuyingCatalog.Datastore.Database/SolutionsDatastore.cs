@@ -54,6 +54,7 @@ where frame.Id = '{frameworkId}'
         using (var trans = _dbConnection.Value.BeginTransaction())
         {
           solution.Id = Guid.NewGuid().ToString();
+          solution.CreatedOn = solution.ModifiedOn = DateTime.UtcNow;
           _dbConnection.Value.Insert(solution, trans);
           trans.Commit();
 
@@ -68,6 +69,7 @@ where frame.Id = '{frameworkId}'
       {
         using (var trans = _dbConnection.Value.BeginTransaction())
         {
+          solution.ModifiedOn = DateTime.UtcNow;
           _dbConnection.Value.Update(solution, trans);
           trans.Commit();
           return 0;

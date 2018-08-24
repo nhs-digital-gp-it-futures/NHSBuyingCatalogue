@@ -1,4 +1,5 @@
 using Dapper.Contrib.Extensions;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace NHSD.GPITF.BuyingCatalog.Models
@@ -34,6 +35,38 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     /// Current status of this solution
     /// </summary>
     public SolutionStatus Status { get; set; } = SolutionStatus.Draft;
+
+    /// <summary>
+    /// Unique identifier of Contact who created this entity
+    /// Derived from calling context
+    /// SET ON SERVER
+    /// </summary>
+    [Required]
+    public string CreatedById { get; set; }
+
+    /// <summary>
+    /// UTC date and time at which record created
+    /// Set by server when creating record
+    /// SET ON SERVER
+    /// </summary>
+    [Required]
+    public DateTime CreatedOn { get; set; }
+
+    /// <summary>
+    /// Unique identifier of Contact who last modified this entity
+    /// Derived from calling context
+    /// SET ON SERVER
+    /// </summary>
+    [Required]
+    public string ModifiedById { get; set; }
+
+    /// <summary>
+    /// UTC date and time at which record last modified
+    /// Set by server when creating record
+    /// SET ON SERVER
+    /// </summary>
+    [Required]
+    public DateTime ModifiedOn { get; set; }
 
     /// <summary>
     /// Name of solution, as displayed to a user
