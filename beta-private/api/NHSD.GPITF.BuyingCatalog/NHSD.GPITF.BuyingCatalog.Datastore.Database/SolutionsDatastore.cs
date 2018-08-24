@@ -43,7 +43,13 @@ where frame.Id = '{frameworkId}'
     {
       return GetInternal(() =>
       {
-        return _dbConnection.Value.GetAll<Solutions>().Where(soln => soln.OrganisationId == organisationId).AsQueryable();
+        var sql = @"
+-- select all current versions
+select * from Solutions where Id not in 
+(
+  select PreviousId from Solutions where PreviousId is not null
+)
+";        return _dbConnection.Value.Query<Solutions>(sql).Where(soln => soln.OrganisationId == organisationId).AsQueryable();
       });
     }
 
