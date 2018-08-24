@@ -118,7 +118,13 @@
   padding-left: 0.5em;
 }
 
-#compliance.edit .capabilities h3 {
+#compliance.edit h3 a,
+#compliance.edit .name a {
+  font-size: smaller;
+  text-decoration: none;
+}
+
+#compliance.edit h3 {
   color: var(--color-fg);
 }
 
@@ -126,16 +132,8 @@
   color: var(--color-nhs-blue);
 }
 
-#compliance.edit .capabilities .content {
-  font-size: var(--font-size-navigation);
-  margin-left: 1em;
-}
-
-#compliance.edit .capabilities .content a {
-  display: block;
-  font-size: smaller;
-  margin-bottom: 1em;
-  text-decoration: none;
+#compliance.edit .capabilities ul {
+  list-style-type: none;
 }
 
 #compliance.edit fieldset.standard-evidence {
@@ -145,34 +143,16 @@
   padding: 1.5em 1em;
   position: relative;
 }
-#compliance.edit fieldset.standard-evidence.collapsed {
-  padding: 1.5em 0 0.25em 0;
-}
 
 #compliance.edit fieldset.standard-evidence legend {
   width: 100%;
   background-color: var(--color-nhs-blue);
   color: var(--color-nhs-white);
-  cursor: pointer;
   padding: 0.25em 0;
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-}
-
-#compliance.edit fieldset.standard-evidence.collapsed legend {
-  background-color: transparent;
-  color: var(--color-compliance-draft);
-}
-
-#compliance.edit fieldset.standard-evidence legend::before {
-  content: '\25B2'; /* ▲ BLACK UP-POINTING TRIANGLE */
-  display: inline-block;
-  padding-left: 0.5em;
-}
-#compliance.edit fieldset.standard-evidence.collapsed legend::before {
-  content: '\25BC'; /* ▼ BLACK DOWN-POINTING TRIANGLE */
 }
 
 #compliance.edit fieldset.standard-evidence.submitted {
@@ -196,10 +176,6 @@
 #compliance.edit fieldset.standard-evidence.approved legend {
   background-color: var(--color-compliance-approved);
 }
-#compliance.edit fieldset.standard-evidence.collapsed.approved legend {
-  background-color: transparent;
-  color: var(--color-compliance-approved);
-}
 #compliance.edit fieldset.standard-evidence.approved legend .status::after {
   content: ' ✔︎';
 }
@@ -211,10 +187,6 @@
 #compliance.edit fieldset.standard-evidence legend .status {
   float: right;
   padding-right: 1em;
-}
-
-#compliance.edit fieldset.standard-evidence.collapsed > *:not(legend) {
-  display: none;
 }
 
 #compliance.edit fieldset.standard-evidence .in-assessment {
@@ -234,10 +206,17 @@
 }
 
 #compliance.edit fieldset.standard-evidence h4 {
-  margin: 1em 0 0.5em 0;
+  color: var(--color-fg);
+  font-size: var(--font-size-navigation);
+  font-weight: bold;
+  margin: 0 0 0.5em 0;
 }
 
-#compliance.edit fieldset.standard-evidence .requirements,
+#compliance.edit fieldset.standard-evidence .requirements {
+  font-size: var(--font-size-evidence);
+  margin-top: 0.5em;
+}
+
 #compliance.edit fieldset.standard-evidence .evidence {
   background-color: var(--color-nhs-pale-grey);
   font-size: var(--font-size-evidence);
