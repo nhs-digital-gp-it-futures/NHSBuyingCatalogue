@@ -15,6 +15,6 @@ namespace NHSD.GPITF.BuyingCatalog.Models.Porcelain
     /// <summary>
     /// A list of <see cref="Standard"/>
     /// </summary>
-    public List<Standard> Standard { get; set; } = new List<Standard>();
+    public List<Standards> Standard { get; set; } = new List<Standards>();
   }
 }

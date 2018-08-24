@@ -6,37 +6,37 @@
   public enum SolutionStatus : int
   {
     /// <summary>
-    /// <see cref="Solution"/> is being revised by <see cref="Organisation"/>
+    /// <see cref="Solutions"/> is being revised by <see cref="Organisations"/>
     /// </summary>
     Draft = 0,
 
     /// <summary>
-    /// <see cref="Solution"/> has been submitted by <see cref="Organisation"/>, for consideration
+    /// <see cref="Solutions"/> has been submitted by <see cref="Organisations"/>, for consideration
     /// by NHSD for inclusion into Buying Catalog
     /// </summary>
     Registered = 1,
 
     /// <summary>
-    /// <see cref="Solution"/> has been assessed by NHSD and has been accepted onto the
-    /// Buying Catalog.  The <see cref="Solution"/> will now have its <see cref="ClaimedCapability"/>
+    /// <see cref="Solutions"/> has been assessed by NHSD and has been accepted onto the
+    /// Buying Catalog.  The <see cref="Solutions"/> will now have its <see cref="CapabilitiesImplemented"/>
     /// assessed by NHSD.
     /// </summary>
     CapabilitiesAssessment = 2,
 
     /// <summary>
-    /// <see cref="ClaimedCapability"/> have been verified by NHSD; and the <see cref="Solution"/>
-    /// will now have its <see cref="ClaimedStandard"/> assessed by NHSD.
+    /// <see cref="CapabilitiesImplemented"/> have been verified by NHSD; and the <see cref="Solutions"/>
+    /// will now have its <see cref="StandardsApplicable"/> assessed by NHSD.
     /// </summary>
     StandardsCompliance = 3,
 
     /// <summary>
-    /// <see cref="ClaimedStandard"/> have been verified by NHSD; and the <see cref="Organisation"/>
+    /// <see cref="StandardsApplicable"/> have been verified by NHSD; and the <see cref="Organisations"/>
     /// will now build its solution page for the Buying Catalog.
     /// </summary>
     SolutionPage = 4,
 
     /// <summary>
-    /// The solution page has reviewed by NHS and the <see cref="Solution"/> is now available for
+    /// The solution page has reviewed by NHS and the <see cref="Solutions"/> is now available for
     /// purchase on the Buying Catalog.
     /// </summary>
     Approved = 5,

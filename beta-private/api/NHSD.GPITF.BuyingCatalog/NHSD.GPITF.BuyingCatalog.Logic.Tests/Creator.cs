@@ -9,22 +9,24 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
   {
     public static DefaultHttpContext GetContext(
       string orgId = "NHS Digital",
-      string role = Roles.Admin)
+      string role = Roles.Admin,
+      string email = "NHS-GPIT@WigglyAmps.com")
     {
-      var orgClaim = new Claim(nameof(Organisation), orgId);
+      var orgClaim = new Claim(nameof(Organisations), orgId);
       var roleClaim = new Claim(ClaimTypes.Role, role);
-      var claimsIdentity = new ClaimsIdentity(new[] { orgClaim, roleClaim });
+      var emailClaim = new Claim(ClaimTypes.Email, email);
+      var claimsIdentity = new ClaimsIdentity(new[] { orgClaim, roleClaim, emailClaim });
       var user = new ClaimsPrincipal(new[] { claimsIdentity });
       var ctx = new DefaultHttpContext { User = user };
 
       return ctx;
     }
 
-    public static Organisation GetOrganisation(
+    public static Organisations GetOrganisation(
       string id = "NHS Digital",
       string primaryRoleId = PrimaryRole.GovernmentDepartment)
     {
-      return new Organisation
+      return new Organisations
       {
         Id = id,
         Name = id,
@@ -32,12 +34,12 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       };
     }
 
-    public static Solution GetSolution(
+    public static Solutions GetSolution(
       string id = null,
       string orgId = null,
       SolutionStatus status = SolutionStatus.Draft)
     {
-      return new Solution
+      return new Solutions
       {
         Id = id ?? Guid.NewGuid().ToString(),
         OrganisationId = orgId ?? Guid.NewGuid().ToString(),
@@ -45,29 +47,15 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       };
     }
 
-    public static TechnicalContact GetTechnicalContact(
+    public static TechnicalContacts GetTechnicalContact(
       string id = null,
       string solutionId = null
       )
     {
-      return new TechnicalContact
+      return new TechnicalContacts
       {
         Id = id ?? Guid.NewGuid().ToString(),
         SolutionId = solutionId ?? Guid.NewGuid().ToString()
-      };
-    }
-
-    public static AssessmentMessage GetAssessmentMessage(
-      string id = null,
-      string solutionId = null,
-      string contactId = null
-      )
-    {
-      return new AssessmentMessage
-      {
-        Id = id ?? Guid.NewGuid().ToString(),
-        SolutionId = solutionId ?? Guid.NewGuid().ToString(),
-        ContactId = contactId ?? Guid.NewGuid().ToString()
       };
     }
   }

@@ -24,10 +24,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
         var sql = $@"
 select cap.*, '|' as '|', std.*, '|' as '|', cs.*
 from CapabilityStandard cs
-join Capability cap on cap.Id = cs.CapabilityId
-join Standard std on std.Id = cs.StandardId
+join Capabilities cap on cap.Id = cs.CapabilityId
+join Standards std on std.Id = cs.StandardId
 ";
-        _dbConnection.Value.Query<Capability, Standard, CapabilityStandard, CapabilityMapping>(sql,
+        _dbConnection.Value.Query<Capabilities, Standards, CapabilityStandard, CapabilityMapping>(sql,
           (cap, std, cs) =>
           {
             var thisCapMap = retval.CapabilityMapping.SingleOrDefault(x => x.Capability.Id == cap.Id);

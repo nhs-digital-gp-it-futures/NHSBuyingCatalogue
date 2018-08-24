@@ -1,18 +1,20 @@
 .read Preimport.SQLite.sql
 .mode csv
-.import Organisation.csv Organisation
-.import Contact.csv Contact
-.import Solution.csv Solution
-.import TechnicalContact.csv TechnicalContact
-.import Capability.csv Capability
-.import Framework.csv Framework
-.import Standard.csv Standard
-.import ClaimedCapability.csv ClaimedCapability
-.import ClaimedStandard.csv ClaimedStandard
-.import AssessmentMessage.csv AssessmentMessage
+.import Organisations.csv Organisations
+.import Contacts.csv Contacts
+.import Solutions.csv Solutions
+.import TechnicalContacts.csv TechnicalContacts
+.import Capabilities.csv Capabilities
+.import Frameworks.csv Frameworks
+.import Standards.csv Standards
+.import CapabilitiesImplemented.csv CapabilitiesImplemented
+.import StandardsApplicable.csv StandardsApplicable
+.import Reviews.csv Reviews
 .import CapabilityFramework.csv CapabilityFramework
 .import FrameworkSolution.csv FrameworkSolution
 .import FrameworkStandard.csv FrameworkStandard
 .import CapabilityStandard.csv CapabilityStandard
-.import ClaimedCapabilityStandard.csv ClaimedCapabilityStandard
-.import AssessmentMessageContact.csv AssessmentMessageContact
+.import CapabilitiesImplementedEvidence.csv CapabilitiesImplementedEvidence
+.import CapabilitiesImplementedReviews.csv CapabilitiesImplementedReviews
+.import StandardsApplicableEvidence.csv StandardsApplicableEvidence
+.import StandardsApplicableReviews.csv StandardsApplicableReviews
