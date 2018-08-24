@@ -9,7 +9,6 @@
 .import Standards.csv Standards
 .import CapabilitiesImplemented.csv CapabilitiesImplemented
 .import StandardsApplicable.csv StandardsApplicable
-.import Reviews.csv Reviews
 .import CapabilityFramework.csv CapabilityFramework
 .import FrameworkSolution.csv FrameworkSolution
 .import FrameworkStandard.csv FrameworkStandard
