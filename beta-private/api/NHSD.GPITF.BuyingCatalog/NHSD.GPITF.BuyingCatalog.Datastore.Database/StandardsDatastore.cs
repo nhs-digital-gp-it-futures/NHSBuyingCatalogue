@@ -88,7 +88,14 @@ where Id in ({sqlIds})";
     {
       return GetInternal(() =>
       {
-        return _dbConnection.Value.GetAll<Standards>().AsQueryable();
+        var sql = @"
+-- select all current versions
+select * from Standards where Id not in 
+(
+  select PreviousId from Standards where PreviousId is not null
+)
+";
+        return _dbConnection.Value.Query<Standards>(sql).AsQueryable();
       });
     }
 

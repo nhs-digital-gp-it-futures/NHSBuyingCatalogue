@@ -72,7 +72,14 @@ where std.Id = '{standardId}'
     {
       return GetInternal(() =>
       {
-        return _dbConnection.Value.GetAll<Frameworks>().AsQueryable();
+        var sql = @"
+-- select all current versions
+select * from Frameworks where Id not in 
+(
+  select PreviousId from Frameworks where PreviousId is not null
+)
+";
+        return _dbConnection.Value.Query<Frameworks>(sql).AsQueryable();
       });
     }
   }

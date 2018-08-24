@@ -73,7 +73,14 @@ where std.Id = '{standardId}' and cs.IsOptional = {(isOptional ? 1 : 0).ToString
     {
       return GetInternal(() =>
       {
-        return _dbConnection.Value.GetAll<Capabilities>().AsQueryable();
+        var sql = @"
+-- select all current versions
+select * from Capabilities where Id not in 
+(
+  select PreviousId from Capabilities where PreviousId is not null
+)
+";
+        return _dbConnection.Value.Query<Capabilities>(sql).AsQueryable();
       });
     }
   }
