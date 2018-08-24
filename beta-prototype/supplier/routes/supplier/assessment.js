@@ -92,10 +92,9 @@ app.post('/', csrfProtection, async (req, res) => {
   }
 
   // set the status on submission to send the solution to the capabilities assessment team
-  if (req.body.action === 'submit' &&
-      solutionEx.solution.status === api.SOLUTION_STATUS.REGISTERED) {
+  if (req.body.action === 'submit') {
     solutionEx.solution.status = api.SOLUTION_STATUS.CAPABILITIES_ASSESSMENT
-    redirectUrl = `/suppliers/solutions/${solutionEx.solution.id}/submitted`
+    redirectUrl = `/suppliers/solutions/${solutionEx.solution.id}?submitted`
     updateSolution = true
   }
 

@@ -26,6 +26,10 @@ app.get('/', async (req, res) => {
   try {
     const solutionEx = await loadEnrichedSolution(req.params.solution_id, req.baseUrl)
     context.solution = solutionEx.solution
+
+    if ('submitted' in req.query) {
+      context.submitted = req.query.std
+    }
   } catch (err) {
     context.errors.general = err
   }
@@ -306,7 +310,7 @@ async function complianceEditPostHandler (req, res) {
       }]
 
       evidence.submissions = _.concat(submission, evidence.submissions || [])
-      redirect = `${req.baseUrl}/../submitted?std=${_.find(standards, ['id', stdIdToUpdate]).name}`
+      redirect = `${req.baseUrl}?submitted&std=${_.find(standards, ['id', stdIdToUpdate]).name}`
     }
 
     stdToUpdate.evidence = JSON.stringify(evidence)

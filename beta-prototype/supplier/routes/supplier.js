@@ -400,7 +400,8 @@ app.get('/solutions/:solution_id', async (req, res) => {
       assessment: {...defaults},
       compliance: {...defaults},
       solution_page: {...defaults}
-    }
+    },
+    submitted: 'submitted' in req.query
   }
   let solution
 
@@ -421,6 +422,7 @@ app.get('/solutions/:solution_id', async (req, res) => {
     if (status === api.SOLUTION_STATUS.REGISTERED ||
         status === api.SOLUTION_STATUS.CAPABILITIES_ASSESSMENT) {
       context.stages.register.complete = true
+      context.stages.assessment.active = true
       context.stages.assessment.continueUrl = `${solnUrl}/assessment`
       context.stages.compliance.viewUrl = `${solnUrl}/compliance`
       context.stages.compliance.stageClass = 'active'
@@ -718,7 +720,7 @@ app.post('/solutions/:solution_id/mobile', csrfProtection, async (req, res) => {
 
     if (req.body.action === 'submit') {
       solutionEx.solution.status = api.SOLUTION_STATUS.REGISTERED
-      redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/submitted`
+      redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}?submitted`
     }
 
     await api.update_solution(solutionEx)
@@ -728,37 +730,6 @@ app.post('/solutions/:solution_id/mobile', csrfProtection, async (req, res) => {
     context.errors = err
     res.render('supplier/solution-mobile', context)
   }
-})
-
-app.get('/solutions/:solution_id/submitted', async (req, res) => {
-  const solutionEx = await api.get_solution_by_id(req.params.solution_id)
-  const context = {
-    dashboardUrl: `${req.baseUrl}/solutions`,
-    solution: solutionEx.solution
-  }
-
-  switch (solutionEx.solution.status) {
-    case api.SOLUTION_STATUS.REGISTERED:
-      context.registered = true
-      context.continueUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/assessment`
-      break
-
-    case api.SOLUTION_STATUS.CAPABILITIES_ASSESSMENT:
-      context.assessment = true
-      context.continueUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/compliance`
-      break
-
-    case api.SOLUTION_STATUS.STANDARDS_COMPLIANCE:
-      context.compliance = true
-      context.standard = req.query.std
-      context.continueUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/compliance`
-      break
-
-    case api.SOLUTION_STATUS.SOLUTION_PAGE:
-      context.solution_page = true
-  }
-
-  res.render('supplier/solution-submitted', context)
 })
 
 function renderProductPageEditor (req, res, solutionEx, context) {
@@ -911,7 +882,7 @@ app.post('/solutions/:solution_id/product-page', [
 
       if (action === 'submit') {
         solutionEx.solution.productPage.status = 'SUBMITTED'
-        redirect = `${req.baseUrl}/solutions/${solutionEx.solution.id}/submitted`
+        redirect = `${req.baseUrl}/solutions/${solutionEx.solution.id}?submitted`
       }
 
       solutionEx = await api.update_solution(solutionEx)

@@ -81,6 +81,43 @@
   color: var(--color-compliance-rejected);
 }
 
+#compliance #submitted {
+  color: var(--color-standout-fg);
+  margin: 2em auto;
+  position: relative;
+  width: 80%;
+}
+
+/* full-width background */
+#compliance #submitted::before {
+  background-color: var(--color-standout-bg);
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -50vw;
+  width: 137vw;
+  height: calc(100% + 20px);
+}
+
+#compliance #submitted > * {
+  position: relative; /* otherwise inner text elements disappear */
+  z-index: 1;         /* ensures that children appear above the background */
+}
+
+#compliance #submitted h3 {
+  color: var(--color-standout-fg);
+  font-weight: bold;
+  padding-top: 0.5em;
+  text-align: center;
+}
+
+#compliance #submitted h3::after {
+  color: var(--color-nhs-dark-green);
+  content: '✔︎';
+  font-size: larger;
+  padding-left: 0.5em;
+}
+
 #compliance.edit .capabilities h3 {
   color: var(--color-fg);
 }

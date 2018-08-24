@@ -12,6 +12,24 @@
 {{/inline}}
 
 <div id="onboarding-status" class="supplier">
+  {{#if submitted}}
+  <section id="submitted">
+    {{#if stages.compliance.complete}}
+      <h3>Solution Page Submitted</h3>
+      <p>Your solution page has been submitted to NHS Digital for review. You can expect to a reply within xx business days.</p>
+      <p>If your page is approved, you will receive a notification that your Solution page is ready to be published. If your page requires changes, you will receive feedback, and be asked to edit and re-submit the page.</p>
+    {{else if stages.assessment.active}}
+      <h3>Capabilities Assessment Submitted</h3>
+      <p>Your responses have been submitted to NHS Digital. You can expect to receive a reply within xx business days.</p>
+      <p>While you wait, you are free to view and keep working on evidence requirements for Standards Compliance. However, you cannot submit Standards Compliance evidence until you have passed Capabilities Assessment.</p>
+    {{else if stages.register.complete}}
+      <h3>Solution registration complete.</h3>
+      <p>You can now continue with Capabilities Assessment as soon as you’re ready.</p>
+      <p>While you are working on Capabilities Assessment responses, you are free to view and start working on evidence requirements for Standards Compliance. However, you cannot submit Standards Compliance evidence until you have passed Capabilities Assessment.</p>
+    {{/if}}
+  </section>
+  {{/if}}
+
   {{> onboarding-progress-header
         title="Onboarding A Solution" }}
 
