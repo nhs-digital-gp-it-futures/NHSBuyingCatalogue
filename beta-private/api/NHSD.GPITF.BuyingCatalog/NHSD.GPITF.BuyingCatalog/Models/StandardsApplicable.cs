@@ -8,21 +8,8 @@ namespace NHSD.GPITF.BuyingCatalog.Models
   /// This is then assessed by NHS to verify the ‘Solution’ complies with the ‘Standard’ it has claimed.
   /// </summary>
   [Table(nameof(StandardsApplicable))]
-  public sealed class StandardsApplicable
+  public sealed class StandardsApplicable : ClaimsBase
   {
-    /// <summary>
-    /// Unique identifier of entity
-    /// </summary>
-    [Required]
-    [ExplicitKey]
-    public string Id { get; set; }
-
-    /// <summary>
-    /// Unique identifier of solution
-    /// </summary>
-    [Required]
-    public string SolutionId { get; set; }
-
     /// <summary>
     /// Unique identifier of standard
     /// </summary>

@@ -8,21 +8,8 @@ namespace NHSD.GPITF.BuyingCatalog.Models
   /// This is then assessed by NHS to verify the ‘solution’ complies with the ‘capability’ it has claimed.
   /// </summary>
   [Table(nameof(CapabilitiesImplemented))]
-  public sealed class CapabilitiesImplemented
+  public sealed class CapabilitiesImplemented : ClaimsBase
   {
-    /// <summary>
-    /// Unique identifier of entity
-    /// </summary>
-    [Required]
-    [ExplicitKey]
-    public string Id { get; set; }
-
-    /// <summary>
-    /// Unique identifier of solution
-    /// </summary>
-    [Required]
-    public string SolutionId { get; set; }
-
     /// <summary>
     /// Unique identifier of capability
     /// </summary>
