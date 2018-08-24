@@ -51,6 +51,7 @@ CREATE TABLE Contacts
 CREATE TABLE Solutions
 (
   Id TEXT NOT NULL UNIQUE,
+  PreviousId TEXT,
   OrganisationId TEXT NOT NULL,
   Version TEXT NOT NULL DEFAULT '',
   Status INTEGER DEFAULT 0,
@@ -61,6 +62,7 @@ CREATE TABLE Solutions
   Name TEXT NOT NULL,
   Description TEXT,
   ProductPage TEXT,
+  FOREIGN KEY (PreviousId) REFERENCES Solutions(Id),
   FOREIGN KEY (OrganisationId) REFERENCES Organisations(Id) ON DELETE CASCADE,
   FOREIGN KEY (CreatedById) REFERENCES Contacts(Id) ON DELETE CASCADE,
   FOREIGN KEY (ModifiedById) REFERENCES Contacts(Id) ON DELETE CASCADE,
