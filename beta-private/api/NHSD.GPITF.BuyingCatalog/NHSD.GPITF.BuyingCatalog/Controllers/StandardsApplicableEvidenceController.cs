@@ -39,19 +39,19 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// <summary>
     /// Get evidence for the given StandardsApplicable
     /// </summary>
-    /// <param name="standardsApplicableId">CRM identifier of StandardsApplicable</param>
+    /// <param name="claimId">CRM identifier of StandardsApplicable</param>
     /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
     /// <param name="pageSize">number of items per page.  Defaults to 20</param>
     /// <response code="200">Success</response>
     /// <response code="404">StandardsApplicable not found</response>
     [HttpGet]
-    [Route("StandardsApplicable/{standardsApplicableId}/Evidence")]
+    [Route("ByClaim/{claimId}")]
     [ValidateModelState]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<StandardsApplicableEvidence>), description: "Success")]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "StandardsApplicable not found")]
-    public IActionResult BySolution([FromRoute][Required]string standardsApplicableId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
+    public IActionResult ByClaim([FromRoute][Required]string claimId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      var capEvidenc = _logic.ByClaim(standardsApplicableId);
+      var capEvidenc = _logic.ByClaim(claimId);
       var retval = PaginatedList<StandardsApplicableEvidence>.Create(capEvidenc, pageIndex, pageSize);
       return capEvidenc.Count() > 0 ? (IActionResult)new OkObjectResult(capEvidenc) : new NotFoundResult();
     }

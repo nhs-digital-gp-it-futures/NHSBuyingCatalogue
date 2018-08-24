@@ -67,7 +67,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// <response code="200">Success</response>
     /// <response code="404">Solution not found in CRM</response>
     [HttpPost]
-    [Route("Create")]
     [ValidateModelState]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(StandardsApplicable), description: "Success")]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Solution not found in CRM")]
@@ -85,7 +84,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
       }
     }
 
-
     /// <summary>
     /// Update an existing claimed standard with new information
     /// </summary>
@@ -93,7 +91,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// <response code="200">Success</response>
     /// <response code="404">Solution or ClaimedStandard not found in CRM</response>
     [HttpPut]
-    [Route("Update")]
     [ValidateModelState]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, description: "Success")]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Solution or ClaimedStandard not found in CRM")]
@@ -118,7 +115,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// <response code="200">Success</response>
     /// <response code="404">Claimed standard not found in CRM</response>
     [HttpDelete]
-    [Route("Delete")]
     [ValidateModelState]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, description: "Success")]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "ClaimedStandard not found in CRM")]

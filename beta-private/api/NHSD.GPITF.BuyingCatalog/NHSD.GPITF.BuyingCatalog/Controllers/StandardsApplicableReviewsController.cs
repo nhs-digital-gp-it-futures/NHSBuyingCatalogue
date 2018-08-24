@@ -39,18 +39,17 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// <summary>
     /// Get all Reviews for a StandardsApplicable
     /// </summary>
-    /// <param name="standardsApplicableId">CRM identifier of StandardsApplicable</param>
     /// <param name="evidenceId">CRM identifier of StandardsApplicableEvidence</param>
     /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
     /// <param name="pageSize">number of items per page.  Defaults to 20</param>
     /// <response code="200">Success</response>
     /// <response code="404">StandardsApplicableEvidence not found</response>
     [HttpGet]
-    [Route("StandardsApplicable/{standardsApplicableId}/Evidence/{evidenceId}/Reviews")]
+    [Route("ByEvidence/{evidenceId}")]
     [ValidateModelState]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<StandardsApplicableReviews>), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "StandardsApplicable not found")]
-    public IActionResult ByEvidence([FromRoute][Required]string standardsApplicableId, [FromRoute][Required]string evidenceId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Evidence not found")]
+    public IActionResult ByEvidence([FromRoute][Required]string evidenceId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
       var reviews = _logic.ByEvidence(evidenceId);
       var retval = PaginatedList<StandardsApplicableReviews>.Create(reviews, pageIndex, pageSize);
@@ -64,7 +63,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// <response code="200">Success</response>
     /// <response code="404">StandardsApplicableEvidence not found</response>
     [HttpPost]
-    [Route("StandardsApplicable/{standardsApplicableId}/Evidence/{evidenceId}/Reviews")]
     [ValidateModelState]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(StandardsApplicableReviews), description: "Success")]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "StandardsApplicable not found")]

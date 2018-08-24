@@ -39,19 +39,19 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// <summary>
     /// Get evidence for the given CapabilitiesImplemented
     /// </summary>
-    /// <param name="capabilitiesImplementedId">CRM identifier of CapabilitiesImplemented</param>
+    /// <param name="claimId">CRM identifier of CapabilitiesImplemented</param>
     /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
     /// <param name="pageSize">number of items per page.  Defaults to 20</param>
     /// <response code="200">Success</response>
     /// <response code="404">CapabilitiesImplemented not found</response>
     [HttpGet]
-    [Route("CapabilitiesImplemented/{capabilitiesImplementedId}/Evidence")]
+    [Route("ByClaim/{claimId}")]
     [ValidateModelState]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<CapabilitiesImplementedEvidence>), description: "Success")]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "CapabilitiesImplemented not found")]
-    public IActionResult BySolution([FromRoute][Required]string capabilitiesImplementedId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
+    public IActionResult ByClaim([FromRoute][Required]string claimId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      var evidence = _logic.ByClaim(capabilitiesImplementedId);
+      var evidence = _logic.ByClaim(claimId);
       var retval = PaginatedList<CapabilitiesImplementedEvidence>.Create(evidence, pageIndex, pageSize);
       return evidence.Count() > 0 ? (IActionResult)new OkObjectResult(evidence) : new NotFoundResult();
     }

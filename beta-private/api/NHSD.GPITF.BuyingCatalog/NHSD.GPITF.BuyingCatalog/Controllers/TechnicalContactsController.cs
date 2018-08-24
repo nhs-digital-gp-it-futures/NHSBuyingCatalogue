@@ -67,7 +67,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// <response code="200">Success</response>
     /// <response code="404">Solution not found in CRM</response>
     [HttpPost]
-    [Route("Create")]
     [ValidateModelState]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(TechnicalContacts), description: "Success")]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Solution not found in CRM")]
@@ -92,7 +91,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// <response code="200">Success</response>
     /// <response code="404">Technical Contact or Solution not found in CRM</response>
     [HttpPut]
-    [Route("Update")]
     [ValidateModelState]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, description: "Success")]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Technical Contact or Solution not found in CRM")]
@@ -117,7 +115,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// <response code="200">Success</response>
     /// <response code="404">Technical Contact or Solution not found in CRM</response>
     [HttpDelete]
-    [Route("Delete")]
     [ValidateModelState]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, description: "Success")]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Technical Contact or Solution not found in CRM")]

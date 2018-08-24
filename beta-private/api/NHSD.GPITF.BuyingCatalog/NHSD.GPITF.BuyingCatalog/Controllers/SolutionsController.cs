@@ -108,7 +108,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// <response code="404">Organisation not found in CRM</response>
     /// <response code="500">Validation exception</response>
     [HttpPost]
-    [Route("Create")]
     [ValidateModelState]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(Solutions), description: "Success")]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Organisation not found in CRM")]
@@ -138,7 +137,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// <response code="200">Success</response>
     /// <response code="404">Organisation or solution not found in CRM</response>
     [HttpPut]
-    [Route("Update")]
     [ValidateModelState]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, description: "Success")]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Organisation or solution not found in CRM")]

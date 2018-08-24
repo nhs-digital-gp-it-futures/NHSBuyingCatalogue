@@ -41,12 +41,13 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// <response code="200">Success</response>
     /// <response code="404">Organisation not found</response>
     [HttpGet]
+    [Route("ByContact/{contactId}")]
     [ValidateModelState]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(Organisations), description: "Success")]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Organisation not found")]
-    public IActionResult ByODS([FromQuery][Required]string contactId)
+    public IActionResult ByContact([FromRoute][Required]string contactId)
     {
-      var org = _logic.ByEmail(contactId);
+      var org = _logic.ByContact(contactId);
       return org != null ? (IActionResult)new OkObjectResult(org) : new NotFoundResult();
     }
   }

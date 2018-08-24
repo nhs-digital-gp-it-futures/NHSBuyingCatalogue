@@ -39,18 +39,17 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// <summary>
     /// Get all Reviews for a CapabilitiesImplemented
     /// </summary>
-    /// <param name="capabilitiesImplementedId">CRM identifier of CapabilitiesImplemented</param>
     /// <param name="evidenceId">CRM identifier of CapabilitiesImplementedEvidence</param>
     /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
     /// <param name="pageSize">number of items per page.  Defaults to 20</param>
     /// <response code="200">Success</response>
     /// <response code="404">CapabilitiesImplementedEvidence not found</response>
     [HttpGet]
-    [Route("CapabilitiesImplemented/{capabilitiesImplementedId}/Evidence/{evidenceId}/Reviews")]
+    [Route("ByEvidence/{evidenceId}")]
     [ValidateModelState]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<CapabilitiesImplementedReviews>), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "CapabilitiesImplemented not found")]
-    public IActionResult ByEvidence([FromRoute][Required]string capabilitiesImplementedId, [FromRoute][Required]string evidenceId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Evidence not found")]
+    public IActionResult ByEvidence([FromRoute][Required]string evidenceId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
       var reviews = _logic.ByEvidence(evidenceId);
       var retval = PaginatedList<CapabilitiesImplementedReviews>.Create(reviews, pageIndex, pageSize);
@@ -64,7 +63,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// <response code="200">Success</response>
     /// <response code="404">CapabilitiesImplementedEvidence not found</response>
     [HttpPost]
-    [Route("CapabilitiesImplemented/{capabilitiesImplementedId}/Evidence/{evidenceId}/Reviews")]
     [ValidateModelState]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(CapabilitiesImplementedReviews), description: "Success")]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "CapabilitiesImplemented not found")]
