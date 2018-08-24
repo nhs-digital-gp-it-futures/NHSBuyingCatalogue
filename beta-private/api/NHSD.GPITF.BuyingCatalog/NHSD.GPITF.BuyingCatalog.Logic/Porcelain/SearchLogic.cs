@@ -8,12 +8,12 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
   public sealed class SearchLogic : LogicBase, ISearchLogic
   {
     private readonly ISearchDatastore _datastore;
-    private readonly ISolutionFilter _solutionFilter;
+    private readonly ISolutionsFilter _solutionFilter;
 
     public SearchLogic(
       IHttpContextAccessor context,
       ISearchDatastore datastore,
-      ISolutionFilter solutionFilter) :
+      ISolutionsFilter solutionFilter) :
       base(context)
     {
       _datastore = datastore;

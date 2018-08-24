@@ -11,7 +11,6 @@ DROP TABLE IF EXISTS StandardsApplicableEvidence;
 DROP TABLE IF EXISTS StandardsApplicableReviews;
 
 -- drop data tables
-DROP TABLE IF EXISTS Reviews;
 DROP TABLE IF EXISTS TechnicalContacts;
 DROP TABLE IF EXISTS Contacts;
 DROP TABLE IF EXISTS Solutions;
@@ -237,3 +236,4 @@ CREATE TABLE StandardsApplicableReviews
   FOREIGN KEY (CreatedById) REFERENCES Contacts(Id) ON DELETE CASCADE,
   PRIMARY KEY (Id)
 );
+

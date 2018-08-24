@@ -25,9 +25,21 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var ctx = Creator.GetContext(orgId: orgId);
       _context.Setup(c => c.HttpContext).Returns(ctx);
 
-      var ctxOrgId = _context.Object.ContextOrganisationId();
+      var ctxOrgId = _context.Object.OrganisationId();
 
       ctxOrgId.Should().Be(orgId);
+    }
+
+    [TestCase("NHS-GPIT@TPP.com")]
+    [TestCase("buying.catalogue.supplier@gmail.com")]
+    public void ContextEmail_Returns_Expected(string email)
+    {
+      var ctx = Creator.GetContext(email: email);
+      _context.Setup(c => c.HttpContext).Returns(ctx);
+
+      var ctxOrgId = _context.Object.Email();
+
+      ctxOrgId.Should().Be(email);
     }
 
     [TestCase(Roles.Admin)]
