@@ -17,7 +17,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
     }
 
-    public IQueryable<Standards> ByCapability(string capabilityId, bool isOptional)
+    public IEnumerable<Standards> ByCapability(string capabilityId, bool isOptional)
     {
       return GetInternal(() =>
       {
@@ -28,11 +28,11 @@ join Capabilities cap on cap.Id = cs.CapabilityId
 where cap.Id = '{capabilityId}' and cs.IsOptional = {(isOptional ? 1 : 0).ToString()}
 ";
         var retval = _dbConnection.Value.Query<Standards>(sql);
-        return retval.AsQueryable();
+        return retval;
       });
     }
 
-    public IQueryable<Standards> ByFramework(string frameworkId)
+    public IEnumerable<Standards> ByFramework(string frameworkId)
     {
       return GetInternal(() =>
       {
@@ -43,7 +43,7 @@ join Frameworks frame on frame.Id = fs.FrameworkId
 where frame.Id = '{frameworkId}'
 ";
         var retval = _dbConnection.Value.Query<Standards>(sql);
-        return retval.AsQueryable();
+        return retval;
       });
     }
 
@@ -55,7 +55,7 @@ where frame.Id = '{frameworkId}'
       });
     }
 
-    public IQueryable<Standards> ByIds(IEnumerable<string> ids)
+    public IEnumerable<Standards> ByIds(IEnumerable<string> ids)
     {
       return GetInternal(() =>
       {
@@ -65,7 +65,7 @@ where frame.Id = '{frameworkId}'
 select * from Standards
 where Id in ({sqlIds})";
         var retval = _dbConnection.Value.Query<Standards>(sql);
-        return retval.AsQueryable();
+        return retval;
       });
     }
 
@@ -84,7 +84,7 @@ where Id in ({sqlIds})";
       });
     }
 
-    public IQueryable<Standards> GetAll()
+    public IEnumerable<Standards> GetAll()
     {
       return GetInternal(() =>
       {
@@ -95,7 +95,7 @@ select * from Standards where Id not in
   select PreviousId from Standards where PreviousId is not null
 )
 ";
-        return _dbConnection.Value.Query<Standards>(sql).AsQueryable();
+        return _dbConnection.Value.Query<Standards>(sql);
       });
     }
 

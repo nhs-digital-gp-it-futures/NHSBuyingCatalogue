@@ -7,6 +7,7 @@ using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
@@ -47,12 +48,12 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [HttpGet]
     [Route("ByClaim/{claimId}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<StandardsApplicableEvidence>), description: "Success")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<IEnumerable<StandardsApplicableEvidence>>), description: "Success")]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "StandardsApplicable not found")]
     public IActionResult ByClaim([FromRoute][Required]string claimId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
       var capEvidenc = _logic.ByClaim(claimId);
-      var retval = PaginatedList<StandardsApplicableEvidence>.Create(capEvidenc, pageIndex, pageSize);
+      var retval = PaginatedList<IEnumerable<StandardsApplicableEvidence>>.Create(capEvidenc, pageIndex, pageSize);
       return capEvidenc.Count() > 0 ? (IActionResult)new OkObjectResult(capEvidenc) : new NotFoundResult();
     }
 

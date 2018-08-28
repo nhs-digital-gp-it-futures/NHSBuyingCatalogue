@@ -1,14 +1,14 @@
 ﻿using NHSD.GPITF.BuyingCatalog.Models;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Interfaces
 {
 #pragma warning disable CS1591
   public interface ISolutionsLogic
   {
-    IQueryable<Solutions> ByFramework(string frameworkId);
+    IEnumerable<Solutions> ByFramework(string frameworkId);
     Solutions ById(string id);
-    IQueryable<Solutions> ByOrganisation(string organisationId);
+    IEnumerable<Solutions> ByOrganisation(string organisationId);
     Solutions Create(Solutions solution);
     void Update(Solutions solution);
   }

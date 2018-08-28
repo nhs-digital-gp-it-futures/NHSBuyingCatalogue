@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
@@ -22,11 +23,11 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
       });
     }
 
-    public IQueryable<Contacts> ByOrganisation(string organisationId)
+    public IEnumerable<Contacts> ByOrganisation(string organisationId)
     {
       return GetInternal(() =>
       {
-        return _dbConnection.Value.GetAll<Contacts>().Where(c => c.OrganisationId == organisationId).AsQueryable();
+        return _dbConnection.Value.GetAll<Contacts>().Where(c => c.OrganisationId == organisationId);
       });
     }
 

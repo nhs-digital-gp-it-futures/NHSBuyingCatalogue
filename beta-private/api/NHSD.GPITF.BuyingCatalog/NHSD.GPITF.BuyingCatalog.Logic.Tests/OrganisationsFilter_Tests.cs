@@ -37,7 +37,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var supp2Org = Creator.GetOrganisation(id: Guid.NewGuid().ToString(), primaryRoleId: PrimaryRole.ApplicationServiceProvider);
       var orgs = new[] { govOrg, supp1Org, supp2Org };
 
-      var filterOrg = orgFilt.Filter(orgs.ToList().AsQueryable());
+      var filterOrg = orgFilt.Filter(orgs.ToList());
 
       filterOrg.Should().BeEquivalentTo(orgs);
     }
@@ -54,7 +54,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var supp2Org = Creator.GetOrganisation(id: Guid.NewGuid().ToString(), primaryRoleId: PrimaryRole.ApplicationServiceProvider);
       var orgs = new[] { govOrg, supp1Org, supp2Org };
 
-      var filterOrg = orgFilt.Filter(orgs.ToList().AsQueryable());
+      var filterOrg = orgFilt.Filter(orgs.ToList());
 
       filterOrg.Should().BeEquivalentTo(orgs);
     }
@@ -71,7 +71,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var supp2Org = Creator.GetOrganisation(id: Guid.NewGuid().ToString(), primaryRoleId: PrimaryRole.ApplicationServiceProvider);
       var orgs = new[] { govOrg, supp1Org, supp2Org };
 
-      var filterOrg = orgFilt.Filter(orgs.ToList().AsQueryable());
+      var filterOrg = orgFilt.Filter(orgs.ToList());
 
       filterOrg.Should().BeEquivalentTo(new[] { govOrg, supp1Org });
     }

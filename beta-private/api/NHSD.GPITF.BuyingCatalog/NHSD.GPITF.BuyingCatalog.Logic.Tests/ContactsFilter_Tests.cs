@@ -41,7 +41,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         GetContact(),
         GetContact()
       };
-      var res = filter.Filter(contacts.AsQueryable());
+      var res = filter.Filter(contacts);
 
       res.Should().BeEquivalentTo(contacts);
     }
@@ -75,7 +75,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var contacts = new[] { cont1, cont2, cont3, cont4 };
 
 
-      var res = filter.Filter(contacts.AsQueryable());
+      var res = filter.Filter(contacts);
 
 
       res.Should().BeEquivalentTo(new[] { cont1, cont2, cont4 });

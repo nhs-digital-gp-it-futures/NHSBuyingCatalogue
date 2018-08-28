@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
@@ -27,17 +28,17 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _filter = filter;
     }
 
-    public IQueryable<Solutions> ByFramework(string frameworkId)
+    public IEnumerable<Solutions> ByFramework(string frameworkId)
     {
       return _filter.Filter(_datastore.ByFramework(frameworkId));
     }
 
     public Solutions ById(string id)
     {
-      return _filter.Filter(new[] { _datastore.ById(id) }.AsQueryable()).SingleOrDefault();
+      return _filter.Filter(new[] { _datastore.ById(id) }).SingleOrDefault();
     }
 
-    public IQueryable<Solutions> ByOrganisation(string organisationId)
+    public IEnumerable<Solutions> ByOrganisation(string organisationId)
     {
       return _filter.Filter(_datastore.ByOrganisation(organisationId));
     }

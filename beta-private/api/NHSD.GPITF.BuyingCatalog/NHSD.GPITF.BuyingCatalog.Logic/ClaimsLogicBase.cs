@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
@@ -17,7 +18,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _datastore = datastore;
     }
 
-    public IQueryable<T> BySolution(string solutionId)
+    public IEnumerable<T> BySolution(string solutionId)
     {
       return _datastore.BySolution(solutionId);
     }

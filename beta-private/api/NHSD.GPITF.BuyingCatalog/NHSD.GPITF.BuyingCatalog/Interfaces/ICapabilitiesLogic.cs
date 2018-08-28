@@ -7,11 +7,11 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
 #pragma warning disable CS1591
   public interface ICapabilitiesLogic
   {
-    IQueryable<Capabilities> ByFramework(string frameworkId);
+    IEnumerable<Capabilities> ByFramework(string frameworkId);
     Capabilities ById(string id);
-    IQueryable<Capabilities> ByIds(IEnumerable<string> ids);
-    IQueryable<Capabilities> ByStandard(string standardId, bool isOptional);
-    IQueryable<Capabilities> GetAll();
+    IEnumerable<Capabilities> ByIds(IEnumerable<string> ids);
+    IEnumerable<Capabilities> ByStandard(string standardId, bool isOptional);
+    IEnumerable<Capabilities> GetAll();
   }
 #pragma warning restore CS1591
 }

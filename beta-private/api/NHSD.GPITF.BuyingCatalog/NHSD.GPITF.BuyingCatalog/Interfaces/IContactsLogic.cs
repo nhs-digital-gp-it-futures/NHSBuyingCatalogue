@@ -1,5 +1,5 @@
 ﻿using NHSD.GPITF.BuyingCatalog.Models;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Interfaces
 {
@@ -7,7 +7,7 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
   public interface IContactsLogic
   {
     Contacts ById(string id);
-    IQueryable<Contacts> ByOrganisation(string organisationId);
+    IEnumerable<Contacts> ByOrganisation(string organisationId);
     Contacts ByEmail(string email);
   }
 #pragma warning restore CS1591

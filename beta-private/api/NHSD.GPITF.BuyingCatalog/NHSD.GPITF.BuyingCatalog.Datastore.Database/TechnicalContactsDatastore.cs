@@ -4,6 +4,7 @@ using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
@@ -15,11 +16,11 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
     }
 
-    public IQueryable<TechnicalContacts> BySolution(string solutionId)
+    public IEnumerable<TechnicalContacts> BySolution(string solutionId)
     {
       return GetInternal(() =>
       {
-        return _dbConnection.Value.GetAll<TechnicalContacts>().Where(tc => tc.SolutionId == solutionId).AsQueryable();
+        return _dbConnection.Value.GetAll<TechnicalContacts>().Where(tc => tc.SolutionId == solutionId);
       });
     }
 
