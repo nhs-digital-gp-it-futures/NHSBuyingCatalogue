@@ -10,42 +10,38 @@
 
 {{#*inline "contact"}}
 <fieldset class="contact">
-  <legend>{{contactType}}{{#required}} (required){{/required}}</legend>
+  <legend>{{contactType}}{{^required}} (optional){{/required}}</legend>
   {{#if help}}
   {{#> help-reveal title="Help - Who is this?"}}
   <p>{{help}}</p>
   {{/help-reveal}}
   {{/if}}
   <label{{#if errors.firstName}} class="has-errors"{{/if}}>
-    First Name
+    First Name{{#required}} <span class="required">*</span>{{/required}}
     <input type="text"
            name="contacts[{{contactType}}][firstName]"
-           value="{{ firstName }}"
-           placeholder="Enter first name">
+           value="{{ firstName }}">
   </label>
   {{> errors errors=errors.firstName }}
   <label{{#if errors.lastName}} class="has-errors"{{/if}}>
-    Last Name
+    Last Name{{#required}} <span class="required">*</span>{{/required}}
     <input type="text"
            name="contacts[{{contactType}}][lastName]"
-           value="{{ lastName }}"
-           placeholder="Enter last name">
+           value="{{ lastName }}">
   </label>
   {{> errors errors=errors.lastName }}
   <label{{#if errors.emailAddress}} class="has-errors"{{/if}}>
-    Email
-    <input type="text"
+    Email{{#required}} <span class="required">*</span>{{/required}}
+    <input type="email"
            name="contacts[{{contactType}}][emailAddress]"
-           value="{{ emailAddress }}"
-           placeholder="Enter email">
+           value="{{ emailAddress }}">
   </label>
   {{> errors errors=errors.emailAddress }}
   <label{{#if errors.phoneNumber}} class="has-errors"{{/if}}>
-    Phone Number
+    Phone Number{{#required}} <span class="required">*</span>{{/required}}
     <input type="text"
            name="contacts[{{contactType}}][phoneNumber]"
-           value="{{ phoneNumber }}"
-           placeholder="Enter phone number">
+           value="{{ phoneNumber }}">
   </label>
   {{> errors errors=errors.phoneNumber }}
 </fieldset>
@@ -57,40 +53,35 @@
     Contact Type
     <input type="text"
            name="secondaryContacts[contactType]"
-           value="{{ contactType }}"
-           placeholder="Enter type of contact">
+           value="{{ contactType }}">
   </label>
   {{> errors errors=errors.contactType }}
   <label{{#if errors.firstName}} class="has-errors"{{/if}}>
     First Name
     <input type="text"
            name="secondaryContacts[firstName]"
-           value="{{ firstName }}"
-           placeholder="Enter first name">
+           value="{{ firstName }}">
   </label>
   {{> errors errors=errors.firstName }}
   <label{{#if errors.lastName}} class="has-errors"{{/if}}>
     Last Name
     <input type="text"
            name="secondaryContacts[lastName]"
-           value="{{ lastName }}"
-           placeholder="Enter last name">
+           value="{{ lastName }}">
   </label>
   {{> errors errors=errors.lastName }}
   <label{{#if errors.emailAddress}} class="has-errors"{{/if}}>
     Email
-    <input type="text"
+    <input type="email"
            name="secondaryContacts[emailAddress]"
-           value="{{ emailAddress }}"
-           placeholder="Enter email">
+           value="{{ emailAddress }}">
   </label>
   {{> errors errors=errors.emailAddress }}
   <label{{#if errors.phoneNumber}} class="has-errors"{{/if}}>
     Phone Number
     <input type="text"
            name="secondaryContacts[phoneNumber]"
-           value="{{ phoneNumber }}"
-           placeholder="Enter phone number">
+           value="{{ phoneNumber }}">
   </label>
   {{> errors errors=errors.phoneNumber }}
 </fieldset>
@@ -116,16 +107,21 @@
               Enter Name, Version &amp; Description
             </legend>
             <label{{#if errors.name}} class="has-errors"{{/if}}>
-                Solution Name (Required)
-                <input type="text" name="name" value="{{ name }}"
-                       placeholder="Enter solution name (max 60 characters)">
+                Solution Name <span class="required">*</span>
+                <ul class="validation-rules">
+                  <li>max 60 characters</li>
+                </ul>
+                <input type="text" name="name" value="{{ name }}">
             </label>
             {{> errors errors=errors.name }}
             <label{{#if errors.description}} class="has-errors"{{/if}}>
-                Description (Required)
+                Description <span class="required">*</span>
+                <p class="instructions">Your Solution description will be displayed on your Solution page and in search results, but it will not affect search ranking.</p>
+                <ul class="validation-rules">
+                  <li>max 300 characters</li>
+                </ul>
                 <textarea name="description"
-                          rows="4"
-                          placeholder="Enter solution description (max 300 characters). This description will be displayed on your solution page and solution search result. However, descriptions will not affect search ranking.">{{ description }}</textarea>
+                          rows="4">{{ description }}</textarea>
             </label>
             {{> errors errors=errors.description }}
             <label{{#if errors.version}} class="has-errors"{{/if}}>
@@ -134,8 +130,7 @@
                 <p>Solution version is used to distinguish between instances of a solution. On the Catalogue, Solution version is intended to be used to describe Solutions with significant feature developments. In other words, when the ‘major number’ has changed, in standard semantic versioning schemes.
                 <p>Version might be used, for example, to describe a new version of a Solution with expanded functionality or additional Capabilities.
                 {{/help-reveal}}
-                <input type="text" name="version" value="{{ version }}"
-                       placeholder="Enter solution version">
+                <input type="text" name="version" value="{{ version }}">
             </label>
             {{> errors errors=errors.version }}
         </fieldset>

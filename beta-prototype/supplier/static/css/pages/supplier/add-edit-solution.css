@@ -47,7 +47,12 @@
   margin-top: 0.5em;
 }
 
+#add-edit-solution form label .required {
+  color: var(--color-input-val-error);
+}
+
 #add-edit-solution form input[type=text],
+#add-edit-solution form input[type=email],
 #add-edit-solution form textarea {
   display: block;
   width: 80%;
@@ -61,6 +66,7 @@
 }
 
 #add-edit-solution form .has-errors input[type=text],
+#add-edit-solution form .has-errors input[type=email],
 #add-edit-solution form .has-errors textarea {
   border-color: var(--color-input-val-error);
   border-width: 2px;
@@ -77,6 +83,22 @@
   margin: 0;
   padding: 0;
   list-style-type: none;
+}
+
+#add-edit-solution form ul.validation-rules {
+  list-style-type: disc;
+  margin: 0.5em 0 0.5em 1.5em;
+}
+
+#add-edit-solution form ul.validation-rules li {
+  font-size: var(--font-size-help);
+  font-weight: var(--font-weight-help);
+}
+
+#add-edit-solution form p.instructions {
+  font-weight: var(--font-weight-help);
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 }
 
 #add-edit-solution fieldset.contact {
