@@ -37,13 +37,13 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     }
 
     /// <summary>
-    /// Get evidence for the given StandardsApplicable
+    /// Get evidence for the given Claim
     /// </summary>
-    /// <param name="claimId">CRM identifier of StandardsApplicable</param>
+    /// <param name="claimId">CRM identifier of Claim</param>
     /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
     /// <param name="pageSize">number of items per page.  Defaults to 20</param>
     /// <response code="200">Success</response>
-    /// <response code="404">StandardsApplicable not found</response>
+    /// <response code="404">Claim not found</response>
     [HttpGet]
     [Route("ByClaim/{claimId}")]
     [ValidateModelState]
@@ -61,11 +61,11 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// </summary>
     /// <param name="evidence">new evidence information</param>
     /// <response code="200">Success</response>
-    /// <response code="404">CapabilitiesImplemented not found</response>
+    /// <response code="404">Claim not found</response>
     [HttpPost]
     [ValidateModelState]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(StandardsApplicableEvidence), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "StandardsApplicable not found")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Claim not found")]
     public IActionResult Create([FromBody]StandardsApplicableEvidence evidence)
     {
       try
@@ -81,5 +81,33 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
       {
         return new NotFoundObjectResult(ex);
       }
-    }  }
+    }
+
+    /// <summary>
+    /// Update an existing evidence with new evidence information
+    /// </summary>
+    /// <param name="evidence">new evidence information</param>
+    /// <response code="200">Success</response>
+    /// <response code="404">Claim not found</response>
+    [HttpPut]
+    [ValidateModelState]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, description: "Success")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Claim not found")]
+    public IActionResult Update([FromBody]StandardsApplicableEvidence evidence)
+    {
+      try
+      {
+        _logic.Update(evidence);
+        return new OkResult();
+      }
+      catch (FluentValidation.ValidationException ex)
+      {
+        return new InternalServerErrorObjectResult(ex);
+      }
+      catch (Exception ex)
+      {
+        return new NotFoundObjectResult(ex);
+      }
+    }
+  }
 }

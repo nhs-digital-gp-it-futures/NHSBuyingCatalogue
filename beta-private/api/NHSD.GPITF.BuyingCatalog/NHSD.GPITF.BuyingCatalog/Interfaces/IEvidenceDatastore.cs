@@ -7,6 +7,7 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
   {
     IQueryable<T> ByClaim(string claimId);
     T Create(T evidence);
+    void Update(T evidence);
   }
 #pragma warning restore CS1591
 }
