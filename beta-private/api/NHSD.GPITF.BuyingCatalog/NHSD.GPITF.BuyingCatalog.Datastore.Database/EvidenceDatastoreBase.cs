@@ -22,7 +22,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
       return GetInternal(() =>
       {
-        var retval = _dbConnection.Value.GetAll<T>().Where(sae => sae.ClaimId == claimId);
+        var retval = _dbConnection.Value.GetAll<T>().Where(eb => eb.ClaimId == claimId);
         return retval.AsQueryable();
       });
     }
