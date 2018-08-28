@@ -27,17 +27,17 @@
   padding-right: 1em;
 }
 
-#add-edit-solution form > fieldset > legend::after {
+#add-edit-solution form > fieldset > legend::before {
   content: '▲';
-  position: absolute;
-  right: 0.5em;
+  position: relative;
+  left: -0.5em;
 }
 
 #add-edit-solution form > fieldset.collapsed > *:not(legend) {
   display: none;
 }
 
-#add-edit-solution form > fieldset.collapsed > legend::after {
+#add-edit-solution form > fieldset.collapsed > legend::before {
   content: '▼';
 }
 
