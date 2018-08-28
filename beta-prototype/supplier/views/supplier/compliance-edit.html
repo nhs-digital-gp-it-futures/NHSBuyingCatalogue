@@ -128,6 +128,21 @@
 <script>
 /* global $, $$ */
 document.addEventListener('DOMContentLoaded', () => {
+  $$('fieldset.standard-evidence').forEach(el => {
+    el.addEventListener('input', enableSubmitIfAllStandardsHaveEvidence)
+  })
+  enableSubmitIfAllStandardsHaveEvidence()
+
+  function enableSubmitIfAllStandardsHaveEvidence () {
+    const elSubmit = $('.controls [name^=submit]')
+    if (elSubmit) {
+      const allEvidenceInputs = $$('input[name^=evidence]')
+      const allEvidenceValues = allEvidenceInputs.map(el => el.value.trim()).filter(_ => _)
+
+      elSubmit.disabled = allEvidenceInputs.length !== allEvidenceValues.length
+    }
+  }
+
   $$('fieldset.standard-evidence .evidence .controls .edit').forEach(el => {
     el.addEventListener('click', ev => {
       ev.preventDefault()
