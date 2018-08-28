@@ -80,11 +80,16 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('fieldset.capability > legend').forEach(el => {
+  $$('fieldset.capability').forEach(el => {
+    el.addEventListener('input', enableSubmitIfAllCapabilitiesHaveEvidence)
+  })
+  enableSubmitIfAllCapabilitiesHaveEvidence()
+
+  $$('fieldset.capability > legend').forEach(el => {
     el.addEventListener('click', toggleFieldsetCollapse)
   })
 
-  document.querySelectorAll('fieldset.capability .edit.button').forEach(el => {
+  $$('fieldset.capability .edit.button').forEach(el => {
     el.addEventListener('click', toggleFieldsetEditing)
   })
 
@@ -101,6 +106,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function toggleFieldsetEditing (ev) {
     ev.target.closest('fieldset.capability').classList.toggle('editing')
+  }
+
+  function enableSubmitIfAllCapabilitiesHaveEvidence () {
+    const allEvidenceInputs = $$('input[name^=evidence]')
+    const allEvidenceValues = allEvidenceInputs.map(el => el.value.trim()).filter(_ => _)
+
+    $('button[name=action][value=submit]').disabled = allEvidenceInputs.length !== allEvidenceValues.length
   }
 })
 </script>
