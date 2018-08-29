@@ -31,7 +31,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 select rev.* from {table.Name} rev where Id not in 
 (
   select PreviousId from {table.Name} where PreviousId is not null
-)
+) and
+EvidenceId = '{evidenceId}'
 ";
         var allCurrent = _dbConnection.Value.Query<T>(sqlAllCurrent);
         foreach (var current in allCurrent)

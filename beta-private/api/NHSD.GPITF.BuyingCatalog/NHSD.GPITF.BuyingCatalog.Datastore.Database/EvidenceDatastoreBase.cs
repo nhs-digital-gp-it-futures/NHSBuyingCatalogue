@@ -31,7 +31,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 select ev.* from {table.Name} ev where Id not in 
 (
   select PreviousId from {table.Name} where PreviousId is not null
-)
+) and
+ClaimId = '{claimId}'
 ";
         var allCurrent = _dbConnection.Value.Query<T>(sqlAllCurrent);
         foreach (var current in allCurrent)
