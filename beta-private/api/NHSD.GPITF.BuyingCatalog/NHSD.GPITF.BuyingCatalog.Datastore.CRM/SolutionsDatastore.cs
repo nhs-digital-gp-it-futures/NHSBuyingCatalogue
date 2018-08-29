@@ -3,7 +3,7 @@ using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
@@ -17,7 +17,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
     }
 
-    public IQueryable<Solutions> ByFramework(string frameworkId)
+    public IEnumerable<Solutions> ByFramework(string frameworkId)
     {
       throw new NotImplementedException();
     }
@@ -27,7 +27,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       throw new NotImplementedException();
     }
 
-    public IQueryable<Solutions> ByOrganisation(string organisationId)
+    public IEnumerable<Solutions> ByOrganisation(string organisationId)
     {
       throw new NotImplementedException();
     }

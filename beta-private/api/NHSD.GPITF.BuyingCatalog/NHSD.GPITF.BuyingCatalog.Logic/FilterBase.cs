@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
@@ -14,7 +15,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     protected abstract T Filter(T input);
 
-    public IQueryable<T> Filter(IQueryable<T> input)
+    public IEnumerable<T> Filter(IEnumerable<T> input)
     {
       return input.Select(x => Filter(x)).Where(x => x != null);
     }

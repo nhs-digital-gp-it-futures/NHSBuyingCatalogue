@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
@@ -20,10 +21,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       _solutionFilter = solutionFilter;
     }
 
-    public IQueryable<SolutionEx> SolutionExByKeyword(string keyword)
+    public IEnumerable<SolutionEx> SolutionExByKeyword(string keyword)
     {
       var solnExs = _datastore.SolutionExByKeyword(keyword);
-      return solnExs.Where(soln => _solutionFilter.Filter(new[] { soln.Solution }.AsQueryable()).Any());
+      return solnExs.Where(soln => _solutionFilter.Filter(new[] { soln.Solution }).Any());
     }
   }
 }

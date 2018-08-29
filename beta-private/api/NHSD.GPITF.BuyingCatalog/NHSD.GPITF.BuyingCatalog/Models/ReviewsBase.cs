@@ -15,6 +15,11 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     public string Id { get; set; }
 
     /// <summary>
+    /// Unique identifier of previous version of entity
+    /// </summary>
+    public string PreviousId { get; set; }
+
+    /// <summary>
     /// Unique identifier of associated Evidence
     /// </summary>
     [Required]

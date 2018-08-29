@@ -34,7 +34,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
       _solutionExDatastore = solutionExDatastore;
     }
 
-    public IQueryable<SolutionEx> SolutionExByKeyword(string keyword)
+    public IEnumerable<SolutionEx> SolutionExByKeyword(string keyword)
     {
       // get all Solutions via frameworks
       var allSolns = _frameworkDatastore.GetAll()

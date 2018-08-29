@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,7 +16,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
     }
 
-    public IQueryable<Capabilities> ByFramework(string frameworkId)
+    public IEnumerable<Capabilities> ByFramework(string frameworkId)
     {
       return GetInternal(() =>
       {
@@ -28,7 +27,7 @@ join Frameworks frame on frame.Id = cf.FrameworkId
 where frame.Id = '{frameworkId}'
 ";
         var retval = _dbConnection.Value.Query<Capabilities>(sql);
-        return retval.AsQueryable();
+        return retval;
       });
     }
 
@@ -40,7 +39,7 @@ where frame.Id = '{frameworkId}'
       });
     }
 
-    public IQueryable<Capabilities> ByIds(IEnumerable<string> ids)
+    public IEnumerable<Capabilities> ByIds(IEnumerable<string> ids)
     {
       return GetInternal(() =>
       {
@@ -50,11 +49,11 @@ where frame.Id = '{frameworkId}'
 select * from Capabilities
 where Id in ({sqlIds})";
         var retval = _dbConnection.Value.Query<Capabilities>(sql);
-        return retval.AsQueryable();
+        return retval;
       });
     }
 
-    public IQueryable<Capabilities> ByStandard(string standardId, bool isOptional)
+    public IEnumerable<Capabilities> ByStandard(string standardId, bool isOptional)
     {
       return GetInternal(() =>
       {
@@ -65,15 +64,22 @@ join Standards std on std.Id = cs.StandardId
 where std.Id = '{standardId}' and cs.IsOptional = {(isOptional ? 1 : 0).ToString()}
 ";
         var retval = _dbConnection.Value.Query<Capabilities>(sql);
-        return retval.AsQueryable();
+        return retval;
       });
     }
 
-    public IQueryable<Capabilities> GetAll()
+    public IEnumerable<Capabilities> GetAll()
     {
       return GetInternal(() =>
       {
-        return _dbConnection.Value.GetAll<Capabilities>().AsQueryable();
+        var sql = @"
+-- select all current versions
+select * from Capabilities where Id not in 
+(
+  select PreviousId from Capabilities where PreviousId is not null
+)
+";
+        return _dbConnection.Value.Query<Capabilities>(sql);
       });
     }
   }

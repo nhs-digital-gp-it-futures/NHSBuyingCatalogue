@@ -7,6 +7,7 @@ using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
@@ -38,6 +39,9 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
 
     /// <summary>
     /// Get all Reviews for a StandardsApplicable
+    /// Each list is a distinct 'chain' of Review ie original Review with all subsequent Review
+    /// The first item in each 'chain' is the most current Review.
+    /// The last item in each 'chain' is the original Review.
     /// </summary>
     /// <param name="evidenceId">CRM identifier of StandardsApplicableEvidence</param>
     /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
@@ -47,12 +51,12 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [HttpGet]
     [Route("ByEvidence/{evidenceId}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<StandardsApplicableReviews>), description: "Success")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<IEnumerable<StandardsApplicableReviews>>), description: "Success")]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Evidence not found")]
     public IActionResult ByEvidence([FromRoute][Required]string evidenceId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
       var reviews = _logic.ByEvidence(evidenceId);
-      var retval = PaginatedList<StandardsApplicableReviews>.Create(reviews, pageIndex, pageSize);
+      var retval = PaginatedList<IEnumerable<StandardsApplicableReviews>>.Create(reviews, pageIndex, pageSize);
       return reviews.Count() > 0 ? (IActionResult)new OkObjectResult(reviews) : new NotFoundResult();
     }
 

@@ -1,9 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
   public interface IFilter<T>
   {
-    IQueryable<T> Filter(IQueryable<T> input);
+    IEnumerable<T> Filter(IEnumerable<T> input);
   }
 }

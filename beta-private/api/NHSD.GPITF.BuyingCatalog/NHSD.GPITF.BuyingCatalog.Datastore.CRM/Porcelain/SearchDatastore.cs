@@ -4,7 +4,7 @@ using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
 {
@@ -18,7 +18,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
     {
     }
 
-    public IQueryable<SolutionEx> SolutionExByKeyword(string keyword)
+    public IEnumerable<SolutionEx> SolutionExByKeyword(string keyword)
     {
       throw new NotImplementedException();
     }

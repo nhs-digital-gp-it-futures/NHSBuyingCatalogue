@@ -19,6 +19,11 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     public string Id { get; set; }
 
     /// <summary>
+    /// Unique identifier of previous version of entity
+    /// </summary>
+    public string PreviousId { get; set; }
+
+    /// <summary>
     /// True if this standard applies to all solutions
     /// </summary>
     public bool IsOverarching { get; set; }

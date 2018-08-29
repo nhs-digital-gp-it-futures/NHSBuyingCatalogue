@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
@@ -15,7 +16,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
     }
 
-    public IQueryable<Frameworks> ByCapability(string capabilityId)
+    public IEnumerable<Frameworks> ByCapability(string capabilityId)
     {
       return GetInternal(() =>
       {
@@ -26,7 +27,7 @@ join Capabilities cap on cap.Id = cf.CapabilityId
 where cap.Id = '{capabilityId}'
 ";
         var retval = _dbConnection.Value.Query<Frameworks>(sql);
-        return retval.AsQueryable();
+        return retval;
       });
     }
 
@@ -38,7 +39,7 @@ where cap.Id = '{capabilityId}'
       });
     }
 
-    public IQueryable<Frameworks> BySolution(string solutionId)
+    public IEnumerable<Frameworks> BySolution(string solutionId)
     {
       return GetInternal(() =>
       {
@@ -49,11 +50,11 @@ join Solutions soln on soln.Id = fs.SolutionId
 where soln.Id = '{solutionId}'
 ";
         var retval = _dbConnection.Value.Query<Frameworks>(sql);
-        return retval.AsQueryable();
+        return retval;
       });
     }
 
-    public IQueryable<Frameworks> ByStandard(string standardId)
+    public IEnumerable<Frameworks> ByStandard(string standardId)
     {
       return GetInternal(() =>
       {
@@ -64,15 +65,22 @@ join Standards std on std.Id = fs.StandardId
 where std.Id = '{standardId}'
 ";
         var retval = _dbConnection.Value.Query<Frameworks>(sql);
-        return retval.AsQueryable();
+        return retval;
       });
     }
 
-    public IQueryable<Frameworks> GetAll()
+    public IEnumerable<Frameworks> GetAll()
     {
       return GetInternal(() =>
       {
-        return _dbConnection.Value.GetAll<Frameworks>().AsQueryable();
+        var sql = @"
+-- select all current versions
+select * from Frameworks where Id not in 
+(
+  select PreviousId from Frameworks where PreviousId is not null
+)
+";
+        return _dbConnection.Value.Query<Frameworks>(sql);
       });
     }
   }

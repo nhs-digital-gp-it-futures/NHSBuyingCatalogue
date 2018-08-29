@@ -5,6 +5,7 @@ using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
@@ -16,7 +17,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
     }
 
-    public IQueryable<Solutions> ByFramework(string frameworkId)
+    public IEnumerable<Solutions> ByFramework(string frameworkId)
     {
       return GetInternal(() =>
       {
@@ -27,7 +28,7 @@ join Frameworks frame on frame.Id = fs.FrameworkId
 where frame.Id = '{frameworkId}'
 ";
         var retval = _dbConnection.Value.Query<Solutions>(sql);
-        return retval.AsQueryable();
+        return retval;
       });
     }
 
@@ -39,11 +40,17 @@ where frame.Id = '{frameworkId}'
       });
     }
 
-    public IQueryable<Solutions> ByOrganisation(string organisationId)
+    public IEnumerable<Solutions> ByOrganisation(string organisationId)
     {
       return GetInternal(() =>
       {
-        return _dbConnection.Value.GetAll<Solutions>().Where(soln => soln.OrganisationId == organisationId).AsQueryable();
+        var sql = @"
+-- select all current versions
+select * from Solutions where Id not in 
+(
+  select PreviousId from Solutions where PreviousId is not null
+)
+";        return _dbConnection.Value.Query<Solutions>(sql).Where(soln => soln.OrganisationId == organisationId);
       });
     }
 

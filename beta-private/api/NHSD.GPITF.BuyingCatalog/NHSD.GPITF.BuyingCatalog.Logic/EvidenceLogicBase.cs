@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
@@ -20,7 +20,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _contacts = contacts;
     }
 
-    public IQueryable<T> ByClaim(string claimId)
+    public IEnumerable<IEnumerable<T>> ByClaim(string claimId)
     {
       return _datastore.ByClaim(claimId);
     }
@@ -30,6 +30,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       var email = Context.Email();
       evidence.CreatedById = _contacts.ByEmail(email).Id;
       return _datastore.Create(evidence);
+    }
+
+    public void Update(T evidence)
+    {
+      var email = Context.Email();
+      evidence.CreatedById = _contacts.ByEmail(email).Id;
+      _datastore.Update(evidence);
     }
   }
 }

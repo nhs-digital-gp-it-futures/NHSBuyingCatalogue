@@ -26,7 +26,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     public Organisations ByContact(string contactId)
     {
-      return _filter.Filter(new[] { _datastore.ByContact(contactId) }.AsQueryable()).SingleOrDefault();
+      return _filter.Filter(new[] { _datastore.ByContact(contactId) }).SingleOrDefault();
     }
   }
 }

@@ -18,7 +18,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _datastore = datastore;
     }
 
-    public IQueryable<Capabilities> ByFramework(string frameworkId)
+    public IEnumerable<Capabilities> ByFramework(string frameworkId)
     {
       return _datastore.ByFramework(frameworkId);
     }
@@ -28,17 +28,17 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       return _datastore.ById(id);
     }
 
-    public IQueryable<Capabilities> ByIds(IEnumerable<string> ids)
+    public IEnumerable<Capabilities> ByIds(IEnumerable<string> ids)
     {
       return _datastore.ByIds(ids);
     }
 
-    public IQueryable<Capabilities> ByStandard(string standardId, bool isOptional)
+    public IEnumerable<Capabilities> ByStandard(string standardId, bool isOptional)
     {
       return _datastore.ByStandard(standardId, isOptional);
     }
 
-    public IQueryable<Capabilities> GetAll()
+    public IEnumerable<Capabilities> GetAll()
     {
       return _datastore.GetAll();
     }

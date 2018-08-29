@@ -40,7 +40,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         Creator.GetTechnicalContact(),
         Creator.GetTechnicalContact()
       };
-      var res = filter.Filter(techConts.AsQueryable());
+      var res = filter.Filter(techConts);
 
       res.Should().BeEquivalentTo(techConts);
     }
@@ -63,7 +63,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var techContCtx3 = Creator.GetTechnicalContact(solutionId: soln3.Id);
       var techContCtxs = new[] { techContCtx1, techContCtx2, techContCtx3 };
 
-      var res = filter.Filter(techContCtxs.AsQueryable());
+      var res = filter.Filter(techContCtxs);
 
       res.Should().BeEquivalentTo(new[] { techContCtx1 });
     }

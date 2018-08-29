@@ -23,6 +23,11 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     public string Id { get; set; }
 
     /// <summary>
+    /// Unique identifier of previous version of entity
+    /// </summary>
+    public string PreviousId { get; set; }
+
+    /// <summary>
     /// Name of Capability, as displayed to a user
     /// </summary>
     public string Name { get; set; }

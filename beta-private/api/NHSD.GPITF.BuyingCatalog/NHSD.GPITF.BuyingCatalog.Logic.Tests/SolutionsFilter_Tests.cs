@@ -39,7 +39,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         Creator.GetSolution(status: status)
       };
 
-      var res = filter.Filter(solns.AsQueryable());
+      var res = filter.Filter(solns);
 
       res.Should().BeEquivalentTo(solns);
     }
@@ -58,7 +58,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       };
       var expSolns = solns.Where(x => x.Status != SolutionStatus.Draft);
 
-      var res = filter.Filter(solns.AsQueryable());
+      var res = filter.Filter(solns);
 
       res.Should().BeEquivalentTo(expSolns);
     }
@@ -77,7 +77,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       };
       var expSolns = solns.Where(x => x.Status != SolutionStatus.Draft);
 
-      var res = filter.Filter(solns.AsQueryable());
+      var res = filter.Filter(solns);
 
       res.Should().BeEquivalentTo(expSolns);
     }
@@ -94,7 +94,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var soln3 = Creator.GetSolution(status: status);
       var solns = new[] { soln1, soln2, soln3 };
 
-      var res = filter.Filter(solns.AsQueryable());
+      var res = filter.Filter(solns);
 
       res.Should().BeEquivalentTo(soln1);
     }

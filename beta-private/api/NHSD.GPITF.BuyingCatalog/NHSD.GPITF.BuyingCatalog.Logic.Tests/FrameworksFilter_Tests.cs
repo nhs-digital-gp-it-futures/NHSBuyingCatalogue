@@ -43,7 +43,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         GetFramework(),
         GetFramework()
       };
-      var res = filter.Filter(frameworks.AsQueryable());
+      var res = filter.Filter(frameworks);
 
       res.Should().BeEquivalentTo(frameworks);
     }
@@ -64,18 +64,18 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var soln3 = Creator.GetSolution();
       _solutionDatastore
         .Setup(x => x.ByOrganisation(orgId))
-        .Returns(new[] { soln1, soln2 }.AsQueryable());
+        .Returns(new[] { soln1, soln2 });
       _frameworkDatastore
         .Setup(x => x.BySolution(soln1.Id))
-        .Returns(new[] { fw1 }.AsQueryable());
+        .Returns(new[] { fw1 });
       _frameworkDatastore
         .Setup(x => x.BySolution(soln2.Id))
-        .Returns(new[] { fw1, fw2 }.AsQueryable());
+        .Returns(new[] { fw1, fw2 });
       _frameworkDatastore
         .Setup(x => x.BySolution(soln3.Id))
-        .Returns(new[] { fw1, fw2, fw3 }.AsQueryable());
+        .Returns(new[] { fw1, fw2, fw3 });
 
-      var res = filter.Filter(frameworks.AsQueryable());
+      var res = filter.Filter(frameworks);
 
       res.Should().BeEquivalentTo(new[] { fw1, fw2 });
     }

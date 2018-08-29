@@ -51,6 +51,7 @@ CREATE TABLE Contacts
 CREATE TABLE Solutions
 (
   Id TEXT NOT NULL UNIQUE,
+  PreviousId TEXT,
   OrganisationId TEXT NOT NULL,
   Version TEXT NOT NULL DEFAULT '',
   Status INTEGER DEFAULT 0,
@@ -61,6 +62,7 @@ CREATE TABLE Solutions
   Name TEXT NOT NULL,
   Description TEXT,
   ProductPage TEXT,
+  FOREIGN KEY (PreviousId) REFERENCES Solutions(Id),
   FOREIGN KEY (OrganisationId) REFERENCES Organisations(Id) ON DELETE CASCADE,
   FOREIGN KEY (CreatedById) REFERENCES Contacts(Id) ON DELETE CASCADE,
   FOREIGN KEY (ModifiedById) REFERENCES Contacts(Id) ON DELETE CASCADE,
@@ -189,10 +191,12 @@ CREATE TABLE CapabilityStandard
 CREATE TABLE CapabilitiesImplementedEvidence
 (
   Id TEXT NOT NULL UNIQUE,
+  PreviousId TEXT,
   ClaimId TEXT NOT NULL,
   CreatedById TEXT NOT NULL,
   CreatedOn TEXT NOT NULL,
   Evidence TEXT,
+  FOREIGN KEY (PreviousId) REFERENCES CapabilitiesImplementedEvidence(Id),
   FOREIGN KEY (ClaimId) REFERENCES CapabilitiesImplemented(Id) ON DELETE CASCADE,
   FOREIGN KEY (CreatedById) REFERENCES Contacts(Id) ON DELETE CASCADE,
   PRIMARY KEY (Id)
@@ -202,10 +206,12 @@ CREATE TABLE CapabilitiesImplementedEvidence
 CREATE TABLE CapabilitiesImplementedReviews
 (
   Id TEXT NOT NULL UNIQUE,
+  PreviousId TEXT,
   EvidenceId TEXT NOT NULL,
   CreatedById TEXT NOT NULL,
   CreatedOn TEXT NOT NULL,
   Message TEXT,
+  FOREIGN KEY (PreviousId) REFERENCES CapabilitiesImplementedReviews(Id),
   FOREIGN KEY (EvidenceId) REFERENCES CapabilitiesImplementedEvidence(Id) ON DELETE CASCADE,
   FOREIGN KEY (CreatedById) REFERENCES Contacts(Id) ON DELETE CASCADE,
   PRIMARY KEY (Id)
@@ -215,10 +221,12 @@ CREATE TABLE CapabilitiesImplementedReviews
 CREATE TABLE StandardsApplicableEvidence
 (
   Id TEXT NOT NULL UNIQUE,
+  PreviousId TEXT,
   ClaimId TEXT NOT NULL,
   CreatedById TEXT NOT NULL,
   CreatedOn TEXT NOT NULL,
   Evidence TEXT,
+  FOREIGN KEY (PreviousId) REFERENCES StandardsApplicableEvidence(Id),
   FOREIGN KEY (ClaimId) REFERENCES StandardsApplicable(Id) ON DELETE CASCADE,
   FOREIGN KEY (CreatedById) REFERENCES Contacts(Id) ON DELETE CASCADE,
   PRIMARY KEY (Id)
@@ -228,10 +236,12 @@ CREATE TABLE StandardsApplicableEvidence
 CREATE TABLE StandardsApplicableReviews
 (
   Id TEXT NOT NULL UNIQUE,
+  PreviousId TEXT,
   EvidenceId TEXT NOT NULL,
   CreatedById TEXT NOT NULL,
   CreatedOn TEXT NOT NULL,
   Message TEXT,
+  FOREIGN KEY (PreviousId) REFERENCES StandardsApplicableReviews(Id),
   FOREIGN KEY (EvidenceId) REFERENCES StandardsApplicableEvidence(Id) ON DELETE CASCADE,
   FOREIGN KEY (CreatedById) REFERENCES Contacts(Id) ON DELETE CASCADE,
   PRIMARY KEY (Id)

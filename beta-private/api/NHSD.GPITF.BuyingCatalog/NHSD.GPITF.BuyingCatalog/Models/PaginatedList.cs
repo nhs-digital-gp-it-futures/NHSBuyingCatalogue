@@ -66,7 +66,7 @@ namespace NHSD.GPITF.BuyingCatalog.Models
       }
     }
 
-    internal static PaginatedList<T> Create(IQueryable<T> source, int? pageIndex, int? pageSize)
+    internal static PaginatedList<T> Create(IEnumerable<T> source, int? pageIndex, int? pageSize)
     {
       pageIndex = pageIndex ?? DefaultPageIndex;
       pageSize = pageSize ?? DefaultPageSize;

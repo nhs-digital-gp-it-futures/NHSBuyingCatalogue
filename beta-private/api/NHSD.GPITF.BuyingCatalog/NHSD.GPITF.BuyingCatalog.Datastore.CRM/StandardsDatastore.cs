@@ -18,7 +18,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
     }
 
-    public IQueryable<Standards> ByCapability(string capabilityId, bool isOptional)
+    public IEnumerable<Standards> ByCapability(string capabilityId, bool isOptional)
     {
       return GetInternal(() =>
       {
@@ -26,18 +26,18 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
         request.AddQueryParameter("isOptional", isOptional.ToString().ToLowerInvariant());
         var retval = GetResponse<PaginatedList<Standards>>(request);
 
-        return retval.Items.AsQueryable();
+        return retval.Items;
       });
     }
 
-    public IQueryable<Standards> ByFramework(string frameworkId)
+    public IEnumerable<Standards> ByFramework(string frameworkId)
     {
       return GetInternal(() =>
       {
         var request = GetRequest($"/Standard/ByFramework/{frameworkId}");
         var retval = GetResponse<PaginatedList<Standards>>(request);
 
-        return retval.Items.AsQueryable();
+        return retval.Items;
       });
     }
 
@@ -52,7 +52,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       });
     }
 
-    public IQueryable<Standards> ByIds(IEnumerable<string> ids)
+    public IEnumerable<Standards> ByIds(IEnumerable<string> ids)
     {
       return GetInternal(() =>
       {
@@ -61,11 +61,11 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
         request.AddQueryParameter("pageSize", int.MaxValue.ToString(CultureInfo.InvariantCulture));
         var retval = GetResponse<PaginatedList<Standards>>(request);
 
-        return retval.Items.AsQueryable();
+        return retval.Items;
       });
     }
 
-    public IQueryable<Standards> GetAll()
+    public IEnumerable<Standards> GetAll()
     {
       return GetInternal(() =>
       {
@@ -74,7 +74,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
         request.AddQueryParameter("pageSize", int.MaxValue.ToString(CultureInfo.InvariantCulture));
         var retval = GetResponse<PaginatedList<Standards>>(request);
 
-        return retval.Items.AsQueryable();
+        return retval.Items;
       });
     }
   }

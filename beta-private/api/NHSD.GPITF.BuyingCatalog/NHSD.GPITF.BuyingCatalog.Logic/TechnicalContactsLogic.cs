@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
@@ -24,7 +24,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _filter = filter;
     }
 
-    public IQueryable<TechnicalContacts> BySolution(string solutionId)
+    public IEnumerable<TechnicalContacts> BySolution(string solutionId)
     {
       return _filter.Filter(_datastore.BySolution(solutionId));
     }
