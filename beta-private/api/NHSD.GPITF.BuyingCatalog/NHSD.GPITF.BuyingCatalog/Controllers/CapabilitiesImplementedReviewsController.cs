@@ -39,6 +39,9 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
 
     /// <summary>
     /// Get all Reviews for a CapabilitiesImplemented
+    /// Each list is a distinct 'chain' of Review ie original Review with all subsequent Review
+    /// The first item in each 'chain' is the most current Review.
+    /// The last item in each 'chain' is the original Review.
     /// </summary>
     /// <param name="evidenceId">CRM identifier of CapabilitiesImplementedEvidence</param>
     /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>

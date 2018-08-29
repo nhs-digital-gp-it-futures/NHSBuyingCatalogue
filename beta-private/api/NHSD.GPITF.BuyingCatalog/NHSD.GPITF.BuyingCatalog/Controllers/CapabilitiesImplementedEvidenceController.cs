@@ -38,7 +38,10 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     }
 
     /// <summary>
-    /// Get evidence for the given Claim
+    /// Get all Evidence for the given Claim
+    /// Each list is a distinct 'chain' of Evidence ie original Evidence with all subsequent Evidence
+    /// The first item in each 'chain' is the most current Evidence.
+    /// The last item in each 'chain' is the original Evidence.
     /// </summary>
     /// <param name="claimId">CRM identifier of Claim</param>
     /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
