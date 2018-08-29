@@ -1,0 +1,38 @@
+<div id="add-edit-solution" class="supplier mobile">
+  {{> onboarding-progress-header
+        title="Confirm Mobile"
+        subtitle="Stage 1—Register Solution (3 of 3)"}}
+  <p class="help">If your Solution can be used on a mobile device, you will have to comply with the Mobile Standard.</p>
+
+  {{#errors}}
+  <p class="error">{{.}}</p>
+  {{/errors}}
+
+  <form method="POST">
+    <h3>Can your Solution be used on a mobile device?</h3>
+
+    {{#> help-reveal title="Help - How do I know?"}}
+    <p>
+      Capabilities describe what your Solution does. Your Solution will be Assessed against the Capabilities that it provides to ensure that it is within the scope of the Catalogue.
+      <a href="#">Learn more and view all Capabilities & Standards.</a>
+    </p>
+    {{/help-reveal}}
+
+    <fieldset class="is-mobile">
+      <label>
+        <input type="radio" name="isMobile" value="yes"{{#if isMobile}} checked{{/if}}>
+        Yes
+      </label>
+      <label>
+        <input type="radio" name="isMobile" value="no"{{#if isMobile}}{{else}} checked{{/if}}>
+        No
+      </label>
+    </fieldset>
+
+    <fieldset class="controls">
+      <button name="action" value="save" type="submit">Save</button>
+      <button class="primary" name="action" value="submit" type="submit">Submit</button>
+      <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    </fieldset>
+  </form>
+</div>

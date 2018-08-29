@@ -22,6 +22,10 @@
   font-size: var(--font-size-button-label);
 }
 
+#solution-page label .required {
+  color: var(--color-input-val-error);
+}
+
 #solution-page input[type=text],
 #solution-page textarea,
 #solution-page select {

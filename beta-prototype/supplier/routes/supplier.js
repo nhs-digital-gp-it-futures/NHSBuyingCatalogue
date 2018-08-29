@@ -400,7 +400,8 @@ app.get('/solutions/:solution_id', async (req, res) => {
       assessment: {...defaults},
       compliance: {...defaults},
       solution_page: {...defaults}
-    }
+    },
+    submitted: 'submitted' in req.query
   }
   let solution
 
@@ -421,6 +422,7 @@ app.get('/solutions/:solution_id', async (req, res) => {
     if (status === api.SOLUTION_STATUS.REGISTERED ||
         status === api.SOLUTION_STATUS.CAPABILITIES_ASSESSMENT) {
       context.stages.register.complete = true
+      context.stages.assessment.active = status === api.SOLUTION_STATUS.CAPABILITIES_ASSESSMENT
       context.stages.assessment.continueUrl = `${solnUrl}/assessment`
       context.stages.compliance.viewUrl = `${solnUrl}/compliance`
       context.stages.compliance.stageClass = 'active'
@@ -584,11 +586,6 @@ app.get('/solutions/:solution_id/capabilities', csrfProtection, async (req, res)
       const claimedCapability = _.find(solutionEx.claimedCapability, ['capabilityId', cap.id])
       cap.selected = !!claimedCapability
       cap.standardIds = _.map(_.flatMap(cap.standards), 'id')
-      cap.optionalStandards = _.map(cap.standards.optional, optStd => ({
-        id: optStd.id,
-        selected: claimedCapability &&
-                  _.some(solutionEx.claimedCapabilityStandard, ['claimedCapabilityId', claimedCapability.id])
-      }))
       return cap
     }),
     standards: groupedStandards,
@@ -626,6 +623,8 @@ app.post('/solutions/:solution_id/capabilities', csrfProtection, async (req, res
   })
 
   // claim all the non-optional standards associated with all the claimed capabilities
+  const hasMobile = _.some(solutionEx.claimedStandard, ['standardId', 'CSS3'])
+
   solutionEx.claimedStandard = _.uniqBy(
     _.map(
       _.flatten(
@@ -645,17 +644,15 @@ app.post('/solutions/:solution_id/capabilities', csrfProtection, async (req, res
   )
 
   // optional standards are now also claimed along with the other standards
-  solutionEx.claimedStandard = _.concat(
-    solutionEx.claimedStandard,
-    _.uniqBy(solutionEx.claimedCapabilityStandard, 'standardId')
-  )
+  if (hasMobile) {
+    solutionEx.claimedStandard.push({'standardId': 'CSS3'})
+  }
 
   try {
     let redirectUrl = `${req.baseUrl}/solutions`
 
     if (req.body.action === 'submit') {
-      solutionEx.solution.status = api.SOLUTION_STATUS.REGISTERED
-      redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/submitted`
+      redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/mobile`
     }
 
     await api.update_solution(solutionEx)
@@ -682,35 +679,57 @@ app.post('/solutions/:solution_id/capabilities', csrfProtection, async (req, res
   }
 })
 
-app.get('/solutions/:solution_id/submitted', async (req, res) => {
+app.get('/solutions/:solution_id/mobile', csrfProtection, async (req, res) => {
   const solutionEx = await api.get_solution_by_id(req.params.solution_id)
+
+  // only draft solutions can be edited
+  if (solutionEx.solution.status !== api.SOLUTION_STATUS.DRAFT) {
+    return res.redirect('/suppliers/solutions')
+  }
+
   const context = {
-    dashboardUrl: `${req.baseUrl}/solutions`,
-    solution: solutionEx.solution
+    csrfToken: req.csrfToken(),
+    isMobile: _.some(solutionEx.claimedStandard, ['standardId', 'CSS3'])
   }
 
-  switch (solutionEx.solution.status) {
-    case api.SOLUTION_STATUS.REGISTERED:
-      context.registered = true
-      context.continueUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/assessment`
-      break
+  res.render('supplier/solution-mobile', context)
+})
 
-    case api.SOLUTION_STATUS.CAPABILITIES_ASSESSMENT:
-      context.assessment = true
-      context.continueUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/compliance`
-      break
+app.post('/solutions/:solution_id/mobile', csrfProtection, async (req, res) => {
+  const solutionEx = await api.get_solution_by_id(req.params.solution_id)
 
-    case api.SOLUTION_STATUS.STANDARDS_COMPLIANCE:
-      context.compliance = true
-      context.standard = req.query.std
-      context.continueUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/compliance`
-      break
-
-    case api.SOLUTION_STATUS.SOLUTION_PAGE:
-      context.solution_page = true
+  // only draft solutions can be edited
+  if (solutionEx.solution.status !== api.SOLUTION_STATUS.DRAFT) {
+    return res.redirect('/suppliers/solutions')
   }
 
-  res.render('supplier/solution-submitted', context)
+  _.remove(solutionEx.claimedStandard, ['standardId', 'CSS3'])
+  if (req.body.isMobile === 'yes') {
+    solutionEx.claimedStandard.push({
+      'standardId': 'CSS3'
+    })
+  }
+
+  const context = {
+    csrfToken: req.csrfToken(),
+    isMobile: _.some(solutionEx.claimedStandard, ['standardId', 'CSS3'])
+  }
+
+  try {
+    let redirectUrl = `${req.baseUrl}/solutions`
+
+    if (req.body.action === 'submit') {
+      solutionEx.solution.status = api.SOLUTION_STATUS.REGISTERED
+      redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}?submitted`
+    }
+
+    await api.update_solution(solutionEx)
+
+    res.redirect(redirectUrl)
+  } catch (err) {
+    context.errors = err
+    res.render('supplier/solution-mobile', context)
+  }
 })
 
 function renderProductPageEditor (req, res, solutionEx, context) {
@@ -863,7 +882,7 @@ app.post('/solutions/:solution_id/product-page', [
 
       if (action === 'submit') {
         solutionEx.solution.productPage.status = 'SUBMITTED'
-        redirect = `${req.baseUrl}/solutions/${solutionEx.solution.id}/submitted`
+        redirect = `${req.baseUrl}/solutions/${solutionEx.solution.id}?submitted`
       }
 
       solutionEx = await api.update_solution(solutionEx)

@@ -1,27 +1,30 @@
 {{#*inline "evidence-form"}}
 <fieldset class="standard-evidence{{#statusClass}} {{.}}{{/statusClass}}" id="std-{{id}}">
   <legend>
-    <span class="name">{{name}}</span>
+    <span class="name">Evidence Requirements</span>
     <span class="status">{{status}}</span>
   </legend>
   {{#if isWithAssessmentTeam}}
   <p class="in-assessment"><span>Standard with Assessment Team</span></p>
   {{/if}}
-  <h4>Standard Requirements</h4>
   <section class="requirements">
-    <p>View &amp; download evidence requirements from this link.</p>
-    <p><a download href="/Dummy TraceabilityMatrix.xlsx">{{name}} Requirements Traceability Matrix (RTM)</a></p>
+    <p>Follow link to view &amp; add evidence requirements:</p>
+    <p><a download href="/Dummy TraceabilityMatrix.xlsx">{{name}} Traceability Matrix (TM)</a></p>
   </section>
-  <h4>Provide Evidence against Requirements</h4>
   {{#if editUrl}}
   <section class="evidence{{^saved}} editing{{/saved}}">
     <div class="editable">
+      <h4>Add Link to Completed TM</h4>
       <label>
-        Provide a link to the completed RTM, and any additional evidence. RTM should be an editable Excel file. 
+        Copy/paste link from File Sharing platform here.
         <input type="text"
                placeholder="Provide link to folder or file"
                name="evidence[{{id}}]"
                value="{{evidence.savedLink}}">
+      </label>
+      <h4>Message (Optional)</h4>
+      <label>
+        Include a message to for Compliance officer’s attention or to describe changes from previous submission.<br>&nbsp;• 300 character limit
       </label>
       <textarea placeholder="Include a message with the link (optional). 300 character limit."
                 name="message[{{id}}]">{{evidence.savedMessage}}</textarea>
@@ -70,7 +73,7 @@
     <input type="submit"
            class="button primary"
            name="submit[{{id}}]"
-           value="Submit">
+           value="Submit for Compliance ❯">
     {{/if}}
   </section>
   {{/if}}
@@ -80,7 +83,7 @@
 <div id="compliance" class="supplier edit">
   {{> onboarding-progress-header
         title=subtitle
-        subtitle="Stage 2—Standards Compliance"}}
+        subtitle="Standards Compliance"}}
 
   {{> solution-info solution}}
 
@@ -92,28 +95,28 @@
   </div>
   {{/if}}
 
-  <p class="help">
-    For each Standard, view and download the requirements from the link provided to the Requirements Traceability Matrix (RTM). When you have completed the RTM, upload it to a platform of your choice and provide a link to it, from which it can be downloaded. Examples of these platforms include
-    <a href="https://www.google.com/drive/" target="_blank">Google Drive</a>,
-    <a href="https://dropbox.com" target="_blank">Dropbox</a>, and
-    <a href="https://onedrive.live.com" target="_blank">OneDrive</a>.
-  </p>
+  <section class="instructions">
+    <header>
+      <h3>Add evidence requirements.</h3>
+    </header>
+    <p class="help">
+      To provide evidence, follow the link provided to the Traceability Matrix (TM). Evidence can take a variety of forms: text-based, image, video, or PDF. When you have finished adding evidence to the TM, create a link to the file and paste it below. Once Submitted, our Assurance team will review your evidence to ensure your Solution is compliant with the Standard.
+    </p>
+  </section>
+
+  {{#if standard.url}}
+  <h3><a target="_blank" href="{{standard.url}}">View {{standard.name}}</a></h3>
+  {{/if}}
 
   {{#if standard.capabilities}}
-  <section class="capabilities">
-    <header>
-      <h3>Related Capabilities</h3>
-    </header>
+  <details class="capabilities">
+    <summary>Related Capabilities</summary>
+    <ul>
     {{#standard.capabilities}}
-    <details class="capability">
-      <summary class="name"><span class="name">{{name}} Capability</span></summary>
-      <div class="content">
-        <p class="description">{{description}}</p>
-        <a target="_blank" href="{{url}}">View full Capability description</a>
-      </div>
-    </details>
+      <li class="name"><a target="_blank" href="{{url}}">View {{name}} Capability</a></li>
     {{/standard.capabilities}}
-  </section>
+    </ul>
+  </details>
   {{/if}}
 
   <form method="POST" class="standards">
@@ -125,12 +128,19 @@
 <script>
 /* global $, $$ */
 document.addEventListener('DOMContentLoaded', () => {
-  $$('fieldset.standard-evidence > legend').forEach(el => {
-    el.addEventListener('click', toggleFieldsetCollapse)
+  $$('fieldset.standard-evidence').forEach(el => {
+    el.addEventListener('input', enableSubmitIfAllStandardsHaveEvidence)
   })
+  enableSubmitIfAllStandardsHaveEvidence()
 
-  function toggleFieldsetCollapse (ev) {
-    ev.target.closest('fieldset').classList.toggle('collapsed')
+  function enableSubmitIfAllStandardsHaveEvidence () {
+    const elSubmit = $('.controls [name^=submit]')
+    if (elSubmit) {
+      const allEvidenceInputs = $$('input[name^=evidence]')
+      const allEvidenceValues = allEvidenceInputs.map(el => el.value.trim()).filter(_ => _)
+
+      elSubmit.disabled = allEvidenceInputs.length !== allEvidenceValues.length
+    }
   }
 
   $$('fieldset.standard-evidence .evidence .controls .edit').forEach(el => {

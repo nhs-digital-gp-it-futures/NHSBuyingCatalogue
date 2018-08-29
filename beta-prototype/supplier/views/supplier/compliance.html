@@ -1,7 +1,15 @@
 <div id="compliance" class="supplier">
+  {{#if submitted}}
+  <section id="submitted">
+    <h3>Standard Compliance Evidence Submitted</h3>
+    <p>Your evidence for {{submitted}} has been submitted to NHS Digital. You can expect to receive a reply within xx business days.</p>
+    <p>While you wait, you are free to keep working on gathering and submitting evidence for the remaining Standards.</p>
+  </section>
+  {{/if}}
+
   {{> onboarding-progress-header
-        title="Standards Compliance"
-        subtitle="Stage 3—Standards Compliance"}}
+        title="All Standards"
+        subtitle="Standards Compliance"}}
 
   {{> solution-info solution}}
 

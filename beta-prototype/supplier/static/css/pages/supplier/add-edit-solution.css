@@ -27,17 +27,17 @@
   padding-right: 1em;
 }
 
-#add-edit-solution form > fieldset > legend::after {
+#add-edit-solution form > fieldset > legend::before {
   content: '▲';
-  position: absolute;
-  right: 0.5em;
+  position: relative;
+  left: -0.5em;
 }
 
 #add-edit-solution form > fieldset.collapsed > *:not(legend) {
   display: none;
 }
 
-#add-edit-solution form > fieldset.collapsed > legend::after {
+#add-edit-solution form > fieldset.collapsed > legend::before {
   content: '▼';
 }
 
@@ -47,7 +47,12 @@
   margin-top: 0.5em;
 }
 
+#add-edit-solution form label .required {
+  color: var(--color-input-val-error);
+}
+
 #add-edit-solution form input[type=text],
+#add-edit-solution form input[type=email],
 #add-edit-solution form textarea {
   display: block;
   width: 80%;
@@ -61,6 +66,7 @@
 }
 
 #add-edit-solution form .has-errors input[type=text],
+#add-edit-solution form .has-errors input[type=email],
 #add-edit-solution form .has-errors textarea {
   border-color: var(--color-input-val-error);
   border-width: 2px;
@@ -77,6 +83,22 @@
   margin: 0;
   padding: 0;
   list-style-type: none;
+}
+
+#add-edit-solution form ul.validation-rules {
+  list-style-type: disc;
+  margin: 0.5em 0 0.5em 1.5em;
+}
+
+#add-edit-solution form ul.validation-rules li {
+  font-size: var(--font-size-help);
+  font-weight: var(--font-weight-help);
+}
+
+#add-edit-solution form p.instructions {
+  font-weight: var(--font-weight-help);
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 }
 
 #add-edit-solution fieldset.contact {
@@ -368,6 +390,14 @@
   display: inline-block;
   margin-left: 0.25em;
   transform: rotate(180deg); /* because BLACK RIGHTWARDS ARROW ➡︎ looks different */
+}
+
+#add-edit-solution.mobile h3 {
+  color: var(--color-fg);
+}
+
+#add-edit-solution.mobile .is-mobile {
+  margin-top: 0;
 }
 
 dialog::backdrop {

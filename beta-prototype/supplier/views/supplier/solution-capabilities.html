@@ -23,7 +23,7 @@
 <div id="add-edit-solution" class="supplier">
   {{> onboarding-progress-header
         title="Select Capabilities"
-        subtitle="Stage 1—Register Solution (2 of 2)"}}
+        subtitle="Stage 1—Register Solution (2 of 3)"}}
   <div class="help">
     <p>Capabilities describe what the Solution does. The Solution will be Assessed against the Capabilities that it provides to ensure that it is within the scope of the Catalogue.
 
@@ -73,9 +73,6 @@
             {{#capabilities}}
             <li data-cap-id="{{id}}">
               {{name}}
-              {{#standards.optional}}
-              <span class="optional" data-std-id="{{id}}">(+ {{name}})</span>
-              {{/standards.optional}}
             </li>
             {{/capabilities}}
           </ul>
@@ -89,7 +86,7 @@
               <summary>Capability-specific Standards</summary>
               <ul>
                 {{#standards.mandatory}}
-                <li data-std-id="{{id}}">{{name}}</li>
+                <li data-std-id="{{id}}"><a target="_blank" href="{{url}}">{{name}}</a></li>
                 {{/standards.mandatory}}
               </ul>
             </details>
@@ -99,7 +96,7 @@
               <summary>Solution-specific Standards</summary>
               <ul>
                 {{#standards.interop}}
-                <li data-std-id="{{id}}">{{name}}</li>
+                <li data-std-id="{{id}}"><a target="_blank" href="{{url}}">{{name}}</a></li>
                 {{/standards.interop}}
               </ul>
             </details>
@@ -109,7 +106,7 @@
               <summary>General Standards</summary>
               <ul>
                 {{#standards.overarching}}
-                <li data-std-id="{{id}}">{{name}}</li>
+                <li data-std-id="{{id}}"><a target="_blank" href="{{url}}">{{name}}</a></li>
                 {{/standards.overarching}}
               </ul>
             </details>
@@ -119,8 +116,8 @@
     </section>
 
     <fieldset class="controls">
-      <button name="action" value="save" type="submit">Save &amp; Exit</button>
-      <button class="primary" name="action" value="submit" type="submit">Submit</button>
+      <button name="action" value="save" type="submit">Save</button>
+      <button class="primary" name="action" value="submit" type="submit">Continue</button>
       <input type="hidden" name="_csrf" value="{{csrfToken}}">
     </fieldset>
   </form>
@@ -149,17 +146,6 @@
       </ul>
       {{/if}}
     </section>
-    {{#if standards.optional}}
-    <fieldset>
-      {{#standards.optional}}
-      <label>
-        <input type="checkbox" name="optionalStandards" value="{{id}}">
-        {{!-- {{name}} --}}
-        Check this box if your solution has a mobile version for this capability
-      </label>
-      {{/standards.optional}}
-    </fieldset>
-    {{/if}}
   </section>
   {{/capabilities}}
 </div>
@@ -203,19 +189,6 @@ document.addEventListener('DOMContentLoaded', () => {
         dialog: elDialogCapabilityCheckbox
       }
     ]
-
-    // optional standards for the capability
-    $$(
-      'input[type=checkbox][name^=optionalStandards]',
-      elClickedCapability
-    ).forEach(elOptionalStandardCheckbox => {
-      const standardId = elOptionalStandardCheckbox.value
-      syncedCheckboxes.push({
-        main: elOptionalStandardCheckbox,
-        dialog: $(`input[type=checkbox][name=optionalStandards][value=${standardId}]`,
-                  elReplacableParent)
-      })
-    })
 
     syncedCheckboxes.forEach(cb => {
       cb.dialog.checked = cb.main.checked
