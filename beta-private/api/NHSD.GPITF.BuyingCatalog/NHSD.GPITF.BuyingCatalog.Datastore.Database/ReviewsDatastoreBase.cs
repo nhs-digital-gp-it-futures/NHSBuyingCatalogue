@@ -39,7 +39,7 @@ EvidenceId = '{evidenceId}'
         {
           var sqlCurrent = $@"
 -- get all previous versions from a specified (CurrentId) version
-with Links(CurrentId, Id, PreviousId, EvidenceId, CreatedById, CreatedOn, Message) as (
+with recursive Links(CurrentId, Id, PreviousId, EvidenceId, CreatedById, CreatedOn, Message) as (
   select
     Id, Id, PreviousId, EvidenceId, CreatedById, CreatedOn, Message
   from {table.Name}
