@@ -400,6 +400,53 @@
   margin-top: 0;
 }
 
+#add-edit-solution.review .counter {
+  color: var(--color-nhs-blue);
+  font-style: italic;
+}
+
+#add-edit-solution.review .counter+.button {
+  display: inline-block;
+  margin-left: 5em;
+  text-align: center;
+  width: 6em;
+}
+
+#add-edit-solution.review ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#add-edit-solution.review .capabilities-selected li {
+  border-bottom: solid 2px var(--color-nhs-pale-grey);
+  color: var(--color-nhs-blue);
+  font-size: larger;
+  padding: 0.5em 0;
+}
+
+#add-edit-solution.review summary:focus {
+  outline: none;
+}
+
+#add-edit-solution.review .group {
+  margin-bottom: 0.5em;
+}
+
+#add-edit-solution.review .group summary {
+  color: var(--color-nhs-blue);
+  margin-bottom: 0.25em;
+}
+
+#add-edit-solution.review .group li {
+  font-size: smaller;
+  padding: 0.25em 0;
+}
+
+#add-edit-solution.review .group li a {
+  color: var(--color-nhs-blue);
+  text-decoration: none;
+}
+
 dialog::backdrop {
   background: rgba(66, 85, 99, 0.8);
 }
