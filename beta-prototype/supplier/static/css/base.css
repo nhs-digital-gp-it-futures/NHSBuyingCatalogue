@@ -26,3 +26,17 @@ nav li {
   display: inline-block;
   margin-left: 2em;
 }
+
+nav.backlink {
+  margin-top: 0.5em;
+}
+
+nav.backlink a {
+  color: var(--color-breadcrumbs-fg);
+  font-size: var(--font-size-breadcrumbs);
+  font-weight: var(--font-weight-breadcrumbs);
+}
+
+nav.backlink a .title {
+  font-weight: var(--font-weight-breadcrumbs-bold);
+}

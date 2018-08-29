@@ -21,6 +21,9 @@
   --font-size-high-density: var(--font-size-button-label);
   --font-weight-high-density: 300;
   --font-weight-high-density-bold: 600;
+  --font-size-breadcrumbs: var(--font-size-button-label);
+  --font-weight-breadcrumbs: 300;
+  --font-weight-breadcrumbs-bold: 600;
 }
 
 * {
