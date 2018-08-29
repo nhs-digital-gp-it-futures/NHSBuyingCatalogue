@@ -1,31 +1,35 @@
 -- assumes database collation is:
 --    utf8_unicode_ci
 
+-- disable foreign key checking so we can delete tables
+SET FOREIGN_KEY_CHECKS = 0;
+
 -- drop relationship tables
 DROP TABLE IF EXISTS CapabilityFramework;
 DROP TABLE IF EXISTS FrameworkSolution;
 DROP TABLE IF EXISTS FrameworkStandard;
-DROP TABLE IF EXISTS ClaimedCapabilityStandard;
 DROP TABLE IF EXISTS CapabilityStandard;
-DROP TABLE IF EXISTS ClaimedCapability;
-DROP TABLE IF EXISTS ClaimedStandard;
-DROP TABLE IF EXISTS AssessmentMessageContact;
+DROP TABLE IF EXISTS CapabilitiesImplemented;
+DROP TABLE IF EXISTS StandardsApplicable;
+DROP TABLE IF EXISTS CapabilitiesImplementedEvidence;
+DROP TABLE IF EXISTS CapabilitiesImplementedReviews;
+DROP TABLE IF EXISTS StandardsApplicableEvidence;
+DROP TABLE IF EXISTS StandardsApplicableReviews;
 
 -- drop data tables
-DROP TABLE IF EXISTS AssessmentMessage;
-DROP TABLE IF EXISTS TechnicalContact;
-DROP TABLE IF EXISTS Contact;
-DROP TABLE IF EXISTS Solution;
-DROP TABLE IF EXISTS Organisation;
+DROP TABLE IF EXISTS TechnicalContacts;
+DROP TABLE IF EXISTS Contacts;
+DROP TABLE IF EXISTS Solutions;
+DROP TABLE IF EXISTS Organisations;
 
-DROP TABLE IF EXISTS Capability;
-DROP TABLE IF EXISTS Framework;
-DROP TABLE IF EXISTS Standard;
+DROP TABLE IF EXISTS Capabilities;
+DROP TABLE IF EXISTS Frameworks;
+DROP TABLE IF EXISTS Standards;
 
 -- create data tables
 
--- Organisation.csv
-CREATE TABLE Organisation
+-- Organisations.csv
+CREATE TABLE Organisations
 (
   Id CHAR(38) NOT NULL UNIQUE,
   Name VARCHAR(512) NOT NULL UNIQUE,
@@ -36,8 +40,8 @@ CREATE TABLE Organisation
   PRIMARY KEY (Id)
 );
 
--- Contact.csv
-CREATE TABLE Contact
+-- Contacts.csv
+CREATE TABLE Contacts
 (
   Id CHAR(38) NOT NULL UNIQUE,
   OrganisationId CHAR(38) NOT NULL,
@@ -45,26 +49,34 @@ CREATE TABLE Contact
   LastName TEXT,
   EmailAddress1 CHAR(128) NOT NULL UNIQUE,
   PhoneNumber1 TEXT,
-  FOREIGN KEY (OrganisationId) REFERENCES Organisation(Id) ON DELETE CASCADE,
+  FOREIGN KEY (OrganisationId) REFERENCES Organisations(Id) ON DELETE CASCADE,
   PRIMARY KEY (Id)
 );
 
--- Solution.csv
-CREATE TABLE Solution
+-- Solutions.csv
+CREATE TABLE Solutions
 (
   Id CHAR(38) NOT NULL UNIQUE,
+  PreviousId CHAR(38),
   OrganisationId CHAR(38) NOT NULL,
   Version TEXT NOT NULL DEFAULT '',
   Status INTEGER DEFAULT 0,
+  CreatedById CHAR(38) NOT NULL,
+  CreatedOn TEXT NOT NULL,
+  ModifiedById CHAR(38) NOT NULL,
+  ModifiedOn TEXT NOT NULL,
   Name TEXT NOT NULL,
   Description TEXT,
   ProductPage TEXT,
-  FOREIGN KEY (OrganisationId) REFERENCES Organisation(Id) ON DELETE CASCADE,
+  FOREIGN KEY (PreviousId) REFERENCES Solutions(Id),
+  FOREIGN KEY (OrganisationId) REFERENCES Organisations(Id) ON DELETE CASCADE,
+  FOREIGN KEY (CreatedById) REFERENCES Contacts(Id) ON DELETE CASCADE,
+  FOREIGN KEY (ModifiedById) REFERENCES Contacts(Id) ON DELETE CASCADE,
   PRIMARY KEY (Id)
 );
 
--- TechnicalContact.csv
-CREATE TABLE TechnicalContact
+-- TechnicalContacts.csv
+CREATE TABLE TechnicalContacts
 (
   Id CHAR(38) NOT NULL UNIQUE,
   SolutionId CHAR(38) NOT NULL,
@@ -73,79 +85,70 @@ CREATE TABLE TechnicalContact
   LastName TEXT,
   EmailAddress TEXT NOT NULL,
   PhoneNumber TEXT,
-  FOREIGN KEY (SolutionId) REFERENCES Solution(Id) ON DELETE CASCADE,
+  FOREIGN KEY (SolutionId) REFERENCES Solutions(Id) ON DELETE CASCADE,
   PRIMARY KEY (Id)
 );
 
--- Capability.csv
-CREATE TABLE Capability
+-- Capabilities.csv
+CREATE TABLE Capabilities
 (
   Id CHAR(38) NOT NULL UNIQUE,
+  PreviousId CHAR(38),
   Name TEXT NOT NULL,
   Description TEXT,
   URL TEXT,
-  PRIMARY KEY (Id)
+  PRIMARY KEY (Id),
+  FOREIGN KEY (PreviousId) REFERENCES Capabilities(Id)
 );
 
--- Framework.csv
-CREATE TABLE Framework
+-- Frameworks.csv
+CREATE TABLE Frameworks
 (
   Id CHAR(38) NOT NULL UNIQUE,
+  PreviousId CHAR(38),
   Name TEXT NOT NULL,
   Description TEXT,
-  PRIMARY KEY (Id)
+  PRIMARY KEY (Id),
+  FOREIGN KEY (PreviousId) REFERENCES Frameworks(Id)
 );
 
--- Standard.csv
-CREATE TABLE Standard
+-- Standards.csv
+CREATE TABLE Standards
 (
   Id CHAR(38) NOT NULL UNIQUE,
+  PreviousId CHAR(38),
   IsOverarching INTEGER DEFAULT 0,
   Name TEXT NOT NULL,
   Description TEXT,
   URL TEXT,
-  PRIMARY KEY (Id)
-);
-
--- AssessmentMessage.csv
-CREATE TABLE AssessmentMessage
-(
-  Id CHAR(38) NOT NULL UNIQUE,
-  SolutionId CHAR(38) NOT NULL,
-  ContactId CHAR(38) NOT NULL,
-  Timestamp TEXT NOT NULL,
-  Message TEXT,
   PRIMARY KEY (Id),
-  FOREIGN KEY (SolutionId) REFERENCES Solution(Id) ON DELETE CASCADE,
-  FOREIGN KEY (ContactId) REFERENCES Contact(Id) ON DELETE CASCADE
+  FOREIGN KEY (PreviousId) REFERENCES Standards(Id)
 );
 
 
 -- create relationship tables
 
--- ClaimedCapability.csv
-CREATE TABLE ClaimedCapability
+-- CapabilitiesImplemented.csv
+CREATE TABLE CapabilitiesImplemented
 (
   Id CHAR(38) NOT NULL UNIQUE,
   SolutionId CHAR(38) NOT NULL,
   CapabilityId CHAR(38) NOT NULL,
-  Evidence TEXT,
   Status INTEGER DEFAULT 0,
-  FOREIGN KEY (SolutionId) REFERENCES Solution(Id) ON DELETE CASCADE,
-  FOREIGN KEY (CapabilityId) REFERENCES Capability(Id) ON DELETE CASCADE,
+  FOREIGN KEY (SolutionId) REFERENCES Solutions(Id) ON DELETE CASCADE,
+  FOREIGN KEY (CapabilityId) REFERENCES Capabilities(Id) ON DELETE CASCADE,
   PRIMARY KEY (Id)
 );
 
--- ClaimedStandard.csv
-CREATE TABLE ClaimedStandard
+-- StandardsApplicable.csv
+CREATE TABLE StandardsApplicable
 (
   Id CHAR(38) NOT NULL UNIQUE,
   SolutionId CHAR(38) NOT NULL,
   StandardId CHAR(38) NOT NULL,
-  Evidence TEXT,
   Status INTEGER DEFAULT 0,
-  FOREIGN KEY (SolutionId) REFERENCES Solution(Id) ON DELETE CASCADE,
-  FOREIGN KEY (StandardId) REFERENCES Standard(Id) ON DELETE CASCADE,
+  FOREIGN KEY (SolutionId) REFERENCES Solutions(Id) ON DELETE CASCADE,
+  FOREIGN KEY (StandardId) REFERENCES Standards(Id) ON DELETE CASCADE,
   PRIMARY KEY (Id)
 );
 
@@ -154,8 +157,8 @@ CREATE TABLE CapabilityFramework
 (
   CapabilityId CHAR(38) NOT NULL,
   FrameworkId CHAR(38) NOT NULL,
-  FOREIGN KEY (CapabilityId) REFERENCES Capability(Id) ON DELETE NO ACTION,
-  FOREIGN KEY (FrameworkId) REFERENCES Framework(Id) ON DELETE NO ACTION,
+  FOREIGN KEY (CapabilityId) REFERENCES Capabilities(Id) ON DELETE NO ACTION,
+  FOREIGN KEY (FrameworkId) REFERENCES Frameworks(Id) ON DELETE NO ACTION,
   PRIMARY KEY (CapabilityId, FrameworkId)
 );
 
@@ -164,8 +167,8 @@ CREATE TABLE FrameworkSolution
 (
   FrameworkId CHAR(38) NOT NULL,
   SolutionId CHAR(38) NOT NULL,
-  FOREIGN KEY (FrameworkId) REFERENCES Framework(Id) ON DELETE CASCADE,
-  FOREIGN KEY (SolutionId) REFERENCES Solution(Id) ON DELETE CASCADE,
+  FOREIGN KEY (FrameworkId) REFERENCES Frameworks(Id) ON DELETE CASCADE,
+  FOREIGN KEY (SolutionId) REFERENCES Solutions(Id) ON DELETE CASCADE,
   PRIMARY KEY (FrameworkId, SolutionId)
 );
 
@@ -174,8 +177,8 @@ CREATE TABLE FrameworkStandard
 (
   FrameworkId CHAR(38) NOT NULL,
   StandardId CHAR(38) NOT NULL,
-  FOREIGN KEY (FrameworkId) REFERENCES Framework(Id) ON DELETE NO ACTION,
-  FOREIGN KEY (StandardId) REFERENCES Standard(Id) ON DELETE NO ACTION,
+  FOREIGN KEY (FrameworkId) REFERENCES Frameworks(Id) ON DELETE NO ACTION,
+  FOREIGN KEY (StandardId) REFERENCES Standards(Id) ON DELETE NO ACTION,
   PRIMARY KEY (FrameworkId, StandardId)
 );
 
@@ -185,29 +188,67 @@ CREATE TABLE CapabilityStandard
   CapabilityId CHAR(38) NOT NULL,
   StandardId CHAR(38) NOT NULL,
   IsOptional INTEGER DEFAULT 0,
-  FOREIGN KEY (CapabilityId) REFERENCES Capability(Id) ON DELETE NO ACTION,
-  FOREIGN KEY (StandardId) REFERENCES Standard(Id) ON DELETE NO ACTION,
+  FOREIGN KEY (CapabilityId) REFERENCES Capabilities(Id) ON DELETE NO ACTION,
+  FOREIGN KEY (StandardId) REFERENCES Standards(Id) ON DELETE NO ACTION,
   PRIMARY KEY (CapabilityId, StandardId)
 );
 
--- ClaimedCapabilityStandard.csv
-CREATE TABLE ClaimedCapabilityStandard
+-- CapabilitiesImplementedEvidence.csv
+CREATE TABLE CapabilitiesImplementedEvidence
 (
-  ClaimedCapabilityId CHAR(38) NOT NULL,
-  StandardId CHAR(38) NOT NULL,
+  Id CHAR(38) NOT NULL UNIQUE,
+  PreviousId CHAR(38),
+  ClaimId CHAR(38) NOT NULL,
+  CreatedById CHAR(38) NOT NULL,
+  CreatedOn TEXT NOT NULL,
   Evidence TEXT,
-  Status INTEGER DEFAULT 0,
-  FOREIGN KEY (ClaimedCapabilityId) REFERENCES ClaimedCapability(Id) ON DELETE CASCADE,
-  FOREIGN KEY (StandardId) REFERENCES Standard(Id) ON DELETE CASCADE,
-  PRIMARY KEY (ClaimedCapabilityId, StandardId)
+  FOREIGN KEY (PreviousId) REFERENCES CapabilitiesImplementedEvidence(Id),
+  FOREIGN KEY (ClaimId) REFERENCES CapabilitiesImplemented(Id) ON DELETE CASCADE,
+  FOREIGN KEY (CreatedById) REFERENCES Contacts(Id) ON DELETE CASCADE,
+  PRIMARY KEY (Id)
 );
 
--- AssessmentMessageContact.csv
-CREATE TABLE AssessmentMessageContact
+-- CapabilitiesImplementedReviews.csv
+CREATE TABLE CapabilitiesImplementedReviews
 (
-  AssessmentMessageId CHAR(38) NOT NULL,
-  ContactId CHAR(38) NOT NULL,
-  FOREIGN KEY (AssessmentMessageId) REFERENCES AssessmentMessage(Id) ON DELETE CASCADE,
-  FOREIGN KEY (ContactId) REFERENCES Contact(Id) ON DELETE CASCADE,
-  PRIMARY KEY (AssessmentMessageId, ContactId)
+  Id CHAR(38) NOT NULL UNIQUE,
+  PreviousId CHAR(38),
+  EvidenceId CHAR(38) NOT NULL,
+  CreatedById CHAR(38) NOT NULL,
+  CreatedOn TEXT NOT NULL,
+  Message TEXT,
+  FOREIGN KEY (PreviousId) REFERENCES CapabilitiesImplementedReviews(Id),
+  FOREIGN KEY (EvidenceId) REFERENCES CapabilitiesImplementedEvidence(Id) ON DELETE CASCADE,
+  FOREIGN KEY (CreatedById) REFERENCES Contacts(Id) ON DELETE CASCADE,
+  PRIMARY KEY (Id)
+);
+
+-- StandardsApplicableEvidence.csv
+CREATE TABLE StandardsApplicableEvidence
+(
+  Id CHAR(38) NOT NULL UNIQUE,
+  PreviousId CHAR(38),
+  ClaimId CHAR(38) NOT NULL,
+  CreatedById CHAR(38) NOT NULL,
+  CreatedOn TEXT NOT NULL,
+  Evidence TEXT,
+  FOREIGN KEY (PreviousId) REFERENCES StandardsApplicableEvidence(Id),
+  FOREIGN KEY (ClaimId) REFERENCES StandardsApplicable(Id) ON DELETE CASCADE,
+  FOREIGN KEY (CreatedById) REFERENCES Contacts(Id) ON DELETE CASCADE,
+  PRIMARY KEY (Id)
+);
+
+-- StandardsApplicableReviews.csv
+CREATE TABLE StandardsApplicableReviews
+(
+  Id CHAR(38) NOT NULL UNIQUE,
+  PreviousId CHAR(38),
+  EvidenceId CHAR(38) NOT NULL,
+  CreatedById CHAR(38) NOT NULL,
+  CreatedOn TEXT NOT NULL,
+  Message TEXT,
+  FOREIGN KEY (PreviousId) REFERENCES StandardsApplicableReviews(Id),
+  FOREIGN KEY (EvidenceId) REFERENCES StandardsApplicableEvidence(Id) ON DELETE CASCADE,
+  FOREIGN KEY (CreatedById) REFERENCES Contacts(Id) ON DELETE CASCADE,
+  PRIMARY KEY (Id)
 );
