@@ -83,12 +83,12 @@
 
       {{#solution}}      
       <label{{#if ../errors.name}} class="has-errors"{{/if}}>
-          Solution Name
+          Solution Name <span class="required">*</span>
           <input type="text" name="name" value="{{ name }}">
       </label>
       {{> errors errors=../errors.name }}
       <label{{#if ../errors.description}} class="has-errors"{{/if}}>
-          Description
+          Description <span class="required">*</span>
           <textarea name="description" rows="5">{{ description }}</textarea>
       </label>
       {{> errors errors=../errors.description }}

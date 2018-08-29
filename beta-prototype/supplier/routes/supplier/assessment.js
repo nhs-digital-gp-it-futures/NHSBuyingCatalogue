@@ -73,11 +73,8 @@ app.post('/', csrfProtection, async (req, res) => {
     return res.redirect(redirectUrl)
   }
 
-  // set the evidence for the capability that the user asked to save
-  if (req.body.save) {
-    redirectUrl = _.head(_.split(req.originalUrl, '?', 1))
-
-    const capabilityIdToSave = _.head(Object.keys(req.body.save))
+  // always save all the evidence
+  Object.keys(req.body.evidence).forEach(capabilityIdToSave => {
     const cap = _.find(solutionEx.claimedCapability, ['capabilityId', capabilityIdToSave])
     const evidence = _.get(req.body.evidence, capabilityIdToSave, '').trim()
 
@@ -87,8 +84,12 @@ app.post('/', csrfProtection, async (req, res) => {
       // update the solution
       updateSolution = true
     }
+  })
 
-    redirectUrl += `?saved=${capabilityIdToSave}#evidence-${capabilityIdToSave}`
+  if (req.body.save) {
+    const capabilityIdToSave = _.head(Object.keys(req.body.save))
+    redirectUrl = _.head(_.split(req.originalUrl, '?', 1))
+                + `?saved=${capabilityIdToSave}#evidence-${capabilityIdToSave}`
   }
 
   // set the status on submission to send the solution to the capabilities assessment team

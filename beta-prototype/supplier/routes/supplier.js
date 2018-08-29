@@ -422,7 +422,7 @@ app.get('/solutions/:solution_id', async (req, res) => {
     if (status === api.SOLUTION_STATUS.REGISTERED ||
         status === api.SOLUTION_STATUS.CAPABILITIES_ASSESSMENT) {
       context.stages.register.complete = true
-      context.stages.assessment.active = true
+      context.stages.assessment.active = status === api.SOLUTION_STATUS.CAPABILITIES_ASSESSMENT
       context.stages.assessment.continueUrl = `${solnUrl}/assessment`
       context.stages.compliance.viewUrl = `${solnUrl}/compliance`
       context.stages.compliance.stageClass = 'active'
