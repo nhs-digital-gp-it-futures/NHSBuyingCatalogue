@@ -29,6 +29,8 @@ p.help, div.help p {
 }
 
 .help-reveal .help p {
+  font-size: var(--font-size-high-density);
+  font-weight: var(--font-weight-high-density);
   margin-bottom: 0.5em;
   margin-top: 0.5em;
 }

@@ -212,8 +212,8 @@
 
 #compliance.edit .in-assessment span,
 #compliance.edit .has-feedback span {
-  font-size: var(--font-size-help);
-  font-weight: var(--font-weight-help);
+  font-size: var(--font-size-high-density);
+  font-weight: var(--font-weight-high-density);
 }
 
 #compliance.edit .feedback-icon {
@@ -355,6 +355,11 @@
   display: block;
   margin: 0 auto;
   width: 75%;
+}
+
+#compliance.edit section.owner .help {
+  font-size: var(--font-size-high-density);
+  font-weight: var(--font-weight-high-density);
 }
 
 #compliance.edit section.owner h4 {

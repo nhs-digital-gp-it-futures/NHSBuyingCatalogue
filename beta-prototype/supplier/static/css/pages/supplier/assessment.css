@@ -107,8 +107,8 @@
 }
 
 #assessment form fieldset.evidence .label {
-  font-size: var(--font-size-help);
-  font-weight: var(--font-weight-help);
+  font-size: var(--font-size-high-density);
+  font-weight: var(--font-weight-high-density);
 }
 
 #assessment form fieldset.evidence input {

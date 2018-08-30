@@ -11,9 +11,9 @@
   --font-size-capability-label: var(--font-size-navigation);
   --font-size-capability-description: calc(0.6 * var(--font-size-body));
   --font-weight-capability-description: 300;
-  --font-size-help: var(--font-size-button-label);
-  --font-weight-help: 300;
-  --font-size-message: var(--font-size-help); 
+  --font-size-help: var(--font-size-body);
+  --font-weight-help: 500;
+  --font-size-message: var(--font-size-high-density); 
   --font-size-message-metadata: var(--font-size-capability-description);
   --font-weight-message-metadata: 300;
   --font-size-input: var(--font-size-navigation);

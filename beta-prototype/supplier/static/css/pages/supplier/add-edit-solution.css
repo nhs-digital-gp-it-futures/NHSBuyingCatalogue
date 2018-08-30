@@ -91,12 +91,13 @@
 }
 
 #add-edit-solution form ul.validation-rules li {
-  font-size: var(--font-size-help);
-  font-weight: var(--font-weight-help);
+  font-size: var(--font-size-high-density);
+  font-weight: var(--font-weight-high-density);
 }
 
 #add-edit-solution form p.instructions {
-  font-weight: var(--font-weight-help);
+  font-size: var(--font-size-high-density);
+  font-weight: var(--font-weight-high-density);
   margin-top: 0.5em;
   margin-bottom: 0.5em;
 }
@@ -266,9 +267,9 @@
 
 #add-edit-solution .summary .counter,
 #add-edit-solution .summary .counter * {
-  font-size: var(--font-size-help);
+  font-size: var(--font-size-high-density);
   font-style: italic;
-  font-weight: var(--font-weight-help);
+  font-weight: var(--font-weight-high-density);
 }
 
 #add-edit-solution .summary details {
@@ -347,8 +348,8 @@
 
 #capability-popup ul.interop li,
 #capability-popup p.interop {
-  font-size: var(--font-size-help);
-  font-weight: var(--font-weight-help);
+  font-size: var(--font-size-high-density);
+  font-weight: var(--font-weight-high-density);
 }
 
 #capability-popup label.disabled {
@@ -455,7 +456,7 @@
   background-color: var(--color-standout-bg);
   border-left: 5px solid var(--color-nhs-blue);
   color: var(--color-fg);
-  font-size: var(--font-size-help);
+  font-size: var(--font-size-high-density);
   margin-top: 4em;
   padding: .5em 0 .5em 1em;
   position: relative;
