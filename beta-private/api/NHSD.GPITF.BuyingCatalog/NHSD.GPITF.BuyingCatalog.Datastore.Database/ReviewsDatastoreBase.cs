@@ -10,7 +10,7 @@ using System.Reflection;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 {
-  public abstract class ReviewsDatastoreBase<T> : DatastoreBase<T> where T : ReviewsBase
+  public abstract class ReviewsDatastoreBase<T> : CommonTableExpressionDatastoreBase<T> where T : ReviewsBase
   {
     public ReviewsDatastoreBase(
       IDbConnectionFactory dbConnectionFactory,
@@ -68,7 +68,8 @@ with recursive Links(CurrentId, Id, PreviousId, EvidenceId, CreatedById, Created
   from Links
   where CurrentId ='{current.Id}';
 ";
-          var chain = _dbConnection.Value.Query<T>(sqlCurrent);
+          var amendedSql = AmendCommonTableExpression(sqlCurrent);
+          var chain = _dbConnection.Value.Query<T>(amendedSql);
           chains.Add(chain);
         }
 
