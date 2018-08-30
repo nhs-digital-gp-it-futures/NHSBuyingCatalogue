@@ -11,55 +11,11 @@
     <p>The videos and answers will be used by our Commercial team to assess whether your Solution satisfies the Capabilities selected. We will also display the videos on your Solution’s catalogue page to support buyers in making purchasing decisions, unless you opt out.</p>
 
     <p>You can opt out, and miss out on showing videos to buyers, when building your Solution's catalogue page during Onboarding Stage 4.</p>
+
+    <p>Need help? For Clarifications and other queries, see:
+      <a href="{{ contactUsUrl }}">Contact Us.</a></p>
   </div>
 
-  <form method="post">
-    {{#solution.capabilities}}
-    <fieldset id="evidence-{{id}}" class="capability {{statusClass}}">
-      <legend>{{ name }} <span class="status">{{status}}</span></legend>
-      <p class="description">{{ description }}</p>
-      <a href="{{ url }}" target="_blank">View full Capability description & Capability Standards.</a>
-      <h3>Evidence Guidelines</h3>
-      {{#with (lookup ../questions id)}}
-      <fieldset class="evidence">
-        <p>{{lede}}</p>
-        <ul>
-          {{#points}}
-          <li>{{.}}</li>
-          {{/points}}
-        </ul>
-        <input type="text"
-               name="evidence[{{../id}}]"
-               value="{{../evidence}}"
-               placeholder="Provide link to downloadable video">
-        <a class="evidenceLink" target="_blank" href="{{../evidence}}">{{../evidence}}</a>
-      </fieldset>
-      {{/with}}
-      <div class="controls editing">
-        <input class="button" type="submit" name="save[{{id}}]" value="Save">
-        <span>By saving this link, you are confirming that your solution can meet this capability to the best of your knowledge.</span>
-      </div>
-      <div class="controls">
-        <a class="edit button">Edit</a>
-      </div>
-      <div class="remove">
-        <a class="remove-capability"
-            href="#"
-            title="If you don’t feel that you can provide evidence demonstrating how your solution meets this capability, then you can remove it.">remove capability</a>
-      </div>
-    </fieldset>
-    {{/solution.capabilities}}
-    <div class="messaging">
-      <h3>Assessment Messaging (optional)</h3>
-      <p class="help">Add any general comments that you would like to include with your submission. Please note that comments will not be assessed by the Capability Assessment team.</p>
-      <textarea name="message" rows="6"></textarea>
-    </div>
-    <div class="controls">
-        <button name="action" value="save" type="submit">Save</button>
-        <button class="primary" name="action" value="submit" type="submit">Submit for Assessment ❯</button>
-        <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    </div>
-  </form>
   {{#if messages}}
   <section class="message-history">
     <h3>Assessment Message History</h3>
@@ -76,9 +32,34 @@
     </ul>
   </section>
   {{/if}}
+
+  <form method="post">
+    {{#solution.capabilities}}
+    <fieldset id="evidence-{{id}}" class="capability {{statusClass}}">
+      <legend>{{ name }} <span class="status">{{status}}</span></legend>
+      <p class="description">1. Provide video(s) demonstrating that the Solution meets all the qualifying user stories defined in the Capability description.
+        <a href="{{ url }}" target="_blank">View Capability description.</a>
+      </p>
+      <fieldset class="evidence">
+        <h3>Add video link</h3>
+        <p class="label">Upload video to file share platform, and provide link to video here.
+          <a href="{{ filesharePlatformUrl }}" target="_blank">Open file share platform.</a></p>
+        <input type="text"
+               name="evidence[{{id}}]"
+               value="{{evidence}}">
+      </fieldset>
+    </fieldset>
+    {{/solution.capabilities}}
+    <div class="controls">
+        <button name="action" value="save" type="submit">Save</button>
+        <button class="primary" name="action" value="submit" type="submit">Submit for Assessment ❯</button>
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    </div>
+  </form>
 </div>
 
 <script>
+/* global $, $$ */
 document.addEventListener('DOMContentLoaded', () => {
   $$('fieldset.capability').forEach(el => {
     el.addEventListener('input', enableSubmitIfAllCapabilitiesHaveEvidence)
@@ -89,23 +70,8 @@ document.addEventListener('DOMContentLoaded', () => {
     el.addEventListener('click', toggleFieldsetCollapse)
   })
 
-  $$('fieldset.capability .edit.button').forEach(el => {
-    el.addEventListener('click', toggleFieldsetEditing)
-  })
-
-  $$('a.remove-capability').forEach(el => {
-    el.addEventListener('click', ev => {
-      const elCap = ev.target.closest('fieldset.capability')
-      elCap.parentElement.removeChild(elCap)
-    })
-  })
-
   function toggleFieldsetCollapse (ev) {
     ev.target.closest('fieldset').classList.toggle('expanded')
-  }
-
-  function toggleFieldsetEditing (ev) {
-    ev.target.closest('fieldset.capability').classList.toggle('editing')
   }
 
   function enableSubmitIfAllCapabilitiesHaveEvidence () {
