@@ -28,6 +28,11 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     /// <returns>SQL statement for specific database</returns>
     protected string AmendCommonTableExpression(string sql)
     {
+      if (!sql.Contains("recursive"))
+      {
+        throw new ArgumentException("SQL Common Table Expression modified - cannot find 'recursive'");
+      }
+
       var dbType = _dbConnection.Value.GetType().ToString();
       switch (dbType)
       {
