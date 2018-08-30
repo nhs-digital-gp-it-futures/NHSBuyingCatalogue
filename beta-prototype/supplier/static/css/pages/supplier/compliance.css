@@ -309,8 +309,20 @@
   content: 'Submitted by ';
 }
 
+#compliance.edit section.owner {
+  margin-top: 1em;
+}
+
+#compliance.edit section.owner label {
+  display: block;
+  margin: 0 auto;
+  width: 50%;
+}
+
 #compliance.edit section.owner h4 {
+  color: var(--color-nhs-blue);
   display: inline-block;
+  font-weight: 500;
   margin-right: 2em;
 }
 
