@@ -95,3 +95,8 @@ h5,
 h6 {
   color: var(--color-heading);
 }
+
+a:link,
+a:visited {
+  color: var(--color-link-fg);
+}

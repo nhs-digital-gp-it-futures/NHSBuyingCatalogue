@@ -1,9 +1,6 @@
-.button {
-  text-decoration: none;
-}
-
 button,
-.button {
+.button,
+a.button {
   color: var(--color-button-fg);
   background-color: var(--color-button-bg);
   border-radius: 2px;
