@@ -447,6 +447,33 @@
   text-decoration: none;
 }
 
+#add-edit-solution h3.question {
+  color: var(--color-fg);
+}
+
+#add-edit-solution .commercial-warning {
+  background-color: var(--color-standout-bg);
+  border-left: 5px solid var(--color-nhs-blue);
+  color: var(--color-fg);
+  font-size: var(--font-size-help);
+  margin-top: 4em;
+  padding: .5em 0 .5em 1em;
+  position: relative;
+  width: 80%;
+}
+
+#add-edit-solution .commercial-warning strong {
+  background-color: var(--color-nhs-blue);
+  color: var(--color-nhs-white);
+  display: inline-block;
+  font-size: larger;
+  font-weight: 600;
+  padding: 0.25em 1em;
+  position: absolute;
+  top: -1.5em;
+  left: -0.5em;
+}
+
 dialog::backdrop {
   background: rgba(66, 85, 99, 0.8);
 }

@@ -24,15 +24,17 @@
   {{> onboarding-progress-header
         title="Select Capabilities"
         subtitle="Register Solution (2 of 4)"}}
-  <div class="help">
-    <p>Capabilities describe what the Solution does. The Solution will be Assessed against the Capabilities that it provides to ensure that it is within the scope of the Catalogue.
-
-    <p>Following successful completion of the Capability Assessment (Stage 2), your Solution will undergo Compliance (Stage 3) against the Capability-Specific Standards as well as the Overarching and Context-Specific Standards. Context-Specific Standards are shown when you select an individual Capability. Overarching Standards are shown below the Capability Selector. 
-
-    <p>You must select ALL the Capabilities your Solution provides. If your Solution provides Capabilities that are not outlined below, please {info on this to come}.
-
-    <p>Once you have selected all the appropriate Capabilities for your Solution, click “Submit” to complete Solution registration.
-  </div>
+  <h3 class="question">Which Capability(-ies) does your Solution provide?</h3>
+  <p>Select all that apply.</p>
+  <p class="commercial-warning">
+    <strong>Commercial Warning</strong>
+    You must select ALL the Capabilities your Solution provides. If your Solution provides Capabilities that are not outlined below, please {info on this to come}.
+  </p>
+  {{#> help-reveal title="Help - What are Capabilities?"}}
+    <p>Capabilities describe what your Solution does. Your Solution will be assessed against the Capabilities that it provides to ensure that it is within the scope of the Catalogue.
+      <a href="{{capabilitiesHelpUrl}}" target="_blank">Learn more and view all Capabilities &amp; Standards.</a>
+    </p>
+  {{/help-reveal}}
 
   {{#errors}}
   <p class="error">{{.}}</p>
