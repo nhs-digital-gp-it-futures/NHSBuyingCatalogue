@@ -9,9 +9,11 @@
     <section><!-- replace with content --></section>
     <fieldset class="select">
       <p>By selecting this Capability, I acknowledge the set of standards my solution must meet to attain compliance with this Capability.</p>
-      <label>
-        <input type="checkbox" name="capability" autofocus>
-        Select Capability
+      <input id="select-capability" type="checkbox" name="capability" autofocus>
+      <label for="select-capability" class="unchecked button primary">Select</label>
+      <label for="select-capability" class="checked">
+        <span class="selected">✔︎ Selected</span>
+        <span class="remove">Remove selection</span>
       </label>
     </fieldset>
     <fieldset class="controls">

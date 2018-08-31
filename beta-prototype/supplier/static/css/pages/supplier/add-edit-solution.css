@@ -372,6 +372,41 @@
   text-align: center;
 }
 
+#capability-popup .select p {
+  margin-bottom: 1em;
+}
+
+/* styling the popup's checkbox like a button when unchecked, and as a
+   combination of a tick and unselect link when checked */
+#select-capability {
+  left: -10em;
+  position: absolute; /* take it out of flow so the labels align correctly */
+  opacity: 0; /* make it invisible but still accessible */
+}
+
+/* show the appropriate label only */
+#select-capability:not(:checked) ~ label.checked,
+#select-capability:checked ~ label.unchecked {
+  display: none;
+}
+
+/* give the label the appearance of focus */
+#select-capability:focus ~ label.unchecked,
+#select-capability:focus ~ label.checked .remove {
+  outline: 2px solid Highlight;
+  outline: 5px auto -webkit-focus-ring-color;
+}
+
+#select-capability ~ label.checked .selected {
+  color: var(--color-nhs-dark-green);
+  padding-right: 3em;
+}
+
+#select-capability ~ label.checked .remove {
+  color: var(--color-nhs-blue);
+  text-decoration: underline;
+}
+
 #capability-popup nav {
   position: absolute;
   top: -2em;
