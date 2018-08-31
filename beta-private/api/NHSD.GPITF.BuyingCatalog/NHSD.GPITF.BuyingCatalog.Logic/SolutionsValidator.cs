@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
@@ -41,6 +43,39 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
           return soln != null && x.OrganisationId == soln.OrganisationId;
         })
         .WithMessage("Cannot transfer solutions between organisations");
+      RuleFor(x => x)
+        .Must(x =>
+        {
+          /// NOTE:  null solution check is not quite correct
+          /// as this would result in a FK exception if we let it through
+          /// but it is good enough for the moment
+          var soln = _solutionDatastore.ById(x.Id);
+          if (soln == null)
+          {
+            return false;
+          }
+          var oldStatus = soln.Status;
+          var newStatus = x.Status;
+          return ValidStatusTransitions.Any(
+            trans => trans.OldStatus == oldStatus && trans.NewStatus == newStatus);
+        })
+        .WithMessage($"Invalid Status transition");
+    }
+
+    private static IEnumerable<(SolutionStatus OldStatus, SolutionStatus NewStatus)> ValidStatusTransitions
+    {
+      get
+      {
+        yield return (SolutionStatus.Draft, SolutionStatus.Draft);
+        yield return (SolutionStatus.Draft, SolutionStatus.Registered);
+        yield return (SolutionStatus.Registered, SolutionStatus.CapabilitiesAssessment);
+        yield return (SolutionStatus.CapabilitiesAssessment, SolutionStatus.Failed);
+        yield return (SolutionStatus.CapabilitiesAssessment, SolutionStatus.StandardsCompliance);
+        yield return (SolutionStatus.StandardsCompliance, SolutionStatus.Failed);
+        yield return (SolutionStatus.StandardsCompliance, SolutionStatus.FinalApproval);
+        yield return (SolutionStatus.FinalApproval, SolutionStatus.SolutionPage);
+        yield return (SolutionStatus.SolutionPage, SolutionStatus.Approved);
+      }
     }
   }
 }
