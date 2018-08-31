@@ -20,9 +20,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     /// database is MS SQL Server as this database does not support this
     /// keyword.
     /// 
-    /// 'Recursive' keyword is required for MySQL but is ignored by SQLite.
-    /// 
-    /// Currently untested on PostgreSql.
+    /// 'Recursive' keyword is definitely required for MySQL and PostgreSql
+    /// but is ignored by SQLite.
     /// </summary>
     /// <param name="sql">generic SQL statement containing keyword 'recursive'</param>
     /// <returns>SQL statement for specific database</returns>
@@ -38,12 +37,12 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
       {
         case "Microsoft.Data.Sqlite.SqliteConnection":
         case "MySql.Data.MySqlClient.MySqlConnection":
+        case "Npgsql.NpgsqlConnection":
           return sql;
 
         case "System.Data.SqlClient.SqlConnection":
           return sql.Replace("recursive", "");
 
-        case "Npgsql.NpgsqlConnection":
         default:
           throw new ArgumentOutOfRangeException($"Untested database: {dbType}");
       }
