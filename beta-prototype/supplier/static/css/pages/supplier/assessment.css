@@ -201,3 +201,36 @@
 #assessment .messages .message.assessment-team .metadata .originator::before {
   content: 'Submitted by ';
 }
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+
+  99% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+#saved-notification {
+  animation: .5s ease-in 1s fade-out;
+  animation-fill-mode: forwards;
+  background-color: var(--color-standout-bg);
+  left: 0;
+  padding: 1em 0;
+  position: fixed;
+  text-align: center;
+  top: 45%;
+  width: 100%;
+  z-index: 2;
+}
+
+#saved-notification span {
+  color: var(--color-nhs-dark-green);
+  font-size: var(--font-size-page-title);
+}

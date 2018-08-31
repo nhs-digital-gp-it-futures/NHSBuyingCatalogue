@@ -58,6 +58,7 @@ app.get('/', csrfProtection, async (req, res) => {
     solution: solutionEx.solution,
     messages: _.orderBy(messages, 'timestamp', 'desc'),
     questions,
+    saved: 'saved' in req.query,
     csrfToken: req.csrfToken()
   })
 })
@@ -86,10 +87,8 @@ app.post('/', csrfProtection, async (req, res) => {
     }
   })
 
-  if (req.body.save) {
-    const capabilityIdToSave = _.head(Object.keys(req.body.save))
-    redirectUrl = _.head(_.split(req.originalUrl, '?', 1))
-                + `?saved=${capabilityIdToSave}#evidence-${capabilityIdToSave}`
+  if (req.body.action === 'save') {
+    redirectUrl = '?saved'
   }
 
   // set the status on submission to send the solution to the capabilities assessment team
