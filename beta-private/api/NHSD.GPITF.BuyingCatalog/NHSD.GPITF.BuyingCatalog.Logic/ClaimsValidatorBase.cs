@@ -22,6 +22,11 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         RuleForUpdate();
       });
 
+      RuleSet(nameof(IClaimsLogic<T>.Delete), () =>
+      {
+        RuleForDelete();
+      });
+
       RuleFor(x => x.Id)
         .NotNull()
         .Must(id => Guid.TryParse(id, out _))
@@ -31,6 +36,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .Must(solnId => Guid.TryParse(solnId, out _))
         .WithMessage("Invalid SolutionId");
     }
+
+    protected abstract void RuleForDelete();
 
     private void RuleForUpdate()
     {

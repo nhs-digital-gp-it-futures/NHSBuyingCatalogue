@@ -12,5 +12,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       base(context, claimDatastore)
     {
     }
+
+    protected override void RuleForDelete()
+    {
+      throw new System.NotImplementedException();
+    }
   }
 }

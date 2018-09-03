@@ -14,5 +14,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       base(context, claimDatastore)
     {
     }
+
+    protected override void RuleForDelete()
+    {
+    }
   }
 }
