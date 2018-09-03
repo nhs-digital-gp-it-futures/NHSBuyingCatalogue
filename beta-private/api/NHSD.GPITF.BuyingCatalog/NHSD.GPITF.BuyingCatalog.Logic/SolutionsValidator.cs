@@ -27,8 +27,14 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         RuleForUpdate();
       });
 
-      RuleFor(x => x.Id).NotNull().Must(id => Guid.TryParse(id, out _)).WithMessage("Invalid Id");
-      RuleFor(x => x.OrganisationId).NotNull().Must(orgId => Guid.TryParse(orgId, out _)).WithMessage("Invalid OrganisationId");
+      RuleFor(x => x.Id)
+        .NotNull()
+        .Must(id => Guid.TryParse(id, out _))
+        .WithMessage("Invalid Id");
+      RuleFor(x => x.OrganisationId)
+        .NotNull()
+        .Must(orgId => Guid.TryParse(orgId, out _))
+        .WithMessage("Invalid OrganisationId");
     }
 
     private void RuleForUpdate()
