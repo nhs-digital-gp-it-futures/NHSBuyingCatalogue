@@ -2,7 +2,6 @@
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
@@ -16,6 +15,11 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       base(context)
     {
       _datastore = datastore;
+    }
+
+    public T ById(string id)
+    {
+      return _datastore.ById(id);
     }
 
     public IEnumerable<T> BySolution(string solutionId)

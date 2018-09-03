@@ -5,6 +5,7 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
 #pragma warning disable CS1591
   public interface IClaimsLogic<T>
   {
+    T ById(string id);
     IEnumerable<T> BySolution(string solutionId);
     T Create(T claim);
     void Update(T claim);
