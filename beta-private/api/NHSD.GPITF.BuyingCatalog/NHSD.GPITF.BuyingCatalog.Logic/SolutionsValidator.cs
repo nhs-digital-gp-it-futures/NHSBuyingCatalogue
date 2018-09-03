@@ -56,26 +56,26 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
           }
           var oldStatus = soln.Status;
           var newStatus = x.Status;
-          return ValidStatusTransitions.Any(
-            trans => trans.OldStatus == oldStatus && trans.NewStatus == newStatus);
+          return ValidStatusTransitions(_context).Any(
+            trans =>
+              trans.OldStatus == oldStatus &&
+              trans.NewStatus == newStatus &&
+              trans.HasValidRole);
         })
         .WithMessage($"Invalid Status transition");
     }
 
-    private static IEnumerable<(SolutionStatus OldStatus, SolutionStatus NewStatus)> ValidStatusTransitions
+    private static IEnumerable<(SolutionStatus OldStatus, SolutionStatus NewStatus, bool HasValidRole)> ValidStatusTransitions(IHttpContextAccessor context)
     {
-      get
-      {
-        yield return (SolutionStatus.Draft, SolutionStatus.Draft);
-        yield return (SolutionStatus.Draft, SolutionStatus.Registered);
-        yield return (SolutionStatus.Registered, SolutionStatus.CapabilitiesAssessment);
-        yield return (SolutionStatus.CapabilitiesAssessment, SolutionStatus.Failed);
-        yield return (SolutionStatus.CapabilitiesAssessment, SolutionStatus.StandardsCompliance);
-        yield return (SolutionStatus.StandardsCompliance, SolutionStatus.Failed);
-        yield return (SolutionStatus.StandardsCompliance, SolutionStatus.FinalApproval);
-        yield return (SolutionStatus.FinalApproval, SolutionStatus.SolutionPage);
-        yield return (SolutionStatus.SolutionPage, SolutionStatus.Approved);
-      }
+      yield return (SolutionStatus.Draft, SolutionStatus.Draft, context.HasRole(Roles.Supplier));
+      yield return (SolutionStatus.Draft, SolutionStatus.Registered, context.HasRole(Roles.Supplier));
+      yield return (SolutionStatus.Registered, SolutionStatus.CapabilitiesAssessment, context.HasRole(Roles.Supplier));
+      yield return (SolutionStatus.CapabilitiesAssessment, SolutionStatus.Failed, context.HasRole(Roles.Admin));
+      yield return (SolutionStatus.CapabilitiesAssessment, SolutionStatus.StandardsCompliance, context.HasRole(Roles.Admin));
+      yield return (SolutionStatus.StandardsCompliance, SolutionStatus.Failed,context.HasRole( Roles.Admin));
+      yield return (SolutionStatus.StandardsCompliance, SolutionStatus.FinalApproval, context.HasRole(Roles.Admin));
+      yield return (SolutionStatus.FinalApproval, SolutionStatus.SolutionPage, context.HasRole(Roles.Admin));
+      yield return (SolutionStatus.SolutionPage, SolutionStatus.Approved, context.HasRole(Roles.Admin));
     }
   }
 }
