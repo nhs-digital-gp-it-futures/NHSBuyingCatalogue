@@ -15,7 +15,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
     protected override void RuleForDelete()
     {
-      throw new System.NotImplementedException();
     }
   }
 }
