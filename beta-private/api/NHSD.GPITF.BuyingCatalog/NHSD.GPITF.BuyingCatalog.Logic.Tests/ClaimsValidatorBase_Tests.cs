@@ -116,7 +116,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase();
       _claimDatastore.Setup(x => x.ById(claim.Id)).Returns(Creator.GetClaimsBase());
-      _solutionsDatastore.Setup(x => x.ById(claim.SolutionId)).Returns(Creator.GetSolution());
+      _solutionsDatastore.Setup(x => x.ById(It.IsAny<string>())).Returns(Creator.GetSolution(orgId: orgId));
 
       var valres = validator.Validate(claim, ruleSet: nameof(IClaimsLogic<ClaimsBase>.Update));
 
@@ -151,6 +151,21 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var valres = validator.Validate(claim, ruleSet: nameof(IClaimsLogic<ClaimsBase>.Delete));
 
       valres.Errors.Should().BeEmpty();
+    }
+
+    [Test]
+    public void Validate_Update_OtherOrganisation_ReturnsError()
+    {
+      var orgId = Guid.NewGuid().ToString();
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: Roles.Supplier, orgId: orgId));
+      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
+      var claim = Creator.GetClaimsBase();
+      _claimDatastore.Setup(x => x.ById(claim.Id)).Returns(claim);
+      _solutionsDatastore.Setup(x => x.ById(claim.SolutionId)).Returns(Creator.GetSolution());
+
+      var valres = validator.Validate(claim, ruleSet: nameof(IClaimsLogic<ClaimsBase>.Update));
+
+      valres.Errors.Count().Should().Be(1);
     }
   }
 }

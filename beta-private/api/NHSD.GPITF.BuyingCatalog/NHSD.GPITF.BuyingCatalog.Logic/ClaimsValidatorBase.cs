@@ -22,12 +22,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
       RuleSet(nameof(IClaimsLogic<T>.Update), () =>
       {
-        RuleForUpdate();
+        MustBeSameSolution();
+        MustBeSameOrganisation();
       });
 
       RuleSet(nameof(IClaimsLogic<T>.Delete), () =>
       {
-        RuleForDelete();
+        MustBeSameOrganisation();
       });
 
       RuleFor(x => x.Id)
@@ -40,7 +41,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Invalid SolutionId");
     }
 
-    private void RuleForDelete()
+    private void MustBeSameOrganisation()
     {
       RuleFor(x => x)
         .Must(x =>
@@ -54,10 +55,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
           var claimSoln = _solutionsDatastore.ById(claim.SolutionId);
           return claimSoln != null && claimSoln.OrganisationId == orgId;
         })
-        .WithMessage("Cannot delete claim for other organisation");
+        .WithMessage("Cannot update/delete claim for other organisation");
     }
 
-    private void RuleForUpdate()
+    private void MustBeSameSolution()
     {
       RuleFor(x => x)
         .Must(x =>
