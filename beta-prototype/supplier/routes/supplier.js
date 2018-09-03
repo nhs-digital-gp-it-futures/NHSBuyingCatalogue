@@ -153,12 +153,10 @@ app.get('/solutions', async (req, res) => {
 
 app.get('/solutions/add', csrfProtection, async (req, res) => {
   res.render('supplier/add-solution', {
-    breadcrumbs: [
-      { label: 'My Dashboard', url: '/suppliers' },
-      { label: 'My Solutions', url: '/suppliers/solutions' },
-      { label: 'Onboarding Solution', url: `/suppliers/solutions/new` },
-      { label: 'Registration' }
-    ],
+    backlink: {
+      title: 'Onboarding Solution',
+      href: `/suppliers/solutions/new`
+    },
     primaryContactTypes,
     primaryContactHelp,
     csrfToken: req.csrfToken()
@@ -323,12 +321,10 @@ app.post('/solutions/add', csrfProtection, (req, res) => {
   const rerender = () => {
     const context = {
       ...solution,
-      breadcrumbs: [
-        { label: 'My Dashboard', url: '/suppliers' },
-        { label: 'My Solutions', url: '/suppliers/solutions' },
-        { label: 'Onboarding Solution', url: `/suppliers/solutions/new` },
-        { label: 'Registration' }
-      ],
+      backlink: {
+        title: 'Onboarding Solution',
+        href: `/suppliers/solutions/new`
+      },
       primaryContactTypes,
       primaryContactHelp,
       primaryContacts: contacts,
@@ -342,42 +338,6 @@ app.post('/solutions/add', csrfProtection, (req, res) => {
 
   saveSolution().catch(rerender)
 })
-
-async function loadSolutionDetails (solutionId) {
-  const { capabilities: allCaps, standards: allStds } = await api.get_all_capabilities()
-
-  const allCapabilities = _.keyBy(allCaps, 'id')
-  const allStandards = _.keyBy(allStds, 'id')
-
-  const solutionEx = await api.get_solution_by_id(solutionId)
-
-  solutionEx.solution.capabilities = _.sortBy(_.map(solutionEx.claimedCapability, cap => {
-    const mainCap = allCapabilities[cap.capabilityId]
-    cap.name = _.get(mainCap, 'name')
-    cap.optionalStandards = _.map(
-      _.filter(solutionEx.claimedCapabilityStandard, ['claimedCapabilityId', cap.id]),
-      capStd => _.get(
-        _.find(mainCap.standards.optional, ['id', capStd.standardId]),
-        'name'
-      )
-    )
-    return cap
-  }), 'name')
-
-  solutionEx.solution.standards = _.sortBy(_.map(solutionEx.claimedStandard, std => {
-    std.name = _.get(allStandards[std.standardId], 'name')
-    return std
-  }), 'name')
-
-  solutionEx.solution.contacts = _.map(
-    solutionEx.technicalContact, contact => ({
-      ...contact,
-      phoneNumberUrl: contact.phoneNumber.replace(/ /g, '-')
-    })
-  )
-
-  return solutionEx.solution
-}
 
 app.get('/solutions/:solution_id', async (req, res) => {
   delete req.session.solutionEx
@@ -403,10 +363,10 @@ app.get('/solutions/:solution_id', async (req, res) => {
     },
     submitted: 'submitted' in req.query
   }
-  let solution
 
   try {
-    solution = await loadSolutionDetails(req.params.solution_id)
+    const solutionEx = await api.get_solution_by_id(req.params.solution_id)
+    const solution = solutionEx.solution
 
     context.solution = solution
 
@@ -479,12 +439,10 @@ app.get('/solutions/:solution_id/edit', csrfProtection, async (req, res) => {
 
     res.render('supplier/add-solution', {
       ...solutionEx.solution,
-      breadcrumbs: [
-        { label: 'My Dashboard', url: '/suppliers' },
-        { label: 'My Solutions', url: '/suppliers/solutions' },
-        { label: 'Onboarding Solution', url: `/suppliers/solutions/${req.params.solution_id}` },
-        { label: 'Registration' }
-      ],
+      backlink: {
+        title: 'Onboarding Solution',
+        href: `/suppliers/solutions/${req.params.solution_id}`
+      },
       primaryContactTypes,
       primaryContactHelp,
       primaryContacts: _.keyBy(primaryContacts, 'contactType'),
@@ -543,12 +501,10 @@ app.post('/solutions/:solution_id/edit', csrfProtection, (req, res) => {
   const rerender = () => {
     const context = {
       ...solution,
-      breadcrumbs: [
-        { label: 'My Dashboard', url: '/suppliers' },
-        { label: 'My Solutions', url: '/suppliers/solutions' },
-        { label: 'Onboarding Solution', url: `/suppliers/solutions/${req.params.solution_id}` },
-        { label: 'Registration' }
-      ],
+      backlink: {
+        title: 'Onboarding Solution',
+        href: `/suppliers/solutions/${req.params.solution_id}`
+      },
       primaryContactTypes,
       primaryContactHelp,
       primaryContacts: contacts,
@@ -576,12 +532,11 @@ app.get('/solutions/:solution_id/capabilities', csrfProtection, async (req, res)
 
   res.render('supplier/solution-capabilities', {
     ...solutionEx.solution,
-    breadcrumbs: [
-      { label: 'My Dashboard', url: '/suppliers' },
-      { label: 'My Solutions', url: '/suppliers/solutions' },
-      { label: 'Onboarding Solution', url: `/suppliers/solutions/${req.params.solution_id}` },
-      { label: 'Registration' }
-    ],
+    backlink: {
+      title: 'Solution Details',
+      subtitle: '(1 of 4)',
+      href: `/suppliers/solutions/${req.params.solution_id}/edit`
+    },
     capabilities: capabilities.map(cap => {
       const claimedCapability = _.find(solutionEx.claimedCapability, ['capabilityId', cap.id])
       cap.selected = !!claimedCapability
@@ -661,12 +616,11 @@ app.post('/solutions/:solution_id/capabilities', csrfProtection, async (req, res
   } catch (err) {
     res.render('supplier/solution-capabilities', {
       ...solutionEx.solution,
-      breadcrumbs: [
-        { label: 'My Dashboard', url: '/suppliers' },
-        { label: 'My Solutions', url: '/suppliers/solutions' },
-        { label: 'Onboarding Solution', url: `/suppliers/solutions/${req.params.solution_id}` },
-        { label: 'Registration' }
-      ],
+      backlink: {
+        title: 'Solution Details',
+        subtitle: '(1 of 4)',
+        href: `/suppliers/solutions/${req.params.solution_id}/edit`
+      },
       capabilities: capabilities.map(cap => {
         cap.selected = _.some(solutionEx.claimedCapability, ['capabilityId', cap.id])
         cap.standardIds = _.map(_.flatMap(cap.standards), 'id')
@@ -688,6 +642,11 @@ app.get('/solutions/:solution_id/mobile', csrfProtection, async (req, res) => {
   }
 
   const context = {
+    backlink: {
+      title: 'Select Capabilities',
+      subtitle: '(2 of 4)',
+      href: `/suppliers/solutions/${req.params.solution_id}/capabilities`
+    },
     csrfToken: req.csrfToken(),
     isMobile: _.some(solutionEx.claimedStandard, ['standardId', 'CSS3'])
   }
@@ -711,8 +670,103 @@ app.post('/solutions/:solution_id/mobile', csrfProtection, async (req, res) => {
   }
 
   const context = {
+    backlink: {
+      title: 'Select Capabilities',
+      subtitle: '(2 of 4)',
+      href: `/suppliers/solutions/${req.params.solution_id}/capabilities`
+    },
     csrfToken: req.csrfToken(),
     isMobile: _.some(solutionEx.claimedStandard, ['standardId', 'CSS3'])
+  }
+
+  try {
+    let redirectUrl = `${req.baseUrl}/solutions`
+
+    if (req.body.action === 'submit') {
+      redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/review`
+    }
+
+    await api.update_solution(solutionEx)
+
+    res.redirect(redirectUrl)
+  } catch (err) {
+    context.errors = err
+    res.render('supplier/solution-mobile', context)
+  }
+})
+
+app.get('/solutions/:solution_id/review', csrfProtection, async (req, res) => {
+  const context = {
+    backlink: {
+      title: 'Confirm Mobile',
+      subtitle: '(3 of 4)',
+      href: `/suppliers/solutions/${req.params.solution_id}/mobile`
+    },
+    csrfToken: req.csrfToken(),
+    errors: {}
+  }
+
+  try {
+    const solutionEx = await api.get_solution_by_id(req.params.solution_id)
+
+    // only draft solutions can be edited
+    if (solutionEx.solution.status !== api.SOLUTION_STATUS.DRAFT) {
+      return res.redirect('/suppliers/solutions')
+    }
+
+    // generate review context
+    const { capabilities, groupedStandards } = await api.get_all_capabilities()
+
+    context.solution = solutionEx.solution
+    const allCaps = _.keyBy(capabilities, 'id')
+
+    context.capabilityCount = solutionEx.claimedCapability.length
+    context.capabilitySingular = context.capabilityCount === 1
+    context.capabilityEditUrl = './capabilities'
+
+    context.capabilities = _.map(
+      solutionEx.claimedCapability,
+      ({capabilityId}) => allCaps[capabilityId].name
+    )
+
+    // merge optional with interop standards prior to display, so that Mobile Working
+    // is considered solution-specific
+    groupedStandards.interop = _.concat(groupedStandards.interop, groupedStandards.optional)
+    delete groupedStandards.optional
+
+    context.standardCount = solutionEx.claimedStandard.length
+    context.standardSingular = context.standardCount === 1
+    context.standards = _(groupedStandards)
+      .map((stds, type) => [
+        type,
+        stds.filter(std => _.find(solutionEx.claimedStandard, ['standardId', std.id]))
+      ])
+      .filter(([, stds]) => stds.length)
+      .fromPairs()
+      .value()
+  } catch (err) {
+    context.errors.general = err
+  }
+
+  res.render('supplier/solution-review', context)
+})
+
+app.post('/solutions/:solution_id/review', csrfProtection, async (req, res) => {
+  const solutionEx = await api.get_solution_by_id(req.params.solution_id)
+
+  // only draft solutions can be edited
+  if (solutionEx.solution.status !== api.SOLUTION_STATUS.DRAFT) {
+    return res.redirect('/suppliers/solutions')
+  }
+
+  const context = {
+    backlink: {
+      title: 'Confirm Mobile',
+      subtitle: '(3 of 4)',
+      href: `/suppliers/solutions/${req.params.solution_id}/mobile`
+    },
+    csrfToken: req.csrfToken(),
+    errors: {}
   }
 
   try {
@@ -727,8 +781,8 @@ app.post('/solutions/:solution_id/mobile', csrfProtection, async (req, res) => {
 
     res.redirect(redirectUrl)
   } catch (err) {
-    context.errors = err
-    res.render('supplier/solution-mobile', context)
+    context.errors.general = err
+    res.render('supplier/solution-review', context)
   }
 })
 

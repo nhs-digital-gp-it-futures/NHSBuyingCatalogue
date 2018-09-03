@@ -447,8 +447,8 @@
 #solution-page-preview .list-view .capabilities ul,
 #solution-page-preview .list-view .standards ul,
 #solution-page-preview section.optional ul {
-  font-size: var(--font-size-help);
-  font-weight: var(--font-weight-help);
+  font-size: var(--font-size-high-density);
+  font-weight: var(--font-weight-high-density);
   list-style-type: none;
   margin-top: 0;
 }

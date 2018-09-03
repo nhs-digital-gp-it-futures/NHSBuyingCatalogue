@@ -1,0 +1,84 @@
+<div id="add-edit-solution" class="supplier review">
+  {{> onboarding-progress-header
+        title="Review & submit"
+        subtitle="Register Solution (4 of 4)"}}
+
+  {{#errors.general}}
+  <p class="error">{{.}}</p>
+  {{/errors.general}}
+
+  {{> solution-info solution}}
+
+  <p>Your Capability selections and required Standards are shown below. ‘Submit’ to complete Solution Registration and send to NHS Digital.</p>
+
+  <h3>Review Capabilities selected.</h3>
+
+  <p>
+    <span class="counter">
+    {{capabilityCount}}
+    {{#if capabilitySingular}}capability has{{else}}capabilities have{{/if}}
+    been selected
+    </span>
+    <a class="button" href="{{capabilityEditUrl}}">Edit</a>
+  </p>
+
+  <ul class="capabilities-selected">
+    {{#capabilities}}
+    <li>{{.}}</li>
+    {{/capabilities}}
+  </ul>
+
+  <section class="standards">
+    <p class="counter">
+      Based on your selections, compliance with
+      {{standardCount}}
+      {{#if standardSingular}}Standard{{else}}Standards{{/if}}
+      will be required.
+    </p>
+    <ul>
+      {{#if standards.mandatory}}
+      <li class="group">
+        <details>
+          <summary>Capability-specific Standards</summary>
+          <ul>
+            {{#standards.mandatory}}
+            <li data-std-id="{{id}}"><a target="_blank" href="{{url}}">{{name}} Standard</a></li>
+            {{/standards.mandatory}}
+          </ul>
+        </details>
+      </li>
+      {{/if}}
+      {{#if standards.interop}}
+      <li class="group">
+        <details>
+          <summary>Solution-specific Standards</summary>
+          <ul>
+            {{#standards.interop}}
+            <li data-std-id="{{id}}"><a target="_blank" href="{{url}}">{{name}} Standard</a></li>
+            {{/standards.interop}}
+          </ul>
+        </details>
+      </li>
+      {{/if}}
+      {{#if standards.overarching}}
+      <li class="group">
+        <details>
+          <summary>General Standards</summary>
+          <ul>
+            {{#standards.overarching}}
+            <li data-std-id="{{id}}"><a target="_blank" href="{{url}}">{{name}} Standard</a></li>
+            {{/standards.overarching}}
+          </ul>
+        </details>
+      </li>
+      {{/if}}
+    </ul>
+  </section>
+  <form method="POST">
+    <fieldset class="controls">
+      <button name="action" value="save" type="submit">Save</button>
+      <button class="primary" name="action" value="submit" type="submit">Submit to NHS Digital ❯</button>
+      <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    </fieldset>
+  </form>
+</div>

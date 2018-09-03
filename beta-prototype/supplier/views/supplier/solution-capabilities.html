@@ -7,15 +7,17 @@
   </nav>
   <form method="dialog">
     <section><!-- replace with content --></section>
-    <fieldset>
-      <label>
-        <input type="checkbox" name="capability">
-        Select Capability. I acknowledge the set of standards my solution must meet to attain compliance with this Capability.
+    <fieldset class="select">
+      <p>By selecting this Capability, I acknowledge the set of standards my solution must meet to attain compliance with this Capability.</p>
+      <input id="select-capability" type="checkbox" name="capability" autofocus>
+      <label for="select-capability" class="unchecked button primary">Select</label>
+      <label for="select-capability" class="checked">
+        <span class="selected">✔︎ Selected</span>
+        <span class="remove">Remove selection</span>
       </label>
     </fieldset>
     <fieldset class="controls">
-      <a class="close" href="#">&times; Cancel</a>
-      <button type="submit" name="save" value="save">Save</button>
+      <a class="close" href="#">Close</a>
     </fieldset>
   </form>
 </dialog>
@@ -23,16 +25,18 @@
 <div id="add-edit-solution" class="supplier">
   {{> onboarding-progress-header
         title="Select Capabilities"
-        subtitle="Stage 1—Register Solution (2 of 3)"}}
-  <div class="help">
-    <p>Capabilities describe what the Solution does. The Solution will be Assessed against the Capabilities that it provides to ensure that it is within the scope of the Catalogue.
-
-    <p>Following successful completion of the Capability Assessment (Stage 2), your Solution will undergo Compliance (Stage 3) against the Capability-Specific Standards as well as the Overarching and Context-Specific Standards. Context-Specific Standards are shown when you select an individual Capability. Overarching Standards are shown below the Capability Selector. 
-
-    <p>You must select ALL the Capabilities your Solution provides. If your Solution provides Capabilities that are not outlined below, please {info on this to come}.
-
-    <p>Once you have selected all the appropriate Capabilities for your Solution, click “Submit” to complete Solution registration.
-  </div>
+        subtitle="Register Solution (2 of 4)"}}
+  <h3 class="question">Which Capability(-ies) does your Solution provide?</h3>
+  <p>Select all that apply.</p>
+  <p class="commercial-warning">
+    <strong>Commercial Warning</strong>
+    You must select ALL the Capabilities your Solution provides. If your Solution provides Capabilities that are not outlined below, please {info on this to come}.
+  </p>
+  {{#> help-reveal title="Help - What are Capabilities?"}}
+    <p>Capabilities describe what your Solution does. Your Solution will be assessed against the Capabilities that it provides to ensure that it is within the scope of the Catalogue.
+      <a href="{{capabilitiesHelpUrl}}" target="_blank">Learn more and view all Capabilities &amp; Standards.</a>
+    </p>
+  {{/help-reveal}}
 
   {{#errors}}
   <p class="error">{{.}}</p>
@@ -129,21 +133,29 @@
     <h3 class="name">{{name}}</h3>
     <p class="description">{{description}}</p>
     {{#url}}
-    <a href="{{.}}" target="_blank">View full Capability description &amp; Capability Standards.</a>
+    <ul><li><a href="{{.}}" target="_blank">See full Capability description</a></li></ul>
     {{/url}}
-    <p>To comply with this Capability, you will also have to meet these associated Standards.</p>
     <section class="standards">
-      {{#standards.mandatory}}
-      <p><a href="{{url}}" target="_blank">View {{name}} Standard</a></p>
-      {{/standards.mandatory}}
+      <h4>Required Standards</h4>
+      <p>To comply with this Capability, you will also have to meet these associated Standards.</p>
+      {{#if standards.mandatory}}
+      <section class="mandatory">
+        <ul>
+          {{#standards.mandatory}}
+          <li><a href="{{url}}" target="_blank">{{name}}</a></li>
+          {{/standards.mandatory}}
+        </ul>
+      </section>
+      {{/if}}
       {{#if standards.interop}}
-      <p><a href="#">View Interoperability Standard</a></p>
-      <p class="interop">You’ll be responsible for the these parts of the Interoperability Standard.</p>
-      <ul class="interop">
-        {{#standards.interop}}
-        <li>{{name}}</li>
-        {{/standards.interop}}
-      </ul>
+      <section class="interop">
+        <h5>Interoperability</h5>
+        <ul>
+          {{#standards.interop}}
+          <li><a href="{{url}}" target="_blank">{{name}}</a></li>
+          {{/standards.interop}}
+        </ul>
+      </section>
       {{/if}}
     </section>
   </section>
@@ -165,7 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
   $('nav .next', dialog).addEventListener('click', nextCapability)
 
   const elDialogCapabilityCheckbox = $('input[name=capability]', dialog)
-  elDialogCapabilityCheckbox.addEventListener('change', updateDialogOptionalStandardCheckboxState)
 
   let currentCapabilityId
 
@@ -194,26 +205,28 @@ document.addEventListener('DOMContentLoaded', () => {
       cb.dialog.checked = cb.main.checked
     })
 
-    updateDialogOptionalStandardCheckboxState()
-
+    elDialogCapabilityCheckbox.addEventListener('change', dialogCheckboxChangeHandler)
     dialog.addEventListener('close', dialogClosed)
     dialog.showModal()
 
     function dialogClosed (ev) {
       dialog.removeEventListener('close', dialogClosed)
+      elDialogCapabilityCheckbox.removeEventListener('change', dialogCheckboxChangeHandler)
 
-      if (dialog.returnValue === 'save') {
-        syncedCheckboxes.forEach(cb => {
-          cb.main.checked = cb.dialog.checked
-        })
-
-        updateForCapabilitySelectionStateChange()
-      } else if (dialog.returnValue) {
+      if (dialog.returnValue) {
         const nextCap = $(`ul.capabilities li.capability[data-cap-id=${dialog.returnValue}]`)
         if (nextCap) nextCap.click()
       }
 
       dialog.returnValue = undefined
+    }
+
+    function dialogCheckboxChangeHandler (ev) {
+      syncedCheckboxes.forEach(cb => {
+        cb.main.checked = cb.dialog.checked
+      })
+
+      updateForCapabilitySelectionStateChange()
     }
   })
 
@@ -241,13 +254,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function nextCapability (ev) {
     navigateCapability(ev, 1)
-  }
-
-  function updateDialogOptionalStandardCheckboxState () {
-    $$('input[type=checkbox][name=optionalStandards]', dialog).forEach(cb => {
-      cb.disabled = !elDialogCapabilityCheckbox.checked
-      cb.closest('label').classList.toggle('disabled', cb.disabled)
-    })
   }
 
   function updateForCapabilitySelectionStateChange () {

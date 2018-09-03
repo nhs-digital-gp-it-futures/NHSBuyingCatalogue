@@ -11,6 +11,10 @@ img {
   width: 100%;
 }
 
+a {
+  text-decoration: none;
+}
+
 nav ul,
 nav ol {
   list-style-type: none;
@@ -23,6 +27,16 @@ nav li {
   margin-left: 2em;
 }
 
-nav li a {
-  text-decoration: none;
+nav.backlink {
+  margin-top: 0.5em;
+}
+
+nav.backlink a {
+  color: var(--color-breadcrumbs-fg);
+  font-size: var(--font-size-breadcrumbs);
+  font-weight: var(--font-weight-breadcrumbs);
+}
+
+nav.backlink a .title {
+  font-weight: var(--font-weight-breadcrumbs-bold);
 }
