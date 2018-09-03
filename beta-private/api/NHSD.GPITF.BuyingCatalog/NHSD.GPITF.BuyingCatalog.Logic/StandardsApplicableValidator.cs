@@ -10,12 +10,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   {
     public StandardsApplicableValidator(
       IHttpContextAccessor context,
-      IStandardsApplicableDatastore claimDatastore) :
-      base(context, claimDatastore)
-    {
-    }
-
-    protected override void RuleForDelete()
+      IStandardsApplicableDatastore claimDatastore,
+      ISolutionsDatastore solutionsDatastore) :
+      base(context, claimDatastore, solutionsDatastore)
     {
     }
   }

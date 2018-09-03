@@ -8,12 +8,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
   {
     public DummyClaimsValidatorBase(
       IHttpContextAccessor context,
-      IClaimsDatastore<ClaimsBase> claimDatastore) :
-      base(context, claimDatastore)
-    {
-    }
-
-    protected override void RuleForDelete()
+      IClaimsDatastore<ClaimsBase> claimDatastore,
+      ISolutionsDatastore solutionsDatastore) :
+      base(context, claimDatastore, solutionsDatastore)
     {
     }
   }

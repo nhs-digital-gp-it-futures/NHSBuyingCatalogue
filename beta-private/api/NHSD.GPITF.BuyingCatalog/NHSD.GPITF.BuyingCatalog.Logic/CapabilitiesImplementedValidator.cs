@@ -9,12 +9,17 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   {
     public CapabilitiesImplementedValidator(
       IHttpContextAccessor context,
-      ICapabilitiesImplementedDatastore claimDatastore) :
-      base(context, claimDatastore)
+      ICapabilitiesImplementedDatastore claimDatastore,
+      ISolutionsDatastore solutionsDatastore) :
+      base(context, claimDatastore, solutionsDatastore)
     {
+      RuleSet(nameof(ICapabilitiesImplementedLogic.Delete), () =>
+      {
+        RuleForDelete();
+      });
     }
 
-    protected override void RuleForDelete()
+    private void RuleForDelete()
     {
       RuleFor(x => x)
         .Must(x =>

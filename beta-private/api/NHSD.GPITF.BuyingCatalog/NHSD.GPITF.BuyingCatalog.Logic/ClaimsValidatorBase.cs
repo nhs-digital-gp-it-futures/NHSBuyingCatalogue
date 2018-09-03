@@ -9,13 +9,16 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   public abstract class ClaimsValidatorBase<T> : ValidatorBase<T>, IClaimsValidator<T> where T : ClaimsBase
   {
     private readonly IClaimsDatastore<T> _claimDatastore;
+    private readonly ISolutionsDatastore _solutionsDatastore;
 
     public ClaimsValidatorBase(
       IHttpContextAccessor context,
-      IClaimsDatastore<T> claimDatastore) :
+      IClaimsDatastore<T> claimDatastore,
+      ISolutionsDatastore solutionsDatastore) :
       base(context)
     {
       _claimDatastore = claimDatastore;
+      _solutionsDatastore = solutionsDatastore;
 
       RuleSet(nameof(IClaimsLogic<T>.Update), () =>
       {
@@ -37,7 +40,22 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Invalid SolutionId");
     }
 
-    protected abstract void RuleForDelete();
+    private void RuleForDelete()
+    {
+      RuleFor(x => x)
+        .Must(x =>
+        {
+          var orgId = _context.OrganisationId();
+          var claim = _claimDatastore.ById(x.Id);
+          if (claim == null)
+          {
+            return false;
+          }
+          var claimSoln = _solutionsDatastore.ById(claim.SolutionId);
+          return claimSoln != null && claimSoln.OrganisationId == orgId;
+        })
+        .WithMessage("Cannot delete claim for other organisation");
+    }
 
     private void RuleForUpdate()
     {

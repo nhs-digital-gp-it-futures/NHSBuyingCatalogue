@@ -15,25 +15,27 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
   {
     private Mock<IHttpContextAccessor> _context;
     private Mock<ICapabilitiesImplementedDatastore> _claimDatastore;
+    private Mock<ISolutionsDatastore> _solutionsDatastore;
 
     [SetUp]
     public void SetUp()
     {
       _context = new Mock<IHttpContextAccessor>();
       _claimDatastore = new Mock<ICapabilitiesImplementedDatastore>();
+      _solutionsDatastore = new Mock<ISolutionsDatastore>();
     }
 
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object));
+      Assert.DoesNotThrow(() => new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object));
     }
 
     [TestCase(Roles.Supplier)]
     public void Validate_Delete_ValidRole_Draft_ReturnsNoError(string role)
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
-      var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object);
+      var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
       var claim = GetCapabilitiesImplemented(status: CapabilitiesImplementedStatus.Draft);
 
       var valres = validator.Validate(claim, ruleSet: nameof(ICapabilitiesImplementedLogic.Delete));
@@ -46,12 +48,12 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void Validate_Delete_InvalidRole_Draft_ReturnsError(string role)
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
-      var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object);
+      var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
       var claim = GetCapabilitiesImplemented(status: CapabilitiesImplementedStatus.Draft);
 
       var valres = validator.Validate(claim, ruleSet: nameof(ICapabilitiesImplementedLogic.Delete));
 
-      valres.Errors.Count().Should().Be(1);
+      valres.Errors.Count().Should().Be(2);
     }
 
     [Test]
@@ -71,12 +73,12 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         CapabilitiesImplementedStatus status)
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
-      var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object);
+      var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
       var claim = GetCapabilitiesImplemented(status: status);
 
       var valres = validator.Validate(claim, ruleSet: nameof(ICapabilitiesImplementedLogic.Delete));
 
-      valres.Errors.Count().Should().Be(1);
+      valres.Errors.Count().Should().Be(2);
     }
 
     private static CapabilitiesImplemented GetCapabilitiesImplemented(

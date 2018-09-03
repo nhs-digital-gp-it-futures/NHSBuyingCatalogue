@@ -32,10 +32,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Validate_Valid_ReturnsNoError()
+    public void Validate_Valid_Succeeds()
     {
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
-      var soln = GetSolution();
+      var soln = Creator.GetSolution();
 
       var valres = validator.Validate(soln);
 
@@ -46,7 +46,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void Validate_IdNull_ReturnsError()
     {
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
-      var soln = GetSolution();
+      var soln = Creator.GetSolution();
       soln.Id = null;
 
       var valres = validator.Validate(soln);
@@ -58,7 +58,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void Validate_IdNotGuid_ReturnsError()
     {
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
-      var soln = GetSolution(id: "some other Id");
+      var soln = Creator.GetSolution(id: "some other Id");
 
       var valres = validator.Validate(soln);
 
@@ -69,7 +69,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void Validate_OrganisationIdNull_ReturnsError()
     {
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
-      var soln = GetSolution(orgId: null);
+      var soln = Creator.GetSolution(orgId: null);
       soln.OrganisationId = null;
 
       var valres = validator.Validate(soln);
@@ -81,7 +81,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void Validate_OrganisationIdNotGuid_ReturnsError()
     {
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
-      var soln = GetSolution(orgId: "some other Id");
+      var soln = Creator.GetSolution(orgId: "some other Id");
 
       var valres = validator.Validate(soln);
 
@@ -89,12 +89,12 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Validate_Update_Valid_ReturnsNoError()
+    public void Validate_Update_Valid_Succeeds()
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: Roles.Supplier));
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
-      var soln = GetSolution();
-      _solutionDatastore.Setup(x => x.ById(It.IsAny<string>())).Returns(GetSolution(orgId: soln.OrganisationId));
+      var soln = Creator.GetSolution();
+      _solutionDatastore.Setup(x => x.ById(It.IsAny<string>())).Returns(Creator.GetSolution(orgId: soln.OrganisationId));
 
       var valres = validator.Validate(soln, ruleSet: nameof(ISolutionsLogic.Update));
 
@@ -106,8 +106,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: Roles.Supplier));
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
-      var soln = GetSolution();
-      _solutionDatastore.Setup(x => x.ById(It.IsAny<string>())).Returns(GetSolution());
+      var soln = Creator.GetSolution();
+      _solutionDatastore.Setup(x => x.ById(It.IsAny<string>())).Returns(Creator.GetSolution());
 
       var valres = validator.Validate(soln, ruleSet: nameof(ISolutionsLogic.Update));
 
@@ -128,8 +128,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
       var orgId = Guid.NewGuid().ToString();
-      var oldSoln = GetSolution(status: oldStatus, orgId: orgId);
-      var newSoln = GetSolution(status: newStatus, orgId: orgId);
+      var oldSoln = Creator.GetSolution(status: oldStatus, orgId: orgId);
+      var newSoln = Creator.GetSolution(status: newStatus, orgId: orgId);
       _solutionDatastore.Setup(x => x.ById(It.IsAny<string>())).Returns(oldSoln);
 
       var valres = validator.Validate(newSoln, ruleSet: nameof(ISolutionsLogic.Update));
@@ -231,8 +231,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
       var orgId = Guid.NewGuid().ToString();
-      var oldSoln = GetSolution(status: oldStatus, orgId: orgId);
-      var newSoln = GetSolution(status: newStatus, orgId: orgId);
+      var oldSoln = Creator.GetSolution(status: oldStatus, orgId: orgId);
+      var newSoln = Creator.GetSolution(status: newStatus, orgId: orgId);
       _solutionDatastore.Setup(x => x.ById(It.IsAny<string>())).Returns(oldSoln);
 
       var valres = validator.Validate(newSoln, ruleSet: nameof(ISolutionsLogic.Update));
@@ -265,26 +265,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
       var orgId = Guid.NewGuid().ToString();
-      var oldSoln = GetSolution(status: oldStatus, orgId: orgId);
-      var newSoln = GetSolution(status: newStatus, orgId: orgId);
+      var oldSoln = Creator.GetSolution(status: oldStatus, orgId: orgId);
+      var newSoln = Creator.GetSolution(status: newStatus, orgId: orgId);
       _solutionDatastore.Setup(x => x.ById(It.IsAny<string>())).Returns(oldSoln);
 
       var valres = validator.Validate(newSoln, ruleSet: nameof(ISolutionsLogic.Update));
 
       valres.Errors.Count.Should().Be(1);
-    }
-
-    private static Solutions GetSolution(
-      string id = null,
-      string orgId = null,
-      SolutionStatus status = SolutionStatus.Draft)
-    {
-      return new Solutions
-      {
-        Id = id ?? Guid.NewGuid().ToString(),
-        OrganisationId = orgId ?? Guid.NewGuid().ToString(),
-        Status = status
-      };
     }
   }
 }
