@@ -3,7 +3,7 @@
   /// <summary>
   /// Status of a <see cref="CapabilitiesImplemented"/> as it goes through various stages in its life cycle
   /// </summary>
-  public enum ClaimedCapabilityStatus : int
+  public enum CapabilitiesImplementedStatus : int
   {
     /// <summary>
     /// <see cref="CapabilitiesImplemented"/> has been submitted, for assessment by NHSD
