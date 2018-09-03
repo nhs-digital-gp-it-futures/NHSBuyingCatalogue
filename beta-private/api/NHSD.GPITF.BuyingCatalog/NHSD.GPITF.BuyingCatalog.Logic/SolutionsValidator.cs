@@ -24,7 +24,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
       RuleSet(nameof(ISolutionsLogic.Update), () =>
       {
-        RuleForUpdate();
+        MustBeSameOrganisation();
+        MustBeValidStatusTransition();
       });
 
       RuleFor(x => x.Id)
@@ -37,18 +38,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Invalid OrganisationId");
     }
 
-    private void RuleForUpdate()
+    private void MustBeValidStatusTransition()
     {
-      RuleFor(x => x)
-        .Must(x =>
-        {
-          /// NOTE:  null solution check is not quite correct
-          /// as this would result in a FK exception if we let it through
-          /// but it is good enough for the moment
-          var soln = _solutionDatastore.ById(x.Id);
-          return soln != null && x.OrganisationId == soln.OrganisationId;
-        })
-        .WithMessage("Cannot transfer solutions between organisations");
       RuleFor(x => x)
         .Must(x =>
         {
@@ -71,6 +62,20 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage($"Invalid Status transition");
     }
 
+    private void MustBeSameOrganisation()
+    {
+      RuleFor(x => x)
+        .Must(x =>
+        {
+          /// NOTE:  null solution check is not quite correct
+          /// as this would result in a FK exception if we let it through
+          /// but it is good enough for the moment
+          var soln = _solutionDatastore.ById(x.Id);
+          return soln != null && x.OrganisationId == soln.OrganisationId;
+        })
+        .WithMessage("Cannot transfer solutions between organisations");
+    }
+
     private static IEnumerable<(SolutionStatus OldStatus, SolutionStatus NewStatus, bool HasValidRole)> ValidStatusTransitions(IHttpContextAccessor context)
     {
       yield return (SolutionStatus.Draft, SolutionStatus.Draft, context.HasRole(Roles.Supplier));
@@ -78,7 +83,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       yield return (SolutionStatus.Registered, SolutionStatus.CapabilitiesAssessment, context.HasRole(Roles.Supplier));
       yield return (SolutionStatus.CapabilitiesAssessment, SolutionStatus.Failed, context.HasRole(Roles.Admin));
       yield return (SolutionStatus.CapabilitiesAssessment, SolutionStatus.StandardsCompliance, context.HasRole(Roles.Admin));
-      yield return (SolutionStatus.StandardsCompliance, SolutionStatus.Failed,context.HasRole( Roles.Admin));
+      yield return (SolutionStatus.StandardsCompliance, SolutionStatus.Failed, context.HasRole(Roles.Admin));
       yield return (SolutionStatus.StandardsCompliance, SolutionStatus.FinalApproval, context.HasRole(Roles.Admin));
       yield return (SolutionStatus.FinalApproval, SolutionStatus.SolutionPage, context.HasRole(Roles.Admin));
       yield return (SolutionStatus.SolutionPage, SolutionStatus.Approved, context.HasRole(Roles.Admin));
