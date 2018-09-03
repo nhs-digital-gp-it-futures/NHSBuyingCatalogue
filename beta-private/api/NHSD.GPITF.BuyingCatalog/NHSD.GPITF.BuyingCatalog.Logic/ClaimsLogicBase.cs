@@ -48,6 +48,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     public void Delete(T claim)
     {
+      _validator.ValidateAndThrow(claim);
+
       _datastore.Delete(claim);
     }
   }
