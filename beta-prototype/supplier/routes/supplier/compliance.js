@@ -190,9 +190,22 @@ function standardContext (std, baseUrl, cap = undefined) {
 
   const evidence = std.evidence
   const hasSubmissions = !_.isEmpty(evidence.submissions)
-  const hasSaved = !!(evidence.savedLink || evidence.savedMessage)
-  const latestContact = (_.head(evidence.submissions) || {}).contact || {}
+  let latestSubmission = {}
+  let latestContact = {}
+  let latestSubmissionDate = ''
 
+  if (hasSubmissions) {
+    evidence.submissions = _.orderBy(evidence.submissions, 'timestamp')
+    latestSubmission = _.last(evidence.submissions)
+    latestContact = latestSubmission.contact
+    latestSubmissionDate = new Date(latestSubmission.timestamp).toLocaleDateString('en-gb', {
+      timeZone: 'Europe/London',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    })
+  }
+  const hasSaved = !!(evidence.savedLink || evidence.savedMessage)
   const isWithAssessmentTeam = hasSubmissions && latestContact.organisationId !== api.NHS_DIGITAL_ORG_ID
   const hasFeedback = hasSubmissions && latestContact.organisationId === api.NHS_DIGITAL_ORG_ID
 
@@ -212,6 +225,8 @@ function standardContext (std, baseUrl, cap = undefined) {
                  : STATUS_CLASS_MAP[std.status] || '',
     evidence,
     isWithAssessmentTeam,
+    hasFeedback,
+    latestSubmissionDate,
     saved: hasSaved,
     viewUrl: !isEditable(std) && `${baseUrl}/edit/${urlSuffix}`,
     editUrl: isEditable(std) && `${baseUrl}/edit/${urlSuffix}`

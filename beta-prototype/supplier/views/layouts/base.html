@@ -82,6 +82,14 @@
         </ul>
       </nav>
       {{/if}}
+      {{#backlink}}
+      <nav class="backlink">
+        <a href="{{href}}" rel="prev">&larr; Previous
+          <span class="title">{{title}}</span>
+          <span class="subtitle">{{subtitle}}</span>
+        </a>
+      </nav>
+      {{/backlink}}
       {{{body}}}
     </main>
     <footer>

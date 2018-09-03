@@ -1,7 +1,7 @@
 <div id="add-edit-solution" class="supplier mobile">
   {{> onboarding-progress-header
         title="Confirm Mobile"
-        subtitle="Stage 1—Register Solution (3 of 3)"}}
+        subtitle="Register Solution (3 of 4)"}}
   <p class="help">If your Solution can be used on a mobile device, you will have to comply with the Mobile Standard.</p>
 
   {{#errors}}
@@ -31,7 +31,7 @@
 
     <fieldset class="controls">
       <button name="action" value="save" type="submit">Save</button>
-      <button class="primary" name="action" value="submit" type="submit">Submit</button>
+      <button class="primary" name="action" value="submit" type="submit">Continue</button>
       <input type="hidden" name="_csrf" value="{{csrfToken}}">
     </fieldset>
   </form>

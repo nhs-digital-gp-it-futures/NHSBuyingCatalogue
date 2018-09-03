@@ -6,6 +6,11 @@
   public enum SolutionStatus : int
   {
     /// <summary>
+    /// <see cref="Solutions"/> has reached an end point
+    /// </summary>
+    Failed = -1,
+
+    /// <summary>
     /// <see cref="Solutions"/> is being revised by <see cref="Organisations"/>
     /// </summary>
     Draft = 0,
@@ -30,15 +35,21 @@
     StandardsCompliance = 3,
 
     /// <summary>
+    /// Solution has passed Standards Compliance and is awaiting final sign off (aka final approval).
+    /// </summary>
+    FinalApproval = 4,
+
+    /// <summary>
     /// <see cref="StandardsApplicable"/> have been verified by NHSD; and the <see cref="Organisations"/>
     /// will now build its solution page for the Buying Catalog.
     /// </summary>
-    SolutionPage = 4,
+    SolutionPage = 5,
 
     /// <summary>
     /// The solution page has reviewed by NHS and the <see cref="Solutions"/> is now available for
     /// purchase on the Buying Catalog.
+    /// Solution has reached an end point.
     /// </summary>
-    Approved = 5,
+    Approved = 6,
   }
 }

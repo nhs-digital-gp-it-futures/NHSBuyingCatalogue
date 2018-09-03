@@ -4,9 +4,6 @@
     <span class="name">Evidence Requirements</span>
     <span class="status">{{status}}</span>
   </legend>
-  {{#if isWithAssessmentTeam}}
-  <p class="in-assessment"><span>Standard with Assessment Team</span></p>
-  {{/if}}
   <section class="requirements">
     <p>Follow link to view &amp; add evidence requirements:</p>
     <p><a download href="/Dummy TraceabilityMatrix.xlsx">{{name}} Traceability Matrix (TM)</a></p>
@@ -18,7 +15,6 @@
       <label>
         Copy/paste link from File Sharing platform here.
         <input type="text"
-               placeholder="Provide link to folder or file"
                name="evidence[{{id}}]"
                value="{{evidence.savedLink}}">
       </label>
@@ -26,8 +22,7 @@
       <label>
         Include a message to for Compliance officer’s attention or to describe changes from previous submission.<br>&nbsp;• 300 character limit
       </label>
-      <textarea placeholder="Include a message with the link (optional). 300 character limit."
-                name="message[{{id}}]">{{evidence.savedMessage}}</textarea>
+      <textarea name="message[{{id}}]">{{evidence.savedMessage}}</textarea>
     </div>
     <div class="controls">
       <a class="saved-link" href="{{evidence.savedLink}}" target="_blank">{{evidence.savedLink}}</a>
@@ -35,20 +30,6 @@
       <a href="#" class="edit">edit</a>
     </div>
   </section>
-  {{/if}}
-  {{#if evidence.submissions}}
-  <ul class="submissions">
-    {{#evidence.submissions}}
-    <li class="submission {{originatorClass}}">
-      <p class="link"><a href="{{link}}" target="_blank">{{link}}</a></p>
-      <pre class="text">{{message}}</pre>
-      <p class="metadata">
-        <span class="originator">{{contact.firstName}} {{contact.lastName}}</span>
-        <span class="timestamp">{{displayTimestamp}}</span>
-      </p>
-    </li>
-    {{/evidence.submissions}}
-  </ul>
   {{/if}}
   {{#if editUrl}}
   {{#if owners}}
@@ -62,6 +43,11 @@
         {{/owners}}
       </select>
     </label>
+    <p class="help">
+      Owner is Lead Contact by default. Only registered Marketplace users are available to select. If you don’t see the colleague you wish to select, you must invite them to register.
+      <a href="{{ inviteUserUrl }}">Send an Invitation</a>.
+      Learn more about <a href="{{ selectOwnerHelpUrl }}">Select Owner</a>.
+    </p>
   </section>
   {{/if}}
   <section class="controls">
@@ -81,6 +67,17 @@
 {{/inline}}
 
 <div id="compliance" class="supplier edit">
+  {{#if standard.isWithAssessmentTeam}}
+  <p class="in-assessment">
+    <span>Evidence submitted {{standard.latestSubmissionDate}}. You can expect a reply from our Compliance Officer within xx business days of submitting your evidence.</span>
+  </p>
+  {{/if}}
+  {{#if standard.hasFeedback}}
+  <p class="has-feedback">
+    <span>Find new evidence feedback below. <img class="feedback-icon" src="/img/red-envelope.svg"></span>
+  </p>
+  {{/if}}
+
   {{> onboarding-progress-header
         title=subtitle
         subtitle="Standards Compliance"}}
@@ -97,20 +94,20 @@
 
   <section class="instructions">
     <header>
-      <h3>Add evidence requirements.</h3>
+      <h3>Add link to evidence requirements.</h3>
     </header>
     <p class="help">
-      To provide evidence, follow the link provided to the Traceability Matrix (TM). Evidence can take a variety of forms: text-based, image, video, or PDF. When you have finished adding evidence to the TM, create a link to the file and paste it below. Once Submitted, our Assurance team will review your evidence to ensure your Solution is compliant with the Standard.
+      Follow the link provided to the Traceability Matrix (TM). When you have completed the TM, create a link to the file and paste it below in the space provided. Once Submitted, our Assurance team will review your evidence to ensure your Solution is compliant with the Standard.
     </p>
   </section>
 
   {{#if standard.url}}
-  <h3><a target="_blank" href="{{standard.url}}">View {{standard.name}}</a></h3>
+  <p><a class="standard-url" target="_blank" href="{{standard.url}}">View {{standard.name}}</a></p>
   {{/if}}
 
   {{#if standard.capabilities}}
   <details class="capabilities">
-    <summary>Related Capabilities</summary>
+    <summary class="name">Related Capabilities</summary>
     <ul>
     {{#standard.capabilities}}
       <li class="name"><a target="_blank" href="{{url}}">View {{name}} Capability</a></li>
@@ -118,6 +115,29 @@
     </ul>
   </details>
   {{/if}}
+
+  {{#if standard.evidence.submissions}}
+  <section class="evidence-history">
+    <header>
+      <h4>Evidence History</h4>
+    </header>
+    <ul class="submissions">
+      {{#standard.evidence.submissions}}
+      <li class="submission {{originatorClass}}">
+        {{#link}}<p class="link"><a href="{{.}}" target="_blank">{{.}}</a></p>{{/link}}
+        <pre class="text">{{message}}</pre>
+        <p class="metadata">
+          <span class="originator">{{contact.firstName}} {{contact.lastName}}</span>
+          <span class="timestamp">{{displayTimestamp}}</span>
+        </p>
+      </li>
+      {{/standard.evidence.submissions}}
+    </ul>
+  </section>
+  {{/if}}
+
+  <p>Need help? For Clarifications and other queries, see:
+    <a href="{{ contactUsUrl }}">Contact Us.</a></p>
 
   <form method="POST" class="standards">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">

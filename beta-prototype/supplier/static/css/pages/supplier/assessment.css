@@ -99,26 +99,24 @@
   margin-bottom: 0.5em;
 }
 
-#assessment form fieldset.evidence label {
-  display: block;
+#assessment form fieldset.evidence h3 {
+  color: var(--color-fg);
+  font-size: var(--font-size-label);
+  font-weight: 600;
+  margin: .5em 0;
+}
+
+#assessment form fieldset.evidence .label {
+  font-size: var(--font-size-high-density);
+  font-weight: var(--font-weight-high-density);
 }
 
 #assessment form fieldset.evidence input {
   border: 1px solid var(--color-capability-border);
-  display: none;
   height: 2.5em;
   padding-left: 1em;
-  margin-top: 1em;
   margin-left: 1em;
   width: 90%;
-}
-
-#assessment form fieldset.capability.editing fieldset.evidence input {
-  display: inline-block;
-}
-
-#assessment form fieldset.capability.editing fieldset.evidence .evidenceLink {
-  display: none;
 }
 
 #assessment form fieldset.capability .controls {
@@ -132,24 +130,6 @@
 #assessment form fieldset.capability .controls > span {
   float: right;
   width: 80%;
-}
-
-#assessment form fieldset.capability:not(.editing) .controls.editing {
-  display: none;
-}
-
-#assessment form fieldset.capability.editing .controls:not(.editing) {
-  display: none;
-}
-
-#assessment form fieldset.capability .remove {
-  clear: both;
-  margin-top: 1.5em;
-}
-
-#assessment form fieldset.capability .remove .remove-capability {
-  font-size: var(--font-size-help);
-  float: right;
 }
 
 #assessment form .controls {
@@ -220,4 +200,37 @@
 
 #assessment .messages .message.assessment-team .metadata .originator::before {
   content: 'Submitted by ';
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+
+  99% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+#saved-notification {
+  animation: .5s ease-in 1s fade-out;
+  animation-fill-mode: forwards;
+  background-color: var(--color-standout-bg);
+  left: 0;
+  padding: 1em 0;
+  position: fixed;
+  text-align: center;
+  top: 45%;
+  width: 100%;
+  z-index: 2;
+}
+
+#saved-notification span {
+  color: var(--color-nhs-dark-green);
+  font-size: var(--font-size-page-title);
 }

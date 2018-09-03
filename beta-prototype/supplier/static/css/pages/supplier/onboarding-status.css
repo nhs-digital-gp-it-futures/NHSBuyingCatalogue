@@ -36,7 +36,7 @@
 }
 
 #onboarding-status ol.stages li.stage .instructions {
-  font-size: var(--font-size-help);
+  font-size: var(--font-size-high-density);
   margin: 0;
   width: 70%;
 }
