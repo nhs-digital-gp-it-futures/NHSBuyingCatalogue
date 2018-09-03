@@ -32,7 +32,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [TestCase(Roles.Supplier)]
-    public void Validate_Delete_ValidRole_Draft_ReturnsNoError(string role)
+    public void Validate_Delete_ValidRole_Draft_Succeeds(string role)
     {
       var orgId = Guid.NewGuid().ToString();
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role, orgId: orgId));

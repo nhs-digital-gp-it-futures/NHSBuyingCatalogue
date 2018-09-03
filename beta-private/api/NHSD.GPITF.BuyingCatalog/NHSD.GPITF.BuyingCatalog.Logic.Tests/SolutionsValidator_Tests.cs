@@ -123,7 +123,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [TestCase(SolutionStatus.StandardsCompliance, SolutionStatus.FinalApproval, Roles.Admin)]
     [TestCase(SolutionStatus.FinalApproval, SolutionStatus.SolutionPage, Roles.Admin)]
     [TestCase(SolutionStatus.SolutionPage, SolutionStatus.Approved, Roles.Admin)]
-    public void Validate_Update_ValidStatusTransition_ReturnsNoError(SolutionStatus oldStatus, SolutionStatus newStatus, string role)
+    public void Validate_Update_ValidStatusTransition_Succeeds(SolutionStatus oldStatus, SolutionStatus newStatus, string role)
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
