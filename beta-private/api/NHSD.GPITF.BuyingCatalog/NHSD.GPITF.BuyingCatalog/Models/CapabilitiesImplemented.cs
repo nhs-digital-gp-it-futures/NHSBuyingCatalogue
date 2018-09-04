@@ -19,6 +19,6 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     /// <summary>
     /// Current status of this ClaimedCapability
     /// </summary>
-    public ClaimedCapabilityStatus Status { get; set; } = ClaimedCapabilityStatus.Submitted;
+    public CapabilitiesImplementedStatus Status { get; set; } = CapabilitiesImplementedStatus.Submitted;
   }
 }

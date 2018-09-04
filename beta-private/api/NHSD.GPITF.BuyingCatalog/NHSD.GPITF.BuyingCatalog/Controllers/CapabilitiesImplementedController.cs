@@ -40,6 +40,23 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     }
 
     /// <summary>
+    /// Retrieve claim, given the claim’s CRM identifier
+    /// </summary>
+    /// <param name="id">CRM identifier of solution</param>
+    /// <response code="200">Success</response>
+    /// <response code="404">Claim not found in CRM</response>
+    [HttpGet]
+    [Route("{id}")]
+    [ValidateModelState]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(CapabilitiesImplemented), description: "Success")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Claim not found in CRM")]
+    public IActionResult ById([FromRoute][Required]string id)
+    {
+      var claim = _logic.ById(id);
+      return claim != null ? (IActionResult)new OkObjectResult(claim) : new NotFoundResult();
+    }
+
+    /// <summary>
     /// Retrieve all claimed capabilities for a solution in a paged list,
     /// given the solution’s CRM identifier
     /// </summary>

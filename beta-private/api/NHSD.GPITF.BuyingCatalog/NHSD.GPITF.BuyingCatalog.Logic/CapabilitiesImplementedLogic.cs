@@ -8,8 +8,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   {
     public CapabilitiesImplementedLogic(
       ICapabilitiesImplementedDatastore datastore,
-      IHttpContextAccessor context) :
-      base(datastore, context)
+      ICapabilitiesImplementedValidator validator,
+      IHttpContextAccessor context
+      ) :
+      base(datastore, validator,context)
     {
     }
   }

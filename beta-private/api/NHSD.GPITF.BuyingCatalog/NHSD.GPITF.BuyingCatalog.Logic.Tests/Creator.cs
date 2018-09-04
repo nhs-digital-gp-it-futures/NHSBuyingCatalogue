@@ -58,5 +58,16 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         SolutionId = solutionId ?? Guid.NewGuid().ToString()
       };
     }
+
+    public static ClaimsBase GetClaimsBase(
+      string id = null,
+      string solnId = null)
+    {
+      return new DummyClaimsBase
+      {
+        Id = id ?? Guid.NewGuid().ToString(),
+        SolutionId = solnId ?? Guid.NewGuid().ToString()
+      };
+    }
   }
 }

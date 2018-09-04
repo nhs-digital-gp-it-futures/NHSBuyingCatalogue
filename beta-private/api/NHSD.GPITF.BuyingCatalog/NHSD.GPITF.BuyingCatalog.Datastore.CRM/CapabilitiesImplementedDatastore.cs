@@ -17,6 +17,11 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
     }
 
+    public CapabilitiesImplemented ById(string id)
+    {
+      throw new NotImplementedException();
+    }
+
     public IEnumerable<CapabilitiesImplemented> BySolution(string solutionId)
     {
       throw new NotImplementedException();
