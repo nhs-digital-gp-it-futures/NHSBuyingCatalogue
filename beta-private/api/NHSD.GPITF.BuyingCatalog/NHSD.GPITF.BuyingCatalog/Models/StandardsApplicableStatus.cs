@@ -3,7 +3,7 @@
   /// <summary>
   /// Status of a <see cref="StandardsApplicable"/> as it goes through various stages in its life cycle
   /// </summary>
-  public enum ClaimedStandardStatus : int
+  public enum StandardsApplicableStatus : int
     {
     /// <summary>
     /// <see cref="StandardsApplicable"/> has been submitted, for assessment by NHSD

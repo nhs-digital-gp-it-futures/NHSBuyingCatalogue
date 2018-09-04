@@ -19,6 +19,6 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     /// <summary>
     /// Current status of this ClaimedStandard
     /// </summary>
-    public ClaimedStandardStatus Status { get; set; } = ClaimedStandardStatus.Submitted;
+    public StandardsApplicableStatus Status { get; set; } = StandardsApplicableStatus.Submitted;
   }
 }
