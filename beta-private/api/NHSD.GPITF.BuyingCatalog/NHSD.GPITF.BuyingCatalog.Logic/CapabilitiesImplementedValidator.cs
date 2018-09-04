@@ -55,7 +55,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
               trans.NewStatus == newStatus &&
               trans.HasValidRole);
         })
-        .WithMessage($"Invalid Status transition");
+        .WithMessage("Invalid Status transition");
     }
 
     private static IEnumerable<(CapabilitiesImplementedStatus OldStatus, CapabilitiesImplementedStatus NewStatus, bool HasValidRole)> ValidStatusTransitions(IHttpContextAccessor context)

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
@@ -18,6 +20,11 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       {
         MustBePending();
       });
+
+      RuleSet(nameof(IStandardsApplicableLogic.Update), () =>
+      {
+        MustBeValidStatusTransition();
+      });
     }
 
     private void MustBePending()
@@ -30,6 +37,32 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
             x.Status == StandardsApplicableStatus.Draft);
         })
         .WithMessage("Only supplier can delete a draft claim");
+    }
+
+    private void MustBeValidStatusTransition()
+    {
+      RuleFor(x => x)
+        .Must(x =>
+        {
+          var claim = _claimDatastore.ById(x.Id);
+          if (claim == null)
+          {
+            return false;
+          }
+          var oldStatus = claim.Status;
+          var newStatus = x.Status;
+          return ValidStatusTransitions(_context).Any(
+            trans =>
+              trans.OldStatus == oldStatus &&
+              trans.NewStatus == newStatus &&
+              trans.HasValidRole);
+        })
+        .WithMessage("Invalid Status transition");
+    }
+
+    private static IEnumerable<(StandardsApplicableStatus OldStatus, StandardsApplicableStatus NewStatus, bool HasValidRole)> ValidStatusTransitions(IHttpContextAccessor context)
+    {
+      yield return (StandardsApplicableStatus.NotStarted, StandardsApplicableStatus.Draft, context.HasRole(Roles.Supplier));
     }
   }
 }
