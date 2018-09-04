@@ -114,6 +114,63 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       valres.Errors.Should().BeEmpty();
     }
 
+    [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.Draft, Roles.Admin)]
+    [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.Draft, Roles.Buyer)]
+    [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.Submitted, Roles.Admin)]
+    [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.Submitted, Roles.Buyer)]
+    [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.Remediation, Roles.Admin)]
+    [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.Remediation, Roles.Buyer)]
+    [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.Remediation, Roles.Supplier)]
+    [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.Approved, Roles.Admin)]
+    [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.Approved, Roles.Buyer)]
+    [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.Approved, Roles.Supplier)]
+    [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.Rejected, Roles.Admin)]
+    [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.Rejected, Roles.Buyer)]
+    [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.Rejected, Roles.Supplier)]
+
+    [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Remediation, Roles.Buyer)]
+    [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Draft, Roles.Admin)]
+    [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Draft, Roles.Buyer)]
+    [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Draft, Roles.Supplier)]
+    [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Submitted, Roles.Admin)]
+    [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Submitted, Roles.Buyer)]
+    [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Submitted, Roles.Supplier)]
+    [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Approved, Roles.Buyer)]
+    [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Approved, Roles.Supplier)]
+    [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Rejected, Roles.Buyer)]
+    [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Rejected, Roles.Supplier)]
+
+    [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Submitted, Roles.Admin)]
+    [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Submitted, Roles.Buyer)]
+    [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Draft, Roles.Admin)]
+    [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Draft, Roles.Buyer)]
+    [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Draft, Roles.Supplier)]
+    [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Remediation, Roles.Admin)]
+    [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Remediation, Roles.Buyer)]
+    [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Remediation, Roles.Supplier)]
+    [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Approved, Roles.Admin)]
+    [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Approved, Roles.Buyer)]
+    [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Approved, Roles.Supplier)]
+    [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Rejected, Roles.Admin)]
+    [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Rejected, Roles.Buyer)]
+    [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Rejected, Roles.Supplier)]
+    public void Validate_Update_InvalidStatusTransition_ReturnsError(CapabilitiesImplementedStatus oldStatus, CapabilitiesImplementedStatus newStatus, string role)
+    {
+      var orgId = Guid.NewGuid().ToString();
+      var claimId = Guid.NewGuid().ToString();
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role, orgId: orgId));
+      var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
+      var soln = Creator.GetSolution(orgId: orgId);
+      var oldClaim = GetCapabilitiesImplemented(id: claimId, status: oldStatus, solnId: soln.Id);
+      var newClaim = GetCapabilitiesImplemented(id: claimId, status: newStatus, solnId: soln.Id);
+      _claimDatastore.Setup(x => x.ById(claimId)).Returns(oldClaim);
+      _solutionsDatastore.Setup(x => x.ById(soln.Id)).Returns(soln);
+
+      var valres = validator.Validate(newClaim, ruleSet: nameof(ICapabilitiesImplementedLogic.Update));
+
+      valres.Errors.Count().Should().Be(1);
+    }
+
     private static CapabilitiesImplemented GetCapabilitiesImplemented(
       string id = null,
       string solnId = null,
