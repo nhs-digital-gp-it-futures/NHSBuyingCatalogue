@@ -8,8 +8,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 {
   public abstract class ClaimsValidatorBase<T> : ValidatorBase<T>, IClaimsValidator<T> where T : ClaimsBase
   {
-    private readonly IClaimsDatastore<T> _claimDatastore;
-    private readonly ISolutionsDatastore _solutionsDatastore;
+    protected readonly IClaimsDatastore<T> _claimDatastore;
+    protected readonly ISolutionsDatastore _solutionsDatastore;
 
     public ClaimsValidatorBase(
       IHttpContextAccessor context,
