@@ -17,7 +17,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     {
       RuleSet(nameof(ICapabilitiesImplementedLogic.Delete), () =>
       {
-        RuleForDelete();
+        MustBePending();
       });
 
       RuleSet(nameof(ICapabilitiesImplementedLogic.Update), () =>
@@ -26,7 +26,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       });
     }
 
-    private void RuleForDelete()
+    private void MustBePending()
     {
       RuleFor(x => x)
         .Must(x =>
