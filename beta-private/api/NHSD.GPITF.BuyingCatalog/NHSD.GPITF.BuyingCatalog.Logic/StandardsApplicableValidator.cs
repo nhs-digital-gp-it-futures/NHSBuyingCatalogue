@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -63,6 +62,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     private static IEnumerable<(StandardsApplicableStatus OldStatus, StandardsApplicableStatus NewStatus, bool HasValidRole)> ValidStatusTransitions(IHttpContextAccessor context)
     {
       yield return (StandardsApplicableStatus.NotStarted, StandardsApplicableStatus.Draft, context.HasRole(Roles.Supplier));
+      yield return (StandardsApplicableStatus.Draft, StandardsApplicableStatus.Submitted, context.HasRole(Roles.Supplier));
+      yield return (StandardsApplicableStatus.Submitted, StandardsApplicableStatus.Remediation, context.HasRole(Roles.Admin));
+      yield return (StandardsApplicableStatus.Remediation, StandardsApplicableStatus.Submitted, context.HasRole(Roles.Supplier));
+      yield return (StandardsApplicableStatus.Submitted, StandardsApplicableStatus.Rejected, context.HasRole(Roles.Admin));
+      yield return (StandardsApplicableStatus.Submitted, StandardsApplicableStatus.Approved, context.HasRole(Roles.Admin));
+      yield return (StandardsApplicableStatus.Submitted, StandardsApplicableStatus.ApprovedFirstOfType, context.HasRole(Roles.Admin));
+      yield return (StandardsApplicableStatus.Submitted, StandardsApplicableStatus.ApprovedPartial, context.HasRole(Roles.Admin));
     }
   }
 }

@@ -88,6 +88,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [TestCase(StandardsApplicableStatus.NotStarted, StandardsApplicableStatus.Draft, Roles.Supplier)]
+    [TestCase(StandardsApplicableStatus.Draft, StandardsApplicableStatus.Submitted, Roles.Supplier)]
+    [TestCase(StandardsApplicableStatus.Submitted, StandardsApplicableStatus.Remediation, Roles.Admin)]
+    [TestCase(StandardsApplicableStatus.Remediation, StandardsApplicableStatus.Submitted, Roles.Supplier)]
+    [TestCase(StandardsApplicableStatus.Submitted, StandardsApplicableStatus.Rejected, Roles.Admin)]
+    [TestCase(StandardsApplicableStatus.Submitted, StandardsApplicableStatus.Approved, Roles.Admin)]
+    [TestCase(StandardsApplicableStatus.Submitted, StandardsApplicableStatus.ApprovedFirstOfType, Roles.Admin)]
+    [TestCase(StandardsApplicableStatus.Submitted, StandardsApplicableStatus.ApprovedPartial, Roles.Admin)]
     public void Validate_Update_ValidStatusTransition_Succeeds(StandardsApplicableStatus oldStatus, StandardsApplicableStatus newStatus, string role)
     {
       var orgId = Guid.NewGuid().ToString();
