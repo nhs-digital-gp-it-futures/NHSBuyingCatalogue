@@ -171,6 +171,39 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       valres.Errors.Count().Should().Be(1);
     }
 
+    [Test]
+    public void Validate_Update_FinalState_ReturnsError(
+      [Values(
+        CapabilitiesImplementedStatus.Approved,
+        CapabilitiesImplementedStatus.Rejected)]
+          CapabilitiesImplementedStatus oldStatus,
+      [Values(
+        CapabilitiesImplementedStatus.Draft,
+        CapabilitiesImplementedStatus.Submitted,
+        CapabilitiesImplementedStatus.Remediation,
+        CapabilitiesImplementedStatus.Approved,
+        CapabilitiesImplementedStatus.Rejected)]
+          CapabilitiesImplementedStatus newStatus,
+      [Values(
+        Roles.Admin,
+        Roles.Buyer,
+        Roles.Supplier)]
+          string role)
+    {
+      var orgId = Guid.NewGuid().ToString();
+      var claimId = Guid.NewGuid().ToString();
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role, orgId: orgId));
+      var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
+      var soln = Creator.GetSolution(orgId: orgId);
+      var oldClaim = GetCapabilitiesImplemented(id: claimId, status: oldStatus, solnId: soln.Id);
+      var newClaim = GetCapabilitiesImplemented(id: claimId, status: newStatus, solnId: soln.Id);
+      _claimDatastore.Setup(x => x.ById(claimId)).Returns(oldClaim);
+      _solutionsDatastore.Setup(x => x.ById(soln.Id)).Returns(soln);
+
+      var valres = validator.Validate(newClaim, ruleSet: nameof(ICapabilitiesImplementedLogic.Update));
+
+      valres.Errors.Count.Should().Be(1);
+    }
     private static CapabilitiesImplemented GetCapabilitiesImplemented(
       string id = null,
       string solnId = null,
