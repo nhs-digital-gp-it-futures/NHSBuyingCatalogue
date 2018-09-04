@@ -15,18 +15,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       ISolutionsDatastore solutionsDatastore) :
       base(context, claimDatastore, solutionsDatastore)
     {
-      RuleSet(nameof(ICapabilitiesImplementedLogic.Delete), () =>
-      {
-        MustBePending();
-      });
-
-      RuleSet(nameof(ICapabilitiesImplementedLogic.Update), () =>
-      {
-        MustBeValidStatusTransition();
-      });
     }
 
-    private void MustBePending()
+    protected override void MustBePending()
     {
       RuleFor(x => x)
         .Must(x =>
@@ -37,7 +28,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Only supplier can delete a draft claim");
     }
 
-    private void MustBeValidStatusTransition()
+    protected override void MustBeValidStatusTransition()
     {
       RuleFor(x => x)
         .Must(x =>

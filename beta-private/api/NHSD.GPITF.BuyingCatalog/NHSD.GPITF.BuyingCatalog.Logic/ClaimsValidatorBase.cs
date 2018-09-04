@@ -24,11 +24,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       {
         MustBeSameSolution();
         MustBeSameOrganisation();
+        MustBeValidStatusTransition();
       });
 
       RuleSet(nameof(IClaimsLogic<T>.Delete), () =>
       {
         MustBeSameOrganisation();
+        MustBePending();
       });
 
       RuleFor(x => x.Id)
@@ -40,6 +42,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .Must(solnId => Guid.TryParse(solnId, out _))
         .WithMessage("Invalid SolutionId");
     }
+
+    protected abstract void MustBePending();
+    protected abstract void MustBeValidStatusTransition();
 
     private void MustBeSameOrganisation()
     {

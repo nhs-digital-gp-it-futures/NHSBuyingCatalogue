@@ -13,5 +13,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       base(context, claimDatastore, solutionsDatastore)
     {
     }
+
+    protected override void MustBePending()
+    {
+    }
+
+    protected override void MustBeValidStatusTransition()
+    {
+    }
   }
 }
