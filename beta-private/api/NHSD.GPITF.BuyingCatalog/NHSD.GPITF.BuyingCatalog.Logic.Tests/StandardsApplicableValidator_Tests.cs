@@ -67,7 +67,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         StandardsApplicableStatus.Remediation,
         StandardsApplicableStatus.Approved,
         StandardsApplicableStatus.ApprovedFirstOfType,
-        StandardsApplicableStatus.PartiallyApproved,
+        StandardsApplicableStatus.ApprovedPartial,
         StandardsApplicableStatus.Rejected
       )]
         StandardsApplicableStatus status)
@@ -107,6 +107,48 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
     [TestCase(StandardsApplicableStatus.Remediation, StandardsApplicableStatus.Rejected, Roles.Supplier)]
     public void Validate_Update_InvalidStatusTransition_ReturnsError(StandardsApplicableStatus oldStatus, StandardsApplicableStatus newStatus, string role)
+    {
+      var orgId = Guid.NewGuid().ToString();
+      var claimId = Guid.NewGuid().ToString();
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role, orgId: orgId));
+      var validator = new StandardsApplicableValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
+      var soln = Creator.GetSolution(orgId: orgId);
+      var oldClaim = GetStandardsApplicable(id: claimId, status: oldStatus, solnId: soln.Id);
+      var newClaim = GetStandardsApplicable(id: claimId, status: newStatus, solnId: soln.Id);
+      _claimDatastore.Setup(x => x.ById(claimId)).Returns(oldClaim);
+      _solutionsDatastore.Setup(x => x.ById(soln.Id)).Returns(soln);
+
+      var valres = validator.Validate(newClaim, ruleSet: nameof(IStandardsApplicableLogic.Update));
+
+      valres.Errors.Should()
+        .ContainSingle()
+        .And
+        .ContainSingle(x => x.ErrorMessage == "Invalid Status transition");
+    }
+
+    [Test]
+    public void Validate_Update_FinalState_ReturnsError(
+      [Values(
+        StandardsApplicableStatus.Approved,
+        StandardsApplicableStatus.ApprovedPartial,
+        StandardsApplicableStatus.ApprovedFirstOfType,
+        StandardsApplicableStatus.Rejected)]
+          StandardsApplicableStatus oldStatus,
+      [Values(
+        StandardsApplicableStatus.NotStarted,
+        StandardsApplicableStatus.Draft,
+        StandardsApplicableStatus.Submitted,
+        StandardsApplicableStatus.Remediation,
+        StandardsApplicableStatus.Approved,
+        StandardsApplicableStatus.ApprovedPartial,
+        StandardsApplicableStatus.ApprovedFirstOfType,
+        StandardsApplicableStatus.Rejected)]
+          StandardsApplicableStatus newStatus,
+      [Values(
+        Roles.Admin,
+        Roles.Buyer,
+        Roles.Supplier)]
+          string role)
     {
       var orgId = Guid.NewGuid().ToString();
       var claimId = Guid.NewGuid().ToString();
