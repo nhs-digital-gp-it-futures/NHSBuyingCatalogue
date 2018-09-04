@@ -204,6 +204,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       valres.Errors.Count.Should().Be(1);
     }
+
     private static CapabilitiesImplemented GetCapabilitiesImplemented(
       string id = null,
       string solnId = null,
