@@ -48,7 +48,7 @@
     /// of the requirements of the <see cref="Standards"/>
     /// This is a positive end point in the life cycle.
     /// </summary>
-    PartiallyApproved = 6,
+    ApprovedPartial = 6,
 
     /// <summary>
     /// The Evidence has reviewed by NHSD and the <see cref="StandardsApplicable"/> does NOT fulfill all
