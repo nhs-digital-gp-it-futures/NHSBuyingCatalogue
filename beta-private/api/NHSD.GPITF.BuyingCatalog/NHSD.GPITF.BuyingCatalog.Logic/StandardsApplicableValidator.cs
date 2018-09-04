@@ -14,6 +14,22 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       ISolutionsDatastore solutionsDatastore) :
       base(context, claimDatastore, solutionsDatastore)
     {
+      RuleSet(nameof(IStandardsApplicableLogic.Delete), () =>
+      {
+        MustBePending();
+      });
+    }
+
+    private void MustBePending()
+    {
+      RuleFor(x => x)
+        .Must(x =>
+        {
+          return _context.HasRole(Roles.Supplier) &&
+            (x.Status == StandardsApplicableStatus.NotStarted ||
+            x.Status == StandardsApplicableStatus.Draft);
+        })
+        .WithMessage("Only supplier can delete a draft claim");
     }
   }
 }
