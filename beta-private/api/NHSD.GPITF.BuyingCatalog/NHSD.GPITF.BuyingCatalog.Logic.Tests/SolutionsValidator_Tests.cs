@@ -51,7 +51,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       var valres = validator.Validate(soln);
 
-      valres.Errors.Count().Should().Be(2);
+      valres.Errors.Should()
+        .Contain(x => x.ErrorMessage == "Invalid Id")
+        .And
+        .Contain(x => x.ErrorMessage == "'Id' must not be empty.");
     }
 
     [Test]
@@ -62,7 +65,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       var valres = validator.Validate(soln);
 
-      valres.Errors.Count().Should().Be(1);
+      valres.Errors.Should()
+        .ContainSingle()
+        .And
+        .ContainSingle(x => x.ErrorMessage == "Invalid Id");
     }
 
     [Test]
@@ -74,7 +80,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       var valres = validator.Validate(soln);
 
-      valres.Errors.Count().Should().Be(2);
+      valres.Errors.Should()
+        .Contain(x => x.ErrorMessage == "Invalid OrganisationId")
+        .And
+        .Contain(x => x.ErrorMessage == "'Organisation Id' must not be empty.");
     }
 
     [Test]
@@ -85,7 +94,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       var valres = validator.Validate(soln);
 
-      valres.Errors.Count().Should().Be(1);
+      valres.Errors.Should()
+        .ContainSingle()
+        .And
+        .ContainSingle(x => x.ErrorMessage == "Invalid OrganisationId");
     }
 
     [Test]
@@ -111,7 +123,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       var valres = validator.Validate(soln, ruleSet: nameof(ISolutionsLogic.Update));
 
-      valres.Errors.Count().Should().Be(1);
+      valres.Errors.Should()
+        .ContainSingle()
+        .And
+        .ContainSingle(x => x.ErrorMessage == "Cannot transfer solutions between organisations");
     }
 
     [TestCase(SolutionStatus.Draft, SolutionStatus.Draft, Roles.Supplier)]
@@ -237,7 +252,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       var valres = validator.Validate(newSoln, ruleSet: nameof(ISolutionsLogic.Update));
 
-      valres.Errors.Count.Should().Be(1);
+      valres.Errors.Should()
+        .ContainSingle()
+        .And
+        .ContainSingle(x => x.ErrorMessage == "Invalid Status transition");
     }
 
     [Test]
@@ -271,7 +289,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       var valres = validator.Validate(newSoln, ruleSet: nameof(ISolutionsLogic.Update));
 
-      valres.Errors.Count.Should().Be(1);
+      valres.Errors.Should()
+        .ContainSingle()
+        .And
+        .ContainSingle(x => x.ErrorMessage == "Invalid Status transition");
     }
   }
 }

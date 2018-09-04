@@ -44,7 +44,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       var valres = validator.Validate(_context.Object);
 
-      valres.Errors.Count().Should().Be(1);
+      valres.Errors.Should()
+        .ContainSingle()
+        .And
+        .ContainSingle(x => x.ErrorMessage == "Must be admin");
     }
 
     [Test]
@@ -56,7 +59,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       var valres = validator.Validate(_context.Object);
 
-      valres.Errors.Count().Should().Be(1);
+      valres.Errors.Should()
+        .ContainSingle()
+        .And
+        .ContainSingle(x => x.ErrorMessage == "Must be admin");
     }
   }
 }
