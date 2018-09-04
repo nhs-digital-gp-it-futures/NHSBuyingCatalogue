@@ -92,7 +92,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
     [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.Draft, Roles.Supplier)]
     [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.Submitted, Roles.Supplier)]
-    [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Remediation, Roles.Supplier)]
     [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Remediation, Roles.Admin)]
     [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Submitted, Roles.Supplier)]
     [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Approved, Roles.Admin)]
@@ -129,6 +128,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.Rejected, Roles.Supplier)]
 
     [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Remediation, Roles.Buyer)]
+    [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Remediation, Roles.Supplier)]
     [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Draft, Roles.Admin)]
     [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Draft, Roles.Buyer)]
     [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Draft, Roles.Supplier)]
