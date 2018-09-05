@@ -28,6 +28,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         MustBeFromSameOrganisation();
         MustBeValidStatusTransition();
         MustBeCurrentVersion();
+        PreviousVersionMustBeFromSameOrganisation();
       });
 
       RuleFor(x => x.Id)
@@ -40,7 +41,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Invalid OrganisationId");
     }
 
-    private void MustBeValidStatusTransition()
+    internal void MustBeValidStatusTransition()
     {
       RuleFor(x => x)
         .Must(x =>
@@ -64,7 +65,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Invalid Status transition");
     }
 
-    private void MustBeSameOrganisation()
+    internal void MustBeSameOrganisation()
     {
       RuleFor(x => x)
         .Must(x =>
@@ -78,7 +79,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Cannot transfer solutions between organisations");
     }
 
-    private void MustBeFromSameOrganisation()
+    internal void MustBeFromSameOrganisation()
     {
       RuleFor(x => x)
         .Must(x =>
@@ -89,7 +90,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Must be from same organisation");
     }
 
-    private void MustBeCurrentVersion()
+    internal void MustBeCurrentVersion()
     {
       RuleFor(x => x)
         .Must(x =>
@@ -98,6 +99,17 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
           return solns.Select(soln => soln.Id).Contains(x.Id);
         })
         .WithMessage("Can only change current version");
+    }
+
+    internal void PreviousVersionMustBeFromSameOrganisation()
+    {
+      RuleFor(x => x)
+        .Must(x =>
+        {
+          // TODO
+          return false;
+        })
+        .WithMessage("Previous version must be from same organisation");
     }
 
     private static IEnumerable<(SolutionStatus OldStatus, SolutionStatus NewStatus, bool HasValidRole)> ValidStatusTransitions(IHttpContextAccessor context)
