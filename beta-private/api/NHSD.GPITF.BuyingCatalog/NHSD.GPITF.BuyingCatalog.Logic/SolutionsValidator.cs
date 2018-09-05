@@ -31,6 +31,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         PreviousVersionMustBeFromSameOrganisation();
       });
 
+      RuleSet(nameof(ISolutionsLogic.Create), () =>
+      {
+        MustBeFromSameOrganisation();
+        PreviousVersionMustBeFromSameOrganisation();
+        MustBePending();
+      });
+
       RuleFor(x => x.Id)
         .NotNull()
         .Must(id => Guid.TryParse(id, out _))
@@ -106,10 +113,24 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       RuleFor(x => x)
         .Must(x =>
         {
-          // TODO
-          return false;
+          if (x.PreviousId == null)
+          {
+            return true;
+          }
+          var soln = _solutionDatastore.ById(x.PreviousId);
+          return soln != null && soln.OrganisationId == x.OrganisationId;
         })
         .WithMessage("Previous version must be from same organisation");
+    }
+
+    internal void MustBePending()
+    {
+      RuleFor(x => x)
+        .Must(x =>
+        {
+          return x.Status == SolutionStatus.Draft;
+        })
+        .WithMessage("Status must be Draft");
     }
 
     private static IEnumerable<(SolutionStatus OldStatus, SolutionStatus NewStatus, bool HasValidRole)> ValidStatusTransitions(IHttpContextAccessor context)

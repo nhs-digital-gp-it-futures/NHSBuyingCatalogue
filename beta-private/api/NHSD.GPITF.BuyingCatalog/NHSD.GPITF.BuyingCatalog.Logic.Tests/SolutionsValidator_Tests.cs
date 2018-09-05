@@ -135,7 +135,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
       var oldSoln = Creator.GetSolution(id: solnId, status: oldStatus);
       var newSoln = Creator.GetSolution(id: solnId, status: newStatus);
-      _solutionDatastore.Setup(x => x.ById(newSoln.Id)).Returns(oldSoln);
+      _solutionDatastore.Setup(x => x.ById(solnId)).Returns(oldSoln);
 
       validator.MustBeValidStatusTransition();
       var valres = validator.Validate(newSoln);
@@ -277,7 +277,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
       var oldSoln = Creator.GetSolution(id: solnId, status: oldStatus);
       var newSoln = Creator.GetSolution(id: solnId, status: newStatus);
-      _solutionDatastore.Setup(x => x.ById(newSoln.Id)).Returns(oldSoln);
+      _solutionDatastore.Setup(x => x.ById(solnId)).Returns(oldSoln);
 
       validator.MustBeValidStatusTransition();
       var valres = validator.Validate(newSoln);
@@ -294,11 +294,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var orgId = Guid.NewGuid().ToString();
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(orgId: orgId, role: Roles.Supplier));
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
-      var oldSoln = Creator.GetSolution(orgId: orgId);
-      var newSoln = Creator.GetSolution(orgId: orgId);
+      var soln = Creator.GetSolution(orgId: orgId);
 
       validator.MustBeFromSameOrganisation();
-      var valres = validator.Validate(newSoln);
+      var valres = validator.Validate(soln);
 
       valres.Errors.Should().BeEmpty();
     }
@@ -340,11 +339,11 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
-      var newSoln = Creator.GetSolution();
-      _solutionDatastore.Setup(x => x.ByOrganisation(newSoln.OrganisationId)).Returns(new[] { Creator.GetSolution(previousId: newSoln.Id) });
+      var soln = Creator.GetSolution();
+      _solutionDatastore.Setup(x => x.ByOrganisation(soln.OrganisationId)).Returns(new[] { Creator.GetSolution(previousId: soln.Id) });
 
       validator.MustBeCurrentVersion();
-      var valres = validator.Validate(newSoln);
+      var valres = validator.Validate(soln);
 
       valres.Errors.Should()
         .ContainSingle(x => x.ErrorMessage == "Can only change current version")
@@ -353,16 +352,62 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void PreviousVersionMustBeFromSameOrganisation_ReturnsError()
+    public void PreviousVersionMustBeFromSameOrganisation_NoPrevious_Succeeds()
     {
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
-      var newSoln = Creator.GetSolution();
+      var soln = Creator.GetSolution();
 
       validator.PreviousVersionMustBeFromSameOrganisation();
-      var valres = validator.Validate(newSoln);
+      var valres = validator.Validate(soln);
+
+      valres.Errors.Should().BeEmpty();
+    }
+
+    [Test]
+    public void PreviousVersionMustBeFromSameOrganisation_Different_ReturnsError()
+    {
+      var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
+      var soln = Creator.GetSolution(previousId: Guid.NewGuid().ToString());
+      _solutionDatastore.Setup(x => x.ById(soln.PreviousId)).Returns(Creator.GetSolution());
+
+      validator.PreviousVersionMustBeFromSameOrganisation();
+      var valres = validator.Validate(soln);
 
       valres.Errors.Should()
         .ContainSingle(x => x.ErrorMessage == "Previous version must be from same organisation")
+        .And
+        .HaveCount(1);
+    }
+
+    [TestCase(SolutionStatus.Draft)]
+    public void MustBePending_Draft_Succeeds(SolutionStatus status)
+    {
+      var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
+      var soln = Creator.GetSolution(status: status);
+
+      validator.MustBePending();
+      var valres = validator.Validate(soln);
+
+      valres.Errors.Should().BeEmpty();
+    }
+
+    [TestCase(SolutionStatus.Failed)]
+    [TestCase(SolutionStatus.Registered)]
+    [TestCase(SolutionStatus.CapabilitiesAssessment)]
+    [TestCase(SolutionStatus.StandardsCompliance)]
+    [TestCase(SolutionStatus.FinalApproval)]
+    [TestCase(SolutionStatus.SolutionPage)]
+    [TestCase(SolutionStatus.Approved)]
+    public void MustBePending_NonDraft_ReturnsError(SolutionStatus status)
+    {
+      var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
+      var soln = Creator.GetSolution(status: status);
+
+      validator.MustBePending();
+      var valres = validator.Validate(soln);
+
+      valres.Errors.Should()
+        .ContainSingle(x => x.ErrorMessage == "Status must be Draft")
         .And
         .HaveCount(1);
     }
