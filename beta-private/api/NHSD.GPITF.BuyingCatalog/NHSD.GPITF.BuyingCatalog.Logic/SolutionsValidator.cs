@@ -25,6 +25,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       RuleSet(nameof(ISolutionsLogic.Update), () =>
       {
         MustBeSameOrganisation();
+        MustBeFromSameOrganisation();
         MustBeValidStatusTransition();
       });
 
@@ -74,6 +75,17 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
           return soln != null && x.OrganisationId == soln.OrganisationId;
         })
         .WithMessage("Cannot transfer solutions between organisations");
+    }
+
+    private void MustBeFromSameOrganisation()
+    {
+      RuleFor(x => x)
+        .Must(x =>
+        {
+          var orgId = _context.OrganisationId();
+          return x.OrganisationId == orgId;
+        })
+        .WithMessage("Must be from same organisation");
     }
 
     private static IEnumerable<(SolutionStatus OldStatus, SolutionStatus NewStatus, bool HasValidRole)> ValidStatusTransitions(IHttpContextAccessor context)
