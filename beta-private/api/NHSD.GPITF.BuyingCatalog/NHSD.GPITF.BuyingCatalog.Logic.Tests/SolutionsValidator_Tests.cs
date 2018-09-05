@@ -301,7 +301,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Validate_Update_SupplierFromSameOrganisation_ReturnsError()
+    public void Validate_Update_SupplierFromSameOrganisation_Succeeds()
     {
       var orgId = Guid.NewGuid().ToString();
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(orgId: orgId, role: Roles.Supplier));
