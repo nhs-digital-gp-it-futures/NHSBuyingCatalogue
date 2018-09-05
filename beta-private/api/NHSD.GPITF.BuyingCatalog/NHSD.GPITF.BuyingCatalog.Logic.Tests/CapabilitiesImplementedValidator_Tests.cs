@@ -31,32 +31,28 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [TestCase(Roles.Supplier)]
-    public void Validate_Delete_ValidRole_Draft_Succeeds(string role)
+    public void MustBePending_Draft_Succeeds(string role)
     {
-      var orgId = Guid.NewGuid().ToString();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role, orgId: orgId));
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
       var claim = GetCapabilitiesImplemented(status: CapabilitiesImplementedStatus.Draft);
-      _claimDatastore.Setup(x => x.ById(claim.Id)).Returns(claim);
-      _solutionsDatastore.Setup(x => x.ById(claim.SolutionId)).Returns(Creator.GetSolution(orgId: orgId));
 
-      var valres = validator.Validate(claim, ruleSet: nameof(ICapabilitiesImplementedLogic.Delete));
+      validator.MustBePending();
+      var valres = validator.Validate(claim);
 
       valres.Errors.Should().BeEmpty();
     }
 
     [TestCase(Roles.Buyer)]
     [TestCase(Roles.Admin)]
-    public void Validate_Delete_InvalidRole_Draft_ReturnsError(string role)
+    public void MustBePending_Draft_ReturnsError(string role)
     {
-      var orgId = Guid.NewGuid().ToString();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role, orgId: orgId));
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
       var claim = GetCapabilitiesImplemented(status: CapabilitiesImplementedStatus.Draft);
-      _claimDatastore.Setup(x => x.ById(claim.Id)).Returns(claim);
-      _solutionsDatastore.Setup(x => x.ById(claim.SolutionId)).Returns(Creator.GetSolution(orgId: orgId));
 
-      var valres = validator.Validate(claim, ruleSet: nameof(ICapabilitiesImplementedLogic.Delete));
+      validator.MustBePending();
+      var valres = validator.Validate(claim);
 
       valres.Errors.Should()
         .ContainSingle(x => x.ErrorMessage == "Only supplier can delete a draft claim")
@@ -65,7 +61,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Validate_Delete_NonDraft_ReturnsError(
+    public void MustBePending_NonDraft_ReturnsError(
       [Values(
         Roles.Buyer,
         Roles.Supplier,
@@ -80,14 +76,12 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         )]
         CapabilitiesImplementedStatus status)
     {
-      var orgId = Guid.NewGuid().ToString();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role, orgId: orgId));
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
       var claim = GetCapabilitiesImplemented(status: status);
-      _claimDatastore.Setup(x => x.ById(claim.Id)).Returns(claim);
-      _solutionsDatastore.Setup(x => x.ById(claim.SolutionId)).Returns(Creator.GetSolution(orgId: orgId));
 
-      var valres = validator.Validate(claim, ruleSet: nameof(ICapabilitiesImplementedLogic.Delete));
+      validator.MustBePending();
+      var valres = validator.Validate(claim);
 
       valres.Errors.Should()
         .ContainSingle(x => x.ErrorMessage == "Only supplier can delete a draft claim")

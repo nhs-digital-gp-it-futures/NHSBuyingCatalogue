@@ -54,7 +54,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Invalid Id");
     }
 
-    protected abstract void MustBePending();
+    internal abstract void MustBePending();
     protected abstract void MustBeValidStatusTransition();
 
     internal void MustBeSameOrganisation()

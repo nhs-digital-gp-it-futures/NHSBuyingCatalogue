@@ -14,7 +14,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
     }
 
-    protected override void MustBePending()
+    internal override void MustBePending()
     {
     }
 

@@ -17,7 +17,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     {
     }
 
-    protected override void MustBePending()
+    internal override void MustBePending()
     {
       RuleFor(x => x)
         .Must(x =>
