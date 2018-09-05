@@ -110,7 +110,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(orgId: orgId, role: Roles.Supplier));
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
       var soln = Creator.GetSolution(orgId: orgId);
-      _solutionDatastore.Setup(x => x.ById(It.IsAny<string>())).Returns(Creator.GetSolution(orgId: soln.OrganisationId));
+      _solutionDatastore.Setup(x => x.ById(soln.Id)).Returns(Creator.GetSolution(orgId: soln.OrganisationId));
 
       var valres = validator.Validate(soln, ruleSet: nameof(ISolutionsLogic.Update));
 
@@ -124,7 +124,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var soln = Creator.GetSolution(orgId: orgId);
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(orgId: orgId, role: Roles.Supplier));
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
-      _solutionDatastore.Setup(x => x.ById(It.IsAny<string>())).Returns(Creator.GetSolution());
+      _solutionDatastore.Setup(x => x.ById(soln.Id)).Returns(Creator.GetSolution());
 
       var valres = validator.Validate(soln, ruleSet: nameof(ISolutionsLogic.Update));
 
@@ -150,7 +150,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
       var oldSoln = Creator.GetSolution(status: oldStatus, orgId: orgId);
       var newSoln = Creator.GetSolution(status: newStatus, orgId: orgId);
-      _solutionDatastore.Setup(x => x.ById(It.IsAny<string>())).Returns(oldSoln);
+      _solutionDatastore.Setup(x => x.ById(newSoln.Id)).Returns(oldSoln);
 
       var valres = validator.Validate(newSoln, ruleSet: nameof(ISolutionsLogic.Update));
 
@@ -253,7 +253,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
       var oldSoln = Creator.GetSolution(status: oldStatus, orgId: orgId);
       var newSoln = Creator.GetSolution(status: newStatus, orgId: orgId);
-      _solutionDatastore.Setup(x => x.ById(It.IsAny<string>())).Returns(oldSoln);
+      _solutionDatastore.Setup(x => x.ById(newSoln.Id)).Returns(oldSoln);
 
       var valres = validator.Validate(newSoln, ruleSet: nameof(ISolutionsLogic.Update));
 
@@ -290,7 +290,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
       var oldSoln = Creator.GetSolution(status: oldStatus, orgId: orgId);
       var newSoln = Creator.GetSolution(status: newStatus, orgId: orgId);
-      _solutionDatastore.Setup(x => x.ById(It.IsAny<string>())).Returns(oldSoln);
+      _solutionDatastore.Setup(x => x.ById(newSoln.Id)).Returns(oldSoln);
 
       var valres = validator.Validate(newSoln, ruleSet: nameof(ISolutionsLogic.Update));
 
@@ -308,7 +308,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
       var oldSoln = Creator.GetSolution(status: SolutionStatus.Draft, orgId: orgId);
       var newSoln = Creator.GetSolution(status: SolutionStatus.Draft, orgId: orgId);
-      _solutionDatastore.Setup(x => x.ById(It.IsAny<string>())).Returns(oldSoln);
+      _solutionDatastore.Setup(x => x.ById(newSoln.Id)).Returns(oldSoln);
 
       var valres = validator.Validate(newSoln, ruleSet: nameof(ISolutionsLogic.Update));
 
@@ -326,7 +326,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
       var oldSoln = Creator.GetSolution(status: SolutionStatus.Draft, orgId: orgId);
       var newSoln = Creator.GetSolution(status: SolutionStatus.Draft, orgId: orgId);
-      _solutionDatastore.Setup(x => x.ById(It.IsAny<string>())).Returns(oldSoln);
+      _solutionDatastore.Setup(x => x.ById(newSoln.Id)).Returns(oldSoln);
 
       var valres = validator.Validate(newSoln, ruleSet: nameof(ISolutionsLogic.Update));
 
@@ -348,7 +348,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
       var oldSoln = Creator.GetSolution(status: SolutionStatus.Draft, orgId: orgId);
       var newSoln = Creator.GetSolution(status: SolutionStatus.Draft, orgId: orgId);
-      _solutionDatastore.Setup(x => x.ById(It.IsAny<string>())).Returns(oldSoln);
+      _solutionDatastore.Setup(x => x.ById(newSoln.Id)).Returns(oldSoln);
 
       var valres = validator.Validate(newSoln, ruleSet: nameof(ISolutionsLogic.Update));
 
@@ -358,6 +358,21 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         .ContainSingle(x => x.ErrorMessage == "Invalid Status transition")
         .And
         .HaveCount(2);
+    }
+
+    [Test]
+    public void Validate_Update_NoPreviousVersion_Succeeds()
+    {
+      var orgId = Guid.NewGuid().ToString();
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(orgId: orgId, role: Roles.Supplier));
+      var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
+      var oldSoln = Creator.GetSolution(status: SolutionStatus.Draft, orgId: orgId);
+      var newSoln = Creator.GetSolution(status: SolutionStatus.Draft, orgId: orgId);
+      _solutionDatastore.Setup(x => x.ById(newSoln.Id)).Returns(oldSoln);
+
+      var valres = validator.Validate(newSoln, ruleSet: nameof(ISolutionsLogic.Update));
+
+      valres.Errors.Should().BeEmpty();
     }
   }
 }
