@@ -6,7 +6,6 @@ using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NUnit.Framework;
 using System;
-using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 {
@@ -59,7 +58,12 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       var valres = validator.Validate(claim);
 
-      valres.Errors.Count().Should().Be(2);
+      valres.Errors.Should()
+        .ContainSingle(x => x.ErrorMessage == "Invalid Id")
+        .And
+        .ContainSingle(x => x.ErrorMessage == "'Id' must not be empty.")
+        .And
+        .HaveCount(2);
     }
 
     [Test]
@@ -74,7 +78,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       var valres = validator.Validate(claim);
 
-      valres.Errors.Count().Should().Be(1);
+      valres.Errors.Should()
+        .ContainSingle(x => x.ErrorMessage == "Invalid Id")
+        .And
+        .HaveCount(1);
     }
 
     [Test]
@@ -90,7 +97,12 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       var valres = validator.Validate(claim);
 
-      valres.Errors.Count().Should().Be(2);
+      valres.Errors.Should()
+        .ContainSingle(x => x.ErrorMessage == "Invalid SolutionId")
+        .And
+        .ContainSingle(x => x.ErrorMessage == "'Solution Id' must not be empty.")
+        .And
+        .HaveCount(2);
     }
 
     [Test]
@@ -105,7 +117,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       var valres = validator.Validate(claim);
 
-      valres.Errors.Count().Should().Be(1);
+      valres.Errors.Should()
+        .ContainSingle(x => x.ErrorMessage == "Invalid SolutionId")
+        .And
+        .HaveCount(1);
     }
 
     [Test]
@@ -120,7 +135,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       var valres = validator.Validate(claim, ruleSet: nameof(IClaimsLogic<ClaimsBase>.Update));
 
-      valres.Errors.Count().Should().Be(1);
+      valres.Errors.Should()
+        .ContainSingle(x => x.ErrorMessage == "Cannot transfer claim between solutions")
+        .And
+        .HaveCount(1);
     }
 
     [Test]
@@ -135,7 +153,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       var valres = validator.Validate(claim, ruleSet: nameof(IClaimsLogic<ClaimsBase>.Delete));
 
-      valres.Errors.Count().Should().Be(1);
+      valres.Errors.Should()
+        .ContainSingle(x => x.ErrorMessage == "Cannot update/delete claim for other organisation")
+        .And
+        .HaveCount(1);
     }
 
     [Test]
@@ -165,7 +186,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       var valres = validator.Validate(claim, ruleSet: nameof(IClaimsLogic<ClaimsBase>.Update));
 
-      valres.Errors.Count().Should().Be(1);
+      valres.Errors.Should()
+        .ContainSingle(x => x.ErrorMessage == "Cannot update/delete claim for other organisation")
+        .And
+        .HaveCount(1);
     }
   }
 }

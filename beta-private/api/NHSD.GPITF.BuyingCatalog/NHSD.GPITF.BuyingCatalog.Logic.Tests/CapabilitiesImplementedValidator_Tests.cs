@@ -59,9 +59,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var valres = validator.Validate(claim, ruleSet: nameof(ICapabilitiesImplementedLogic.Delete));
 
       valres.Errors.Should()
-        .ContainSingle()
+        .ContainSingle(x => x.ErrorMessage == "Only supplier can delete a draft claim")
         .And
-        .ContainSingle(x => x.ErrorMessage == "Only supplier can delete a draft claim");
+        .HaveCount(1);
     }
 
     [Test]
@@ -90,9 +90,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var valres = validator.Validate(claim, ruleSet: nameof(ICapabilitiesImplementedLogic.Delete));
 
       valres.Errors.Should()
-        .ContainSingle()
+        .ContainSingle(x => x.ErrorMessage == "Only supplier can delete a draft claim")
         .And
-        .ContainSingle(x => x.ErrorMessage == "Only supplier can delete a draft claim");
+        .HaveCount(1);
     }
 
     [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.Draft, Roles.Supplier)]
@@ -174,9 +174,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var valres = validator.Validate(newClaim, ruleSet: nameof(ICapabilitiesImplementedLogic.Update));
 
       valres.Errors.Should()
-        .ContainSingle()
+        .ContainSingle(x => x.ErrorMessage == "Invalid Status transition")
         .And
-        .ContainSingle(x => x.ErrorMessage == "Invalid Status transition");
+        .HaveCount(1);
     }
 
     [Test]
@@ -211,9 +211,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var valres = validator.Validate(newClaim, ruleSet: nameof(ICapabilitiesImplementedLogic.Update));
 
       valres.Errors.Should()
-        .ContainSingle()
+        .ContainSingle(x => x.ErrorMessage == "Invalid Status transition")
         .And
-        .ContainSingle(x => x.ErrorMessage == "Invalid Status transition");
+        .HaveCount(1);
     }
 
     private static CapabilitiesImplemented GetCapabilitiesImplemented(

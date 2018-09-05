@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
-using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 {
@@ -45,9 +44,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var valres = validator.Validate(_context.Object);
 
       valres.Errors.Should()
-        .ContainSingle()
+        .ContainSingle(x => x.ErrorMessage == "Must be admin")
         .And
-        .ContainSingle(x => x.ErrorMessage == "Must be admin");
+        .HaveCount(1);
     }
 
     [Test]
@@ -60,9 +59,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var valres = validator.Validate(_context.Object);
 
       valres.Errors.Should()
-        .ContainSingle()
+        .ContainSingle(x => x.ErrorMessage == "Must be admin")
         .And
-        .ContainSingle(x => x.ErrorMessage == "Must be admin");
+        .HaveCount(1);
     }
   }
 }
