@@ -92,80 +92,69 @@
         title="Enter Solution details & contacts"
         subtitle="Register Solution (1 of 4)"}}
   <div class="help">
-    <p>Enter basic details about your Solution and contact details from your organisation below. On the next page, you can choose Capabilities to complete Solution Registration. 
-
-    <p>The contacts entered on this page will be used to enable contact with NHS Digital during the on-boarding process. These contacts will not be shared publicly. In Stage 4—Solution Page, you’ll be able to enter public contact details. 
-
-    <p>All fields optional unless otherwise indicated. 
+    <p>Provide basic information and key contacts for your Solution below to NHS Digital.</p>
   </div>
 
-    {{> errors errors=errors.general }}
-    <form action="#errors" method="post" novalidate>
-        <fieldset>
-            <legend>
-              <small>Step 1 (of 2)</small>
-              Enter Name, Version &amp; Description
-            </legend>
-            <label{{#if errors.name}} class="has-errors"{{/if}}>
-                Solution Name <span class="required">*</span>
-                <ul class="validation-rules">
-                  <li>max 60 characters</li>
-                </ul>
-                <input type="text" name="name" value="{{ name }}">
-            </label>
-            {{> errors errors=errors.name }}
-            <label{{#if errors.description}} class="has-errors"{{/if}}>
-                Description <span class="required">*</span>
-                <p class="instructions">Your Solution description will be displayed on your Solution page and in search results, but it will not affect search ranking.</p>
-                <ul class="validation-rules">
-                  <li>max 300 characters</li>
-                </ul>
-                <textarea name="description"
-                          rows="4">{{ description }}</textarea>
-            </label>
-            {{> errors errors=errors.description }}
-            <label{{#if errors.version}} class="has-errors"{{/if}}>
-                Version
-                {{#> help-reveal title="Help - What is this?" class="version-help"}}
-                <p>Solution version is used to distinguish between instances of a solution. On the Catalogue, Solution version is intended to be used to describe Solutions with significant feature developments. In other words, when the ‘major number’ has changed, in standard semantic versioning schemes.
-                <p>Version might be used, for example, to describe a new version of a Solution with expanded functionality or additional Capabilities.
-                {{/help-reveal}}
-                <input type="text" name="version" value="{{ version }}">
-            </label>
-            {{> errors errors=errors.version }}
-        </fieldset>
-        <fieldset class="contacts">
-          <legend>
-            <small>Step 2 (of 2)</small>
-            Enter Contacts
-          </legend>
-          <h3>Primary Contacts</h3>
-          <p class="help">Provide the following contacts from your organisation to enable communication with NHS Digital during the on-boarding process. These contacts will not be shared publicly. The Lead Contact is required to complete registration.</p>
-          {{#each primaryContactTypes}}
-            {{> contact (lookup ../primaryContacts this)
-                        contactType=this
-                        required=@first
-                        help=(lookup ../primaryContactHelp this)
-                        errors=(lookup ../errors.contacts this)}}
-          {{/each}}
-          <h3>Secondary Contacts (optional)</h3>
-          <p class="help">Some organisations work with multiple people in similar roles, for example when working with cohort organisations. Please add any additional contacts, as relevant.</p>
-          <div id="secondary-contacts">
-          {{#secondaryContacts}}
-            {{> secondaryContact . errors=(lookup ../errors.secondaryContacts @index)}}
-          {{/secondaryContacts}}
-          </div>
-          <p><a href="#" class="add-contact">⊕ Add Contact</a></p>
-          <template id="contact-template">
-            {{>secondaryContact}}
-          </template>
-        </fieldset>
-        <fieldset class="controls">
-            <button name="action" value="save" type="submit">Save</button>
-            <button class="primary" name="action" value="continue" type="submit">Continue</button>
-            <input type="hidden" name="_csrf" value="{{csrfToken}}">
-        </fieldset>
-    </form>
+  {{> errors errors=errors.general }}
+  <form action="#errors" method="post" novalidate>
+    <fieldset>
+      <legend>Enter Solution name, description, version</legend>
+
+      <p class="help">‘Solution name’ ‘Description’ and ‘Version’ will be sent to NHS Digital to identify your Solution. They will also be shown to buyers at the conclusion of onboarding.  You can edit the ‘Description’ field later before displaying your Solution page to buyers.</p>
+
+      <label{{#if errors.name}} class="has-errors"{{/if}}>
+        Solution Name <span class="required">*</span>
+        <ul class="validation-rules">
+          <li>max 60 characters</li>
+        </ul>
+        <input type="text" name="name" value="{{ name }}">
+      </label>
+      {{> errors errors=errors.name }}
+      <label{{#if errors.description}} class="has-errors"{{/if}}>
+        Description <span class="required">*</span>
+        <p class="instructions">Your Solution description will be displayed on your Solution page and in search results, but it will not affect search ranking. You can edit this later.</p>
+        <ul class="validation-rules">
+          <li>max 300 characters</li>
+        </ul>
+        <textarea name="description"
+                  rows="4">{{ description }}</textarea>
+      </label>
+      {{> errors errors=errors.description }}
+      <label{{#if errors.version}} class="has-errors"{{/if}}>
+        Version
+        {{#> help-reveal title="Help - What is this?" class="version-help"}}
+        <p>Solution version is used to distinguish between instances of a solution. On the Catalogue, Solution version is intended to be used to describe Solutions with significant feature developments. In other words, when the ‘major number’ has changed, in standard semantic versioning schemes.
+        <p>Version might be used, for example, to describe a new version of a Solution with expanded functionality or additional Capabilities.
+        {{/help-reveal}}
+        <input type="text" name="version" value="{{ version }}">
+      </label>
+      {{> errors errors=errors.version }}
+    </fieldset>
+    <div class="contacts">
+      {{#each primaryContactTypes}}
+        {{> contact (lookup ../primaryContacts this)
+                    contactType=this
+                    required=@first
+                    help=(lookup ../primaryContactHelp this)
+                    errors=(lookup ../errors.contacts this)}}
+      {{/each}}
+      <p class="help">Some organisations work with multiple people in similar roles, for example when working with cohort organisations. Please add any additional contacts, as relevant.</p>
+      <div id="secondary-contacts">
+      {{#secondaryContacts}}
+        {{> secondaryContact . errors=(lookup ../errors.secondaryContacts @index)}}
+      {{/secondaryContacts}}
+      </div>
+      <p><a href="#" class="add-contact">⊕ Add Contact</a></p>
+      <template id="contact-template">
+        {{>secondaryContact}}
+      </template>
+    </div>
+    <fieldset class="controls">
+        <button name="action" value="save" type="submit">Save</button>
+        <button class="primary" name="action" value="continue" type="submit">Continue</button>
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    </fieldset>
+  </form>
 </div>
 
 <script>
@@ -179,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ev.target.closest('fieldset').classList.toggle('collapsed')
   }
 
-  $('fieldset.contacts a.add-contact').addEventListener('click', ev => {
+  $('.contacts a.add-contact').addEventListener('click', ev => {
     ev.preventDefault()
     const newContact = $('#secondary-contacts').appendChild(
       document.importNode($('#contact-template').content, true)
