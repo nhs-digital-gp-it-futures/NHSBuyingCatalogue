@@ -59,7 +59,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
               trans.NewStatus == newStatus &&
               trans.HasValidRole);
         })
-        .WithMessage($"Invalid Status transition");
+        .WithMessage("Invalid Status transition");
     }
 
     private void MustBeSameOrganisation()

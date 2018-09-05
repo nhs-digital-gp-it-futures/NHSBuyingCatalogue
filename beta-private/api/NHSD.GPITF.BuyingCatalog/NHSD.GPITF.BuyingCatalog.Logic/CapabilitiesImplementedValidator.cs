@@ -15,18 +15,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       ISolutionsDatastore solutionsDatastore) :
       base(context, claimDatastore, solutionsDatastore)
     {
-      RuleSet(nameof(ICapabilitiesImplementedLogic.Delete), () =>
-      {
-        RuleForDelete();
-      });
-
-      RuleSet(nameof(ICapabilitiesImplementedLogic.Update), () =>
-      {
-        MustBeValidStatusTransition();
-      });
     }
 
-    private void RuleForDelete()
+    protected override void MustBePending()
     {
       RuleFor(x => x)
         .Must(x =>
@@ -37,7 +28,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Only supplier can delete a draft claim");
     }
 
-    private void MustBeValidStatusTransition()
+    protected override void MustBeValidStatusTransition()
     {
       RuleFor(x => x)
         .Must(x =>
@@ -55,7 +46,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
               trans.NewStatus == newStatus &&
               trans.HasValidRole);
         })
-        .WithMessage($"Invalid Status transition");
+        .WithMessage("Invalid Status transition");
     }
 
     private static IEnumerable<(CapabilitiesImplementedStatus OldStatus, CapabilitiesImplementedStatus NewStatus, bool HasValidRole)> ValidStatusTransitions(IHttpContextAccessor context)
