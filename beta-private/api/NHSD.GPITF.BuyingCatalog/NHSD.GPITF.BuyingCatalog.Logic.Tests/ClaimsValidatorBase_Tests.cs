@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
@@ -31,31 +30,25 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Validate_Valid_Succeeds()
+    public void MustBeValidId_Valid_Succeeds()
     {
-      var orgId = Guid.NewGuid().ToString();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: Roles.Supplier, orgId: orgId));
       var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase();
-      _claimDatastore.Setup(x => x.ById(claim.Id)).Returns(claim);
-      _solutionsDatastore.Setup(x => x.ById(claim.SolutionId)).Returns(Creator.GetSolution(orgId: orgId));
 
+      validator.MustBeValidId();
       var valres = validator.Validate(claim);
 
       valres.Errors.Should().BeEmpty();
     }
 
     [Test]
-    public void Validate_IdNull_ReturnsError()
+    public void MustBeValidId_Null_ReturnsError()
     {
-      var orgId = Guid.NewGuid().ToString();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: Roles.Supplier, orgId: orgId));
       var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase();
       claim.Id = null;
-      _claimDatastore.Setup(x => x.ById(claim.Id)).Returns(claim);
-      _solutionsDatastore.Setup(x => x.ById(claim.SolutionId)).Returns(Creator.GetSolution(orgId: orgId));
 
+      validator.MustBeValidId();
       var valres = validator.Validate(claim);
 
       valres.Errors.Should()
@@ -67,15 +60,12 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Validate_IdNotGuid_ReturnsError()
+    public void MustBeValidId_NotGuid_ReturnsError()
     {
-      var orgId = Guid.NewGuid().ToString();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: Roles.Supplier, orgId: orgId));
       var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase(id: "some other Id");
-      _claimDatastore.Setup(x => x.ById(claim.Id)).Returns(claim);
-      _solutionsDatastore.Setup(x => x.ById(claim.SolutionId)).Returns(Creator.GetSolution(orgId: orgId));
 
+      validator.MustBeValidId();
       var valres = validator.Validate(claim);
 
       valres.Errors.Should()
@@ -85,16 +75,25 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Validate_SolutionIdNull_ReturnsError()
+    public void MustBeValidSolutionId_Valid_Succeeds()
     {
-      var orgId = Guid.NewGuid().ToString();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: Roles.Supplier, orgId: orgId));
+      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
+      var claim = Creator.GetClaimsBase();
+
+      validator.MustBeValidSolutionId();
+      var valres = validator.Validate(claim);
+
+      valres.Errors.Should().BeEmpty();
+    }
+
+    [Test]
+    public void MustBeValidSolutionId_Null_ReturnsError()
+    {
       var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase();
       claim.SolutionId = null;
-      _claimDatastore.Setup(x => x.ById(claim.Id)).Returns(claim);
-      _solutionsDatastore.Setup(x => x.ById(claim.SolutionId)).Returns(Creator.GetSolution(orgId: orgId));
 
+      validator.MustBeValidSolutionId();
       var valres = validator.Validate(claim);
 
       valres.Errors.Should()
@@ -106,15 +105,12 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Validate_SolutionIdNotGuid_ReturnsError()
+    public void MustBeValidSolutionId_NotGuid_ReturnsError()
     {
-      var orgId = Guid.NewGuid().ToString();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: Roles.Supplier, orgId: orgId));
       var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase(solnId: "some other Id");
-      _claimDatastore.Setup(x => x.ById(claim.Id)).Returns(claim);
-      _solutionsDatastore.Setup(x => x.ById(claim.SolutionId)).Returns(Creator.GetSolution(orgId: orgId));
 
+      validator.MustBeValidSolutionId();
       var valres = validator.Validate(claim);
 
       valres.Errors.Should()
@@ -124,16 +120,27 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Validate_Update_DifferentSolution_ReturnsError()
+    public void MustBeSameSolution_Same_Succeeds()
     {
-      var orgId = Guid.NewGuid().ToString();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: Roles.Supplier, orgId: orgId));
+      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
+      var claim = Creator.GetClaimsBase();
+      _claimDatastore.Setup(x => x.ById(claim.Id)).Returns(claim);
+
+      validator.MustBeSameSolution();
+      var valres = validator.Validate(claim);
+
+      valres.Errors.Should().BeEmpty();
+    }
+
+    [Test]
+    public void MustBeSameSolution_Different_ReturnsError()
+    {
       var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase();
       _claimDatastore.Setup(x => x.ById(claim.Id)).Returns(Creator.GetClaimsBase());
-      _solutionsDatastore.Setup(x => x.ById(It.IsAny<string>())).Returns(Creator.GetSolution(orgId: orgId));
 
-      var valres = validator.Validate(claim, ruleSet: nameof(IClaimsLogic<ClaimsBase>.Update));
+      validator.MustBeSameSolution();
+      var valres = validator.Validate(claim);
 
       valres.Errors.Should()
         .ContainSingle(x => x.ErrorMessage == "Cannot transfer claim between solutions")
@@ -142,52 +149,36 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Validate_Delete_OtherOrganisation_ReturnsError()
+    public void MustBeSameOrganisation_Same_Succeeds()
     {
       var orgId = Guid.NewGuid().ToString();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: Roles.Supplier, orgId: orgId));
-      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
-      var claim = Creator.GetClaimsBase();
-      _claimDatastore.Setup(x => x.ById(claim.Id)).Returns(claim);
-      _solutionsDatastore.Setup(x => x.ById(claim.SolutionId)).Returns(Creator.GetSolution());
-
-      var valres = validator.Validate(claim, ruleSet: nameof(IClaimsLogic<ClaimsBase>.Delete));
-
-      valres.Errors.Should()
-        .ContainSingle(x => x.ErrorMessage == "Cannot update/delete claim for other organisation")
-        .And
-        .HaveCount(1);
-    }
-
-    [Test]
-    public void Validate_Delete_OwnOrganisation_Succeeds()
-    {
-      var orgId = Guid.NewGuid().ToString();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: Roles.Supplier, orgId: orgId));
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(orgId: orgId));
       var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase();
       _claimDatastore.Setup(x => x.ById(claim.Id)).Returns(claim);
       _solutionsDatastore.Setup(x => x.ById(claim.SolutionId)).Returns(Creator.GetSolution(orgId: orgId));
 
-      var valres = validator.Validate(claim, ruleSet: nameof(IClaimsLogic<ClaimsBase>.Delete));
+      validator.MustBeSameOrganisation();
+      var valres = validator.Validate(claim);
 
       valres.Errors.Should().BeEmpty();
     }
 
     [Test]
-    public void Validate_Update_OtherOrganisation_ReturnsError()
+    public void MustBeSameOrganisation_Different_ReturnsError()
     {
       var orgId = Guid.NewGuid().ToString();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: Roles.Supplier, orgId: orgId));
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(orgId: orgId));
       var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase();
       _claimDatastore.Setup(x => x.ById(claim.Id)).Returns(claim);
       _solutionsDatastore.Setup(x => x.ById(claim.SolutionId)).Returns(Creator.GetSolution());
 
-      var valres = validator.Validate(claim, ruleSet: nameof(IClaimsLogic<ClaimsBase>.Update));
+      validator.MustBeSameOrganisation();
+      var valres = validator.Validate(claim);
 
       valres.Errors.Should()
-        .ContainSingle(x => x.ErrorMessage == "Cannot update/delete claim for other organisation")
+        .ContainSingle(x => x.ErrorMessage == "Cannot change claim for other organisation")
         .And
         .HaveCount(1);
     }

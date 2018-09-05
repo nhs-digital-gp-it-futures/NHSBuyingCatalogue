@@ -22,6 +22,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
       RuleSet(nameof(IClaimsLogic<T>.Update), () =>
       {
+        MustBeValidId();
+        MustBeValidSolutionId();
         MustBeSameSolution();
         MustBeSameOrganisation();
         MustBeValidStatusTransition();
@@ -29,24 +31,33 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
       RuleSet(nameof(IClaimsLogic<T>.Delete), () =>
       {
+        MustBeValidId();
+        MustBeValidSolutionId();
         MustBeSameOrganisation();
         MustBePending();
       });
+    }
 
-      RuleFor(x => x.Id)
-        .NotNull()
-        .Must(id => Guid.TryParse(id, out _))
-        .WithMessage("Invalid Id");
+    internal void MustBeValidSolutionId()
+    {
       RuleFor(x => x.SolutionId)
         .NotNull()
         .Must(solnId => Guid.TryParse(solnId, out _))
         .WithMessage("Invalid SolutionId");
     }
 
+    internal void MustBeValidId()
+    {
+      RuleFor(x => x.Id)
+        .NotNull()
+        .Must(id => Guid.TryParse(id, out _))
+        .WithMessage("Invalid Id");
+    }
+
     protected abstract void MustBePending();
     protected abstract void MustBeValidStatusTransition();
 
-    private void MustBeSameOrganisation()
+    internal void MustBeSameOrganisation()
     {
       RuleFor(x => x)
         .Must(x =>
@@ -60,10 +71,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
           var claimSoln = _solutionsDatastore.ById(claim.SolutionId);
           return claimSoln != null && claimSoln.OrganisationId == orgId;
         })
-        .WithMessage("Cannot update/delete claim for other organisation");
+        .WithMessage("Cannot change claim for other organisation");
     }
 
-    private void MustBeSameSolution()
+    internal void MustBeSameSolution()
     {
       RuleFor(x => x)
         .Must(x =>
