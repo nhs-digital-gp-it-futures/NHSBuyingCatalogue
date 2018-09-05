@@ -18,7 +18,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
     }
 
-    protected override void MustBeValidStatusTransition()
+    internal override void MustBeValidStatusTransition()
     {
     }
   }

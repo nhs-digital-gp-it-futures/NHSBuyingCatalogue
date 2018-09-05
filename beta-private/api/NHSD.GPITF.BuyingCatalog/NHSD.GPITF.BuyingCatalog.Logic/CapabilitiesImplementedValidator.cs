@@ -28,7 +28,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Only supplier can delete a draft claim");
     }
 
-    protected override void MustBeValidStatusTransition()
+    internal override void MustBeValidStatusTransition()
     {
       RuleFor(x => x)
         .Must(x =>

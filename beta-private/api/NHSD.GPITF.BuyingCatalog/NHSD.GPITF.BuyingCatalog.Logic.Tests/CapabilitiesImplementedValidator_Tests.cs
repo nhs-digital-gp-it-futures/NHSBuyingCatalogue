@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
@@ -95,19 +94,16 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Submitted, Roles.Supplier)]
     [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Approved, Roles.Admin)]
     [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Rejected, Roles.Admin)]
-    public void Validate_Update_ValidStatusTransition_Succeeds(CapabilitiesImplementedStatus oldStatus, CapabilitiesImplementedStatus newStatus, string role)
+    public void MustBeValidStatusTransition_Valid_Succeeds(CapabilitiesImplementedStatus oldStatus, CapabilitiesImplementedStatus newStatus, string role)
     {
-      var orgId = Guid.NewGuid().ToString();
-      var claimId = Guid.NewGuid().ToString();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role, orgId: orgId));
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
-      var soln = Creator.GetSolution(orgId: orgId);
-      var oldClaim = GetCapabilitiesImplemented(id: claimId, status: oldStatus, solnId: soln.Id);
-      var newClaim = GetCapabilitiesImplemented(id: claimId, status: newStatus, solnId: soln.Id);
-      _claimDatastore.Setup(x => x.ById(claimId)).Returns(oldClaim);
-      _solutionsDatastore.Setup(x => x.ById(soln.Id)).Returns(soln);
+      var oldClaim = GetCapabilitiesImplemented(status: oldStatus);
+      var newClaim = GetCapabilitiesImplemented(status: newStatus);
+      _claimDatastore.Setup(x => x.ById(newClaim.Id)).Returns(oldClaim);
 
-      var valres = validator.Validate(newClaim, ruleSet: nameof(ICapabilitiesImplementedLogic.Update));
+      validator.MustBeValidStatusTransition();
+      var valres = validator.Validate(newClaim);
 
       valres.Errors.Should().BeEmpty();
     }
@@ -153,19 +149,16 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Rejected, Roles.Admin)]
     [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Rejected, Roles.Buyer)]
     [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Rejected, Roles.Supplier)]
-    public void Validate_Update_InvalidStatusTransition_ReturnsError(CapabilitiesImplementedStatus oldStatus, CapabilitiesImplementedStatus newStatus, string role)
+    public void MustBeValidStatusTransition_Invalid_ReturnsError(CapabilitiesImplementedStatus oldStatus, CapabilitiesImplementedStatus newStatus, string role)
     {
-      var orgId = Guid.NewGuid().ToString();
-      var claimId = Guid.NewGuid().ToString();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role, orgId: orgId));
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
-      var soln = Creator.GetSolution(orgId: orgId);
-      var oldClaim = GetCapabilitiesImplemented(id: claimId, status: oldStatus, solnId: soln.Id);
-      var newClaim = GetCapabilitiesImplemented(id: claimId, status: newStatus, solnId: soln.Id);
-      _claimDatastore.Setup(x => x.ById(claimId)).Returns(oldClaim);
-      _solutionsDatastore.Setup(x => x.ById(soln.Id)).Returns(soln);
+      var oldClaim = GetCapabilitiesImplemented(status: oldStatus);
+      var newClaim = GetCapabilitiesImplemented(status: newStatus);
+      _claimDatastore.Setup(x => x.ById(newClaim.Id)).Returns(oldClaim);
 
-      var valres = validator.Validate(newClaim, ruleSet: nameof(ICapabilitiesImplementedLogic.Update));
+      validator.MustBeValidStatusTransition();
+      var valres = validator.Validate(newClaim);
 
       valres.Errors.Should()
         .ContainSingle(x => x.ErrorMessage == "Invalid Status transition")
@@ -192,17 +185,14 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         Roles.Supplier)]
           string role)
     {
-      var orgId = Guid.NewGuid().ToString();
-      var claimId = Guid.NewGuid().ToString();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role, orgId: orgId));
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
-      var soln = Creator.GetSolution(orgId: orgId);
-      var oldClaim = GetCapabilitiesImplemented(id: claimId, status: oldStatus, solnId: soln.Id);
-      var newClaim = GetCapabilitiesImplemented(id: claimId, status: newStatus, solnId: soln.Id);
-      _claimDatastore.Setup(x => x.ById(claimId)).Returns(oldClaim);
-      _solutionsDatastore.Setup(x => x.ById(soln.Id)).Returns(soln);
+      var oldClaim = GetCapabilitiesImplemented(status: oldStatus);
+      var newClaim = GetCapabilitiesImplemented(status: newStatus);
+      _claimDatastore.Setup(x => x.ById(newClaim.Id)).Returns(oldClaim);
 
-      var valres = validator.Validate(newClaim, ruleSet: nameof(ICapabilitiesImplementedLogic.Update));
+      validator.MustBeValidStatusTransition();
+      var valres = validator.Validate(newClaim);
 
       valres.Errors.Should()
         .ContainSingle(x => x.ErrorMessage == "Invalid Status transition")

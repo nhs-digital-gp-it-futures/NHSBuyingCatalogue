@@ -55,7 +55,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     }
 
     internal abstract void MustBePending();
-    protected abstract void MustBeValidStatusTransition();
+    internal abstract void MustBeValidStatusTransition();
 
     internal void MustBeSameOrganisation()
     {
