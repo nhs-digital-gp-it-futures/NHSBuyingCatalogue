@@ -27,6 +27,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         MustBeSameOrganisation();
         MustBeFromSameOrganisation();
         MustBeValidStatusTransition();
+        MustBeCurrentVersion();
       });
 
       RuleFor(x => x.Id)
@@ -86,6 +87,17 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
           return x.OrganisationId == orgId;
         })
         .WithMessage("Must be from same organisation");
+    }
+
+    private void MustBeCurrentVersion()
+    {
+      RuleFor(x => x)
+        .Must(x =>
+        {
+          var solns = _solutionDatastore.ByOrganisation(x.OrganisationId);
+          return solns.Select(soln => soln.Id).Contains(x.Id);
+        })
+        .WithMessage("Can only change current version");
     }
 
     private static IEnumerable<(SolutionStatus OldStatus, SolutionStatus NewStatus, bool HasValidRole)> ValidStatusTransitions(IHttpContextAccessor context)

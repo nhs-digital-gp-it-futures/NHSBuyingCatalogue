@@ -111,6 +111,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
       var soln = Creator.GetSolution(orgId: orgId);
       _solutionDatastore.Setup(x => x.ById(soln.Id)).Returns(Creator.GetSolution(orgId: soln.OrganisationId));
+      _solutionDatastore.Setup(x => x.ByOrganisation(orgId)).Returns(new[] { soln });
 
       var valres = validator.Validate(soln, ruleSet: nameof(ISolutionsLogic.Update));
 
@@ -125,6 +126,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(orgId: orgId, role: Roles.Supplier));
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
       _solutionDatastore.Setup(x => x.ById(soln.Id)).Returns(Creator.GetSolution());
+      _solutionDatastore.Setup(x => x.ByOrganisation(orgId)).Returns(new[] { soln });
 
       var valres = validator.Validate(soln, ruleSet: nameof(ISolutionsLogic.Update));
 
@@ -146,11 +148,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void Validate_Update_ValidStatusTransition_Succeeds(SolutionStatus oldStatus, SolutionStatus newStatus, string role)
     {
       var orgId = Guid.NewGuid().ToString();
+      var solnId = Guid.NewGuid().ToString();
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(orgId: orgId, role: role));
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
-      var oldSoln = Creator.GetSolution(status: oldStatus, orgId: orgId);
-      var newSoln = Creator.GetSolution(status: newStatus, orgId: orgId);
+      var oldSoln = Creator.GetSolution(id: solnId, status: oldStatus, orgId: orgId);
+      var newSoln = Creator.GetSolution(id: solnId, status: newStatus, orgId: orgId);
       _solutionDatastore.Setup(x => x.ById(newSoln.Id)).Returns(oldSoln);
+      _solutionDatastore.Setup(x => x.ByOrganisation(orgId)).Returns(new[] { oldSoln });
 
       var valres = validator.Validate(newSoln, ruleSet: nameof(ISolutionsLogic.Update));
 
@@ -249,11 +253,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void Validate_Update_InvalidStatusTransition_ReturnsError(SolutionStatus oldStatus, SolutionStatus newStatus, string role)
     {
       var orgId = Guid.NewGuid().ToString();
+      var solnId = Guid.NewGuid().ToString();
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(orgId: orgId, role: role));
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
-      var oldSoln = Creator.GetSolution(status: oldStatus, orgId: orgId);
-      var newSoln = Creator.GetSolution(status: newStatus, orgId: orgId);
-      _solutionDatastore.Setup(x => x.ById(newSoln.Id)).Returns(oldSoln);
+      var oldSoln = Creator.GetSolution(id: solnId, status: oldStatus, orgId: orgId);
+      var newSoln = Creator.GetSolution(id: solnId, status: newStatus, orgId: orgId);
+      _solutionDatastore.Setup(x => x.ById(solnId)).Returns(oldSoln);
+      _solutionDatastore.Setup(x => x.ByOrganisation(orgId)).Returns(new[] { oldSoln });
 
       var valres = validator.Validate(newSoln, ruleSet: nameof(ISolutionsLogic.Update));
 
@@ -286,11 +292,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
           string role)
     {
       var orgId = Guid.NewGuid().ToString();
+      var solnId = Guid.NewGuid().ToString();
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(orgId: orgId, role: role));
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
-      var oldSoln = Creator.GetSolution(status: oldStatus, orgId: orgId);
-      var newSoln = Creator.GetSolution(status: newStatus, orgId: orgId);
+      var oldSoln = Creator.GetSolution(id: solnId, status: oldStatus, orgId: orgId);
+      var newSoln = Creator.GetSolution(id: solnId, status: newStatus, orgId: orgId);
       _solutionDatastore.Setup(x => x.ById(newSoln.Id)).Returns(oldSoln);
+      _solutionDatastore.Setup(x => x.ByOrganisation(orgId)).Returns(new[] { oldSoln });
 
       var valres = validator.Validate(newSoln, ruleSet: nameof(ISolutionsLogic.Update));
 
@@ -304,11 +312,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void Validate_Update_SupplierFromSameOrganisation_Succeeds()
     {
       var orgId = Guid.NewGuid().ToString();
+      var solnId = Guid.NewGuid().ToString();
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(orgId: orgId, role: Roles.Supplier));
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
-      var oldSoln = Creator.GetSolution(status: SolutionStatus.Draft, orgId: orgId);
-      var newSoln = Creator.GetSolution(status: SolutionStatus.Draft, orgId: orgId);
+      var oldSoln = Creator.GetSolution(id: solnId, status: SolutionStatus.Draft, orgId: orgId);
+      var newSoln = Creator.GetSolution(id: solnId, status: SolutionStatus.Draft, orgId: orgId);
       _solutionDatastore.Setup(x => x.ById(newSoln.Id)).Returns(oldSoln);
+      _solutionDatastore.Setup(x => x.ByOrganisation(orgId)).Returns(new[] { oldSoln });
 
       var valres = validator.Validate(newSoln, ruleSet: nameof(ISolutionsLogic.Update));
 
@@ -322,11 +332,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
           string role)
     {
       var orgId = Guid.NewGuid().ToString();
+      var solnId = Guid.NewGuid().ToString();
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
-      var oldSoln = Creator.GetSolution(status: SolutionStatus.Draft, orgId: orgId);
-      var newSoln = Creator.GetSolution(status: SolutionStatus.Draft, orgId: orgId);
-      _solutionDatastore.Setup(x => x.ById(newSoln.Id)).Returns(oldSoln);
+      var oldSoln = Creator.GetSolution(id: solnId, status: SolutionStatus.Draft, orgId: orgId);
+      var newSoln = Creator.GetSolution(id: solnId, status: SolutionStatus.Draft, orgId: orgId);
+     _solutionDatastore.Setup(x => x.ById(newSoln.Id)).Returns(oldSoln);
+       _solutionDatastore.Setup(x => x.ByOrganisation(orgId)).Returns(new[] { oldSoln });
 
       var valres = validator.Validate(newSoln, ruleSet: nameof(ISolutionsLogic.Update));
 
@@ -344,11 +356,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
           string role)
     {
       var orgId = Guid.NewGuid().ToString();
+      var solnId = Guid.NewGuid().ToString();
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
-      var oldSoln = Creator.GetSolution(status: SolutionStatus.Draft, orgId: orgId);
-      var newSoln = Creator.GetSolution(status: SolutionStatus.Draft, orgId: orgId);
+      var oldSoln = Creator.GetSolution(id: solnId, status: SolutionStatus.Draft, orgId: orgId);
+      var newSoln = Creator.GetSolution(id: solnId, status: SolutionStatus.Draft, orgId: orgId);
       _solutionDatastore.Setup(x => x.ById(newSoln.Id)).Returns(oldSoln);
+       _solutionDatastore.Setup(x => x.ByOrganisation(orgId)).Returns(new[] { oldSoln });
 
       var valres = validator.Validate(newSoln, ruleSet: nameof(ISolutionsLogic.Update));
 
@@ -364,15 +378,37 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void Validate_Update_NoPreviousVersion_Succeeds()
     {
       var orgId = Guid.NewGuid().ToString();
+      var solnId = Guid.NewGuid().ToString();
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(orgId: orgId, role: Roles.Supplier));
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
-      var oldSoln = Creator.GetSolution(status: SolutionStatus.Draft, orgId: orgId);
-      var newSoln = Creator.GetSolution(status: SolutionStatus.Draft, orgId: orgId);
+      var oldSoln = Creator.GetSolution(id:solnId, status: SolutionStatus.Draft, orgId: orgId);
+      var newSoln = Creator.GetSolution(id:solnId, status: SolutionStatus.Draft, orgId: orgId);
       _solutionDatastore.Setup(x => x.ById(newSoln.Id)).Returns(oldSoln);
+      _solutionDatastore.Setup(x => x.ByOrganisation(orgId)).Returns(new[] { oldSoln });
 
       var valres = validator.Validate(newSoln, ruleSet: nameof(ISolutionsLogic.Update));
 
       valres.Errors.Should().BeEmpty();
+    }
+
+    [Test]
+    public void Validate_Update_PreviousVersion_ReturnsError()
+    {
+      var orgId = Guid.NewGuid().ToString();
+      var solnId = Guid.NewGuid().ToString();
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(orgId: orgId, role: Roles.Supplier));
+      var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
+      var oldSoln = Creator.GetSolution(id:solnId, status: SolutionStatus.Draft, orgId: orgId);
+      var newSoln = Creator.GetSolution(id:solnId, status: SolutionStatus.Draft, orgId: orgId);
+      _solutionDatastore.Setup(x => x.ById(newSoln.Id)).Returns(oldSoln);
+      _solutionDatastore.Setup(x => x.ByOrganisation(orgId)).Returns(new[] { Creator.GetSolution() });
+
+      var valres = validator.Validate(newSoln, ruleSet: nameof(ISolutionsLogic.Update));
+
+      valres.Errors.Should()
+        .ContainSingle(x => x.ErrorMessage == "Can only change current version")
+        .And
+        .HaveCount(1);
     }
   }
 }

@@ -36,12 +36,14 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
     public static Solutions GetSolution(
       string id = null,
+      string previousId = null,
       string orgId = null,
       SolutionStatus status = SolutionStatus.Draft)
     {
       return new Solutions
       {
         Id = id ?? Guid.NewGuid().ToString(),
+        PreviousId = previousId,
         OrganisationId = orgId ?? Guid.NewGuid().ToString(),
         Status = status
       };
