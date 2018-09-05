@@ -24,6 +24,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
       RuleSet(nameof(ISolutionsLogic.Update), () =>
       {
+        MustBeValidId();
+        MustBeValidOrganisationId();
         MustBeSameOrganisation();
         MustBeFromSameOrganisation();
         MustBeValidStatusTransition();
@@ -33,15 +35,24 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
       RuleSet(nameof(ISolutionsLogic.Create), () =>
       {
+        MustBeValidId();
+        MustBeValidOrganisationId();
         MustBeFromSameOrganisation();
         PreviousVersionMustBeFromSameOrganisation();
         MustBePending();
       });
+    }
 
+    internal void MustBeValidId()
+    {
       RuleFor(x => x.Id)
         .NotNull()
         .Must(id => Guid.TryParse(id, out _))
         .WithMessage("Invalid Id");
+    }
+
+    internal void MustBeValidOrganisationId()
+    {
       RuleFor(x => x.OrganisationId)
         .NotNull()
         .Must(orgId => Guid.TryParse(orgId, out _))

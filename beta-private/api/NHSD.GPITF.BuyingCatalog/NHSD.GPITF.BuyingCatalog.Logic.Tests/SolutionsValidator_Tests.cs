@@ -41,12 +41,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void IdNull_ReturnsError()
+    public void MustBeValidId_Null_ReturnsError()
     {
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
       var soln = Creator.GetSolution();
       soln.Id = null;
 
+      validator.MustBeValidId();
       var valres = validator.Validate(soln);
 
       valres.Errors.Should()
@@ -58,11 +59,12 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void IdNotGuid_ReturnsError()
+    public void MustBeValidId_NotGuid_ReturnsError()
     {
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
       var soln = Creator.GetSolution(id: "some other Id");
 
+      validator.MustBeValidId();
       var valres = validator.Validate(soln);
 
       valres.Errors.Should()
@@ -72,12 +74,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void OrganisationIdNull_ReturnsError()
+    public void MustBeValidOrganisationId_Null_ReturnsError()
     {
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
       var soln = Creator.GetSolution(orgId: null);
       soln.OrganisationId = null;
 
+      validator.MustBeValidOrganisationId();
       var valres = validator.Validate(soln);
 
       valres.Errors.Should()
@@ -89,11 +92,12 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void OrganisationIdNotGuid_ReturnsError()
+    public void MustBeValidOrganisationId_NotGuid_ReturnsError()
     {
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
       var soln = Creator.GetSolution(orgId: "some other Id");
 
+      validator.MustBeValidOrganisationId();
       var valres = validator.Validate(soln);
 
       valres.Errors.Should()
