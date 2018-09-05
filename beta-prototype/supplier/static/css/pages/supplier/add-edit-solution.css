@@ -3,48 +3,87 @@
   width: 80%;
 }
 
-#add-edit-solution form > fieldset {
-  border: none;
-  margin: 3em 0 0 0;
-  padding: 0;
+#add-edit-solution fieldset {
+  border: 0;  
 }
 
-#add-edit-solution form > fieldset > legend {
-  border: solid 2px var(--color-heading);
-  border-radius: 2px;
-  color: var(--color-heading);
+#add-edit-solution form fieldset.collapsible {
+  border: solid 2px var(--color-nhs-blue);
+  border-radius: 3px;
+  margin: 1em 0 0 0;
+  padding: 2.5em 0 0 0;
+  position: relative;
+  overflow: hidden;
+}
+
+#add-edit-solution form fieldset.collapsible > legend {
+  background-color: var(--color-nhs-blue);
+  color: var(--color-nhs-white);
   cursor: pointer;
   font-size: var(--font-size-subsubtitle);
-  font-weight: 600;
-  padding: 0.3em 1em;
-  position: relative;
-  width: 97%;
+  font-weight: 400;
+  padding: 0.5em 1em;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
 }
 
-#add-edit-solution form > fieldset > legend small {
-  font-size: smaller;
-  font-weight: normal;
-  padding-right: 1em;
+#add-edit-solution form fieldset.collapsible > legend a {
+  color: var(--color-nhs-white);
 }
 
-#add-edit-solution form > fieldset > legend::before {
+#add-edit-solution form fieldset.collapsible .instructions {
+  font-size: var(--font-size-body);
+  font-weight: 300;
+}
+#add-edit-solution form fieldset.collapsible > .instructions {
+  font-weight: 500;
+  padding: 1rem 2.5rem;
+}
+
+#add-edit-solution form fieldset.collapsible > legend::before {
   content: '▲';
   position: relative;
   left: -0.5em;
 }
 
-#add-edit-solution form > fieldset.collapsed > *:not(legend) {
+#add-edit-solution form fieldset.collapsible.collapsed {
+  border: 0;
+  margin-bottom: 4em;
+  padding: 0;
+  overflow: visible;
+}
+
+#add-edit-solution form fieldset.collapsible.collapsed > legend {
+  background-color: var(--color-nhs-white);
+  border: solid 2px var(--color-nhs-blue);
+  border-radius: 3px;
+  color: var(--color-nhs-blue);
+}
+
+#add-edit-solution form fieldset.collapsible.collapsed > legend a {
+  color: var(--color-nhs-blue);
+}
+
+#add-edit-solution form fieldset.collapsible.collapsed > *:not(legend) {
   display: none;
 }
 
-#add-edit-solution form > fieldset.collapsed > legend::before {
+#add-edit-solution form fieldset.collapsible.collapsed > legend::before {
   content: '▼';
 }
 
+#add-edit-solution form fieldset .inputs {
+  background-color: var(--color-nhs-pale-grey);
+  padding: 0.1rem 2.5rem 1rem 2.5rem;
+}
+
 #add-edit-solution form label {
-  font-size: var(--font-size-body);
+  font-size: var(--font-size-navigation);
+  font-weight: 600;
   display: block;
-  margin-top: 0.5em;
+  margin-top: 1em;
 }
 
 #add-edit-solution form label .required {
@@ -55,13 +94,11 @@
 #add-edit-solution form input[type=email],
 #add-edit-solution form textarea {
   display: block;
-  width: 80%;
-  max-width: 60em;
-
+  width: 95%;
   font-size: var(--font-size-body);
   padding: 0.5em 1em 0.5em 1em;
   margin: 0.1em 0 0 0;
-  border: 1px solid var(--color-input-border);
+  border: 2px solid var(--color-nhs-blue);
   border-radius: 2px;
 }
 
@@ -102,24 +139,6 @@
   margin-bottom: 0.5em;
 }
 
-#add-edit-solution fieldset.contact {
-  background-color: var(--color-contact-form-bg);
-  border: none;
-  margin-top: -1em;
-  padding-left: 4em;
-}
-
-#add-edit-solution fieldset.contact legend {
-  color: var(--color-contact-form-fg);
-  font-size: larger;
-  font-weight: 600;
-  padding-top: 1.5em;
-}
-
-#add-edit-solution #secondary-contacts {
-  margin-top: 2em;
-}
-
 #add-edit-solution fieldset.contact.secondary {
   margin-bottom: 2em;
 }
@@ -130,13 +149,6 @@
 
 #add-edit-solution fieldset details summary {
   color: var(--color-nhs-blue);
-  font-size: smaller;
-}
-
-#add-edit-solution fieldset details.version-help .help {
-  margin-bottom: 1em;
-  margin-top: 1em;
-  padding: 0 0 0 1em;
 }
 
 #add-edit-solution ul.capabilities {
