@@ -6,6 +6,7 @@ using Moq;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NUnit.Framework;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
@@ -16,6 +17,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     private Mock<IHttpContextAccessor> _context;
     private Mock<IClaimsDatastore<ClaimsBase>> _datastore;
     private Mock<IClaimsValidator<ClaimsBase>> _validator;
+    private Mock<IClaimsFilter<ClaimsBase>> _filter;
 
     [SetUp]
     public void SetUp()
@@ -23,18 +25,19 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       _context = new Mock<IHttpContextAccessor>();
       _datastore = new Mock<IClaimsDatastore<ClaimsBase>>();
       _validator = new Mock<IClaimsValidator<ClaimsBase>>();
+      _filter = new Mock<IClaimsFilter<ClaimsBase>>();
     }
 
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _context.Object));
+      Assert.DoesNotThrow(() => new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _filter.Object, _context.Object));
     }
 
     [Test]
     public void Create_CallsValidator_WithoutRuleset()
     {
-      var logic = new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _context.Object);
+      var logic = new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _filter.Object, _context.Object);
       var claim = Creator.GetClaimsBase();
 
       var valres = new ValidationResult();
@@ -52,7 +55,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void Create_CallsValidator_WithRuleset()
     {
-      var logic = new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _context.Object);
+      var logic = new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _filter.Object, _context.Object);
       var claim = Creator.GetClaimsBase();
 
       var valres = new ValidationResult();
@@ -71,7 +74,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void Update_CallsValidator_WithoutRuleset()
     {
-      var logic = new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _context.Object);
+      var logic = new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _filter.Object, _context.Object);
       var claim = Creator.GetClaimsBase();
 
       var valres = new ValidationResult();
@@ -88,7 +91,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void Update_CallsValidator_WithRuleset()
     {
-      var logic = new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _context.Object);
+      var logic = new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _filter.Object, _context.Object);
       var claim = Creator.GetClaimsBase();
 
       var valres = new ValidationResult();
@@ -106,7 +109,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void Delete_CallsValidator_WithoutRuleset()
     {
-      var logic = new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _context.Object);
+      var logic = new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _filter.Object, _context.Object);
       var claim = Creator.GetClaimsBase();
 
       var valres = new ValidationResult();
@@ -123,7 +126,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void Delete_CallsValidator_WithRuleset()
     {
-      var logic = new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _context.Object);
+      var logic = new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _filter.Object, _context.Object);
       var claim = Creator.GetClaimsBase();
 
       var valres = new ValidationResult();
@@ -136,6 +139,26 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
           vc.InstanceToValidate == claim &&
           vc.Selector is RulesetValidatorSelector &&
           ((RulesetValidatorSelector)vc.Selector).RuleSets.Contains(nameof(IClaimsLogic<ClaimsBase>.Delete)))), Times.Once());
+    }
+
+    [Test]
+    public void ById_CallsFilter()
+    {
+      var logic = new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _filter.Object, _context.Object);
+
+      logic.ById("some Id");
+
+      _filter.Verify(x => x.Filter(It.IsAny<IEnumerable<ClaimsBase>>()), Times.Once());
+    }
+
+    [Test]
+    public void BySolution_CallsFilter()
+    {
+      var logic = new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _filter.Object, _context.Object);
+
+      logic.BySolution("some Id");
+
+      _filter.Verify(x => x.Filter(It.IsAny<IEnumerable<ClaimsBase>>()), Times.Once());
     }
   }
 }

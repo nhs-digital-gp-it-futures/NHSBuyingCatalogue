@@ -9,8 +9,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public DummyClaimsLogicBase(
       IClaimsDatastore<ClaimsBase> datastore,
       IClaimsValidator<ClaimsBase> validator,
+      IClaimsFilter<ClaimsBase> filter,
       IHttpContextAccessor context) :
-      base(datastore, validator, context)
+      base(datastore, validator, filter, context)
     {
     }
   }
