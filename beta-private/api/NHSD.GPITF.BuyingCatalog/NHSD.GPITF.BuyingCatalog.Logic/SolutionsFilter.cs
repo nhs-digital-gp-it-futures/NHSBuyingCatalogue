@@ -14,13 +14,14 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     {
       if (_context.HasRole(Roles.Admin))
       {
+        // Admin: everything
         return input;
       }
 
       if (_context.HasRole(Roles.Buyer))
       {
-        // Buyer: hide draft Solutions
-        return input.Status == SolutionStatus.Draft ? null : input;
+        // Buyer: hide draft & failed Solutions
+        return (input.Status == SolutionStatus.Draft || input.Status == SolutionStatus.Failed) ? null : input;
       }
 
       if (_context.HasRole(Roles.Supplier))
@@ -29,8 +30,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         return _context.OrganisationId() == input.OrganisationId ? input : null;
       }
 
-      // None: hide draft Solutions
-      return input.Status == SolutionStatus.Draft ? null : input;
+      // None: hide draft & failed Solutions
+      return (input.Status == SolutionStatus.Draft || input.Status == SolutionStatus.Failed) ? null : input;
     }
   }
 }

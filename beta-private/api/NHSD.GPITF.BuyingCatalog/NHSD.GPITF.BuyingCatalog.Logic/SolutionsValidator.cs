@@ -24,21 +24,42 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
       RuleSet(nameof(ISolutionsLogic.Update), () =>
       {
+        MustBeValidId();
+        MustBeValidOrganisationId();
         MustBeSameOrganisation();
+        MustBeFromSameOrganisation();
         MustBeValidStatusTransition();
+        MustBeCurrentVersion();
+        PreviousVersionMustBeFromSameOrganisation();
       });
 
+      RuleSet(nameof(ISolutionsLogic.Create), () =>
+      {
+        MustBeValidId();
+        MustBeValidOrganisationId();
+        MustBeFromSameOrganisation();
+        PreviousVersionMustBeFromSameOrganisation();
+        MustBePending();
+      });
+    }
+
+    internal void MustBeValidId()
+    {
       RuleFor(x => x.Id)
         .NotNull()
         .Must(id => Guid.TryParse(id, out _))
         .WithMessage("Invalid Id");
+    }
+
+    internal void MustBeValidOrganisationId()
+    {
       RuleFor(x => x.OrganisationId)
         .NotNull()
         .Must(orgId => Guid.TryParse(orgId, out _))
         .WithMessage("Invalid OrganisationId");
     }
 
-    private void MustBeValidStatusTransition()
+    internal void MustBeValidStatusTransition()
     {
       RuleFor(x => x)
         .Must(x =>
@@ -62,7 +83,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Invalid Status transition");
     }
 
-    private void MustBeSameOrganisation()
+    internal void MustBeSameOrganisation()
     {
       RuleFor(x => x)
         .Must(x =>
@@ -74,6 +95,53 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
           return soln != null && x.OrganisationId == soln.OrganisationId;
         })
         .WithMessage("Cannot transfer solutions between organisations");
+    }
+
+    internal void MustBeFromSameOrganisation()
+    {
+      RuleFor(x => x)
+        .Must(x =>
+        {
+          var orgId = _context.OrganisationId();
+          return x.OrganisationId == orgId;
+        })
+        .WithMessage("Must be from same organisation");
+    }
+
+    internal void MustBeCurrentVersion()
+    {
+      RuleFor(x => x)
+        .Must(x =>
+        {
+          var solns = _solutionDatastore.ByOrganisation(x.OrganisationId);
+          return solns.Select(soln => soln.Id).Contains(x.Id);
+        })
+        .WithMessage("Can only change current version");
+    }
+
+    internal void PreviousVersionMustBeFromSameOrganisation()
+    {
+      RuleFor(x => x)
+        .Must(x =>
+        {
+          if (x.PreviousId == null)
+          {
+            return true;
+          }
+          var soln = _solutionDatastore.ById(x.PreviousId);
+          return soln != null && soln.OrganisationId == x.OrganisationId;
+        })
+        .WithMessage("Previous version must be from same organisation");
+    }
+
+    internal void MustBePending()
+    {
+      RuleFor(x => x)
+        .Must(x =>
+        {
+          return x.Status == SolutionStatus.Draft;
+        })
+        .WithMessage("Status must be Draft");
     }
 
     private static IEnumerable<(SolutionStatus OldStatus, SolutionStatus NewStatus, bool HasValidRole)> ValidStatusTransitions(IHttpContextAccessor context)

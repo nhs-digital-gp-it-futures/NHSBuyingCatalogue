@@ -45,7 +45,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Filter_Buyer_Returns_NonDraft([ValueSource(nameof(Statuses))]SolutionStatus status)
+    public void Filter_Buyer_Returns_NonFailedDraft([ValueSource(nameof(Statuses))]SolutionStatus status)
     {
       var ctx = Creator.GetContext(role: Roles.Buyer);
       _context.Setup(c => c.HttpContext).Returns(ctx);
@@ -56,7 +56,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         Creator.GetSolution(status: status),
         Creator.GetSolution(status: status)
       };
-      var expSolns = solns.Where(x => x.Status != SolutionStatus.Draft);
+      var expSolns = solns.Where(x =>
+        x.Status != SolutionStatus.Draft &&
+        x.Status != SolutionStatus.Failed);
 
       var res = filter.Filter(solns);
 
@@ -64,7 +66,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Filter_None_Returns_NonDraft([ValueSource(nameof(Statuses))]SolutionStatus status)
+    public void Filter_None_Returns_NonFailedDraft([ValueSource(nameof(Statuses))]SolutionStatus status)
     {
       var ctx = Creator.GetContext(role: "None");
       _context.Setup(c => c.HttpContext).Returns(ctx);
@@ -75,7 +77,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         Creator.GetSolution(status: status),
         Creator.GetSolution(status: status)
       };
-      var expSolns = solns.Where(x => x.Status != SolutionStatus.Draft);
+      var expSolns = solns.Where(x =>
+        x.Status != SolutionStatus.Draft &&
+        x.Status != SolutionStatus.Failed);
 
       var res = filter.Filter(solns);
 

@@ -50,6 +50,6 @@
     /// purchase on the Buying Catalog.
     /// Solution has reached an end point.
     /// </summary>
-    Approved = 6,
+    Approved = 6
   }
 }
