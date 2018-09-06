@@ -8,83 +8,85 @@
 {{/if}}
 {{/inline}}
 
-{{#*inline "contact"}}
-<fieldset class="contact">
-  <legend>{{contactType}}{{^required}} (optional){{/required}}</legend>
-  {{#if help}}
-  {{#> help-reveal title="Help - Who is this?"}}
-  <p>{{help}}</p>
-  {{/help-reveal}}
-  {{/if}}
-  <label{{#if errors.firstName}} class="has-errors"{{/if}}>
-    First Name{{#required}} <span class="required">*</span>{{/required}}
-    <input type="text"
-           name="contacts[{{contactType}}][firstName]"
-           value="{{ firstName }}">
-  </label>
-  {{> errors errors=errors.firstName }}
-  <label{{#if errors.lastName}} class="has-errors"{{/if}}>
-    Last Name{{#required}} <span class="required">*</span>{{/required}}
-    <input type="text"
-           name="contacts[{{contactType}}][lastName]"
-           value="{{ lastName }}">
-  </label>
-  {{> errors errors=errors.lastName }}
-  <label{{#if errors.emailAddress}} class="has-errors"{{/if}}>
-    Email{{#required}} <span class="required">*</span>{{/required}}
-    <input type="email"
-           name="contacts[{{contactType}}][emailAddress]"
-           value="{{ emailAddress }}">
-  </label>
-  {{> errors errors=errors.emailAddress }}
-  <label{{#if errors.phoneNumber}} class="has-errors"{{/if}}>
-    Phone Number{{#required}} <span class="required">*</span>{{/required}}
-    <input type="text"
-           name="contacts[{{contactType}}][phoneNumber]"
-           value="{{ phoneNumber }}">
-  </label>
-  {{> errors errors=errors.phoneNumber }}
+{{#*inline "accordion"}}
+<fieldset class="collapsible {{class}}">
+  <legend><a href="#" role="button" tabindex="0">{{legend}}</a></legend>
+  {{> @partial-block}}
 </fieldset>
 {{/inline}}
 
+{{#*inline "contact"}}
+<label{{#if errors.firstName}} class="has-errors"{{/if}}>
+  First Name{{#required}} <span class="required">*</span>{{/required}}
+  <input type="text"
+         name="contacts[{{contactType}}][firstName]"
+         value="{{ firstName }}">
+</label>
+{{> errors errors=errors.firstName }}
+<label{{#if errors.lastName}} class="has-errors"{{/if}}>
+  Last Name{{#required}} <span class="required">*</span>{{/required}}
+  <input type="text"
+         name="contacts[{{contactType}}][lastName]"
+         value="{{ lastName }}">
+</label>
+{{> errors errors=errors.lastName }}
+<label{{#if errors.emailAddress}} class="has-errors"{{/if}}>
+  Email{{#required}} <span class="required">*</span>{{/required}}
+  <input type="email"
+         name="contacts[{{contactType}}][emailAddress]"
+         value="{{ emailAddress }}">
+</label>
+{{> errors errors=errors.emailAddress }}
+<label{{#if errors.phoneNumber}} class="has-errors"{{/if}}>
+  Phone Number{{#required}} <span class="required">*</span>{{/required}}
+  <input type="text"
+         name="contacts[{{contactType}}][phoneNumber]"
+         value="{{ phoneNumber }}">
+</label>
+{{> errors errors=errors.phoneNumber }}
+{{/inline}}
+
 {{#*inline "secondaryContact"}}
-<fieldset class="contact secondary">
-  <label{{#if errors.contactType}} class="has-errors"{{/if}}>
-    Contact Type
-    <input type="text"
-           name="secondaryContacts[contactType]"
-           value="{{ contactType }}">
-  </label>
-  {{> errors errors=errors.contactType }}
-  <label{{#if errors.firstName}} class="has-errors"{{/if}}>
-    First Name
-    <input type="text"
-           name="secondaryContacts[firstName]"
-           value="{{ firstName }}">
-  </label>
-  {{> errors errors=errors.firstName }}
-  <label{{#if errors.lastName}} class="has-errors"{{/if}}>
-    Last Name
-    <input type="text"
-           name="secondaryContacts[lastName]"
-           value="{{ lastName }}">
-  </label>
-  {{> errors errors=errors.lastName }}
-  <label{{#if errors.emailAddress}} class="has-errors"{{/if}}>
-    Email
-    <input type="email"
-           name="secondaryContacts[emailAddress]"
-           value="{{ emailAddress }}">
-  </label>
-  {{> errors errors=errors.emailAddress }}
-  <label{{#if errors.phoneNumber}} class="has-errors"{{/if}}>
-    Phone Number
-    <input type="text"
-           name="secondaryContacts[phoneNumber]"
-           value="{{ phoneNumber }}">
-  </label>
-  {{> errors errors=errors.phoneNumber }}
-</fieldset>
+{{#> accordion class="contact secondary"
+              legend="Add Secondary Contact (optional)"}}
+  <div class="inputs">
+    <label{{#if errors.contactType}} class="has-errors"{{/if}}>
+      Contact Type
+      <input type="text"
+             name="secondaryContacts[contactType]"
+             value="{{ contactType }}">
+    </label>
+    {{> errors errors=errors.contactType }}
+    <label{{#if errors.firstName}} class="has-errors"{{/if}}>
+      First Name
+      <input type="text"
+             name="secondaryContacts[firstName]"
+             value="{{ firstName }}">
+    </label>
+    {{> errors errors=errors.firstName }}
+    <label{{#if errors.lastName}} class="has-errors"{{/if}}>
+      Last Name
+      <input type="text"
+             name="secondaryContacts[lastName]"
+             value="{{ lastName }}">
+    </label>
+    {{> errors errors=errors.lastName }}
+    <label{{#if errors.emailAddress}} class="has-errors"{{/if}}>
+      Email
+      <input type="email"
+             name="secondaryContacts[emailAddress]"
+             value="{{ emailAddress }}">
+    </label>
+    {{> errors errors=errors.emailAddress }}
+    <label{{#if errors.phoneNumber}} class="has-errors"{{/if}}>
+      Phone Number
+      <input type="text"
+             name="secondaryContacts[phoneNumber]"
+             value="{{ phoneNumber }}">
+    </label>
+    {{> errors errors=errors.phoneNumber }}
+  </div>
+{{/accordion}}
 {{/inline}}
 
 <div id="add-edit-solution">
@@ -92,94 +94,113 @@
         title="Enter Solution details & contacts"
         subtitle="Register Solution (1 of 4)"}}
   <div class="help">
-    <p>Enter basic details about your Solution and contact details from your organisation below. On the next page, you can choose Capabilities to complete Solution Registration. 
-
-    <p>The contacts entered on this page will be used to enable contact with NHS Digital during the on-boarding process. These contacts will not be shared publicly. In Stage 4—Solution Page, you’ll be able to enter public contact details. 
-
-    <p>All fields optional unless otherwise indicated. 
+    <p>Provide basic information and key contacts for your Solution below to NHS Digital.</p>
   </div>
 
-    {{> errors errors=errors.general }}
-    <form action="#errors" method="post" novalidate>
-        <fieldset>
-            <legend>
-              <small>Step 1 (of 2)</small>
-              Enter Name, Version &amp; Description
-            </legend>
-            <label{{#if errors.name}} class="has-errors"{{/if}}>
-                Solution Name <span class="required">*</span>
-                <ul class="validation-rules">
-                  <li>max 60 characters</li>
-                </ul>
-                <input type="text" name="name" value="{{ name }}">
-            </label>
-            {{> errors errors=errors.name }}
-            <label{{#if errors.description}} class="has-errors"{{/if}}>
-                Description <span class="required">*</span>
-                <p class="instructions">Your Solution description will be displayed on your Solution page and in search results, but it will not affect search ranking.</p>
-                <ul class="validation-rules">
-                  <li>max 300 characters</li>
-                </ul>
-                <textarea name="description"
-                          rows="4">{{ description }}</textarea>
-            </label>
-            {{> errors errors=errors.description }}
-            <label{{#if errors.version}} class="has-errors"{{/if}}>
-                Version
-                {{#> help-reveal title="Help - What is this?" class="version-help"}}
-                <p>Solution version is used to distinguish between instances of a solution. On the Catalogue, Solution version is intended to be used to describe Solutions with significant feature developments. In other words, when the ‘major number’ has changed, in standard semantic versioning schemes.
-                <p>Version might be used, for example, to describe a new version of a Solution with expanded functionality or additional Capabilities.
-                {{/help-reveal}}
-                <input type="text" name="version" value="{{ version }}">
-            </label>
-            {{> errors errors=errors.version }}
-        </fieldset>
-        <fieldset class="contacts">
-          <legend>
-            <small>Step 2 (of 2)</small>
-            Enter Contacts
-          </legend>
-          <h3>Primary Contacts</h3>
-          <p class="help">Provide the following contacts from your organisation to enable communication with NHS Digital during the on-boarding process. These contacts will not be shared publicly. The Lead Contact is required to complete registration.</p>
-          {{#each primaryContactTypes}}
+  {{> errors errors=errors.general }}
+  <form action="#errors" method="post" novalidate>
+    {{#> accordion legend="Enter Solution name, description, version"}}
+      <p class="instructions">‘Solution name’ ‘Description’ and ‘Version’ will be sent to NHS Digital to identify your Solution. They will also be shown to buyers at the conclusion of onboarding.  You can edit the ‘Description’ field later before displaying your Solution page to buyers.</p>
+
+      <div class="inputs">
+        <label{{#if errors.name}} class="has-errors"{{/if}}>
+          Solution Name <span class="required">*</span>
+          <ul class="validation-rules">
+            <li>max 60 characters</li>
+          </ul>
+          <input type="text" name="name" value="{{ name }}">
+        </label>
+        {{> errors errors=errors.name }}
+        <label{{#if errors.description}} class="has-errors"{{/if}}>
+          Description <span class="required">*</span>
+          <p class="instructions">Your Solution description will be displayed on your Solution page and in search results, but it will not affect search ranking. You can edit this later.</p>
+          <ul class="validation-rules">
+            <li>max 300 characters</li>
+          </ul>
+          <textarea name="description"
+                    rows="4">{{ description }}</textarea>
+        </label>
+        {{> errors errors=errors.description }}
+        <label{{#if errors.version}} class="has-errors"{{/if}}>
+          Version
+          {{#> help-reveal title="Help - What is this?" class="version-help"}}
+          <p>Solution version is used to distinguish between instances of a solution. On the Catalogue, Solution version is intended to be used to describe Solutions with significant feature developments. In other words, when the ‘major number’ has changed, in standard semantic versioning schemes.</p>
+          <p>Version might be used, for example, to describe a new version of a Solution with expanded functionality or additional Capabilities.</p>
+          {{/help-reveal}}
+          <input type="text" name="version" value="{{ version }}">
+        </label>
+        {{> errors errors=errors.version }}
+      </div>
+    {{/accordion}}
+    <div class="contacts">
+      {{#> accordion class="contact" legend="Add Lead Contact"}}
+        <p class="instructions">
+          Provide a Lead Contact to enable communication with NHS Digital during the onboarding process. This contact will not be shared publicly. The Lead Contact is required to complete registration.
+        </p>
+        <div class="inputs">
+          {{#> help-reveal title="Help - Who is this?"}}
+          <p>The person responsible for ensuring the information supplied during onboarding is a true reflection of the solution.</p>
+          {{/help-reveal}}
+          {{#with 'Lead Contact'}}
             {{> contact (lookup ../primaryContacts this)
                         contactType=this
-                        required=@first
-                        help=(lookup ../primaryContactHelp this)
+                        required=true
                         errors=(lookup ../errors.contacts this)}}
-          {{/each}}
-          <h3>Secondary Contacts (optional)</h3>
-          <p class="help">Some organisations work with multiple people in similar roles, for example when working with cohort organisations. Please add any additional contacts, as relevant.</p>
-          <div id="secondary-contacts">
-          {{#secondaryContacts}}
-            {{> secondaryContact . errors=(lookup ../errors.secondaryContacts @index)}}
-          {{/secondaryContacts}}
-          </div>
-          <p><a href="#" class="add-contact">⊕ Add Contact</a></p>
-          <template id="contact-template">
-            {{>secondaryContact}}
-          </template>
-        </fieldset>
-        <fieldset class="controls">
-            <button name="action" value="save" type="submit">Save</button>
-            <button class="primary" name="action" value="continue" type="submit">Continue</button>
-            <input type="hidden" name="_csrf" value="{{csrfToken}}">
-        </fieldset>
-    </form>
+          {{/with}}
+        </div>
+      {{/accordion}}
+      {{#> accordion class="contact" legend="Add Clinical Safety Officer (optional)"}}
+        <p class="instructions">
+          Provide a Clinical Safety Officer to enable communication with NHS Digital during the onboarding process. This contact will not be shared publicly. This contact is optional, however if you choose to provide any part of the contact details, all fields are required.
+        </p>
+        <div class="inputs">
+          {{#> help-reveal title="Help - Who is this?"}}
+          <p>The person in a Manufacturer’s organisation responsible for ensuring the safety of a Health IT System in that organisation through the application of clinical risk management.</p>
+          {{/help-reveal}}
+          {{#with 'Clinical Safety Officer'}}
+            {{> contact (lookup ../primaryContacts this)
+                        contactType=this
+                        errors=(lookup ../errors.contacts this)}}
+          {{/with}}
+        </div>
+      {{/accordion}}
+      <p class="help">Some organisations work with multiple people in similar roles, for example when working with cohort organisations. Please add any additional contacts, as relevant.</p>
+      <div id="secondary-contacts">
+      {{#secondaryContacts}}
+        {{> secondaryContact . errors=(lookup ../errors.secondaryContacts @index)}}
+      {{/secondaryContacts}}
+      </div>
+      <p><a href="#" class="add-contact">⊕ Add Contact</a></p>
+      <template id="contact-template">
+        {{>secondaryContact}}
+      </template>
+    </div>
+    <fieldset class="controls">
+        <button name="action" value="save" type="submit">Save</button>
+        <button class="primary" name="action" value="continue" type="submit">Continue</button>
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    </fieldset>
+  </form>
 </div>
 
 <script>
 /* global $, $$ */
 document.addEventListener('DOMContentLoaded', () => {
-  $$('form > fieldset > legend').forEach(el => {
+  $$('form fieldset.collapsible > legend').forEach(el => {
     el.addEventListener('click', toggleFieldsetCollapse)
   })
 
-  function toggleFieldsetCollapse (ev) {
-    ev.target.closest('fieldset').classList.toggle('collapsed')
+  function collapseAllFieldsets () {
+    $$('form fieldset.collapsible').forEach(el => el.classList.add('collapsed'))
   }
 
-  $('fieldset.contacts a.add-contact').addEventListener('click', ev => {
+  function toggleFieldsetCollapse (ev) {
+    ev.preventDefault()
+    collapseAllFieldsets()
+    ev.target.closest('fieldset').classList.remove('collapsed')
+  }
+
+  $('.contacts a.add-contact').addEventListener('click', ev => {
     ev.preventDefault()
     const newContact = $('#secondary-contacts').appendChild(
       document.importNode($('#contact-template').content, true)
@@ -187,5 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     $('#secondary-contacts fieldset:last-of-type input[type=text]').focus()
   })
+
+  collapseAllFieldsets()
 })
 </script>

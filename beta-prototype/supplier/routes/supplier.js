@@ -641,6 +641,8 @@ app.get('/solutions/:solution_id/mobile', csrfProtection, async (req, res) => {
     return res.redirect('/suppliers/solutions')
   }
 
+  const { standards } = await api.get_all_capabilities()
+
   const context = {
     backlink: {
       title: 'Select Capabilities',
@@ -648,7 +650,8 @@ app.get('/solutions/:solution_id/mobile', csrfProtection, async (req, res) => {
       href: `/suppliers/solutions/${req.params.solution_id}/capabilities`
     },
     csrfToken: req.csrfToken(),
-    isMobile: _.some(solutionEx.claimedStandard, ['standardId', 'CSS3'])
+    isMobile: _.some(solutionEx.claimedStandard, ['standardId', 'CSS3']),
+    standard: _.find(standards, ['id', 'CSS3'])
   }
 
   res.render('supplier/solution-mobile', context)

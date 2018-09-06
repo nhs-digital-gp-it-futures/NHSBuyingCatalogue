@@ -52,7 +52,7 @@ button,
   font-size: var(--font-size-button-label);
 }
 
-input[type=text], textarea {
+input[type=text], input[type=email], textarea {
   font-size: var(--font-size-input);
   font-weight: var(--font-weight-input);
 }
