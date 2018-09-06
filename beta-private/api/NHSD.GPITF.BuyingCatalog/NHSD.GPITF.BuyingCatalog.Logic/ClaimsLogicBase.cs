@@ -50,6 +50,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     public void Delete(T claim)
     {
       _validator.ValidateAndThrow(claim);
+      _validator.ValidateAndThrow(claim, ruleSet: nameof(IClaimsLogic<T>.Delete));
 
       _datastore.Delete(claim);
     }
