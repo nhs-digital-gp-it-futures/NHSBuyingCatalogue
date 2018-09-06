@@ -37,9 +37,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var filter = new ContactsFilter(_context.Object, _organisationDatastore.Object);
       var contacts = new[]
       {
-        GetContact(),
-        GetContact(),
-        GetContact()
+        Creator.GetContact(),
+        Creator.GetContact(),
+        Creator.GetContact()
       };
       var res = filter.Filter(contacts);
 
@@ -58,10 +58,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var nhsdOrgId = Guid.NewGuid().ToString();
       var nhsd = Creator.GetOrganisation(id: nhsdOrgId, primaryRoleId: PrimaryRole.GovernmentDepartment);
 
-      var cont1 = GetContact(orgId: orgId);
-      var cont2 = GetContact(orgId: orgId);
-      var cont3 = GetContact(orgId: otherOrgId);
-      var cont4 = GetContact(orgId: nhsdOrgId);
+      var cont1 = Creator.GetContact(orgId: orgId);
+      var cont2 = Creator.GetContact(orgId: orgId);
+      var cont3 = Creator.GetContact(orgId: otherOrgId);
+      var cont4 = Creator.GetContact(orgId: nhsdOrgId);
 
       _organisationDatastore.Setup(x => x.ByContact(cont1.Id)).Returns(org);
       _organisationDatastore.Setup(x => x.ByContact(cont2.Id)).Returns(org);
@@ -79,17 +79,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
 
       res.Should().BeEquivalentTo(new[] { cont1, cont2, cont4 });
-    }
-
-    private static Contacts GetContact(
-      string id = null,
-      string orgId = null)
-    {
-      return new Contacts
-      {
-        Id = id ?? Guid.NewGuid().ToString(),
-        OrganisationId = orgId ?? Guid.NewGuid().ToString()
-      };
     }
   }
 }
