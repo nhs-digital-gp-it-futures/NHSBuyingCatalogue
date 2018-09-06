@@ -20,6 +20,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _claimDatastore = claimDatastore;
       _solutionsDatastore = solutionsDatastore;
 
+      RuleSet(nameof(IClaimsLogic<T>.Create), () =>
+      {
+        MustBeValidSolutionId();
+        MustBeSameOrganisation();
+        MustBePending();
+      });
+
       RuleSet(nameof(IClaimsLogic<T>.Update), () =>
       {
         MustBeValidId();
@@ -64,14 +71,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         {
           var orgId = _context.OrganisationId();
           var claim = _claimDatastore.ById(x.Id);
-          if (claim == null)
-          {
-            return false;
-          }
-          var claimSoln = _solutionsDatastore.ById(claim.SolutionId);
-          return claimSoln != null && claimSoln.OrganisationId == orgId;
+          var claimSoln = _solutionsDatastore.ById(claim?.SolutionId ?? x.SolutionId);
+          return claimSoln?.OrganisationId == orgId;
         })
-        .WithMessage("Cannot change claim for other organisation");
+        .WithMessage("Cannot create/change claim for other organisation");
     }
 
     internal void MustBeSameSolution()
@@ -80,7 +83,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .Must(x =>
         {
           var claim = _claimDatastore.ById(x.Id);
-          return claim != null && x.SolutionId == claim.SolutionId;
+          return x.SolutionId == claim?.SolutionId;
         })
         .WithMessage("Cannot transfer claim between solutions");
     }

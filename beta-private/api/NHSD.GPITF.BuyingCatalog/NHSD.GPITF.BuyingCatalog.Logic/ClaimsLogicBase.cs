@@ -34,6 +34,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     public T Create(T claim)
     {
       _validator.ValidateAndThrow(claim);
+      _validator.ValidateAndThrow(claim, ruleSet: nameof(IClaimsLogic<T>.Create));
 
       return _datastore.Create(claim);
     }

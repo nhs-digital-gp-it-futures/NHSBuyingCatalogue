@@ -165,6 +165,21 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
+    public void MustBeSameOrganisation_Same_NewClaim_Succeeds()
+    {
+      var orgId = Guid.NewGuid().ToString();
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(orgId: orgId));
+      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
+      var claim = Creator.GetClaimsBase();
+      _solutionsDatastore.Setup(x => x.ById(claim.SolutionId)).Returns(Creator.GetSolution(orgId: orgId));
+
+      validator.MustBeSameOrganisation();
+      var valres = validator.Validate(claim);
+
+      valres.Errors.Should().BeEmpty();
+    }
+
+    [Test]
     public void MustBeSameOrganisation_Different_ReturnsError()
     {
       var orgId = Guid.NewGuid().ToString();
@@ -178,7 +193,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var valres = validator.Validate(claim);
 
       valres.Errors.Should()
-        .ContainSingle(x => x.ErrorMessage == "Cannot change claim for other organisation")
+        .ContainSingle(x => x.ErrorMessage == "Cannot create/change claim for other organisation")
         .And
         .HaveCount(1);
     }
