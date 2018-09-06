@@ -2,11 +2,11 @@
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 
-namespace NHSD.GPITF.BuyingCatalog.Logic
+namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 {
-  public sealed class StandardsApplicableFilter : ClaimsFilterBase<StandardsApplicable>, IStandardsApplicableFilter
+  internal class DummyClaimsFilterBase : ClaimsFilterBase<ClaimsBase>
   {
-    public StandardsApplicableFilter(
+    public DummyClaimsFilterBase(
       IHttpContextAccessor context,
       ISolutionsDatastore solutionDatastore) :
       base(context, solutionDatastore)
