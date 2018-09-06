@@ -2,23 +2,16 @@
   {{> onboarding-progress-header
         title="Confirm Mobile"
         subtitle="Register Solution (3 of 4)"}}
-  <p class="help">If your Solution can be used on a mobile device, you will have to comply with the Mobile Standard.</p>
+  <p class="help">If your Solution can be used on a mobile device, you will have to comply with relevant Standards. During the Standards Compliance stage of Onboarding, you will be asked to describe to what extent your Solution is available for mobile working.</p>
+  <p><a href="{{standard.url}}" target="_blank">See {{standard.name}} Standard</a></p>
 
   {{#errors}}
   <p class="error">{{.}}</p>
   {{/errors}}
 
   <form method="POST">
-    <h3>Can your Solution be used on a mobile device?</h3>
-
-    {{#> help-reveal title="Help - How do I know?"}}
-    <p>
-      Capabilities describe what your Solution does. Your Solution will be Assessed against the Capabilities that it provides to ensure that it is within the scope of the Catalogue.
-      <a href="#">Learn more and view all Capabilities & Standards.</a>
-    </p>
-    {{/help-reveal}}
-
     <fieldset class="is-mobile">
+      <h3>Can your Solution be used on a mobile device?</h3>
       <label>
         <input type="radio" name="isMobile" value="yes"{{#if isMobile}} checked{{/if}}>
         Yes
