@@ -46,6 +46,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     public Solutions Create(Solutions solution)
     {
       _validator.ValidateAndThrow(solution);
+      _validator.ValidateAndThrow(solution, ruleSet: nameof(ISolutionsLogic.Create));
 
       var email = Context.Email();
       solution.CreatedById = _contacts.ByEmail(email).Id;
