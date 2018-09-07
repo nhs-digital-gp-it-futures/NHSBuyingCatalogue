@@ -35,7 +35,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
       RuleSet(nameof(ISolutionsLogic.Create), () =>
       {
-        MustBeValidId();
         MustBeValidOrganisationId();
         MustBeFromSameOrganisation();
         PreviousVersionMustBeFromSameOrganisation();
