@@ -14,11 +14,11 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
     }
 
-    protected override void MustBePending()
+    internal override void MustBePending()
     {
     }
 
-    protected override void MustBeValidStatusTransition()
+    internal override void MustBeValidStatusTransition()
     {
     }
   }

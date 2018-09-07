@@ -71,5 +71,16 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         SolutionId = solnId ?? Guid.NewGuid().ToString()
       };
     }
+
+    public static Contacts GetContact(
+      string id = null,
+      string orgId = null)
+    {
+      return new Contacts
+      {
+        Id = id ?? Guid.NewGuid().ToString(),
+        OrganisationId = orgId ?? Guid.NewGuid().ToString()
+      };
+    }
   }
 }

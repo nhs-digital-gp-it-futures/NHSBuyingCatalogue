@@ -9,8 +9,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     public StandardsApplicableLogic(
       IStandardsApplicableDatastore datastore,
       IStandardsApplicableValidator validator,
+      IStandardsApplicableFilter filter,
       IHttpContextAccessor context) :
-      base(datastore, validator, context)
+      base(datastore, validator, filter, context)
     {
     }
   }

@@ -20,8 +20,17 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _claimDatastore = claimDatastore;
       _solutionsDatastore = solutionsDatastore;
 
+      RuleSet(nameof(IClaimsLogic<T>.Create), () =>
+      {
+        MustBeValidSolutionId();
+        MustBeSameOrganisation();
+        MustBePending();
+      });
+
       RuleSet(nameof(IClaimsLogic<T>.Update), () =>
       {
+        MustBeValidId();
+        MustBeValidSolutionId();
         MustBeSameSolution();
         MustBeSameOrganisation();
         MustBeValidStatusTransition();
@@ -29,47 +38,52 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
       RuleSet(nameof(IClaimsLogic<T>.Delete), () =>
       {
+        MustBeValidId();
+        MustBeValidSolutionId();
         MustBeSameOrganisation();
         MustBePending();
       });
+    }
 
-      RuleFor(x => x.Id)
-        .NotNull()
-        .Must(id => Guid.TryParse(id, out _))
-        .WithMessage("Invalid Id");
+    internal void MustBeValidSolutionId()
+    {
       RuleFor(x => x.SolutionId)
         .NotNull()
         .Must(solnId => Guid.TryParse(solnId, out _))
         .WithMessage("Invalid SolutionId");
     }
 
-    protected abstract void MustBePending();
-    protected abstract void MustBeValidStatusTransition();
+    internal void MustBeValidId()
+    {
+      RuleFor(x => x.Id)
+        .NotNull()
+        .Must(id => Guid.TryParse(id, out _))
+        .WithMessage("Invalid Id");
+    }
 
-    private void MustBeSameOrganisation()
+    internal abstract void MustBePending();
+    internal abstract void MustBeValidStatusTransition();
+
+    internal void MustBeSameOrganisation()
     {
       RuleFor(x => x)
         .Must(x =>
         {
           var orgId = _context.OrganisationId();
           var claim = _claimDatastore.ById(x.Id);
-          if (claim == null)
-          {
-            return false;
-          }
-          var claimSoln = _solutionsDatastore.ById(claim.SolutionId);
-          return claimSoln != null && claimSoln.OrganisationId == orgId;
+          var claimSoln = _solutionsDatastore.ById(claim?.SolutionId ?? x.SolutionId);
+          return claimSoln?.OrganisationId == orgId;
         })
-        .WithMessage("Cannot update/delete claim for other organisation");
+        .WithMessage("Cannot create/change claim for other organisation");
     }
 
-    private void MustBeSameSolution()
+    internal void MustBeSameSolution()
     {
       RuleFor(x => x)
         .Must(x =>
         {
           var claim = _claimDatastore.ById(x.Id);
-          return claim != null && x.SolutionId == claim.SolutionId;
+          return x.SolutionId == claim?.SolutionId;
         })
         .WithMessage("Cannot transfer claim between solutions");
     }
