@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
@@ -31,33 +30,47 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Validate_Delete_ValidStatusRole_Draft_Succeeds(
-      [Values(
-        Roles.Supplier
-      )]
+    public void MustBePending_Draft_Succeeds(
+      [Values(Roles.Supplier)]
         string role,
-      [Values(
-        StandardsApplicableStatus.NotStarted,
-        StandardsApplicableStatus.Draft
-      )]
+      [Values(StandardsApplicableStatus.Draft, StandardsApplicableStatus.NotStarted)]
         StandardsApplicableStatus status)
     {
-      var orgId = Guid.NewGuid().ToString();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role, orgId: orgId));
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new StandardsApplicableValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
       var claim = GetStandardsApplicable(status: status);
-      _claimDatastore.Setup(x => x.ById(claim.Id)).Returns(claim);
-      _solutionsDatastore.Setup(x => x.ById(claim.SolutionId)).Returns(Creator.GetSolution(orgId: orgId));
 
-      var valres = validator.Validate(claim, ruleSet: nameof(IStandardsApplicableLogic.Delete));
+      validator.MustBePending();
+      var valres = validator.Validate(claim);
 
       valres.Errors.Should().BeEmpty();
     }
 
     [Test]
-    public void Validate_Delete_InvalidStatusRole_Draft_Succeeds(
+    public void MustBePending_Draft_ReturnsError(
+      [Values(Roles.Admin, Roles.Buyer)]
+        string role,
+      [Values(StandardsApplicableStatus.Draft, StandardsApplicableStatus.NotStarted)]
+        StandardsApplicableStatus status)
+    {
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
+      var validator = new StandardsApplicableValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
+      var claim = GetStandardsApplicable(status: status);
+
+      validator.MustBePending();
+      var valres = validator.Validate(claim);
+
+      valres.Errors.Should()
+        .ContainSingle(x => x.ErrorMessage == "Only supplier can delete a draft claim")
+        .And
+        .HaveCount(1);
+    }
+
+    [Test]
+    public void MustBePending_NonDraft_ReturnsError(
       [Values(
         Roles.Buyer,
+        Roles.Supplier,
         Roles.Admin
       )]
         string role,
@@ -68,17 +81,15 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         StandardsApplicableStatus.ApprovedFirstOfType,
         StandardsApplicableStatus.ApprovedPartial,
         StandardsApplicableStatus.Rejected
-      )]
+        )]
         StandardsApplicableStatus status)
     {
-      var orgId = Guid.NewGuid().ToString();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role, orgId: orgId));
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new StandardsApplicableValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
       var claim = GetStandardsApplicable(status: status);
-      _claimDatastore.Setup(x => x.ById(claim.Id)).Returns(claim);
-      _solutionsDatastore.Setup(x => x.ById(claim.SolutionId)).Returns(Creator.GetSolution(orgId: orgId));
 
-      var valres = validator.Validate(claim, ruleSet: nameof(IStandardsApplicableLogic.Delete));
+      validator.MustBePending();
+      var valres = validator.Validate(claim);
 
       valres.Errors.Should()
         .ContainSingle(x => x.ErrorMessage == "Only supplier can delete a draft claim")
@@ -94,22 +105,20 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [TestCase(StandardsApplicableStatus.Submitted, StandardsApplicableStatus.Approved, Roles.Admin)]
     [TestCase(StandardsApplicableStatus.Submitted, StandardsApplicableStatus.ApprovedFirstOfType, Roles.Admin)]
     [TestCase(StandardsApplicableStatus.Submitted, StandardsApplicableStatus.ApprovedPartial, Roles.Admin)]
-    public void Validate_Update_ValidStatusTransition_Succeeds(StandardsApplicableStatus oldStatus, StandardsApplicableStatus newStatus, string role)
+    public void MustBeValidStatusTransition_Valid_Succeeds(StandardsApplicableStatus oldStatus, StandardsApplicableStatus newStatus, string role)
     {
-      var orgId = Guid.NewGuid().ToString();
-      var claimId = Guid.NewGuid().ToString();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role, orgId: orgId));
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new StandardsApplicableValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
-      var soln = Creator.GetSolution(orgId: orgId);
-      var oldClaim = GetStandardsApplicable(id: claimId, status: oldStatus, solnId: soln.Id);
-      var newClaim = GetStandardsApplicable(id: claimId, status: newStatus, solnId: soln.Id);
-      _claimDatastore.Setup(x => x.ById(claimId)).Returns(oldClaim);
-      _solutionsDatastore.Setup(x => x.ById(soln.Id)).Returns(soln);
+      var oldClaim = GetStandardsApplicable(status: oldStatus);
+      var newClaim = GetStandardsApplicable(status: newStatus);
+      _claimDatastore.Setup(x => x.ById(newClaim.Id)).Returns(oldClaim);
 
-      var valres = validator.Validate(newClaim, ruleSet: nameof(IStandardsApplicableLogic.Update));
+      validator.MustBeValidStatusTransition();
+      var valres = validator.Validate(newClaim);
 
       valres.Errors.Should().BeEmpty();
     }
+
 
     [TestCase(StandardsApplicableStatus.NotStarted, StandardsApplicableStatus.Draft, Roles.Buyer)]
     [TestCase(StandardsApplicableStatus.NotStarted, StandardsApplicableStatus.Draft, Roles.Admin)]
@@ -199,19 +208,16 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [TestCase(StandardsApplicableStatus.Remediation, StandardsApplicableStatus.Rejected, Roles.Admin)]
     [TestCase(StandardsApplicableStatus.Remediation, StandardsApplicableStatus.Rejected, Roles.Buyer)]
     [TestCase(StandardsApplicableStatus.Remediation, StandardsApplicableStatus.Rejected, Roles.Supplier)]
-    public void Validate_Update_InvalidStatusTransition_ReturnsError(StandardsApplicableStatus oldStatus, StandardsApplicableStatus newStatus, string role)
+    public void MustBeValidStatusTransition_Invalid_ReturnsError(StandardsApplicableStatus oldStatus, StandardsApplicableStatus newStatus, string role)
     {
-      var orgId = Guid.NewGuid().ToString();
-      var claimId = Guid.NewGuid().ToString();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role, orgId: orgId));
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new StandardsApplicableValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
-      var soln = Creator.GetSolution(orgId: orgId);
-      var oldClaim = GetStandardsApplicable(id: claimId, status: oldStatus, solnId: soln.Id);
-      var newClaim = GetStandardsApplicable(id: claimId, status: newStatus, solnId: soln.Id);
-      _claimDatastore.Setup(x => x.ById(claimId)).Returns(oldClaim);
-      _solutionsDatastore.Setup(x => x.ById(soln.Id)).Returns(soln);
+      var oldClaim = GetStandardsApplicable(status: oldStatus);
+      var newClaim = GetStandardsApplicable(status: newStatus);
+      _claimDatastore.Setup(x => x.ById(newClaim.Id)).Returns(oldClaim);
 
-      var valres = validator.Validate(newClaim, ruleSet: nameof(IStandardsApplicableLogic.Update));
+      validator.MustBeValidStatusTransition();
+      var valres = validator.Validate(newClaim);
 
       valres.Errors.Should()
         .ContainSingle(x => x.ErrorMessage == "Invalid Status transition")
@@ -243,17 +249,14 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         Roles.Supplier)]
           string role)
     {
-      var orgId = Guid.NewGuid().ToString();
-      var claimId = Guid.NewGuid().ToString();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role, orgId: orgId));
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new StandardsApplicableValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
-      var soln = Creator.GetSolution(orgId: orgId);
-      var oldClaim = GetStandardsApplicable(id: claimId, status: oldStatus, solnId: soln.Id);
-      var newClaim = GetStandardsApplicable(id: claimId, status: newStatus, solnId: soln.Id);
-      _claimDatastore.Setup(x => x.ById(claimId)).Returns(oldClaim);
-      _solutionsDatastore.Setup(x => x.ById(soln.Id)).Returns(soln);
+      var oldClaim = GetStandardsApplicable(status: oldStatus);
+      var newClaim = GetStandardsApplicable(status: newStatus);
+      _claimDatastore.Setup(x => x.ById(newClaim.Id)).Returns(oldClaim);
 
-      var valres = validator.Validate(newClaim, ruleSet: nameof(IStandardsApplicableLogic.Update));
+      validator.MustBeValidStatusTransition();
+      var valres = validator.Validate(newClaim);
 
       valres.Errors.Should()
         .ContainSingle(x => x.ErrorMessage == "Invalid Status transition")
