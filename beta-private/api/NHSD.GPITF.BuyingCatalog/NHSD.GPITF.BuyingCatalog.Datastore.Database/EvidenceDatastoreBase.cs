@@ -92,20 +92,5 @@ with recursive Links(CurrentId, Id, PreviousId, ClaimId, CreatedById, CreatedOn,
         }
       });
     }
-
-    public void Update(T evidence)
-    {
-      GetInternal(() =>
-      {
-        using (var trans = _dbConnection.Value.BeginTransaction())
-        {
-          evidence.CreatedOn = DateTime.UtcNow;
-          _dbConnection.Value.Update(evidence, trans);
-          trans.Commit();
-
-          return 0;
-        }
-      });
-    }
   }
 }

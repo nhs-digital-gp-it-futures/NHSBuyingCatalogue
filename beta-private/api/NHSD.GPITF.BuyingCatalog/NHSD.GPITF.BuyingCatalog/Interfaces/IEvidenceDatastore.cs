@@ -7,7 +7,6 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
   {
     IEnumerable<IEnumerable<T>> ByClaim(string claimId);
     T Create(T evidence);
-    void Update(T evidence);
   }
 #pragma warning restore CS1591
 }

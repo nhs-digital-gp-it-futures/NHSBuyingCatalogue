@@ -31,12 +31,5 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       evidence.CreatedById = _contacts.ByEmail(email).Id;
       return _datastore.Create(evidence);
     }
-
-    public void Update(T evidence)
-    {
-      var email = Context.Email();
-      evidence.CreatedById = _contacts.ByEmail(email).Id;
-      _datastore.Update(evidence);
-    }
   }
 }

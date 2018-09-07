@@ -86,32 +86,5 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
         return new NotFoundObjectResult(ex);
       }
     }
-
-    /// <summary>
-    /// Update an existing evidence with new evidence information
-    /// </summary>
-    /// <param name="evidence">new evidence information</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Claim not found</response>
-    [HttpPut]
-    [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Claim not found")]
-    public IActionResult Update([FromBody]CapabilitiesImplementedEvidence evidence)
-    {
-      try
-      {
-        _logic.Update(evidence);
-        return new OkResult();
-      }
-      catch (FluentValidation.ValidationException ex)
-      {
-        return new InternalServerErrorObjectResult(ex);
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
-      }
-    }
   }
 }
