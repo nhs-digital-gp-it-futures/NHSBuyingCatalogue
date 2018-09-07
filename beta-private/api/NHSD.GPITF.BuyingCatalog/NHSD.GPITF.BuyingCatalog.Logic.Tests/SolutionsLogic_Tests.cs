@@ -12,7 +12,7 @@ using System.Linq;
 namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 {
   [TestFixture]
-  public class SolutionsLogic_Tests
+  public sealed class SolutionsLogic_Tests
   {
     private Mock<ISolutionsDatastore> _datastore;
     private Mock<IContactsDatastore> _contacts;
