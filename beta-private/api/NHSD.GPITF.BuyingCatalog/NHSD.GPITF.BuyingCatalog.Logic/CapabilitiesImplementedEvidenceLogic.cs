@@ -9,8 +9,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     public CapabilitiesImplementedEvidenceLogic(
       ICapabilitiesImplementedEvidenceDatastore datastore,
       IContactsDatastore contacts,
+      ICapabilitiesImplementedEvidenceValidator validator,
+      ICapabilitiesImplementedEvidenceFilter filter,
       IHttpContextAccessor context) :
-      base(datastore, contacts, context)
+      base(datastore, contacts, validator, filter, context)
     {
     }
   }

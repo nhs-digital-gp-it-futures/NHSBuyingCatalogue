@@ -72,6 +72,19 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       };
     }
 
+    public static DummyEvidenceBase GetEvidenceBase(
+      string id = null,
+      string prevId = null,
+      string claimId = null)
+    {
+      return new DummyEvidenceBase
+      {
+        Id = id ?? Guid.NewGuid().ToString(),
+        PreviousId = prevId,
+        ClaimId = claimId ?? Guid.NewGuid().ToString()
+      };
+    }
+
     public static Contacts GetContact(
       string id = null,
       string orgId = null)
