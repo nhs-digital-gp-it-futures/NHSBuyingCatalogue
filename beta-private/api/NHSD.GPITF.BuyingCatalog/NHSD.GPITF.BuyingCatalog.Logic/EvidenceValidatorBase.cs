@@ -14,6 +14,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       RuleSet(nameof(IEvidenceLogic<T>.Create), () =>
       {
         MustBeValidClaimId();
+        MustBeSupplier();
       });
     }
 
@@ -23,6 +24,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .NotNull()
         .Must(id => Guid.TryParse(id, out _))
         .WithMessage("Invalid ClaimId");
+    }
+
+    internal void MustBeSupplier()
+    {
+      RuleFor(x => x)
+        .Must(x => _context.HasRole(Roles.Supplier))
+        .WithMessage("Must be supplier");
     }
   }
 }

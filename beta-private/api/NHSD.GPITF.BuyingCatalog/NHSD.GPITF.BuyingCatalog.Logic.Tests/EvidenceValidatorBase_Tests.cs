@@ -66,5 +66,35 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         .And
         .HaveCount(1);
     }
+
+    [TestCase(Roles.Supplier)]
+    public void MustBeSupplier_Supplier_Succeeds(string role)
+    {
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
+      var validator = new DummyEvidenceValidatorBase(_context.Object);
+      var evidence = Creator.GetEvidenceBase();
+
+      validator.MustBeSupplier();
+      var valres = validator.Validate(evidence);
+
+      valres.Errors.Should().BeEmpty();
+    }
+
+    [TestCase(Roles.Admin)]
+    [TestCase(Roles.Buyer)]
+    public void MustBeSupplier_NonSupplier_ReturnsError(string role)
+    {
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
+      var validator = new DummyEvidenceValidatorBase(_context.Object);
+      var evidence = Creator.GetEvidenceBase();
+
+      validator.MustBeSupplier();
+      var valres = validator.Validate(evidence);
+
+      valres.Errors.Should()
+        .ContainSingle(x => x.ErrorMessage == "Must be supplier")
+        .And
+        .HaveCount(1);
+    }
   }
 }
