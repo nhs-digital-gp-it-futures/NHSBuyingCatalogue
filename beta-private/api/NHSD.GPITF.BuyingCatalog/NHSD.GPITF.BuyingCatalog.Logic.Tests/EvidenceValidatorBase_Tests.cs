@@ -184,5 +184,38 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         .And
         .HaveCount(1);
     }
+
+    [Test]
+    public void PreviousMustBeForSameClaim_Same_Succeeds()
+    {
+      var prevId = Guid.NewGuid().ToString();
+      var validator = new DummyEvidenceValidatorBase(_evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
+      var evidence = Creator.GetEvidenceBase(prevId: prevId);
+      var prevEvidence = Creator.GetEvidenceBase(claimId: evidence.ClaimId);
+      _evidenceDatastore.Setup(x => x.ById(prevId)).Returns(prevEvidence);
+
+      validator.PreviousMustBeForSameClaim();
+      var valres = validator.Validate(evidence);
+
+      valres.Errors.Should().BeEmpty();
+    }
+
+    [Test]
+    public void PreviousMustBeForSameClaim_Other_ReturnsError()
+    {
+      var prevId = Guid.NewGuid().ToString();
+      var validator = new DummyEvidenceValidatorBase(_evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
+      var evidence = Creator.GetEvidenceBase(prevId: prevId);
+      var prevEvidence = Creator.GetEvidenceBase();
+      _evidenceDatastore.Setup(x => x.ById(prevId)).Returns(prevEvidence);
+
+      validator.PreviousMustBeForSameClaim();
+      var valres = validator.Validate(evidence);
+
+      valres.Errors.Should()
+        .ContainSingle(x => x.ErrorMessage == "Previous evidence must be for same claim")
+        .And
+        .HaveCount(1);
+    }
   }
 }

@@ -30,6 +30,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         SolutionMustBeInReview();
         MustBeFromSameOrganisation();
         MustBeValidPreviousId();
+        PreviousMustBeForSameClaim();
       });
     }
 
@@ -93,7 +94,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
             return true;
           }
           var evidence = _evidenceDatastore.ById(x.PreviousId);
-          return false;
+          return x.ClaimId == evidence.ClaimId;
         })
         .WithMessage("Previous evidence must be for same claim");
     }
