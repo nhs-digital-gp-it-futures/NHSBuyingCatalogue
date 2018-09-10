@@ -89,13 +89,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       RuleFor(x => x)
         .Must(x =>
         {
-          if (x.PreviousId == null)
-          {
-            return true;
-          }
           var evidence = _evidenceDatastore.ById(x.PreviousId);
           return x.ClaimId == evidence.ClaimId;
         })
+        .When(x => !string.IsNullOrEmpty(x.PreviousId))
         .WithMessage("Previous evidence must be for same claim");
     }
   }
