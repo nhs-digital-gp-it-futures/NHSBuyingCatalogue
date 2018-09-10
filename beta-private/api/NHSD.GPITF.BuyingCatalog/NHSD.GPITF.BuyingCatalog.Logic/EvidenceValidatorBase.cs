@@ -8,8 +8,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 {
   public abstract class EvidenceValidatorBase<T> : ValidatorBase<T>, IEvidenceValidator<T> where T : EvidenceBase
   {
-    protected readonly IClaimsDatastore<ClaimsBase> _claimDatastore;
-    protected readonly ISolutionsDatastore _solutionDatastore;
+    private readonly IClaimsDatastore<ClaimsBase> _claimDatastore;
+    private readonly ISolutionsDatastore _solutionDatastore;
 
     public EvidenceValidatorBase(
       IClaimsDatastore<ClaimsBase> claimDatastore,
@@ -25,6 +25,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         MustBeValidClaimId();
         MustBeSupplier();
         SolutionMustBeInReview();
+        MustBeFromSameOrganisation();
       });
     }
 
@@ -55,6 +56,19 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       RuleFor(x => x)
         .Must(x => _context.HasRole(Roles.Supplier))
         .WithMessage("Must be supplier");
+    }
+
+    internal void MustBeFromSameOrganisation()
+    {
+      RuleFor(x => x)
+        .Must(x =>
+        {
+          var claim = _claimDatastore.ById(x.ClaimId);
+          var soln = _solutionDatastore.ById(claim.SolutionId);
+          var orgId = _context.OrganisationId();
+          return soln.OrganisationId == orgId;
+        })
+        .WithMessage("Must be from same organisation");
     }
   }
 }

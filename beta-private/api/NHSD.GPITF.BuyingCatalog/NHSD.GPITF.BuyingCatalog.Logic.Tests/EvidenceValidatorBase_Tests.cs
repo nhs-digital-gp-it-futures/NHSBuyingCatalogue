@@ -4,6 +4,7 @@ using Moq;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NUnit.Framework;
+using System;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 {
@@ -100,6 +101,45 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       valres.Errors.Should()
         .ContainSingle(x => x.ErrorMessage == "Must be supplier")
+        .And
+        .HaveCount(1);
+    }
+
+    [Test]
+    public void MustBeFromSameOrganisation_Same_Succeeds()
+    {
+      var orgId = Guid.NewGuid().ToString();
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(orgId: orgId));
+      var validator = new DummyEvidenceValidatorBase(_claimDatastore.Object, _solutionDatastore.Object, _context.Object);
+      var soln = Creator.GetSolution(orgId: orgId);
+      var claim = Creator.GetClaimsBase(solnId: soln.Id);
+      var evidence = Creator.GetEvidenceBase();
+      _claimDatastore.As<IClaimsDatastore<ClaimsBase>>().Setup(x => x.ById(evidence.ClaimId)).Returns(claim);
+      _solutionDatastore.Setup(x => x.ById(soln.Id)).Returns(soln);
+
+      validator.MustBeFromSameOrganisation();
+      var valres = validator.Validate(evidence);
+
+      valres.Errors.Should().BeEmpty();
+    }
+
+    [Test]
+    public void MustBeFromSameOrganisation_Other_ReturnsError()
+    {
+      var orgId = Guid.NewGuid().ToString();
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
+      var validator = new DummyEvidenceValidatorBase(_claimDatastore.Object, _solutionDatastore.Object, _context.Object);
+      var soln = Creator.GetSolution(orgId: orgId);
+      var claim = Creator.GetClaimsBase(solnId: soln.Id);
+      var evidence = Creator.GetEvidenceBase();
+      _claimDatastore.As<IClaimsDatastore<ClaimsBase>>().Setup(x => x.ById(evidence.ClaimId)).Returns(claim);
+      _solutionDatastore.Setup(x => x.ById(soln.Id)).Returns(soln);
+
+      validator.MustBeFromSameOrganisation();
+      var valres = validator.Validate(evidence);
+
+      valres.Errors.Should()
+        .ContainSingle(x => x.ErrorMessage == "Must be from same organisation")
         .And
         .HaveCount(1);
     }
