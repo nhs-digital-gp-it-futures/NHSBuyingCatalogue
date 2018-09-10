@@ -1,0 +1,21 @@
+{
+  "name": "frontend",
+  "version": "0.1.0-private-beta",
+  "private": true,
+  "description": "NHS Digital Buying Catalogue Web Frontend (private beta)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Paul Mitchell <paul.mitchell@bjss.com>",
+  "scripts": {
+    "dev": "next -p 8000",
+    "build": "next build",
+    "start": "next start -p 8000"
+  },
+  "dependencies": {
+    "next": "^6.1.2",
+    "react": "^16.5.0",
+    "react-dom": "^16.5.0"
+  }
+}
