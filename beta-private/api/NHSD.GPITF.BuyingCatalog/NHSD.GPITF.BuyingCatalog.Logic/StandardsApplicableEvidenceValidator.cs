@@ -7,10 +7,11 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   public sealed class StandardsApplicableEvidenceValidator : EvidenceValidatorBase<StandardsApplicableEvidence>, IStandardsApplicableEvidenceValidator
   {
     public StandardsApplicableEvidenceValidator(
+      IStandardsApplicableEvidenceDatastore evidenceDatastore,
       IStandardsApplicableDatastore claimDatastore,
       ISolutionsDatastore solutionDatastore,
       IHttpContextAccessor context) :
-      base((IClaimsDatastore<ClaimsBase>)claimDatastore, solutionDatastore, context)
+      base(evidenceDatastore, (IClaimsDatastore<ClaimsBase>)claimDatastore, solutionDatastore, context)
     {
     }
 

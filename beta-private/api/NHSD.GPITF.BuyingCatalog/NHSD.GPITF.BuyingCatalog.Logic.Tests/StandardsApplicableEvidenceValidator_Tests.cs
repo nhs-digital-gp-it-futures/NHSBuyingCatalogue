@@ -12,6 +12,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
   public sealed class StandardsApplicableEvidenceValidator_Tests
   {
     private Mock<IHttpContextAccessor> _context;
+    private Mock<IStandardsApplicableEvidenceDatastore> _evidenceDatastore;
     private Mock<IStandardsApplicableDatastore> _claimDatastore;
     private Mock<ISolutionsDatastore> _solutionDatastore;
 
@@ -19,6 +20,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void SetUp()
     {
       _context = new Mock<IHttpContextAccessor>();
+      _evidenceDatastore = new Mock<IStandardsApplicableEvidenceDatastore>();
       _claimDatastore = new Mock<IStandardsApplicableDatastore>();
       _claimDatastore.As<IClaimsDatastore<ClaimsBase>>();
       _solutionDatastore = new Mock<ISolutionsDatastore>();
@@ -27,13 +29,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new StandardsApplicableEvidenceValidator(_claimDatastore.Object, _solutionDatastore.Object, _context.Object));
+      Assert.DoesNotThrow(() => new StandardsApplicableEvidenceValidator(_evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object));
     }
 
     [TestCase(SolutionStatus.StandardsCompliance)]
     public void SolutionMustBeInReview_Review_Succeeds(SolutionStatus status)
     {
-      var validator = new StandardsApplicableEvidenceValidator(_claimDatastore.Object, _solutionDatastore.Object, _context.Object);
+      var validator = new StandardsApplicableEvidenceValidator(_evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
       var soln = Creator.GetSolution(status: status);
       var claim = Creator.GetStandardsApplicable(solnId: soln.Id);
       var evidence = GetStandardsApplicableEvidence(claimId: claim.Id);
@@ -55,7 +57,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [TestCase(SolutionStatus.Approved)]
     public void SolutionMustBeInReview_NonReview_ReturnsError(SolutionStatus status)
     {
-      var validator = new StandardsApplicableEvidenceValidator(_claimDatastore.Object, _solutionDatastore.Object, _context.Object);
+      var validator = new StandardsApplicableEvidenceValidator(_evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
       var soln = Creator.GetSolution(status: status);
       var claim = Creator.GetStandardsApplicable(solnId: soln.Id);
       var evidence = GetStandardsApplicableEvidence(claimId: claim.Id);

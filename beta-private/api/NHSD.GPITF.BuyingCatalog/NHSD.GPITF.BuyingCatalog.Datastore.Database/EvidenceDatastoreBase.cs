@@ -20,6 +20,14 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
     }
 
+    public T ById(string id)
+    {
+      return GetInternal(() =>
+      {
+          return _dbConnection.Value.Get<T>(id);
+      });
+    }
+
     public IEnumerable<IEnumerable<T>> ByClaim(string claimId)
     {
       return GetInternal(() =>

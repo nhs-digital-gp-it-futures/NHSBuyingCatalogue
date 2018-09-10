@@ -6,6 +6,7 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
   public interface IEvidenceDatastore<T>
   {
     IEnumerable<IEnumerable<T>> ByClaim(string claimId);
+    T ById(string id);
     T Create(T evidence);
   }
 #pragma warning restore CS1591

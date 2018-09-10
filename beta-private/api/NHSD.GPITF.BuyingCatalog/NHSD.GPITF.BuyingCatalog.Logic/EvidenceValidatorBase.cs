@@ -8,15 +8,18 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 {
   public abstract class EvidenceValidatorBase<T> : ValidatorBase<T>, IEvidenceValidator<T> where T : EvidenceBase
   {
+    private readonly IEvidenceDatastore<T> _evidenceDatastore;
     private readonly IClaimsDatastore<ClaimsBase> _claimDatastore;
     private readonly ISolutionsDatastore _solutionDatastore;
 
     public EvidenceValidatorBase(
+      IEvidenceDatastore<T> evidenceDatastore,
       IClaimsDatastore<ClaimsBase> claimDatastore,
       ISolutionsDatastore solutionDatastore,
       IHttpContextAccessor context) :
       base(context)
     {
+      _evidenceDatastore = evidenceDatastore;
       _claimDatastore = claimDatastore;
       _solutionDatastore = solutionDatastore;
 
@@ -26,6 +29,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         MustBeSupplier();
         SolutionMustBeInReview();
         MustBeFromSameOrganisation();
+        MustBeValidPreviousId();
       });
     }
 
@@ -51,6 +55,14 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Invalid ClaimId");
     }
 
+    internal void MustBeValidPreviousId()
+    {
+      RuleFor(x => x.PreviousId)
+        .Must(id => Guid.TryParse(id, out _))
+        .When(x => !string.IsNullOrEmpty(x.PreviousId))
+        .WithMessage("Invalid PreviousId");
+    }
+
     internal void MustBeSupplier()
     {
       RuleFor(x => x)
@@ -69,6 +81,21 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
           return soln.OrganisationId == orgId;
         })
         .WithMessage("Must be from same organisation");
+    }
+
+    internal void PreviousMustBeForSameClaim()
+    {
+      RuleFor(x => x)
+        .Must(x =>
+        {
+          if (x.PreviousId == null)
+          {
+            return true;
+          }
+          var evidence = _evidenceDatastore.ById(x.PreviousId);
+          return false;
+        })
+        .WithMessage("Previous evidence must be for same claim");
     }
   }
 }

@@ -7,10 +7,11 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
   public sealed class DummyEvidenceValidatorBase : EvidenceValidatorBase<EvidenceBase>
   {
     public DummyEvidenceValidatorBase(
+      IEvidenceDatastore<EvidenceBase> evidenceDatastore,
       IStandardsApplicableDatastore claimDatastore,
       ISolutionsDatastore solutionDatastore,
       IHttpContextAccessor context) :
-      base((IClaimsDatastore<ClaimsBase>)claimDatastore, solutionDatastore, context)
+      base(evidenceDatastore, (IClaimsDatastore<ClaimsBase>)claimDatastore, solutionDatastore, context)
     {
     }
 
