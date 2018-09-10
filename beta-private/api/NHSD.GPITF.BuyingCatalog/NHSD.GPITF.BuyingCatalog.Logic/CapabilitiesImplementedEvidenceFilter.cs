@@ -14,10 +14,5 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       base((IClaimsDatastore<ClaimsBase>)claimDatastore, solutionDatastore, context)
     {
     }
-
-    protected override IEnumerable<CapabilitiesImplementedEvidence> Filter(IEnumerable<CapabilitiesImplementedEvidence> input)
-    {
-      return input;
-    }
   }
 }
