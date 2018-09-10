@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System;
+using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
@@ -31,6 +32,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         MustBeFromSameOrganisation();
         MustBeValidPreviousId();
         PreviousMustBeForSameClaim();
+        PreviousMustNotBeInUse();
       });
     }
 
@@ -94,6 +96,19 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         })
         .When(x => !string.IsNullOrEmpty(x.PreviousId))
         .WithMessage("Previous evidence must be for same claim");
+    }
+
+    internal void PreviousMustNotBeInUse()
+    {
+      RuleFor(x => x)
+        .Must(x =>
+        {
+          var chains = _evidenceDatastore.ByClaim(x.ClaimId);
+          var allPrevIds = chains.SelectMany(chain => chain.Select(evidence => evidence.PreviousId));
+          return !allPrevIds.Contains(x.PreviousId);
+        })
+        .When(x => !string.IsNullOrEmpty(x.PreviousId))
+        .WithMessage("Previous evidence already in use");
     }
   }
 }

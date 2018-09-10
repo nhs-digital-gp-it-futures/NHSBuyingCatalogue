@@ -217,5 +217,53 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         .And
         .HaveCount(1);
     }
+
+    [Test]
+    public void PreviousMustNotBeInUse_NotInUse_Succeeds()
+    {
+      var validator = new DummyEvidenceValidatorBase(_evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
+      var evidence = Creator.GetEvidenceBase();
+
+      validator.PreviousMustNotBeInUse();
+      var valres = validator.Validate(evidence);
+
+      valres.Errors.Should().BeEmpty();
+    }
+
+    [Test]
+    public void PreviousMustNotBeInUse_InUse_ReturnsError()
+    {
+      var claimId = Guid.NewGuid().ToString();
+
+      // first chain: ev1 <-- ev2
+      var ev1 = Creator.GetEvidenceBase(claimId: claimId);
+      var ev2 = Creator.GetEvidenceBase(claimId: claimId, prevId: ev1.Id);
+
+      // second chain: evA <-- evB
+      var evA = Creator.GetEvidenceBase(claimId: claimId);
+      var evB = Creator.GetEvidenceBase(claimId: claimId, prevId: evA.Id);
+
+      // evidence datastore returns both chains
+      _evidenceDatastore.Setup(x => x.ByClaim(claimId))
+        .Returns(new[] 
+        {
+          new[] { ev1, ev2 },
+          new[] { evA, evB }
+        });
+
+      // create new evidence linked (previous) to ev1 ie 'fan out'
+      var evidence = Creator.GetEvidenceBase(claimId: claimId, prevId: ev1.Id);
+      var validator = new DummyEvidenceValidatorBase(_evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
+
+
+      validator.PreviousMustNotBeInUse();
+      var valres = validator.Validate(evidence);
+
+
+      valres.Errors.Should()
+        .ContainSingle(x => x.ErrorMessage == "Previous evidence already in use")
+        .And
+        .HaveCount(1);
+    }
   }
 }
