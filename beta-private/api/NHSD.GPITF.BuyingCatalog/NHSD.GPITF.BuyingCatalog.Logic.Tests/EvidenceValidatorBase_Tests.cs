@@ -1,6 +1,8 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Moq;
+using NHSD.GPITF.BuyingCatalog.Interfaces;
+using NHSD.GPITF.BuyingCatalog.Models;
 using NUnit.Framework;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
@@ -9,23 +11,28 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
   public sealed class EvidenceValidatorBase_Tests
   {
     private Mock<IHttpContextAccessor> _context;
+    private Mock<IStandardsApplicableDatastore> _claimDatastore;
+    private Mock<ISolutionsDatastore> _solutionDatastore;
 
     [SetUp]
     public void SetUp()
     {
       _context = new Mock<IHttpContextAccessor>();
+      _claimDatastore = new Mock<IStandardsApplicableDatastore>();
+      _claimDatastore.As<IClaimsDatastore<ClaimsBase>>();
+      _solutionDatastore = new Mock<ISolutionsDatastore>();
     }
 
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new DummyEvidenceValidatorBase(_context.Object));
+      Assert.DoesNotThrow(() => new DummyEvidenceValidatorBase(_claimDatastore.Object, _solutionDatastore.Object, _context.Object));
     }
 
     [Test]
     public void MustBeValidClaimId_Valid_Succeeds()
     {
-      var validator = new DummyEvidenceValidatorBase(_context.Object);
+      var validator = new DummyEvidenceValidatorBase(_claimDatastore.Object, _solutionDatastore.Object, _context.Object);
       var evidence = Creator.GetEvidenceBase();
 
       validator.MustBeValidClaimId();
@@ -37,7 +44,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void MustBeValidClaimId_Null_ReturnsError()
     {
-      var validator = new DummyEvidenceValidatorBase(_context.Object);
+      var validator = new DummyEvidenceValidatorBase(_claimDatastore.Object, _solutionDatastore.Object, _context.Object);
       var evidence = Creator.GetEvidenceBase();
       evidence.ClaimId = null;
 
@@ -55,7 +62,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void MustBeValidClaimId_NotGuid_ReturnsError()
     {
-      var validator = new DummyEvidenceValidatorBase(_context.Object);
+      var validator = new DummyEvidenceValidatorBase(_claimDatastore.Object, _solutionDatastore.Object, _context.Object);
       var evidence = Creator.GetEvidenceBase(claimId: "some other Id");
 
       validator.MustBeValidClaimId();
@@ -71,7 +78,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void MustBeSupplier_Supplier_Succeeds(string role)
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
-      var validator = new DummyEvidenceValidatorBase(_context.Object);
+      var validator = new DummyEvidenceValidatorBase(_claimDatastore.Object, _solutionDatastore.Object, _context.Object);
       var evidence = Creator.GetEvidenceBase();
 
       validator.MustBeSupplier();
@@ -85,7 +92,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void MustBeSupplier_NonSupplier_ReturnsError(string role)
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
-      var validator = new DummyEvidenceValidatorBase(_context.Object);
+      var validator = new DummyEvidenceValidatorBase(_claimDatastore.Object, _solutionDatastore.Object, _context.Object);
       var evidence = Creator.GetEvidenceBase();
 
       validator.MustBeSupplier();

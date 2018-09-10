@@ -95,5 +95,35 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         OrganisationId = orgId ?? Guid.NewGuid().ToString()
       };
     }
+
+    public static CapabilitiesImplemented GetCapabilitiesImplemented(
+      string id = null,
+      string solnId = null,
+      string claimId = null,
+      CapabilitiesImplementedStatus status = CapabilitiesImplementedStatus.Draft)
+    {
+      return new CapabilitiesImplemented
+      {
+        Id = id ?? Guid.NewGuid().ToString(),
+        SolutionId = solnId ?? Guid.NewGuid().ToString(),
+        CapabilityId = claimId ?? Guid.NewGuid().ToString(),
+        Status = status
+      };
+    }
+
+    public static StandardsApplicable GetStandardsApplicable(
+      string id = null,
+      string solnId = null,
+      string claimId = null,
+      StandardsApplicableStatus status = StandardsApplicableStatus.Draft)
+    {
+      return new StandardsApplicable
+      {
+        Id = id ?? Guid.NewGuid().ToString(),
+        SolutionId = solnId ?? Guid.NewGuid().ToString(),
+        StandardId = claimId ?? Guid.NewGuid().ToString(),
+        Status = status
+      };
+    }
   }
 }

@@ -34,7 +34,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
-      var claim = GetCapabilitiesImplemented(status: CapabilitiesImplementedStatus.Draft);
+      var claim = Creator.GetCapabilitiesImplemented(status: CapabilitiesImplementedStatus.Draft);
 
       validator.MustBePending();
       var valres = validator.Validate(claim);
@@ -48,7 +48,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
-      var claim = GetCapabilitiesImplemented(status: CapabilitiesImplementedStatus.Draft);
+      var claim = Creator.GetCapabilitiesImplemented(status: CapabilitiesImplementedStatus.Draft);
 
       validator.MustBePending();
       var valres = validator.Validate(claim);
@@ -77,7 +77,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
-      var claim = GetCapabilitiesImplemented(status: status);
+      var claim = Creator.GetCapabilitiesImplemented(status: status);
 
       validator.MustBePending();
       var valres = validator.Validate(claim);
@@ -98,8 +98,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
-      var oldClaim = GetCapabilitiesImplemented(status: oldStatus);
-      var newClaim = GetCapabilitiesImplemented(status: newStatus);
+      var oldClaim = Creator.GetCapabilitiesImplemented(status: oldStatus);
+      var newClaim = Creator.GetCapabilitiesImplemented(status: newStatus);
       _claimDatastore.Setup(x => x.ById(newClaim.Id)).Returns(oldClaim);
 
       validator.MustBeValidStatusTransition();
@@ -153,8 +153,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
-      var oldClaim = GetCapabilitiesImplemented(status: oldStatus);
-      var newClaim = GetCapabilitiesImplemented(status: newStatus);
+      var oldClaim = Creator.GetCapabilitiesImplemented(status: oldStatus);
+      var newClaim = Creator.GetCapabilitiesImplemented(status: newStatus);
       _claimDatastore.Setup(x => x.ById(newClaim.Id)).Returns(oldClaim);
 
       validator.MustBeValidStatusTransition();
@@ -187,8 +187,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
-      var oldClaim = GetCapabilitiesImplemented(status: oldStatus);
-      var newClaim = GetCapabilitiesImplemented(status: newStatus);
+      var oldClaim = Creator.GetCapabilitiesImplemented(status: oldStatus);
+      var newClaim = Creator.GetCapabilitiesImplemented(status: newStatus);
       _claimDatastore.Setup(x => x.ById(newClaim.Id)).Returns(oldClaim);
 
       validator.MustBeValidStatusTransition();
@@ -198,21 +198,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         .ContainSingle(x => x.ErrorMessage == "Invalid Status transition")
         .And
         .HaveCount(1);
-    }
-
-    private static CapabilitiesImplemented GetCapabilitiesImplemented(
-      string id = null,
-      string solnId = null,
-      string claimId = null,
-      CapabilitiesImplementedStatus status = CapabilitiesImplementedStatus.Draft)
-    {
-      return new CapabilitiesImplemented
-      {
-        Id = id ?? Guid.NewGuid().ToString(),
-        SolutionId = solnId ?? Guid.NewGuid().ToString(),
-        CapabilityId = claimId ?? Guid.NewGuid().ToString(),
-        Status = status
-      };
     }
   }
 }

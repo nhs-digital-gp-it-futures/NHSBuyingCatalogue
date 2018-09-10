@@ -8,14 +8,38 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 {
   public abstract class EvidenceValidatorBase<T> : ValidatorBase<T>, IEvidenceValidator<T> where T : EvidenceBase
   {
-    public EvidenceValidatorBase(IHttpContextAccessor context) :
+    protected readonly IClaimsDatastore<ClaimsBase> _claimDatastore;
+    protected readonly ISolutionsDatastore _solutionDatastore;
+
+    public EvidenceValidatorBase(
+      IClaimsDatastore<ClaimsBase> claimDatastore,
+      ISolutionsDatastore solutionDatastore,
+      IHttpContextAccessor context) :
       base(context)
     {
+      _claimDatastore = claimDatastore;
+      _solutionDatastore = solutionDatastore;
+
       RuleSet(nameof(IEvidenceLogic<T>.Create), () =>
       {
         MustBeValidClaimId();
         MustBeSupplier();
+        SolutionMustBeInReview();
       });
+    }
+
+    protected abstract SolutionStatus SolutionReviewStatus { get; }
+
+    internal void SolutionMustBeInReview()
+    {
+      RuleFor(x => x)
+        .Must(x =>
+        {
+          var claim = _claimDatastore.ById(x.ClaimId);
+          var soln = _solutionDatastore.ById(claim.SolutionId);
+          return soln.Status == SolutionReviewStatus;
+        })
+        .WithMessage("Can only add evidence if solution is in review");
     }
 
     internal void MustBeValidClaimId()
