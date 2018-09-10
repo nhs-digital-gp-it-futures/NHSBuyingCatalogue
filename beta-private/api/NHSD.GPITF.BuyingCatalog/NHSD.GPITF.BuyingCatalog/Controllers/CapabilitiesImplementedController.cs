@@ -42,7 +42,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// <summary>
     /// Retrieve claim, given the claim’s CRM identifier
     /// </summary>
-    /// <param name="id">CRM identifier of solution</param>
+    /// <param name="id">CRM identifier of claim</param>
     /// <response code="200">Success</response>
     /// <response code="404">Claim not found in CRM</response>
     [HttpGet]
