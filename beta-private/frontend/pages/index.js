@@ -1,9 +1,8 @@
-import Head from 'next/head'
+import Layout from '../components/layout'
 
 export default () => (
-  <main id="content">
-    <Head>
-      <title>Home | NHS Digital Buying Catalogue</title>
-    </Head>
-  </main>
+  <Layout>
+    <h1>Home</h1>
+    <p>This is the homepage of the catalogue</p>
+  </Layout>
 )
