@@ -25,7 +25,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       return input;
     }
 
-    protected override T Filter(T input)
+    public override T Filter(T input)
     {
       if (_context.HasRole(Roles.Admin))
       {
@@ -45,19 +45,19 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       return FilterSpecific(input);
     }
 
-    internal T FilterForAdmin(T input)
+    public T FilterForAdmin(T input)
     {
       // Admin: everything
       return input;
     }
 
-    internal T FilterForBuyer(T input)
+    public T FilterForBuyer(T input)
     {
       // Buyer: nothing
       return default(T);
     }
 
-    internal T FilterForSupplier(T input)
+    public T FilterForSupplier(T input)
     {
       // Supplier: only own Claims
       foreach (var evidence in input)

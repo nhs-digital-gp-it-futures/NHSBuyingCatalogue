@@ -16,7 +16,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _solutionDatastore = solutionDatastore;
     }
 
-    protected override TechnicalContacts Filter(TechnicalContacts input)
+    public override TechnicalContacts Filter(TechnicalContacts input)
     {
       if (_context.HasRole(Roles.Admin) ||
         _context.HasRole(Roles.Buyer))

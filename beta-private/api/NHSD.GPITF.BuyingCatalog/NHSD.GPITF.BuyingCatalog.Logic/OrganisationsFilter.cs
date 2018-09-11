@@ -10,7 +10,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     {
     }
 
-    protected override Organisations Filter(Organisations input)
+    public override Organisations Filter(Organisations input)
     {
       if (_context.HasRole(Roles.Supplier))
       {

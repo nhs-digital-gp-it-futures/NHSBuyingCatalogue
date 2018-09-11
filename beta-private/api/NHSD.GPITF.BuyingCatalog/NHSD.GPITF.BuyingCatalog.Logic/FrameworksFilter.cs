@@ -20,7 +20,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _frameworkDatastore = frameworkDatastore;
     }
 
-    protected override Frameworks Filter(Frameworks input)
+    public override Frameworks Filter(Frameworks input)
     {
       if (!_context.HasRole(Roles.Supplier))
       {

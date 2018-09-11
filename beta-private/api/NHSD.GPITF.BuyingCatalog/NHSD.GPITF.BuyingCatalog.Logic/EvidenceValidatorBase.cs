@@ -38,7 +38,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     protected abstract SolutionStatus SolutionReviewStatus { get; }
 
-    internal void SolutionMustBeInReview()
+    public void SolutionMustBeInReview()
     {
       RuleFor(x => x)
         .Must(x =>
@@ -50,7 +50,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Can only add evidence if solution is in review");
     }
 
-    internal void MustBeValidClaimId()
+    public void MustBeValidClaimId()
     {
       RuleFor(x => x.ClaimId)
         .NotNull()
@@ -58,7 +58,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Invalid ClaimId");
     }
 
-    internal void MustBeValidPreviousId()
+    public void MustBeValidPreviousId()
     {
       RuleFor(x => x.PreviousId)
         .Must(id => Guid.TryParse(id, out _))
@@ -66,14 +66,14 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Invalid PreviousId");
     }
 
-    internal void MustBeSupplier()
+    public void MustBeSupplier()
     {
       RuleFor(x => x)
         .Must(x => _context.HasRole(Roles.Supplier))
         .WithMessage("Must be supplier");
     }
 
-    internal void MustBeFromSameOrganisation()
+    public void MustBeFromSameOrganisation()
     {
       RuleFor(x => x)
         .Must(x =>
@@ -86,7 +86,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Must be from same organisation");
     }
 
-    internal void PreviousMustBeForSameClaim()
+    public void PreviousMustBeForSameClaim()
     {
       RuleFor(x => x)
         .Must(x =>
@@ -98,7 +98,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Previous evidence must be for same claim");
     }
 
-    internal void PreviousMustNotBeInUse()
+    public void PreviousMustNotBeInUse()
     {
       RuleFor(x => x)
         .Must(x =>

@@ -13,7 +13,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _context = context;
     }
 
-    protected abstract T Filter(T input);
+    public abstract T Filter(T input);
 
     public IEnumerable<T> Filter(IEnumerable<T> input)
     {
