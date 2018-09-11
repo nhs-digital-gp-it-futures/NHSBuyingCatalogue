@@ -9,20 +9,23 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   {
     private readonly IReviewsDatastore<T> _datastore;
     private readonly IContactsDatastore _contacts;
+    private readonly IReviewsFilter<IEnumerable<T>> _filter;
 
     public ReviewsLogicBase(
       IReviewsDatastore<T> datastore,
       IContactsDatastore contacts,
+      IReviewsFilter<IEnumerable<T>> filter,
       IHttpContextAccessor context) :
       base(context)
     {
       _datastore = datastore;
       _contacts = contacts;
+      _filter = filter;
     }
 
     public IEnumerable<IEnumerable<T>> ByEvidence(string evidenceId)
     {
-      return _datastore.ByEvidence(evidenceId);
+      return _filter.Filter(_datastore.ByEvidence(evidenceId));
     }
 
     public T Create(T review)
