@@ -9,9 +9,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     public StandardsApplicableReviewsLogic(
       IStandardsApplicableReviewsDatastore datastore,
       IContactsDatastore contacts,
+      IStandardsApplicableReviewsValidator validator,
       IStandardsApplicableReviewsFilter filter,
       IHttpContextAccessor context) :
-      base(datastore, contacts, filter, context)
+      base(datastore, contacts, validator, filter, context)
     {
     }
   }

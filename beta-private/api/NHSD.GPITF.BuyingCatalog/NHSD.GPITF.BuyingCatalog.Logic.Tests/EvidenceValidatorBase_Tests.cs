@@ -13,7 +13,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
   {
     private Mock<IHttpContextAccessor> _context;
     private Mock<IEvidenceDatastore<EvidenceBase>> _evidenceDatastore;
-    private Mock<IStandardsApplicableDatastore> _claimDatastore;
+    private Mock<IClaimsDatastore<ClaimsBase>> _claimDatastore;
     private Mock<ISolutionsDatastore> _solutionDatastore;
 
     [SetUp]
@@ -21,8 +21,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       _context = new Mock<IHttpContextAccessor>();
       _evidenceDatastore = new Mock<IEvidenceDatastore<EvidenceBase>>();
-      _claimDatastore = new Mock<IStandardsApplicableDatastore>();
-      _claimDatastore.As<IClaimsDatastore<ClaimsBase>>();
+      _claimDatastore = new Mock<IClaimsDatastore<ClaimsBase>>();
       _solutionDatastore = new Mock<ISolutionsDatastore>();
     }
 
@@ -116,7 +115,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var soln = Creator.GetSolution(orgId: orgId);
       var claim = Creator.GetClaimsBase(solnId: soln.Id);
       var evidence = Creator.GetEvidenceBase();
-      _claimDatastore.As<IClaimsDatastore<ClaimsBase>>().Setup(x => x.ById(evidence.ClaimId)).Returns(claim);
+      _claimDatastore.Setup(x => x.ById(evidence.ClaimId)).Returns(claim);
       _solutionDatastore.Setup(x => x.ById(soln.Id)).Returns(soln);
 
       validator.MustBeFromSameOrganisation();
@@ -134,7 +133,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var soln = Creator.GetSolution(orgId: orgId);
       var claim = Creator.GetClaimsBase(solnId: soln.Id);
       var evidence = Creator.GetEvidenceBase();
-      _claimDatastore.As<IClaimsDatastore<ClaimsBase>>().Setup(x => x.ById(evidence.ClaimId)).Returns(claim);
+      _claimDatastore.Setup(x => x.ById(evidence.ClaimId)).Returns(claim);
       _solutionDatastore.Setup(x => x.ById(soln.Id)).Returns(soln);
 
       validator.MustBeFromSameOrganisation();
@@ -222,7 +221,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void PreviousMustNotBeInUse_NotInUse_Succeeds()
     {
       var validator = new DummyEvidenceValidatorBase(_evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
-      var evidence = Creator.GetEvidenceBase();
+      var evidence = Creator.GetEvidenceBase(prevId: Guid.NewGuid().ToString());
+      _evidenceDatastore.Setup(x => x.ByClaim(evidence.ClaimId)).Returns(new[] { new[] { Creator.GetEvidenceBase() } });
 
       validator.PreviousMustNotBeInUse();
       var valres = validator.Validate(evidence);

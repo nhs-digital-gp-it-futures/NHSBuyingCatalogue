@@ -10,7 +10,7 @@ using System.Reflection;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 {
-  public abstract class ReviewsDatastoreBase<T> : CommonTableExpressionDatastoreBase<T> where T : ReviewsBase
+  public abstract class ReviewsDatastoreBase<T> : CommonTableExpressionDatastoreBase<T>, IReviewsDatastore<ReviewsBase> where T : ReviewsBase
   {
     public ReviewsDatastoreBase(
       IDbConnectionFactory dbConnectionFactory,
@@ -77,6 +77,14 @@ with recursive Links(CurrentId, Id, PreviousId, EvidenceId, CreatedById, Created
       });
     }
 
+    public T ById(string id)
+    {
+      return GetInternal(() =>
+      {
+        return _dbConnection.Value.Get<T>(id);
+      });
+    }
+
     public T Create(T review)
     {
       return GetInternal(() =>
@@ -91,6 +99,21 @@ with recursive Links(CurrentId, Id, PreviousId, EvidenceId, CreatedById, Created
           return review;
         }
       });
+    }
+
+    IEnumerable<IEnumerable<ReviewsBase>> IReviewsDatastore<ReviewsBase>.ByEvidence(string evidenceId)
+    {
+      return ByEvidence(evidenceId);
+    }
+
+    ReviewsBase IReviewsDatastore<ReviewsBase>.ById(string id)
+    {
+      return ById(id);
+    }
+
+    ReviewsBase IReviewsDatastore<ReviewsBase>.Create(ReviewsBase review)
+    {
+      return Create((T)review);
     }
   }
 }

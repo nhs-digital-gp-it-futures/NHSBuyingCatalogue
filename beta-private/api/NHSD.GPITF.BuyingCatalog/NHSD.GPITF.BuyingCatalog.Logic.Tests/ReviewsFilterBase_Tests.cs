@@ -35,7 +35,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void Filter_Admin_ReturnsAll()
     {
       var filter = new DummyReviewsFilterBase(_evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
-      var review = GetReviewsBase();
+      var review = Creator.GetReviewsBase();
 
       var res = filter.FilterForAdmin(new[] { review });
 
@@ -46,7 +46,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void Filter_Buyer_ReturnsNull()
     {
       var filter = new DummyReviewsFilterBase(_evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
-      var review = GetReviewsBase();
+      var review = Creator.GetReviewsBase();
 
       var res = filter.FilterForBuyer(new[] { review });
 
@@ -61,7 +61,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var soln = Creator.GetSolution(orgId: orgId);
       var claim = Creator.GetClaimsBase(solnId: soln.Id);
       var evidence = Creator.GetEvidenceBase(claimId: claim.Id);
-      var review = GetReviewsBase(evidenceId: evidence.Id);
+      var review = Creator.GetReviewsBase(evidenceId: evidence.Id);
       var ctx = Creator.GetContext(orgId: orgId);
       _context.Setup(c => c.HttpContext).Returns(ctx);
       _evidenceDatastore.Setup(x => x.ById(review.EvidenceId)).Returns(evidence);
@@ -81,7 +81,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var soln = Creator.GetSolution(orgId: orgId);
       var claim = Creator.GetClaimsBase(solnId: soln.Id);
       var evidence = Creator.GetEvidenceBase(claimId: claim.Id);
-      var review = GetReviewsBase(evidenceId: evidence.Id);
+      var review = Creator.GetReviewsBase(evidenceId: evidence.Id);
       var ctx = Creator.GetContext();
       _context.Setup(c => c.HttpContext).Returns(ctx);
       _evidenceDatastore.Setup(x => x.ById(review.EvidenceId)).Returns(evidence);
@@ -91,19 +91,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var res = filter.FilterForSupplier(new[] { review });
 
       res.Should().BeNull();
-    }
-
-    private static DummyReviewsBase GetReviewsBase(
-      string id = null,
-      string prevId = null,
-      string evidenceId = null)
-    {
-      return new DummyReviewsBase
-      {
-        Id = id ?? Guid.NewGuid().ToString(),
-        PreviousId = prevId,
-        EvidenceId = evidenceId ?? Guid.NewGuid().ToString()
-      };
     }
   }
 }
