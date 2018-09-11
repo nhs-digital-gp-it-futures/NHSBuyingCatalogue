@@ -38,7 +38,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new StandardsApplicableValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
-      var claim = GetStandardsApplicable(status: status);
+      var claim = Creator.GetStandardsApplicable(status: status);
 
       validator.MustBePending();
       var valres = validator.Validate(claim);
@@ -55,7 +55,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new StandardsApplicableValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
-      var claim = GetStandardsApplicable(status: status);
+      var claim = Creator.GetStandardsApplicable(status: status);
 
       validator.MustBePending();
       var valres = validator.Validate(claim);
@@ -86,7 +86,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new StandardsApplicableValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
-      var claim = GetStandardsApplicable(status: status);
+      var claim = Creator.GetStandardsApplicable(status: status);
 
       validator.MustBePending();
       var valres = validator.Validate(claim);
@@ -109,8 +109,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new StandardsApplicableValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
-      var oldClaim = GetStandardsApplicable(status: oldStatus);
-      var newClaim = GetStandardsApplicable(status: newStatus);
+      var oldClaim = Creator.GetStandardsApplicable(status: oldStatus);
+      var newClaim = Creator.GetStandardsApplicable(status: newStatus);
       _claimDatastore.Setup(x => x.ById(newClaim.Id)).Returns(oldClaim);
 
       validator.MustBeValidStatusTransition();
@@ -212,8 +212,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new StandardsApplicableValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
-      var oldClaim = GetStandardsApplicable(status: oldStatus);
-      var newClaim = GetStandardsApplicable(status: newStatus);
+      var oldClaim = Creator.GetStandardsApplicable(status: oldStatus);
+      var newClaim = Creator.GetStandardsApplicable(status: newStatus);
       _claimDatastore.Setup(x => x.ById(newClaim.Id)).Returns(oldClaim);
 
       validator.MustBeValidStatusTransition();
@@ -251,8 +251,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new StandardsApplicableValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
-      var oldClaim = GetStandardsApplicable(status: oldStatus);
-      var newClaim = GetStandardsApplicable(status: newStatus);
+      var oldClaim = Creator.GetStandardsApplicable(status: oldStatus);
+      var newClaim = Creator.GetStandardsApplicable(status: newStatus);
       _claimDatastore.Setup(x => x.ById(newClaim.Id)).Returns(oldClaim);
 
       validator.MustBeValidStatusTransition();
@@ -262,21 +262,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         .ContainSingle(x => x.ErrorMessage == "Invalid Status transition")
         .And
         .HaveCount(1);
-    }
-
-    private static StandardsApplicable GetStandardsApplicable(
-      string id = null,
-      string solnId = null,
-      string claimId = null,
-      StandardsApplicableStatus status = StandardsApplicableStatus.Draft)
-    {
-      return new StandardsApplicable
-      {
-        Id = id ?? Guid.NewGuid().ToString(),
-        SolutionId = solnId ?? Guid.NewGuid().ToString(),
-        StandardId = claimId ?? Guid.NewGuid().ToString(),
-        Status = status
-      };
     }
   }
 }

@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 {
-  public abstract class ClaimsDatastoreBase<T> : DatastoreBase<T> where T : ClaimsBase
+  public abstract class ClaimsDatastoreBase<T> : DatastoreBase<T>, IClaimsDatastore<ClaimsBase> where T : ClaimsBase
   {
     public ClaimsDatastoreBase(
       IDbConnectionFactory dbConnectionFactory,
@@ -74,6 +74,31 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
           return 0;
         }
       });
+    }
+
+    ClaimsBase IClaimsDatastore<ClaimsBase>.ById(string id)
+    {
+      return ById(id);
+    }
+
+    IEnumerable<ClaimsBase> IClaimsDatastore<ClaimsBase>.BySolution(string solutionId)
+    {
+      return BySolution(solutionId);
+    }
+
+    ClaimsBase IClaimsDatastore<ClaimsBase>.Create(ClaimsBase claim)
+    {
+      return Create((T)claim);
+    }
+
+    void IClaimsDatastore<ClaimsBase>.Update(ClaimsBase claim)
+    {
+      Update((T)claim);
+    }
+
+    void IClaimsDatastore<ClaimsBase>.Delete(ClaimsBase claim)
+    {
+      Delete((T)claim);
     }
   }
 }

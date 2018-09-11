@@ -45,7 +45,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       });
     }
 
-    internal void MustBeValidSolutionId()
+    public void MustBeValidSolutionId()
     {
       RuleFor(x => x.SolutionId)
         .NotNull()
@@ -53,7 +53,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Invalid SolutionId");
     }
 
-    internal void MustBeValidId()
+    public void MustBeValidId()
     {
       RuleFor(x => x.Id)
         .NotNull()
@@ -61,10 +61,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Invalid Id");
     }
 
-    internal abstract void MustBePending();
-    internal abstract void MustBeValidStatusTransition();
+    public abstract void MustBePending();
+    public abstract void MustBeValidStatusTransition();
 
-    internal void MustBeSameOrganisation()
+    public void MustBeSameOrganisation()
     {
       RuleFor(x => x)
         .Must(x =>
@@ -77,7 +77,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Cannot create/change claim for other organisation");
     }
 
-    internal void MustBeSameSolution()
+    public void MustBeSameSolution()
     {
       RuleFor(x => x)
         .Must(x =>

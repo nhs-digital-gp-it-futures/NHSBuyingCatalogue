@@ -20,6 +20,14 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
     }
 
+    public T ById(string id)
+    {
+      return GetInternal(() =>
+      {
+          return _dbConnection.Value.Get<T>(id);
+      });
+    }
+
     public IEnumerable<IEnumerable<T>> ByClaim(string claimId)
     {
       return GetInternal(() =>
@@ -89,21 +97,6 @@ with recursive Links(CurrentId, Id, PreviousId, ClaimId, CreatedById, CreatedOn,
           trans.Commit();
 
           return evidence;
-        }
-      });
-    }
-
-    public void Update(T evidence)
-    {
-      GetInternal(() =>
-      {
-        using (var trans = _dbConnection.Value.BeginTransaction())
-        {
-          evidence.CreatedOn = DateTime.UtcNow;
-          _dbConnection.Value.Update(evidence, trans);
-          trans.Commit();
-
-          return 0;
         }
       });
     }

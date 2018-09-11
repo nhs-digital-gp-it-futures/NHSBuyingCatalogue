@@ -17,7 +17,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _organisationDatastore = organisationDatastore;
     }
 
-    protected override Contacts Filter(Contacts input)
+    public override Contacts Filter(Contacts input)
     {
       if (!_context.HasRole(Roles.Supplier))
       {

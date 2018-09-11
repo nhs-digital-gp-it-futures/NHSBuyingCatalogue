@@ -72,6 +72,19 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       };
     }
 
+    public static DummyEvidenceBase GetEvidenceBase(
+      string id = null,
+      string prevId = null,
+      string claimId = null)
+    {
+      return new DummyEvidenceBase
+      {
+        Id = id ?? Guid.NewGuid().ToString(),
+        PreviousId = prevId,
+        ClaimId = claimId ?? Guid.NewGuid().ToString()
+      };
+    }
+
     public static Contacts GetContact(
       string id = null,
       string orgId = null)
@@ -80,6 +93,36 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       {
         Id = id ?? Guid.NewGuid().ToString(),
         OrganisationId = orgId ?? Guid.NewGuid().ToString()
+      };
+    }
+
+    public static CapabilitiesImplemented GetCapabilitiesImplemented(
+      string id = null,
+      string solnId = null,
+      string claimId = null,
+      CapabilitiesImplementedStatus status = CapabilitiesImplementedStatus.Draft)
+    {
+      return new CapabilitiesImplemented
+      {
+        Id = id ?? Guid.NewGuid().ToString(),
+        SolutionId = solnId ?? Guid.NewGuid().ToString(),
+        CapabilityId = claimId ?? Guid.NewGuid().ToString(),
+        Status = status
+      };
+    }
+
+    public static StandardsApplicable GetStandardsApplicable(
+      string id = null,
+      string solnId = null,
+      string claimId = null,
+      StandardsApplicableStatus status = StandardsApplicableStatus.Draft)
+    {
+      return new StandardsApplicable
+      {
+        Id = id ?? Guid.NewGuid().ToString(),
+        SolutionId = solnId ?? Guid.NewGuid().ToString(),
+        StandardId = claimId ?? Guid.NewGuid().ToString(),
+        Status = status
       };
     }
   }

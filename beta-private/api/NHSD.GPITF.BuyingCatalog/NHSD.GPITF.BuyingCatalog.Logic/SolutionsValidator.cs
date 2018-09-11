@@ -35,7 +35,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
       RuleSet(nameof(ISolutionsLogic.Create), () =>
       {
-        MustBeValidId();
         MustBeValidOrganisationId();
         MustBeFromSameOrganisation();
         PreviousVersionMustBeFromSameOrganisation();
@@ -43,7 +42,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       });
     }
 
-    internal void MustBeValidId()
+    public void MustBeValidId()
     {
       RuleFor(x => x.Id)
         .NotNull()
@@ -51,7 +50,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Invalid Id");
     }
 
-    internal void MustBeValidOrganisationId()
+    public void MustBeValidOrganisationId()
     {
       RuleFor(x => x.OrganisationId)
         .NotNull()
@@ -59,7 +58,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Invalid OrganisationId");
     }
 
-    internal void MustBeValidStatusTransition()
+    public void MustBeValidStatusTransition()
     {
       RuleFor(x => x)
         .Must(x =>
@@ -83,7 +82,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Invalid Status transition");
     }
 
-    internal void MustBeSameOrganisation()
+    public void MustBeSameOrganisation()
     {
       RuleFor(x => x)
         .Must(x =>
@@ -97,7 +96,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Cannot transfer solutions between organisations");
     }
 
-    internal void MustBeFromSameOrganisation()
+    public void MustBeFromSameOrganisation()
     {
       RuleFor(x => x)
         .Must(x =>
@@ -108,7 +107,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Must be from same organisation");
     }
 
-    internal void MustBeCurrentVersion()
+    public void MustBeCurrentVersion()
     {
       RuleFor(x => x)
         .Must(x =>
@@ -119,7 +118,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Can only change current version");
     }
 
-    internal void PreviousVersionMustBeFromSameOrganisation()
+    public void PreviousVersionMustBeFromSameOrganisation()
     {
       RuleFor(x => x)
         .Must(x =>
@@ -134,7 +133,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Previous version must be from same organisation");
     }
 
-    internal void MustBePending()
+    public void MustBePending()
     {
       RuleFor(x => x)
         .Must(x =>

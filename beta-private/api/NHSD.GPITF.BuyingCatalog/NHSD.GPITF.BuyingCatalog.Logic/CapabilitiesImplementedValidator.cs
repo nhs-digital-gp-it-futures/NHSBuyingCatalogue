@@ -17,7 +17,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     {
     }
 
-    internal override void MustBePending()
+    public override void MustBePending()
     {
       RuleFor(x => x)
         .Must(x =>
@@ -28,7 +28,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Only supplier can delete a draft claim");
     }
 
-    internal override void MustBeValidStatusTransition()
+    public override void MustBeValidStatusTransition()
     {
       RuleFor(x => x)
         .Must(x =>

@@ -10,7 +10,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     {
     }
 
-    protected override Solutions Filter(Solutions input)
+    public override Solutions Filter(Solutions input)
     {
       if (_context.HasRole(Roles.Admin))
       {
