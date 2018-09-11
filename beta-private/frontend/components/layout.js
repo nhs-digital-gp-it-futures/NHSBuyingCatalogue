@@ -5,7 +5,7 @@ import Head from 'next/head'
 
 import NHSDigitalLogo from './nhs-digital-logo'
 
-import styles from '../styles.scss'
+import styles from '../styles/styles.scss'
 
 export default ({children, title = 'Home'}) => (
   <React.Fragment>
