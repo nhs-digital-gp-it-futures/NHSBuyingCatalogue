@@ -5,6 +5,8 @@ import Head from 'next/head'
 
 import NHSDigitalLogo from './nhs-digital-logo'
 
+import styles from '../styles.scss'
+
 export default ({children, title = 'Home'}) => (
   <React.Fragment>
     <Head>
@@ -14,7 +16,7 @@ export default ({children, title = 'Home'}) => (
     </Head>
     <header role="banner" aria-label="Site header">
       <nav aria-label="Main">
-        <Link href="#content"><a id="skip-to-main-content-link">Skip to main content</a></Link>
+        <Link href="#content"><a className="sr" id="skip-to-main-content-link">Skip to main content</a></Link>
         <Link href="/#content">
           <a aria-label="Home"><NHSDigitalLogo /></a>
         </Link>
@@ -25,10 +27,10 @@ export default ({children, title = 'Home'}) => (
       {children}
     </main>
     <footer role="banner" aria-label="Site footer">
-      <section>
-        <h2>About</h2>
-        <Link href="/about#catalogue"><a>Catalogue</a></Link>
-        <Link href="/about#nhs-digital"><a>NHS Digital</a></Link>
+      <section role="group" aria-labelledby="footer-about-section-label">
+        <h2 id="footer-about-section-label" role="none">About</h2>
+        <Link href="/about#catalogue"><a><span className="sr">About the</span> Catalogue</a></Link>
+        <Link href="/about#nhs-digital"><a><span className="sr">About</span> NHS Digital</a></Link>
       </section>
     </footer>
   </React.Fragment>

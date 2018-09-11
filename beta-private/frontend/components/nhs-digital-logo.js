@@ -1,6 +1,3 @@
 export default () => (
-  <picture>
-    <source srcSet="/static/img/nhs-digital.svg" />
-    <img src="/static/img/nhs-digital.png" alt="NHS Digital" />
-  </picture>
+  <img className="nhs-digital-logo" src="/static/img/nhs-digital.svg" alt="NHS Digital" />
 )
