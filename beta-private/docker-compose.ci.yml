@@ -5,4 +5,6 @@ services:
     build:
       context: ./frontend
       target: test
-    command: npm test
+    command: npm run test:ci
+    volumes:
+      - "${VSTS_WORKING_DIR}:/home/node/app/results"

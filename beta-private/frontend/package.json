@@ -8,7 +8,9 @@
     "dev": "next -p 8000",
     "build": "next build",
     "start": "next start -p 8000",
-    "test": "NODE_ENV=test jest"
+    "test": "NODE_ENV=test jest",
+    "test:ci": "NODE_ENV=test JEST_JUNIT_OUTPUT=results/junit.xml jest --ci --reporters jest-junit --coverage --coverageReporters=cobertura --coverageReporters=html --coverageDirectory=results/coverage",
+    "posttest:ci": "node __tests__/__tools__/coverage-report-postprocessor.js"
   },
   "author": "Paul Mitchell <paul.mitchell@bjss.com>",
   "dependencies": {
@@ -21,15 +23,23 @@
     "babel-jest": "^23.6.0",
     "enzyme": "^3.6.0",
     "enzyme-adapter-react-16": "^1.5.0",
+    "inline-css": "^2.4.0",
     "jest": "^23.6.0",
+    "jest-junit": "^5.1.0",
     "node-sass": "^4.9.3",
     "react-addons-test-utils": "^15.6.2",
     "react-test-renderer": "^16.5.0"
   },
   "jest": {
-    "setupFiles": ["<rootDir>/jest.setup.js"],
+    "setupFiles": [
+      "<rootDir>/jest.setup.js"
+    ],
     "moduleNameMapper": {
       "\\.scss$": "<rootDir>/__mocks__/styleMock.js"
-    }
+    },
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/__tools__/"
+    ]
   }
 }
