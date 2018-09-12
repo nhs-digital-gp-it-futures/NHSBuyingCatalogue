@@ -4,14 +4,15 @@ using NHSD.GPITF.BuyingCatalog.Models;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 {
-  public sealed class DummyEvidenceValidatorBase : EvidenceValidatorBase<EvidenceBase>
+  internal sealed class DummyReviewsValidatorBase : ReviewsValidatorBase<DummyReviewsBase>
   {
-    public DummyEvidenceValidatorBase(
+    public DummyReviewsValidatorBase(
+      IReviewsDatastore<ReviewsBase> reviewsDatastore,
       IEvidenceDatastore<EvidenceBase> evidenceDatastore,
       IClaimsDatastore<ClaimsBase> claimDatastore,
       ISolutionsDatastore solutionDatastore,
       IHttpContextAccessor context) :
-      base(evidenceDatastore, claimDatastore, solutionDatastore, context)
+      base(reviewsDatastore, evidenceDatastore, claimDatastore, solutionDatastore, context)
     {
     }
 

@@ -10,7 +10,7 @@ using System.Reflection;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 {
-  public abstract class EvidenceDatastoreBase<T> : CommonTableExpressionDatastoreBase<T> where T : EvidenceBase
+  public abstract class EvidenceDatastoreBase<T> : CommonTableExpressionDatastoreBase<T>, IEvidenceDatastore<EvidenceBase> where T : EvidenceBase
   {
     public EvidenceDatastoreBase(
       IDbConnectionFactory dbConnectionFactory,
@@ -24,7 +24,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
       return GetInternal(() =>
       {
-          return _dbConnection.Value.Get<T>(id);
+        return _dbConnection.Value.Get<T>(id);
       });
     }
 
@@ -99,6 +99,21 @@ with recursive Links(CurrentId, Id, PreviousId, ClaimId, CreatedById, CreatedOn,
           return evidence;
         }
       });
+    }
+
+    IEnumerable<IEnumerable<EvidenceBase>> IEvidenceDatastore<EvidenceBase>.ByClaim(string claimId)
+    {
+      return ByClaim(claimId);
+    }
+
+    EvidenceBase IEvidenceDatastore<EvidenceBase>.ById(string id)
+    {
+      return ById(id);
+    }
+
+    EvidenceBase IEvidenceDatastore<EvidenceBase>.Create(EvidenceBase evidence)
+    {
+      return Create((T)evidence);
     }
   }
 }

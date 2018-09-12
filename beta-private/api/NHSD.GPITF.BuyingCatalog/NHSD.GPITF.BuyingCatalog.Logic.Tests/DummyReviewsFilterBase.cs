@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
+using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 {
-  public sealed class DummyEvidenceValidatorBase : EvidenceValidatorBase<EvidenceBase>
+  public sealed class DummyReviewsFilterBase : ReviewsFilterBase<IEnumerable<ReviewsBase>>
   {
-    public DummyEvidenceValidatorBase(
+    public DummyReviewsFilterBase(
       IEvidenceDatastore<EvidenceBase> evidenceDatastore,
       IClaimsDatastore<ClaimsBase> claimDatastore,
       ISolutionsDatastore solutionDatastore,
@@ -14,7 +15,5 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       base(evidenceDatastore, claimDatastore, solutionDatastore, context)
     {
     }
-
-    protected override SolutionStatus SolutionReviewStatus => SolutionStatus.Failed;
   }
 }
