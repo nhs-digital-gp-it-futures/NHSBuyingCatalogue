@@ -5,12 +5,21 @@ FROM base AS dependencies
 COPY package*.json ./
 RUN npm install
 
-FROM dependencies AS build
+FROM dependencies AS pre-build
 COPY pages pages/
 COPY components components/
 COPY static static/
 COPY styles styles/
 COPY next.config.js .
+
+FROM pre-build AS test
+COPY __mocks__ __mocks__/
+COPY __tests__ __tests__/
+COPY jest.setup.js .
+COPY .babelrc .
+RUN npm test
+
+FROM pre-build AS build
 RUN npm run build
 
 FROM node:8-alpine AS release
