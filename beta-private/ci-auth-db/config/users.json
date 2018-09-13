@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "email": "supplier@test",
+    "email_verified": true,
+    "name": "Test Supplier",
+    "password": "Supplier1"
+  },
+  {
+    "id": 2,
+    "email": "supplier2@test",
+    "email_verified": true,
+    "name": "Test2 Supplier",
+    "password": "Supplier2"
+  },
+  {
+    "id": 3,
+    "email": "buyer@test",
+    "email_verified": true,
+    "name": "A Buyer",
+    "password": "Buyer1"
+  }
+]

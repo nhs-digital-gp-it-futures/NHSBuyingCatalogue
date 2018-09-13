@@ -5,9 +5,9 @@
   "description": "NHS Digital Buying Catalogue Web Frontend (private beta)",
   "main": "index.js",
   "scripts": {
-    "dev": "next -p 8000",
+    "dev": "node server.js",
     "build": "next build",
-    "start": "next start -p 8000",
+    "start": "NODE_ENV=production node server.js",
     "test": "NODE_ENV=test jest",
     "test:ci": "NODE_ENV=test JEST_JUNIT_OUTPUT=results/junit.xml jest --ci --reporters jest-junit --coverage --coverageReporters=cobertura --coverageReporters=html --coverageDirectory=results/coverage",
     "posttest:ci": "node __tests__/__tools__/coverage-report-postprocessor.js"
@@ -15,6 +15,9 @@
   "author": "Paul Mitchell <paul.mitchell@bjss.com>",
   "dependencies": {
     "@zeit/next-sass": "^0.2.0",
+    "catalogue-authn-authz": "./lib/catalogue-authn-authz",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
     "next": "^6.1.2",
     "react": "^16.5.0",
     "react-dom": "^16.5.0"

@@ -1,0 +1,12 @@
+{
+  "idp_name": "http://oidc-provider:9000",
+  "client_config": [
+    {
+      "client_id": "catalogue-private-beta-ci",
+      "client_secret": "ptjqjbxbdxryshjbsqelfwoonibgnnee",
+      "redirect_uris": [
+        "http://localhost:3000/oidc/callback/"
+      ]
+    }
+  ]
+}

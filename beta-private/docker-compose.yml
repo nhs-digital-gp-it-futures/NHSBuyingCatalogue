@@ -11,6 +11,10 @@ services:
       - "8000:8000"
     environment:
       - NODE_ENV
+      - BASE_URL
+      - OIDC_ISSUER_URL
+      - OIDC_CLIENT_ID
+      - OIDC_CLIENT_SECRET
     restart: always
 
   api:
@@ -20,6 +24,8 @@ services:
       - beta_network
     volumes:
       - api_data:/app/Data
+    environment:
+      - OIDC_ISSUER_URL
     ports:
       - "8001:8001"
 
