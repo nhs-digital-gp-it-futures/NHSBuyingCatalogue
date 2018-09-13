@@ -44,6 +44,8 @@ DROP TABLE IF EXISTS Capabilities;
 DROP TABLE IF EXISTS Frameworks;
 DROP TABLE IF EXISTS Standards;
 
+DROP TABLE IF EXISTS CachedUserInfoResponseJson;
+
 -- create data tables
 -- NOTE:  maximum text field lengths is 425 characters because 
 --        max index size (on relationship tables) is 1700 bytes (425 = 1700/4)
@@ -143,6 +145,13 @@ CREATE TABLE Standards
   URL NVARCHAR(MAX),
   PRIMARY KEY (Id),
   FOREIGN KEY (PreviousId) REFERENCES Standards(Id)
+);
+
+CREATE TABLE CachedUserInfoResponseJson
+(
+  Id NVARCHAR(425) NOT NULL UNIQUE,
+  Data NVARCHAR(MAX),
+  PRIMARY KEY (Id)
 );
 
 

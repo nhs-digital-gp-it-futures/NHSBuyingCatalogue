@@ -25,6 +25,8 @@ DROP TABLE IF EXISTS Capabilities;
 DROP TABLE IF EXISTS Frameworks;
 DROP TABLE IF EXISTS Standards;
 
+DROP TABLE IF EXISTS CachedUserInfoResponseJson;
+
 -- create data tables
 
 -- Organisations.csv
@@ -122,6 +124,13 @@ CREATE TABLE Standards
   URL TEXT,
   PRIMARY KEY (Id),
   FOREIGN KEY (PreviousId) REFERENCES Standards(Id)
+);
+
+CREATE TABLE CachedUserInfoResponseJson
+(
+  Id CHAR(512) NOT NULL UNIQUE,
+  Data TEXT,
+  PRIMARY KEY (Id)
 );
 
 
