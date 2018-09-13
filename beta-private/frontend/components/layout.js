@@ -4,10 +4,11 @@ import Link from 'next/link'
 import Head from 'next/head'
 
 import NHSDigitalLogo from './nhs-digital-logo'
+import UserAuthenticationNav from './user-authentication-nav'
 
 import styles from '../styles/styles.scss'
 
-export default ({children, title = 'Home'}) => (
+export default ({children, title = 'Home', ...props}) => (
   <React.Fragment>
     <Head>
       <meta charSet="utf-8" />
@@ -20,6 +21,7 @@ export default ({children, title = 'Home'}) => (
         <Link href="/#content">
           <a aria-label="Home"><NHSDigitalLogo /></a>
         </Link>
+        <UserAuthenticationNav {...props} />
         <Link href="/about#content"><a>About</a></Link>
       </nav>
     </header>
