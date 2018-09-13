@@ -49,13 +49,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Invalid EvidenceId");
     }
 
-    public void MustBeSupplier()
-    {
-      RuleFor(x => x)
-        .Must(x => _context.HasRole(Roles.Supplier))
-        .WithMessage("Must be supplier");
-    }
-
     public void MustBeValidPreviousId()
     {
       RuleFor(x => x.PreviousId)

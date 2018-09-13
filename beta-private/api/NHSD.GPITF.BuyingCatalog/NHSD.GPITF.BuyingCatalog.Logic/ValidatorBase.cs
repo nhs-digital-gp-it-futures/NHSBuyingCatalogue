@@ -12,14 +12,21 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _context = context;
     }
 
-    protected void MustBeAdmin()
+    public void MustBeAdmin()
     {
       RuleFor(x => x)
         .Must(x => _context.HasRole(Roles.Admin))
         .WithMessage("Must be admin");
     }
 
-    protected void MustBeAdminOrSupplier()
+    public void MustBeSupplier()
+    {
+      RuleFor(x => x)
+        .Must(x => _context.HasRole(Roles.Supplier))
+        .WithMessage("Must be supplier");
+    }
+
+    public void MustBeAdminOrSupplier()
     {
       RuleFor(x => x)
         .Must(x =>
