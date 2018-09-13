@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace NHSD.GPITF.BuyingCatalog.Authentications
 {
 #pragma warning disable CS1591
-  public sealed class UserInfoResponseDatastore : IUserInfoResponseDatastore
+  public sealed class UserInfoResponseMemoryDatastore : IUserInfoResponseDatastore
   {
     private readonly object _cacheLock = new object();
 
