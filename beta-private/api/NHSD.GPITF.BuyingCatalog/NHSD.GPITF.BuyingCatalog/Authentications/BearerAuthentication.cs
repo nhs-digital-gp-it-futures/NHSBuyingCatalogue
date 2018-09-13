@@ -1,7 +1,8 @@
-﻿using IdentityModel.Client;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System;
@@ -12,44 +13,47 @@ using System.Threading.Tasks;
 
 namespace NHSD.GPITF.BuyingCatalog.Authentications
 {
-  internal static class BearerAuthentication
+#pragma warning disable CS1591
+  public static partial class BearerAuthentication
   {
     private static TimeSpan Expiry = TimeSpan.FromMinutes(60);
 
-    // [bearerToken]-->[UserInfoResponse]
-    private static Dictionary<string, CachedUserInfoResponse> _cache = new Dictionary<string, CachedUserInfoResponse>();
-
-    private static object _cacheLock = new object();
-
-    public static async Task Authenticate(IConfiguration config, TokenValidatedContext context)
+    public static async Task Authenticate(IServiceProvider sp, TokenValidatedContext context)
     {
       // set roles based on email-->organisation-->org.PrimaryRoleId
       var bearerToken = ((FrameRequestHeaders)context.HttpContext.Request.Headers).HeaderAuthorization.Single();
+      var cache = sp.GetService<IUserInfoResponseDatastore>();
 
-      CachedUserInfoResponse cachedresponse;
-      lock (_cacheLock)
+      // have to cache responses or UserInfo endpoint thinks we are a DOS attack
+      CachedUserInfoResponse cachedresponse = null;
+      if (cache.TryGetValue(bearerToken, out string jsonCachedResponse))
       {
-        // have to cache responses or UserInfo endpoint thinks we are a DOS attack
-        if (_cache.TryGetValue(bearerToken, out cachedresponse))
+        cachedresponse = JsonConvert.DeserializeObject<CachedUserInfoResponse>(jsonCachedResponse);
+        if (cachedresponse.Created < DateTime.UtcNow.Subtract(Expiry))
         {
-          if (cachedresponse.Created < DateTime.UtcNow.Subtract(Expiry))
-          {
-            _cache.Remove(bearerToken);
-            cachedresponse = null;
-          }
+          cache.Remove(bearerToken);
+          cachedresponse = null;
         }
       }
 
       var response = cachedresponse?.UserInfoResponse;
       if (response == null)
       {
-        var userInfoClient = new UserInfoClient(config["Jwt:UserInfo"]);
-        response = await userInfoClient.GetAsync(bearerToken.Substring(7));
-        lock (_cacheLock)
+        var config = sp.GetService<IConfiguration>();
+        var userInfo = config["Jwt:UserInfo"] ?? Environment.GetEnvironmentVariable("Jwt:UserInfo");
+        var userInfoClient = sp.GetService<IUserInfoResponseRetriever>();
+        response = await userInfoClient.GetAsync(userInfo, bearerToken.Substring(7));
+        if (response == null)
         {
-          _cache.Remove(bearerToken);
-          _cache.Add(bearerToken, new CachedUserInfoResponse(response));
+          return;
         }
+        cache.Remove(bearerToken);
+        cache.Add(bearerToken, JsonConvert.SerializeObject(new CachedUserInfoResponse(response)));
+      }
+
+      if (response?.Claims == null)
+      {
+        return;
       }
 
       var userClaims = response.Claims;
@@ -57,10 +61,9 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
       var email = userClaims.SingleOrDefault(x => x.Type == "email")?.Value;
       if (!string.IsNullOrEmpty(email))
       {
-        var servProv = context.HttpContext.RequestServices;
-        var contLog = (IContactsDatastore)servProv.GetService(typeof(IContactsDatastore));
+        var contLog = sp.GetService<IContactsDatastore>();
         var contact = contLog.ByEmail(email);
-        var orgLog = (IOrganisationsDatastore)servProv.GetService(typeof(IOrganisationsDatastore));
+        var orgLog = sp.GetService<IOrganisationsDatastore>();
         var org = orgLog.ByContact(contact.Id);
         switch (org.PrimaryRoleId)
         {
@@ -78,17 +81,7 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
 
       context.Principal.AddIdentity(new ClaimsIdentity(claims));
     }
-
-    private sealed class CachedUserInfoResponse
-    {
-      public UserInfoResponse UserInfoResponse { get; }
-      public DateTime Created { get; } = DateTime.UtcNow;
-
-      public CachedUserInfoResponse(UserInfoResponse userInfoResponse)
-      {
-        UserInfoResponse = userInfoResponse;
-      }
-    }
   }
+#pragma warning restore CS1591
 }
 

@@ -26,11 +26,13 @@ namespace NHSD.GPITF.BuyingCatalog
 {
   internal sealed class Startup
   {
+    private IServiceProvider ServiceProvider { get; }
     private IConfiguration Configuration { get; }
     private IHostingEnvironment CurrentEnvironment { get; set; }
 
-    public Startup(IConfiguration configuration, IHostingEnvironment env)
+    public Startup(IServiceProvider serviceProvider, IConfiguration configuration, IHostingEnvironment env)
     {
+      ServiceProvider = serviceProvider;
       Configuration = configuration;
 
       // Environment variable:
@@ -141,13 +143,13 @@ namespace NHSD.GPITF.BuyingCatalog
         })
       .AddJwtBearer(options =>
       {
-        options.Authority = Configuration["Jwt:Authority"];
-        options.Audience = Configuration["Jwt:Audience"];
+        options.Authority = Configuration["Jwt:Authority"] ?? Environment.GetEnvironmentVariable("Jwt:Authority");
+        options.Audience = Configuration["Jwt:Audience"] ?? Environment.GetEnvironmentVariable("Jwt:Audience");
         options.Events = new JwtBearerEvents
         {
           OnTokenValidated = async context =>
           {
-            await BearerAuthentication.Authenticate(Configuration, context);
+            await BearerAuthentication.Authenticate(ServiceProvider, context);
           }
         };
       });

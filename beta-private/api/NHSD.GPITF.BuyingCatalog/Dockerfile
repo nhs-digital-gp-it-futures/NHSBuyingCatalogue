@@ -10,6 +10,7 @@ COPY NHSD.GPITF.BuyingCatalog.Datastore.Database/NHSD.GPITF.BuyingCatalog.Datast
 COPY NHSD.GPITF.BuyingCatalog.Datastore.CRM/NHSD.GPITF.BuyingCatalog.Datastore.CRM.csproj NHSD.GPITF.BuyingCatalog.Datastore.CRM/
 COPY NHSD.GPITF.BuyingCatalog.Logic/NHSD.GPITF.BuyingCatalog.Logic.csproj NHSD.GPITF.BuyingCatalog.Logic/
 COPY NHSD.GPITF.BuyingCatalog.Logic.Tests/NHSD.GPITF.BuyingCatalog.Logic.Tests.csproj NHSD.GPITF.BuyingCatalog.Logic.Tests/
+COPY NHSD.GPITF.BuyingCatalog.Tests/NHSD.GPITF.BuyingCatalog.Tests.csproj NHSD.GPITF.BuyingCatalog.Tests/
 RUN dotnet restore
 
 COPY . .
@@ -27,6 +28,10 @@ WORKDIR /src/NHSD.GPITF.BuyingCatalog.Logic
 RUN dotnet build -c Release -o /app
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.Logic.Tests
+RUN dotnet build -c Release -o /app
+RUN dotnet test -c Release
+
+WORKDIR /src/NHSD.GPITF.BuyingCatalog.Tests
 RUN dotnet build -c Release -o /app
 RUN dotnet test -c Release
 

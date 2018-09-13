@@ -1,0 +1,81 @@
+﻿using FluentAssertions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
+using Moq;
+using Newtonsoft.Json;
+using NHSD.GPITF.BuyingCatalog.Authentications;
+using NHSD.GPITF.BuyingCatalog.Interfaces;
+using NHSD.GPITF.BuyingCatalog.Models;
+using NUnit.Framework;
+using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
+
+namespace NHSD.GPITF.BuyingCatalog.Tests
+{
+  [TestFixture]
+  public sealed class BearerAuthentication_Tests
+  {
+    private const string BearerToken = "abcdefghijklmno";
+    private const string UserInfoEndpoint = "https://localhost/userinfo";
+    private const string EmailAddress = "some_person@nhsd.co.uk";
+
+    private TokenValidatedContext _context;
+    private Mock<IConfiguration> _config;
+    private Mock<IServiceProvider> _serviceProvider;
+    private Mock<IUserInfoResponseDatastore> _cache;
+    private Mock<IUserInfoResponseRetriever> _rover;
+    private Mock<IContactsDatastore> _contactsDatastore;
+    private Mock<IOrganisationsDatastore> _organisationDatastore;
+
+    [SetUp]
+    public void SetUp()
+    {
+      _context = Creator.GetTokenValidatedContext(BearerToken);
+      _config = new Mock<IConfiguration>();
+      _serviceProvider = new Mock<IServiceProvider>();
+      _cache = new Mock<IUserInfoResponseDatastore>();
+      _rover = new Mock<IUserInfoResponseRetriever>();
+      _contactsDatastore = new Mock<IContactsDatastore>();
+      _organisationDatastore = new Mock<IOrganisationsDatastore>();
+
+      _serviceProvider.Setup(x => x.GetService(typeof(IUserInfoResponseDatastore))).Returns(_cache.Object);
+      _serviceProvider.Setup(x => x.GetService(typeof(IConfiguration))).Returns(_config.Object);
+      _serviceProvider.Setup(x => x.GetService(typeof(IUserInfoResponseRetriever))).Returns(_rover.Object);
+      _serviceProvider.Setup(x => x.GetService(typeof(IContactsDatastore))).Returns(_contactsDatastore.Object);
+      _serviceProvider.Setup(x => x.GetService(typeof(IOrganisationsDatastore))).Returns(_organisationDatastore.Object);
+    }
+
+#pragma warning disable AsyncFixer01
+    [TestCase(PrimaryRole.ApplicationServiceProvider, Roles.Supplier)]
+    [TestCase(PrimaryRole.GovernmentDepartment, Roles.Admin)]
+    [TestCase(PrimaryRole.GovernmentDepartment, Roles.Buyer)]
+    public async Task Authenticate_OrganisationPrimaryRole_MapsToDomainRole(
+      string orgPrimaryRole, string expDomainRole)
+    {
+      var contact = Creator.GetContact();
+      var organisation = Creator.GetOrganisation(primaryRoleId: orgPrimaryRole);
+      var resp = Creator.GetUserInfoResponse(new[] { ("email", EmailAddress) });
+      var expiredResp = Creator.GetCachedUserInfoResponseExpired(resp);
+      var expiredRespJson = JsonConvert.SerializeObject(expiredResp);
+
+      _config.Setup(x => x["Jwt:UserInfo"]).Returns(UserInfoEndpoint);
+      _cache.Setup(x => x.TryGetValue(It.Is<string>(token => token == BearerToken), out expiredRespJson)).Returns(true);
+      _rover.Setup(x => x.GetAsync(UserInfoEndpoint, BearerToken.Substring(7))).ReturnsAsync(resp);
+      _contactsDatastore.Setup(x => x.ByEmail(EmailAddress)).Returns(contact);
+      _organisationDatastore.Setup(x => x.ByContact(contact.Id)).Returns(organisation);
+
+
+      await BearerAuthentication.Authenticate(_serviceProvider.Object, _context);
+
+
+      _context.Principal.Claims
+        .Should()
+        .ContainSingle(x =>
+          x.Type == ClaimTypes.Role &&
+          x.Value == expDomainRole);
+    }
+#pragma warning restore AsyncFixer01
+  }
+}
+;
