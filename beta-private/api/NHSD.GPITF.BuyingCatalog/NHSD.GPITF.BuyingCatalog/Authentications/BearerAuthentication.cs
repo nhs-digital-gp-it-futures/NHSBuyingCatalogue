@@ -63,8 +63,20 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
       {
         var contLog = sp.GetService<IContactsDatastore>();
         var contact = contLog.ByEmail(email);
+
+        if (contact == null)
+        {
+          return;
+        }
+
         var orgLog = sp.GetService<IOrganisationsDatastore>();
         var org = orgLog.ByContact(contact.Id);
+
+        if (org == null)
+        {
+          return;
+        }
+
         switch (org.PrimaryRoleId)
         {
           case PrimaryRole.ApplicationServiceProvider:

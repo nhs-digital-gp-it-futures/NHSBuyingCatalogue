@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace NHSD.GPITF.BuyingCatalog.Tests
 {
+#pragma warning disable AsyncFixer01
   [TestFixture]
   public sealed class BearerAuthentication_Tests
   {
@@ -46,12 +47,10 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       _serviceProvider.Setup(x => x.GetService(typeof(IOrganisationsDatastore))).Returns(_organisationDatastore.Object);
     }
 
-#pragma warning disable AsyncFixer01
     [TestCase(PrimaryRole.ApplicationServiceProvider, Roles.Supplier)]
     [TestCase(PrimaryRole.GovernmentDepartment, Roles.Admin)]
     [TestCase(PrimaryRole.GovernmentDepartment, Roles.Buyer)]
-    public async Task Authenticate_OrganisationPrimaryRole_MapsToDomainRole(
-      string orgPrimaryRole, string expDomainRole)
+    public async Task Authenticate_OrganisationPrimaryRole_ClaimsRole(string orgPrimaryRole, string expDomainRole)
     {
       var contact = Creator.GetContact();
       var organisation = Creator.GetOrganisation(primaryRoleId: orgPrimaryRole);
@@ -75,7 +74,95 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
           x.Type == ClaimTypes.Role &&
           x.Value == expDomainRole);
     }
-#pragma warning restore AsyncFixer01
+
+    [Test]
+    public async Task Authenticate_OrganisationPrimaryRoleOther_NoRole()
+    {
+      var contact = Creator.GetContact();
+      var organisation = Creator.GetOrganisation(primaryRoleId: "other role");
+      var resp = Creator.GetUserInfoResponse(new[] { ("email", EmailAddress) });
+      var expiredResp = Creator.GetCachedUserInfoResponseExpired(resp);
+      var expiredRespJson = JsonConvert.SerializeObject(expiredResp);
+
+      _config.Setup(x => x["Jwt:UserInfo"]).Returns(UserInfoEndpoint);
+      _cache.Setup(x => x.TryGetValue(It.Is<string>(token => token == BearerToken), out expiredRespJson)).Returns(true);
+      _rover.Setup(x => x.GetAsync(UserInfoEndpoint, BearerToken.Substring(7))).ReturnsAsync(resp);
+      _contactsDatastore.Setup(x => x.ByEmail(EmailAddress)).Returns(contact);
+      _organisationDatastore.Setup(x => x.ByContact(contact.Id)).Returns(organisation);
+
+
+      await BearerAuthentication.Authenticate(_serviceProvider.Object, _context);
+
+
+      _context.Principal.Claims
+        .Should()
+        .NotContain(x =>
+          x.Type == ClaimTypes.Role);
+    }
+
+    [Test]
+    public async Task Authenticate_OrganisationPrimaryRole_ClaimsOrganisation()
+    {
+      var contact = Creator.GetContact();
+      var organisation = Creator.GetOrganisation();
+      var resp = Creator.GetUserInfoResponse(new[] { ("email", EmailAddress) });
+      var expiredResp = Creator.GetCachedUserInfoResponseExpired(resp);
+      var expiredRespJson = JsonConvert.SerializeObject(expiredResp);
+
+      _config.Setup(x => x["Jwt:UserInfo"]).Returns(UserInfoEndpoint);
+      _cache.Setup(x => x.TryGetValue(It.Is<string>(token => token == BearerToken), out expiredRespJson)).Returns(true);
+      _rover.Setup(x => x.GetAsync(UserInfoEndpoint, BearerToken.Substring(7))).ReturnsAsync(resp);
+      _contactsDatastore.Setup(x => x.ByEmail(EmailAddress)).Returns(contact);
+      _organisationDatastore.Setup(x => x.ByContact(contact.Id)).Returns(organisation);
+
+
+      await BearerAuthentication.Authenticate(_serviceProvider.Object, _context);
+
+
+      _context.Principal.Claims
+        .Should()
+        .ContainSingle(x =>
+          x.Type == nameof(Organisations));
+    }
+
+    [Test]
+    public async Task Authenticate_EmailNotFound_NoClaims()
+    {
+      var resp = Creator.GetUserInfoResponse(new[] { ("email", EmailAddress) });
+      var expiredResp = Creator.GetCachedUserInfoResponseExpired(resp);
+      var expiredRespJson = JsonConvert.SerializeObject(expiredResp);
+
+      _config.Setup(x => x["Jwt:UserInfo"]).Returns(UserInfoEndpoint);
+      _cache.Setup(x => x.TryGetValue(It.Is<string>(token => token == BearerToken), out expiredRespJson)).Returns(true);
+      _rover.Setup(x => x.GetAsync(UserInfoEndpoint, BearerToken.Substring(7))).ReturnsAsync(resp);
+
+
+      await BearerAuthentication.Authenticate(_serviceProvider.Object, _context);
+
+
+      _context.Principal.Claims.Should().BeEmpty();
+    }
+
+    [Test]
+    public async Task Authenticate_OrganisationNotFound_NoClaims()
+    {
+      var contact = Creator.GetContact();
+      var resp = Creator.GetUserInfoResponse(new[] { ("email", EmailAddress) });
+      var expiredResp = Creator.GetCachedUserInfoResponseExpired(resp);
+      var expiredRespJson = JsonConvert.SerializeObject(expiredResp);
+
+      _config.Setup(x => x["Jwt:UserInfo"]).Returns(UserInfoEndpoint);
+      _cache.Setup(x => x.TryGetValue(It.Is<string>(token => token == BearerToken), out expiredRespJson)).Returns(true);
+      _rover.Setup(x => x.GetAsync(UserInfoEndpoint, BearerToken.Substring(7))).ReturnsAsync(resp);
+      _contactsDatastore.Setup(x => x.ByEmail(EmailAddress)).Returns(contact);
+
+
+      await BearerAuthentication.Authenticate(_serviceProvider.Object, _context);
+
+
+      _context.Principal.Claims.Should().BeEmpty();
+    }
   }
+#pragma warning restore AsyncFixer01
 }
 ;
