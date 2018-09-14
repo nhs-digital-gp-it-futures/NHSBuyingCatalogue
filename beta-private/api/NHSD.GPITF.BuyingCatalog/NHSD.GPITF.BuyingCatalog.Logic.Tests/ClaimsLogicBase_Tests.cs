@@ -35,24 +35,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Create_CallsValidator_WithoutRuleset()
-    {
-      var logic = new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _filter.Object, _context.Object);
-      var claim = Creator.GetClaimsBase();
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Create(claim);
-
-      // obfuscated validation code because we use an extension method
-      _validator.Verify(x => x.Validate(It.Is<ValidationContext>(
-        vc =>
-          vc.InstanceToValidate == claim &&
-          vc.Selector is DefaultValidatorSelector)), Times.Once());
-    }
-
-    [Test]
     public void Create_CallsValidator_WithRuleset()
     {
       var logic = new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _filter.Object, _context.Object);
@@ -72,23 +54,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Update_CallsValidator_WithoutRuleset()
-    {
-      var logic = new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _filter.Object, _context.Object);
-      var claim = Creator.GetClaimsBase();
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Update(claim);
-
-      _validator.Verify(x => x.Validate(It.Is<ValidationContext>(
-        vc =>
-          vc.InstanceToValidate == claim &&
-          vc.Selector is DefaultValidatorSelector)), Times.Once());
-    }
-
-    [Test]
     public void Update_CallsValidator_WithRuleset()
     {
       var logic = new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _filter.Object, _context.Object);
@@ -104,23 +69,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
           vc.InstanceToValidate == claim &&
           vc.Selector is RulesetValidatorSelector &&
           ((RulesetValidatorSelector)vc.Selector).RuleSets.Contains(nameof(IClaimsLogic<ClaimsBase>.Update)))), Times.Once());
-    }
-
-    [Test]
-    public void Delete_CallsValidator_WithoutRuleset()
-    {
-      var logic = new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _filter.Object, _context.Object);
-      var claim = Creator.GetClaimsBase();
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Delete(claim);
-
-      _validator.Verify(x => x.Validate(It.Is<ValidationContext>(
-        vc =>
-          vc.InstanceToValidate == claim &&
-          vc.Selector is DefaultValidatorSelector)), Times.Once());
     }
 
     [Test]

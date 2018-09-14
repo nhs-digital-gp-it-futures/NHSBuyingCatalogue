@@ -47,26 +47,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Create_CallsValidator_WithoutRuleset()
-    {
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
-      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(Creator.GetContact());
-      var logic = new DummyEvidenceLogicBase(_datastore.Object, _contacts.Object, _validator.Object, _filter.Object, _context.Object);
-      var evidence = Creator.GetEvidenceBase();
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Create(evidence);
-
-      // obfuscated validation code because we use an extension method
-      _validator.Verify(x => x.Validate(It.Is<ValidationContext>(
-        vc =>
-          vc.InstanceToValidate == evidence &&
-          vc.Selector is DefaultValidatorSelector)), Times.Once());
-    }
-
-    [Test]
     public void Create_CallsValidator_WithRuleset()
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());

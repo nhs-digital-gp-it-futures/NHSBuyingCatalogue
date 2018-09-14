@@ -30,17 +30,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Valid_Succeeds()
-    {
-      var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
-      var soln = Creator.GetSolution();
-
-      var valres = validator.Validate(soln);
-
-      valres.Errors.Should().BeEmpty();
-    }
-
-    [Test]
     public void MustBeValidId_Null_ReturnsError()
     {
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);

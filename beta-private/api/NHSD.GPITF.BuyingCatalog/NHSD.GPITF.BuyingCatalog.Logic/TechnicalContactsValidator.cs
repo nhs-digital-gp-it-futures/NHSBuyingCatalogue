@@ -21,11 +21,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         MustBeAdminOrSupplier();
         SupplierOwn();
       });
+
       RuleSet(nameof(ITechnicalContactsLogic.Update), () =>
       {
         MustBeAdminOrSupplier();
         SupplierOwn();
       });
+
       RuleSet(nameof(ITechnicalContactsLogic.Delete), () =>
       {
         MustBeAdminOrSupplier();
@@ -33,7 +35,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       });
     }
 
-    private void SupplierOwn()
+    public void SupplierOwn()
     {
       RuleFor(x => x)
         .Must(x => 
