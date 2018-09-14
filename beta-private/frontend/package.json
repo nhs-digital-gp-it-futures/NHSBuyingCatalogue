@@ -5,7 +5,7 @@
   "description": "NHS Digital Buying Catalogue Web Frontend (private beta)",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon -w server.js server.js",
+    "dev": "npm rebuild node-sass; nodemon -w server.js -w lib server.js",
     "build": "next build",
     "start": "NODE_ENV=production node server.js",
     "test": "NODE_ENV=test jest",
@@ -15,6 +15,7 @@
   "author": "Paul Mitchell <paul.mitchell@bjss.com>",
   "dependencies": {
     "@zeit/next-sass": "^0.2.0",
+    "catalogue-api": "./lib/catalogue-api",
     "catalogue-authn-authz": "./lib/catalogue-authn-authz",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
@@ -43,7 +44,8 @@
     },
     "testPathIgnorePatterns": [
       "/node_modules/",
-      "/__tools__/"
+      "/__tools__/",
+      "/lib/catalogue-api"
     ]
   }
 }

@@ -1,20 +1,11 @@
 // set up OpenID Connect authentication
 const passport = require('passport')
 const { Issuer, Strategy } = require('openid-client')
-// const api = require('catalogue-api')
-const api = {
-  set_authorisation (header) {
-  },
+const CatalogueApi = require('catalogue-api')
 
-  async get_org_for_user (user) {
-    return {
-      org: {},
-      contact: {
-        firstName: 'Yay!'
-      }
-    }
-  }
-}
+CatalogueApi.ApiClient.instance.basePath = 'http://api:5100'
+
+const api = new CatalogueApi.ContactsApi()
 
 function authentication (app) {
   app.use(passport.initialize())
@@ -58,7 +49,7 @@ function authentication (app) {
 
       passport.deserializeUser((user, done) => {
         if (user.auth_header) {
-          api.set_authorisation(user.auth_header)
+          CatalogueApi.ApiClient.instance.authentications.oauth2.accessToken = user.auth_header
         }
         done(null, user)
       })
@@ -70,8 +61,8 @@ function authentication (app) {
 }
 
 function authCallback (tokenset, userinfo, done) {
-  const authHeader = `Bearer ${tokenset.access_token}`
-  api.set_authorisation(authHeader)
+  const authHeader = tokenset.access_token
+  CatalogueApi.ApiClient.instance.authentications.oauth2.accessToken = authHeader
 
   if (!userinfo) {
     done(null, false)
@@ -82,7 +73,7 @@ function authCallback (tokenset, userinfo, done) {
   // if there is no such contact, the user is still authenticated but the
   // lack of contact or organisation will prevent authorisation for
   // supplier-specific routes
-  api.get_org_for_user(userinfo)
+  api.apiContactsByEmailByEmailGet(userinfo.email)
     .then(({ org, contact }) => {
       const user = {
         ...userinfo,
@@ -94,11 +85,15 @@ function authCallback (tokenset, userinfo, done) {
       }
       done(null, user)
     })
-    .catch(() => done(null, {
-      ...userinfo,
-      is_authenticated: true,
-      auth_header: authHeader
-    }))
+    .catch(err => {
+      console.log('API Error', err)
+      return done(null, {
+        ...userinfo,
+        first_name: userinfo.email,
+        is_authenticated: true,
+        auth_header: authHeader
+      })
+    })
 }
 
 function authenticatedOnly (req, res, next) {
