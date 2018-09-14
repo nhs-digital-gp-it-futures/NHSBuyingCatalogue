@@ -21,7 +21,7 @@ app.prepare()
   .then(() => {
     server.get('/logout', (req, res) => {
       req.logout()
-      res.redirect('/')
+      res.redirect('/#account')
     })
 
     server.get('*', (req, res) => {

@@ -21,7 +21,7 @@ function authentication (app) {
   app.use(passport.session())
 
   app.get('/oidc/authenticate', passport.authenticate('oidc'))
-  app.get('/oidc/callback', passport.authenticate('oidc', { successRedirect: '/', failureRedirect: '/' }))
+  app.get('/oidc/callback', passport.authenticate('oidc', { successRedirect: '/#account', failureRedirect: '/' }))
 
   const makeIssuer = process.env.OIDC_ISSUER_URL
     ? Issuer.discover(process.env.OIDC_ISSUER_URL)

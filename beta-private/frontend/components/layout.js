@@ -21,7 +21,9 @@ export default ({children, title = 'Home', ...props}) => (
         <Link href="/#content">
           <a aria-label="Home"><NHSDigitalLogo /></a>
         </Link>
-        <UserAuthenticationNav {...props} />
+        <div id="account" role='group' aria-label='Account'>
+          <UserAuthenticationNav {...props} />
+        </div>
         <Link href="/about#content"><a>About</a></Link>
       </nav>
     </header>
