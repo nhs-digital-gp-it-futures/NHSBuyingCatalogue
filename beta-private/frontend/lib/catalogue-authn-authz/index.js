@@ -1,12 +1,12 @@
 // set up OpenID Connect authentication
 const passport = require('passport')
 const { Issuer, Strategy } = require('openid-client')
-//const api = require('catalogue-api')
+// const api = require('catalogue-api')
 const api = {
-  set_authorisation(header) {
+  set_authorisation (header) {
   },
 
-  async get_org_for_user(user) {
+  async get_org_for_user (user) {
     return {
       org: {},
       contact: {
@@ -104,7 +104,7 @@ function authCallback (tokenset, userinfo, done) {
 function authenticatedOnly (req, res, next) {
   if (!req.user || !req.user.is_authenticated) {
     req.session.redirectTo = req.originalUrl
-    passport.authenticate('oidc', {failureRedirect: '/'})(req, res, next)
+    passport.authenticate('oidc', { failureRedirect: '/' })(req, res, next)
   } else next()
 }
 

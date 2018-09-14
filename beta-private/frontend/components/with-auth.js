@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function withAuth (WrappedPage) {
   return class extends React.Component {
-    static async getInitialProps ({req}) {
+    static async getInitialProps ({ req }) {
       const defaults = WrappedPage.getInitialProps
         ? await WrappedPage.getInitialProps(...arguments)
         : {}

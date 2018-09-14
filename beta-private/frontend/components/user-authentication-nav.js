@@ -15,12 +15,12 @@ export default class UserAuthenticationNav extends React.Component {
             <a href='/logout'>Your Account</a>
           </span>
         </div>
-        )
+      )
       : (
         <div className='auth'>
-          <span class='sr'>You are logged out.</span>
+          <span className='sr'>You are logged out.</span>
           <a href='/oidc/authenticate'>Log In</a>
         </div>
-        )
+      )
   }
 }
