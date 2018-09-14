@@ -67,26 +67,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Create_CallsValidator_WithoutRuleset()
-    {
-      var logic = new SolutionsLogic(_datastore.Object, _contacts.Object, _context.Object, _validator.Object, _filter.Object);
-      var soln = Creator.GetSolution();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
-      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(Creator.GetContact());
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Create(soln);
-
-      // obfuscated validation code because we use an extension method
-      _validator.Verify(x => x.Validate(It.Is<ValidationContext>(
-        vc =>
-          vc.InstanceToValidate == soln &&
-          vc.Selector is DefaultValidatorSelector)), Times.Once());
-    }
-
-    [Test]
     public void Create_CallsValidator_WithRuleset()
     {
       var logic = new SolutionsLogic(_datastore.Object, _contacts.Object, _context.Object, _validator.Object, _filter.Object);
@@ -105,26 +85,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
           vc.InstanceToValidate == soln &&
           vc.Selector is RulesetValidatorSelector &&
           ((RulesetValidatorSelector)vc.Selector).RuleSets.Contains(nameof(ISolutionsLogic.Create)))), Times.Once());
-    }
-
-    [Test]
-    public void Update_CallsValidator_WithoutRuleset()
-    {
-      var logic = new SolutionsLogic(_datastore.Object, _contacts.Object, _context.Object, _validator.Object, _filter.Object);
-      var soln = Creator.GetSolution();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
-      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(Creator.GetContact());
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Update(soln);
-
-      // obfuscated validation code because we use an extension method
-      _validator.Verify(x => x.Validate(It.Is<ValidationContext>(
-        vc =>
-          vc.InstanceToValidate == soln &&
-          vc.Selector is DefaultValidatorSelector)), Times.Once());
     }
 
     [Test]

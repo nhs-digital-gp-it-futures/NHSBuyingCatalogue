@@ -37,7 +37,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     public T Create(T claim)
     {
-      _validator.ValidateAndThrow(claim);
       _validator.ValidateAndThrow(claim, ruleSet: nameof(IClaimsLogic<T>.Create));
 
       return _datastore.Create(claim);
@@ -45,7 +44,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     public void Update(T claim)
     {
-      _validator.ValidateAndThrow(claim);
       _validator.ValidateAndThrow(claim, ruleSet: nameof(IClaimsLogic<T>.Update));
 
       _datastore.Update(claim);
@@ -53,7 +51,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     public void Delete(T claim)
     {
-      _validator.ValidateAndThrow(claim);
       _validator.ValidateAndThrow(claim, ruleSet: nameof(IClaimsLogic<T>.Delete));
 
       _datastore.Delete(claim);

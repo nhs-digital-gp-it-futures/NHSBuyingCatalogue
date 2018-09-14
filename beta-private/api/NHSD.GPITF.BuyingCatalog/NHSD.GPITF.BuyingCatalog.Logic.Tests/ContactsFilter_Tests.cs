@@ -5,7 +5,6 @@ using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NUnit.Framework;
 using System;
-using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 {

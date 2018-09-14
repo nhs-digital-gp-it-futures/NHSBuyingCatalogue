@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using NHSD.GPITF.BuyingCatalog.Interfaces;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
@@ -7,7 +8,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     public LinkManagerValidator(IHttpContextAccessor context) :
       base(context)
     {
-      MustBeAdmin();
+      RuleSet(nameof(ILinkManagerLogic.FrameworkSolutionCreate), () =>
+      {
+        MustBeAdmin();
+      });
     }
   }
 }

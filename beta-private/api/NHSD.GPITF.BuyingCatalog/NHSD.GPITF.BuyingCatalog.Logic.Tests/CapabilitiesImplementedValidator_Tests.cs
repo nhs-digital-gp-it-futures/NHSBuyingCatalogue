@@ -4,7 +4,6 @@ using Moq;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NUnit.Framework;
-using System;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 {

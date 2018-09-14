@@ -78,36 +78,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         .HaveCount(1);
     }
 
-    [TestCase(Roles.Supplier)]
-    public void MustBeSupplier_Supplier_Succeeds(string role)
-    {
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
-      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
-      var review = Creator.GetReviewsBase();
-
-      validator.MustBeSupplier();
-      var valres = validator.Validate(review);
-
-      valres.Errors.Should().BeEmpty();
-    }
-
-    [TestCase(Roles.Admin)]
-    [TestCase(Roles.Buyer)]
-    public void MustBeSupplier_NonSupplier_ReturnsError(string role)
-    {
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
-      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
-      var review = Creator.GetReviewsBase();
-
-      validator.MustBeSupplier();
-      var valres = validator.Validate(review);
-
-      valres.Errors.Should()
-        .ContainSingle(x => x.ErrorMessage == "Must be supplier")
-        .And
-        .HaveCount(1);
-    }
-
     [Test]
     public void MustBeValidPreviousId_Valid_Succeeds()
     {

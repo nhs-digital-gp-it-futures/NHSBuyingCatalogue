@@ -66,13 +66,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Invalid PreviousId");
     }
 
-    public void MustBeSupplier()
-    {
-      RuleFor(x => x)
-        .Must(x => _context.HasRole(Roles.Supplier))
-        .WithMessage("Must be supplier");
-    }
-
     public void MustBeFromSameOrganisation()
     {
       RuleFor(x => x)
