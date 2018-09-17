@@ -34,8 +34,7 @@
 
   "Jwt":
   {
-    "Authority": "https://buying-catalogue-beta-prototype.eu.auth0.com/",
-    "Audience": "api.buying-catalogue-beta-prototype",
-    "UserInfo": "https://buying-catalogue-beta-prototype.eu.auth0.com/userinfo"
+    "Authority": "http://oidc-provider:9000",
+    "UserInfo": "http://oidc-provider:9000/me"
   }
 }

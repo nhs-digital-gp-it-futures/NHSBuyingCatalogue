@@ -106,6 +106,14 @@ namespace NHSD.GPITF.BuyingCatalog
               tags.Any(tag => tag.Tag == docName);
           });
 
+          options.AddSecurityDefinition("oauth2", new OAuth2Scheme
+          {
+            Type = "oauth2",
+            Flow = "authorizationCode"
+          });
+
+          options.AddSecurityDefinition("basic", new BasicAuthScheme());
+
           // Set the comments path for the Swagger JSON and UI.
           var xmlPath = Path.Combine(AppContext.BaseDirectory, "NHSD.GPITF.BuyingCatalog.xml");
           options.IncludeXmlComments(xmlPath);
@@ -137,8 +145,8 @@ namespace NHSD.GPITF.BuyingCatalog
         })
       .AddJwtBearer(options =>
       {
-        options.Authority = Configuration["Jwt:Authority"] ?? Environment.GetEnvironmentVariable("Jwt:Authority");
-        options.Audience = Configuration["Jwt:Audience"] ?? Environment.GetEnvironmentVariable("Jwt:Audience");
+        options.Authority = Environment.GetEnvironmentVariable("OIDC_ISSUER_URL") ?? Configuration["Jwt:Authority"];
+        options.RequireHttpsMetadata = !CurrentEnvironment.IsDevelopment();
         options.Events = new JwtBearerEvents
         {
           OnTokenValidated = async context =>
