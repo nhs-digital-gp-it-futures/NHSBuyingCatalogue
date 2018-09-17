@@ -1,13 +1,5 @@
 ﻿{
-  "urls": "http://localhost:6000; http://*:5122; https://*:5123",
-
-  "Certificate":
-  {
-    "FileName": "NHSD.GPITF.BuyingCatalog.pfx",
-    "Password": "DisruptTheMarket",
-    "HttpsPort": 8001
-  },
-
+  "urls": "http://localhost:5100",
 
   "wwwroot": "wwwroot",
 

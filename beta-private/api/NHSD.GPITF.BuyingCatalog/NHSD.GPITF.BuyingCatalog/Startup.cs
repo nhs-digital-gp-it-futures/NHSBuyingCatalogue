@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -17,7 +16,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Reflection;
 using ZNetCS.AspNetCore.Authentication.Basic;
 using ZNetCS.AspNetCore.Authentication.Basic.Events;
@@ -164,12 +162,6 @@ namespace NHSD.GPITF.BuyingCatalog
       }
 
       app.UseAuthentication();
-
-      var httpsPort = Configuration.GetValue<int>(Constants.HttpsPortKey);
-      var options = new RewriteOptions()
-                      .AddRedirectToHttps((int)HttpStatusCode.MovedPermanently, httpsPort);
-
-      app.UseRewriter(options);
 
       if (CurrentEnvironment.IsDevelopment())
       {
