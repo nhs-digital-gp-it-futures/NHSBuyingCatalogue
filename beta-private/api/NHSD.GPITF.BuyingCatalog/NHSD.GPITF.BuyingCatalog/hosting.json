@@ -1,5 +1,5 @@
 ﻿{
-  "urls": "http://localhost:5100",
+  "urls": "http://*:5100",
 
   "wwwroot": "wwwroot",
 
