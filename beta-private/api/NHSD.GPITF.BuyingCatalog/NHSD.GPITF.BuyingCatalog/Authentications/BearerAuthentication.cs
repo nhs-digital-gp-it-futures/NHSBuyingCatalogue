@@ -40,7 +40,7 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
       if (response == null)
       {
         var config = sp.GetService<IConfiguration>();
-        var userInfo = config["Jwt:UserInfo"] ?? Environment.GetEnvironmentVariable("Jwt:UserInfo");
+        var userInfo = Environment.GetEnvironmentVariable("OIDC_USERINFO_URL") ?? config["Jwt:UserInfo"];
         var userInfoClient = sp.GetService<IUserInfoResponseRetriever>();
         response = await userInfoClient.GetAsync(userInfo, bearerToken.Substring(7));
         if (response == null)
