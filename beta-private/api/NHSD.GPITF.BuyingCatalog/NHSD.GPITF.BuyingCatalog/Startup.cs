@@ -113,7 +113,7 @@ namespace NHSD.GPITF.BuyingCatalog
           options.AddSecurityDefinition("oauth2", new OAuth2Scheme
           {
             Type = "oauth2",
-            Flow = "authorizationCode"
+            Flow = "accessCode"
           });
 
           options.AddSecurityDefinition("basic", new BasicAuthScheme());
