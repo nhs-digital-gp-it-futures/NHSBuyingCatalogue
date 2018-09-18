@@ -64,10 +64,6 @@ namespace NHSD.GPITF.BuyingCatalog
       services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
       services.AddMvc();
-      services.Configure<MvcOptions>(options =>
-      {
-        options.Filters.Add(new RequireHttpsAttribute());
-      });
 
       if (CurrentEnvironment.IsDevelopment())
       {
