@@ -73,14 +73,14 @@ namespace NHSD.GPITF.BuyingCatalog
           options.SwaggerDoc("v1",
             new Info
             {
-              Title = "Buying Catalog API",
-              Version = "v1",
+              Title = "catalogue-api",
+              Version = "1.0.0-private-beta",
               Description = "NHS Digital GP IT Futures Buying Catalog API"
             });
           options.SwaggerDoc("porcelain",
             new Info
             {
-              Title = "Buying Catalog API",
+              Title = "catalogue-api",
               Version = "porcelain",
               Description = "NHS Digital GP IT Futures Buying Catalog API"
             });
@@ -113,6 +113,8 @@ namespace NHSD.GPITF.BuyingCatalog
           });
 
           options.AddSecurityDefinition("basic", new BasicAuthScheme());
+
+          options.OperationFilter<AssignSecurityRequirements>();
 
           // Set the comments path for the Swagger JSON and UI.
           var xmlPath = Path.Combine(AppContext.BaseDirectory, "NHSD.GPITF.BuyingCatalog.xml");
