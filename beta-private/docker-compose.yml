@@ -7,8 +7,6 @@ services:
     image: gpitf/catalogue-frontend:private-beta
     networks:
       - beta_network
-    ports:
-      - "8000:8000"
     environment:
       - NODE_ENV
       - BASE_URL
@@ -26,8 +24,7 @@ services:
       - api_data:/app/Data
     environment:
       - OIDC_ISSUER_URL
-    ports:
-      - "8001:8001"
+      - OIDC_USERINFO_URL
 
   nginx:
     build: ./nginx
