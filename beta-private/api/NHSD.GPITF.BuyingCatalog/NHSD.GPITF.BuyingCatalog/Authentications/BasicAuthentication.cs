@@ -9,12 +9,22 @@ using ZNetCS.AspNetCore.Authentication.Basic.Events;
 
 namespace NHSD.GPITF.BuyingCatalog.Authentications
 {
-  internal static class BasicAuthentication
+#pragma warning disable CS1591
+  public sealed class BasicAuthentication
   {
-    public static Task Authenticate(
+    private readonly IContactsDatastore _contactDatastore;
+    private readonly IOrganisationsDatastore _organisationDatastore;
+
+    public BasicAuthentication(
       IContactsDatastore contactDatastore,
-      IOrganisationsDatastore organisationDatastore,
-      ValidatePrincipalContext context)
+      IOrganisationsDatastore organisationDatastore
+      )
+    {
+      _contactDatastore = contactDatastore;
+      _organisationDatastore = organisationDatastore;
+    }
+
+    public Task Authenticate(ValidatePrincipalContext context)
     {
       // use basic authentication to support Swagger
       if (context.UserName != context.Password)
@@ -43,8 +53,8 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
           break;
       }
 
-      var contact = contactDatastore.ByEmail(email);
-      var org = organisationDatastore.ByContact(contact.Id);
+      var contact = _contactDatastore.ByEmail(email);
+      var org = _organisationDatastore.ByContact(contact.Id);
       var claims = new List<Claim>
       {
         new Claim(ClaimTypes.Email, email, context.Options.ClaimsIssuer),
@@ -62,4 +72,5 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
       return Task.CompletedTask;
     }
   }
+#pragma warning restore CS1591
 }

@@ -133,10 +133,8 @@ namespace NHSD.GPITF.BuyingCatalog
                 {
                   OnValidatePrincipal = context =>
                   {
-                    return BasicAuthentication.Authenticate(
-                      ServiceProvider.GetService<IContactsDatastore>(),
-                      ServiceProvider.GetService<IOrganisationsDatastore>(),
-                      context);
+                    var auth = ServiceProvider.GetService<BasicAuthentication>();
+                    return auth.Authenticate(context);
                   }
                 };
               });
