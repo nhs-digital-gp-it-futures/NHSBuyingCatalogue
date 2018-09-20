@@ -32,9 +32,9 @@ select rev.* from {table.Name} rev where Id not in
 (
   select PreviousId from {table.Name} where PreviousId is not null
 ) and
-EvidenceId = '{evidenceId}'
+EvidenceId = @evidenceId
 ";
-        var allCurrent = _dbConnection.Value.Query<T>(sqlAllCurrent);
+        var allCurrent = _dbConnection.Value.Query<T>(sqlAllCurrent, new { evidenceId });
         foreach (var current in allCurrent)
         {
           var sqlCurrent = $@"
@@ -66,10 +66,10 @@ with recursive Links(CurrentId, Id, PreviousId, EvidenceId, CreatedById, Created
 )
   select Links.Id, Links.PreviousId, Links.EvidenceId, Links.CreatedById, Links.CreatedOn, Links.Message
   from Links
-  where CurrentId ='{current.Id}';
+  where CurrentId = @currentId;
 ";
           var amendedSql = AmendCommonTableExpression(sqlCurrent);
-          var chain = _dbConnection.Value.Query<T>(amendedSql);
+          var chain = _dbConnection.Value.Query<T>(amendedSql, new { currentId = current.Id });
           chains.Add(chain);
         }
 
