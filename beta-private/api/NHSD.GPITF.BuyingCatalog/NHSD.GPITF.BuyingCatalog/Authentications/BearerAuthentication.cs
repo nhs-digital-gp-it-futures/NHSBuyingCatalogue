@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace NHSD.GPITF.BuyingCatalog.Authentications
 {
 #pragma warning disable CS1591
-  public static partial class BearerAuthentication
+  public static class BearerAuthentication
   {
     private static TimeSpan Expiry = TimeSpan.FromMinutes(60);
 
