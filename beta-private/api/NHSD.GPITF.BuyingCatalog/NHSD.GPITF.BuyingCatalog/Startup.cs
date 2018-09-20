@@ -154,13 +154,8 @@ namespace NHSD.GPITF.BuyingCatalog
         {
           OnTokenValidated = async context =>
           {
-            await BearerAuthentication.Authenticate(
-              ServiceProvider.GetService<IUserInfoResponseDatastore>(),
-              ServiceProvider.GetService<IConfiguration>(),
-              ServiceProvider.GetService<IUserInfoResponseRetriever>(),
-              ServiceProvider.GetService<IContactsDatastore>(),
-              ServiceProvider.GetService<IOrganisationsDatastore>(),
-              context);
+            var auth = ServiceProvider.GetService<BearerAuthentication>();
+            await auth.Authenticate(context);
           }
         };
       });

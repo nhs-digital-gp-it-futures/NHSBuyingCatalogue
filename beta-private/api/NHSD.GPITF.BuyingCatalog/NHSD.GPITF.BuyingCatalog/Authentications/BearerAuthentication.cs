@@ -13,29 +13,43 @@ using System.Threading.Tasks;
 namespace NHSD.GPITF.BuyingCatalog.Authentications
 {
 #pragma warning disable CS1591
-  public static class BearerAuthentication
+  public sealed class BearerAuthentication
   {
+    private readonly IUserInfoResponseDatastore _cache;
+    private readonly IConfiguration _config;
+    private readonly IUserInfoResponseRetriever _userInfoClient;
+    private readonly IContactsDatastore _contactsDatastore;
+    private readonly IOrganisationsDatastore _organisationDatastore;
+
     private static TimeSpan Expiry = TimeSpan.FromMinutes(60);
 
-    public static async Task Authenticate(
+    public BearerAuthentication(
       IUserInfoResponseDatastore cache,
       IConfiguration config,
       IUserInfoResponseRetriever userInfoClient,
       IContactsDatastore contactsDatastore,
-      IOrganisationsDatastore organisationDatastore,
-      TokenValidatedContext context)
+      IOrganisationsDatastore organisationDatastore)
+    {
+      _cache = cache;
+      _config = config;
+      _userInfoClient = userInfoClient;
+      _contactsDatastore = contactsDatastore;
+      _organisationDatastore = organisationDatastore;
+    }
+
+    public async Task Authenticate(TokenValidatedContext context)
     {
       // set roles based on email-->organisation-->org.PrimaryRoleId
       var bearerToken = ((FrameRequestHeaders)context.HttpContext.Request.Headers).HeaderAuthorization.Single();
 
       // have to cache responses or UserInfo endpoint thinks we are a DOS attack
       CachedUserInfoResponse cachedresponse = null;
-      if (cache.TryGetValue(bearerToken, out string jsonCachedResponse))
+      if (_cache.TryGetValue(bearerToken, out string jsonCachedResponse))
       {
         cachedresponse = JsonConvert.DeserializeObject<CachedUserInfoResponse>(jsonCachedResponse);
         if (cachedresponse.Created < DateTime.UtcNow.Subtract(Expiry))
         {
-          cache.Remove(bearerToken);
+          _cache.Remove(bearerToken);
           cachedresponse = null;
         }
       }
@@ -43,14 +57,14 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
       var response = cachedresponse?.UserInfoResponse;
       if (response == null)
       {
-        var userInfo = Environment.GetEnvironmentVariable("OIDC_USERINFO_URL") ?? config["Jwt:UserInfo"];
-        response = await userInfoClient.GetAsync(userInfo, bearerToken.Substring(7));
+        var userInfo = Environment.GetEnvironmentVariable("OIDC_USERINFO_URL") ?? _config["Jwt:UserInfo"];
+        response = await _userInfoClient.GetAsync(userInfo, bearerToken.Substring(7));
         if (response == null)
         {
           return;
         }
-        cache.Remove(bearerToken);
-        cache.Add(bearerToken, JsonConvert.SerializeObject(new CachedUserInfoResponse(response)));
+        _cache.Remove(bearerToken);
+        _cache.Add(bearerToken, JsonConvert.SerializeObject(new CachedUserInfoResponse(response)));
       }
 
       if (response?.Claims == null)
@@ -62,14 +76,15 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
       var claims = new List<Claim>(userClaims);
       var email = userClaims.SingleOrDefault(x => x.Type == "email")?.Value;
       if (!string.IsNullOrEmpty(email))
-      {        var contact = contactsDatastore.ByEmail(email);
+      {
+        var contact = _contactsDatastore.ByEmail(email);
 
         if (contact == null)
         {
           return;
         }
 
-        var org = organisationDatastore.ByContact(contact.Id);
+        var org = _organisationDatastore.ByContact(contact.Id);
         if (org == null)
         {
           return;
