@@ -5,7 +5,6 @@ using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 {
@@ -20,13 +19,13 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
       return GetInternal(() =>
       {
-        var sql = $@"
+        const string sql = @"
 select cap.* from Capabilities cap
 join CapabilityFramework cf on cf.CapabilityId = cap.Id
 join Frameworks frame on frame.Id = cf.FrameworkId
-where frame.Id = '{frameworkId}'
+where frame.Id = @frameworkId
 ";
-        var retval = _dbConnection.Value.Query<Capabilities>(sql);
+        var retval = _dbConnection.Value.Query<Capabilities>(sql, new { frameworkId });
         return retval;
       });
     }
@@ -43,12 +42,11 @@ where frame.Id = '{frameworkId}'
     {
       return GetInternal(() =>
       {
-        var sqlIdsQuoted = ids.Select(id => $"'{id}'");
-        var sqlIds = string.Join(',', sqlIdsQuoted);
-        var sql = $@"
+        const string sql = @"
 select * from Capabilities
-where Id in ({sqlIds})";
-        var retval = _dbConnection.Value.Query<Capabilities>(sql);
+where Id in @ids";
+
+        var retval = _dbConnection.Value.Query<Capabilities>(sql, new { ids });
         return retval;
       });
     }
@@ -57,13 +55,13 @@ where Id in ({sqlIds})";
     {
       return GetInternal(() =>
       {
-        var sql = $@"
+        const string sql = @"
 select cap.* from Capabilities cap
 join CapabilityStandard cs on cs.CapabilityId = cap.Id
 join Standards std on std.Id = cs.StandardId
-where std.Id = '{standardId}' and cs.IsOptional = {(isOptional ? 1 : 0).ToString()}
+where std.Id = @standardId and cs.IsOptional = @isOptional
 ";
-        var retval = _dbConnection.Value.Query<Capabilities>(sql);
+        var retval = _dbConnection.Value.Query<Capabilities>(sql, new { standardId, isOptional = (isOptional ? 1 : 0).ToString() });
         return retval;
       });
     }
@@ -72,7 +70,7 @@ where std.Id = '{standardId}' and cs.IsOptional = {(isOptional ? 1 : 0).ToString
     {
       return GetInternal(() =>
       {
-        var sql = @"
+        const string sql = @"
 -- select all current versions
 select * from Capabilities where Id not in 
 (

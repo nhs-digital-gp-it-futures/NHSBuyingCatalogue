@@ -6,7 +6,6 @@ using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 {
@@ -21,13 +20,13 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
       return GetInternal(() =>
       {
-        var sql = $@"
+        const string sql = @"
 select std.* from Standards std
 join CapabilityStandard cs on cs.StandardId = std.Id
 join Capabilities cap on cap.Id = cs.CapabilityId
-where cap.Id = '{capabilityId}' and cs.IsOptional = {(isOptional ? 1 : 0).ToString()}
+where cap.Id = @capabilityId and cs.IsOptional = @isOptional
 ";
-        var retval = _dbConnection.Value.Query<Standards>(sql);
+        var retval = _dbConnection.Value.Query<Standards>(sql, new { capabilityId, isOptional = (isOptional ? 1 : 0).ToString()});
         return retval;
       });
     }
@@ -36,13 +35,13 @@ where cap.Id = '{capabilityId}' and cs.IsOptional = {(isOptional ? 1 : 0).ToStri
     {
       return GetInternal(() =>
       {
-        var sql = $@"
+        const string sql = @"
 select std.* from Standards std
 join FrameworkStandard fs on fs.StandardId = std.Id
 join Frameworks frame on frame.Id = fs.FrameworkId
-where frame.Id = '{frameworkId}'
+where frame.Id = @frameworkId
 ";
-        var retval = _dbConnection.Value.Query<Standards>(sql);
+        var retval = _dbConnection.Value.Query<Standards>(sql, new { frameworkId });
         return retval;
       });
     }
@@ -59,12 +58,11 @@ where frame.Id = '{frameworkId}'
     {
       return GetInternal(() =>
       {
-        var sqlIdsQuoted = ids.Select(id => $"'{id}'");
-        var sqlIds = string.Join(',', sqlIdsQuoted);
-        var sql = $@"
+        const string sql = @"
 select * from Standards
-where Id in ({sqlIds})";
-        var retval = _dbConnection.Value.Query<Standards>(sql);
+where Id in @ids
+";
+        var retval = _dbConnection.Value.Query<Standards>(sql, new { ids });
         return retval;
       });
     }
@@ -88,7 +86,7 @@ where Id in ({sqlIds})";
     {
       return GetInternal(() =>
       {
-        var sql = @"
+        const string sql = @"
 -- select all current versions
 select * from Standards where Id not in 
 (

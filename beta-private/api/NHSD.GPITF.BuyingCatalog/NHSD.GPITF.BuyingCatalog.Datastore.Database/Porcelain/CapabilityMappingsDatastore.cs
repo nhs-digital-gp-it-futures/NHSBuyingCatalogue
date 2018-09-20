@@ -21,7 +21,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
       return GetInternal(() =>
       {
         var retval = new CapabilityMappings();
-        var sql = $@"
+        const string sql = @"
 select cap.*, '|' as '|', std.*, '|' as '|', cs.*
 from CapabilityStandard cs
 join Capabilities cap on cap.Id = cs.CapabilityId

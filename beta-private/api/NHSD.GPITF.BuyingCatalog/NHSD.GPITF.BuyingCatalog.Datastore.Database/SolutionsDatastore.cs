@@ -21,13 +21,13 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
       return GetInternal(() =>
       {
-        var sql = $@"
+        const string sql = @"
 select soln.* from Solutions soln
 join FrameworkSolution fs on fs.SolutionId = soln.Id
 join Frameworks frame on frame.Id = fs.FrameworkId
-where frame.Id = '{frameworkId}'
+where frame.Id = @frameworkId
 ";
-        var retval = _dbConnection.Value.Query<Solutions>(sql);
+        var retval = _dbConnection.Value.Query<Solutions>(sql, new { frameworkId });
         return retval;
       });
     }
@@ -44,7 +44,7 @@ where frame.Id = '{frameworkId}'
     {
       return GetInternal(() =>
       {
-        var sql = @"
+        const string sql = @"
 -- select all current versions
 select * from Solutions where Id not in 
 (

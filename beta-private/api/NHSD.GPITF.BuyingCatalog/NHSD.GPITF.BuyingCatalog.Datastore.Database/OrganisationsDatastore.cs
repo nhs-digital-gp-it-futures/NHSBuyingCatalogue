@@ -18,11 +18,11 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
       return GetInternal(() =>
       {
-        var sql = $@"
+        const string sql = @"
 select * from Organisations org
 join Contacts cont on cont.OrganisationId = org.Id
-where cont.Id = '{contactId}'";
-        var retval = _dbConnection.Value.Query<Organisations>(sql).SingleOrDefault();
+where cont.Id = @contactId";
+        var retval = _dbConnection.Value.Query<Organisations>(sql, new { contactId }).SingleOrDefault();
         return retval;
       });
     }

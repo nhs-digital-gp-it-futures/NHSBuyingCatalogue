@@ -5,7 +5,6 @@ using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 {
@@ -20,13 +19,13 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
       return GetInternal(() =>
       {
-        var sql = $@"
+        const string sql = @"
 select frame.* from Frameworks frame
 join CapabilityFramework cf on cf.FrameworkId = frame.Id
 join Capabilities cap on cap.Id = cf.CapabilityId
-where cap.Id = '{capabilityId}'
+where cap.Id = @capabilityId
 ";
-        var retval = _dbConnection.Value.Query<Frameworks>(sql);
+        var retval = _dbConnection.Value.Query<Frameworks>(sql, new { capabilityId });
         return retval;
       });
     }
@@ -43,13 +42,13 @@ where cap.Id = '{capabilityId}'
     {
       return GetInternal(() =>
       {
-        var sql = $@"
+        const string sql = @"
 select frame.* from Frameworks frame
 join FrameworkSolution fs on fs.FrameworkId = frame.Id
 join Solutions soln on soln.Id = fs.SolutionId
-where soln.Id = '{solutionId}'
+where soln.Id = @solutionId
 ";
-        var retval = _dbConnection.Value.Query<Frameworks>(sql);
+        var retval = _dbConnection.Value.Query<Frameworks>(sql, new { solutionId });
         return retval;
       });
     }
@@ -58,13 +57,13 @@ where soln.Id = '{solutionId}'
     {
       return GetInternal(() =>
       {
-        var sql = $@"
+        const string sql = @"
 select frame.* from Frameworks frame
 join FrameworkStandard fs on fs.FrameworkId = frame.Id
 join Standards std on std.Id = fs.StandardId
-where std.Id = '{standardId}'
+where std.Id = @standardId
 ";
-        var retval = _dbConnection.Value.Query<Frameworks>(sql);
+        var retval = _dbConnection.Value.Query<Frameworks>(sql, new { standardId });
         return retval;
       });
     }
@@ -73,7 +72,7 @@ where std.Id = '{standardId}'
     {
       return GetInternal(() =>
       {
-        var sql = @"
+        const string sql = @"
 -- select all current versions
 select * from Frameworks where Id not in 
 (
