@@ -7,7 +7,6 @@ using NHSD.GPITF.BuyingCatalog.Authentications;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NUnit.Framework;
-using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
