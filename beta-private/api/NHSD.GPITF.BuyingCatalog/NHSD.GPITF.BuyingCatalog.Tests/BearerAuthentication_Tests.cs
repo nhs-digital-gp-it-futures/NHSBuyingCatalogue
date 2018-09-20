@@ -23,7 +23,6 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
 
     private TokenValidatedContext _context;
     private Mock<IConfiguration> _config;
-    private Mock<IServiceProvider> _serviceProvider;
     private Mock<IUserInfoResponseDatastore> _cache;
     private Mock<IUserInfoResponseRetriever> _rover;
     private Mock<IContactsDatastore> _contactsDatastore;
@@ -34,17 +33,10 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
     {
       _context = Creator.GetTokenValidatedContext(BearerToken);
       _config = new Mock<IConfiguration>();
-      _serviceProvider = new Mock<IServiceProvider>();
       _cache = new Mock<IUserInfoResponseDatastore>();
       _rover = new Mock<IUserInfoResponseRetriever>();
       _contactsDatastore = new Mock<IContactsDatastore>();
       _organisationDatastore = new Mock<IOrganisationsDatastore>();
-
-      _serviceProvider.Setup(x => x.GetService(typeof(IUserInfoResponseDatastore))).Returns(_cache.Object);
-      _serviceProvider.Setup(x => x.GetService(typeof(IConfiguration))).Returns(_config.Object);
-      _serviceProvider.Setup(x => x.GetService(typeof(IUserInfoResponseRetriever))).Returns(_rover.Object);
-      _serviceProvider.Setup(x => x.GetService(typeof(IContactsDatastore))).Returns(_contactsDatastore.Object);
-      _serviceProvider.Setup(x => x.GetService(typeof(IOrganisationsDatastore))).Returns(_organisationDatastore.Object);
     }
 
     [TestCase(PrimaryRole.ApplicationServiceProvider, Roles.Supplier)]
@@ -65,7 +57,13 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       _organisationDatastore.Setup(x => x.ByContact(contact.Id)).Returns(organisation);
 
 
-      await BearerAuthentication.Authenticate(_serviceProvider.Object, _context);
+      await BearerAuthentication.Authenticate(
+        _cache.Object,
+        _config.Object,
+        _rover.Object,
+        _contactsDatastore.Object,
+        _organisationDatastore.Object,
+        _context);
 
 
       _context.Principal.Claims
@@ -91,7 +89,13 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       _organisationDatastore.Setup(x => x.ByContact(contact.Id)).Returns(organisation);
 
 
-      await BearerAuthentication.Authenticate(_serviceProvider.Object, _context);
+      await BearerAuthentication.Authenticate(
+        _cache.Object,
+        _config.Object,
+        _rover.Object,
+        _contactsDatastore.Object,
+        _organisationDatastore.Object,
+        _context);
 
 
       _context.Principal.Claims
@@ -116,7 +120,13 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       _organisationDatastore.Setup(x => x.ByContact(contact.Id)).Returns(organisation);
 
 
-      await BearerAuthentication.Authenticate(_serviceProvider.Object, _context);
+      await BearerAuthentication.Authenticate(
+        _cache.Object,
+        _config.Object,
+        _rover.Object,
+        _contactsDatastore.Object,
+        _organisationDatastore.Object,
+        _context);
 
 
       _context.Principal.Claims
@@ -137,7 +147,13 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       _rover.Setup(x => x.GetAsync(UserInfoEndpoint, BearerToken.Substring(7))).ReturnsAsync(resp);
 
 
-      await BearerAuthentication.Authenticate(_serviceProvider.Object, _context);
+      await BearerAuthentication.Authenticate(
+        _cache.Object,
+        _config.Object,
+        _rover.Object,
+        _contactsDatastore.Object,
+        _organisationDatastore.Object,
+        _context);
 
 
       _context.Principal.Claims.Should().BeEmpty();
@@ -157,7 +173,13 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       _contactsDatastore.Setup(x => x.ByEmail(EmailAddress)).Returns(contact);
 
 
-      await BearerAuthentication.Authenticate(_serviceProvider.Object, _context);
+      await BearerAuthentication.Authenticate(
+        _cache.Object,
+        _config.Object,
+        _rover.Object,
+        _contactsDatastore.Object,
+        _organisationDatastore.Object,
+        _context);
 
 
       _context.Principal.Claims.Should().BeEmpty();

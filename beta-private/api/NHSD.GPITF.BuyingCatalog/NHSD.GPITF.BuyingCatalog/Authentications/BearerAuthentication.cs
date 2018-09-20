@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
@@ -18,11 +17,16 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
   {
     private static TimeSpan Expiry = TimeSpan.FromMinutes(60);
 
-    public static async Task Authenticate(IServiceProvider sp, TokenValidatedContext context)
+    public static async Task Authenticate(
+      IUserInfoResponseDatastore cache,
+      IConfiguration config,
+      IUserInfoResponseRetriever userInfoClient,
+      IContactsDatastore contactsDatastore,
+      IOrganisationsDatastore organisationDatastore,
+      TokenValidatedContext context)
     {
       // set roles based on email-->organisation-->org.PrimaryRoleId
       var bearerToken = ((FrameRequestHeaders)context.HttpContext.Request.Headers).HeaderAuthorization.Single();
-      var cache = sp.GetService<IUserInfoResponseDatastore>();
 
       // have to cache responses or UserInfo endpoint thinks we are a DOS attack
       CachedUserInfoResponse cachedresponse = null;
@@ -39,9 +43,7 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
       var response = cachedresponse?.UserInfoResponse;
       if (response == null)
       {
-        var config = sp.GetService<IConfiguration>();
         var userInfo = Environment.GetEnvironmentVariable("OIDC_USERINFO_URL") ?? config["Jwt:UserInfo"];
-        var userInfoClient = sp.GetService<IUserInfoResponseRetriever>();
         response = await userInfoClient.GetAsync(userInfo, bearerToken.Substring(7));
         if (response == null)
         {
@@ -60,18 +62,14 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
       var claims = new List<Claim>(userClaims);
       var email = userClaims.SingleOrDefault(x => x.Type == "email")?.Value;
       if (!string.IsNullOrEmpty(email))
-      {
-        var contLog = sp.GetService<IContactsDatastore>();
-        var contact = contLog.ByEmail(email);
+      {        var contact = contactsDatastore.ByEmail(email);
 
         if (contact == null)
         {
           return;
         }
 
-        var orgLog = sp.GetService<IOrganisationsDatastore>();
-        var org = orgLog.ByContact(contact.Id);
-
+        var org = organisationDatastore.ByContact(contact.Id);
         if (org == null)
         {
           return;

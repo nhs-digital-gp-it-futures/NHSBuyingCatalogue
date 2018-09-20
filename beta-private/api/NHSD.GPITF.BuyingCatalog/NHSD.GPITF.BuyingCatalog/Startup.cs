@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NHSD.GPITF.BuyingCatalog.Authentications;
+using NHSD.GPITF.BuyingCatalog.Interfaces;
 using Swashbuckle.AspNetCore.Examples;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
@@ -24,13 +25,12 @@ namespace NHSD.GPITF.BuyingCatalog
 {
   internal sealed class Startup
   {
-    private IServiceProvider ServiceProvider { get; }
+    private IServiceProvider ServiceProvider { get; set; }
     private IConfiguration Configuration { get; }
     private IHostingEnvironment CurrentEnvironment { get; set; }
 
-    public Startup(IServiceProvider serviceProvider, IConfiguration configuration, IHostingEnvironment env)
+    public Startup(IConfiguration configuration, IHostingEnvironment env)
     {
-      ServiceProvider = serviceProvider;
       Configuration = configuration;
 
       // Environment variable:
@@ -133,7 +133,9 @@ namespace NHSD.GPITF.BuyingCatalog
                 {
                   OnValidatePrincipal = context =>
                   {
-                    return BasicAuthentication.Authenticate(context);
+                    return BasicAuthentication.Authenticate(
+                      
+                      context);
                   }
                 };
               });
@@ -153,7 +155,13 @@ namespace NHSD.GPITF.BuyingCatalog
         {
           OnTokenValidated = async context =>
           {
-            await BearerAuthentication.Authenticate(ServiceProvider, context);
+            await BearerAuthentication.Authenticate(
+              ServiceProvider.GetService<IUserInfoResponseDatastore>(),
+              ServiceProvider.GetService<IConfiguration>(),
+              ServiceProvider.GetService<IUserInfoResponseRetriever>(),
+              ServiceProvider.GetService<IContactsDatastore>(),
+              ServiceProvider.GetService<IOrganisationsDatastore>(),
+              context);
           }
         };
       });
@@ -162,6 +170,8 @@ namespace NHSD.GPITF.BuyingCatalog
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, ILoggerFactory logging)
     {
+      ServiceProvider = app.ApplicationServices;
+
       if (CurrentEnvironment.IsDevelopment())
       {
         app.UseDeveloperExceptionPage();
