@@ -11,7 +11,10 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
 {
   internal static class BasicAuthentication
   {
-    public static Task Authenticate(ValidatePrincipalContext context)
+    public static Task Authenticate(
+      IContactsDatastore contactDatastore,
+      IOrganisationsDatastore organisationDatastore,
+      ValidatePrincipalContext context)
     {
       // use basic authentication to support Swagger
       if (context.UserName != context.Password)
@@ -40,11 +43,8 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
           break;
       }
 
-      var servProv = context.HttpContext.RequestServices;
-      var contStore = (IContactsDatastore)servProv.GetService(typeof(IContactsDatastore));
-      var contact = contStore.ByEmail(email);
-      var orgStore = (IOrganisationsDatastore)servProv.GetService(typeof(IOrganisationsDatastore));
-      var org = orgStore.ByContact(contact.Id);
+      var contact = contactDatastore.ByEmail(email);
+      var org = organisationDatastore.ByContact(contact.Id);
       var claims = new List<Claim>
       {
         new Claim(ClaimTypes.Email, email, context.Options.ClaimsIssuer),
