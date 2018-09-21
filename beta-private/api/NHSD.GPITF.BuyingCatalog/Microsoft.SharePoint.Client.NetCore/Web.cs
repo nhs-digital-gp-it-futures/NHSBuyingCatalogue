@@ -2806,280 +2806,280 @@ namespace Microsoft.SharePoint.Client.NetCore
             context.AddQuery(query);
         }
 
-        //[Remote]
-        //public View GetViewFromUrl(string listUrl)
-        //{
-        //    ClientRuntimeContext context = base.Context;
-        //    return new View(context, new ObjectPathMethod(context, base.Path, "GetViewFromUrl", new object[]
-        //    {
-        //        listUrl
-        //    }));
-        //}
+    //[Remote]
+    //public View GetViewFromUrl(string listUrl)
+    //{
+    //    ClientRuntimeContext context = base.Context;
+    //    return new View(context, new ObjectPathMethod(context, base.Path, "GetViewFromUrl", new object[]
+    //    {
+    //        listUrl
+    //    }));
+    //}
 
-        //[Remote]
-        //public View GetViewFromPath(ResourcePath listPath)
-        //{
-        //    ClientRuntimeContext context = base.Context;
-        //    return new View(context, new ObjectPathMethod(context, base.Path, "GetViewFromPath", new object[]
-        //    {
-        //        listPath
-        //    }));
-        //}
+    //[Remote]
+    //public View GetViewFromPath(ResourcePath listPath)
+    //{
+    //    ClientRuntimeContext context = base.Context;
+    //    return new View(context, new ObjectPathMethod(context, base.Path, "GetViewFromPath", new object[]
+    //    {
+    //        listPath
+    //    }));
+    //}
 
-        //[Remote]
-        //public File GetFileByServerRelativeUrl(string serverRelativeUrl)
-        //{
-        //    ClientRuntimeContext context = base.Context;
-        //    if (base.Context.ValidateOnClient)
-        //    {
-        //        if (serverRelativeUrl == null)
-        //        {
-        //            throw ClientUtility.CreateArgumentNullException("serverRelativeUrl");
-        //        }
-        //        if (serverRelativeUrl != null && serverRelativeUrl.Length == 0)
-        //        {
-        //            throw ClientUtility.CreateArgumentException("serverRelativeUrl");
-        //        }
-        //    }
-        //    object obj;
-        //    Dictionary<string, File> dictionary;
-        //    if (base.ObjectData.MethodReturnObjects.TryGetValue("GetFileByServerRelativeUrl", out obj))
-        //    {
-        //        dictionary = (Dictionary<string, File>)obj;
-        //    }
-        //    else
-        //    {
-        //        dictionary = new Dictionary<string, File>(StringComparer.OrdinalIgnoreCase);
-        //        base.ObjectData.MethodReturnObjects["GetFileByServerRelativeUrl"] = dictionary;
-        //    }
-        //    File file = null;
-        //    if (!context.DisableReturnValueCache && dictionary.TryGetValue(serverRelativeUrl, out file))
-        //    {
-        //        return file;
-        //    }
-        //    file = new File(context, new ObjectPathMethod(context, base.Path, "GetFileByServerRelativeUrl", new object[]
-        //    {
-        //        serverRelativeUrl
-        //    }));
-        //    if (!context.DisableReturnValueCache)
-        //    {
-        //        dictionary[serverRelativeUrl] = file;
-        //    }
-        //    ObjectIdentityQuery objectIdentityQuery = new ObjectIdentityQuery(file.Path);
-        //    context.AddQueryIdAndResultObject(objectIdentityQuery.Id, file);
-        //    context.AddQuery(objectIdentityQuery);
-        //    return file;
-        //}
+    //[Remote]
+    //public File GetFileByServerRelativeUrl(string serverRelativeUrl)
+    //{
+    //    ClientRuntimeContext context = base.Context;
+    //    if (base.Context.ValidateOnClient)
+    //    {
+    //        if (serverRelativeUrl == null)
+    //        {
+    //            throw ClientUtility.CreateArgumentNullException("serverRelativeUrl");
+    //        }
+    //        if (serverRelativeUrl != null && serverRelativeUrl.Length == 0)
+    //        {
+    //            throw ClientUtility.CreateArgumentException("serverRelativeUrl");
+    //        }
+    //    }
+    //    object obj;
+    //    Dictionary<string, File> dictionary;
+    //    if (base.ObjectData.MethodReturnObjects.TryGetValue("GetFileByServerRelativeUrl", out obj))
+    //    {
+    //        dictionary = (Dictionary<string, File>)obj;
+    //    }
+    //    else
+    //    {
+    //        dictionary = new Dictionary<string, File>(StringComparer.OrdinalIgnoreCase);
+    //        base.ObjectData.MethodReturnObjects["GetFileByServerRelativeUrl"] = dictionary;
+    //    }
+    //    File file = null;
+    //    if (!context.DisableReturnValueCache && dictionary.TryGetValue(serverRelativeUrl, out file))
+    //    {
+    //        return file;
+    //    }
+    //    file = new File(context, new ObjectPathMethod(context, base.Path, "GetFileByServerRelativeUrl", new object[]
+    //    {
+    //        serverRelativeUrl
+    //    }));
+    //    if (!context.DisableReturnValueCache)
+    //    {
+    //        dictionary[serverRelativeUrl] = file;
+    //    }
+    //    ObjectIdentityQuery objectIdentityQuery = new ObjectIdentityQuery(file.Path);
+    //    context.AddQueryIdAndResultObject(objectIdentityQuery.Id, file);
+    //    context.AddQuery(objectIdentityQuery);
+    //    return file;
+    //}
 
-        //[Remote]
-        //public File GetFileByServerRelativePath(ResourcePath serverRelativePath)
-        //{
-        //    ClientRuntimeContext context = base.Context;
-        //    if (base.Context.ValidateOnClient && serverRelativePath == null)
-        //    {
-        //        throw ClientUtility.CreateArgumentNullException("serverRelativePath");
-        //    }
-        //    return new File(context, new ObjectPathMethod(context, base.Path, "GetFileByServerRelativePath", new object[]
-        //    {
-        //        serverRelativePath
-        //    }));
-        //}
+    //[Remote]
+    //public File GetFileByServerRelativePath(ResourcePath serverRelativePath)
+    //{
+    //    ClientRuntimeContext context = base.Context;
+    //    if (base.Context.ValidateOnClient && serverRelativePath == null)
+    //    {
+    //        throw ClientUtility.CreateArgumentNullException("serverRelativePath");
+    //    }
+    //    return new File(context, new ObjectPathMethod(context, base.Path, "GetFileByServerRelativePath", new object[]
+    //    {
+    //        serverRelativePath
+    //    }));
+    //}
 
-        //[Remote]
-        //public static IList<DocumentLibraryInformation> GetDocumentLibraries(ClientRuntimeContext context, string webFullUrl)
-        //{
-        //    if (context == null)
-        //    {
-        //        throw new ArgumentNullException("context");
-        //    }
-        //    Uri uri;
-        //    if (context.ValidateOnClient && webFullUrl != null && !Uri.TryCreate(webFullUrl, UriKind.Absolute, out uri))
-        //    {
-        //        throw ClientUtility.CreateArgumentException("webFullUrl");
-        //    }
-        //    ClientAction clientAction = new ClientActionInvokeStaticMethod(context, "{a489add2-5d3a-4de8-9445-49259462dceb}", "GetDocumentLibraries", new object[]
-        //    {
-        //        webFullUrl
-        //    });
-        //    context.AddQuery(clientAction);
-        //    IList<DocumentLibraryInformation> list = new List<DocumentLibraryInformation>();
-        //    context.AddQueryIdAndResultObject(clientAction.Id, new ClientListResultHandler<DocumentLibraryInformation>(list));
-        //    return list;
-        //}
+    //[Remote]
+    //public static IList<DocumentLibraryInformation> GetDocumentLibraries(ClientRuntimeContext context, string webFullUrl)
+    //{
+    //    if (context == null)
+    //    {
+    //        throw new ArgumentNullException("context");
+    //    }
+    //    Uri uri;
+    //    if (context.ValidateOnClient && webFullUrl != null && !Uri.TryCreate(webFullUrl, UriKind.Absolute, out uri))
+    //    {
+    //        throw ClientUtility.CreateArgumentException("webFullUrl");
+    //    }
+    //    ClientAction clientAction = new ClientActionInvokeStaticMethod(context, "{a489add2-5d3a-4de8-9445-49259462dceb}", "GetDocumentLibraries", new object[]
+    //    {
+    //        webFullUrl
+    //    });
+    //    context.AddQuery(clientAction);
+    //    IList<DocumentLibraryInformation> list = new List<DocumentLibraryInformation>();
+    //    context.AddQueryIdAndResultObject(clientAction.Id, new ClientListResultHandler<DocumentLibraryInformation>(list));
+    //    return list;
+    //}
 
-        //[Remote]
-        //public static IList<DocumentLibraryInformation> GetDocumentAndMediaLibraries(ClientRuntimeContext context, string webFullUrl)
-        //{
-        //    if (context == null)
-        //    {
-        //        throw new ArgumentNullException("context");
-        //    }
-        //    Uri uri;
-        //    if (context.ValidateOnClient && webFullUrl != null && !Uri.TryCreate(webFullUrl, UriKind.Absolute, out uri))
-        //    {
-        //        throw ClientUtility.CreateArgumentException("webFullUrl");
-        //    }
-        //    ClientAction clientAction = new ClientActionInvokeStaticMethod(context, "{a489add2-5d3a-4de8-9445-49259462dceb}", "GetDocumentAndMediaLibraries", new object[]
-        //    {
-        //        webFullUrl
-        //    });
-        //    context.AddQuery(clientAction);
-        //    IList<DocumentLibraryInformation> list = new List<DocumentLibraryInformation>();
-        //    context.AddQueryIdAndResultObject(clientAction.Id, new ClientListResultHandler<DocumentLibraryInformation>(list));
-        //    return list;
-        //}
+    //[Remote]
+    //public static IList<DocumentLibraryInformation> GetDocumentAndMediaLibraries(ClientRuntimeContext context, string webFullUrl)
+    //{
+    //    if (context == null)
+    //    {
+    //        throw new ArgumentNullException("context");
+    //    }
+    //    Uri uri;
+    //    if (context.ValidateOnClient && webFullUrl != null && !Uri.TryCreate(webFullUrl, UriKind.Absolute, out uri))
+    //    {
+    //        throw ClientUtility.CreateArgumentException("webFullUrl");
+    //    }
+    //    ClientAction clientAction = new ClientActionInvokeStaticMethod(context, "{a489add2-5d3a-4de8-9445-49259462dceb}", "GetDocumentAndMediaLibraries", new object[]
+    //    {
+    //        webFullUrl
+    //    });
+    //    context.AddQuery(clientAction);
+    //    IList<DocumentLibraryInformation> list = new List<DocumentLibraryInformation>();
+    //    context.AddQueryIdAndResultObject(clientAction.Id, new ClientListResultHandler<DocumentLibraryInformation>(list));
+    //    return list;
+    //}
 
-        //[Remote]
-        //public List DefaultDocumentLibrary()
-        //{
-        //    ClientRuntimeContext context = base.Context;
-        //    return new List(context, new ObjectPathMethod(context, base.Path, "DefaultDocumentLibrary", null));
-        //}
+    //[Remote]
+    //public List DefaultDocumentLibrary()
+    //{
+    //    ClientRuntimeContext context = base.Context;
+    //    return new List(context, new ObjectPathMethod(context, base.Path, "DefaultDocumentLibrary", null));
+    //}
 
-        //[Remote]
-        //public File GetFileById(Guid uniqueId)
-        //{
-        //    ClientRuntimeContext context = base.Context;
-        //    return new File(context, new ObjectPathMethod(context, base.Path, "GetFileById", new object[]
-        //    {
-        //        uniqueId
-        //    }));
-        //}
+    //[Remote]
+    //public File GetFileById(Guid uniqueId)
+    //{
+    //    ClientRuntimeContext context = base.Context;
+    //    return new File(context, new ObjectPathMethod(context, base.Path, "GetFileById", new object[]
+    //    {
+    //        uniqueId
+    //    }));
+    //}
 
-        //[Remote]
-        //public Folder GetFolderById(Guid uniqueId)
-        //{
-        //    ClientRuntimeContext context = base.Context;
-        //    return new Folder(context, new ObjectPathMethod(context, base.Path, "GetFolderById", new object[]
-        //    {
-        //        uniqueId
-        //    }));
-        //}
+    //[Remote]
+    //public Folder GetFolderById(Guid uniqueId)
+    //{
+    //    ClientRuntimeContext context = base.Context;
+    //    return new Folder(context, new ObjectPathMethod(context, base.Path, "GetFolderById", new object[]
+    //    {
+    //        uniqueId
+    //    }));
+    //}
 
-        //[Remote]
-        //public File GetFileByLinkingUrl(string linkingUrl)
-        //{
-        //    ClientRuntimeContext context = base.Context;
-        //    if (base.Context.ValidateOnClient && linkingUrl == null)
-        //    {
-        //        throw ClientUtility.CreateArgumentNullException("linkingUrl");
-        //    }
-        //    return new File(context, new ObjectPathMethod(context, base.Path, "GetFileByLinkingUrl", new object[]
-        //    {
-        //        linkingUrl
-        //    }));
-        //}
+    //[Remote]
+    //public File GetFileByLinkingUrl(string linkingUrl)
+    //{
+    //    ClientRuntimeContext context = base.Context;
+    //    if (base.Context.ValidateOnClient && linkingUrl == null)
+    //    {
+    //        throw ClientUtility.CreateArgumentNullException("linkingUrl");
+    //    }
+    //    return new File(context, new ObjectPathMethod(context, base.Path, "GetFileByLinkingUrl", new object[]
+    //    {
+    //        linkingUrl
+    //    }));
+    //}
 
-        //[Remote]
-        //public File GetFileByGuestUrl(string guestUrl)
-        //{
-        //    ClientRuntimeContext context = base.Context;
-        //    if (base.Context.ValidateOnClient && guestUrl == null)
-        //    {
-        //        throw ClientUtility.CreateArgumentNullException("guestUrl");
-        //    }
-        //    return new File(context, new ObjectPathMethod(context, base.Path, "GetFileByGuestUrl", new object[]
-        //    {
-        //        guestUrl
-        //    }));
-        //}
+    //[Remote]
+    //public File GetFileByGuestUrl(string guestUrl)
+    //{
+    //    ClientRuntimeContext context = base.Context;
+    //    if (base.Context.ValidateOnClient && guestUrl == null)
+    //    {
+    //        throw ClientUtility.CreateArgumentNullException("guestUrl");
+    //    }
+    //    return new File(context, new ObjectPathMethod(context, base.Path, "GetFileByGuestUrl", new object[]
+    //    {
+    //        guestUrl
+    //    }));
+    //}
 
-        //[Remote]
-        //public File GetFileByGuestUrlEnsureAccess(string guestUrl, bool ensureAccess)
-        //{
-        //    ClientRuntimeContext context = base.Context;
-        //    if (base.Context.ValidateOnClient && guestUrl == null)
-        //    {
-        //        throw ClientUtility.CreateArgumentNullException("guestUrl");
-        //    }
-        //    return new File(context, new ObjectPathMethod(context, base.Path, "GetFileByGuestUrlEnsureAccess", new object[]
-        //    {
-        //        guestUrl,
-        //        ensureAccess
-        //    }));
-        //}
+    //[Remote]
+    //public File GetFileByGuestUrlEnsureAccess(string guestUrl, bool ensureAccess)
+    //{
+    //    ClientRuntimeContext context = base.Context;
+    //    if (base.Context.ValidateOnClient && guestUrl == null)
+    //    {
+    //        throw ClientUtility.CreateArgumentNullException("guestUrl");
+    //    }
+    //    return new File(context, new ObjectPathMethod(context, base.Path, "GetFileByGuestUrlEnsureAccess", new object[]
+    //    {
+    //        guestUrl,
+    //        ensureAccess
+    //    }));
+    //}
 
-        //[Remote]
-        //public File GetFileByWOPIFrameUrl(string wopiFrameUrl)
-        //{
-        //    ClientRuntimeContext context = base.Context;
-        //    if (base.Context.ValidateOnClient && wopiFrameUrl == null)
-        //    {
-        //        throw ClientUtility.CreateArgumentNullException("wopiFrameUrl");
-        //    }
-        //    return new File(context, new ObjectPathMethod(context, base.Path, "GetFileByWOPIFrameUrl", new object[]
-        //    {
-        //        wopiFrameUrl
-        //    }));
-        //}
+    //[Remote]
+    //public File GetFileByWOPIFrameUrl(string wopiFrameUrl)
+    //{
+    //    ClientRuntimeContext context = base.Context;
+    //    if (base.Context.ValidateOnClient && wopiFrameUrl == null)
+    //    {
+    //        throw ClientUtility.CreateArgumentNullException("wopiFrameUrl");
+    //    }
+    //    return new File(context, new ObjectPathMethod(context, base.Path, "GetFileByWOPIFrameUrl", new object[]
+    //    {
+    //        wopiFrameUrl
+    //    }));
+    //}
 
-        //[Remote]
-        //public File GetFileByUrl(string fileUrl)
-        //{
-        //    ClientRuntimeContext context = base.Context;
-        //    if (base.Context.ValidateOnClient && fileUrl == null)
-        //    {
-        //        throw ClientUtility.CreateArgumentNullException("fileUrl");
-        //    }
-        //    return new File(context, new ObjectPathMethod(context, base.Path, "GetFileByUrl", new object[]
-        //    {
-        //        fileUrl
-        //    }));
-        //}
+    //[Remote]
+    //public File GetFileByUrl(string fileUrl)
+    //{
+    //    ClientRuntimeContext context = base.Context;
+    //    if (base.Context.ValidateOnClient && fileUrl == null)
+    //    {
+    //        throw ClientUtility.CreateArgumentNullException("fileUrl");
+    //    }
+    //    return new File(context, new ObjectPathMethod(context, base.Path, "GetFileByUrl", new object[]
+    //    {
+    //        fileUrl
+    //    }));
+    //}
 
-        //[Remote]
-        //public Folder GetFolderByServerRelativeUrl(string serverRelativeUrl)
-        //{
-        //    ClientRuntimeContext context = base.Context;
-        //    if (base.Context.ValidateOnClient && serverRelativeUrl == null)
-        //    {
-        //        throw ClientUtility.CreateArgumentNullException("serverRelativeUrl");
-        //    }
-        //    object obj;
-        //    Dictionary<string, Folder> dictionary;
-        //    if (base.ObjectData.MethodReturnObjects.TryGetValue("GetFolderByServerRelativeUrl", out obj))
-        //    {
-        //        dictionary = (Dictionary<string, Folder>)obj;
-        //    }
-        //    else
-        //    {
-        //        dictionary = new Dictionary<string, Folder>(StringComparer.OrdinalIgnoreCase);
-        //        base.ObjectData.MethodReturnObjects["GetFolderByServerRelativeUrl"] = dictionary;
-        //    }
-        //    Folder folder = null;
-        //    if (!context.DisableReturnValueCache && dictionary.TryGetValue(serverRelativeUrl, out folder))
-        //    {
-        //        return folder;
-        //    }
-        //    folder = new Folder(context, new ObjectPathMethod(context, base.Path, "GetFolderByServerRelativeUrl", new object[]
-        //    {
-        //        serverRelativeUrl
-        //    }));
-        //    if (!context.DisableReturnValueCache)
-        //    {
-        //        dictionary[serverRelativeUrl] = folder;
-        //    }
-        //    ObjectIdentityQuery objectIdentityQuery = new ObjectIdentityQuery(folder.Path);
-        //    context.AddQueryIdAndResultObject(objectIdentityQuery.Id, folder);
-        //    context.AddQuery(objectIdentityQuery);
-        //    return folder;
-        //}
+    [Remote]
+    public Folder GetFolderByServerRelativeUrl(string serverRelativeUrl)
+    {
+      ClientRuntimeContext context = base.Context;
+      if (base.Context.ValidateOnClient && serverRelativeUrl == null)
+      {
+        throw ClientUtility.CreateArgumentNullException("serverRelativeUrl");
+      }
+      object obj;
+      Dictionary<string, Folder> dictionary;
+      if (base.ObjectData.MethodReturnObjects.TryGetValue("GetFolderByServerRelativeUrl", out obj))
+      {
+        dictionary = (Dictionary<string, Folder>)obj;
+      }
+      else
+      {
+        dictionary = new Dictionary<string, Folder>(StringComparer.OrdinalIgnoreCase);
+        base.ObjectData.MethodReturnObjects["GetFolderByServerRelativeUrl"] = dictionary;
+      }
+      Folder folder = null;
+      if (!context.DisableReturnValueCache && dictionary.TryGetValue(serverRelativeUrl, out folder))
+      {
+        return folder;
+      }
+      folder = new Folder(context, new ObjectPathMethod(context, base.Path, "GetFolderByServerRelativeUrl", new object[]
+      {
+                serverRelativeUrl
+      }));
+      if (!context.DisableReturnValueCache)
+      {
+        dictionary[serverRelativeUrl] = folder;
+      }
+      ObjectIdentityQuery objectIdentityQuery = new ObjectIdentityQuery(folder.Path);
+      context.AddQueryIdAndResultObject(objectIdentityQuery.Id, folder);
+      context.AddQuery(objectIdentityQuery);
+      return folder;
+    }
 
-        //[Remote]
-        //public Folder GetFolderByServerRelativePath(ResourcePath serverRelativePath)
-        //{
-        //    ClientRuntimeContext context = base.Context;
-        //    if (base.Context.ValidateOnClient && serverRelativePath == null)
-        //    {
-        //        throw ClientUtility.CreateArgumentNullException("serverRelativePath");
-        //    }
-        //    return new Folder(context, new ObjectPathMethod(context, base.Path, "GetFolderByServerRelativePath", new object[]
-        //    {
-        //        serverRelativePath
-        //    }));
-        //}
+    //[Remote]
+    //public Folder GetFolderByServerRelativePath(ResourcePath serverRelativePath)
+    //{
+    //    ClientRuntimeContext context = base.Context;
+    //    if (base.Context.ValidateOnClient && serverRelativePath == null)
+    //    {
+    //        throw ClientUtility.CreateArgumentNullException("serverRelativePath");
+    //    }
+    //    return new Folder(context, new ObjectPathMethod(context, base.Path, "GetFolderByServerRelativePath", new object[]
+    //    {
+    //        serverRelativePath
+    //    }));
+    //}
 
-        [Remote]
+    [Remote]
         public void ApplyWebTemplate(string webTemplate)
         {
             ClientRuntimeContext context = base.Context;
