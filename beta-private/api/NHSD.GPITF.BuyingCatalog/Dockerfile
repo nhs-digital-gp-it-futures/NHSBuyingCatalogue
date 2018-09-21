@@ -13,6 +13,7 @@ COPY NHSD.GPITF.BuyingCatalog.Datastore.CRM/NHSD.GPITF.BuyingCatalog.Datastore.C
 COPY NHSD.GPITF.BuyingCatalog.Logic/NHSD.GPITF.BuyingCatalog.Logic.csproj NHSD.GPITF.BuyingCatalog.Logic/
 COPY NHSD.GPITF.BuyingCatalog.Logic.Tests/NHSD.GPITF.BuyingCatalog.Logic.Tests.csproj NHSD.GPITF.BuyingCatalog.Logic.Tests/
 COPY NHSD.GPITF.BuyingCatalog.Tests/NHSD.GPITF.BuyingCatalog.Tests.csproj NHSD.GPITF.BuyingCatalog.Tests/
+COPY Microsoft.SharePoint.Client.NetCore/Microsoft.SharePoint.Client.NetCore.csproj Microsoft.SharePoint.Client.NetCore/Microsoft.SharePoint.Client.NetCore.csproj
 RUN dotnet restore
 
 COPY . .
@@ -43,6 +44,9 @@ RUN dotnet test -c Release
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.Tests
 RUN dotnet build -c Release -o /app
 RUN dotnet test -c Release
+
+WORKDIR /src/Microsoft.SharePoint.Client.NetCore
+RUN dotnet build -c Release -o /app
 
 FROM build AS publish
 RUN dotnet publish -c Release -o /app
