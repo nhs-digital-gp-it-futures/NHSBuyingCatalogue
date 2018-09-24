@@ -12,5 +12,18 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
     Solutions Create(Solutions solution);
     void Update(Solutions solution);
   }
+
+  public interface IEvidenceBlobDatastore
+  {
+    void PrepareForSolution(string solutionId);
+  }
+
+  public interface ICapabilitiesImplementedEvidenceBlobDatastore : IEvidenceBlobDatastore
+  {
+  }
+
+  public interface IStandardsApplicbleEvidenceBlobDatastore : IEvidenceBlobDatastore
+  {
+  }
 #pragma warning restore CS1591
 }
