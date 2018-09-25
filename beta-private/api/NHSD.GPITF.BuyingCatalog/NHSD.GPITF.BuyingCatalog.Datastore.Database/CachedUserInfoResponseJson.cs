@@ -7,10 +7,17 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
   public sealed class CachedUserInfoResponseJson
   {
     /// <summary>
+    /// Unique identifier of entity
+    /// </summary>
+    [Required]
+    [ExplicitKey]
+    public string Id { get; set; }
+
+    /// <summary>
     /// Bearer token
     /// </summary>
     [Required]
-    public string Id { get; set; }
+    public string BearerToken { get; set; }
 
     /// <summary>
     /// JSON serialised CachedUserInfoResponse

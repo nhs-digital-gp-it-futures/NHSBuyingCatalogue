@@ -78,7 +78,6 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
       if (!string.IsNullOrEmpty(email))
       {
         var contact = _contactsDatastore.ByEmail(email);
-
         if (contact == null)
         {
           return;
