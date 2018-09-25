@@ -1,0 +1,51 @@
+{
+  "name": "frontend",
+  "version": "0.1.0-private-beta",
+  "private": true,
+  "description": "NHS Digital Buying Catalogue Web Frontend (private beta)",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npm rebuild node-sass; nodemon -w server.js -w lib server.js",
+    "build": "next build",
+    "start": "NODE_ENV=production node server.js",
+    "test": "NODE_ENV=test jest",
+    "test:ci": "NODE_ENV=test JEST_JUNIT_OUTPUT=results/junit.xml jest --ci --reporters jest-junit --coverage --coverageReporters=cobertura --coverageReporters=html --coverageDirectory=results/coverage",
+    "posttest:ci": "node __tests__/__tools__/coverage-report-postprocessor.js"
+  },
+  "author": "Paul Mitchell <paul.mitchell@bjss.com>",
+  "dependencies": {
+    "@zeit/next-sass": "^0.2.0",
+    "catalogue-api": "./lib/catalogue-api",
+    "catalogue-authn-authz": "./lib/catalogue-authn-authz",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "next": "^6.1.2",
+    "react": "^16.5.0",
+    "react-dom": "^16.5.0"
+  },
+  "devDependencies": {
+    "babel-jest": "^23.6.0",
+    "enzyme": "^3.6.0",
+    "enzyme-adapter-react-16": "^1.5.0",
+    "inline-css": "^2.4.0",
+    "jest": "^23.6.0",
+    "jest-junit": "^5.1.0",
+    "node-sass": "^4.9.3",
+    "nodemon": "^1.18.4",
+    "react-addons-test-utils": "^15.6.2",
+    "react-test-renderer": "^16.5.0"
+  },
+  "jest": {
+    "setupFiles": [
+      "<rootDir>/jest.setup.js"
+    ],
+    "moduleNameMapper": {
+      "\\.scss$": "<rootDir>/__mocks__/styleMock.js"
+    },
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/__tools__/",
+      "/lib/catalogue-api"
+    ]
+  }
+}

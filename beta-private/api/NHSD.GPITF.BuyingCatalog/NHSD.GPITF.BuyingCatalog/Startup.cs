@@ -10,7 +10,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NHSD.GPITF.BuyingCatalog.Authentications;
-using NHSD.GPITF.BuyingCatalog.Interfaces;
 using Swashbuckle.AspNetCore.Examples;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
@@ -106,12 +105,6 @@ namespace NHSD.GPITF.BuyingCatalog
               tags.Any(tag => tag.Tag == docName);
           });
 
-          options.AddSecurityDefinition("oauth2", new OAuth2Scheme
-          {
-            Type = "oauth2",
-            Flow = "accessCode"
-          });
-
           options.AddSecurityDefinition("basic", new BasicAuthScheme());
 
           options.OperationFilter<AssignSecurityRequirements>();
@@ -126,18 +119,18 @@ namespace NHSD.GPITF.BuyingCatalog
         services
           .AddAuthentication(BasicAuthenticationDefaults.AuthenticationScheme)
           .AddBasicAuthentication(
-              options =>
+            options =>
+            {
+              options.Realm = "NHSD.GPITF.BuyingCatalog";
+              options.Events = new BasicAuthenticationEvents
               {
-                options.Realm = "NHSD.GPITF.BuyingCatalog";
-                options.Events = new BasicAuthenticationEvents
+                OnValidatePrincipal = context =>
                 {
-                  OnValidatePrincipal = context =>
-                  {
-                    var auth = ServiceProvider.GetService<BasicAuthentication>();
-                    return auth.Authenticate(context);
-                  }
-                };
-              });
+                  var auth = ServiceProvider.GetService<BasicAuthentication>();
+                  return auth.Authenticate(context);
+                }
+              };
+            });
       }
 
       services
@@ -146,19 +139,20 @@ namespace NHSD.GPITF.BuyingCatalog
           options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
           options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         })
-      .AddJwtBearer(options =>
-      {
-        options.Authority = Environment.GetEnvironmentVariable("OIDC_ISSUER_URL") ?? Configuration["Jwt:Authority"];
-        options.RequireHttpsMetadata = !CurrentEnvironment.IsDevelopment();
-        options.Events = new JwtBearerEvents
+        .AddJwtBearer(options =>
         {
-          OnTokenValidated = async context =>
+          options.Authority = Environment.GetEnvironmentVariable("OIDC_ISSUER_URL") ?? Configuration["Jwt:Authority"];
+          options.Audience = Environment.GetEnvironmentVariable("OIDC_AUDIENCE") ?? Configuration["Jwt:Audience"];
+          options.RequireHttpsMetadata = !CurrentEnvironment.IsDevelopment();
+          options.Events = new JwtBearerEvents
           {
-            var auth = ServiceProvider.GetService<BearerAuthentication>();
-            await auth.Authenticate(context);
-          }
-        };
-      });
+            OnTokenValidated = async context =>
+            {
+              var auth = ServiceProvider.GetService<BearerAuthentication>();
+              await auth.Authenticate(context);
+            }
+          };
+        });
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
