@@ -5,7 +5,8 @@ const CatalogueApi = require('catalogue-api')
 
 CatalogueApi.ApiClient.instance.basePath = 'http://api:5100'
 
-const api = new CatalogueApi.ContactsApi()
+const contactsApi = new CatalogueApi.ContactsApi()
+const orgsApi = new CatalogueApi.OrganisationsApi()
 
 function authentication (app) {
   app.use(passport.initialize())
@@ -60,7 +61,7 @@ function authentication (app) {
     })
 }
 
-function authCallback (tokenset, userinfo, done) {
+async function authCallback (tokenset, userinfo, done) {
   const authHeader = tokenset.access_token
   CatalogueApi.ApiClient.instance.authentications.oauth2.accessToken = authHeader
 
@@ -73,27 +74,27 @@ function authCallback (tokenset, userinfo, done) {
   // if there is no such contact, the user is still authenticated but the
   // lack of contact or organisation will prevent authorisation for
   // supplier-specific routes
-  api.apiContactsByEmailByEmailGet(userinfo.email)
-    .then(({ org, contact }) => {
-      const user = {
-        ...userinfo,
-        org,
-        contact,
-        first_name: contact.firstName,
-        is_authenticated: true,
-        auth_header: authHeader
-      }
-      done(null, user)
+  try {
+    const contact = await contactsApi.apiContactsByEmailByEmailGet(userinfo.email)
+    const org = await orgsApi.apiOrganisationsByContactByContactIdGet(contact.id)
+    const user = {
+      ...userinfo,
+      org,
+      contact,
+      first_name: contact.firstName,
+      is_authenticated: true,
+      auth_header: authHeader
+    }
+    done(null, user)
+  } catch (err) {
+    console.log('API Error', err)
+    return done(null, {
+      ...userinfo,
+      first_name: userinfo.email,
+      is_authenticated: true,
+      auth_header: authHeader
     })
-    .catch(err => {
-      console.log('API Error', err)
-      return done(null, {
-        ...userinfo,
-        first_name: userinfo.email,
-        is_authenticated: true,
-        auth_header: authHeader
-      })
-    })
+  }
 }
 
 function authenticatedOnly (req, res, next) {
