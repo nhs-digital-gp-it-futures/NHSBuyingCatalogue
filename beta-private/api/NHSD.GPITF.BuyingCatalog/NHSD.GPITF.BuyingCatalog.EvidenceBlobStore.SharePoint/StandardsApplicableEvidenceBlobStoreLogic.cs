@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
-using NHSD.GPITF.BuyingCatalog.Interfaces;
+﻿using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 {
-  public sealed class CapabilitiesImplementedEvidenceBlobStoreLogic : EvidenceBlobStoreLogic, ICapabilitiesImplementedEvidenceBlobStoreLogic
+  public sealed class StandardsApplicableEvidenceBlobStoreLogic : EvidenceBlobStoreLogic, IStandardsApplicableEvidenceBlobStoreLogic
   {
-    public CapabilitiesImplementedEvidenceBlobStoreLogic(
+    public StandardsApplicableEvidenceBlobStoreLogic(
       IConfiguration config,
       IOrganisationsDatastore organisationsDatastore,
       ISolutionsDatastore solutionsDatastore,
@@ -27,22 +27,22 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
     protected override string GetFolderName()
     {
-      return "Capability Evidence";
+      return "Standards Evidence";
     }
 
     protected override string GetFolderClaimName(ClaimsBase claim)
     {
-      var specifiClaim = (CapabilitiesImplemented)claim;
-      var cap = _capabilitiesDatastore.ById(specifiClaim.CapabilityId);
+      var specifiClaim = (StandardsApplicable)claim;
+      var std = _standardsDatastore.ById(specifiClaim.StandardId);
 
-      return cap.Name;
+      return std.Name;
     }
 
     protected override IClaimsDatastore<ClaimsBase> ClaimsDatastore
     {
       get
       {
-        return (IClaimsDatastore<ClaimsBase>)_capabilitiesImplementedDatastore;
+        return (IClaimsDatastore<ClaimsBase>)_standardsApplicableDatastore;
       }
     }
   }

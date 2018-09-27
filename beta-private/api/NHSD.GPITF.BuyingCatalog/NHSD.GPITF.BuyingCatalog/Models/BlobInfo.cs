@@ -8,22 +8,22 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     /// <summary>
     /// Display name
     /// </summary>
-    string Name { get; }
+    public string Name { get; set; }
 
     /// <summary>
     /// true if object is a folder
     /// </summary>
-    bool IsFolder { get; }
+    public bool IsFolder { get; set; }
 
     /// <summary>
     /// Externally accessible URL
     /// </summary>
-    string Url { get; }
+    public string Url { get; set; }
 
     /// <summary>
     /// UTC when last modified
     /// </summary>
-    public DateTime TimeLastModified { get; }
+    public DateTime TimeLastModified { get; set; }
   }
 #pragma warning restore CS1591
 }

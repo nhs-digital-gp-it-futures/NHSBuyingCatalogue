@@ -8,6 +8,7 @@ using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.OperationFilters;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using ZNetCS.AspNetCore.Authentication.Basic;
@@ -34,33 +35,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     public StandardsApplicableEvidenceBlobStoreController(IStandardsApplicableEvidenceBlobStoreLogic logic)
     {
       _logic = logic;
-    }
-
-    /// <summary>
-    /// Create server side folder structure for specified solution
-    /// </summary>
-    /// <remarks>
-    /// Server side folder structure is something like:
-    /// --Organisation
-    /// ----Solution
-    /// ------Capability Evidence
-    /// --------Appointment Management - Citizen
-    /// --------Appointment Management - GP
-    /// --------Clinical Decision Support
-    /// --------[all other claimed capabilities]
-    /// </remarks>
-    /// <param name="solutionId">unique identifier of solution</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Solution not found in CRM</response>
-    [HttpGet]
-    [Route("PrepareForSolution/{solutionId}")]
-    [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Solution not found in CRM")]
-    public IActionResult PrepareForSolution([FromRoute][Required]string solutionId)
-    {
-      _logic.PrepareForSolution(solutionId);
-      return new OkResult();
     }
 
     /// <summary>
@@ -96,8 +70,15 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Claim not found in CRM")]
     public IActionResult AddEvidenceForClaim([Required]string claimId, [Required]IFormFile file, [Required]string filename, string subFolder = null)
     {
-      var extUrl = _logic.AddEvidenceForClaim(claimId, file.OpenReadStream(), filename, subFolder);
-      return new OkObjectResult(extUrl);
+      try
+      {
+        var extUrl = _logic.AddEvidenceForClaim(claimId, file.OpenReadStream(), filename, subFolder);
+        return new OkObjectResult(extUrl);
+      }
+      catch (KeyNotFoundException ex)
+      {
+        return new NotFoundObjectResult(ex);
+      }
     }
 
     /// <summary>
@@ -115,9 +96,16 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Claim not found in CRM")]
     public IActionResult EnumerateFolder([FromRoute][Required]string claimId, [FromQuery]string subFolder, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      var infos = _logic.EnumerateFolder(claimId, subFolder);
-      var retval = PaginatedList<BlobInfo>.Create(infos, pageIndex, pageSize);
-      return new OkObjectResult(retval);
+      try
+      {
+        var infos = _logic.EnumerateFolder(claimId, subFolder);
+        var retval = PaginatedList<BlobInfo>.Create(infos, pageIndex, pageSize);
+        return new OkObjectResult(retval);
+      }
+      catch (KeyNotFoundException ex)
+      {
+        return new NotFoundObjectResult(ex);
+      }
     }
   }
 }
