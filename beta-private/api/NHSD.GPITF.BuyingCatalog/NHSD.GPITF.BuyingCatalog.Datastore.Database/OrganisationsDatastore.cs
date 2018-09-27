@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Dapper.Contrib.Extensions;
 using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
@@ -24,6 +25,14 @@ join Contacts cont on cont.OrganisationId = org.Id
 where cont.Id = @contactId";
         var retval = _dbConnection.Value.Query<Organisations>(sql, new { contactId }).SingleOrDefault();
         return retval;
+      });
+    }
+
+    public Organisations ById(string organisationId)
+    {
+      return GetInternal(() =>
+      {
+        return _dbConnection.Value.Get<Organisations>(organisationId);
       });
     }
   }

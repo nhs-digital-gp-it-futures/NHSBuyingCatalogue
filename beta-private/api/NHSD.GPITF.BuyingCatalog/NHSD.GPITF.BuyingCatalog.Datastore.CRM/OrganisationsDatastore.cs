@@ -20,5 +20,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       throw new NotImplementedException();
     }
+
+    public Organisations ById(string organisationId)
+    {
+      throw new NotImplementedException();
+    }
   }
 }
