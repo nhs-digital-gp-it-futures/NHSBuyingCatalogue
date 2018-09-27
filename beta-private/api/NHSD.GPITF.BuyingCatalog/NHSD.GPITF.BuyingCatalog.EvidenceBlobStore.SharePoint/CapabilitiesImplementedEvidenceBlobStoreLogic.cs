@@ -27,7 +27,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
     protected override string GetFolderName()
     {
-      return "Capability Evidence";
+      return CapabilityFolderName;
     }
 
     protected override string GetFolderClaimName(ClaimsBase claim)

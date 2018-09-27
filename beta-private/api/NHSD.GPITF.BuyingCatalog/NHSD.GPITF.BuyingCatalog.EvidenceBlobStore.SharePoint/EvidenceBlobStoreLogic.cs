@@ -13,7 +13,11 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 {
   public class EvidenceBlobStoreLogic : IEvidenceBlobStoreLogic
   {
+    protected const string CapabilityFolderName = "Capability Evidence";
+    protected const string StandardsFolderName = "Standards Evidence";
+
     private readonly ClientContext _context;
+
     protected readonly IOrganisationsDatastore _organisationsDatastore;
     protected readonly ISolutionsDatastore _solutionsDatastore;
     protected readonly ICapabilitiesImplementedDatastore _capabilitiesImplementedDatastore;
@@ -71,13 +75,24 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       var soln = _solutionsDatastore.ById(claim.SolutionId);
       var org = _organisationsDatastore.ById(soln.OrganisationId);
       var subFolderseparator = !string.IsNullOrEmpty(subFolder) ? "/" : string.Empty;
+      var claimFolder = $"{SharePoint_BaseUrl}/{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{GetFolderName()}/{GetFolderClaimName(claim)}";
+      var absUri = new Uri($"{claimFolder}/{subFolder ?? string.Empty}{subFolderseparator}{filename}");
+      var serverRelativeUrl = $"/{absUri.GetComponents(UriComponents.Path, UriFormat.Unescaped)}";
 
-      // TODO   AddEvidenceForClaim
-      return $"{SharePoint_BaseUrl}/{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{GetFolderName()}/{GetFolderClaimName(claim)}/{subFolder ?? string.Empty}{subFolderseparator}{filename}";
+      // create subFolder if not exists
+      if (!string.IsNullOrEmpty(subFolder))
+      {
+        CreateSubFolder(claimFolder, subFolder);
+      }
+
+      Microsoft.SharePoint.Client.NetCore.File.SaveBinaryDirect(_context, serverRelativeUrl, file, true);
+
+      return absUri.AbsoluteUri;
     }
 
     public IEnumerable<BlobInfo> EnumerateFolder(string claimId, string subFolder = null)
     {
+      // TODO   EnumerateFolder - get working :-(
       var claim = ClaimsDatastore.ById(claimId);
       if (claim == null)
       {
@@ -89,6 +104,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       var claimFolderExists = true;
       var claimFolderUrl = $"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{GetFolderName()}/{GetFolderClaimName(claim)}/{subFolder ?? string.Empty}";
       var claimFolder = _context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString(claimFolderUrl));
+
       _context.Load(claimFolder);
       _context.Load(claimFolder.Files);
       _context.Load(claimFolder.Folders);
@@ -147,7 +163,19 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       var claimedNameStds = _standardsApplicableDatastore
         .BySolution(solutionId)
         .Select(x => _standardsDatastore.ById(x.StandardId).Name);
-      // TODO   PrepareForSolution
+
+      CreateSubFolder(SharePoint_OrganisationsRelativeUrl, org.Name);
+      CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}", soln.Name);
+      CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}", CapabilityFolderName);
+      CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}", StandardsFolderName);
+      foreach (var folderName in claimedCapNames)
+      {
+        CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{CapabilityFolderName}", folderName);
+      }
+      foreach (var folderName in claimedNameStds)
+      {
+        CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{StandardsFolderName}", folderName);
+      }
     }
 
     protected virtual string GetFolderName()
@@ -166,6 +194,45 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       {
         throw new NotImplementedException();
       }
+    }
+
+    // can only create sub-folder immediately under baseUrl
+    private void CreateSubFolder(string baseUrl, string subFolder)
+    {
+      var baseFolderExists = true;
+      var baseFolder = _context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString($"{baseUrl}"));
+      _context.Load(baseFolder);
+      try
+      {
+        _context.ExecuteQuery();
+      }
+      catch
+      {
+        baseFolderExists = false;
+      }
+      if (!baseFolderExists)
+      {
+        return;
+      }
+
+      var targetFolderExists = true;
+      var targetFolder = _context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString($"{baseUrl}/{subFolder}"));
+      _context.Load(targetFolder);
+      try
+      {
+        _context.ExecuteQuery();
+      }
+      catch
+      {
+        targetFolderExists = false;
+      }
+      if (targetFolderExists)
+      {
+        return;
+      }
+
+      baseFolder.AddSubFolder(subFolder);
+      _context.ExecuteQuery();
     }
   }
 }
