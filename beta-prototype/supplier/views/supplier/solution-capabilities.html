@@ -1,27 +1,3 @@
-<dialog id="capability-popup" class="fixed">
-  <nav>
-    <ul>
-      <li class="previous">previous</li>
-      <li class="next">next</li>
-    </ul>
-  </nav>
-  <form method="dialog">
-    <section><!-- replace with content --></section>
-    <fieldset class="select">
-      <p>By selecting this Capability, I acknowledge the set of standards my solution must meet to attain compliance with this Capability.</p>
-      <input id="select-capability" type="checkbox" name="capability" autofocus>
-      <label for="select-capability" class="unchecked button primary">Select</label>
-      <label for="select-capability" class="checked">
-        <span class="selected">✔︎ Selected</span>
-        <span class="remove">Remove selection</span>
-      </label>
-    </fieldset>
-    <fieldset class="controls">
-      <a class="close" href="#">Close</a>
-    </fieldset>
-  </form>
-</dialog>
-
 <div id="add-edit-solution" class="supplier">
   {{> onboarding-progress-header
         title="Select Capabilities"
@@ -41,30 +17,56 @@
   {{#errors}}
   <p class="error">{{.}}</p>
   {{/errors}}
-  <section class="filter">
-    <p>Filter by Capability Type</p>
-    <ul>
-      <li><label><input type="checkbox" name="filter" value="core"> Core</label></li>
-      <li><label><input type="checkbox" name="filter" value="citizen"> Citizen-facing</label></li>
-      <li><label><input type="checkbox" name="filter" value="practice"> Practice-facing</label></li>
-    </ul>
-  </section>
-  <form action="" method="post" novalidate>
-    <ul class="capabilities">
-      {{#capabilities}}
-      <li class="capability {{types}}" data-cap-id="{{id}}" data-std-ids="{{standardIds}}">
-        <label>
-          <input type="checkbox" name="capabilities" value="{{id}}"{{#selected}} checked{{/selected}}>
-          {{#optionalStandards}}
-          <input type="checkbox" name="optionalStandards[{{../id}}]" value="{{id}}"{{#selected}} checked{{/selected}}>
-          {{/optionalStandards}}
-          <span class="name">{{name}}</span>
-        </label>
-        <p class="description">{{description}}</p>
-      </li>
-      {{/capabilities}}
-    </ul>
-
+  <form method="post" novalidate>
+    {{#each groupedCapabilities as |capabilities group|}}
+    <fieldset class="capability-group">
+      <legend>{{group}}</legend>
+      <ul class="capabilities">
+        {{#capabilities}}
+        <li class="capability {{types}}" data-cap-id="{{id}}" data-std-ids="{{standardIds}}">
+          <h4 class="name">{{name}}</h4>
+          <input id="select-capability-{{id}}" type="checkbox" name="capabilities" value="{{id}}"{{#selected}} checked{{/selected}}>
+          <section class="reveal">
+            <p class="description">
+              {{description}}
+              {{#url}}
+                <a href="{{.}}" target="_blank">See full Capability description</a>
+              {{/url}}
+            </p>
+            <section class="standards">
+              <p>To comply with this Capability, you will have to meet these associated Standards.</p>
+              {{#if standards.mandatory}}
+              <section class="mandatory">
+                <ul>
+                  {{#standards.mandatory}}
+                  <li><a href="{{url}}" target="_blank">{{name}}</a></li>
+                  {{/standards.mandatory}}
+                </ul>
+              </section>
+              {{/if}}
+              {{#if standards.interop}}
+              <section class="interop">
+                <p>Interoperability</p>
+                <ul>
+                  {{#standards.interop}}
+                  <li><a href="{{url}}" target="_blank">{{name}}</a></li>
+                  {{/standards.interop}}
+                </ul>
+              </section>
+              {{/if}}
+            </section>
+            <p>By selecting this Capability, I acknowledge the set of standards my solution must meet to attain compliance with this Capability.</p>
+            <label for="select-capability-{{id}}" class="unchecked button primary">Select</label>
+            <label for="select-capability-{{id}}" class="checked">
+              <span class="selected">✔︎ Selected</span>
+              <span class="remove">Remove selection</span>
+            </label>
+          </section>
+        </li>
+        {{/capabilities}}
+      </ul>
+    {{/each}}
+    </fieldset>
     <section class="summary">
       <header>
         <h3>Summary</h3>
@@ -127,135 +129,9 @@
   </form>
 </div>
 
-<div id="capability-popup-content">
-  {{#capabilities}}
-  <section class="capability" data-cap-id="{{id}}">
-    <h3 class="name">{{name}}</h3>
-    <p class="description">{{description}}</p>
-    {{#url}}
-    <ul><li><a href="{{.}}" target="_blank">See full Capability description</a></li></ul>
-    {{/url}}
-    <section class="standards">
-      <h4>Required Standards</h4>
-      <p>To comply with this Capability, you will also have to meet these associated Standards.</p>
-      {{#if standards.mandatory}}
-      <section class="mandatory">
-        <ul>
-          {{#standards.mandatory}}
-          <li><a href="{{url}}" target="_blank">{{name}}</a></li>
-          {{/standards.mandatory}}
-        </ul>
-      </section>
-      {{/if}}
-      {{#if standards.interop}}
-      <section class="interop">
-        <h5>Interoperability</h5>
-        <ul>
-          {{#standards.interop}}
-          <li><a href="{{url}}" target="_blank">{{name}}</a></li>
-          {{/standards.interop}}
-        </ul>
-      </section>
-      {{/if}}
-    </section>
-  </section>
-  {{/capabilities}}
-</div>
-
 <script>
-/* global dialogPolyfill, $, $$ */
+/* global $, $$ */
 document.addEventListener('DOMContentLoaded', () => {
-  const dialog = $('#capability-popup')
-  dialogPolyfill.registerDialog(dialog)
-
-  $('.close', dialog).addEventListener('click', ev => {
-    ev.preventDefault()
-    dialog.close()
-  })
-
-  $('nav .previous', dialog).addEventListener('click', previousCapability)
-  $('nav .next', dialog).addEventListener('click', nextCapability)
-
-  const elDialogCapabilityCheckbox = $('input[name=capability]', dialog)
-
-  let currentCapabilityId
-
-  $('ul.capabilities').addEventListener('click', ev => {
-    const elClickedCapability = ev.target.closest('li.capability')
-    if (!elClickedCapability) return
-
-    currentCapabilityId = elClickedCapability.dataset.capId
-
-    // lift the content for the clicked capability into the dialog
-    const elDialogContent = $(`#capability-popup-content .capability[data-cap-id=${currentCapabilityId}]`)
-    if (!elDialogContent) return
-
-    const elReplacableSection = $('section', dialog)
-    const elReplacableParent = elReplacableSection.parentElement
-    elReplacableParent.removeChild(elReplacableSection)
-    elReplacableParent.insertAdjacentElement('afterbegin', elDialogContent.cloneNode(true))
-
-    const syncedCheckboxes = [
-      { main: $('input[type=checkbox][name=capabilities]', elClickedCapability),
-        dialog: elDialogCapabilityCheckbox
-      }
-    ]
-
-    syncedCheckboxes.forEach(cb => {
-      cb.dialog.checked = cb.main.checked
-    })
-
-    elDialogCapabilityCheckbox.addEventListener('change', dialogCheckboxChangeHandler)
-    dialog.addEventListener('close', dialogClosed)
-    dialog.showModal()
-
-    function dialogClosed (ev) {
-      dialog.removeEventListener('close', dialogClosed)
-      elDialogCapabilityCheckbox.removeEventListener('change', dialogCheckboxChangeHandler)
-
-      if (dialog.returnValue) {
-        const nextCap = $(`ul.capabilities li.capability[data-cap-id=${dialog.returnValue}]`)
-        if (nextCap) nextCap.click()
-      }
-
-      dialog.returnValue = undefined
-    }
-
-    function dialogCheckboxChangeHandler (ev) {
-      syncedCheckboxes.forEach(cb => {
-        cb.main.checked = cb.dialog.checked
-      })
-
-      updateForCapabilitySelectionStateChange()
-    }
-  })
-
-  function navigateCapability (ev, step) {
-    ev.preventDefault()
-
-    const capabilityIds = $$('ul.capabilities li.capability').map(el => el.dataset.capId)
-
-    let currentIndex = capabilityIds.indexOf(currentCapabilityId)
-    if (currentIndex === -1) return
-
-    currentIndex += step
-    if (currentIndex < 0) {
-      currentIndex = capabilityIds.length - 1
-    } else if (currentIndex >= capabilityIds.length) {
-      currentIndex = 0
-    }
-
-    dialog.close(capabilityIds[currentIndex])
-  }
-
-  function previousCapability (ev) {
-    navigateCapability(ev, -1)
-  }
-
-  function nextCapability (ev) {
-    navigateCapability(ev, 1)
-  }
-
   function updateForCapabilitySelectionStateChange () {
     function select (el) {
       el.classList.add('selected')
@@ -347,22 +223,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // initial synchronisation of capability selected states
   updateForCapabilitySelectionStateChange()
 
-  // filtering
-  $('#add-edit-solution section.filter').addEventListener('change', ev => {
-    const ulCapabilities = $('#add-edit-solution ul.capabilities')
-    const allFilterClasses = $$(
-      'input[name=filter]',
-      ev.currentTarget
-    ).map(el => el.value)
-    const currentFilterClasses = $$(
-      'input[name=filter]:checked',
-      ev.currentTarget
-    ).map(el => el.value)
-
-    ulCapabilities.classList.remove('filtered', ...allFilterClasses)
-    if (currentFilterClasses.length) {
-      ulCapabilities.classList.add('filtered', ...currentFilterClasses)
-    }
+  $$('.capability-group').forEach(el => {
+    el.addEventListener('change', updateForCapabilitySelectionStateChange)
   })
 })
 </script>

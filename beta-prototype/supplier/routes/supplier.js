@@ -530,6 +530,19 @@ app.get('/solutions/:solution_id/capabilities', csrfProtection, async (req, res)
     return res.redirect('/suppliers/solutions')
   }
 
+  const enrichedCapabilities = capabilities.map(cap => {
+    const claimedCapability = _.find(solutionEx.claimedCapability, ['capabilityId', cap.id])
+    cap.selected = !!claimedCapability
+    cap.standardIds = _.map(_.flatMap(cap.standards), 'id')
+    return cap
+  })
+
+  const isCore = cap => _.includes(_.words(cap.types), 'core')
+  const groupedCapabilities = {
+    'Core Capabilities': _.filter(enrichedCapabilities, isCore),
+    'Non-core Capabilities': _.reject(enrichedCapabilities, isCore)
+  }
+
   res.render('supplier/solution-capabilities', {
     ...solutionEx.solution,
     backlink: {
@@ -537,12 +550,8 @@ app.get('/solutions/:solution_id/capabilities', csrfProtection, async (req, res)
       subtitle: '(1 of 4)',
       href: `/suppliers/solutions/${req.params.solution_id}/edit`
     },
-    capabilities: capabilities.map(cap => {
-      const claimedCapability = _.find(solutionEx.claimedCapability, ['capabilityId', cap.id])
-      cap.selected = !!claimedCapability
-      cap.standardIds = _.map(_.flatMap(cap.standards), 'id')
-      return cap
-    }),
+    capabilities: enrichedCapabilities,
+    groupedCapabilities,
     standards: groupedStandards,
     csrfToken: req.csrfToken()
   })
