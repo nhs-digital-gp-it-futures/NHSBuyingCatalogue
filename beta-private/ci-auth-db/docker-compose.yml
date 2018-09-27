@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  oidc-provider:
+    build: ../ci-oidc-provider
+    environment:
+      USERS_FILE: /config/users.json
+      CONFIG_FILE: /config/config.json
+    ports:
+      - "9001:9000"
+    volumes:
+      - ./config:/config

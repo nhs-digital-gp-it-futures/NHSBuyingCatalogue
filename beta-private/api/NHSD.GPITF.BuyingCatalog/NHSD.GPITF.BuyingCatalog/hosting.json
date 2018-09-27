@@ -16,7 +16,7 @@
     "SqlServer":
     {
       "Type": "SqlServer",
-      "ConnectionString": "Data Source=localhost;Initial Catalog=BuyingCatalog;MultipleActiveResultSets=True;User Id=NHSD;Password=DisruptTheMarket;"
+      "ConnectionString": "Data Source=db;Initial Catalog=BuyingCatalog;MultipleActiveResultSets=True;User Id=NHSD;Password=DisruptTheMarket;"
     },
 
     "MySql":
@@ -35,6 +35,7 @@
   "Jwt":
   {
     "Authority": "http://oidc-provider:9000",
-    "UserInfo": "http://oidc-provider:9000/me"
+    "UserInfo": "http://oidc-provider:9000/me",
+    "Audience": "catalogue-private-beta-ci"
   }
 }

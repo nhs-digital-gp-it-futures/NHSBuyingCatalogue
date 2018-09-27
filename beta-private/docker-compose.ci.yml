@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      target: test
+    command: npm run test:ci
+    volumes:
+      - "${VSTS_WORKING_DIR}:/home/node/app/results"
+
+  oidc-provider:
+    image: qlik/simple-oidc-provider
+    environment:
+      USERS_FILE: /config/users.json
+      CONFIG_FILE: /config/config.json
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./ci-auth-db/config:/config
+    networks:
+      - beta_network

@@ -1,39 +1,32 @@
-version: '3'
+version: '3.4'
 
 services:
-  supplier:
-    build: ./supplier
-    image: gpitf/buywolf-supplier
+  frontend:
+    build:
+      context: ./frontend
+    image: gpitf/catalogue-frontend:private-beta
     networks:
-      beta_network:
-        aliases:
-          - frontend
-    ports:
-      - "8000:8000"
+      - beta_network
     environment:
       - NODE_ENV
       - BASE_URL
-      - API_BASE_URL
-      - API_AUTHORISATION_METHOD
       - OIDC_ISSUER_URL
       - OIDC_CLIENT_ID
       - OIDC_CLIENT_SECRET
-      - SESSION_SECRET
     restart: always
 
   api:
-    image: gpitf/buywolf-api
+    image: gpitf/catalogue-api:private-beta
     build: ./api/NHSD.GPITF.BuyingCatalog
     networks:
       - beta_network
-    volumes:
-      - api_data:/app/Data
-    ports:
-      - "8001:8001"
+    environment:
+      - OIDC_ISSUER_URL
+      - OIDC_USERINFO_URL
 
   nginx:
     build: ./nginx
-    image: gpitf/buywolf-nginx
+    image: gpitf/catalogue-frontend-proxy:private-beta
     networks:
       - beta_network
     ports:
@@ -42,6 +35,3 @@ services:
 networks:
   beta_network:
     driver: bridge
-
-volumes:
-  api_data:

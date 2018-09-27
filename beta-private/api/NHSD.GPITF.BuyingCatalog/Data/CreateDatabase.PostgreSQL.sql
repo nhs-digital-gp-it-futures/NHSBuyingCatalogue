@@ -128,7 +128,8 @@ CREATE TABLE Standards
 
 CREATE TABLE CachedUserInfoResponseJson
 (
-  Id CHAR(512) NOT NULL UNIQUE,
+  Id CHAR(36) NOT NULL UNIQUE,
+  BearerToken TEXT NOT NULL,
   Data TEXT,
   PRIMARY KEY (Id)
 );

@@ -19,7 +19,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
       return GetInternal(() =>
       {
         const string sql = @"
-select * from Organisations org
+select org.* from Organisations org
 join Contacts cont on cont.OrganisationId = org.Id
 where cont.Id = @contactId";
         var retval = _dbConnection.Value.Query<Organisations>(sql, new { contactId }).SingleOrDefault();
