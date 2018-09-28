@@ -23,9 +23,8 @@
       <legend>{{group}}</legend>
       <ul class="capabilities">
         {{#capabilities}}
-        <li class="capability {{types}}" data-cap-id="{{id}}" data-std-ids="{{standardIds}}" tabindex="0">
+        <li class="capability {{types}}" data-cap-id="{{id}}" data-std-ids="{{standardIds}}">
           <h4 class="name">{{name}}</h4>
-          <input id="select-capability-{{id}}" type="checkbox" name="capabilities" value="{{id}}"{{#selected}} checked{{/selected}}>
           <a class="toggle-reveal" href="#">﹀</a>
           <section class="reveal">
             <p class="description">
@@ -56,12 +55,17 @@
               </section>
               {{/if}}
             </section>
-            <p>By selecting this Capability, I acknowledge the set of standards my solution must meet to attain compliance with this Capability.</p>
-            <label for="select-capability-{{id}}" class="unchecked button primary">Select</label>
-            <label for="select-capability-{{id}}" class="checked">
-              <span class="selected">✔︎ Selected</span>
-              <span class="remove">Remove selection</span>
-            </label>
+            <section class="selection">
+              <p>By selecting this Capability, I acknowledge the set of standards my solution must meet to attain compliance with this Capability.</p>
+              <div>
+                <input id="select-capability-{{id}}" type="checkbox" name="capabilities" value="{{id}}"{{#selected}} checked{{/selected}}>
+                <label for="select-capability-{{id}}" class="unchecked button">Select</label>
+                <label for="select-capability-{{id}}" class="checked">
+                  <span class="selected">✔︎ Selected</span>
+                  <span class="remove">Remove selection</span>
+                </label>
+              </div>
+            </section>
           </section>
         </li>
         {{/capabilities}}
@@ -216,9 +220,14 @@ document.addEventListener('DOMContentLoaded', () => {
     el.addEventListener('click', ev => {
       ev.preventDefault()
 
-      // only one reveal should be active at any time
+      // only one reveal should be active at any time and clicking the reveal on
+      // the currently revealed capability should collapse it
+      const elCapability = ev.target.closest('.capability')
+      const isRevealed = elCapability.classList.contains('revealed')
       elPage.$$('.capability').forEach(el => { el.classList.remove('revealed') })
-      ev.target.closest('.capability').classList.add('revealed')
+      if (!isRevealed) {
+        elCapability.classList.add('revealed')
+      }
     })
   })
 })
