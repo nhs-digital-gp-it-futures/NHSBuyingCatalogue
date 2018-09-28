@@ -92,7 +92,6 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
     public IEnumerable<BlobInfo> EnumerateFolder(string claimId, string subFolder = null)
     {
-      // TODO   EnumerateFolder - get working :-(
       var claim = ClaimsDatastore.ById(claimId);
       if (claim == null)
       {
