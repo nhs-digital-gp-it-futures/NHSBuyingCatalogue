@@ -1,0 +1,230 @@
+#solution-capabilities ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+#solution-capabilities fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+#solution-capabilities h3.question {
+  color: var(--color-fg);
+}
+
+#solution-capabilities .commercial-warning {
+  background-color: var(--color-standout-bg);
+  border-left: 5px solid var(--color-nhs-blue);
+  color: var(--color-fg);
+  font-size: var(--font-size-high-density);
+  margin-top: 4em;
+  padding: .5em 0 .5em 1em;
+  position: relative;
+  width: 80%;
+}
+
+#solution-capabilities .commercial-warning strong {
+  background-color: var(--color-nhs-blue);
+  color: var(--color-nhs-white);
+  display: inline-block;
+  font-size: larger;
+  font-weight: 600;
+  padding: 0.25em 1em;
+  position: absolute;
+  top: -1.5em;
+  left: -0.5em;
+}
+
+#solution-capabilities fieldset.capability-group {
+  background-color: var(--color-nhs-pale-grey);
+  border-top: solid 3px var(--color-nhs-blue);
+  left: -3em;
+  padding: 0 3em;
+  position: relative;
+  width: 100%;
+}
+
+#solution-capabilities fieldset.capability-group legend {
+  color: var(--color-nhs-blue);
+  font-size: var(--font-size-high-density);
+  font-weight: var(--font-weight-high-density-bold);
+}
+
+#solution-capabilities fieldset.capability-group legend::before {
+  content: '▼';
+  display: inline-block;
+  font-size: larger;
+  padding-right: 0.25em;
+}
+
+#solution-capabilities .capability-group .capabilities {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  max-width: 68rem;
+}
+
+#solution-capabilities .capability-group .capabilities .capability {
+  background-color: var(--color-nhs-white);
+  background-repeat: no-repeat;
+  background-size: 15% 15%;
+  background-position: center;
+  box-shadow: 0 2px 2px 2px rgba(0, 0, 0, .25);
+  display: block;
+  height: 16rem;
+  margin: .5em;
+  overflow: hidden;
+  padding: 1rem 1.5rem;
+  position: relative;
+  width: 17rem;
+}
+
+#solution-capabilities .capability-group .capabilities .capability.core {
+  background-image: url('/img/heartbeat.svg');
+}
+#solution-capabilities .capability-group .capabilities .capability.practice {
+  background-image: url('/img/doctor-stethoscope.svg');
+}
+#solution-capabilities .capability-group .capabilities .capability.citizen {
+  background-image: url('/img/family.svg');
+}
+
+#solution-capabilities .capability-group .capabilities .capability:focus,
+#solution-capabilities .capability-group .capabilities .capability:hover {
+  background-image: none;
+  box-shadow: none;
+  outline: 3px solid var(--color-nhs-warm-yellow);
+}
+
+#solution-capabilities .capability-group .capabilities .capability:focus .description,
+#solution-capabilities .capability-group .capabilities .capability:hover .description {
+  opacity: 1;
+  transition: opacity .2s ease-in;
+}
+
+#solution-capabilities .capability-group .capabilities .capability .name {
+  color: var(--color-nhs-blue);
+  font-weight: 600;
+  text-align: center;
+}
+
+#solution-capabilities .capability-group .capabilities .capability [name='capabilities'] {
+  opacity: 0;
+  position: absolute;
+}
+
+#solution-capabilities .capability-group .capabilities .capability .description {
+
+}
+
+#solution-capabilities .capability-group .capabilities .capability .toggle-reveal {
+  background-color: inherit;
+  bottom: 0;
+  color: inherit;
+  display: block;
+  left: 0;
+  position: absolute;
+  right: 0;
+  text-align: center;
+}
+
+#solution-capabilities .capability-group .capabilities .capability .description {
+  font-size: var(--font-size-high-density);
+  font-weight: var(--font-weight-high-density);
+  opacity: 0;
+  transition: opacity .1s ease-in;
+}
+
+#solution-capabilities .capability-group .capabilities .capability .description .full-description-link {
+  display: none;
+}
+
+#solution-capabilities .capability-group .capabilities .capability .reveal > *:not(.description) {
+  display: none;
+}
+
+#solution-capabilities .capability-group .capabilities .capability.selected {
+  background-color: var(--color-nhs-blue);
+  color: var(--color-nhs-warm-yellow);
+}
+
+#solution-capabilities .capability-group .capabilities .capability.selected .name {
+  color: var(--color-nhs-warm-yellow);
+}
+
+#solution-capabilities .summary {
+  background-color: var(--color-standout-bg);
+  padding: .1em 1em;
+}
+
+#solution-capabilities .summary .counter,
+#solution-capabilities .summary .counter * {
+  font-size: var(--font-size-high-density);
+  font-style: italic;
+  font-weight: var(--font-weight-high-density);
+}
+
+#solution-capabilities .summary details {
+  color: var(--color-nhs-blue);
+  margin-bottom: 1em;
+}
+
+#solution-capabilities .summary details > :not(summary){
+  font-size: var(--font-size-navigation);
+  padding-left: 1em;
+}
+
+#solution-capabilities .summary > .capabilities ul,
+#solution-capabilities .summary > .standards ul {
+  list-style-type: none;
+}
+
+#solution-capabilities .summary > .capabilities details,
+#solution-capabilities .summary > .capabilities li,
+#solution-capabilities .summary > .standards li,
+#solution-capabilities .summary > .capabilities li .optional {
+  display: none;
+}
+
+#solution-capabilities .summary > .capabilities details.selected,
+#solution-capabilities .summary > .capabilities li.selected,
+#solution-capabilities .summary > .standards li.selected {
+  display: block;
+}
+
+#solution-capabilities .summary > .capabilities li .optional.selected {
+  display: inline;
+}
+
+#solution-capabilities .controls .primary {
+  float: right;
+}
+
+/* styling the popup's checkbox like a button when unchecked, and as a
+   combination of a tick and unselect link when checked */
+#select-capability {
+  left: -10em;
+  position: absolute; /* take it out of flow so the labels align correctly */
+  opacity: 0; /* make it invisible but still accessible */
+}
+
+/* show the appropriate label only */
+#select-capability:not(:checked) ~ label.checked,
+#select-capability:checked ~ label.unchecked {
+  display: none;
+}
+
+/* give the label the appearance of focus */
+#select-capability:focus ~ label.unchecked,
+#select-capability:focus ~ label.checked .remove {
+  outline: 2px solid Highlight;
+  outline: 5px auto -webkit-focus-ring-color;
+}
+
+#select-capability ~ label.checked .selected {
+  color: var(--color-nhs-dark-green);
+  padding-right: 3em;
+}

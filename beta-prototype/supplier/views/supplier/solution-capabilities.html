@@ -1,4 +1,4 @@
-<div id="add-edit-solution" class="supplier">
+<div id="solution-capabilities" class="supplier">
   {{> onboarding-progress-header
         title="Select Capabilities"
         subtitle="Register Solution (2 of 4)"}}
@@ -23,14 +23,15 @@
       <legend>{{group}}</legend>
       <ul class="capabilities">
         {{#capabilities}}
-        <li class="capability {{types}}" data-cap-id="{{id}}" data-std-ids="{{standardIds}}">
+        <li class="capability {{types}}" data-cap-id="{{id}}" data-std-ids="{{standardIds}}" tabindex="0">
           <h4 class="name">{{name}}</h4>
           <input id="select-capability-{{id}}" type="checkbox" name="capabilities" value="{{id}}"{{#selected}} checked{{/selected}}>
+          <a class="toggle-reveal" href="#">﹀</a>
           <section class="reveal">
             <p class="description">
               {{description}}
               {{#url}}
-                <a href="{{.}}" target="_blank">See full Capability description</a>
+                <a href="{{.}}" target="_blank" class="full-description-link">See full Capability description</a>
               {{/url}}
             </p>
             <section class="standards">
@@ -65,8 +66,8 @@
         </li>
         {{/capabilities}}
       </ul>
-    {{/each}}
     </fieldset>
+    {{/each}}
     <section class="summary">
       <header>
         <h3>Summary</h3>
@@ -130,8 +131,10 @@
 </div>
 
 <script>
-/* global $, $$ */
 document.addEventListener('DOMContentLoaded', () => {
+  const elPage = document.$('#solution-capabilities')
+  const elSummary = elPage.$('.summary')
+
   function updateForCapabilitySelectionStateChange () {
     function select (el) {
       el.classList.add('selected')
@@ -142,31 +145,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // reset all selected states
-    const mainCapabilities = $$(
-      '#add-edit-solution ul.capabilities input[name=capabilities]'
-    )
+    const mainCapabilities = elPage.$$('input[name=capabilities]')
     mainCapabilities.forEach(el => deselect(el.closest('.capability')))
 
     const summaryCapabilities = {}
-    $$(
-      '#add-edit-solution .summary .capabilities [data-cap-id]'
-    ).forEach(el => {
+    elSummary.$$('.capabilities [data-cap-id]').forEach(el => {
       deselect(el)
-      $$('.optional', el).forEach(deselect)
+      el.$$('.optional').forEach(deselect)
       summaryCapabilities[el.dataset.capId] = el
     })
 
     const summaryStandards = {}
-    $$(
-      '#add-edit-solution .summary .standards [data-std-id]'
-    ).forEach(el => {
+    elSummary.$$('.standards [data-std-id]').forEach(el => {
       deselect(el)
       summaryStandards[el.dataset.stdId] = el
     })
 
-    const standardGroups = $$(`
-      #add-edit-solution .summary .standards li.group,
-      #add-edit-solution .summary .capabilities details`)
+    const standardGroups = elSummary.$$('.standards li.group, .capabilities details')
     standardGroups.forEach(deselect)
 
     let capabilityCount = 0
@@ -182,16 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const elSummaryCapability = summaryCapabilities[capabilityId]
         select(elSummaryCapability)
 
-        $$(
-          'input[type=checkbox][name^=optionalStandards]',
-          elCapability
-        ).forEach(elOptionalStandardCheckbox => {
-          if (elOptionalStandardCheckbox.checked) {
-            const standardId = elOptionalStandardCheckbox.value
-            select($(`.optional[data-std-id=${standardId}]`, elSummaryCapability))
-          }
-        })
-
         const standardIds = elCapability.dataset.stdIds.split(',')
         standardIds.forEach(stdId => {
           const elStd = summaryStandards[stdId]
@@ -205,26 +190,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // make any groups visible that have selected standards within them
     standardGroups.forEach(el => {
-      if (el.querySelector('.selected')) {
+      if (el.$('.selected')) {
         select(el)
       }
     })
 
     // update the counters
-    $('#add-edit-solution .summary .capabilities .count').innerText =
+    elSummary.$('.capabilities .count').innerText =
       capabilityCount + (capabilityCount !== 1 ? ' capabilities' : ' capability')
-    $('#add-edit-solution .summary .standards .count').innerText =
+    elSummary.$('.standards .count').innerText =
       standardCount + (standardCount !== 1 ? ' standards' : ' standard')
 
     // only allow form submission if at least one capability is selected
-    $('#add-edit-solution .controls [name=action][value=submit]').disabled = !capabilityCount
+    elPage.$('.controls [name=action][value=submit]').disabled = !capabilityCount
   }
 
   // initial synchronisation of capability selected states
   updateForCapabilitySelectionStateChange()
 
-  $$('.capability-group').forEach(el => {
+  elPage.$$('.capability-group').forEach(el => {
     el.addEventListener('change', updateForCapabilitySelectionStateChange)
+  })
+
+  elPage.$$('.toggle-reveal').forEach(el => {
+    el.addEventListener('click', ev => {
+      ev.preventDefault()
+
+      // only one reveal should be active at any time
+      elPage.$$('.capability').forEach(el => { el.classList.remove('revealed') })
+      ev.target.closest('.capability').classList.add('revealed')
+    })
   })
 })
 </script>
