@@ -64,7 +64,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       solution.CreatedById = _contacts.ByEmail(email).Id;
 
       // create SharePoint folder structure
-      if (solution.Status == SolutionStatus.Registered)
+      if (solution.Status == SolutionStatus.CapabilitiesAssessment)
       {
         _evidenceBlobStoreLogic.PrepareForSolution(solution.Id);
       }
