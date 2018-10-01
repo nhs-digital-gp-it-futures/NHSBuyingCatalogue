@@ -206,3 +206,11 @@
   color: var(--color-nhs-blue);
   text-decoration: none;
 }
+
+#add-edit-solution .controls {
+  margin-top: 1em;
+}
+
+#add-edit-solution .controls .primary {
+  float: right;
+}
