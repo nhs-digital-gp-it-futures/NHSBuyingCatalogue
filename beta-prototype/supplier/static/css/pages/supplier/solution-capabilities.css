@@ -181,7 +181,6 @@
   padding: 2rem;
   position: absolute;
   top: 20rem;
-  width: 60rem;
   z-index: 1;
 }
 
@@ -227,15 +226,38 @@
   padding-left: 1.25em;
 }
 
+@media screen and (max-width: 46rem) {
+  #solution-capabilities .capability-group .capabilities .capability.revealed .reveal {
+    left: 0;
+    width: 20rem;
+  }
+}
 
-#solution-capabilities .capability-group .capabilities .capability:nth-child(3n+1).revealed .reveal {
+@media screen and (min-width: 46rem) and (max-width: 69rem) {
+  #solution-capabilities .capability-group .capabilities .capability.revealed .reveal {
+    width: 40rem;
+  }
+  #solution-capabilities .capability-group .capabilities .capability:nth-child(2n+1).revealed .reveal {
+    left: 0;
+  }
+  #solution-capabilities .capability-group .capabilities .capability:nth-child(2n+2).revealed .reveal {
+    left: -22rem;
+  }
+}
+
+@media screen and (min-width: 69rem) {
+  #solution-capabilities .capability-group .capabilities .capability.revealed .reveal {
+    width: 60rem;
+  }
+  #solution-capabilities .capability-group .capabilities .capability:nth-child(3n+1).revealed .reveal {
   left: 0;
-}
-#solution-capabilities .capability-group .capabilities .capability:nth-child(3n+2).revealed .reveal {
-  left: -22rem;
-}
-#solution-capabilities .capability-group .capabilities .capability:nth-child(3n+3).revealed .reveal {
-  left: -44rem;
+  }
+  #solution-capabilities .capability-group .capabilities .capability:nth-child(3n+2).revealed .reveal {
+    left: -22rem;
+  }
+  #solution-capabilities .capability-group .capabilities .capability:nth-child(3n+3).revealed .reveal {
+    left: -44rem;
+  }
 }
 
 #solution-capabilities .capability-group .capabilities .capability.revealed .reveal .description {
