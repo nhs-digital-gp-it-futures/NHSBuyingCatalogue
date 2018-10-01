@@ -57,11 +57,12 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.Tests
         .HaveCount(1);
     }
 
-    [Test]
-    public void MustBeSameOrganisation_Same_Succeeds()
+    [TestCase(Roles.Supplier)]
+    [TestCase(Roles.Admin)]
+    public void MustBeSameOrganisation_Same_NonBuyer_Succeeds(string role)
     {
       var orgId = Guid.NewGuid().ToString();
-      var ctx = Creator.GetContext(orgId: orgId);
+      var ctx = Creator.GetContext(orgId: orgId, role: role);
       _context.Setup(c => c.HttpContext).Returns(ctx);
       var claimId = Guid.NewGuid().ToString();
       var claim = Creator.GetClaimsBase();
@@ -76,11 +77,11 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.Tests
       valres.Errors.Should().BeEmpty();
     }
 
-    [Test]
-    public void MustBeSameOrganisation_Different_ReturnsError()
+    [TestCase(Roles.Supplier)]
+    public void MustBeSameOrganisation_Different_Supplier_ReturnsError(string role)
     {
       var orgId = Guid.NewGuid().ToString();
-      var ctx = Creator.GetContext();
+      var ctx = Creator.GetContext(role: role);
       _context.Setup(c => c.HttpContext).Returns(ctx);
       var claimId = Guid.NewGuid().ToString();
       var claim = Creator.GetClaimsBase();
@@ -96,6 +97,23 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.Tests
         .ContainSingle(x => x.ErrorMessage == "Cannot add/see evidence for other organisation")
         .And
         .HaveCount(1);
+    }
+
+    [TestCase(Roles.Buyer)]
+    public void MustBeSameOrganisation_Buyer_Ignored(string role)
+    {
+      var orgId = Guid.NewGuid().ToString();
+      var ctx = Creator.GetContext(role: role);
+      _context.Setup(c => c.HttpContext).Returns(ctx);
+      var claimId = Guid.NewGuid().ToString();
+      var validator = new DummyClaimsEvidenceBlobStoreValidatorBase(_context.Object, _solutionsDatastore.Object, _claimsDatastore.Object);
+
+      validator.MustBeSameOrganisation();
+      var valres = validator.Validate(claimId);
+
+      valres.Errors.Should().BeEmpty();
+      _claimsDatastore.Verify(x => x.ById(It.IsAny<string>()), Times.Never);
+      _solutionsDatastore.Verify(x => x.ById(It.IsAny<string>()), Times.Never);
     }
   }
 }

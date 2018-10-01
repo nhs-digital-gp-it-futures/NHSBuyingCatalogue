@@ -56,6 +56,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
           var claimSoln = _solutionsDatastore.ById(claim?.SolutionId ?? Guid.NewGuid().ToString());
           return claimSoln?.OrganisationId == orgId;
         })
+        .When(x => _context.HasRole(Roles.Supplier))
         .WithMessage("Cannot add/see evidence for other organisation");
     }
   }
