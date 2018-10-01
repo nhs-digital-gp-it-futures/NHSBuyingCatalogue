@@ -47,6 +47,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// --------Appointment Management - GP
     /// --------Clinical Decision Support
     /// --------[all other claimed capabilities]
+    /// 
+    /// Will be done automagically when solution status changes to SolutionStatus.CapabilitiesAssessment
     /// </remarks>
     /// <param name="solutionId">unique identifier of solution</param>
     /// <response code="200">Success</response>
