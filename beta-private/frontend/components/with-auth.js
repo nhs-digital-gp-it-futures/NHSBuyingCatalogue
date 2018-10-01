@@ -21,3 +21,29 @@ export default function withAuth (WrappedPage) {
     }
   }
 }
+
+export function suppliersOnly (WrappedPage) {
+  return withAuth(class extends React.Component {
+    static async getInitialProps ({ req, res }) {
+      const defaults = WrappedPage.getInitialProps
+        ? await WrappedPage.getInitialProps(...arguments)
+        : {}
+
+      // only doing this on the server - not sure what'll happen on the client but I'd
+      // assume that the initial authorised page load must succeed for this to be called on
+      // the client, which is fine by me
+      if (req) {
+        if (!req.user || !req.user.is_supplier) {
+          res.redirect('/')
+          res.end()
+        }
+      }
+
+      return defaults
+    }
+
+    render () {
+      return <WrappedPage {...this.props} />
+    }
+  })
+}
