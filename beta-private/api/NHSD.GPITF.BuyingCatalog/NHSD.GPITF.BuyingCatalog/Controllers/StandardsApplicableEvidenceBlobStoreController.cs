@@ -75,6 +75,10 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
         var extUrl = _logic.AddEvidenceForClaim(claimId, file.OpenReadStream(), filename, subFolder);
         return new OkObjectResult(extUrl);
       }
+      catch (FluentValidation.ValidationException ex)
+      {
+        return new InternalServerErrorObjectResult(ex);
+      }
       catch (KeyNotFoundException ex)
       {
         return new NotFoundObjectResult(ex);
@@ -101,6 +105,10 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
         var infos = _logic.EnumerateFolder(claimId, subFolder);
         var retval = PaginatedList<BlobInfo>.Create(infos, pageIndex, pageSize);
         return new OkObjectResult(retval);
+      }
+      catch (FluentValidation.ValidationException ex)
+      {
+        return new InternalServerErrorObjectResult(ex);
       }
       catch (KeyNotFoundException ex)
       {

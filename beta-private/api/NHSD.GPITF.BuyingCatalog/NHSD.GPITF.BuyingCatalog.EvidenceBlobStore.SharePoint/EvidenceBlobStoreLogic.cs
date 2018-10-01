@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using System.Security;
 using Microsoft.SharePoint.Client.NetCore.Runtime;
 using Microsoft.SharePoint.Client.NetCore;
+using FluentValidation;
 
 namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 {
@@ -24,6 +25,8 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     protected readonly IStandardsApplicableDatastore _standardsApplicableDatastore;
     protected readonly ICapabilitiesDatastore _capabilitiesDatastore;
     protected readonly IStandardsDatastore _standardsDatastore;
+    protected readonly IEvidenceBlobStoreValidator _validator;
+    protected readonly IEvidenceBlobStoreValidator _claimValidator;
 
     private readonly string SharePoint_BaseUrl;
     private readonly string SharePoint_OrganisationsRelativeUrl;
@@ -37,7 +40,9 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       ICapabilitiesImplementedDatastore capabilitiesImplementedDatastore,
       IStandardsApplicableDatastore standardsApplicableDatastore,
       ICapabilitiesDatastore capabilitiesDatastore,
-      IStandardsDatastore standardsDatastore)
+      IStandardsDatastore standardsDatastore,
+      IEvidenceBlobStoreValidator validator,
+      IEvidenceBlobStoreValidator claimValidator)
     {
       _solutionsDatastore = solutionsDatastore;
       _organisationsDatastore = organisationsDatastore;
@@ -45,6 +50,8 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       _standardsApplicableDatastore = standardsApplicableDatastore;
       _capabilitiesDatastore = capabilitiesDatastore;
       _standardsDatastore = standardsDatastore;
+      _validator = validator;
+      _claimValidator = claimValidator;
 
       SharePoint_BaseUrl = Environment.GetEnvironmentVariable("SHAREPOINT_BASEURL") ?? config["SharePoint:BaseUrl"];
       SharePoint_OrganisationsRelativeUrl = Environment.GetEnvironmentVariable("SHAREPOINT_ORGANISATIONSRELATIVEURL") ?? config["SharePoint:OrganisationsRelativeUrl"];
@@ -67,6 +74,8 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
     public string AddEvidenceForClaim(string claimId, Stream file, string filename, string subFolder = null)
     {
+      _claimValidator.ValidateAndThrow(claimId, ruleSet: nameof(IEvidenceBlobStoreLogic.AddEvidenceForClaim));
+
       var claim = ClaimsDatastore.ById(claimId);
       if (claim == null)
       {
@@ -92,6 +101,8 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
     public IEnumerable<BlobInfo> EnumerateFolder(string claimId, string subFolder = null)
     {
+      _claimValidator.ValidateAndThrow(claimId, ruleSet: nameof(IEvidenceBlobStoreLogic.EnumerateFolder));
+
       var claim = ClaimsDatastore.ById(claimId);
       if (claim == null)
       {
@@ -150,6 +161,8 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
     public void PrepareForSolution(string solutionId)
     {
+      _validator.ValidateAndThrow(solutionId, ruleSet: nameof(IEvidenceBlobStoreLogic.PrepareForSolution));
+
       var soln = _solutionsDatastore.ById(solutionId);
       if (soln == null)
       {

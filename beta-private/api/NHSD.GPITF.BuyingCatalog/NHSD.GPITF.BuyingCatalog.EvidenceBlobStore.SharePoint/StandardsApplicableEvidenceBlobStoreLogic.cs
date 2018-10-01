@@ -13,7 +13,9 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       ICapabilitiesImplementedDatastore capabilitiesImplementedDatastore,
       IStandardsApplicableDatastore standardsApplicableDatastore,
       ICapabilitiesDatastore capabilitiesDatastore,
-      IStandardsDatastore standardsDatastore) :
+      IStandardsDatastore standardsDatastore,
+      IEvidenceBlobStoreValidator validator,
+      IStandardsApplicableEvidenceBlobStoreValidator claimValidator) :
       base(
         config,
         organisationsDatastore,
@@ -21,7 +23,9 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         capabilitiesImplementedDatastore,
         standardsApplicableDatastore,
         capabilitiesDatastore,
-        standardsDatastore)
+        standardsDatastore,
+        validator,
+        claimValidator)
     {
     }
 

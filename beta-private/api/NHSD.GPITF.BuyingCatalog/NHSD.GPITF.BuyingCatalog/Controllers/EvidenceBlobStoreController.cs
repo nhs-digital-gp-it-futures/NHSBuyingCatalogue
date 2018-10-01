@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using NHSD.GPITF.BuyingCatalog.Attributes;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
+using NHSD.GPITF.BuyingCatalog.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -61,6 +62,10 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
       {
         _logic.PrepareForSolution(solutionId);
         return new OkResult();
+      }
+      catch (FluentValidation.ValidationException ex)
+      {
+        return new InternalServerErrorObjectResult(ex);
       }
       catch (KeyNotFoundException ex)
       {
