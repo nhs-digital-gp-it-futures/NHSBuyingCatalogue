@@ -31,13 +31,6 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       });
     }
 
-    public void MustBeAdmin()
-    {
-      RuleFor(x => x)
-        .Must(x => _context.HasRole(Roles.Admin))
-        .WithMessage("Must be admin");
-    }
-
     public void MustBeAdminOrSupplier()
     {
       RuleFor(x => x)
