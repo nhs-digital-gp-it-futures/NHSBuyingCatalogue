@@ -5,7 +5,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NHSD.GPITF.BuyingCatalog.Authentications
+namespace NHSD.GPITF.BuyingCatalog.OperationFilters
 {
 #pragma warning disable CS1591
   public sealed class AssignSecurityRequirements : IOperationFilter

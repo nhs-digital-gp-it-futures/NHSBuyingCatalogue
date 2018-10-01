@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NHSD.GPITF.BuyingCatalog.Authentications;
+using NHSD.GPITF.BuyingCatalog.OperationFilters;
 using Swashbuckle.AspNetCore.Examples;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
