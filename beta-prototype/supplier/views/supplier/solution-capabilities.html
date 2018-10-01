@@ -33,10 +33,20 @@
                 <a href="{{.}}" target="_blank" class="full-description-link">See full Capability description</a>
               {{/url}}
             </p>
+            <p>To comply with this Capability, you will have to meet these associated Standards.</p>
+            <div>
             <section class="standards">
-              <p>To comply with this Capability, you will have to meet these associated Standards.</p>
+              <section class="cap-specific">
+                <p class="type">Capability Specific</p>
+                <ul>
+                  {{#standards.capability}}
+                  <li><a href="{{url}}" target="_blank">{{name}}</a></li>
+                  {{/standards.capability}}
+                </ul>
+              </section>
               {{#if standards.mandatory}}
               <section class="mandatory">
+                <p class="type">Solution Specific</p>
                 <ul>
                   {{#standards.mandatory}}
                   <li><a href="{{url}}" target="_blank">{{name}}</a></li>
@@ -46,7 +56,7 @@
               {{/if}}
               {{#if standards.interop}}
               <section class="interop">
-                <p>Interoperability</p>
+                <p class="type">Solution Specific <b>Interoperability</b></p>
                 <ul>
                   {{#standards.interop}}
                   <li><a href="{{url}}" target="_blank">{{name}}</a></li>
@@ -55,6 +65,7 @@
               </section>
               {{/if}}
             </section>
+            </div>
             <section class="selection">
               <p>By selecting this Capability, I acknowledge the set of standards my solution must meet to attain compliance with this Capability.</p>
               <div>
@@ -224,10 +235,12 @@ document.addEventListener('DOMContentLoaded', () => {
       // the currently revealed capability should collapse it
       const elCapability = ev.target.closest('.capability')
       const isRevealed = elCapability.classList.contains('revealed')
+
       elPage.$$('.capability').forEach(el => {
         el.classList.remove('revealed')
         el.style.marginBottom = ''
       })
+
       if (!isRevealed) {
         elCapability.classList.add('revealed')
 
@@ -236,6 +249,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // margin is of a fixed height - set it here to the computed height of the reveal
         const elReveal = elCapability.$('.reveal')
         elCapability.style.marginBottom = '' + elReveal.offsetHeight + 'px'
+
+        elCapability.scrollIntoView()
       }
     })
   })

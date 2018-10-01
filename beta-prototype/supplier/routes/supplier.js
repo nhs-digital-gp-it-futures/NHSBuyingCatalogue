@@ -530,10 +530,17 @@ app.get('/solutions/:solution_id/capabilities', csrfProtection, async (req, res)
     return res.redirect('/suppliers/solutions')
   }
 
+  const isCapSpecificStd = std => !['CSS1', 'CSS2', 'CSS3'].includes(std.id)
+
   const enrichedCapabilities = capabilities.map(cap => {
     const claimedCapability = _.find(solutionEx.claimedCapability, ['capabilityId', cap.id])
     cap.selected = !!claimedCapability
     cap.standardIds = _.map(_.flatMap(cap.standards), 'id')
+
+    // pick out the capability-specific standard from the mandatory standards
+    cap.standards.capability = _.find(cap.standards.mandatory, isCapSpecificStd)
+    cap.standards.mandatory = _.reject(cap.standards.mandatory, isCapSpecificStd)
+
     return cap
   })
 

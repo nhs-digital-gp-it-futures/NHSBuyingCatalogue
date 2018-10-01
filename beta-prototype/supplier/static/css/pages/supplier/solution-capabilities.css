@@ -118,7 +118,9 @@
 
 #solution-capabilities .capability-group .capabilities .capability .name {
   color: var(--color-nhs-blue);
+  font-size: larger;
   font-weight: 600;
+  margin-top: 1rem;
   text-align: center;
 }
 
@@ -140,7 +142,6 @@
 
 #solution-capabilities .capability-group .capabilities .capability .description {
   opacity: 0;
-  transition: opacity .1s ease-in;
 }
 
 #solution-capabilities .capability-group .capabilities .capability .description .full-description-link {
@@ -162,7 +163,7 @@
 }
 
 #solution-capabilities .capability-group .capabilities .capability.selected .name {
-  color: var(--color-nhs-warm-yellow);
+  color: var(--color-nhs-white);
 }
 
 #solution-capabilities .capability-group .capabilities .capability.revealed {
@@ -183,6 +184,49 @@
   width: 60rem;
   z-index: 1;
 }
+
+#solution-capabilities .capability-group .capabilities .capability.revealed .reveal .standards {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+#solution-capabilities .capability-group .capabilities .capability.revealed .reveal .standards .cap-specific {
+  width: 30%;
+}
+#solution-capabilities .capability-group .capabilities .capability.revealed .reveal .standards .mandatory {
+  width: 70%;
+}
+#solution-capabilities .capability-group .capabilities .capability.revealed .reveal .standards .interop {
+  width: 100%;
+}
+
+#solution-capabilities .capability-group .capabilities .capability.revealed .reveal .standards .interop ul {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 90%;
+}
+#solution-capabilities .capability-group .capabilities .capability.revealed .reveal .standards .interop li {
+  width: 33%;
+}
+
+#solution-capabilities .capability-group .capabilities .capability.revealed .reveal .standards .type {
+  color: var(--color-nhs-blue);
+  font-size: var(--font-size-navigation);
+  margin-bottom: 0.25em;
+}
+
+#solution-capabilities .capability-group .capabilities .capability.revealed .reveal .standards .type b {
+  color: var(--color-nhs-black);
+}
+
+#solution-capabilities .capability-group .capabilities .capability.revealed .reveal .standards ul {
+  color: var(--color-nhs-blue);
+  list-style-type: disc;
+  padding-left: 1.25em;
+}
+
 
 #solution-capabilities .capability-group .capabilities .capability:nth-child(3n+1).revealed .reveal {
   left: 0;
