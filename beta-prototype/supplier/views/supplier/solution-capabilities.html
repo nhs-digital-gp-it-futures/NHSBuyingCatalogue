@@ -224,9 +224,18 @@ document.addEventListener('DOMContentLoaded', () => {
       // the currently revealed capability should collapse it
       const elCapability = ev.target.closest('.capability')
       const isRevealed = elCapability.classList.contains('revealed')
-      elPage.$$('.capability').forEach(el => { el.classList.remove('revealed') })
+      elPage.$$('.capability').forEach(el => {
+        el.classList.remove('revealed')
+        el.style.marginBottom = ''
+      })
       if (!isRevealed) {
         elCapability.classList.add('revealed')
+
+        // when the reveal is active, the bottom margin of the .capability element is
+        // increased to move the row underneath down to make space for the reveal. The
+        // margin is of a fixed height - set it here to the computed height of the reveal
+        const elReveal = elCapability.$('.reveal')
+        elCapability.style.marginBottom = '' + elReveal.offsetHeight + 'px'
       }
     })
   })
