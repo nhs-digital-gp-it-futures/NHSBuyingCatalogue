@@ -86,13 +86,13 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     }
 
     /// <summary>
-    /// List all files and folders for a claim
+    /// List all files and sub-folders for a claim including folder for claim
     /// </summary>
     /// <param name="claimId">unique identifier of solution claim</param>
     /// <param name="subFolder">optional sub-folder under claim</param>
     /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
     /// <param name="pageSize">number of items per page.  Defaults to 20</param>
-    /// <returns>list of BlobInfo</returns>
+    /// <returns>list of BlobInfo - first item is folder for claim</returns>
     [HttpGet]
     [Route("EnumerateFolder/{claimId}")]
     [ValidateModelState]

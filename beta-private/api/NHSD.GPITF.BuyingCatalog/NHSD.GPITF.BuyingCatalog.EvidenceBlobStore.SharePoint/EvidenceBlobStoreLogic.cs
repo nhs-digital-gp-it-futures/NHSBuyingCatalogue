@@ -131,6 +131,13 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         throw new KeyNotFoundException($"Folder does not exist!: {_context.Url}/{claimFolderUrl}");
       }
 
+      var claimFolderInfo = new BlobInfo
+      {
+        Name = claimFolder.Name,
+        IsFolder = true,
+        Url = new Uri(new Uri(_context.Url), claimFolder.ServerRelativeUrl).AbsoluteUri,
+        TimeLastModified = claimFolder.TimeLastModified
+      };
       var claimSubFolderInfos = claimFolder
         .Folders
         .Select(x =>
@@ -153,6 +160,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
           });
       var retVal = new List<BlobInfo>();
 
+      retVal.Add(claimFolderInfo);
       retVal.AddRange(claimSubFolderInfos);
       retVal.AddRange(claimFileInfos);
 
