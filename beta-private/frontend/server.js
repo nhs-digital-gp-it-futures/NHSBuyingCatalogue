@@ -14,7 +14,7 @@ server.use(require('express-session')({
   saveUninitialized: false
 }))
 
-const { authentication, authorisation } = require('catalogue-authn-authz')
+const { authentication } = require('catalogue-authn-authz')
 
 app.prepare()
   .then(() => authentication(server))

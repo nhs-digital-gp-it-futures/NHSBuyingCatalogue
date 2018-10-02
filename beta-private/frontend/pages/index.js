@@ -8,7 +8,7 @@ export default withAuth(
       <h1>Home</h1>
       <p>This is the homepage of the catalogue</p>
       {props.user && props.user.is_supplier &&
-        <p><Link href='/suppliers'><a>Go to supplier home</a></Link></p>
+        <p><a href='/suppliers'>Go to supplier home</a></p>
       }
     </Layout>
   )
