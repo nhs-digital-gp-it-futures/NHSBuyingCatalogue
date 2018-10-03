@@ -1,5 +1,7 @@
 require('dotenv').config()
 
+const path = require('path')
+
 const { PORT = 8000 } = process.env
 
 const express = require('express')
@@ -19,21 +21,24 @@ app.use(require('body-parser').urlencoded({ extended: true }))
 
 if (process.env.NODE_ENV === 'development') {
   app.get('/styles.css', require('express-sass-middleware')({
-    file: './styles/styles.scss',
+    file: path.join(__dirname, 'styles/styles.scss'),
     watch: true
   }))
 }
 
-app.use(require('serve-static')('static', {
+app.use(require('serve-static')(path.join(__dirname, 'static'), {
   index: false
 }))
 
+const viewPath = path.join(__dirname, 'views')
 app.engine('html', expresshbs({
+  layoutsDir: path.join(viewPath, 'layouts'),
   defaultLayout: 'layout.html',
   extname: '.html',
-  partialsDir: 'views/partials/'
+  partialsDir: path.join(viewPath, 'partials')
 }))
 app.set('view engine', 'html')
+app.set('views', viewPath)
 
 const { authentication, authorisation } = require('catalogue-authn-authz')
 

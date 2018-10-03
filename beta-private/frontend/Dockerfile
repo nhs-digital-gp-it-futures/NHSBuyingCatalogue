@@ -7,7 +7,7 @@ COPY lib ./lib
 RUN npm install
 
 FROM dependencies AS pre-build
-COPY . .
+COPY src ./src
 
 FROM pre-build AS test
 #COPY __mocks__ __mocks__/
@@ -21,6 +21,5 @@ RUN npm run build
 FROM node:8-alpine AS release
 COPY --from=dependencies /home/node/app/package*.json ./
 RUN npm install --production
-COPY --from=build /home/node/app/server.js .
-COPY --from=build /home/node/app/static static/
+COPY --from=build /home/node/app/src ./src
 CMD ["npm", "start"]

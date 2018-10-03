@@ -3,10 +3,10 @@
   "version": "0.2.0-private-beta",
   "private": true,
   "description": "NHS Digital Buying Catalogue Web Frontend (private beta)",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
-    "dev": "npm rebuild node-sass; NODE_ENV=development nodemon -w server.js -w lib server.js",
-    "start": "NODE_ENV=production node server.js",
+    "dev": "npm rebuild node-sass; NODE_ENV=development nodemon -w src -w lib src/server.js",
+    "start": "NODE_ENV=production node src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Paul Mitchell <paul.mitchell@bjss.com>",
