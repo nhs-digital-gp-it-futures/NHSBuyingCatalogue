@@ -83,7 +83,6 @@ async function authCallback (tokenset, userinfo, done) {
       contact,
       first_name: contact.firstName,
       is_authenticated: true,
-      is_supplier: org.primaryRoleId === 'RO92',
       auth_header: authHeader
     }
     done(null, user)

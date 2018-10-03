@@ -1,51 +1,32 @@
 {
   "name": "frontend",
-  "version": "0.1.0-private-beta",
+  "version": "0.2.0-private-beta",
   "private": true,
   "description": "NHS Digital Buying Catalogue Web Frontend (private beta)",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "dev": "npm rebuild node-sass; nodemon -w server.js -w lib server.js",
-    "build": "next build",
+    "dev": "npm rebuild node-sass; NODE_ENV=development nodemon -w server.js -w lib server.js",
     "start": "NODE_ENV=production node server.js",
-    "test": "NODE_ENV=test jest",
-    "test:ci": "NODE_ENV=test JEST_JUNIT_OUTPUT=results/junit.xml jest --ci --reporters jest-junit --coverage --coverageReporters=cobertura --coverageReporters=html --coverageDirectory=results/coverage",
-    "posttest:ci": "node __tests__/__tools__/coverage-report-postprocessor.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Paul Mitchell <paul.mitchell@bjss.com>",
   "dependencies": {
-    "@zeit/next-sass": "^1",
+    "body-parser": "^1.18.3",
     "catalogue-api": "./lib/catalogue-api",
     "catalogue-authn-authz": "./lib/catalogue-authn-authz",
+    "csurf": "^1.9.0",
+    "dotenv": "^5.0.1",
     "express": "^4.16.3",
+    "express-handlebars": "^3.0.0",
     "express-session": "^1.15.6",
-    "next": "^7",
-    "react": "^16.5.2",
-    "react-dom": "^16.5.2"
+    "express-validator": "^5.2.0",
+    "lodash": "^4.17.10",
+    "node-uuid-generator": "^1.0.0",
+    "serve-static": "^1.13.2"
   },
   "devDependencies": {
-    "babel-jest": "^23.6.0",
-    "enzyme": "^3.6.0",
-    "enzyme-adapter-react-16": "^1.5.0",
-    "inline-css": "^2.4.0",
-    "jest": "^23.6.0",
-    "jest-junit": "^5.2.0",
-    "node-sass": "^4.9.3",
-    "nodemon": "^1.18.4",
-    "react-addons-test-utils": "^15.6.2",
-    "react-test-renderer": "^16.5.2"
-  },
-  "jest": {
-    "setupFiles": [
-      "<rootDir>/jest.setup.js"
-    ],
-    "moduleNameMapper": {
-      "\\.scss$": "<rootDir>/__mocks__/styleMock.js"
-    },
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/__tools__/",
-      "/lib/catalogue-api"
-    ]
+    "express-sass-middleware": "^1.1.0",
+    "nodemon": "^1.17.5",
+    "session-file-store": "^1.2.0"
   }
 }

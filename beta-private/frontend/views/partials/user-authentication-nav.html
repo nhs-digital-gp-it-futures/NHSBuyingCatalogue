@@ -1,0 +1,16 @@
+<div class="auth">
+  {{#if user.is_authenticated}}
+  <span class='user'>
+    <span class='sr'>
+      You are logged in.
+    </span>
+    Hello, {{user.first_name}}
+  </span>
+  <span class='account'>
+    <a href='/logout'>Your Account</a>
+  </span>
+  {{else}}
+  <span class='sr'>You are logged out.</span>
+  <a href='/oidc/authenticate'>Log In</a>
+  {{/if}}
+</div>
