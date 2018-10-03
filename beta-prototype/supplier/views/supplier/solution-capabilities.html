@@ -1,28 +1,4 @@
-<dialog id="capability-popup" class="fixed">
-  <nav>
-    <ul>
-      <li class="previous">previous</li>
-      <li class="next">next</li>
-    </ul>
-  </nav>
-  <form method="dialog">
-    <section><!-- replace with content --></section>
-    <fieldset class="select">
-      <p>By selecting this Capability, I acknowledge the set of standards my solution must meet to attain compliance with this Capability.</p>
-      <input id="select-capability" type="checkbox" name="capability" autofocus>
-      <label for="select-capability" class="unchecked button primary">Select</label>
-      <label for="select-capability" class="checked">
-        <span class="selected">✔︎ Selected</span>
-        <span class="remove">Remove selection</span>
-      </label>
-    </fieldset>
-    <fieldset class="controls">
-      <a class="close" href="#">Close</a>
-    </fieldset>
-  </form>
-</dialog>
-
-<div id="add-edit-solution" class="supplier">
+<div id="solution-capabilities" class="supplier">
   {{> onboarding-progress-header
         title="Select Capabilities"
         subtitle="Register Solution (2 of 4)"}}
@@ -41,30 +17,72 @@
   {{#errors}}
   <p class="error">{{.}}</p>
   {{/errors}}
-  <section class="filter">
-    <p>Filter by Capability Type</p>
-    <ul>
-      <li><label><input type="checkbox" name="filter" value="core"> Core</label></li>
-      <li><label><input type="checkbox" name="filter" value="citizen"> Citizen-facing</label></li>
-      <li><label><input type="checkbox" name="filter" value="practice"> Practice-facing</label></li>
-    </ul>
-  </section>
-  <form action="" method="post" novalidate>
-    <ul class="capabilities">
-      {{#capabilities}}
-      <li class="capability {{types}}" data-cap-id="{{id}}" data-std-ids="{{standardIds}}">
-        <label>
-          <input type="checkbox" name="capabilities" value="{{id}}"{{#selected}} checked{{/selected}}>
-          {{#optionalStandards}}
-          <input type="checkbox" name="optionalStandards[{{../id}}]" value="{{id}}"{{#selected}} checked{{/selected}}>
-          {{/optionalStandards}}
-          <span class="name">{{name}}</span>
-        </label>
-        <p class="description">{{description}}</p>
-      </li>
-      {{/capabilities}}
-    </ul>
-
+  <form method="post" novalidate>
+    {{#each groupedCapabilities as |capabilities group|}}
+    <fieldset class="capability-group">
+      <legend>{{group}}</legend>
+      <ul class="capabilities">
+        {{#capabilities}}
+        <li class="capability {{types}}" data-cap-id="{{id}}" data-std-ids="{{standardIds}}">
+          <h4 class="name">{{name}}</h4>
+          <a class="toggle-reveal" href="#">﹀</a>
+          <section class="reveal">
+            <p class="description">
+              {{description}}
+              {{#url}}
+                <a href="{{.}}" target="_blank" class="full-description-link">See full Capability description</a>
+              {{/url}}
+            </p>
+            <p>To comply with this Capability, you will have to meet these associated Standards.</p>
+            <div>
+            <section class="standards">
+              <section class="cap-specific">
+                <p class="type">Capability Specific</p>
+                <ul>
+                  {{#standards.capability}}
+                  <li><a href="{{url}}" target="_blank">{{name}}</a></li>
+                  {{/standards.capability}}
+                </ul>
+              </section>
+              {{#if standards.mandatory}}
+              <section class="mandatory">
+                <p class="type">Solution Specific</p>
+                <ul>
+                  {{#standards.mandatory}}
+                  <li><a href="{{url}}" target="_blank">{{name}}</a></li>
+                  {{/standards.mandatory}}
+                </ul>
+              </section>
+              {{/if}}
+              {{#if standards.interop}}
+              <section class="interop">
+                <p class="type">Solution Specific <b>Interoperability</b></p>
+                <ul>
+                  {{#standards.interop}}
+                  <li><a href="{{url}}" target="_blank">{{name}}</a></li>
+                  {{/standards.interop}}
+                </ul>
+              </section>
+              {{/if}}
+            </section>
+            </div>
+            <section class="selection">
+              <p>By selecting this Capability, I acknowledge the set of standards my solution must meet to attain compliance with this Capability.</p>
+              <div>
+                <input id="select-capability-{{id}}" type="checkbox" name="capabilities" value="{{id}}"{{#selected}} checked{{/selected}}>
+                <label for="select-capability-{{id}}" class="unchecked button">Select</label>
+                <label for="select-capability-{{id}}" class="checked">
+                  <span class="selected">✔︎ Selected</span>
+                  <span class="remove">Remove selection</span>
+                </label>
+              </div>
+            </section>
+          </section>
+        </li>
+        {{/capabilities}}
+      </ul>
+    </fieldset>
+    {{/each}}
     <section class="summary">
       <header>
         <h3>Summary</h3>
@@ -127,134 +145,10 @@
   </form>
 </div>
 
-<div id="capability-popup-content">
-  {{#capabilities}}
-  <section class="capability" data-cap-id="{{id}}">
-    <h3 class="name">{{name}}</h3>
-    <p class="description">{{description}}</p>
-    {{#url}}
-    <ul><li><a href="{{.}}" target="_blank">See full Capability description</a></li></ul>
-    {{/url}}
-    <section class="standards">
-      <h4>Required Standards</h4>
-      <p>To comply with this Capability, you will also have to meet these associated Standards.</p>
-      {{#if standards.mandatory}}
-      <section class="mandatory">
-        <ul>
-          {{#standards.mandatory}}
-          <li><a href="{{url}}" target="_blank">{{name}}</a></li>
-          {{/standards.mandatory}}
-        </ul>
-      </section>
-      {{/if}}
-      {{#if standards.interop}}
-      <section class="interop">
-        <h5>Interoperability</h5>
-        <ul>
-          {{#standards.interop}}
-          <li><a href="{{url}}" target="_blank">{{name}}</a></li>
-          {{/standards.interop}}
-        </ul>
-      </section>
-      {{/if}}
-    </section>
-  </section>
-  {{/capabilities}}
-</div>
-
 <script>
-/* global dialogPolyfill, $, $$ */
 document.addEventListener('DOMContentLoaded', () => {
-  const dialog = $('#capability-popup')
-  dialogPolyfill.registerDialog(dialog)
-
-  $('.close', dialog).addEventListener('click', ev => {
-    ev.preventDefault()
-    dialog.close()
-  })
-
-  $('nav .previous', dialog).addEventListener('click', previousCapability)
-  $('nav .next', dialog).addEventListener('click', nextCapability)
-
-  const elDialogCapabilityCheckbox = $('input[name=capability]', dialog)
-
-  let currentCapabilityId
-
-  $('ul.capabilities').addEventListener('click', ev => {
-    const elClickedCapability = ev.target.closest('li.capability')
-    if (!elClickedCapability) return
-
-    currentCapabilityId = elClickedCapability.dataset.capId
-
-    // lift the content for the clicked capability into the dialog
-    const elDialogContent = $(`#capability-popup-content .capability[data-cap-id=${currentCapabilityId}]`)
-    if (!elDialogContent) return
-
-    const elReplacableSection = $('section', dialog)
-    const elReplacableParent = elReplacableSection.parentElement
-    elReplacableParent.removeChild(elReplacableSection)
-    elReplacableParent.insertAdjacentElement('afterbegin', elDialogContent.cloneNode(true))
-
-    const syncedCheckboxes = [
-      { main: $('input[type=checkbox][name=capabilities]', elClickedCapability),
-        dialog: elDialogCapabilityCheckbox
-      }
-    ]
-
-    syncedCheckboxes.forEach(cb => {
-      cb.dialog.checked = cb.main.checked
-    })
-
-    elDialogCapabilityCheckbox.addEventListener('change', dialogCheckboxChangeHandler)
-    dialog.addEventListener('close', dialogClosed)
-    dialog.showModal()
-
-    function dialogClosed (ev) {
-      dialog.removeEventListener('close', dialogClosed)
-      elDialogCapabilityCheckbox.removeEventListener('change', dialogCheckboxChangeHandler)
-
-      if (dialog.returnValue) {
-        const nextCap = $(`ul.capabilities li.capability[data-cap-id=${dialog.returnValue}]`)
-        if (nextCap) nextCap.click()
-      }
-
-      dialog.returnValue = undefined
-    }
-
-    function dialogCheckboxChangeHandler (ev) {
-      syncedCheckboxes.forEach(cb => {
-        cb.main.checked = cb.dialog.checked
-      })
-
-      updateForCapabilitySelectionStateChange()
-    }
-  })
-
-  function navigateCapability (ev, step) {
-    ev.preventDefault()
-
-    const capabilityIds = $$('ul.capabilities li.capability').map(el => el.dataset.capId)
-
-    let currentIndex = capabilityIds.indexOf(currentCapabilityId)
-    if (currentIndex === -1) return
-
-    currentIndex += step
-    if (currentIndex < 0) {
-      currentIndex = capabilityIds.length - 1
-    } else if (currentIndex >= capabilityIds.length) {
-      currentIndex = 0
-    }
-
-    dialog.close(capabilityIds[currentIndex])
-  }
-
-  function previousCapability (ev) {
-    navigateCapability(ev, -1)
-  }
-
-  function nextCapability (ev) {
-    navigateCapability(ev, 1)
-  }
+  const elPage = document.$('#solution-capabilities')
+  const elSummary = elPage.$('.summary')
 
   function updateForCapabilitySelectionStateChange () {
     function select (el) {
@@ -266,31 +160,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // reset all selected states
-    const mainCapabilities = $$(
-      '#add-edit-solution ul.capabilities input[name=capabilities]'
-    )
+    const mainCapabilities = elPage.$$('input[name=capabilities]')
     mainCapabilities.forEach(el => deselect(el.closest('.capability')))
 
     const summaryCapabilities = {}
-    $$(
-      '#add-edit-solution .summary .capabilities [data-cap-id]'
-    ).forEach(el => {
+    elSummary.$$('.capabilities [data-cap-id]').forEach(el => {
       deselect(el)
-      $$('.optional', el).forEach(deselect)
+      el.$$('.optional').forEach(deselect)
       summaryCapabilities[el.dataset.capId] = el
     })
 
     const summaryStandards = {}
-    $$(
-      '#add-edit-solution .summary .standards [data-std-id]'
-    ).forEach(el => {
+    elSummary.$$('.standards [data-std-id]').forEach(el => {
       deselect(el)
       summaryStandards[el.dataset.stdId] = el
     })
 
-    const standardGroups = $$(`
-      #add-edit-solution .summary .standards li.group,
-      #add-edit-solution .summary .capabilities details`)
+    const standardGroups = elSummary.$$('.standards li.group, .capabilities details')
     standardGroups.forEach(deselect)
 
     let capabilityCount = 0
@@ -306,16 +192,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const elSummaryCapability = summaryCapabilities[capabilityId]
         select(elSummaryCapability)
 
-        $$(
-          'input[type=checkbox][name^=optionalStandards]',
-          elCapability
-        ).forEach(elOptionalStandardCheckbox => {
-          if (elOptionalStandardCheckbox.checked) {
-            const standardId = elOptionalStandardCheckbox.value
-            select($(`.optional[data-std-id=${standardId}]`, elSummaryCapability))
-          }
-        })
-
         const standardIds = elCapability.dataset.stdIds.split(',')
         standardIds.forEach(stdId => {
           const elStd = summaryStandards[stdId]
@@ -329,40 +205,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // make any groups visible that have selected standards within them
     standardGroups.forEach(el => {
-      if (el.querySelector('.selected')) {
+      if (el.$('.selected')) {
         select(el)
       }
     })
 
     // update the counters
-    $('#add-edit-solution .summary .capabilities .count').innerText =
+    elSummary.$('.capabilities .count').innerText =
       capabilityCount + (capabilityCount !== 1 ? ' capabilities' : ' capability')
-    $('#add-edit-solution .summary .standards .count').innerText =
+    elSummary.$('.standards .count').innerText =
       standardCount + (standardCount !== 1 ? ' standards' : ' standard')
 
     // only allow form submission if at least one capability is selected
-    $('#add-edit-solution .controls [name=action][value=submit]').disabled = !capabilityCount
+    elPage.$('.controls [name=action][value=submit]').disabled = !capabilityCount
   }
 
   // initial synchronisation of capability selected states
   updateForCapabilitySelectionStateChange()
 
-  // filtering
-  $('#add-edit-solution section.filter').addEventListener('change', ev => {
-    const ulCapabilities = $('#add-edit-solution ul.capabilities')
-    const allFilterClasses = $$(
-      'input[name=filter]',
-      ev.currentTarget
-    ).map(el => el.value)
-    const currentFilterClasses = $$(
-      'input[name=filter]:checked',
-      ev.currentTarget
-    ).map(el => el.value)
+  elPage.$$('.capability-group').forEach(el => {
+    el.addEventListener('change', updateForCapabilitySelectionStateChange)
+  })
 
-    ulCapabilities.classList.remove('filtered', ...allFilterClasses)
-    if (currentFilterClasses.length) {
-      ulCapabilities.classList.add('filtered', ...currentFilterClasses)
-    }
+  elPage.$$('.toggle-reveal').forEach(el => {
+    el.addEventListener('click', ev => {
+      ev.preventDefault()
+
+      // only one reveal should be active at any time and clicking the reveal on
+      // the currently revealed capability should collapse it
+      const elCapability = ev.target.closest('.capability')
+      const isRevealed = elCapability.classList.contains('revealed')
+
+      elPage.$$('.capability').forEach(el => {
+        el.classList.remove('revealed')
+        el.style.marginBottom = ''
+      })
+
+      if (!isRevealed) {
+        elCapability.classList.add('revealed')
+
+        // when the reveal is active, the bottom margin of the .capability element is
+        // increased to move the row underneath down to make space for the reveal. The
+        // margin is of a fixed height - set it here to the computed height of the reveal
+        const elReveal = elCapability.$('.reveal')
+        elCapability.style.marginBottom = '' + elReveal.offsetHeight + 'px'
+
+        elCapability.scrollIntoView()
+      }
+    })
   })
 })
 </script>
