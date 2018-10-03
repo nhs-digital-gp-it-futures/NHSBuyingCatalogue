@@ -70,7 +70,7 @@ authentication(app).then(() => {
     res.render('about')
   })
 
-//  app.use('/suppliers', authorisation.suppliersOnly, require('./routes/supplier'))
+  app.use('/suppliers', authorisation.suppliersOnly, require('./routes/supplier'))
 //  app.use('/assessment', authorisation.assessmentTeamOnly, require('./routes/assessment'))
 
   app.listen(PORT)
