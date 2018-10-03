@@ -91,7 +91,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [Route("ByOrganisation/{organisationId}")]
     [ValidateModelState]
     [SwaggerResponse(statusCode: 200, type: typeof(PaginatedList<Solutions>), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Contacts>), description: "Success")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Solutions>), description: "Success")]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Organisation not found in CRM")]
     public IActionResult ByOrganisation([FromRoute][Required]string organisationId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
