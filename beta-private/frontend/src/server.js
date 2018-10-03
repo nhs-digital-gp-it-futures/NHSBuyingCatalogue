@@ -20,9 +20,9 @@ app.use(session({
 app.use(require('body-parser').urlencoded({ extended: true }))
 
 if (process.env.NODE_ENV === 'development') {
-  app.get('/styles.css', require('express-sass-middleware')({
-    file: path.join(__dirname, 'styles/styles.scss'),
-    watch: true
+  app.get('/styles.css', require('node-sass-middleware')({
+    src: path.join(__dirname, 'styles'),
+    response: true
   }))
 }
 
