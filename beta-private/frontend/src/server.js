@@ -43,11 +43,6 @@ app.set('views', viewPath)
 const { authentication, authorisation } = require('catalogue-authn-authz')
 
 authentication(app).then(() => {
-  app.get('/logout', (req, res) => {
-    req.logout()
-    res.redirect('/')
-  })
-
   // middleware to set global template context variables
   app.use('*', (req, res, next) => {
     res.locals.user = req.user

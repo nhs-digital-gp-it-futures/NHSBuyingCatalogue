@@ -23,7 +23,9 @@ function authentication (app) {
           authorization_endpoint: 'http://localhost:9000/auth',
           token_endpoint: 'http://oidc-provider:9000/token',
           userinfo_endpoint: 'http://oidc-provider:9000/me',
-          jwks_uri: 'http://oidc-provider:9000/certs'
+          jwks_uri: 'http://oidc-provider:9000/certs',
+          check_session_iframe: 'http://localhost:9000/session/check',
+          end_session_endpoint: 'http://localhost:9000/session/end'
         })
       )
 
@@ -54,6 +56,17 @@ function authentication (app) {
         }
         done(null, user)
       })
+
+      app.get('/logout', (req, res) => {
+        req.logout()
+
+        if (!process.env.OIDC_ISSUER_URL) {
+          const endSessionUrl = client.endSessionUrl()
+          res.redirect(endSessionUrl)
+        } else {
+          res.redirect('/')
+        }
+      })
     })
     .catch(err => {
       console.error('OIDC initialisation failed:', err)
@@ -77,6 +90,7 @@ async function authCallback (tokenset, userinfo, done) {
   try {
     const contact = await contactsApi.apiContactsByEmailByEmailGet(userinfo.email)
     const org = await orgsApi.apiOrganisationsByContactByContactIdGet(contact.id)
+    org.isSupplier = org.primaryRoleId === 'RO92'
     const user = {
       ...userinfo,
       org,
