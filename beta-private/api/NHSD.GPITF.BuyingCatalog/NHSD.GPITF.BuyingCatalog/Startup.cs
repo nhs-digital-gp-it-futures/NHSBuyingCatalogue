@@ -106,6 +106,11 @@ namespace NHSD.GPITF.BuyingCatalog
               tags.Any(tag => tag.Tag == docName);
           });
 
+          options.AddSecurityDefinition("oauth2", new OAuth2Scheme
+          {
+            Type = "oauth2",
+            Flow = "accessCode"
+          });
           options.AddSecurityDefinition("basic", new BasicAuthScheme());
 
           options.OperationFilter<AssignSecurityRequirements>();
