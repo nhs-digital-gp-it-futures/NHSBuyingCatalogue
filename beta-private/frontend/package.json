@@ -12,7 +12,7 @@
   "author": "Paul Mitchell <paul.mitchell@bjss.com>",
   "dependencies": {
     "body-parser": "^1.18.3",
-    "catalogue-api": "./lib/catalogue-api",
+    "catalogue-data": "./lib/catalogue-data",
     "catalogue-authn-authz": "./lib/catalogue-authn-authz",
     "csurf": "^1.9.0",
     "dotenv": "^5.0.1",

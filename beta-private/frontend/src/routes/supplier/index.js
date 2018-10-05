@@ -1,9 +1,5 @@
 const router = require('express').Router({ mergeParams: true })
-const { SolutionsApi, Solutions } = require('catalogue-api')
-
-const isSolutionLive = (soln) => soln.status === Solutions.StatusEnum.Approved
-const isSolutionOnboarding = (soln) => soln.status !== Solutions.StatusEnum.Approved &&
-  soln.status !== Solutions.StatusEnum.Failed
+const { dataProvider } = require('catalogue-data')
 
 router.get('/', async (req, res) => {
   const context = {
@@ -11,17 +7,15 @@ router.get('/', async (req, res) => {
     solutions: {
       onboarding: [],
       live: []
-    }
+    },
+    addUrl: `${req.baseUrl}/solutions/new`
   }
 
   try {
-    const api = new SolutionsApi()
-    const paginatedSolutions = await api.apiSolutionsByOrganisationByOrganisationIdGet(
-      req.user.org.id,
-      { pageSize: 9999 }
-    )
-    context.solutions.onboarding = paginatedSolutions.items.filter(isSolutionOnboarding)
-    context.solutions.live = paginatedSolutions.items.filter(isSolutionLive)
+    context.solutions = await dataProvider.solutionsForSupplierDashboard(req.user.org.id, soln => ({
+      ...soln,
+      url: `${req.baseUrl}/solutions/${soln.id}`
+    }))
   } catch (err) {
     context.errors.push(err)
   }

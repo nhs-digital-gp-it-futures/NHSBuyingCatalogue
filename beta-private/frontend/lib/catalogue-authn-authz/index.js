@@ -1,12 +1,7 @@
 // set up OpenID Connect authentication
 const passport = require('passport')
 const { Issuer, Strategy } = require('openid-client')
-const CatalogueApi = require('catalogue-api')
-
-CatalogueApi.ApiClient.instance.basePath = 'http://api:5100'
-
-const contactsApi = new CatalogueApi.ContactsApi()
-const orgsApi = new CatalogueApi.OrganisationsApi()
+const { dataProvider } = require('catalogue-data')
 
 function authentication (app) {
   app.use(passport.initialize())
@@ -52,7 +47,7 @@ function authentication (app) {
 
       passport.deserializeUser((user, done) => {
         if (user.auth_header) {
-          CatalogueApi.ApiClient.instance.authentications.oauth2.accessToken = user.auth_header
+          dataProvider.setAuthenticationToken(user.auth_header)
         }
         done(null, user)
       })
@@ -76,7 +71,7 @@ function authentication (app) {
 
 async function authCallback (tokenset, userinfo, done) {
   const authHeader = tokenset.access_token
-  CatalogueApi.ApiClient.instance.authentications.oauth2.accessToken = authHeader
+  dataProvider.setAuthenticationToken(authHeader)
 
   if (!userinfo) {
     done(null, false)
@@ -88,9 +83,7 @@ async function authCallback (tokenset, userinfo, done) {
   // lack of contact or organisation will prevent authorisation for
   // supplier-specific routes
   try {
-    const contact = await contactsApi.apiContactsByEmailByEmailGet(userinfo.email)
-    const org = await orgsApi.apiOrganisationsByContactByContactIdGet(contact.id)
-    org.isSupplier = org.primaryRoleId === 'RO92'
+    const { contact, org } = await dataProvider.contactByEmail(userinfo.email)
     const user = {
       ...userinfo,
       org,

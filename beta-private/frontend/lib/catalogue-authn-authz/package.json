@@ -5,6 +5,7 @@
   "main": "index.js",
   "private": true,
   "dependencies": {
+    "catalogue-data": "../catalogue-data",
     "openid-client": "^2.0.3",
     "passport": "^0.4.0"
   }
