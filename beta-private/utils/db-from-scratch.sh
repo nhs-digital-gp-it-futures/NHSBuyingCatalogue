@@ -2,7 +2,7 @@
 # Run this from the "beta-private" directory of the repo
 
 # 1. Create a volume to hold the source SQL files and data.
- docker volume create api_source_data
+docker volume create api_source_data
 
 # 2. Create a volume to hold the SQL Server data for the private beta 
 docker volume create beta-private_db_data

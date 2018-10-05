@@ -121,7 +121,7 @@ Name | Type | Description  | Notes
 
 <a name="apiSolutionsByOrganisationByOrganisationIdGet"></a>
 # **apiSolutionsByOrganisationByOrganisationIdGet**
-> PaginatedListContacts apiSolutionsByOrganisationByOrganisationIdGet(organisationId, opts)
+> PaginatedListSolutions apiSolutionsByOrganisationByOrganisationIdGet(organisationId, opts)
 
 Retrieve all current solutions in a paged list for an organisation,  given the organisation’s CRM identifier
 
@@ -165,7 +165,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PaginatedListContacts**](PaginatedListContacts.md)
+[**PaginatedListSolutions**](PaginatedListSolutions.md)
 
 ### Authorization
 

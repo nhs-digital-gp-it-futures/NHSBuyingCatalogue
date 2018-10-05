@@ -1,2 +1,29 @@
 <h1>Supplier Home</h1>
 <p>You are logged in from supplier organisation <b>{{user.org.name}}</b></p>
+
+<h2>Solutions Currently Onboarding</h2>
+{{#if solutions.onboarding}}
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Version</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#solutions.onboarding}}
+    <tr>
+      <td>{{name}}</td>
+      <td>{{version}}</td>
+      <td>{{status}}</td>
+    </tr>
+    {{/solutions.onboarding}}
+  </tbody>
+</table>
+{{/if}}
+<a href="#">Add a new solution</a>
+
+{{#if solutions.live}}
+<h2>Solutions Currently Live</h2>
+{{/if}}
