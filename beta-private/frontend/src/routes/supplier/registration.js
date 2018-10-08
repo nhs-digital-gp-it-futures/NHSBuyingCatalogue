@@ -1,4 +1,7 @@
+const _ = require('lodash')
 const router = require('express').Router({ strict: true, mergeParams: true })
+const { checkSchema, validationResult } = require('express-validator/check')
+const { matchedData } = require('express-validator/filter')
 const { dataProvider } = require('catalogue-data')
 
 // all routes in this module require CSRF protection
@@ -13,12 +16,12 @@ router
 router
   .route('/new/register/')
   .get(registrationPageGet)
-  .post(registrationPagePost)
+  .post(registrationPageValidation(), registrationPagePost)
 
 // all the remaining routes need to load a specified solution
 router.param('solution_id', async (req, res, next, solutionId) => {
   try {
-    req.solution = await dataProvider.getSolutionForRegistration(solutionId)
+    req.solution = await dataProvider.solutionForRegistration(solutionId)
     next()
   } catch (err) {
     next(err)
@@ -32,7 +35,7 @@ router
 router
   .route('/:solution_id/register/')
   .get(registrationPageGet)
-  .post(registrationPagePost)
+  .post(registrationPageValidation(), registrationPagePost)
 
 function commonOnboardingContext (req) {
   return {
@@ -44,8 +47,8 @@ function commonOnboardingContext (req) {
 function onboardingStatusPage (req, res) {
   const context = {
     ...commonOnboardingContext(req),
-    continueOnboardingUrl: 'register',
-    registerNewSolutionUrl: 'register'
+    continueOnboardingUrl: 'register#content',
+    registerNewSolutionUrl: 'register#content'
   }
 
   res.render('supplier/registration/index', context)
@@ -66,11 +69,55 @@ function registrationPageGet (req, res) {
 }
 
 async function registrationPagePost (req, res) {
-  const context = {
-    ...registrationPageContext(req)
-  }
+  const context = _.merge({
+    ...registrationPageContext(req),
+    errors: validationResult(req).array({ onlyFirstError: true })
+  }, matchedData(req, {
+    locations: 'body',
+    includeOptionals: true,
+    onlyValidData: false
+  }))
 
   res.render('supplier/registration/1-details', context)
+}
+
+function registrationPageValidation () {
+  return checkSchema({
+    'solution.name': {
+      in: 'body',
+      trim: {},
+      isEmpty: {
+        negated: true,
+        errorMessage: 'Solution name is missing'
+      },
+      isLength: {
+        options: { max: 60 },
+        errorMessage: 'Solution name exceeds maximum length of 60 characters'
+      }
+    },
+
+    'solution.description': {
+      in: 'body',
+      trim: {},
+      isEmpty: {
+        negated: true,
+        errorMessage: 'Solution description is missing'
+      },
+      isLength: {
+        options: { max: 300 },
+        errorMessage: 'Solution description exceeds maximum length of 300 characters'
+      }
+    },
+
+    'solution.version': {
+      in: 'body',
+      trim: {},
+      isLength: {
+        options: { max: 10 },
+        errorMessage: 'Solution version exceeds maximum length of 10 characters'
+      }
+    }
+  })
 }
 
 module.exports = router

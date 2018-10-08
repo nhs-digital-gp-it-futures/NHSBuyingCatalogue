@@ -15,13 +15,13 @@ router.get('/', strictRouting, async (req, res) => {
       onboarding: [],
       live: []
     },
-    addUrl: 'solutions/new/'
+    addUrl: 'solutions/new/#content'
   }
 
   try {
     context.solutions = await dataProvider.solutionsForSupplierDashboard(req.user.org.id, soln => ({
       ...soln,
-      url: `solutions/${soln.id}/`
+      url: `solutions/${soln.id}/#content`
     }))
   } catch (err) {
     context.errors.push(err)

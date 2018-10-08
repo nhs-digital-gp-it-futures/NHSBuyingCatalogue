@@ -13,6 +13,7 @@ class DataProvider {
     this.contactsApi = new this.CatalogueApi.ContactsApi()
     this.orgsApi = new CatalogueApi.OrganisationsApi()
     this.solutionsApi = new CatalogueApi.SolutionsApi()
+    this.solutionsExApi = new CatalogueApi.SolutionsExApi()
   }
 
   async contactByEmail (email) {
@@ -56,6 +57,18 @@ class DataProvider {
     return {
       onboarding: paginatedSolutions.items.filter(isOnboarding).map(forDashboard).map(forOnboarding).map(solutionMapper),
       live: paginatedSolutions.items.filter(isLive).map(forDashboard).map(forLive).map(solutionMapper)
+    }
+  }
+
+  async solutionForRegistration (solutionId) {
+    const solutionEx = await this.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet(solutionId)
+
+    // reformat the returned value for ease-of-use
+    return {
+      ...solutionEx.solution,
+      capabilities: solutionEx.claimedCapability,
+      standards: solutionEx.claimedStandard,
+      contacts: solutionEx.technicalContact
     }
   }
 }
