@@ -46,15 +46,15 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
     /// <param name="pageSize">number of items per page.  Defaults to 20</param>
     /// <response code="200">Success</response>
     [HttpGet]
-    [Route("SolutionExByKeyword/{keyword}")]
+    [Route("ByKeyword/{keyword}")]
     [ValidateModelState]
     [AllowAnonymous]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<SolutionEx>), description: "Success")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<SearchResult>), description: "Success")]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "No Solutions found with keyword")]
-    public IActionResult SolutionExByKeyword([FromRoute][Required]string keyword, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
+    public IActionResult ByKeyword([FromRoute][Required]string keyword, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      var solutions = _logic.SolutionExByKeyword(keyword);
-      var retval = PaginatedList<SolutionEx>.Create(solutions, pageIndex, pageSize);
+      var solutions = _logic.ByKeyword(keyword);
+      var retval = PaginatedList<SearchResult>.Create(solutions, pageIndex, pageSize);
       return solutions.Count() > 0 ? (IActionResult)new OkObjectResult(retval) : new NotFoundResult();
     }
   }

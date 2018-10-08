@@ -21,10 +21,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       _solutionFilter = solutionFilter;
     }
 
-    public IEnumerable<SolutionEx> SolutionExByKeyword(string keyword)
+    public IEnumerable<SearchResult> ByKeyword(string keyword)
     {
-      var solnExs = _datastore.SolutionExByKeyword(keyword);
-      return solnExs.Where(soln => _solutionFilter.Filter(new[] { soln.Solution }).Any());
+      var searchResults = _datastore.ByKeyword(keyword);
+      return searchResults.Where(sr => _solutionFilter.Filter(new[] { sr.SolutionEx.Solution }).Any());
     }
   }
 }

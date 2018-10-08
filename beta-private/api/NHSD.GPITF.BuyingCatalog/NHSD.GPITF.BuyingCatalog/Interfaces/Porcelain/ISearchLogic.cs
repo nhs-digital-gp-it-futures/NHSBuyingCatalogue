@@ -6,7 +6,7 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain
 #pragma warning disable CS1591
   public interface ISearchLogic
   {
-    IEnumerable<SolutionEx> SolutionExByKeyword(string keyword);
+    IEnumerable<SearchResult> ByKeyword(string keyword);
   }
 #pragma warning restore CS1591
 }
