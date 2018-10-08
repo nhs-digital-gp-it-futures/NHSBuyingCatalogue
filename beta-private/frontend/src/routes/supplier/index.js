@@ -1,20 +1,27 @@
-const router = require('express').Router({ mergeParams: true })
+const router = require('express').Router({ strict: true, mergeParams: true })
 const { dataProvider } = require('catalogue-data')
 
-router.get('/', async (req, res) => {
+// work-around for Express bug 2281, open since 2014
+// https://github.com/expressjs/express/issues/2281
+function strictRouting (req, res, next) {
+  if (req.originalUrl.slice(-1) === '/') return next()
+  next('route')
+}
+
+router.get('/', strictRouting, async (req, res) => {
   const context = {
     errors: [],
     solutions: {
       onboarding: [],
       live: []
     },
-    addUrl: `${req.baseUrl}/solutions/new`
+    addUrl: 'solutions/new/'
   }
 
   try {
     context.solutions = await dataProvider.solutionsForSupplierDashboard(req.user.org.id, soln => ({
       ...soln,
-      url: `${req.baseUrl}/solutions/${soln.id}`
+      url: `solutions/${soln.id}/`
     }))
   } catch (err) {
     context.errors.push(err)
@@ -22,5 +29,7 @@ router.get('/', async (req, res) => {
 
   res.render('supplier/index', context)
 })
+
+router.use('/solutions/', require('./registration'))
 
 module.exports = router

@@ -9,6 +9,8 @@ const expresshbs = require('express-handlebars')
 
 const app = express()
 
+app.enable('strict routing')
+
 const session = require('express-session')
 app.use(session({
   secret: process.env.SESSION_SECRET ||
@@ -70,8 +72,12 @@ authentication(app).then(() => {
     res.render('about')
   })
 
-  app.use('/suppliers', authorisation.suppliersOnly, require('./routes/supplier'))
+  app.use('/suppliers/', authorisation.suppliersOnly, require('./routes/supplier'))
 //  app.use('/assessment', authorisation.assessmentTeamOnly, require('./routes/assessment'))
+
+  // automatically redirect to canonical path (with or without trailing slash)
+  // routes mostly use trailing slashes to enable path-relative URLs
+  app.use(require('express-slash')())
 
   app.listen(PORT)
 })

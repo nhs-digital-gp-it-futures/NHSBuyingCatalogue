@@ -1,0 +1,16 @@
+<h1>Solution Onboarding Status</h1>
+
+{{#solution}}
+<p>
+  Currently onboarding
+  <b>{{name}}{{#version}} version {{.}}{{/version}}</b>.
+  <a href="{{continueOnboardingUrl}}">Continue</a>
+</p>
+{{/solution}}
+
+{{^solution}}
+<p>
+  Register a new solution.
+  <a href="{{registerNewSolutionUrl}}">Get Started</a>
+</p>
+{{/solution}}
