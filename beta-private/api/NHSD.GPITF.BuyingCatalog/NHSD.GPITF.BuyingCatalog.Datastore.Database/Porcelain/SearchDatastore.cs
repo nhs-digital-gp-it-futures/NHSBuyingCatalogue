@@ -18,7 +18,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
 
     public SearchDatastore(
       IDbConnectionFactory dbConnectionFactory,
-      ILogger<DatastoreBase<SolutionEx>> logger,
+      ILogger<SearchDatastore> logger,
       ISyncPolicyFactory policy,
       IFrameworksDatastore frameworkDatastore,
       ISolutionsDatastore solutionDatastore,
