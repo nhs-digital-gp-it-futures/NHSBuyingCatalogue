@@ -70,13 +70,20 @@ function registrationPageGet (req, res) {
 
 async function registrationPagePost (req, res) {
   const context = _.merge({
-    ...registrationPageContext(req),
-    errors: validationResult(req).array({ onlyFirstError: true })
+    ...registrationPageContext(req)
   }, matchedData(req, {
     locations: 'body',
     includeOptionals: true,
     onlyValidData: false
   }))
+
+  const valres = validationResult(req)
+  if (!valres.isEmpty()) {
+    context.errors = {
+      items: valres.array({ onlyFirstError: true }),
+      controls: valres.mapped()
+    }
+  }
 
   res.render('supplier/registration/1-details', context)
 }

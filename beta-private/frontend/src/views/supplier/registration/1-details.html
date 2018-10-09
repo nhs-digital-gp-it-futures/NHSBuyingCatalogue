@@ -1,10 +1,10 @@
 {{#if errors}}
-<section id="errors">
+<section id="errors" role="alert">
   <h2>To complete this page, resolve the following errors</h2>
   <ul>
-    {{#errors}}
+    {{#errors.items}}
     <li id="error-{{param}}"><a href="#{{param}}">{{msg}}</a></li>
-    {{/errors}}
+    {{/errors.items}}
   </ul>
 </section>
 {{/if}}
@@ -14,24 +14,25 @@
   <fieldset>
     <legend>Enter Solution name, description, version</legend>
 
-    <label id="solution.name">
+    <label>
       Solution name
-      <input type="text" name="solution[name]" value="{{solution.name}}"
-        autocomplete="off"
-        {{#if errors.[solution.name]}}aria-invalid="true" aria-errormessage="error-solution.name"{{/if}}>
+      <input id="solution.name" type="text" name="solution[name]" value="{{solution.name}}"
+        autocomplete="off" aria-required="true" maxlength="60"
+        {{#if errors.controls.[solution.name]}}aria-invalid="true" aria-errormessage="error-solution.name"{{/if}}>
     </label>
 
-    <label id="solution.description">
+    <label>
       Description
-      <textarea name="solution[description]"
-        {{#if errors.[solution.description]}}aria-invalid="true" aria-errormessage="error-solution.description"{{/if}}>{{solution.description}}</textarea>
+      <textarea id="solution.description" name="solution[description]"
+        aria-required="true" maxlength="300"
+        {{#if errors.controls.[solution.description]}}aria-invalid="true" aria-errormessage="error-solution.description"{{/if}}>{{solution.description}}</textarea>
     </label>
 
-    <label id="solution.version">
+    <label>
       Version
-      <input type="text" name="solution[version]" value="{{solution.version}}"
-        autocomplete="off"
-        {{#if errors.[solution.version]}}aria-invalid="true" aria-errormessage="error-solution.version"{{/if}}>
+      <input id="solution.version" type="text" name="solution[version]" value="{{solution.version}}"
+        autocomplete="off" maxlength="10"
+        {{#if errors.controls.[solution.version]}}aria-invalid="true" aria-errormessage="error-solution.version"{{/if}}>
     </label>
   </fieldset>
 
