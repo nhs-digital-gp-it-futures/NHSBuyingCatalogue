@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
 {
-  public sealed class SearchDatastore : DatastoreBase<SolutionEx>, ISearchDatastore
+  public sealed class SearchDatastore : DatastoreBase<SearchResult>, ISearchDatastore
   {
     public SearchDatastore(
       IRestClientFactory crmConnectionFactory, 
@@ -18,7 +18,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
     {
     }
 
-    public IEnumerable<SolutionEx> SolutionExByKeyword(string keyword)
+    public IEnumerable<SearchResult> ByKeyword(string keyword)
     {
       throw new NotImplementedException();
     }

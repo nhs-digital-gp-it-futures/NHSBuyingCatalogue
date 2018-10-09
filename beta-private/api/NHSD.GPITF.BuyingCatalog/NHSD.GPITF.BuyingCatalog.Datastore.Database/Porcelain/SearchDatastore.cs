@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
 {
-  public sealed class SearchDatastore : DatastoreBase<SolutionEx>, ISearchDatastore
+  public sealed class SearchDatastore : DatastoreBase<SearchResult>, ISearchDatastore
   {
     private readonly IFrameworksDatastore _frameworkDatastore;
     private readonly ISolutionsDatastore _solutionDatastore;
@@ -18,7 +18,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
 
     public SearchDatastore(
       IDbConnectionFactory dbConnectionFactory,
-      ILogger<DatastoreBase<SolutionEx>> logger,
+      ILogger<SearchDatastore> logger,
       ISyncPolicyFactory policy,
       IFrameworksDatastore frameworkDatastore,
       ISolutionsDatastore solutionDatastore,
@@ -34,42 +34,43 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
       _solutionExDatastore = solutionExDatastore;
     }
 
-    public IEnumerable<SolutionEx> SolutionExByKeyword(string keyword)
+    public IEnumerable<SearchResult> ByKeyword(string keyword)
     {
+      // get all Frameworks
+      var allFrameworks = _frameworkDatastore.GetAll();
+
       // get all Solutions via frameworks
-      var allSolns = _frameworkDatastore.GetAll()
+      var allSolns = allFrameworks
         .SelectMany(fw => _solutionDatastore.ByFramework(fw.Id));
 
-      // get all Solutions with keyword in name or description
-      var allSolnsKeywordIds = allSolns
-        .Where(soln =>
-          soln.Name.ToLowerInvariant().Contains(keyword.ToLowerInvariant()) ||
-          soln.Description.ToLowerInvariant().Contains(keyword.ToLowerInvariant()))
-        .Select(soln => soln.Id);
+      // get all Capabilities via frameworks
+      var allCapsFrameworks = allFrameworks
+        .SelectMany(fw => _capabilityDatastore.ByFramework(fw.Id));
 
       // get all Capabilities with keyword
-      var allCapsKeywordIds = _capabilityDatastore.GetAll()
+      var allCapsKeywordIds = allCapsFrameworks
         .Where(cap =>
           cap.Name.ToLowerInvariant().Contains(keyword.ToLowerInvariant()) ||
           cap.Description.ToLowerInvariant().Contains(keyword.ToLowerInvariant()))
         .Select(cap => cap.Id);
 
-      // get all Solutions with at least one ClaimedCapability with keyword
-      var allSolnsClaimedCapsIds = allSolns
+      // get all unique Solutions with at least one ClaimedCapability with keyword
+      var allSolnsCapsKeyword = allSolns
         .Where(soln => _claimedCapabilityDatastore
           .BySolution(soln.Id)
           .Select(cc => cc.CapabilityId)
           .Intersect(allCapsKeywordIds)
           .Any())
-        .Select(soln => soln.Id)
         .Distinct();
 
-      // unique set of Solutions with keyword in name/description or ClaimedCapability
-      var uniqueSolnIds = allSolnsKeywordIds
-        .Union(allSolnsClaimedCapsIds)
-        .Distinct();
+      var searchResults = allSolnsCapsKeyword.Select(soln =>
+        new SearchResult
+        {
+          SolutionEx = _solutionExDatastore.BySolution(soln.Id),
+          Distance = _claimedCapabilityDatastore.BySolution(soln.Id).Count() - allCapsKeywordIds.Count()
+        });
 
-      return uniqueSolnIds.Select(solnId => _solutionExDatastore.BySolution(solnId));
+      return searchResults;
     }
   }
 }

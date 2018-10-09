@@ -38,23 +38,36 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
     }
 
     /// <summary>
-    /// Get existing solution/s which are related to the given keyword
-    /// Keyword is not case sensitive
+    /// Get existing solution/s which are related to the given keyword <br />
+    /// Keyword is not case sensitive <br />
+    /// Capabilities are searched for capabilities which contain
+    /// the keyword in the capability name or descriptions.  This
+    /// forms a set of desired capabilities. <br />
+    /// These desired capabilities are then matched to solution/s which
+    /// implement at least one of the desired capabilities. <br />
+    /// An 'ideal' solution would be one which only implements all
+    /// of the desired capabilities. <br />
+    /// Each solution is given a 'distance' which represents how many
+    /// different capabilites the solution implements, compared to the
+    /// set of desired capabilities: <br />
+    ///   zero     == solution has exactly capabilities desired <br />
+    ///   positive == solution has more capabilities than desired <br />
+    ///   negative == solution has less capabilities than desired <br />
     /// </summary>
     /// <param name="keyword">keyword describing a solution or capability</param>
     /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
     /// <param name="pageSize">number of items per page.  Defaults to 20</param>
     /// <response code="200">Success</response>
     [HttpGet]
-    [Route("SolutionExByKeyword/{keyword}")]
+    [Route("ByKeyword/{keyword}")]
     [ValidateModelState]
     [AllowAnonymous]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<SolutionEx>), description: "Success")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<SearchResult>), description: "Success")]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "No Solutions found with keyword")]
-    public IActionResult SolutionExByKeyword([FromRoute][Required]string keyword, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
+    public IActionResult ByKeyword([FromRoute][Required]string keyword, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      var solutions = _logic.SolutionExByKeyword(keyword);
-      var retval = PaginatedList<SolutionEx>.Create(solutions, pageIndex, pageSize);
+      var solutions = _logic.ByKeyword(keyword);
+      var retval = PaginatedList<SearchResult>.Create(solutions, pageIndex, pageSize);
       return solutions.Count() > 0 ? (IActionResult)new OkObjectResult(retval) : new NotFoundResult();
     }
   }
