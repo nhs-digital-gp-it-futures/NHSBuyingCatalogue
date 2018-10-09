@@ -6,6 +6,7 @@ using NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NUnit.Framework;
+using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Search.Tests
 {
@@ -337,6 +338,56 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
       var res = results.Should().ContainSingle();
       res.Which.SolutionEx.Should().BeEquivalentTo(solnEx1);
       res.Which.Distance.Should().Be(0);
+    }
+
+    [Test]
+    public void ByKeyword_MultiCapabilityMultiSolutions_ReturnsSolutions()
+    {
+      var framework = Creator.GetFramework();
+      _frameworkDatastore.Setup(x => x.GetAll()).Returns(new[] { framework });
+
+      var soln1 = Creator.GetSolution();
+      var soln2 = Creator.GetSolution();
+      _solutionDatastore.Setup(x => x.ByFramework(framework.Id)).Returns(new[] { soln1, soln2 });
+
+      var cap1 = Creator.GetCapability(description: "capabilityDescription");
+      var cap2 = Creator.GetCapability(description: "capabilityDescription");
+      _capabilityDatastore.Setup(x => x.ById(cap1.Id)).Returns(cap1);
+      _capabilityDatastore.Setup(x => x.ById(cap2.Id)).Returns(cap2);
+      _capabilityDatastore.Setup(x => x.ByFramework(framework.Id)).Returns(new[] { cap1, cap2 });
+
+      var claimedCap1_s1 = Creator.GetClaimedCapability(solutionId: soln1.Id, capabilityId: cap1.Id);
+      var claimedCap2_s1 = Creator.GetClaimedCapability(solutionId: soln1.Id, capabilityId: cap2.Id);
+      var claimedCap1_s2 = Creator.GetClaimedCapability(solutionId: soln2.Id, capabilityId: cap1.Id);
+      _claimedCapabilityDatastore.Setup(x => x.BySolution(soln1.Id)).Returns(new[] { claimedCap1_s1, claimedCap2_s1 });
+      _claimedCapabilityDatastore.Setup(x => x.BySolution(soln2.Id)).Returns(new[] { claimedCap1_s2 });
+
+      var solnEx1 = Creator.GetSolutionEx(solution: soln1);
+      var solnEx2 = Creator.GetSolutionEx(solution: soln2);
+      _solutionExDatastore.Setup(x => x.BySolution(soln1.Id)).Returns(solnEx1);
+      _solutionExDatastore.Setup(x => x.BySolution(soln2.Id)).Returns(solnEx2);
+
+      var search = new SearchDatastore(
+        _dbConnectionFactory.Object,
+        _logger.Object,
+        _policy.Object,
+        _frameworkDatastore.Object,
+        _solutionDatastore.Object,
+        _capabilityDatastore.Object,
+        _claimedCapabilityDatastore.Object,
+        _solutionExDatastore.Object);
+
+      var results = search.ByKeyword("descr");
+
+      results.Should().HaveCount(2);
+      results.Should()
+        .ContainSingle(x => x.SolutionEx == solnEx1)
+        .Which
+        .Distance.Should().Be(0);
+      results.Should()
+        .ContainSingle(x => x.SolutionEx == solnEx2)
+        .Which
+        .Distance.Should().Be(-1);
     }
   }
 }
