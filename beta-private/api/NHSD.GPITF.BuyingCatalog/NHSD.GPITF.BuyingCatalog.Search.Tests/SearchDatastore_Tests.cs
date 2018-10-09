@@ -64,7 +64,7 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
 
       var capability = Creator.GetCapability(name: capabilityName);
       _capabilityDatastore.Setup(x => x.ById(capability.Id)).Returns(capability);
-      _capabilityDatastore.Setup(x => x.GetAll()).Returns(new[] { capability });
+      _capabilityDatastore.Setup(x => x.ByFramework(framework.Id)).Returns(new[] { capability });
 
       var claimedCapability = Creator.GetClaimedCapability(solutionId: soln.Id, capabilityId: capability.Id);
       _claimedCapabilityDatastore.Setup(x => x.BySolution(soln.Id)).Returns(new[] { claimedCapability });
@@ -105,7 +105,7 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
 
       var capability = Creator.GetCapability(description: capabilityDescription);
       _capabilityDatastore.Setup(x => x.ById(capability.Id)).Returns(capability);
-      _capabilityDatastore.Setup(x => x.GetAll()).Returns(new[] { capability });
+      _capabilityDatastore.Setup(x => x.ByFramework(framework.Id)).Returns(new[] { capability });
 
       var claimedCapability = Creator.GetClaimedCapability(solutionId: soln.Id, capabilityId: capability.Id);
       _claimedCapabilityDatastore.Setup(x => x.BySolution(soln.Id)).Returns(new[] { claimedCapability });
@@ -146,7 +146,7 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
       _solutionDatastore.Setup(x => x.ByFramework(framework.Id)).Returns(new[] { soln });
 
       var capability = Creator.GetCapability(name: capabilityName);
-      _capabilityDatastore.Setup(x => x.GetAll()).Returns(new[] { capability });
+      _capabilityDatastore.Setup(x => x.ByFramework(framework.Id)).Returns(new[] { capability });
 
       var claimedCapability = Creator.GetClaimedCapability(solutionId: soln.Id, capabilityId: capability.Id);
       _claimedCapabilityDatastore.Setup(x => x.BySolution(soln.Id)).Returns(new[] { claimedCapability });
@@ -185,7 +185,7 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
 
       var capability = Creator.GetCapability(description: capabilityDescription);
       _capabilityDatastore.Setup(x => x.ById(capability.Id)).Returns(capability);
-      _capabilityDatastore.Setup(x => x.GetAll()).Returns(new[] { capability });
+      _capabilityDatastore.Setup(x => x.ByFramework(framework.Id)).Returns(new[] { capability });
 
       var claimedCapability = Creator.GetClaimedCapability(solutionId: soln.Id, capabilityId: capability.Id);
       _claimedCapabilityDatastore.Setup(x => x.BySolution(soln.Id)).Returns(new[] { claimedCapability });
@@ -226,7 +226,7 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
       var cap2 = Creator.GetCapability();
       _capabilityDatastore.Setup(x => x.ById(cap1.Id)).Returns(cap1);
       _capabilityDatastore.Setup(x => x.ById(cap2.Id)).Returns(cap2);
-      _capabilityDatastore.Setup(x => x.GetAll()).Returns(new[] { cap1, cap2 });
+      _capabilityDatastore.Setup(x => x.ByFramework(framework.Id)).Returns(new[] { cap1, cap2 });
 
       var claimedCap11 = Creator.GetClaimedCapability(solutionId: soln1.Id, capabilityId: cap1.Id);
       var claimedCap12 = Creator.GetClaimedCapability(solutionId: soln1.Id, capabilityId: cap2.Id);
@@ -270,7 +270,7 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
       var cap2 = Creator.GetCapability(description: capabilityDescription);
       _capabilityDatastore.Setup(x => x.ById(cap1.Id)).Returns(cap1);
       _capabilityDatastore.Setup(x => x.ById(cap2.Id)).Returns(cap2);
-      _capabilityDatastore.Setup(x => x.GetAll()).Returns(new[] { cap1, cap2 });
+      _capabilityDatastore.Setup(x => x.ByFramework(framework.Id)).Returns(new[] { cap1, cap2 });
 
       var claimedCap11 = Creator.GetClaimedCapability(solutionId: soln1.Id, capabilityId: cap1.Id);
       _claimedCapabilityDatastore.Setup(x => x.BySolution(soln1.Id)).Returns(new[] { claimedCap11 });
@@ -313,7 +313,7 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
       var cap2 = Creator.GetCapability(description: capabilityDescription);
       _capabilityDatastore.Setup(x => x.ById(cap1.Id)).Returns(cap1);
       _capabilityDatastore.Setup(x => x.ById(cap2.Id)).Returns(cap2);
-      _capabilityDatastore.Setup(x => x.GetAll()).Returns(new[] { cap1, cap2 });
+      _capabilityDatastore.Setup(x => x.ByFramework(framework.Id)).Returns(new[] { cap1, cap2 });
 
       var claimedCap11 = Creator.GetClaimedCapability(solutionId: soln1.Id, capabilityId: cap1.Id);
       var claimedCap12 = Creator.GetClaimedCapability(solutionId: soln1.Id, capabilityId: cap2.Id);

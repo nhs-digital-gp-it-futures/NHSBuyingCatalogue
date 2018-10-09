@@ -36,12 +36,19 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
 
     public IEnumerable<SearchResult> ByKeyword(string keyword)
     {
+      // get all Frameworks
+      var allFrameworks = _frameworkDatastore.GetAll();
+
       // get all Solutions via frameworks
-      var allSolns = _frameworkDatastore.GetAll()
+      var allSolns = allFrameworks
         .SelectMany(fw => _solutionDatastore.ByFramework(fw.Id));
 
+      // get all Capabilities via frameworks
+      var allCapsFrameworks = allFrameworks
+        .SelectMany(fw => _capabilityDatastore.ByFramework(fw.Id));
+
       // get all Capabilities with keyword
-      var allCapsKeywordIds = _capabilityDatastore.GetAll()
+      var allCapsKeywordIds = allCapsFrameworks
         .Where(cap =>
           cap.Name.ToLowerInvariant().Contains(keyword.ToLowerInvariant()) ||
           cap.Description.ToLowerInvariant().Contains(keyword.ToLowerInvariant()))
