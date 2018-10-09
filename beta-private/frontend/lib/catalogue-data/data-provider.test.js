@@ -15,11 +15,15 @@ beforeAll(() => {
     this.apiOrganisationsByContactByContactIdGet = jest.fn()
   }
 
+  function MockSolutionsExApi () {
+    this.apiPorcelainSolutionsExBySolutionBySolutionIdGet = jest.fn()
+  }
+
   subject = new DataProvider({
     ContactsApi: MockContactsApi,
     OrganisationsApi: MockOrganisationsApi,
     SolutionsApi: MockApi,
-    SolutionsExApi: MockApi
+    SolutionsExApi: MockSolutionsExApi
   })
 })
 
@@ -77,6 +81,43 @@ describe('contactByEmail', () => {
         id: 'testNonSupplier',
         isSupplier: false
       }
+    })
+  })
+})
+
+describe('solutionForRegistration', () => {
+  // I've elided the unhappy path test here as whatever is thrown is decided
+  // by the API layer - generally an Error('Not Found')
+
+  it('transforms the returned SolutionEx correctly', async () => {
+    subject.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet.mockReturnValue({
+      solution: {
+        id: 'testid',
+        name: 'testname'
+      },
+      claimedCapability: [
+        { claimedCapabilityId: 'testCCId' }
+      ],
+      claimedStandard: [
+        { claimedStandardId: 'testCSId' }
+      ],
+      technicalContact: [
+        { contactId: 'testCId' }
+      ]
+    })
+
+    await expect(subject.solutionForRegistration('testId')).resolves.toMatchObject({
+      id: 'testid',
+      name: 'testname',
+      capabilities: [
+        { claimedCapabilityId: 'testCCId' }
+      ],
+      standards: [
+        { claimedStandardId: 'testCSId' }
+      ],
+      contacts: [
+        { contactId: 'testCId' }
+      ]
     })
   })
 })

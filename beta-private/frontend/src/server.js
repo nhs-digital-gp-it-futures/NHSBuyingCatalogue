@@ -79,5 +79,11 @@ authentication(app).then(() => {
   // routes mostly use trailing slashes to enable path-relative URLs
   app.use(require('express-slash')())
 
+  // generic error handler
+  app.use((err, req, res, next) => {
+    res.status(500)
+    res.render('error', { error: err })
+  })
+
   app.listen(PORT)
 })
