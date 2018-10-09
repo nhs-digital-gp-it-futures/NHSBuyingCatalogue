@@ -40,12 +40,13 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
       var allSolns = _frameworkDatastore.GetAll()
         .SelectMany(fw => _solutionDatastore.ByFramework(fw.Id));
 
-      // get all Capabilities with keyword
+      // get all unique Capabilities with keyword
       var allCapsKeywordIds = _capabilityDatastore.GetAll()
         .Where(cap =>
           cap.Name.ToLowerInvariant().Contains(keyword.ToLowerInvariant()) ||
           cap.Description.ToLowerInvariant().Contains(keyword.ToLowerInvariant()))
-        .Select(cap => cap.Id);
+        .Select(cap => cap.Id)
+        .Distinct();
 
       // get all unique Solutions with at least one ClaimedCapability with keyword
       var allSolnsCapsKeyword = allSolns
