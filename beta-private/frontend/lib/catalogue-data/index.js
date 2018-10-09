@@ -18,7 +18,10 @@ class DataProvider {
 
   async contactByEmail (email) {
     const contact = await this.contactsApi.apiContactsByEmailByEmailGet(email)
+    if (!contact) throw new Error(`No contact found`)
+
     const org = await this.orgsApi.apiOrganisationsByContactByContactIdGet(contact.id)
+    if (!org) throw new Error(`No organisation found for contact`)
 
     // identify supplier organisations
     org.isSupplier = org.primaryRoleId === 'RO92'

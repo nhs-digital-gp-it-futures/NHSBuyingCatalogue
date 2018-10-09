@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "npm rebuild node-sass; NODE_ENV=development nodemon -w src -w lib src/server.js",
     "start": "NODE_ENV=production node src/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "Paul Mitchell <paul.mitchell@bjss.com>",
   "dependencies": {
@@ -26,8 +26,16 @@
     "serve-static": "^1.13.2"
   },
   "devDependencies": {
+    "jest": "^23.6.0",
+    "jest-junit-reporter": "^1.1.0",
     "node-sass-middleware": "^0.11.0",
     "nodemon": "^1.17.5",
     "session-file-store": "^1.2.0"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "<rootDir>/lib/catalogue-api"
+    ]
   }
 }
