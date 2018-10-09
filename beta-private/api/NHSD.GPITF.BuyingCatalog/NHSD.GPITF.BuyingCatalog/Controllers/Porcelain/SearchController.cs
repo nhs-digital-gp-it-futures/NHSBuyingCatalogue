@@ -38,8 +38,21 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
     }
 
     /// <summary>
-    /// Get existing solution/s which are related to the given keyword
-    /// Keyword is not case sensitive
+    /// Get existing solution/s which are related to the given keyword <br />
+    /// Keyword is not case sensitive <br />
+    /// Capabilities are searched for capabilities which contain
+    /// the keyword in the capability name or descriptions.  This
+    /// forms a set of desired capabilities. <br />
+    /// These desired capabilities are then matched to solution/s which
+    /// implement at least one of the desired capabilities. <br />
+    /// An 'ideal' solution would be one which only implements all
+    /// of the desired capabilities. <br />
+    /// Each solution is given a 'distance' which represents how many
+    /// different capabilites the solution implements, compared to the
+    /// set of desired capabilities: <br />
+    ///   zero     == solution has exactly capabilities desired <br />
+    ///   positive == solution has more capabilities than desired <br />
+    ///   negative == solution has less capabilities than desired <br />
     /// </summary>
     /// <param name="keyword">keyword describing a solution or capability</param>
     /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
