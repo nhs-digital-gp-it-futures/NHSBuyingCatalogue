@@ -37,7 +37,7 @@ class DataProvider {
     const forDashboard = (soln) => ({
       raw: soln,
       id: soln.id,
-      displayName: `${soln.name} ${soln.version && `| ${soln.version}`}`,
+      displayName: `${soln.name}${soln.version ? ` | ${soln.version}` : ''}`,
       notifications: []
     })
 
