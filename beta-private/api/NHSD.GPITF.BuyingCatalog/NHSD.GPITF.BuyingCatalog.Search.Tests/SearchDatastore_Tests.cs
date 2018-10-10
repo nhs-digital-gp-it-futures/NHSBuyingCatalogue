@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain;
+using NHSD.GPITF.BuyingCatalog.Search.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NUnit.Framework;

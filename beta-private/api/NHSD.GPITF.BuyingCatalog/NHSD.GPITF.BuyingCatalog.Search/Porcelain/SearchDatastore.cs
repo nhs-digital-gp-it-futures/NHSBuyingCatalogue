@@ -5,7 +5,7 @@ using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
+namespace NHSD.GPITF.BuyingCatalog.Search.Porcelain
 {
   public sealed class SearchDatastore : ISearchDatastore
   {
