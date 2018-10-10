@@ -13,16 +13,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>..\NHSD.GPITF.BuyingCatalog\bin\Debug\netcoreapp2.0\</OutputPath>
+    <OutputPath></OutputPath>
     <NoWarn>1701;1702;1705;8002;</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>..\NHSD.GPITF.BuyingCatalog\bin\Release\netcoreapp2.0\</OutputPath>
+    <OutputPath></OutputPath>
     <NoWarn>1701;1702;1705;8002;</NoWarn>
   </PropertyGroup>
 
