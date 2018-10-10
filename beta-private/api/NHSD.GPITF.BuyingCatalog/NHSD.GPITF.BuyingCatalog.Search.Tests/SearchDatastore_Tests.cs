@@ -1,19 +1,16 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NUnit.Framework;
-using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Search.Tests
 {
   [TestFixture]
   public sealed class SearchDatastore_Tests
   {
-    private Mock<IDbConnectionFactory> _dbConnectionFactory;
     private Mock<ILogger<SearchDatastore>> _logger;
     private Mock<ISyncPolicyFactory> _policy;
     private Mock<IFrameworksDatastore> _frameworkDatastore;
@@ -25,7 +22,6 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
     [SetUp]
     public void SetUp()
     {
-      _dbConnectionFactory = new Mock<IDbConnectionFactory>();
       _logger = new Mock<ILogger<SearchDatastore>>();
       _policy = new Mock<ISyncPolicyFactory>();
       _frameworkDatastore = new Mock<IFrameworksDatastore>();
@@ -39,7 +35,6 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
     public void Constructor_Completes()
     {
       Assert.DoesNotThrow(() => new SearchDatastore(
-        _dbConnectionFactory.Object,
         _logger.Object,
         _policy.Object,
         _frameworkDatastore.Object,
@@ -74,7 +69,6 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
       _solutionExDatastore.Setup(x => x.BySolution(soln.Id)).Returns(solnEx);
 
       var search = new SearchDatastore(
-        _dbConnectionFactory.Object,
         _logger.Object,
         _policy.Object,
         _frameworkDatastore.Object,
@@ -115,7 +109,6 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
       _solutionExDatastore.Setup(x => x.BySolution(soln.Id)).Returns(solnEx);
 
       var search = new SearchDatastore(
-        _dbConnectionFactory.Object,
         _logger.Object,
         _policy.Object,
         _frameworkDatastore.Object,
@@ -156,7 +149,6 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
       _solutionExDatastore.Setup(x => x.BySolution(soln.Id)).Returns(solnEx);
 
       var search = new SearchDatastore(
-        _dbConnectionFactory.Object,
         _logger.Object,
         _policy.Object,
         _frameworkDatastore.Object,
@@ -195,7 +187,6 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
       _solutionExDatastore.Setup(x => x.BySolution(soln.Id)).Returns(solnEx);
 
       var search = new SearchDatastore(
-        _dbConnectionFactory.Object,
         _logger.Object,
         _policy.Object,
         _frameworkDatastore.Object,
@@ -237,7 +228,6 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
       _solutionExDatastore.Setup(x => x.BySolution(soln1.Id)).Returns(solnEx1);
 
       var search = new SearchDatastore(
-        _dbConnectionFactory.Object,
         _logger.Object,
         _policy.Object,
         _frameworkDatastore.Object,
@@ -280,7 +270,6 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
       _solutionExDatastore.Setup(x => x.BySolution(soln1.Id)).Returns(solnEx1);
 
       var search = new SearchDatastore(
-        _dbConnectionFactory.Object,
         _logger.Object,
         _policy.Object,
         _frameworkDatastore.Object,
@@ -324,7 +313,6 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
       _solutionExDatastore.Setup(x => x.BySolution(soln1.Id)).Returns(solnEx1);
 
       var search = new SearchDatastore(
-        _dbConnectionFactory.Object,
         _logger.Object,
         _policy.Object,
         _frameworkDatastore.Object,
@@ -368,7 +356,6 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
       _solutionExDatastore.Setup(x => x.BySolution(soln2.Id)).Returns(solnEx2);
 
       var search = new SearchDatastore(
-        _dbConnectionFactory.Object,
         _logger.Object,
         _policy.Object,
         _frameworkDatastore.Object,

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
@@ -8,7 +7,7 @@ using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
 {
-  public sealed class SearchDatastore : DatastoreBase<SearchResult>, ISearchDatastore
+  public sealed class SearchDatastore : ISearchDatastore
   {
     private readonly IFrameworksDatastore _frameworkDatastore;
     private readonly ISolutionsDatastore _solutionDatastore;
@@ -17,15 +16,13 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
     private readonly ISolutionsExDatastore _solutionExDatastore;
 
     public SearchDatastore(
-      IDbConnectionFactory dbConnectionFactory,
       ILogger<SearchDatastore> logger,
       ISyncPolicyFactory policy,
       IFrameworksDatastore frameworkDatastore,
       ISolutionsDatastore solutionDatastore,
       ICapabilitiesDatastore capabilityDatastore,
       ICapabilitiesImplementedDatastore claimedCapabilityDatastore,
-      ISolutionsExDatastore solutionExDatastore) :
-      base(dbConnectionFactory, logger, policy)
+      ISolutionsExDatastore solutionExDatastore)
     {
       _frameworkDatastore = frameworkDatastore;
       _solutionDatastore = solutionDatastore;
