@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -7,14 +9,11 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NHSD.GPITF.BuyingCatalog.Authentications;
 using NHSD.GPITF.BuyingCatalog.OperationFilters;
 using Swashbuckle.AspNetCore.Examples;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -26,44 +25,36 @@ namespace NHSD.GPITF.BuyingCatalog
   internal sealed class Startup
   {
     private IServiceProvider ServiceProvider { get; set; }
-    private IConfiguration Configuration { get; }
-    private IHostingEnvironment CurrentEnvironment { get; set; }
+    private IConfigurationRoot Configuration { get; }
+    private IHostingEnvironment CurrentEnvironment { get; }
+    private IContainer ApplicationContainer { get; set; }
 
-    public Startup(IConfiguration configuration, IHostingEnvironment env)
+    public Startup(IHostingEnvironment env)
     {
-      Configuration = configuration;
-
       // Environment variable:
       //    ASPNETCORE_ENVIRONMENT == Development
       CurrentEnvironment = env;
+
+      var builder = new ConfigurationBuilder()
+          .SetBasePath(env.ContentRootPath)
+          .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+          .AddJsonFile("hosting.json", optional: true, reloadOnChange: true)
+          .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+          .AddEnvironmentVariables();
+      if (CurrentEnvironment.IsDevelopment())
+      {
+        builder.AddUserSecrets<Program>();
+      }
+      Configuration = builder.Build();
     }
 
     // This method gets called by the runtime. Use this method to add services to the container.
-    public void ConfigureServices(IServiceCollection services)
+    public IServiceProvider ConfigureServices(IServiceCollection services)
     {
-      var jsonServices = JObject.Parse(File.ReadAllText("appsettings.json"))["Services"];
-      var requiredServices = JsonConvert.DeserializeObject<List<Service>>(jsonServices.ToString());
-
-      foreach (var service in requiredServices)
-      {
-        services.Add(new ServiceDescriptor(
-          serviceType: Type.GetType(
-            service.ServiceType,
-            (name) => AssemblyResolver(name),
-            null,
-            true),
-          implementationType: Type.GetType(
-            service.ImplementationType,
-            (name) => AssemblyResolver(name),
-            null,
-            true),
-          lifetime: service.Lifetime));
-      }
-
-      services.AddSingleton(sp => Configuration);
       services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-      services.AddMvc();
+      // Add controllers as services so they'll be resolved.
+      services.AddMvc().AddControllersAsServices();
 
       if (CurrentEnvironment.IsDevelopment())
       {
@@ -132,7 +123,7 @@ namespace NHSD.GPITF.BuyingCatalog
               {
                 OnValidatePrincipal = context =>
                 {
-                  var auth = ServiceProvider.GetService<BasicAuthentication>();
+                  var auth = ServiceProvider.GetService<IBasicAuthentication>();
                   return auth.Authenticate(context);
                 }
               };
@@ -154,11 +145,46 @@ namespace NHSD.GPITF.BuyingCatalog
           {
             OnTokenValidated = async context =>
             {
-              var auth = ServiceProvider.GetService<BearerAuthentication>();
+              var auth = ServiceProvider.GetService<IBearerAuthentication>();
               await auth.Authenticate(context);
             }
           };
         });
+
+      // Create the container builder.
+      var builder = new ContainerBuilder();
+
+      // Register dependencies, populate the services from
+      // the collection, and build the container.
+      //
+      // Note that Populate is basically a foreach to add things
+      // into Autofac that are in the collection. If you register
+      // things in Autofac BEFORE Populate then the stuff in the
+      // ServiceCollection can override those things; if you register
+      // AFTER Populate those registrations can override things
+      // in the ServiceCollection. Mix and match as needed.
+      builder.Populate(services);
+
+      // load all assemblies in same directory and register classes with interfaces
+      // Note that we have to explicitly add this (executing) assembly
+      var exeAssy = Assembly.GetExecutingAssembly();
+      var exeAssyPath = exeAssy.Location;
+      var exeAssyDir = Path.GetDirectoryName(exeAssyPath);
+      var assyPaths = Directory.EnumerateFiles(exeAssyDir, "*.dll");
+      var assys = assyPaths.Select(filePath => Assembly.LoadFile(filePath)).ToList();
+      assys.Add(exeAssy);
+      builder
+        .RegisterAssemblyTypes(assys.ToArray())
+        .PublicOnly()
+        .AsImplementedInterfaces()
+        .SingleInstance();
+
+      builder.Register(cc => Configuration).As<IConfiguration>();
+
+      ApplicationContainer = builder.Build();
+
+      // Create the IServiceProvider based on the container.
+      return new AutofacServiceProvider(ApplicationContainer);
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -197,12 +223,12 @@ namespace NHSD.GPITF.BuyingCatalog
       logging.AddFile(logConfig.GetValue<string>("PathFormat"));
     }
 
-    private Assembly AssemblyResolver(AssemblyName name)
-    {
-      var currAssyPath = Assembly.GetExecutingAssembly().Location;
-      var assyPath = Path.Combine(Path.GetDirectoryName(currAssyPath), $"{name.FullName}.dll");
-      var assy = Assembly.LoadFile(assyPath);
-      return assy;
-    }
+    //private Assembly AssemblyResolver(AssemblyName name)
+    //{
+    //  var currAssyPath = Assembly.GetExecutingAssembly().Location;
+    //  var assyPath = Path.Combine(Path.GetDirectoryName(currAssyPath), $"{name.FullName}.dll");
+    //  var assy = Assembly.LoadFile(assyPath);
+    //  return assy;
+    //}
   }
 }

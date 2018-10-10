@@ -10,7 +10,7 @@ using ZNetCS.AspNetCore.Authentication.Basic.Events;
 namespace NHSD.GPITF.BuyingCatalog.Authentications
 {
 #pragma warning disable CS1591
-  public sealed class BasicAuthentication
+  public sealed class BasicAuthentication : IBasicAuthentication
   {
     private readonly IContactsDatastore _contactDatastore;
     private readonly IOrganisationsDatastore _organisationDatastore;

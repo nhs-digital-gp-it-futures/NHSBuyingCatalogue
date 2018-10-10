@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore;
+﻿using Autofac.Extensions.DependencyInjection;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using System.IO;
@@ -17,6 +18,7 @@ namespace NHSD.GPITF.BuyingCatalog
       return WebHost.CreateDefaultBuilder(args)
         .UseConfiguration(config)
         .UseKestrel()
+        .ConfigureServices(services => services.AddAutofac())
         .UseStartup<Startup>()
         .Build();
     }
