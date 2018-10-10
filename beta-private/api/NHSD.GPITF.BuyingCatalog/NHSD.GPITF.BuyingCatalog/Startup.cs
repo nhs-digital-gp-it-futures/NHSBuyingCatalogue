@@ -222,13 +222,5 @@ namespace NHSD.GPITF.BuyingCatalog
       logging.AddDebug(); //does all log levels
       logging.AddFile(logConfig.GetValue<string>("PathFormat"));
     }
-
-    //private Assembly AssemblyResolver(AssemblyName name)
-    //{
-    //  var currAssyPath = Assembly.GetExecutingAssembly().Location;
-    //  var assyPath = Path.Combine(Path.GetDirectoryName(currAssyPath), $"{name.FullName}.dll");
-    //  var assy = Assembly.LoadFile(assyPath);
-    //  return assy;
-    //}
   }
 }
