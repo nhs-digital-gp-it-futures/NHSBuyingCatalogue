@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "npm rebuild node-sass; NODE_ENV=development nodemon -w src -w lib src/server.js",
     "start": "NODE_ENV=production node src/server.js",
-    "test": "jest"
+    "test": "jest",
+    "test:e2e": "testcafe --disable-page-reloads --hostname localhost chrome tests/e2e/index.js"
   },
   "author": "Paul Mitchell <paul.mitchell@bjss.com>",
   "dependencies": {
@@ -26,11 +27,13 @@
     "serve-static": "^1.13.2"
   },
   "devDependencies": {
+    "axe-testcafe": "^1.1.0",
     "jest": "^23.6.0",
     "jest-junit-reporter": "^1.1.0",
     "node-sass-middleware": "^0.11.0",
     "nodemon": "^1.17.5",
-    "session-file-store": "^1.2.0"
+    "session-file-store": "^1.2.0",
+    "testcafe": "^0.22.0"
   },
   "jest": {
     "testPathIgnorePatterns": [
