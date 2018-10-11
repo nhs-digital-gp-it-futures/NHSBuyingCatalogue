@@ -5,6 +5,10 @@ using NHSD.GPITF.BuyingCatalog.Search.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NUnit.Framework;
+using Polly;
+using System.Collections.Generic;
+using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
+using System;
 
 namespace NHSD.GPITF.BuyingCatalog.Search.Tests
 {
@@ -12,7 +16,8 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
   public sealed class SearchDatastore_Tests
   {
     private Mock<ILogger<SearchDatastore>> _logger;
-    private Mock<ISyncPolicyFactory> _policy;
+    private Mock<ISyncPolicyFactory> _policyFact;
+    private Mock<ISyncPolicy> _policy;
     private Mock<IFrameworksDatastore> _frameworkDatastore;
     private Mock<ISolutionsDatastore> _solutionDatastore;
     private Mock<ICapabilitiesDatastore> _capabilityDatastore;
@@ -23,12 +28,15 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
     public void SetUp()
     {
       _logger = new Mock<ILogger<SearchDatastore>>();
-      _policy = new Mock<ISyncPolicyFactory>();
+      _policyFact = new Mock<ISyncPolicyFactory>();
+      _policy = new Mock<ISyncPolicy>();
       _frameworkDatastore = new Mock<IFrameworksDatastore>();
       _solutionDatastore = new Mock<ISolutionsDatastore>();
       _capabilityDatastore = new Mock<ICapabilitiesDatastore>();
       _claimedCapabilityDatastore = new Mock<ICapabilitiesImplementedDatastore>();
       _solutionExDatastore = new Mock<ISolutionsExDatastore>();
+
+      _policyFact.Setup(x => x.Build(_logger.Object)).Returns(_policy.Object);
     }
 
     [Test]
@@ -36,7 +44,7 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
     {
       Assert.DoesNotThrow(() => new SearchDatastore(
         _logger.Object,
-        _policy.Object,
+        _policyFact.Object,
         _frameworkDatastore.Object,
         _solutionDatastore.Object,
         _capabilityDatastore.Object,
@@ -68,16 +76,21 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
       var solnEx = Creator.GetSolutionEx(solution: soln);
       _solutionExDatastore.Setup(x => x.BySolution(soln.Id)).Returns(solnEx);
 
+      IEnumerable<SearchResult> results = null;
+      _policy.Setup(x => x.Execute(It.IsAny<Func<IEnumerable<SearchResult>>>()))
+        .Callback((Func<IEnumerable<SearchResult>> action) => results = action())
+        .Returns(results);
+
       var search = new SearchDatastore(
         _logger.Object,
-        _policy.Object,
+        _policyFact.Object,
         _frameworkDatastore.Object,
         _solutionDatastore.Object,
         _capabilityDatastore.Object,
         _claimedCapabilityDatastore.Object,
         _solutionExDatastore.Object);
 
-      var results = search.ByKeyword(keyword);
+      search.ByKeyword(keyword);
 
       var res = results.Should().ContainSingle();
       res.Which.SolutionEx.Should().BeEquivalentTo(solnEx);
@@ -108,16 +121,21 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
       var solnEx = Creator.GetSolutionEx(solution: soln);
       _solutionExDatastore.Setup(x => x.BySolution(soln.Id)).Returns(solnEx);
 
+      IEnumerable<SearchResult> results = null;
+      _policy.Setup(x => x.Execute(It.IsAny<Func<IEnumerable<SearchResult>>>()))
+        .Callback((Func<IEnumerable<SearchResult>> action) => results = action())
+        .Returns(results);
+
       var search = new SearchDatastore(
         _logger.Object,
-        _policy.Object,
+        _policyFact.Object,
         _frameworkDatastore.Object,
         _solutionDatastore.Object,
         _capabilityDatastore.Object,
         _claimedCapabilityDatastore.Object,
         _solutionExDatastore.Object);
 
-      var results = search.ByKeyword(keyword);
+      search.ByKeyword(keyword);
 
       var res = results.Should().ContainSingle();
 
@@ -148,16 +166,21 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
       var solnEx = Creator.GetSolutionEx(solution: soln);
       _solutionExDatastore.Setup(x => x.BySolution(soln.Id)).Returns(solnEx);
 
+      IEnumerable<SearchResult> results = null;
+      _policy.Setup(x => x.Execute(It.IsAny<Func<IEnumerable<SearchResult>>>()))
+        .Callback((Func<IEnumerable<SearchResult>> action) => results = action())
+        .Returns(results);
+
       var search = new SearchDatastore(
         _logger.Object,
-        _policy.Object,
+        _policyFact.Object,
         _frameworkDatastore.Object,
         _solutionDatastore.Object,
         _capabilityDatastore.Object,
         _claimedCapabilityDatastore.Object,
         _solutionExDatastore.Object);
 
-      var results = search.ByKeyword(keyword);
+      search.ByKeyword(keyword);
 
       results.Should().BeEmpty();
     }
@@ -186,16 +209,21 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
       var solnEx = Creator.GetSolutionEx(solution: soln);
       _solutionExDatastore.Setup(x => x.BySolution(soln.Id)).Returns(solnEx);
 
+      IEnumerable<SearchResult> results = null;
+      _policy.Setup(x => x.Execute(It.IsAny<Func<IEnumerable<SearchResult>>>()))
+        .Callback((Func<IEnumerable<SearchResult>> action) => results = action())
+        .Returns(results);
+
       var search = new SearchDatastore(
         _logger.Object,
-        _policy.Object,
+        _policyFact.Object,
         _frameworkDatastore.Object,
         _solutionDatastore.Object,
         _capabilityDatastore.Object,
         _claimedCapabilityDatastore.Object,
         _solutionExDatastore.Object);
 
-      var results = search.ByKeyword(keyword);
+      search.ByKeyword(keyword);
 
       results.Should().BeEmpty();
     }
@@ -227,16 +255,21 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
       var solnEx1 = Creator.GetSolutionEx(solution: soln1);
       _solutionExDatastore.Setup(x => x.BySolution(soln1.Id)).Returns(solnEx1);
 
+      IEnumerable<SearchResult> results = null;
+      _policy.Setup(x => x.Execute(It.IsAny<Func<IEnumerable<SearchResult>>>()))
+        .Callback((Func<IEnumerable<SearchResult>> action) => results = action())
+        .Returns(results);
+
       var search = new SearchDatastore(
         _logger.Object,
-        _policy.Object,
+        _policyFact.Object,
         _frameworkDatastore.Object,
         _solutionDatastore.Object,
         _capabilityDatastore.Object,
         _claimedCapabilityDatastore.Object,
         _solutionExDatastore.Object);
 
-      var results = search.ByKeyword(keyword);
+      search.ByKeyword(keyword);
 
       var res = results.Should().ContainSingle();
       res.Which.SolutionEx.Should().BeEquivalentTo(solnEx1);
@@ -269,16 +302,21 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
       var solnEx1 = Creator.GetSolutionEx(solution: soln1);
       _solutionExDatastore.Setup(x => x.BySolution(soln1.Id)).Returns(solnEx1);
 
+      IEnumerable<SearchResult> results = null;
+      _policy.Setup(x => x.Execute(It.IsAny<Func<IEnumerable<SearchResult>>>()))
+        .Callback((Func<IEnumerable<SearchResult>> action) => results = action())
+        .Returns(results);
+
       var search = new SearchDatastore(
         _logger.Object,
-        _policy.Object,
+        _policyFact.Object,
         _frameworkDatastore.Object,
         _solutionDatastore.Object,
         _capabilityDatastore.Object,
         _claimedCapabilityDatastore.Object,
         _solutionExDatastore.Object);
 
-      var results = search.ByKeyword(keyword);
+      search.ByKeyword(keyword);
 
       var res = results.Should().ContainSingle();
       res.Which.SolutionEx.Should().BeEquivalentTo(solnEx1);
@@ -312,16 +350,21 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
       var solnEx1 = Creator.GetSolutionEx(solution: soln1);
       _solutionExDatastore.Setup(x => x.BySolution(soln1.Id)).Returns(solnEx1);
 
+      IEnumerable<SearchResult> results = null;
+      _policy.Setup(x => x.Execute(It.IsAny<Func<IEnumerable<SearchResult>>>()))
+        .Callback((Func<IEnumerable<SearchResult>> action) => results = action())
+        .Returns(results);
+
       var search = new SearchDatastore(
         _logger.Object,
-        _policy.Object,
+        _policyFact.Object,
         _frameworkDatastore.Object,
         _solutionDatastore.Object,
         _capabilityDatastore.Object,
         _claimedCapabilityDatastore.Object,
         _solutionExDatastore.Object);
 
-      var results = search.ByKeyword(keyword);
+      search.ByKeyword(keyword);
 
       var res = results.Should().ContainSingle();
       res.Which.SolutionEx.Should().BeEquivalentTo(solnEx1);
@@ -355,16 +398,21 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Tests
       _solutionExDatastore.Setup(x => x.BySolution(soln1.Id)).Returns(solnEx1);
       _solutionExDatastore.Setup(x => x.BySolution(soln2.Id)).Returns(solnEx2);
 
+      IEnumerable<SearchResult> results = null;
+      _policy.Setup(x => x.Execute(It.IsAny<Func<IEnumerable<SearchResult>>>()))
+        .Callback((Func<IEnumerable<SearchResult>> action) => results = action())
+        .Returns(results);
+
       var search = new SearchDatastore(
         _logger.Object,
-        _policy.Object,
+        _policyFact.Object,
         _frameworkDatastore.Object,
         _solutionDatastore.Object,
         _capabilityDatastore.Object,
         _claimedCapabilityDatastore.Object,
         _solutionExDatastore.Object);
 
-      var results = search.ByKeyword("descr");
+      search.ByKeyword("descr");
 
       results.Should().HaveCount(2);
       results.Should()
