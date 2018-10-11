@@ -27,7 +27,7 @@
     "serve-static": "^1.13.2"
   },
   "devDependencies": {
-    "axe-testcafe": "^1.1.0",
+    "axe-testcafe": "./lib/axe-testcafe",
     "jest": "^23.6.0",
     "jest-junit-reporter": "^1.1.0",
     "node-sass-middleware": "^0.11.0",
