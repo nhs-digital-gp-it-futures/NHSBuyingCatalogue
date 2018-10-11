@@ -9,6 +9,7 @@
   },
   "author": "Paul Mitchell <paul.mitchell@bjss.com>",
   "dependencies": {
-    "catalogue-api": "../catalogue-api"
+    "catalogue-api": "../catalogue-api",
+    "lodash": "^4.17.10"
   }
 }

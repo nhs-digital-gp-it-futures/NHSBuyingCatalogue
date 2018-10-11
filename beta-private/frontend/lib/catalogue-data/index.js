@@ -1,3 +1,5 @@
+const _ = require('lodash')
+
 const solutionOnboardingStatusMap = {
   0: { stageName: 'Registration', stageStep: '1 of 4', status: 'Draft' },
   1: { stageName: 'Registration', stageStep: '1 of 4', status: 'Registered' },
@@ -14,6 +16,7 @@ class DataProvider {
     this.orgsApi = new CatalogueApi.OrganisationsApi()
     this.solutionsApi = new CatalogueApi.SolutionsApi()
     this.solutionsExApi = new CatalogueApi.SolutionsExApi()
+    this.capabilityMappingsApi = new CatalogueApi.CapabilityMappingsApi()
   }
 
   async contactByEmail (email) {
@@ -72,6 +75,24 @@ class DataProvider {
       capabilities: solutionEx.claimedCapability,
       standards: solutionEx.claimedStandard,
       contacts: solutionEx.technicalContact
+    }
+  }
+
+  async capabilityMappings () {
+    const {
+      capabilityMapping,
+      standard
+    } = await this.capabilityMappingsApi.apiPorcelainCapabilityMappingsGet()
+
+    return {
+      capabilities: _(capabilityMapping)
+        .map(({ capability, optionalStandard }) => ({
+          ...capability,
+          standards: optionalStandard
+        }))
+        .keyBy('id')
+        .value(),
+      standards: _.keyBy(standard, 'id')
     }
   }
 }

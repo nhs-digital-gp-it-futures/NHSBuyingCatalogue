@@ -23,11 +23,16 @@ beforeAll(() => {
     this.apiPorcelainSolutionsExBySolutionBySolutionIdGet = jest.fn()
   }
 
+  function MockCapabilityMappingsApi () {
+    this.apiPorcelainCapabilityMappingsGet = jest.fn()
+  }
+
   subject = new DataProvider({
     ContactsApi: MockContactsApi,
     OrganisationsApi: MockOrganisationsApi,
     SolutionsApi: MockSolutionsApi,
-    SolutionsExApi: MockSolutionsExApi
+    SolutionsExApi: MockSolutionsExApi,
+    CapabilityMappingsApi: MockCapabilityMappingsApi
   })
 })
 
@@ -207,5 +212,23 @@ describe('solutionsForSupplierDashboard', () => {
     ])
     expect(result.live).toHaveLength(1)
     expect(result.live[0].copiedId).toEqual('LIVE')
+  })
+})
+
+describe('capabilityMappings', () => {
+  it('correctly maps the incoming static data', async () => {
+    subject.capabilityMappingsApi.apiPorcelainCapabilityMappingsGet.mockReturnValue(
+      require('./data-provider.test-data')
+    )
+
+    const result = await subject.capabilityMappings()
+
+    expect(Object.keys(result.capabilities)).toHaveLength(18)
+    expect(result.capabilities['CAP1'].name).toBe('Appointments Management - Citizen')
+    expect(result.capabilities['CAP1'].standards).toHaveLength(12)
+
+    expect(Object.keys(result.standards)).toHaveLength(50)
+    expect(result.standards['OS1'].name).toBe('Business Continuity / Disaster Recovery')
+    expect(result.standards['OS1'].isOverarching).toBeTruthy()
   })
 })
