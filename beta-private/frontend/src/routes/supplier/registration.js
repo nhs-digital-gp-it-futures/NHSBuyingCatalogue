@@ -39,6 +39,11 @@ router
   .get(registrationPageGet)
   .post(registrationPageValidation, registrationPagePost)
 
+router
+  .route('/:solution_id/capabilities/')
+  .get(capabilitiesPageGet)
+  .post(capabilitiesPagePost)
+
 function commonOnboardingContext (req) {
   return {
     solution: req.solution,
@@ -85,9 +90,35 @@ async function registrationPagePost (req, res) {
       items: valres.array({ onlyFirstError: true }),
       controls: valres.mapped()
     }
+
+    res.render('supplier/registration/1-details', context)
+  } else {
+    // TODO create/update solution
+
+    res.redirect(req.body.action && req.body.action.continue ? '../capabilities/' : '../')
+  }
+}
+
+function capabilitiesPageContext (req) {
+  return {
+    ...commonOnboardingContext(req)
+  }
+}
+
+function capabilitiesPageGet (req, res) {
+  const context = {
+    ...capabilitiesPageContext(req)
   }
 
-  res.render('supplier/registration/1-details', context)
+  res.render('supplier/registration/2-capabilities', context)
+}
+
+function capabilitiesPagePost (req, res) {
+  const context = {
+    ...capabilitiesPageContext(req)
+  }
+
+  res.redirect('../')
 }
 
 module.exports = router
