@@ -2,6 +2,7 @@
 <p>You are logged in from supplier organisation <b>{{user.org.name}}</b></p>
 
 {{#if solutions.onboarding}}
+<section id="solutions-onboarding">
 <h2>Onboarding in Progress</h2>
 <table>
   <thead>
@@ -25,10 +26,12 @@
     {{/solutions.onboarding}}
   </tbody>
 </table>
+</section>
 {{/if}}
-<a href="{{addUrl}}">Add a new solution</a>
+<a id="add-new-solution" href="{{addUrl}}">Add a new solution</a>
 
 {{#if solutions.live}}
+<section id="solutions-live">
 <h2>Live in Marketplace</h2>
 <table>
   <thead>
@@ -50,4 +53,5 @@
     {{/solutions.live}}
   </tbody>
 </table>
+</section>
 {{/if}}
