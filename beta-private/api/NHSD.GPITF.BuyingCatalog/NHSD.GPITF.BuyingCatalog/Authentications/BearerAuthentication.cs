@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace NHSD.GPITF.BuyingCatalog.Authentications
 {
 #pragma warning disable CS1591
-  public sealed class BearerAuthentication
+  public sealed class BearerAuthentication : IBearerAuthentication
   {
     private readonly IUserInfoResponseDatastore _cache;
     private readonly IConfiguration _config;

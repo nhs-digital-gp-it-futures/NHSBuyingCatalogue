@@ -16,6 +16,7 @@ COPY NHSD.GPITF.BuyingCatalog.Tests/NHSD.GPITF.BuyingCatalog.Tests.csproj NHSD.G
 COPY Microsoft.SharePoint.Client.NetCore/Microsoft.SharePoint.Client.NetCore.csproj Microsoft.SharePoint.Client.NetCore/
 COPY NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint/NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.csproj NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint/
 COPY NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.Tests/NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.Tests.csproj NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.Tests/
+COPY NHSD.GPITF.BuyingCatalog.Search/NHSD.GPITF.BuyingCatalog.Search.csproj NHSD.GPITF.BuyingCatalog.Search/
 COPY NHSD.GPITF.BuyingCatalog.Search.Tests/NHSD.GPITF.BuyingCatalog.Search.Tests.csproj NHSD.GPITF.BuyingCatalog.Search.Tests/
 RUN dotnet restore
 
@@ -57,6 +58,9 @@ RUN dotnet build -c Release -o /app
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.Tests
 RUN dotnet build -c Release -o /app
 RUN dotnet test -c Release
+
+WORKDIR /src/NHSD.GPITF.BuyingCatalog.Search
+RUN dotnet build -c Release -o /app
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.Search.Tests
 RUN dotnet build -c Release -o /app
