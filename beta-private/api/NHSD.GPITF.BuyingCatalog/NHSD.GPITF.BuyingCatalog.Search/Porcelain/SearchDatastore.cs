@@ -38,7 +38,6 @@ namespace NHSD.GPITF.BuyingCatalog.Search.Porcelain
 
     public IEnumerable<SearchResult> ByKeyword(string keyword)
     {
-      // TODO   point logger to database
       _logger.LogInformation($"{keyword}");
 
       return _policy.Execute(() =>
