@@ -1,14 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using NHSD.GPITF.BuyingCatalog.Attributes;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
 using ZNetCS.AspNetCore.Authentication.Basic;
