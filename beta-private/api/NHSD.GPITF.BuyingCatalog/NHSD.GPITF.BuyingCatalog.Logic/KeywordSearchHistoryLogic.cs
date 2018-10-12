@@ -18,7 +18,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _datastore = datastore;
     }
 
-    public IEnumerable<Log> Get(DateTime startDate, DateTime endDate)
+    public IEnumerable<KeywordSearchHistory> Get(DateTime startDate, DateTime endDate)
     {
       return _datastore.Get(startDate, endDate);
     }

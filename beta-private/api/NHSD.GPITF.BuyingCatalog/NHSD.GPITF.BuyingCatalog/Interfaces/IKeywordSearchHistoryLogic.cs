@@ -7,7 +7,7 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
 #pragma warning disable CS1591
   public interface IKeywordSearchHistoryLogic
   {
-    IEnumerable<Log> Get(DateTime startDate, DateTime endDate);
+    IEnumerable<KeywordSearchHistory> Get(DateTime startDate, DateTime endDate);
   }
 #pragma warning restore CS1591
 }

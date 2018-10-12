@@ -9,27 +9,27 @@ using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 {
-  public sealed class KeywordSearchHistoryDatastore : DatastoreBase<Log>, IKeywordSearchHistoryDatastore
+  public sealed class KeywordSearchHistoryDatastore : DatastoreBase<KeywordSearchHistory>, IKeywordSearchHistoryDatastore
   {
     public KeywordSearchHistoryDatastore(
       IDbConnectionFactory dbConnectionFactory,
-      ILogger<DatastoreBase<Log>> logger,
+      ILogger<DatastoreBase<KeywordSearchHistory>> logger,
       ISyncPolicyFactory policy) :
       base(dbConnectionFactory, logger, policy)
     {
     }
 
-    public IEnumerable<Log> Get(DateTime startDate, DateTime endDate)
+    public IEnumerable<KeywordSearchHistory> Get(DateTime startDate, DateTime endDate)
     {
       return GetInternal(() =>
       {
         const string SearchByKeywordCallsite = "NHSD.GPITF.BuyingCatalog.Search.Porcelain.SearchDatastore.ByKeyword";
         var sql = $@"
-select log.* from Log log
+select log.Timestamp, log.Message as Keyword from Log log
 where Callsite like '{SearchByKeywordCallsite}'
 ";
         // cannot use GetAll() because this requires an explicit key
-        var retval = _dbConnection.Value.Query<Log>(sql)
+        var retval = _dbConnection.Value.Query<KeywordSearchHistory>(sql)
           .Where(x => x.Timestamp >= startDate && x.Timestamp <= endDate);
         return retval;
       });
