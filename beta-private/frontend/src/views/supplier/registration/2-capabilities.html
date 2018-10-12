@@ -1,3 +1,5 @@
+{{> errors}}
+
 <h1>Which Capabilities does your Solution provide?</h1>
 {{#> form}}
   <fieldset id="capabilities-core">
@@ -6,8 +8,9 @@
       {{#capabilities}}
       <li>
         <label>
-          <input type="checkbox" name="capabilities[{{id}}]"{{#selected}} checked{{/selected}}>
-          {{name}}
+          <input type="checkbox" name="capabilities[{{id}}]"{{#selected}} checked{{/selected}}
+            {{#if @first}}id="capabilities"{{/if}}>
+          <span class="name">{{name}}</span>
         </label>
       </li>
       {{/capabilities}}

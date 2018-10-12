@@ -20,6 +20,7 @@ const solutionNameInput = Selector('#content [name="solution\\[name\\]"]')
 const solutionDescriptionInput = Selector('#content [name="solution\\[description\\]"]')
 const solutionVersionInput = Selector('#content [name="solution\\[version\\]"]')
 const saveButton = Selector('[name="action\\[save\\]"]')
+const continueButton = Selector('[name="action\\[continue\\]"]')
 
 fixture('Getting started')
   .page('http://localhost:3000')
@@ -77,6 +78,42 @@ test('Registration page validation is correct and accessible', async t => {
 
     .expect(Selector('#errors #error-solution\\.name').innerText).contains('Solution name is missing')
     .expect(Selector('#errors #error-solution\\.description').innerText).contains('Solution description is missing')
+
+  await axeCheck(t)
+})
+
+test('Capabilities page shows correct information accessibly', async t => {
+  await t
+    .useRole(supplierRole)
+    .click(firstOnboardingSolutionName)
+    .click(continueRegistrationButton)
+    .click(continueButton)
+
+    .expect(Selector('[type=checkbox][name^=capabilities]').count).eql(18)
+    .expect(Selector('[type=checkbox][name^=capabilities] ~ .name').nth(0).innerText).eql('Appointments Management - Citizen')
+    .expect(Selector('[type=checkbox][name^=capabilities] ~ .name').nth(17).innerText).eql('Workflow')
+    .expect(Selector('[name=capabilities\\[CAP10\\]]').checked).ok()
+
+  await axeCheck(t)
+})
+
+test('Capabilities page validation is correct and accessible', async t => {
+  await t
+    .useRole(supplierRole)
+    .click(firstOnboardingSolutionName)
+    .click(continueRegistrationButton)
+    .click(continueButton)
+
+  const checkedCapabilities = Selector('[type=checkbox][name^=capabilities]:checked')
+  const checkedCapabilitiesCount = await checkedCapabilities.count
+  for (let i = 0; i < checkedCapabilitiesCount; i++) {
+    await t.click(checkedCapabilities.nth(i))
+  }
+
+  await t
+    .click(continueButton)
+    .expect(Selector('#errors #error-capabilities').innerText).contains('Select at least one capability to continue')
+    .expect(Selector('[type=checkbox][name^=capabilities]:checked').exists).notOk('No capabilities should be selected after reload')
 
   await axeCheck(t)
 })

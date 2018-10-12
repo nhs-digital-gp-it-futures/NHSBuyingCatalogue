@@ -4,7 +4,8 @@ const { checkSchema, validationResult } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 const { dataProvider } = require('catalogue-data')
 
-const registrationPageValidation = checkSchema(require('./registration-validation'))
+const registrationPageValidation = checkSchema(require('./registration-validation').registration)
+const capabilitiesPageValidation = checkSchema(require('./registration-validation').capabilities)
 
 // all routes in this module require CSRF protection
 router.use(require('csurf')())
@@ -42,7 +43,7 @@ router
 router
   .route('/:solution_id/capabilities/')
   .get(capabilitiesPageGet)
-  .post(capabilitiesPagePost)
+  .post(capabilitiesPageValidation, capabilitiesPagePost)
 
 function commonOnboardingContext (req) {
   return {
@@ -99,34 +100,50 @@ async function registrationPagePost (req, res) {
   }
 }
 
-function capabilitiesPageContext (req) {
-  return {
-    ...commonOnboardingContext(req)
-  }
-}
-
-async function capabilitiesPageGet (req, res) {
+async function capabilitiesPageContext (req) {
   const context = {
-    ...capabilitiesPageContext(req),
+    ...commonOnboardingContext(req),
     ...await dataProvider.capabilityMappings()
   }
 
   context.capabilities = _(context.capabilities)
     .values()
     .orderBy('name')
-    .forEach(cap => {
-      cap.selected = _.some(req.solution.capabilities, { capabilityId: cap.id })
-    })
+    .value()
+
+  return context
+}
+
+async function capabilitiesPageGet (req, res) {
+  const context = await capabilitiesPageContext(req)
+
+  context.capabilities.forEach(cap => {
+    cap.selected = _.some(req.solution.capabilities, { capabilityId: cap.id })
+  })
 
   res.render('supplier/registration/2-capabilities', context)
 }
 
-function capabilitiesPagePost (req, res) {
-  const context = {
-    ...capabilitiesPageContext(req)
-  }
+async function capabilitiesPagePost (req, res) {
+  const context = await capabilitiesPageContext(req)
 
-  res.redirect('../')
+  context.capabilities.forEach(cap => {
+    cap.selected = _.has(req.body.capabilities, cap.id)
+  })
+
+  const valres = validationResult(req)
+  if (!valres.isEmpty() && req.body.action.continue) {
+    context.errors = {
+      items: valres.array({ onlyFirstError: true }),
+      controls: valres.mapped()
+    }
+
+    res.render('supplier/registration/2-capabilities', context)
+  } else {
+    // TODO create/update solution
+
+    res.redirect('../')
+  }
 }
 
 module.exports = router
