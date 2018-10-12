@@ -45,6 +45,7 @@ DROP TABLE IF EXISTS Frameworks;
 DROP TABLE IF EXISTS Standards;
 
 DROP TABLE IF EXISTS CachedUserInfoResponseJson;
+DROP TABLE IF EXISTS Log;
 
 -- create data tables
 -- NOTE:  maximum text field lengths is 425 characters because 
@@ -153,6 +154,14 @@ CREATE TABLE CachedUserInfoResponseJson
   BearerToken NVARCHAR(MAX) NOT NULL,
   Data NVARCHAR(MAX),
   PRIMARY KEY (Id)
+);
+
+CREATE TABLE Log 
+(
+  Timestamp TEXT,
+  Loglevel TEXT,
+  Callsite TEXT,
+  Message TEXT
 );
 
 

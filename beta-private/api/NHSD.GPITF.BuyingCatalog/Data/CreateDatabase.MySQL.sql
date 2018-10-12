@@ -27,6 +27,7 @@ DROP TABLE IF EXISTS Frameworks;
 DROP TABLE IF EXISTS Standards;
 
 DROP TABLE IF EXISTS CachedUserInfoResponseJson;
+DROP TABLE IF EXISTS Log;
 
 -- create data tables
 
@@ -133,6 +134,14 @@ CREATE TABLE CachedUserInfoResponseJson
   BearerToken TEXT NOT NULL,
   Data TEXT,
   PRIMARY KEY (Id)
+);
+
+CREATE TABLE Log 
+(
+  Timestamp TEXT,
+  Loglevel TEXT,
+  Callsite TEXT,
+  Message TEXT
 );
 
 
