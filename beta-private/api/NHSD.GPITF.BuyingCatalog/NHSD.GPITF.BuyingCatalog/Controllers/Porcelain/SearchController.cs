@@ -15,7 +15,7 @@ using ZNetCS.AspNetCore.Authentication.Basic;
 namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
 {
   /// <summary>
-  /// Find entities in the system
+  /// Find solutions in the system
   /// </summary>
   [ApiVersion("1")]
   [ApiTag("porcelain")]
