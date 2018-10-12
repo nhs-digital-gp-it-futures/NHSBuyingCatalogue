@@ -54,9 +54,16 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "No keywords found")]
     public IActionResult Get([FromQuery]DateTime? startDate, [FromQuery]DateTime? endDate, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
+      try
+      {
       var logs = _logic.Get(startDate ?? DateTime.Now.AddYears(-10), endDate ?? DateTime.Now.AddYears(10));
       var retval = PaginatedList<KeywordCount>.Create(logs, pageIndex, pageSize);
       return logs.Count() > 0 ? (IActionResult)new OkObjectResult(retval) : new NotFoundResult();
+      }
+      catch (Exception)
+      {
+        return new ForbidResult();
+      }
     }
   }
 }
