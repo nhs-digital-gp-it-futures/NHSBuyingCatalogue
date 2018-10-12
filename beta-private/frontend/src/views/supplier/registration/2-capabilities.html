@@ -2,6 +2,16 @@
 {{#> form}}
   <fieldset id="capabilities-core">
     <legend>Core Capabilities</legend>
+    <ul>
+      {{#capabilities}}
+      <li>
+        <label>
+          <input type="checkbox" name="capabilities[{{id}}]"{{#selected}} checked{{/selected}}>
+          {{name}}
+        </label>
+      </li>
+      {{/capabilities}}
+    </ul>
   </fieldset>
   <fieldset id="capabilities-non-core">
     <legend>Non-Core Capabilities</legend>

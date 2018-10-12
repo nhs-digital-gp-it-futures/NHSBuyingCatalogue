@@ -105,10 +105,18 @@ function capabilitiesPageContext (req) {
   }
 }
 
-function capabilitiesPageGet (req, res) {
+async function capabilitiesPageGet (req, res) {
   const context = {
-    ...capabilitiesPageContext(req)
+    ...capabilitiesPageContext(req),
+    ...await dataProvider.capabilityMappings()
   }
+
+  context.capabilities = _(context.capabilities)
+    .values()
+    .orderBy('name')
+    .forEach(cap => {
+      cap.selected = _.some(req.solution.capabilities, { capabilityId: cap.id })
+    })
 
   res.render('supplier/registration/2-capabilities', context)
 }
