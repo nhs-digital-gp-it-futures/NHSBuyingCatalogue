@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Authentications;
 using NHSD.GPITF.BuyingCatalog.OperationFilters;
+using NLog;
 using Swashbuckle.AspNetCore.Examples;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
@@ -45,7 +46,11 @@ namespace NHSD.GPITF.BuyingCatalog
       {
         builder.AddUserSecrets<Program>();
       }
+
       Configuration = builder.Build();
+
+      // database connection string for nLog
+      GlobalDiagnosticsContext.Set("LOG_CONNECTIONSTRING", Environment.GetEnvironmentVariable("LOG_CONNECTIONSTRING") ?? Configuration["Log:ConnectionString"]);
     }
 
     // This method gets called by the runtime. Use this method to add services to the container.
