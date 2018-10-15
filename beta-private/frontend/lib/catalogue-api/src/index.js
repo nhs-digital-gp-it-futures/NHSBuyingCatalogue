@@ -16,12 +16,12 @@
 (function(factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['ApiClient', 'model/Capabilities', 'model/CapabilitiesImplemented', 'model/CapabilitiesImplementedEvidence', 'model/CapabilitiesImplementedReviews', 'model/CapabilityMapping', 'model/CapabilityMappings', 'model/Contacts', 'model/Frameworks', 'model/OptionalStandard', 'model/Organisations', 'model/PaginatedListCapabilities', 'model/PaginatedListCapabilitiesImplemented', 'model/PaginatedListContacts', 'model/PaginatedListFrameworks', 'model/PaginatedListIEnumerableCapabilitiesImplementedEvidence', 'model/PaginatedListIEnumerableCapabilitiesImplementedReviews', 'model/PaginatedListIEnumerableStandardsApplicableEvidence', 'model/PaginatedListIEnumerableStandardsApplicableReviews', 'model/PaginatedListSolutionEx', 'model/PaginatedListSolutions', 'model/PaginatedListStandards', 'model/PaginatedListStandardsApplicable', 'model/PaginatedListTechnicalContacts', 'model/SolutionEx', 'model/Solutions', 'model/Standards', 'model/StandardsApplicable', 'model/StandardsApplicableEvidence', 'model/StandardsApplicableReviews', 'model/TechnicalContacts', 'api/CapabilitiesApi', 'api/CapabilitiesImplementedApi', 'api/CapabilitiesImplementedEvidenceApi', 'api/CapabilitiesImplementedReviewsApi', 'api/CapabilityMappingsApi', 'api/ContactsApi', 'api/FrameworksApi', 'api/LinkManagerApi', 'api/OrganisationsApi', 'api/SearchApi', 'api/SolutionsApi', 'api/SolutionsExApi', 'api/StandardsApi', 'api/StandardsApplicableApi', 'api/StandardsApplicableEvidenceApi', 'api/StandardsApplicableReviewsApi', 'api/TechnicalContactsApi'], factory);
+    define(['ApiClient', 'model/BlobInfo', 'model/Capabilities', 'model/CapabilitiesImplemented', 'model/CapabilitiesImplementedEvidence', 'model/CapabilitiesImplementedReviews', 'model/CapabilityMapping', 'model/CapabilityMappings', 'model/Contacts', 'model/Frameworks', 'model/IFormFile', 'model/OptionalStandard', 'model/Organisations', 'model/PaginatedListBlobInfo', 'model/PaginatedListCapabilities', 'model/PaginatedListCapabilitiesImplemented', 'model/PaginatedListContacts', 'model/PaginatedListFrameworks', 'model/PaginatedListIEnumerableCapabilitiesImplementedEvidence', 'model/PaginatedListIEnumerableCapabilitiesImplementedReviews', 'model/PaginatedListIEnumerableStandardsApplicableEvidence', 'model/PaginatedListIEnumerableStandardsApplicableReviews', 'model/PaginatedListSolutionEx', 'model/PaginatedListSolutions', 'model/PaginatedListStandards', 'model/PaginatedListStandardsApplicable', 'model/PaginatedListTechnicalContacts', 'model/SolutionEx', 'model/Solutions', 'model/Standards', 'model/StandardsApplicable', 'model/StandardsApplicableEvidence', 'model/StandardsApplicableReviews', 'model/TechnicalContacts', 'api/CapabilitiesApi', 'api/CapabilitiesImplementedApi', 'api/CapabilitiesImplementedEvidenceApi', 'api/CapabilitiesImplementedEvidenceBlobStoreApi', 'api/CapabilitiesImplementedReviewsApi', 'api/CapabilityMappingsApi', 'api/ContactsApi', 'api/EvidenceBlobStoreApi', 'api/FrameworksApi', 'api/LinkManagerApi', 'api/OrganisationsApi', 'api/SearchApi', 'api/SolutionsApi', 'api/SolutionsExApi', 'api/StandardsApi', 'api/StandardsApplicableApi', 'api/StandardsApplicableEvidenceApi', 'api/StandardsApplicableEvidenceBlobStoreApi', 'api/StandardsApplicableReviewsApi', 'api/TechnicalContactsApi'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('./ApiClient'), require('./model/Capabilities'), require('./model/CapabilitiesImplemented'), require('./model/CapabilitiesImplementedEvidence'), require('./model/CapabilitiesImplementedReviews'), require('./model/CapabilityMapping'), require('./model/CapabilityMappings'), require('./model/Contacts'), require('./model/Frameworks'), require('./model/OptionalStandard'), require('./model/Organisations'), require('./model/PaginatedListCapabilities'), require('./model/PaginatedListCapabilitiesImplemented'), require('./model/PaginatedListContacts'), require('./model/PaginatedListFrameworks'), require('./model/PaginatedListIEnumerableCapabilitiesImplementedEvidence'), require('./model/PaginatedListIEnumerableCapabilitiesImplementedReviews'), require('./model/PaginatedListIEnumerableStandardsApplicableEvidence'), require('./model/PaginatedListIEnumerableStandardsApplicableReviews'), require('./model/PaginatedListSolutionEx'), require('./model/PaginatedListSolutions'), require('./model/PaginatedListStandards'), require('./model/PaginatedListStandardsApplicable'), require('./model/PaginatedListTechnicalContacts'), require('./model/SolutionEx'), require('./model/Solutions'), require('./model/Standards'), require('./model/StandardsApplicable'), require('./model/StandardsApplicableEvidence'), require('./model/StandardsApplicableReviews'), require('./model/TechnicalContacts'), require('./api/CapabilitiesApi'), require('./api/CapabilitiesImplementedApi'), require('./api/CapabilitiesImplementedEvidenceApi'), require('./api/CapabilitiesImplementedReviewsApi'), require('./api/CapabilityMappingsApi'), require('./api/ContactsApi'), require('./api/FrameworksApi'), require('./api/LinkManagerApi'), require('./api/OrganisationsApi'), require('./api/SearchApi'), require('./api/SolutionsApi'), require('./api/SolutionsExApi'), require('./api/StandardsApi'), require('./api/StandardsApplicableApi'), require('./api/StandardsApplicableEvidenceApi'), require('./api/StandardsApplicableReviewsApi'), require('./api/TechnicalContactsApi'));
+    module.exports = factory(require('./ApiClient'), require('./model/BlobInfo'), require('./model/Capabilities'), require('./model/CapabilitiesImplemented'), require('./model/CapabilitiesImplementedEvidence'), require('./model/CapabilitiesImplementedReviews'), require('./model/CapabilityMapping'), require('./model/CapabilityMappings'), require('./model/Contacts'), require('./model/Frameworks'), require('./model/IFormFile'), require('./model/OptionalStandard'), require('./model/Organisations'), require('./model/PaginatedListBlobInfo'), require('./model/PaginatedListCapabilities'), require('./model/PaginatedListCapabilitiesImplemented'), require('./model/PaginatedListContacts'), require('./model/PaginatedListFrameworks'), require('./model/PaginatedListIEnumerableCapabilitiesImplementedEvidence'), require('./model/PaginatedListIEnumerableCapabilitiesImplementedReviews'), require('./model/PaginatedListIEnumerableStandardsApplicableEvidence'), require('./model/PaginatedListIEnumerableStandardsApplicableReviews'), require('./model/PaginatedListSolutionEx'), require('./model/PaginatedListSolutions'), require('./model/PaginatedListStandards'), require('./model/PaginatedListStandardsApplicable'), require('./model/PaginatedListTechnicalContacts'), require('./model/SolutionEx'), require('./model/Solutions'), require('./model/Standards'), require('./model/StandardsApplicable'), require('./model/StandardsApplicableEvidence'), require('./model/StandardsApplicableReviews'), require('./model/TechnicalContacts'), require('./api/CapabilitiesApi'), require('./api/CapabilitiesImplementedApi'), require('./api/CapabilitiesImplementedEvidenceApi'), require('./api/CapabilitiesImplementedEvidenceBlobStoreApi'), require('./api/CapabilitiesImplementedReviewsApi'), require('./api/CapabilityMappingsApi'), require('./api/ContactsApi'), require('./api/EvidenceBlobStoreApi'), require('./api/FrameworksApi'), require('./api/LinkManagerApi'), require('./api/OrganisationsApi'), require('./api/SearchApi'), require('./api/SolutionsApi'), require('./api/SolutionsExApi'), require('./api/StandardsApi'), require('./api/StandardsApplicableApi'), require('./api/StandardsApplicableEvidenceApi'), require('./api/StandardsApplicableEvidenceBlobStoreApi'), require('./api/StandardsApplicableReviewsApi'), require('./api/TechnicalContactsApi'));
   }
-}(function(ApiClient, Capabilities, CapabilitiesImplemented, CapabilitiesImplementedEvidence, CapabilitiesImplementedReviews, CapabilityMapping, CapabilityMappings, Contacts, Frameworks, OptionalStandard, Organisations, PaginatedListCapabilities, PaginatedListCapabilitiesImplemented, PaginatedListContacts, PaginatedListFrameworks, PaginatedListIEnumerableCapabilitiesImplementedEvidence, PaginatedListIEnumerableCapabilitiesImplementedReviews, PaginatedListIEnumerableStandardsApplicableEvidence, PaginatedListIEnumerableStandardsApplicableReviews, PaginatedListSolutionEx, PaginatedListSolutions, PaginatedListStandards, PaginatedListStandardsApplicable, PaginatedListTechnicalContacts, SolutionEx, Solutions, Standards, StandardsApplicable, StandardsApplicableEvidence, StandardsApplicableReviews, TechnicalContacts, CapabilitiesApi, CapabilitiesImplementedApi, CapabilitiesImplementedEvidenceApi, CapabilitiesImplementedReviewsApi, CapabilityMappingsApi, ContactsApi, FrameworksApi, LinkManagerApi, OrganisationsApi, SearchApi, SolutionsApi, SolutionsExApi, StandardsApi, StandardsApplicableApi, StandardsApplicableEvidenceApi, StandardsApplicableReviewsApi, TechnicalContactsApi) {
+}(function(ApiClient, BlobInfo, Capabilities, CapabilitiesImplemented, CapabilitiesImplementedEvidence, CapabilitiesImplementedReviews, CapabilityMapping, CapabilityMappings, Contacts, Frameworks, IFormFile, OptionalStandard, Organisations, PaginatedListBlobInfo, PaginatedListCapabilities, PaginatedListCapabilitiesImplemented, PaginatedListContacts, PaginatedListFrameworks, PaginatedListIEnumerableCapabilitiesImplementedEvidence, PaginatedListIEnumerableCapabilitiesImplementedReviews, PaginatedListIEnumerableStandardsApplicableEvidence, PaginatedListIEnumerableStandardsApplicableReviews, PaginatedListSolutionEx, PaginatedListSolutions, PaginatedListStandards, PaginatedListStandardsApplicable, PaginatedListTechnicalContacts, SolutionEx, Solutions, Standards, StandardsApplicable, StandardsApplicableEvidence, StandardsApplicableReviews, TechnicalContacts, CapabilitiesApi, CapabilitiesImplementedApi, CapabilitiesImplementedEvidenceApi, CapabilitiesImplementedEvidenceBlobStoreApi, CapabilitiesImplementedReviewsApi, CapabilityMappingsApi, ContactsApi, EvidenceBlobStoreApi, FrameworksApi, LinkManagerApi, OrganisationsApi, SearchApi, SolutionsApi, SolutionsExApi, StandardsApi, StandardsApplicableApi, StandardsApplicableEvidenceApi, StandardsApplicableEvidenceBlobStoreApi, StandardsApplicableReviewsApi, TechnicalContactsApi) {
   'use strict';
 
   /**
@@ -61,6 +61,11 @@
      * @property {module:ApiClient}
      */
     ApiClient: ApiClient,
+    /**
+     * The BlobInfo model constructor.
+     * @property {module:model/BlobInfo}
+     */
+    BlobInfo: BlobInfo,
     /**
      * The Capabilities model constructor.
      * @property {module:model/Capabilities}
@@ -102,6 +107,11 @@
      */
     Frameworks: Frameworks,
     /**
+     * The IFormFile model constructor.
+     * @property {module:model/IFormFile}
+     */
+    IFormFile: IFormFile,
+    /**
      * The OptionalStandard model constructor.
      * @property {module:model/OptionalStandard}
      */
@@ -111,6 +121,11 @@
      * @property {module:model/Organisations}
      */
     Organisations: Organisations,
+    /**
+     * The PaginatedListBlobInfo model constructor.
+     * @property {module:model/PaginatedListBlobInfo}
+     */
+    PaginatedListBlobInfo: PaginatedListBlobInfo,
     /**
      * The PaginatedListCapabilities model constructor.
      * @property {module:model/PaginatedListCapabilities}
@@ -227,6 +242,11 @@
      */
     CapabilitiesImplementedEvidenceApi: CapabilitiesImplementedEvidenceApi,
     /**
+     * The CapabilitiesImplementedEvidenceBlobStoreApi service constructor.
+     * @property {module:api/CapabilitiesImplementedEvidenceBlobStoreApi}
+     */
+    CapabilitiesImplementedEvidenceBlobStoreApi: CapabilitiesImplementedEvidenceBlobStoreApi,
+    /**
      * The CapabilitiesImplementedReviewsApi service constructor.
      * @property {module:api/CapabilitiesImplementedReviewsApi}
      */
@@ -241,6 +261,11 @@
      * @property {module:api/ContactsApi}
      */
     ContactsApi: ContactsApi,
+    /**
+     * The EvidenceBlobStoreApi service constructor.
+     * @property {module:api/EvidenceBlobStoreApi}
+     */
+    EvidenceBlobStoreApi: EvidenceBlobStoreApi,
     /**
      * The FrameworksApi service constructor.
      * @property {module:api/FrameworksApi}
@@ -286,6 +311,11 @@
      * @property {module:api/StandardsApplicableEvidenceApi}
      */
     StandardsApplicableEvidenceApi: StandardsApplicableEvidenceApi,
+    /**
+     * The StandardsApplicableEvidenceBlobStoreApi service constructor.
+     * @property {module:api/StandardsApplicableEvidenceBlobStoreApi}
+     */
+    StandardsApplicableEvidenceBlobStoreApi: StandardsApplicableEvidenceBlobStoreApi,
     /**
      * The StandardsApplicableReviewsApi service constructor.
      * @property {module:api/StandardsApplicableReviewsApi}

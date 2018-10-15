@@ -1,0 +1,51 @@
+{
+   "registration" : {
+      "solution.version" : {
+         "trim" : {},
+         "in" : "body",
+         "isLength" : {
+            "errorMessage" : "Solution version exceeds maximum length of 10 characters",
+            "options" : {
+               "max" : 10
+            }
+         }
+      },
+      "solution.description" : {
+         "isEmpty" : {
+            "negated" : true,
+            "errorMessage" : "Solution description is missing"
+         },
+         "trim" : {},
+         "isLength" : {
+            "errorMessage" : "Solution description exceeds maximum length of 300 characters",
+            "options" : {
+               "max" : 300
+            }
+         },
+         "in" : "body"
+      },
+      "solution.name" : {
+         "isLength" : {
+            "options" : {
+               "max" : 60
+            },
+            "errorMessage" : "Solution name exceeds maximum length of 60 characters"
+         },
+         "in" : "body",
+         "isEmpty" : {
+            "errorMessage" : "Solution name is missing",
+            "negated" : true
+         },
+         "trim" : {}
+      }
+   },
+   "capabilities" : {
+      "capabilities" : {
+         "in" : "body",
+         "isEmpty" : {
+            "negated" : true,
+            "errorMessage" : "Select at least one capability to continue"
+         }
+      }
+   }
+}

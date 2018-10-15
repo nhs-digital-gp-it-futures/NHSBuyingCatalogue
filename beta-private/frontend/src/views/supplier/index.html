@@ -1,0 +1,57 @@
+<h1>Supplier Home</h1>
+<p>You are logged in from supplier organisation <b>{{user.org.name}}</b></p>
+
+{{#if solutions.onboarding}}
+<section id="solutions-onboarding">
+<h2>Onboarding in Progress</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Name | Version</th>
+      <th>Current Stage</th>
+      <th>Stage no.</th>
+      <th>Status</th>
+      <th>Notifications</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#solutions.onboarding}}
+    <tr>
+      <td><a href="{{url}}">{{displayName}}</a></td>
+      <td>{{stageName}}</td>
+      <td>{{stageStep}}</td>
+      <td>{{status}}</td>
+      <td></td>
+    </tr>
+    {{/solutions.onboarding}}
+  </tbody>
+</table>
+</section>
+{{/if}}
+<a id="add-new-solution" href="{{addUrl}}">Add a new solution</a>
+
+{{#if solutions.live}}
+<section id="solutions-live">
+<h2>Live in Marketplace</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Name | Version</th>
+      <th>Status</th>
+      <th>Contracts Signed</th>
+      <th>Notifications</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#solutions.live}}
+    <tr>
+      <td><a href="{{url}}">{{displayName}}</a></td>
+      <td>{{status}}</td>
+      <td>{{contractCount}}</td>
+      <td></td>
+    </tr>
+    {{/solutions.live}}
+  </tbody>
+</table>
+</section>
+{{/if}}

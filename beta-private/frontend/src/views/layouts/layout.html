@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{{meta.title}}{{#meta.title}} - {{/meta.title}}NHS Digital Buying Catalogue Private Beta</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script type="text/javascript" src="/js/app.js"></script>
+  </head>
+  <body>
+    <header role="banner" aria-label="Site header">
+      <nav aria-label="Main">
+        <a href="#content" class="sr" id="skip-to-main-content-link">Skip to main content</a>
+        <a href="/#content" aria-label="Home">
+          {{> nhs-digital-logo }}
+        </a>
+        <div id="account" role="group" aria-label="Account">
+          {{> user-authentication-nav }}
+        </div>
+        <a href="/about#content">About</a>
+      </nav>
+    </header>
+    <main id="content">
+      {{{body}}}
+    </main>
+    <footer aria-label="Site footer">
+      <section aria-labelledby="footer-about-section-label">
+        <h2 id="footer-about-section-label" role="none">About</h2>
+        <a href="/about#catalogue"><span class="sr">About the</span> Catalogue</a>
+        <a href="/about#nhs-digital"><span class="sr">About</span> NHS Digital</a>
+      </section>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "catalogue-data",
+  "version": "0.1.0-private-beta",
+  "description": "Data abstraction layer between the catalogue API and the usage layers",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Paul Mitchell <paul.mitchell@bjss.com>",
+  "dependencies": {
+    "catalogue-api": "../catalogue-api",
+    "lodash": "^4.17.10"
+  }
+}

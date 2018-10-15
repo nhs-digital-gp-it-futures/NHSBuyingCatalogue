@@ -16,18 +16,18 @@
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['ApiClient', 'model/PaginatedListContacts', 'model/PaginatedListSolutions', 'model/Solutions'], factory);
+    define(['ApiClient', 'model/PaginatedListSolutions', 'model/Solutions'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('../ApiClient'), require('../model/PaginatedListContacts'), require('../model/PaginatedListSolutions'), require('../model/Solutions'));
+    module.exports = factory(require('../ApiClient'), require('../model/PaginatedListSolutions'), require('../model/Solutions'));
   } else {
     // Browser globals (root is window)
     if (!root.CatalogueApi) {
       root.CatalogueApi = {};
     }
-    root.CatalogueApi.SolutionsApi = factory(root.CatalogueApi.ApiClient, root.CatalogueApi.PaginatedListContacts, root.CatalogueApi.PaginatedListSolutions, root.CatalogueApi.Solutions);
+    root.CatalogueApi.SolutionsApi = factory(root.CatalogueApi.ApiClient, root.CatalogueApi.PaginatedListSolutions, root.CatalogueApi.Solutions);
   }
-}(this, function(ApiClient, PaginatedListContacts, PaginatedListSolutions, Solutions) {
+}(this, function(ApiClient, PaginatedListSolutions, Solutions) {
   'use strict';
 
   /**
@@ -165,7 +165,7 @@
      * @param {Object} opts Optional parameters
      * @param {Number} opts.pageIndex 1-based index of page to return.  Defaults to 1
      * @param {Number} opts.pageSize number of items per page.  Defaults to 20
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/PaginatedListContacts} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/PaginatedListSolutions} and HTTP response
      */
     this.apiSolutionsByOrganisationByOrganisationIdGetWithHttpInfo = function(organisationId, opts) {
       opts = opts || {};
@@ -194,7 +194,7 @@
       var authNames = ['basic', 'oauth2'];
       var contentTypes = [];
       var accepts = ['application/json'];
-      var returnType = PaginatedListContacts;
+      var returnType = PaginatedListSolutions;
 
       return this.apiClient.callApi(
         '/api/Solutions/ByOrganisation/{organisationId}', 'GET',
@@ -209,7 +209,7 @@
      * @param {Object} opts Optional parameters
      * @param {Number} opts.pageIndex 1-based index of page to return.  Defaults to 1
      * @param {Number} opts.pageSize number of items per page.  Defaults to 20
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/PaginatedListContacts}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/PaginatedListSolutions}
      */
     this.apiSolutionsByOrganisationByOrganisationIdGet = function(organisationId, opts) {
       return this.apiSolutionsByOrganisationByOrganisationIdGetWithHttpInfo(organisationId, opts)

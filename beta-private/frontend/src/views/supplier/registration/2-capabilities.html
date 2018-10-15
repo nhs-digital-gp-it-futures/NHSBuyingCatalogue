@@ -1,0 +1,25 @@
+{{> errors}}
+
+<h1>Which Capabilities does your Solution provide?</h1>
+{{#> form}}
+  <fieldset id="capabilities-core">
+    <legend>Core Capabilities</legend>
+    <ul>
+      {{#capabilities}}
+      <li>
+        <label>
+          <input type="checkbox" name="capabilities[{{id}}]"{{#selected}} checked{{/selected}}
+            {{#if @first}}id="capabilities"{{/if}}>
+          <span class="name">{{name}}</span>
+        </label>
+      </li>
+      {{/capabilities}}
+    </ul>
+  </fieldset>
+  <fieldset id="capabilities-non-core">
+    <legend>Non-Core Capabilities</legend>
+  </fieldset>
+
+  <input type="submit" name="action[save]" value="Save">
+  <input type="submit" name="action[continue]" value="Continue">
+{{/form}}

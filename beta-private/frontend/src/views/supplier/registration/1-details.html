@@ -1,0 +1,32 @@
+{{> errors}}
+
+<h1>Solution Details</h1>
+{{#> form}}
+  <fieldset>
+    <legend>Enter Solution name, description, version</legend>
+
+    <label>
+      Solution name
+      <input id="solution.name" type="text" name="solution[name]" value="{{solution.name}}"
+        autocomplete="off" aria-required="true" maxlength="60"
+        {{#if errors.controls.[solution.name]}}aria-invalid="true" aria-errormessage="error-solution.name"{{/if}}>
+    </label>
+
+    <label>
+      Description
+      <textarea id="solution.description" name="solution[description]"
+        aria-required="true" maxlength="300"
+        {{#if errors.controls.[solution.description]}}aria-invalid="true" aria-errormessage="error-solution.description"{{/if}}>{{solution.description}}</textarea>
+    </label>
+
+    <label>
+      Version
+      <input id="solution.version" type="text" name="solution[version]" value="{{solution.version}}"
+        autocomplete="off" maxlength="10"
+        {{#if errors.controls.[solution.version]}}aria-invalid="true" aria-errormessage="error-solution.version"{{/if}}>
+    </label>
+  </fieldset>
+
+  <input type="submit" name="action[save]" value="Save">
+  <input type="submit" name="action[continue]" value="Continue">
+{{/form}}

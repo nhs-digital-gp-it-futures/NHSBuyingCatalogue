@@ -8,10 +8,10 @@
   },
   {
     "id": 2,
-    "email": "supplier2@test",
+    "email": "drkool@kool.com",
     "email_verified": true,
     "name": "Test2 Supplier",
-    "password": "Supplier2"
+    "password": "kool"
   },
   {
     "id": 3,
