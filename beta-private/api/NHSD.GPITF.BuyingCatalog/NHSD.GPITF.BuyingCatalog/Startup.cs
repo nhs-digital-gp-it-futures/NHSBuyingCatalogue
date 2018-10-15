@@ -47,6 +47,8 @@ namespace NHSD.GPITF.BuyingCatalog
         builder.AddUserSecrets<Program>();
       }
 
+      DumpEnvironment();
+
       Configuration = builder.Build();
 
       // database connection string for nLog
@@ -175,7 +177,7 @@ namespace NHSD.GPITF.BuyingCatalog
       var exeAssy = Assembly.GetExecutingAssembly();
       var exeAssyPath = exeAssy.Location;
       var exeAssyDir = Path.GetDirectoryName(exeAssyPath);
-      var assyPaths = Directory.EnumerateFiles(exeAssyDir, "*.dll");
+      var assyPaths = Directory.EnumerateFiles(exeAssyDir, "NHSD.*.dll");
       var assys = assyPaths.Select(filePath => Assembly.LoadFile(filePath)).ToList();
       assys.Add(exeAssy);
       builder
@@ -229,6 +231,28 @@ namespace NHSD.GPITF.BuyingCatalog
         logging.AddDebug(); //does all log levels
         logging.AddFile(logConfig.GetValue<string>("PathFormat"));
       }
+    }
+
+    private static void DumpEnvironment()
+    {
+      Console.WriteLine("Environment:");
+      Console.WriteLine($"  DATASTORE:");
+      Console.WriteLine($"    DATASTORE_CONNECTIONTYPE : {Environment.GetEnvironmentVariable("DATASTORE_CONNECTIONTYPE")}");
+      Console.WriteLine($"    DATASTORE_CONNECTIONSTRING : {Environment.GetEnvironmentVariable("DATASTORE_CONNECTIONSTRING")}");
+
+      Console.WriteLine($"  LOG:");
+      Console.WriteLine($"    LOG_CONNECTIONSTRING : {Environment.GetEnvironmentVariable("LOG_CONNECTIONSTRING")}");
+
+      Console.WriteLine($"  OIDC:");
+      Console.WriteLine($"    OIDC_USERINFO_URL : {Environment.GetEnvironmentVariable("OIDC_USERINFO_URL")}");
+      Console.WriteLine($"    OIDC_ISSUER_URL : {Environment.GetEnvironmentVariable("OIDC_ISSUER_URL")}");
+      Console.WriteLine($"    OIDC_AUDIENCE : {Environment.GetEnvironmentVariable("OIDC_AUDIENCE")}");
+
+      Console.WriteLine($"  SHAREPOINT:");
+      Console.WriteLine($"    SHAREPOINT_BASEURL : {Environment.GetEnvironmentVariable("SHAREPOINT_BASEURL")}");
+      Console.WriteLine($"    SHAREPOINT_ORGANISATIONSRELATIVEURL : {Environment.GetEnvironmentVariable("SHAREPOINT_ORGANISATIONSRELATIVEURL")}");
+      Console.WriteLine($"    SHAREPOINT_LOGIN : {Environment.GetEnvironmentVariable("SHAREPOINT_LOGIN")}");
+      Console.WriteLine($"    SHAREPOINT_PASSWORD : {Environment.GetEnvironmentVariable("SHAREPOINT_PASSWORD")}");
     }
   }
 }
