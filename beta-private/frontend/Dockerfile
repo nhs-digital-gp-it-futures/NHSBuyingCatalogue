@@ -16,10 +16,11 @@ FROM pre-build AS test
 RUN npm test
 
 FROM pre-build AS build
-RUN npm run build
+#RUN npm run build
 
 FROM node:8-alpine AS release
 COPY --from=dependencies /home/node/app/package*.json ./
+COPY --from=dependencies /home/node/app/lib ./lib
 RUN npm install --production
 COPY --from=build /home/node/app/src ./src
 CMD ["npm", "start"]
