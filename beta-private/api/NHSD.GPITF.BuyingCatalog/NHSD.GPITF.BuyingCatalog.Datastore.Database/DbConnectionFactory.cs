@@ -16,14 +16,13 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 
     public IDbConnection Get()
     {
-      // TODO   read from Environment
       var connection = _config["RepositoryDatabase:Connection"];
-      var connType = _config[$"RepositoryDatabase:{connection}:Type"];
+      var connType = Environment.GetEnvironmentVariable("DATASTORE_CONNECTIONTYPE") ?? _config[$"RepositoryDatabase:{connection}:Type"];
       var dbType = Enum.Parse<DataAccessProviderTypes>(connType);
       var dbFact = DbProviderFactoryUtils.GetDbProviderFactory(dbType);
       var dbConn = dbFact.CreateConnection();
 
-      dbConn.ConnectionString = _config[$"RepositoryDatabase:{connection}:ConnectionString"].Replace("|DataDirectory|", AppDomain.CurrentDomain.BaseDirectory);
+      dbConn.ConnectionString = (Environment.GetEnvironmentVariable("DATASTORE_CONNECTIONSTRING") ?? _config[$"RepositoryDatabase:{connection}:ConnectionString"]).Replace("|DataDirectory|", AppDomain.CurrentDomain.BaseDirectory);
       dbConn.Open();
 
       return dbConn;

@@ -3,35 +3,6 @@
 
   "wwwroot": "wwwroot",
 
-  "RepositoryDatabase":
-  {
-    "Connection": "SqlServer",
-
-    "SqLite":
-    {
-      "Type": "SqLite",
-      "ConnectionString": "Data Source=|DataDirectory|Data/BuyingCatalog.sqlite3;"
-    },
-
-    "SqlServer":
-    {
-      "Type": "SqlServer",
-      "ConnectionString": "Data Source=db;Initial Catalog=BuyingCatalog;MultipleActiveResultSets=True;User Id=NHSD;Password=DisruptTheMarket;"
-    },
-
-    "MySql":
-    {
-      "Type": "MySql",
-      "ConnectionString": "server=127.0.0.1;uid=NHSD;pwd=DisruptTheMarket;database=BuyingCatalog;SslMode=none"
-    },
-
-    "PostgreSql":
-    {
-      "Type": "PostgreSql",
-      "ConnectionString": "Server=127.0.0.1;Port=5432;Database=BuyingCatalog;User Id=NHSD;Password=DisruptTheMarket;"
-    }
-  },
-
   "Jwt":
   {
     "Authority": "http://oidc-provider:9000",
