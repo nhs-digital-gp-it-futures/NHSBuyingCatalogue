@@ -23,10 +23,14 @@ services:
     environment:
       - OIDC_ISSUER_URL
       - OIDC_USERINFO_URL
+      - DATASTORE_CONNECTIONTYPE
+      - DATASTORE_CONNECTIONSTRING
+      - LOG_CONNECTIONSTRING
       - SHAREPOINT_BASEURL
       - SHAREPOINT_ORGANISATIONSRELATIVEURL
       - SHAREPOINT_LOGIN
       - SHAREPOINT_PASSWORD
+
   nginx:
     build: ./nginx
     image: gpitf/catalogue-frontend-proxy:private-beta
