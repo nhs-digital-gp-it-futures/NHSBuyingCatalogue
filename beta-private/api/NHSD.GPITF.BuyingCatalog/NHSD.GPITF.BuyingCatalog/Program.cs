@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Hosting;
-using NLog.Web;
-using System;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
@@ -34,18 +32,9 @@ namespace NHSD.GPITF.BuyingCatalog
         return context.LoadFromAssemblyPath(Path.Combine(assyDir, $"{assembly.Name}.dll"));
       };
 
-      // NLog: setup the logger first to catch all errors
-      var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
       try
       {
-        logger.Debug("init main");
         WebHostBuilder.BuildWebHost(args).Run();
-      }
-      catch (Exception ex)
-      {
-        //NLog: catch setup errors
-        logger.Error(ex, "Stopped program because of exception");
-        throw;
       }
       finally
       {
