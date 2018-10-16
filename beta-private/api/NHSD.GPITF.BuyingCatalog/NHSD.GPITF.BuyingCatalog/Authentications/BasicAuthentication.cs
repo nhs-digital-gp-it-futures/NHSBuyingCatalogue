@@ -54,7 +54,7 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
       }
 
       var contact = _contactDatastore.ByEmail(email);
-      var org = _organisationDatastore.ByContact(contact.Id);
+      var org = _organisationDatastore.ByContact(contact?.Id ?? string.Empty);
       var claims = new List<Claim>
       {
         new Claim(ClaimTypes.Email, email, context.Options.ClaimsIssuer),
