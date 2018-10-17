@@ -91,11 +91,25 @@ async function registrationPagePost (req, res) {
       items: valres.array({ onlyFirstError: true }),
       controls: valres.mapped()
     }
+  } else {
+    // TODO create solution if necessary
 
+    req.solution.name = context.solution.name
+    req.solution.description = context.solution.description
+    req.solution.version = context.solution.version
+
+    try {
+      await dataProvider.updateSolutionForRegistration(req.solution)
+    } catch (err) {
+      context.errors = {
+        items: [{ msg: err.toString() }]
+      }
+    }
+  }
+
+  if (context.errors) {
     res.render('supplier/registration/1-details', context)
   } else {
-    // TODO create/update solution
-
     res.redirect(req.body.action && req.body.action.continue ? '../capabilities/' : '../')
   }
 }
@@ -137,11 +151,29 @@ async function capabilitiesPagePost (req, res) {
       items: valres.array({ onlyFirstError: true }),
       controls: valres.mapped()
     }
+  } else {
+    req.solution.capabilities = _(context.capabilities)
+      .filter('selected')
+      .map(cap => ({
+        id: require('node-uuid-generator').generate(),
+        capabilityId: cap.id,
+        status: '0',
+        solutionId: req.solution.id
+      }))
+      .value()
 
+    try {
+      await dataProvider.updateSolutionForRegistration(req.solution)
+    } catch (err) {
+      context.errors = {
+        items: [{ msg: err.toString() }]
+      }
+    }
+  }
+
+  if (context.errors) {
     res.render('supplier/registration/2-capabilities', context)
   } else {
-    // TODO create/update solution
-
     res.redirect('../')
   }
 }
