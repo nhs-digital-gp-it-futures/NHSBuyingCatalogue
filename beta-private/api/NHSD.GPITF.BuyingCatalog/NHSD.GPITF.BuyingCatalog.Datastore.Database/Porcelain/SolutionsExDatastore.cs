@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
+using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 using System;
 using System.Linq;
@@ -73,20 +74,22 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
           // update Solution
           _dbConnection.Value.Update(solnEx.Solution, trans);
 
+          // TODO   Evidence + Reviews
+
           // delete all ClaimedCapability & re-insert
-          _dbConnection.Value.Execute($@"delete from ClaimedCapability where SolutionId = '{solnEx.Solution.Id}';", trans);
+          _dbConnection.Value.Execute($@"delete from {nameof(CapabilitiesImplemented)} where SolutionId = '{solnEx.Solution.Id}';", transaction: trans);
           solnEx.ClaimedCapability.ForEach(cc => { cc.Id = cc.Id == Guid.Empty.ToString() ? Guid.NewGuid().ToString() : cc.Id; });
-          _dbConnection.Value.Insert(solnEx.ClaimedCapability);
+          _dbConnection.Value.Insert(solnEx.ClaimedCapability, trans);
 
           // delete all ClaimedStandard & re-insert
-          _dbConnection.Value.Execute($@"delete from ClaimedStandard where SolutionId = '{solnEx.Solution.Id}';", trans);
+          _dbConnection.Value.Execute($@"delete from {nameof(StandardsApplicable)} where SolutionId = '{solnEx.Solution.Id}';", transaction: trans);
           solnEx.ClaimedStandard.ForEach(cs => { cs.Id = cs.Id == Guid.Empty.ToString() ? Guid.NewGuid().ToString() : cs.Id; });
-          _dbConnection.Value.Insert(solnEx.ClaimedStandard);
+          _dbConnection.Value.Insert(solnEx.ClaimedStandard, trans);
 
           // delete all TechnicalContact & re-insert
-          _dbConnection.Value.Execute($@"delete from TechnicalContact where SolutionId = '{solnEx.Solution.Id}';", trans);
+          _dbConnection.Value.Execute($@"delete from {nameof(TechnicalContacts)} where SolutionId = '{solnEx.Solution.Id}';", transaction: trans);
           solnEx.TechnicalContact.ForEach(tc => { tc.Id = tc.Id == Guid.Empty.ToString() ? Guid.NewGuid().ToString() : tc.Id; });
-          _dbConnection.Value.Insert(solnEx.TechnicalContact);
+          _dbConnection.Value.Insert(solnEx.TechnicalContact, trans);
 
           trans.Commit();
         }
