@@ -81,6 +81,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       {
         throw new KeyNotFoundException($"Could not find claim: {claimId}");
       }
+
       var soln = _solutionsDatastore.ById(claim.SolutionId);
       var org = _organisationsDatastore.ById(soln.OrganisationId);
       var subFolderseparator = !string.IsNullOrEmpty(subFolder) ? "/" : string.Empty;
@@ -99,6 +100,20 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       return absUri.AbsoluteUri;
     }
 
+    public Stream GetFileStream(string claimId, string extUrl)
+    {
+      _claimValidator.ValidateAndThrow(claimId, ruleSet: nameof(IEvidenceBlobStoreLogic.GetFileStream));
+
+      var claim = ClaimsDatastore.ById(claimId);
+      if (claim == null)
+      {
+        throw new KeyNotFoundException($"Could not find claim: {claimId}");
+      }
+
+      var serverRelURL = new Uri(extUrl).AbsolutePath;
+      return Microsoft.SharePoint.Client.NetCore.File.OpenBinaryDirect(_context, serverRelURL)?.Stream;
+    }
+
     public IEnumerable<BlobInfo> EnumerateFolder(string claimId, string subFolder = null)
     {
       _claimValidator.ValidateAndThrow(claimId, ruleSet: nameof(IEvidenceBlobStoreLogic.EnumerateFolder));
@@ -108,6 +123,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       {
         throw new KeyNotFoundException($"Could not find claim: {claimId}");
       }
+
       var soln = _solutionsDatastore.ById(claim.SolutionId);
       var org = _organisationsDatastore.ById(soln.OrganisationId);
 
