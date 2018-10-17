@@ -9,6 +9,7 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
   {
     void PrepareForSolution(string solutionId);
     string AddEvidenceForClaim(string claimId, Stream file, string filename, string subFolder = null);
+    Stream GetFileStream(string claimId, string extUrl);
     IEnumerable<BlobInfo> EnumerateFolder(string claimId, string subFolder = null);
   }
 #pragma warning restore CS1591

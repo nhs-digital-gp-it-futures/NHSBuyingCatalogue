@@ -8,7 +8,6 @@ using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.OperationFilters;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using ZNetCS.AspNetCore.Authentication.Basic;
@@ -24,17 +23,15 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     Roles = Roles.Admin + "," + Roles.Buyer + "," + Roles.Supplier,
     AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
   [Produces("application/json")]
-  public sealed class CapabilitiesImplementedEvidenceBlobStoreController : Controller
+  public sealed class CapabilitiesImplementedEvidenceBlobStoreController : EvidenceBlobStoreControllerBase
   {
-    private readonly ICapabilitiesImplementedEvidenceBlobStoreLogic _logic;
-
     /// <summary>
     /// constructor
     /// </summary>
     /// <param name="logic">business logic</param>
-    public CapabilitiesImplementedEvidenceBlobStoreController(ICapabilitiesImplementedEvidenceBlobStoreLogic logic)
+    public CapabilitiesImplementedEvidenceBlobStoreController(ICapabilitiesImplementedEvidenceBlobStoreLogic logic) :
+      base(logic)
     {
-      _logic = logic;
     }
 
     /// <summary>
@@ -70,19 +67,24 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Claim not found in CRM")]
     public IActionResult AddEvidenceForClaim([Required]string claimId, [Required]IFormFile file, [Required]string filename, string subFolder = null)
     {
-      try
-      {
-      var extUrl = _logic.AddEvidenceForClaim(claimId, file.OpenReadStream(), filename, subFolder);
-      return new OkObjectResult(extUrl);
-      }
-      catch (FluentValidation.ValidationException ex)
-      {
-        return new InternalServerErrorObjectResult(ex);
-      }
-      catch (KeyNotFoundException ex)
-      {
-        return new NotFoundObjectResult(ex);
-      }
+      return AddEvidenceForClaimInternal(claimId, file, filename, subFolder);
+    }
+
+    /// <summary>
+    /// Download a file which is supporting a claim
+    /// </summary>
+    /// <param name="claimId">unique identifier of solution claim</param>
+    /// <param name="extUrl">externally accessible URL of file</param>
+    /// <returns>FileResult with suggested file downlaod name based on extUrl</returns>
+    [HttpPost]
+    [Route("Download/{claimId}")]
+    [Produces(typeof(FileResult))]
+    [ValidateModelState]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(FileResult), description: "Success")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Claim not found in CRM")]
+    public FileResult Download([FromRoute][Required]string claimId, [FromQuery]string extUrl)
+    {
+      return DownloadInternal(claimId, extUrl);
     }
 
     /// <summary>
@@ -100,20 +102,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Claim not found in CRM")]
     public IActionResult EnumerateFolder([FromRoute][Required]string claimId, [FromQuery]string subFolder, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      try
-      {
-        var infos = _logic.EnumerateFolder(claimId, subFolder);
-        var retval = PaginatedList<BlobInfo>.Create(infos, pageIndex, pageSize);
-        return new OkObjectResult(retval);
-      }
-      catch (FluentValidation.ValidationException ex)
-      {
-        return new InternalServerErrorObjectResult(ex);
-      }
-      catch (KeyNotFoundException ex)
-      {
-        return new NotFoundObjectResult(ex);
-      }
+      return EnumerateFolderInternal(claimId, subFolder, pageIndex, pageSize);
     }
   }
 }

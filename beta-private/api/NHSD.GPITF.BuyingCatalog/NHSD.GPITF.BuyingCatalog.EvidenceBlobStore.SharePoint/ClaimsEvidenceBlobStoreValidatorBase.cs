@@ -28,6 +28,13 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       });
 
       // claimId
+      RuleSet(nameof(IEvidenceBlobStoreLogic.GetFileStream), () =>
+      {
+        MustBeValidClaim();
+        MustBeSameOrganisation();
+      });
+
+      // claimId
       RuleSet(nameof(IEvidenceBlobStoreLogic.EnumerateFolder), () =>
       {
         MustBeValidClaim();
