@@ -1,12 +1,13 @@
 ﻿using Dapper.Contrib.Extensions;
+using NHSD.GPITF.BuyingCatalog.Interfaces;
 using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace NHSD.GPITF.BuyingCatalog.Models
 {
 #pragma warning disable CS1591
-  public abstract class ReviewsBase
-    {
+  public abstract class ReviewsBase : IHasPreviousId
+  {
     /// <summary>
     /// Unique identifier of entity
     /// </summary>

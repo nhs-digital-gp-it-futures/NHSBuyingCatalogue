@@ -30,7 +30,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
       {
         using (var trans = _dbConnection.Value.BeginTransaction())
         {
-          techCont.Id = Guid.NewGuid().ToString();
+          techCont.Id = UpdateId(techCont.Id);
           _dbConnection.Value.Insert(techCont, trans);
           trans.Commit();
 

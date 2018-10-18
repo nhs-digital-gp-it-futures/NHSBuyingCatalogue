@@ -1,4 +1,5 @@
 using Dapper.Contrib.Extensions;
+using NHSD.GPITF.BuyingCatalog.Interfaces;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -11,7 +12,7 @@ namespace NHSD.GPITF.BuyingCatalog.Models
   /// Standard MS Dynamics CRM entity
   /// </summary>
   [Table(nameof(Solutions))]
-  public sealed class Solutions
+  public sealed class Solutions : IHasPreviousId
   {
     /// <summary>
     /// Unique identifier of entity

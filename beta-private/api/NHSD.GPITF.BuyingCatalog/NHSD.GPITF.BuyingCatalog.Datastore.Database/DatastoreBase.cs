@@ -25,6 +25,21 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
       _policy = policy.Build(_logger);
     }
 
+    protected string UpdateId(string proposedId)
+    {
+      if (Guid.Empty.ToString() == proposedId)
+      {
+        return Guid.NewGuid().ToString();
+      }
+
+      if (string.IsNullOrWhiteSpace(proposedId))
+      {
+        return Guid.NewGuid().ToString();
+      }
+
+      return proposedId;
+    }
+
     protected TOther GetInternal<TOther>(Func<TOther> get)
     {
       return _policy.Execute(get);

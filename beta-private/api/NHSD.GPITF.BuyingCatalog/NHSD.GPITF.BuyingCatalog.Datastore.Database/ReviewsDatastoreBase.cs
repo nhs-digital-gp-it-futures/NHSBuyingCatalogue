@@ -91,12 +91,26 @@ with recursive Links(CurrentId, Id, PreviousId, EvidenceId, CreatedById, Created
       {
         using (var trans = _dbConnection.Value.BeginTransaction())
         {
-          review.Id = Guid.NewGuid().ToString();
+          review.Id = UpdateId(review.Id);
           review.CreatedOn = DateTime.UtcNow;
           _dbConnection.Value.Insert(review, trans);
           trans.Commit();
 
           return review;
+        }
+      });
+    }
+
+    public void Delete(T review)
+    {
+      GetInternal(() =>
+      {
+        using (var trans = _dbConnection.Value.BeginTransaction())
+        {
+          _dbConnection.Value.Delete(review, trans);
+          trans.Commit();
+
+          return 0;
         }
       });
     }
@@ -114,6 +128,11 @@ with recursive Links(CurrentId, Id, PreviousId, EvidenceId, CreatedById, Created
     ReviewsBase IReviewsDatastore<ReviewsBase>.Create(ReviewsBase review)
     {
       return Create((T)review);
+    }
+
+    void IReviewsDatastore<ReviewsBase>.Delete(ReviewsBase review)
+    {
+      Delete((T)review);
     }
   }
 }

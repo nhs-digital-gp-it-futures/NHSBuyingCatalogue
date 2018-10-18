@@ -91,7 +91,7 @@ with recursive Links(CurrentId, Id, PreviousId, ClaimId, CreatedById, CreatedOn,
       {
         using (var trans = _dbConnection.Value.BeginTransaction())
         {
-          evidence.Id = Guid.NewGuid().ToString();
+          evidence.Id = UpdateId(evidence.Id);
           evidence.CreatedOn = DateTime.UtcNow;
           _dbConnection.Value.Insert(evidence, trans);
           trans.Commit();

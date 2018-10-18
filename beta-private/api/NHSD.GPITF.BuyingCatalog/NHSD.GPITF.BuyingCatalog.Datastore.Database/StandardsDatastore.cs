@@ -73,7 +73,7 @@ where Id in @ids
       {
         using (var trans = _dbConnection.Value.BeginTransaction())
         {
-          standard.Id = Guid.NewGuid().ToString();
+          standard.Id = UpdateId(standard.Id);
           _dbConnection.Value.Insert(standard, trans);
           trans.Commit();
 
