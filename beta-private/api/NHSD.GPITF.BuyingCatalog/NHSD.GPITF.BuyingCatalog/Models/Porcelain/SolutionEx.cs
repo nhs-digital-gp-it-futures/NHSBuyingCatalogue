@@ -26,6 +26,7 @@ namespace NHSD.GPITF.BuyingCatalog.Models.Porcelain
     /// A list of ClaimedCapabilityReview
     /// </summary>
     public List<CapabilitiesImplementedReviews> ClaimedCapabilityReview { get; set; } = new List<CapabilitiesImplementedReviews>();
+
     /// <summary>
     /// A list of ClaimedStandard
     /// </summary>
