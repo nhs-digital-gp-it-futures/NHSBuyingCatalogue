@@ -59,7 +59,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
         .Must(soln =>
         {
           return soln.ClaimedCapability.All(cc => cc.SolutionId == soln.Solution.Id);
-        });
+        })
+        .WithMessage("ClaimedCapability must belong to solution");
     }
 
     public void ClaimedStandardMustBelongToSolution()
@@ -68,7 +69,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
         .Must(soln =>
         {
           return soln.ClaimedStandard.All(cs => cs.SolutionId == soln.Solution.Id);
-        });
+        })
+        .WithMessage("ClaimedStandard must belong to solution");
     }
 
     public void ClaimedCapabilityEvidenceMustBelongToClaim()
@@ -78,7 +80,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
         {
           var claimIds = soln.ClaimedCapability.Select(cc => cc.Id);
           return soln.ClaimedCapabilityEvidence.All(cce => claimIds.Contains(cce.ClaimId));
-        });
+        })
+        .WithMessage("ClaimedCapabilityEvidence must belong to claim");
     }
 
     public void ClaimedStandardEvidenceMustBelongToClaim()
@@ -88,7 +91,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
         {
           var claimIds = soln.ClaimedStandard.Select(cs => cs.Id);
           return soln.ClaimedStandardEvidence.All(cse => claimIds.Contains(cse.ClaimId));
-        });
+        })
+        .WithMessage("ClaimedStandardEvidence must belong to claim");
     }
 
     public void ClaimedCapabilityReviewMustBelongToEvidence()
@@ -98,7 +102,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
         {
           var evidenceIds = soln.ClaimedCapabilityEvidence.Select(cce => cce.Id);
           return soln.ClaimedCapabilityReview.All(ccr => evidenceIds.Contains(ccr.EvidenceId));
-        });
+        })
+        .WithMessage("ClaimedCapabilityReview must belong to evidence");
     }
 
     public void ClaimedStandardReviewMustBelongToEvidence()
@@ -108,7 +113,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
         {
           var evidenceIds = soln.ClaimedStandardEvidence.Select(cse => cse.Id);
           return soln.ClaimedStandardReview.All(csr => evidenceIds.Contains(csr.EvidenceId));
-        });
+        })
+        .WithMessage("ClaimedStandardReview must belong to evidence");
     }
 
     public void TechnicalContactMustBelongToSolution()
@@ -117,7 +123,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
         .Must(soln =>
         {
           return soln.TechnicalContact.All(tc => tc.SolutionId == soln.Solution.Id);
-        });
+        })
+        .WithMessage("TechnicalContact must belong to solution");
     }
 
     public void ClaimedCapabilityEvidencePreviousVersionMustBelongToSolution()
@@ -128,8 +135,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
           var evidenceIds = soln.ClaimedCapabilityEvidence.Select(cce => cce.Id);
           var evidencePrevIds = soln.ClaimedCapabilityEvidence.Select(cce => cce.PreviousId).Where(id => id != null);
           return evidencePrevIds.All(prevId => evidenceIds.Contains(prevId));
-        });
-
+        })
+        .WithMessage("ClaimedCapabilityEvidence previous version must belong to solution");
     }
 
     public void ClaimedStandardEvidencePreviousVersionMustBelongToSolution()
@@ -140,8 +147,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
           var evidenceIds = soln.ClaimedStandardEvidence.Select(cce => cce.Id);
           var evidencePrevIds = soln.ClaimedStandardEvidence.Select(cce => cce.PreviousId).Where(id => id != null);
           return evidencePrevIds.All(prevId => evidenceIds.Contains(prevId));
-        });
-
+        })
+        .WithMessage("ClaimedStandardEvidence previous version must belong to solution");
     }
 
     public void ClaimedCapabilityReviewPreviousVersionMustBelongToSolution()
@@ -152,8 +159,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
           var evidenceIds = soln.ClaimedCapabilityReview.Select(cce => cce.Id);
           var evidencePrevIds = soln.ClaimedCapabilityReview.Select(cce => cce.PreviousId).Where(id => id != null);
           return evidencePrevIds.All(prevId => evidenceIds.Contains(prevId));
-        });
-
+        })
+        .WithMessage("ClaimedCapabilityReview previous version must belong to solution");
     }
 
     public void ClaimedStandardReviewPreviousVersionMustBelongToSolution()
@@ -164,8 +171,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
           var evidenceIds = soln.ClaimedStandardReview.Select(cce => cce.Id);
           var evidencePrevIds = soln.ClaimedStandardReview.Select(cce => cce.PreviousId).Where(id => id != null);
           return evidencePrevIds.All(prevId => evidenceIds.Contains(prevId));
-        });
-
+        })
+        .WithMessage("ClaimedStandardReview previous version must belong to solution");
     }
   }
 }
