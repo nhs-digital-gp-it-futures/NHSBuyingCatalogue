@@ -60,6 +60,16 @@
         done();
       });
     });
+    describe('apiCapabilitiesImplementedEvidenceBlobStoreDownloadByClaimIdPost', function() {
+      it('should call apiCapabilitiesImplementedEvidenceBlobStoreDownloadByClaimIdPost successfully', function(done) {
+        //uncomment below and update the code to test apiCapabilitiesImplementedEvidenceBlobStoreDownloadByClaimIdPost
+        //instance.apiCapabilitiesImplementedEvidenceBlobStoreDownloadByClaimIdPost(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
+      });
+    });
     describe('apiCapabilitiesImplementedEvidenceBlobStoreEnumerateFolderByClaimIdGet', function() {
       it('should call apiCapabilitiesImplementedEvidenceBlobStoreEnumerateFolderByClaimIdGet successfully', function(done) {
         //uncomment below and update the code to test apiCapabilitiesImplementedEvidenceBlobStoreEnumerateFolderByClaimIdGet

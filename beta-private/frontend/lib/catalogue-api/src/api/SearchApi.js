@@ -16,18 +16,18 @@
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['ApiClient', 'model/PaginatedListSolutionEx'], factory);
+    define(['ApiClient', 'model/PaginatedListSearchResult'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('../ApiClient'), require('../model/PaginatedListSolutionEx'));
+    module.exports = factory(require('../ApiClient'), require('../model/PaginatedListSearchResult'));
   } else {
     // Browser globals (root is window)
     if (!root.CatalogueApi) {
       root.CatalogueApi = {};
     }
-    root.CatalogueApi.SearchApi = factory(root.CatalogueApi.ApiClient, root.CatalogueApi.PaginatedListSolutionEx);
+    root.CatalogueApi.SearchApi = factory(root.CatalogueApi.ApiClient, root.CatalogueApi.PaginatedListSearchResult);
   }
-}(this, function(ApiClient, PaginatedListSolutionEx) {
+}(this, function(ApiClient, PaginatedListSearchResult) {
   'use strict';
 
   /**
@@ -49,20 +49,20 @@
 
 
     /**
-     * Get existing solution/s which are related to the given keyword  Keyword is not case sensitive
+     * Get existing solution/s which are related to the given keyword &lt;br /&gt;  Keyword is not case sensitive &lt;br /&gt;  Capabilities are searched for capabilities which contain  the keyword in the capability name or descriptions.  This  forms a set of desired capabilities. &lt;br /&gt;  These desired capabilities are then matched to solution/s which  implement at least one of the desired capabilities. &lt;br /&gt;  An &#39;ideal&#39; solution would be one which only implements all  of the desired capabilities. &lt;br /&gt;  Each solution is given a &#39;distance&#39; which represents how many  different capabilites the solution implements, compared to the  set of desired capabilities: &lt;br /&gt;    zero     &#x3D;&#x3D; solution has exactly capabilities desired &lt;br /&gt;    positive &#x3D;&#x3D; solution has more capabilities than desired &lt;br /&gt;    negative &#x3D;&#x3D; solution has less capabilities than desired &lt;br /&gt;
      * @param {String} keyword keyword describing a solution or capability
      * @param {Object} opts Optional parameters
      * @param {Number} opts.pageIndex 1-based index of page to return.  Defaults to 1
      * @param {Number} opts.pageSize number of items per page.  Defaults to 20
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/PaginatedListSolutionEx} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/PaginatedListSearchResult} and HTTP response
      */
-    this.apiPorcelainSearchSolutionExByKeywordByKeywordGetWithHttpInfo = function(keyword, opts) {
+    this.apiPorcelainSearchByKeywordByKeywordGetWithHttpInfo = function(keyword, opts) {
       opts = opts || {};
       var postBody = null;
 
       // verify the required parameter 'keyword' is set
       if (keyword === undefined || keyword === null) {
-        throw new Error("Missing the required parameter 'keyword' when calling apiPorcelainSearchSolutionExByKeywordByKeywordGet");
+        throw new Error("Missing the required parameter 'keyword' when calling apiPorcelainSearchByKeywordByKeywordGet");
       }
 
 
@@ -83,25 +83,25 @@
       var authNames = ['basic', 'oauth2'];
       var contentTypes = [];
       var accepts = ['application/json'];
-      var returnType = PaginatedListSolutionEx;
+      var returnType = PaginatedListSearchResult;
 
       return this.apiClient.callApi(
-        '/api/porcelain/Search/SolutionExByKeyword/{keyword}', 'GET',
+        '/api/porcelain/Search/ByKeyword/{keyword}', 'GET',
         pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType
       );
     }
 
     /**
-     * Get existing solution/s which are related to the given keyword  Keyword is not case sensitive
+     * Get existing solution/s which are related to the given keyword &lt;br /&gt;  Keyword is not case sensitive &lt;br /&gt;  Capabilities are searched for capabilities which contain  the keyword in the capability name or descriptions.  This  forms a set of desired capabilities. &lt;br /&gt;  These desired capabilities are then matched to solution/s which  implement at least one of the desired capabilities. &lt;br /&gt;  An &#39;ideal&#39; solution would be one which only implements all  of the desired capabilities. &lt;br /&gt;  Each solution is given a &#39;distance&#39; which represents how many  different capabilites the solution implements, compared to the  set of desired capabilities: &lt;br /&gt;    zero     &#x3D;&#x3D; solution has exactly capabilities desired &lt;br /&gt;    positive &#x3D;&#x3D; solution has more capabilities than desired &lt;br /&gt;    negative &#x3D;&#x3D; solution has less capabilities than desired &lt;br /&gt;
      * @param {String} keyword keyword describing a solution or capability
      * @param {Object} opts Optional parameters
      * @param {Number} opts.pageIndex 1-based index of page to return.  Defaults to 1
      * @param {Number} opts.pageSize number of items per page.  Defaults to 20
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/PaginatedListSolutionEx}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/PaginatedListSearchResult}
      */
-    this.apiPorcelainSearchSolutionExByKeywordByKeywordGet = function(keyword, opts) {
-      return this.apiPorcelainSearchSolutionExByKeywordByKeywordGetWithHttpInfo(keyword, opts)
+    this.apiPorcelainSearchByKeywordByKeywordGet = function(keyword, opts) {
+      return this.apiPorcelainSearchByKeywordByKeywordGetWithHttpInfo(keyword, opts)
         .then(function(response_and_data) {
           return response_and_data.data;
         });

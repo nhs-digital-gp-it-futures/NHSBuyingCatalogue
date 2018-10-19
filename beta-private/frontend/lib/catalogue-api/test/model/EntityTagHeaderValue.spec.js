@@ -30,7 +30,7 @@
   var instance;
 
   beforeEach(function() {
-    instance = new CatalogueApi.SearchApi();
+    instance = new CatalogueApi.EntityTagHeaderValue();
   });
 
   var getProperty = function(object, getter, property) {
@@ -49,17 +49,25 @@
       object[property] = value;
   }
 
-  describe('SearchApi', function() {
-    describe('apiPorcelainSearchByKeywordByKeywordGet', function() {
-      it('should call apiPorcelainSearchByKeywordByKeywordGet successfully', function(done) {
-        //uncomment below and update the code to test apiPorcelainSearchByKeywordByKeywordGet
-        //instance.apiPorcelainSearchByKeywordByKeywordGet(function(error) {
-        //  if (error) throw error;
-        //expect().to.be();
-        //});
-        done();
-      });
+  describe('EntityTagHeaderValue', function() {
+    it('should create an instance of EntityTagHeaderValue', function() {
+      // uncomment below and update the code to test EntityTagHeaderValue
+      //var instance = new CatalogueApi.EntityTagHeaderValue();
+      //expect(instance).to.be.a(CatalogueApi.EntityTagHeaderValue);
     });
+
+    it('should have the property tag (base name: "tag")', function() {
+      // uncomment below and update the code to test the property tag
+      //var instance = new CatalogueApi.EntityTagHeaderValue();
+      //expect(instance).to.be();
+    });
+
+    it('should have the property isWeak (base name: "isWeak")', function() {
+      // uncomment below and update the code to test the property isWeak
+      //var instance = new CatalogueApi.EntityTagHeaderValue();
+      //expect(instance).to.be();
+    });
+
   });
 
 }));

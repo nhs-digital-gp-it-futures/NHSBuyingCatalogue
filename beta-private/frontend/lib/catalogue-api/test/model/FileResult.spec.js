@@ -30,7 +30,7 @@
   var instance;
 
   beforeEach(function() {
-    instance = new CatalogueApi.SearchApi();
+    instance = new CatalogueApi.FileResult();
   });
 
   var getProperty = function(object, getter, property) {
@@ -49,17 +49,37 @@
       object[property] = value;
   }
 
-  describe('SearchApi', function() {
-    describe('apiPorcelainSearchByKeywordByKeywordGet', function() {
-      it('should call apiPorcelainSearchByKeywordByKeywordGet successfully', function(done) {
-        //uncomment below and update the code to test apiPorcelainSearchByKeywordByKeywordGet
-        //instance.apiPorcelainSearchByKeywordByKeywordGet(function(error) {
-        //  if (error) throw error;
-        //expect().to.be();
-        //});
-        done();
-      });
+  describe('FileResult', function() {
+    it('should create an instance of FileResult', function() {
+      // uncomment below and update the code to test FileResult
+      //var instance = new CatalogueApi.FileResult();
+      //expect(instance).to.be.a(CatalogueApi.FileResult);
     });
+
+    it('should have the property contentType (base name: "contentType")', function() {
+      // uncomment below and update the code to test the property contentType
+      //var instance = new CatalogueApi.FileResult();
+      //expect(instance).to.be();
+    });
+
+    it('should have the property fileDownloadName (base name: "fileDownloadName")', function() {
+      // uncomment below and update the code to test the property fileDownloadName
+      //var instance = new CatalogueApi.FileResult();
+      //expect(instance).to.be();
+    });
+
+    it('should have the property lastModified (base name: "lastModified")', function() {
+      // uncomment below and update the code to test the property lastModified
+      //var instance = new CatalogueApi.FileResult();
+      //expect(instance).to.be();
+    });
+
+    it('should have the property entityTag (base name: "entityTag")', function() {
+      // uncomment below and update the code to test the property entityTag
+      //var instance = new CatalogueApi.FileResult();
+      //expect(instance).to.be();
+    });
+
   });
 
 }));

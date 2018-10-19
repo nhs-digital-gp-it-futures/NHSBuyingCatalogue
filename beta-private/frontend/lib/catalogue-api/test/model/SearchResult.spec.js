@@ -30,7 +30,7 @@
   var instance;
 
   beforeEach(function() {
-    instance = new CatalogueApi.SearchApi();
+    instance = new CatalogueApi.SearchResult();
   });
 
   var getProperty = function(object, getter, property) {
@@ -49,17 +49,25 @@
       object[property] = value;
   }
 
-  describe('SearchApi', function() {
-    describe('apiPorcelainSearchByKeywordByKeywordGet', function() {
-      it('should call apiPorcelainSearchByKeywordByKeywordGet successfully', function(done) {
-        //uncomment below and update the code to test apiPorcelainSearchByKeywordByKeywordGet
-        //instance.apiPorcelainSearchByKeywordByKeywordGet(function(error) {
-        //  if (error) throw error;
-        //expect().to.be();
-        //});
-        done();
-      });
+  describe('SearchResult', function() {
+    it('should create an instance of SearchResult', function() {
+      // uncomment below and update the code to test SearchResult
+      //var instance = new CatalogueApi.SearchResult();
+      //expect(instance).to.be.a(CatalogueApi.SearchResult);
     });
+
+    it('should have the property solutionEx (base name: "solutionEx")', function() {
+      // uncomment below and update the code to test the property solutionEx
+      //var instance = new CatalogueApi.SearchResult();
+      //expect(instance).to.be();
+    });
+
+    it('should have the property distance (base name: "distance")', function() {
+      // uncomment below and update the code to test the property distance
+      //var instance = new CatalogueApi.SearchResult();
+      //expect(instance).to.be();
+    });
+
   });
 
 }));

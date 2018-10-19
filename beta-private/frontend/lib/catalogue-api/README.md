@@ -142,6 +142,7 @@ Class | Method | HTTP request | Description
 *CatalogueApi.CapabilitiesImplementedEvidenceApi* | [**apiCapabilitiesImplementedEvidenceByClaimByClaimIdGet**](docs/CapabilitiesImplementedEvidenceApi.md#apiCapabilitiesImplementedEvidenceByClaimByClaimIdGet) | **GET** /api/CapabilitiesImplementedEvidence/ByClaim/{claimId} | Get all Evidence for the given Claim  Each list is a distinct &#39;chain&#39; of Evidence ie original Evidence with all subsequent Evidence  The first item in each &#39;chain&#39; is the most current Evidence.  The last item in each &#39;chain&#39; is the original Evidence.
 *CatalogueApi.CapabilitiesImplementedEvidenceApi* | [**apiCapabilitiesImplementedEvidencePost**](docs/CapabilitiesImplementedEvidenceApi.md#apiCapabilitiesImplementedEvidencePost) | **POST** /api/CapabilitiesImplementedEvidence | Create a new evidence
 *CatalogueApi.CapabilitiesImplementedEvidenceBlobStoreApi* | [**apiCapabilitiesImplementedEvidenceBlobStoreAddEvidenceForClaimPost**](docs/CapabilitiesImplementedEvidenceBlobStoreApi.md#apiCapabilitiesImplementedEvidenceBlobStoreAddEvidenceForClaimPost) | **POST** /api/CapabilitiesImplementedEvidenceBlobStore/AddEvidenceForClaim | Upload a file to support a claim
+*CatalogueApi.CapabilitiesImplementedEvidenceBlobStoreApi* | [**apiCapabilitiesImplementedEvidenceBlobStoreDownloadByClaimIdPost**](docs/CapabilitiesImplementedEvidenceBlobStoreApi.md#apiCapabilitiesImplementedEvidenceBlobStoreDownloadByClaimIdPost) | **POST** /api/CapabilitiesImplementedEvidenceBlobStore/Download/{claimId} | Download a file which is supporting a claim
 *CatalogueApi.CapabilitiesImplementedEvidenceBlobStoreApi* | [**apiCapabilitiesImplementedEvidenceBlobStoreEnumerateFolderByClaimIdGet**](docs/CapabilitiesImplementedEvidenceBlobStoreApi.md#apiCapabilitiesImplementedEvidenceBlobStoreEnumerateFolderByClaimIdGet) | **GET** /api/CapabilitiesImplementedEvidenceBlobStore/EnumerateFolder/{claimId} | List all files and sub-folders for a claim including folder for claim
 *CatalogueApi.CapabilitiesImplementedReviewsApi* | [**apiCapabilitiesImplementedReviewsByEvidenceByEvidenceIdGet**](docs/CapabilitiesImplementedReviewsApi.md#apiCapabilitiesImplementedReviewsByEvidenceByEvidenceIdGet) | **GET** /api/CapabilitiesImplementedReviews/ByEvidence/{evidenceId} | Get all Reviews for a CapabilitiesImplemented  Each list is a distinct &#39;chain&#39; of Review ie original Review with all subsequent Review  The first item in each &#39;chain&#39; is the most current Review.  The last item in each &#39;chain&#39; is the original Review.
 *CatalogueApi.CapabilitiesImplementedReviewsApi* | [**apiCapabilitiesImplementedReviewsPost**](docs/CapabilitiesImplementedReviewsApi.md#apiCapabilitiesImplementedReviewsPost) | **POST** /api/CapabilitiesImplementedReviews | Create a new Review for a CapabilitiesImplemented
@@ -155,9 +156,10 @@ Class | Method | HTTP request | Description
 *CatalogueApi.FrameworksApi* | [**apiFrameworksBySolutionBySolutionIdGet**](docs/FrameworksApi.md#apiFrameworksBySolutionBySolutionIdGet) | **GET** /api/Frameworks/BySolution/{solutionId} | Get existing framework/s on which a solution was onboarded, given the CRM identifier of the solution
 *CatalogueApi.FrameworksApi* | [**apiFrameworksByStandardByStandardIdGet**](docs/FrameworksApi.md#apiFrameworksByStandardByStandardIdGet) | **GET** /api/Frameworks/ByStandard/{standardId} | Get existing framework/s which have the given standard
 *CatalogueApi.FrameworksApi* | [**apiFrameworksGet**](docs/FrameworksApi.md#apiFrameworksGet) | **GET** /api/Frameworks | Retrieve all current frameworks in a paged list
+*CatalogueApi.KeywordSearchHistoryApi* | [**apiPorcelainKeywordSearchHistoryGet**](docs/KeywordSearchHistoryApi.md#apiPorcelainKeywordSearchHistoryGet) | **GET** /api/porcelain/KeywordSearchHistory | Get keywords and how many times they occurred in a specified UTC date range
 *CatalogueApi.LinkManagerApi* | [**apiLinkManagerFrameworkSolutionCreateByFrameworkIdBySolutionIdPost**](docs/LinkManagerApi.md#apiLinkManagerFrameworkSolutionCreateByFrameworkIdBySolutionIdPost) | **POST** /api/LinkManager/FrameworkSolution/Create/{frameworkId}/{solutionId} | Create a link between a Framework and a Solution
 *CatalogueApi.OrganisationsApi* | [**apiOrganisationsByContactByContactIdGet**](docs/OrganisationsApi.md#apiOrganisationsByContactByContactIdGet) | **GET** /api/Organisations/ByContact/{contactId} | Retrieve an Organisation for the given Contact
-*CatalogueApi.SearchApi* | [**apiPorcelainSearchSolutionExByKeywordByKeywordGet**](docs/SearchApi.md#apiPorcelainSearchSolutionExByKeywordByKeywordGet) | **GET** /api/porcelain/Search/SolutionExByKeyword/{keyword} | Get existing solution/s which are related to the given keyword  Keyword is not case sensitive
+*CatalogueApi.SearchApi* | [**apiPorcelainSearchByKeywordByKeywordGet**](docs/SearchApi.md#apiPorcelainSearchByKeywordByKeywordGet) | **GET** /api/porcelain/Search/ByKeyword/{keyword} | Get existing solution/s which are related to the given keyword &lt;br /&gt;  Keyword is not case sensitive &lt;br /&gt;  Capabilities are searched for capabilities which contain  the keyword in the capability name or descriptions.  This  forms a set of desired capabilities. &lt;br /&gt;  These desired capabilities are then matched to solution/s which  implement at least one of the desired capabilities. &lt;br /&gt;  An &#39;ideal&#39; solution would be one which only implements all  of the desired capabilities. &lt;br /&gt;  Each solution is given a &#39;distance&#39; which represents how many  different capabilites the solution implements, compared to the  set of desired capabilities: &lt;br /&gt;    zero     &#x3D;&#x3D; solution has exactly capabilities desired &lt;br /&gt;    positive &#x3D;&#x3D; solution has more capabilities than desired &lt;br /&gt;    negative &#x3D;&#x3D; solution has less capabilities than desired &lt;br /&gt;
 *CatalogueApi.SolutionsApi* | [**apiSolutionsByFrameworkByFrameworkIdGet**](docs/SolutionsApi.md#apiSolutionsByFrameworkByFrameworkIdGet) | **GET** /api/Solutions/ByFramework/{frameworkId} | Get existing solution/s on which were onboarded onto a framework,  given the CRM identifier of the framework
 *CatalogueApi.SolutionsApi* | [**apiSolutionsByIdByIdGet**](docs/SolutionsApi.md#apiSolutionsByIdByIdGet) | **GET** /api/Solutions/ById/{id} | Get an existing solution given its CRM identifier  Typically used to retrieve previous version
 *CatalogueApi.SolutionsApi* | [**apiSolutionsByOrganisationByOrganisationIdGet**](docs/SolutionsApi.md#apiSolutionsByOrganisationByOrganisationIdGet) | **GET** /api/Solutions/ByOrganisation/{organisationId} | Retrieve all current solutions in a paged list for an organisation,  given the organisation’s CRM identifier
@@ -178,6 +180,7 @@ Class | Method | HTTP request | Description
 *CatalogueApi.StandardsApplicableEvidenceApi* | [**apiStandardsApplicableEvidenceByClaimByClaimIdGet**](docs/StandardsApplicableEvidenceApi.md#apiStandardsApplicableEvidenceByClaimByClaimIdGet) | **GET** /api/StandardsApplicableEvidence/ByClaim/{claimId} | Get all Evidence for the given Claim  Each list is a distinct &#39;chain&#39; of Evidence ie original Evidence with all subsequent Evidence  The first item in each &#39;chain&#39; is the most current Evidence.  The last item in each &#39;chain&#39; is the original Evidence.
 *CatalogueApi.StandardsApplicableEvidenceApi* | [**apiStandardsApplicableEvidencePost**](docs/StandardsApplicableEvidenceApi.md#apiStandardsApplicableEvidencePost) | **POST** /api/StandardsApplicableEvidence | Create a new evidence
 *CatalogueApi.StandardsApplicableEvidenceBlobStoreApi* | [**apiStandardsApplicableEvidenceBlobStoreAddEvidenceForClaimPost**](docs/StandardsApplicableEvidenceBlobStoreApi.md#apiStandardsApplicableEvidenceBlobStoreAddEvidenceForClaimPost) | **POST** /api/StandardsApplicableEvidenceBlobStore/AddEvidenceForClaim | Upload a file to support a claim
+*CatalogueApi.StandardsApplicableEvidenceBlobStoreApi* | [**apiStandardsApplicableEvidenceBlobStoreDownloadByClaimIdPost**](docs/StandardsApplicableEvidenceBlobStoreApi.md#apiStandardsApplicableEvidenceBlobStoreDownloadByClaimIdPost) | **POST** /api/StandardsApplicableEvidenceBlobStore/Download/{claimId} | Download a file which is supporting a claim
 *CatalogueApi.StandardsApplicableEvidenceBlobStoreApi* | [**apiStandardsApplicableEvidenceBlobStoreEnumerateFolderByClaimIdGet**](docs/StandardsApplicableEvidenceBlobStoreApi.md#apiStandardsApplicableEvidenceBlobStoreEnumerateFolderByClaimIdGet) | **GET** /api/StandardsApplicableEvidenceBlobStore/EnumerateFolder/{claimId} | List all files and sub-folders for a claim including folder for claim
 *CatalogueApi.StandardsApplicableReviewsApi* | [**apiStandardsApplicableReviewsByEvidenceByEvidenceIdGet**](docs/StandardsApplicableReviewsApi.md#apiStandardsApplicableReviewsByEvidenceByEvidenceIdGet) | **GET** /api/StandardsApplicableReviews/ByEvidence/{evidenceId} | Get all Reviews for a StandardsApplicable  Each list is a distinct &#39;chain&#39; of Review ie original Review with all subsequent Review  The first item in each &#39;chain&#39; is the most current Review.  The last item in each &#39;chain&#39; is the original Review.
 *CatalogueApi.StandardsApplicableReviewsApi* | [**apiStandardsApplicableReviewsPost**](docs/StandardsApplicableReviewsApi.md#apiStandardsApplicableReviewsPost) | **POST** /api/StandardsApplicableReviews | Create a new Review for a StandardsApplicable
@@ -197,8 +200,11 @@ Class | Method | HTTP request | Description
  - [CatalogueApi.CapabilityMapping](docs/CapabilityMapping.md)
  - [CatalogueApi.CapabilityMappings](docs/CapabilityMappings.md)
  - [CatalogueApi.Contacts](docs/Contacts.md)
+ - [CatalogueApi.EntityTagHeaderValue](docs/EntityTagHeaderValue.md)
+ - [CatalogueApi.FileResult](docs/FileResult.md)
  - [CatalogueApi.Frameworks](docs/Frameworks.md)
  - [CatalogueApi.IFormFile](docs/IFormFile.md)
+ - [CatalogueApi.KeywordCount](docs/KeywordCount.md)
  - [CatalogueApi.OptionalStandard](docs/OptionalStandard.md)
  - [CatalogueApi.Organisations](docs/Organisations.md)
  - [CatalogueApi.PaginatedListBlobInfo](docs/PaginatedListBlobInfo.md)
@@ -210,17 +216,20 @@ Class | Method | HTTP request | Description
  - [CatalogueApi.PaginatedListIEnumerableCapabilitiesImplementedReviews](docs/PaginatedListIEnumerableCapabilitiesImplementedReviews.md)
  - [CatalogueApi.PaginatedListIEnumerableStandardsApplicableEvidence](docs/PaginatedListIEnumerableStandardsApplicableEvidence.md)
  - [CatalogueApi.PaginatedListIEnumerableStandardsApplicableReviews](docs/PaginatedListIEnumerableStandardsApplicableReviews.md)
- - [CatalogueApi.PaginatedListSolutionEx](docs/PaginatedListSolutionEx.md)
+ - [CatalogueApi.PaginatedListKeywordCount](docs/PaginatedListKeywordCount.md)
+ - [CatalogueApi.PaginatedListSearchResult](docs/PaginatedListSearchResult.md)
  - [CatalogueApi.PaginatedListSolutions](docs/PaginatedListSolutions.md)
  - [CatalogueApi.PaginatedListStandards](docs/PaginatedListStandards.md)
  - [CatalogueApi.PaginatedListStandardsApplicable](docs/PaginatedListStandardsApplicable.md)
  - [CatalogueApi.PaginatedListTechnicalContacts](docs/PaginatedListTechnicalContacts.md)
+ - [CatalogueApi.SearchResult](docs/SearchResult.md)
  - [CatalogueApi.SolutionEx](docs/SolutionEx.md)
  - [CatalogueApi.Solutions](docs/Solutions.md)
  - [CatalogueApi.Standards](docs/Standards.md)
  - [CatalogueApi.StandardsApplicable](docs/StandardsApplicable.md)
  - [CatalogueApi.StandardsApplicableEvidence](docs/StandardsApplicableEvidence.md)
  - [CatalogueApi.StandardsApplicableReviews](docs/StandardsApplicableReviews.md)
+ - [CatalogueApi.StringSegment](docs/StringSegment.md)
  - [CatalogueApi.TechnicalContacts](docs/TechnicalContacts.md)
 
 
