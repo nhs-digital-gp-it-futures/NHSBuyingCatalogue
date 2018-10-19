@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Dapper.Contrib.Extensions;
+using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -50,6 +50,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
       _claimedStandardEvidenceDatastore = claimedStandardEvidenceDatastore;
       _claimedStandardReviewsDatastore = claimedStandardReviewsDatastore;
     }
+
     public SolutionEx BySolution(string solutionId)
     {
       return GetInternal(() =>
@@ -58,8 +59,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
         {
           Solution = _solutionDatastore.ById(solutionId),
           TechnicalContact = _technicalContactDatastore.BySolution(solutionId).ToList(),
-          ClaimedStandard = _claimedStandardDatastore.BySolution(solutionId).ToList(),
-          ClaimedCapability = _claimedCapabilityDatastore.BySolution(solutionId).ToList()
+          ClaimedCapability = _claimedCapabilityDatastore.BySolution(solutionId).ToList(),
+          ClaimedStandard = _claimedStandardDatastore.BySolution(solutionId).ToList()
         };
 
         // populate Evidence + Review
@@ -88,46 +89,51 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
     {
       GetInternal(() =>
       {
-        // update Solution
-        _solutionDatastore.Update(solnEx.Solution);
+        using (var trans = _dbConnection.Value.BeginTransaction())
+        {
+          // update Solution
+          _dbConnection.Value.Update(solnEx.Solution, trans);
 
-        #region ClaimedCapability
-        // delete ClaimedCapabilities which will cascade delete Evidence + Reviews
-        _claimedCapabilityDatastore
-          .BySolution(solnEx.Solution.Id)
-          .ToList()
-          .ForEach(cc => _claimedCapabilityDatastore.Delete(cc));
+          #region ClaimedCapability
+          // delete ClaimedCapabilities which will cascade delete Evidence + Reviews
+          _claimedCapabilityDatastore
+            .BySolution(solnEx.Solution.Id)
+            .ToList()
+            .ForEach(cc => _dbConnection.Value.Delete(cc, trans));
 
-        // re-insert ClaimedCapabilities + Evidence + Reviews
-        solnEx.ClaimedCapability.ForEach(cc => _claimedCapabilityDatastore.Create(cc));
+          // re-insert ClaimedCapabilities + Evidence + Reviews
+          solnEx.ClaimedCapability.ForEach(cc => _dbConnection.Value.Insert(cc, trans));
 
-        // re-insert each chain, starting at the root ie PreviousId==null
-        GetInsertionTree(solnEx.ClaimedCapabilityEvidence).ForEach(cce => _claimedCapabilityEvidenceDatastore.Create(cce));
-        GetInsertionTree(solnEx.ClaimedCapabilityReview).ForEach(ccr => _claimedCapabilityReviewsDatastore.Create(ccr));
-        #endregion
+          // re-insert each chain, starting at the root ie PreviousId==null
+          GetInsertionTree(solnEx.ClaimedCapabilityEvidence).ForEach(cce => _dbConnection.Value.Insert(cce, trans));
+          GetInsertionTree(solnEx.ClaimedCapabilityReview).ForEach(ccr => _dbConnection.Value.Insert(ccr, trans));
+          #endregion
 
-        #region ClaimedStandard
-        // delete ClaimedStandards which will cascade delete Evidence + Reviews
-        _claimedStandardDatastore
-          .BySolution(solnEx.Solution.Id)
-          .ToList()
-          .ForEach(cs => _claimedStandardDatastore.Delete(cs));
+          #region ClaimedStandard
+          // delete ClaimedStandards which will cascade delete Evidence + Reviews
+          _claimedStandardDatastore
+            .BySolution(solnEx.Solution.Id)
+            .ToList()
+            .ForEach(cs => _dbConnection.Value.Delete(cs, trans));
 
-        // re-insert ClaimedStandards + Evidence + Reviews
-        solnEx.ClaimedStandard.ForEach(cs => _claimedStandardDatastore.Create(cs));
+          // re-insert ClaimedStandards + Evidence + Reviews
+          solnEx.ClaimedStandard.ForEach(cs => _dbConnection.Value.Insert(cs, trans));
 
-        // re-insert each chain, starting at the root ie PreviousId==null
-        GetInsertionTree(solnEx.ClaimedStandardEvidence).ForEach(cse => _claimedStandardEvidenceDatastore.Create(cse));
-        GetInsertionTree(solnEx.ClaimedStandardReview).ForEach(csr => _claimedStandardReviewsDatastore.Create(csr));
-        #endregion
+          // re-insert each chain, starting at the root ie PreviousId==null
+          GetInsertionTree(solnEx.ClaimedStandardEvidence).ForEach(cse => _dbConnection.Value.Insert(cse, trans));
+          GetInsertionTree(solnEx.ClaimedStandardReview).ForEach(csr => _dbConnection.Value.Insert(csr, trans));
+          #endregion
 
-        #region TechnicalContacts
-        // delete all TechnicalContact & re-insert
-        _technicalContactDatastore
-          .BySolution(solnEx.Solution.Id).ToList()
-          .ForEach(tc => _technicalContactDatastore.Delete(tc));
-        solnEx.TechnicalContact.ForEach(tc => _technicalContactDatastore.Create(tc));
-        #endregion
+          #region TechnicalContacts
+          // delete all TechnicalContact & re-insert
+          _technicalContactDatastore
+            .BySolution(solnEx.Solution.Id).ToList()
+            .ForEach(tc => _dbConnection.Value.Delete(tc, trans));
+          solnEx.TechnicalContact.ForEach(tc => _dbConnection.Value.Insert(tc, trans));
+          #endregion
+
+          trans.Commit();
+        }
 
         return 0;
       });
