@@ -36,6 +36,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
 
     /// <summary>
     /// Upload a file to support a claim
+    /// If the file already exists on the server, then a new version is created
     /// </summary>
     /// <param name="claimId">unique identifier of solution claim</param>
     /// <param name="file">Stream representing file to be uploaded</param>

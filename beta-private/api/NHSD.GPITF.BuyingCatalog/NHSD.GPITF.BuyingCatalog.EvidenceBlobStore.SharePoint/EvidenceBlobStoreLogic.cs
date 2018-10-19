@@ -95,6 +95,10 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         CreateSubFolder(claimFolder, subFolder);
       }
 
+      //  Setting:
+      //    overwriteIfExists =true
+      // will create a new version of the file, if it already exists:
+      //    https://sunbin0704.wordpress.com/2013/10/11/csom-update-file-and-create-new-version-in-document-library/
       Microsoft.SharePoint.Client.NetCore.File.SaveBinaryDirect(_context, serverRelativeUrl, file, true);
 
       return absUri.AbsoluteUri;
