@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Models;
+using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
@@ -163,6 +166,97 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         PreviousId = prevId,
         ClaimId = claimId ?? Guid.NewGuid().ToString()
       };
+    }
+
+    public static CapabilitiesImplementedReviews GetCapabilitiesImplementedReviews(
+      string id = null,
+      string prevId = null,
+      string evidenceId = null)
+    {
+      return new CapabilitiesImplementedReviews
+      {
+        Id = id ?? Guid.NewGuid().ToString(),
+        PreviousId = prevId,
+        EvidenceId = evidenceId ?? Guid.NewGuid().ToString()
+      };
+    }
+
+    public static StandardsApplicableReviews GetStandardsApplicableReviews(
+      string id = null,
+      string prevId = null,
+      string evidenceId = null)
+    {
+      return new StandardsApplicableReviews
+      {
+        Id = id ?? Guid.NewGuid().ToString(),
+        PreviousId = prevId,
+        EvidenceId = evidenceId ?? Guid.NewGuid().ToString()
+      };
+    }
+
+    public static SolutionEx GetSolutionEx(
+      Solutions soln = null,
+
+      List<CapabilitiesImplemented> claimedCap = null,
+      List<CapabilitiesImplementedEvidence> claimedCapEv = null,
+      List<CapabilitiesImplementedReviews> claimedCapRev = null,
+
+      List<StandardsApplicable> claimedStd = null,
+      List<StandardsApplicableEvidence> claimedStdEv = null,
+      List<StandardsApplicableReviews> claimedStdRev = null,
+
+      List<TechnicalContacts> techCont = null
+      )
+    {
+      soln = soln ?? GetSolution();
+
+      claimedCap = claimedCap ?? new List<CapabilitiesImplemented>
+      {
+        GetCapabilitiesImplemented(solnId: soln.Id)
+      };
+      claimedCapEv = claimedCapEv ?? new List<CapabilitiesImplementedEvidence>
+      {
+        GetCapabilitiesImplementedEvidence(claimId: claimedCap.First().Id)
+      };
+      claimedCapRev = claimedCapRev ?? new List<CapabilitiesImplementedReviews>
+      {
+        GetCapabilitiesImplementedReviews(evidenceId: claimedCapEv.First().Id)
+      };
+
+      claimedStd = claimedStd ?? new List<StandardsApplicable>
+      {
+        GetStandardsApplicable(solnId: soln.Id)
+      };
+      claimedStdEv = claimedStdEv ?? new List<StandardsApplicableEvidence>
+      {
+        GetStandardsApplicableEvidence(claimId: claimedStd.First().Id)
+      };
+      claimedStdRev = claimedStdRev ?? new List<StandardsApplicableReviews>
+      {
+        GetStandardsApplicableReviews(evidenceId: claimedStdEv.First().Id)
+      };
+
+      techCont = techCont ?? new List<TechnicalContacts>
+      {
+        GetTechnicalContact(solutionId: soln.Id)
+      };
+
+      var solnEx = new SolutionEx
+      {
+        Solution = soln,
+
+        ClaimedCapability = claimedCap,
+        ClaimedCapabilityEvidence = claimedCapEv,
+        ClaimedCapabilityReview = claimedCapRev,
+
+        ClaimedStandard = claimedStd,
+        ClaimedStandardEvidence = claimedStdEv,
+        ClaimedStandardReview = claimedStdRev,
+
+        TechnicalContact = techCont
+      };
+
+      return solnEx;
     }
   }
 }

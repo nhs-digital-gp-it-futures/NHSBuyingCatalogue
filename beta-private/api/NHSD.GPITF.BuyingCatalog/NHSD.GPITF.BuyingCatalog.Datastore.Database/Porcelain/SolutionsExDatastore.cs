@@ -1,11 +1,10 @@
-﻿using Dapper;
-using Dapper.Contrib.Extensions;
+﻿using Dapper.Contrib.Extensions;
 using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
-using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
@@ -14,8 +13,14 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
   {
     private readonly ISolutionsDatastore _solutionDatastore;
     private readonly ITechnicalContactsDatastore _technicalContactDatastore;
+
     private readonly ICapabilitiesImplementedDatastore _claimedCapabilityDatastore;
+    private readonly ICapabilitiesImplementedEvidenceDatastore _claimedCapabilityEvidenceDatastore;
+    private readonly ICapabilitiesImplementedReviewsDatastore _claimedCapabilityReviewsDatastore;
+
     private readonly IStandardsApplicableDatastore _claimedStandardDatastore;
+    private readonly IStandardsApplicableEvidenceDatastore _claimedStandardEvidenceDatastore;
+    private readonly IStandardsApplicableReviewsDatastore _claimedStandardReviewsDatastore;
 
     public SolutionsExDatastore(
       IDbConnectionFactory dbConnectionFactory,
@@ -23,14 +28,27 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
       ISyncPolicyFactory policy,
       ISolutionsDatastore solutionDatastore,
       ITechnicalContactsDatastore technicalContactDatastore,
+
       ICapabilitiesImplementedDatastore claimedCapabilityDatastore,
-      IStandardsApplicableDatastore claimedStandardDatastore) :
+      ICapabilitiesImplementedEvidenceDatastore claimedCapabilityEvidenceDatastore,
+      ICapabilitiesImplementedReviewsDatastore claimedCapabilityReviewsDatastore,
+
+      IStandardsApplicableDatastore claimedStandardDatastore,
+      IStandardsApplicableEvidenceDatastore claimedStandardEvidenceDatastore,
+      IStandardsApplicableReviewsDatastore claimedStandardReviewsDatastore
+      ) :
       base(dbConnectionFactory, logger, policy)
     {
       _solutionDatastore = solutionDatastore;
       _technicalContactDatastore = technicalContactDatastore;
+
       _claimedCapabilityDatastore = claimedCapabilityDatastore;
+      _claimedCapabilityEvidenceDatastore = claimedCapabilityEvidenceDatastore;
+      _claimedCapabilityReviewsDatastore = claimedCapabilityReviewsDatastore;
+
       _claimedStandardDatastore = claimedStandardDatastore;
+      _claimedStandardEvidenceDatastore = claimedStandardEvidenceDatastore;
+      _claimedStandardReviewsDatastore = claimedStandardReviewsDatastore;
     }
 
     public SolutionEx BySolution(string solutionId)
@@ -41,9 +59,27 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
         {
           Solution = _solutionDatastore.ById(solutionId),
           TechnicalContact = _technicalContactDatastore.BySolution(solutionId).ToList(),
-          ClaimedStandard = _claimedStandardDatastore.BySolution(solutionId).ToList(),
-          ClaimedCapability = _claimedCapabilityDatastore.BySolution(solutionId).ToList()
+          ClaimedCapability = _claimedCapabilityDatastore.BySolution(solutionId).ToList(),
+          ClaimedStandard = _claimedStandardDatastore.BySolution(solutionId).ToList()
         };
+
+        // populate Evidence + Review
+        retval.ClaimedCapabilityEvidence = retval.ClaimedCapability
+          .SelectMany(cc => _claimedCapabilityEvidenceDatastore.ByClaim(cc.Id))
+            .SelectMany(x => x)
+            .ToList();
+        retval.ClaimedCapabilityReview = retval.ClaimedCapabilityEvidence
+          .SelectMany(cce => _claimedCapabilityReviewsDatastore.ByEvidence(cce.Id))
+            .SelectMany(x => x)
+            .ToList();
+        retval.ClaimedStandardEvidence = retval.ClaimedStandard
+          .SelectMany(cs => _claimedStandardEvidenceDatastore.ByClaim(cs.Id))
+            .SelectMany(x => x)
+            .ToList();
+        retval.ClaimedStandardReview = retval.ClaimedStandardEvidence
+          .SelectMany(cse => _claimedStandardReviewsDatastore.ByEvidence(cse.Id))
+            .SelectMany(x => x)
+            .ToList();
 
         return retval;
       });
@@ -51,21 +87,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
 
     public void Update(SolutionEx solnEx)
     {
-      if (solnEx.ClaimedCapability.Any(cc => cc.SolutionId != solnEx.Solution.Id))
-      {
-        throw new InvalidOperationException("ClaimedCapability does not belong to Solution");
-      }
-
-      if (solnEx.ClaimedStandard.Any(cs => cs.SolutionId != solnEx.Solution.Id))
-      {
-        throw new InvalidOperationException("ClaimedStandard does not belong to Solution");
-      }
-
-      if (solnEx.TechnicalContact.Any(tc => tc.SolutionId != solnEx.Solution.Id))
-      {
-        throw new InvalidOperationException("TechnicalContact does not belong to Solution");
-      }
-
       GetInternal(() =>
       {
         using (var trans = _dbConnection.Value.BeginTransaction())
@@ -73,26 +94,74 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
           // update Solution
           _dbConnection.Value.Update(solnEx.Solution, trans);
 
-          // delete all ClaimedCapability & re-insert
-          _dbConnection.Value.Execute($@"delete from ClaimedCapability where SolutionId = '{solnEx.Solution.Id}';", trans);
-          solnEx.ClaimedCapability.ForEach(cc => { cc.Id = cc.Id == Guid.Empty.ToString() ? Guid.NewGuid().ToString() : cc.Id; });
-          _dbConnection.Value.Insert(solnEx.ClaimedCapability);
+          #region ClaimedCapability
+          // delete ClaimedCapabilities which will cascade delete Evidence + Reviews
+          _claimedCapabilityDatastore
+            .BySolution(solnEx.Solution.Id)
+            .ToList()
+            .ForEach(cc => _dbConnection.Value.Delete(cc, trans));
 
-          // delete all ClaimedStandard & re-insert
-          _dbConnection.Value.Execute($@"delete from ClaimedStandard where SolutionId = '{solnEx.Solution.Id}';", trans);
-          solnEx.ClaimedStandard.ForEach(cs => { cs.Id = cs.Id == Guid.Empty.ToString() ? Guid.NewGuid().ToString() : cs.Id; });
-          _dbConnection.Value.Insert(solnEx.ClaimedStandard);
+          // re-insert ClaimedCapabilities + Evidence + Reviews
+          solnEx.ClaimedCapability.ForEach(cc => _dbConnection.Value.Insert(cc, trans));
 
+          // re-insert each chain, starting at the root ie PreviousId==null
+          GetInsertionTree(solnEx.ClaimedCapabilityEvidence).ForEach(cce => _dbConnection.Value.Insert(cce, trans));
+          GetInsertionTree(solnEx.ClaimedCapabilityReview).ForEach(ccr => _dbConnection.Value.Insert(ccr, trans));
+          #endregion
+
+          #region ClaimedStandard
+          // delete ClaimedStandards which will cascade delete Evidence + Reviews
+          _claimedStandardDatastore
+            .BySolution(solnEx.Solution.Id)
+            .ToList()
+            .ForEach(cs => _dbConnection.Value.Delete(cs, trans));
+
+          // re-insert ClaimedStandards + Evidence + Reviews
+          solnEx.ClaimedStandard.ForEach(cs => _dbConnection.Value.Insert(cs, trans));
+
+          // re-insert each chain, starting at the root ie PreviousId==null
+          GetInsertionTree(solnEx.ClaimedStandardEvidence).ForEach(cse => _dbConnection.Value.Insert(cse, trans));
+          GetInsertionTree(solnEx.ClaimedStandardReview).ForEach(csr => _dbConnection.Value.Insert(csr, trans));
+          #endregion
+
+          #region TechnicalContacts
           // delete all TechnicalContact & re-insert
-          _dbConnection.Value.Execute($@"delete from TechnicalContact where SolutionId = '{solnEx.Solution.Id}';", trans);
-          solnEx.TechnicalContact.ForEach(tc => { tc.Id = tc.Id == Guid.Empty.ToString() ? Guid.NewGuid().ToString() : tc.Id; });
-          _dbConnection.Value.Insert(solnEx.TechnicalContact);
+          _technicalContactDatastore
+            .BySolution(solnEx.Solution.Id).ToList()
+            .ForEach(tc => _dbConnection.Value.Delete(tc, trans));
+          solnEx.TechnicalContact.ForEach(tc => _dbConnection.Value.Insert(tc, trans));
+          #endregion
 
           trans.Commit();
         }
 
         return 0;
       });
+    }
+
+    private static List<T> GetInsertionTree<T>(List<T> allNodes) where T : IHasPreviousId
+    {
+      var roots = GetRoots(allNodes);
+      var tree = new List<T>(roots);
+
+      var next = GetChildren(roots, allNodes);
+      while (next.Any())
+      {
+        tree.AddRange(next);
+        next = GetChildren(next, allNodes);
+      }
+
+      return tree;
+    }
+
+    private static List<T> GetRoots<T>(List<T> allNodes) where T : IHasPreviousId
+    {
+      return allNodes.Where(x => x.PreviousId == null).ToList();
+    }
+
+    private static List<T> GetChildren<T>(List<T> parents, List<T> allNodes) where T : IHasPreviousId
+    {
+      return parents.SelectMany(parent => allNodes.Where(x => x.PreviousId == parent.Id)).ToList();
     }
   }
 }

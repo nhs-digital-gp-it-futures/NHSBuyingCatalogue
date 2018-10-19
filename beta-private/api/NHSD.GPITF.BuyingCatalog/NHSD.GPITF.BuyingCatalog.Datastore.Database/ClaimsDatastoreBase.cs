@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -41,7 +40,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
       {
         using (var trans = _dbConnection.Value.BeginTransaction())
         {
-          claimedcapability.Id = Guid.NewGuid().ToString();
+          claimedcapability.Id = UpdateId(claimedcapability.Id);
           _dbConnection.Value.Insert(claimedcapability, trans);
           trans.Commit();
 

@@ -8,6 +8,7 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
     IEnumerable<IEnumerable<T>> ByEvidence(string evidenceId);
     T ById(string id);
     T Create(T review);
+    void Delete(T review);
   }
 #pragma warning restore CS1591
 }

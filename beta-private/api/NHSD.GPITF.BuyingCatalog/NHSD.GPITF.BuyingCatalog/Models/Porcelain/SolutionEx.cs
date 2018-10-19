@@ -18,9 +18,29 @@ namespace NHSD.GPITF.BuyingCatalog.Models.Porcelain
     public List<CapabilitiesImplemented> ClaimedCapability { get; set; } = new List<CapabilitiesImplemented>();
 
     /// <summary>
+    /// A list of ClaimedCapabilityEvidence
+    /// </summary>
+    public List<CapabilitiesImplementedEvidence> ClaimedCapabilityEvidence { get; set; } = new List<CapabilitiesImplementedEvidence>();
+
+    /// <summary>
+    /// A list of ClaimedCapabilityReview
+    /// </summary>
+    public List<CapabilitiesImplementedReviews> ClaimedCapabilityReview { get; set; } = new List<CapabilitiesImplementedReviews>();
+
+    /// <summary>
     /// A list of ClaimedStandard
     /// </summary>
     public List<StandardsApplicable> ClaimedStandard { get; set; } = new List<StandardsApplicable>();
+
+    /// <summary>
+    /// A list of ClaimedStandardEvidence
+    /// </summary>
+    public List<StandardsApplicableEvidence> ClaimedStandardEvidence { get; set; } = new List<StandardsApplicableEvidence>();
+
+    /// <summary>
+    /// A list of ClaimedStandardReview
+    /// </summary>
+    public List<StandardsApplicableReviews> ClaimedStandardReview { get; set; } = new List<StandardsApplicableReviews>();
 
     /// <summary>
     /// A list of TechnicalContact

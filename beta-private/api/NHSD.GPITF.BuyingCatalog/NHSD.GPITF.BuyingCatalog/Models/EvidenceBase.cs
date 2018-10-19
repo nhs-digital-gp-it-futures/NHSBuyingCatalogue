@@ -1,11 +1,12 @@
 ﻿using Dapper.Contrib.Extensions;
+using NHSD.GPITF.BuyingCatalog.Interfaces;
 using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace NHSD.GPITF.BuyingCatalog.Models
 {
 #pragma warning disable CS1591
-  public abstract class EvidenceBase
+  public abstract class EvidenceBase : IHasPreviousId
   {
     /// <summary>
     /// Unique identifier of entity
