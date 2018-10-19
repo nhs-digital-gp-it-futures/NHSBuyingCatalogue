@@ -86,21 +86,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
 
     public void Update(SolutionEx solnEx)
     {
-      if (solnEx.ClaimedCapability.Any(cc => cc.SolutionId != solnEx.Solution.Id))
-      {
-        throw new InvalidOperationException("ClaimedCapability does not belong to Solution");
-      }
-
-      if (solnEx.ClaimedStandard.Any(cs => cs.SolutionId != solnEx.Solution.Id))
-      {
-        throw new InvalidOperationException("ClaimedStandard does not belong to Solution");
-      }
-
-      if (solnEx.TechnicalContact.Any(tc => tc.SolutionId != solnEx.Solution.Id))
-      {
-        throw new InvalidOperationException("TechnicalContact does not belong to Solution");
-      }
-
       GetInternal(() =>
       {
         // update Solution
