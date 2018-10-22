@@ -1,26 +1,18 @@
-﻿using NHSD.GPITF.BuyingCatalog.Interfaces;
+﻿using FluentValidation;
+using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using Microsoft.Extensions.Configuration;
-using System.Security;
-using Microsoft.SharePoint.Client.NetCore.Runtime;
-using Microsoft.SharePoint.Client.NetCore;
-using FluentValidation;
 
 namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 {
-  public class EvidenceBlobStoreLogic : IEvidenceBlobStoreLogic
+  public class EvidenceBlobStoreLogic : IClaimsInfoProvider, IEvidenceBlobStoreLogic
   {
     protected const string CapabilityFolderName = "Capability Evidence";
     protected const string StandardsFolderName = "Standards Evidence";
 
-    private readonly ClientContext _context;
-
-    protected readonly IOrganisationsDatastore _organisationsDatastore;
-    protected readonly ISolutionsDatastore _solutionsDatastore;
+    private readonly IEvidenceBlobStoreDatastore _evidenceBlobStoreDatastore;
     protected readonly ICapabilitiesImplementedDatastore _capabilitiesImplementedDatastore;
     protected readonly IStandardsApplicableDatastore _standardsApplicableDatastore;
     protected readonly ICapabilitiesDatastore _capabilitiesDatastore;
@@ -28,15 +20,8 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     protected readonly IEvidenceBlobStoreValidator _validator;
     protected readonly IEvidenceBlobStoreValidator _claimValidator;
 
-    private readonly string SharePoint_BaseUrl;
-    private readonly string SharePoint_OrganisationsRelativeUrl;
-    private readonly string SharePoint_Login;
-    private readonly string SharePoint_Password;
-
     public EvidenceBlobStoreLogic(
-      IConfiguration config,
-      IOrganisationsDatastore organisationsDatastore,
-      ISolutionsDatastore solutionsDatastore,
+      IEvidenceBlobStoreDatastore evidenceBlobStoreDatastore,
       ICapabilitiesImplementedDatastore capabilitiesImplementedDatastore,
       IStandardsApplicableDatastore standardsApplicableDatastore,
       ICapabilitiesDatastore capabilitiesDatastore,
@@ -44,32 +29,13 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       IEvidenceBlobStoreValidator validator,
       IEvidenceBlobStoreValidator claimValidator)
     {
-      _solutionsDatastore = solutionsDatastore;
-      _organisationsDatastore = organisationsDatastore;
+      _evidenceBlobStoreDatastore = evidenceBlobStoreDatastore;
       _capabilitiesImplementedDatastore = capabilitiesImplementedDatastore;
       _standardsApplicableDatastore = standardsApplicableDatastore;
       _capabilitiesDatastore = capabilitiesDatastore;
       _standardsDatastore = standardsDatastore;
       _validator = validator;
       _claimValidator = claimValidator;
-
-      SharePoint_BaseUrl = Environment.GetEnvironmentVariable("SHAREPOINT_BASEURL") ?? config["SharePoint:BaseUrl"];
-      SharePoint_OrganisationsRelativeUrl = Environment.GetEnvironmentVariable("SHAREPOINT_ORGANISATIONSRELATIVEURL") ?? config["SharePoint:OrganisationsRelativeUrl"];
-      SharePoint_Login = Environment.GetEnvironmentVariable("SHAREPOINT_LOGIN") ?? config["SharePoint:Login"];
-      SharePoint_Password = Environment.GetEnvironmentVariable("SHAREPOINT_PASSWORD") ?? config["SharePoint:Password"];
-
-      var securePassword = new SecureString();
-      foreach (char item in SharePoint_Password)
-      {
-        securePassword.AppendChar(item);
-      }
-
-      var encodedUrl = Uri.EscapeUriString(SharePoint_BaseUrl);
-      var onlineCredentials = new SharePointOnlineCredentials(SharePoint_Login, securePassword);
-      _context = new ClientContext(encodedUrl)
-      {
-        Credentials = onlineCredentials
-      };
     }
 
     public string AddEvidenceForClaim(string claimId, Stream file, string filename, string subFolder = null)
@@ -82,150 +48,65 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         throw new KeyNotFoundException($"Could not find claim: {claimId}");
       }
 
-      var soln = _solutionsDatastore.ById(claim.SolutionId);
-      var org = _organisationsDatastore.ById(soln.OrganisationId);
-      var subFolderseparator = !string.IsNullOrEmpty(subFolder) ? "/" : string.Empty;
-      var claimFolder = $"{SharePoint_BaseUrl}/{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{GetFolderName()}/{GetFolderClaimName(claim)}";
-      var absUri = new Uri($"{claimFolder}/{subFolder ?? string.Empty}{subFolderseparator}{filename}");
-      var serverRelativeUrl = $"/{absUri.GetComponents(UriComponents.Path, UriFormat.Unescaped)}";
-
-      // create subFolder if not exists
-      if (!string.IsNullOrEmpty(subFolder))
-      {
-        CreateSubFolder(claimFolder, subFolder);
-      }
-
-      //  Setting:
-      //    overwriteIfExists =true
-      // will create a new version of the file, if it already exists:
-      //    https://sunbin0704.wordpress.com/2013/10/11/csom-update-file-and-create-new-version-in-document-library/
-      Microsoft.SharePoint.Client.NetCore.File.SaveBinaryDirect(_context, serverRelativeUrl, file, true);
-
-      return absUri.AbsoluteUri;
+      return _evidenceBlobStoreDatastore.AddEvidenceForClaim(this, claimId, file, filename, subFolder);
     }
 
     public Stream GetFileStream(string claimId, string extUrl)
     {
       _claimValidator.ValidateAndThrow(claimId, ruleSet: nameof(IEvidenceBlobStoreLogic.GetFileStream));
 
-      var claim = ClaimsDatastore.ById(claimId);
+      var claim = GetClaimById(claimId);
       if (claim == null)
       {
         throw new KeyNotFoundException($"Could not find claim: {claimId}");
       }
 
-      var serverRelURL = new Uri(extUrl).AbsolutePath;
-      return Microsoft.SharePoint.Client.NetCore.File.OpenBinaryDirect(_context, serverRelURL)?.Stream;
+      return _evidenceBlobStoreDatastore.GetFileStream(this, claimId, extUrl);
     }
 
     public IEnumerable<BlobInfo> EnumerateFolder(string claimId, string subFolder = null)
     {
       _claimValidator.ValidateAndThrow(claimId, ruleSet: nameof(IEvidenceBlobStoreLogic.EnumerateFolder));
 
-      var claim = ClaimsDatastore.ById(claimId);
+      var claim = GetClaimById(claimId);
       if (claim == null)
       {
         throw new KeyNotFoundException($"Could not find claim: {claimId}");
       }
 
-      var soln = _solutionsDatastore.ById(claim.SolutionId);
-      var org = _organisationsDatastore.ById(soln.OrganisationId);
-
-      var claimFolderExists = true;
-      var claimFolderUrl = $"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{GetFolderName()}/{GetFolderClaimName(claim)}/{subFolder ?? string.Empty}";
-      var claimFolder = _context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString(claimFolderUrl));
-
-      _context.Load(claimFolder);
-      _context.Load(claimFolder.Files);
-      _context.Load(claimFolder.Folders);
-      try
-      {
-        _context.ExecuteQuery();
-      }
-      catch
-      {
-        claimFolderExists = false;
-      }
-      if (!claimFolderExists)
-      {
-        throw new KeyNotFoundException($"Folder does not exist!: {_context.Url}/{claimFolderUrl}");
-      }
-
-      var claimFolderInfo = new BlobInfo
-      {
-        Name = claimFolder.Name,
-        IsFolder = true,
-        Url = new Uri(new Uri(_context.Url), claimFolder.ServerRelativeUrl).AbsoluteUri,
-        TimeLastModified = claimFolder.TimeLastModified
-      };
-      var claimSubFolderInfos = claimFolder
-        .Folders
-        .Select(x =>
-          new BlobInfo
-          {
-            Name = x.Name,
-            IsFolder = true,
-            Url = new Uri(new Uri(_context.Url), x.ServerRelativeUrl).AbsoluteUri,
-            TimeLastModified = x.TimeLastModified
-          });
-      var claimFileInfos = claimFolder
-        .Files
-        .Select(x =>
-          new BlobInfo
-          {
-            Name = x.Name,
-            IsFolder = false,
-            Url = new Uri(new Uri(_context.Url), x.ServerRelativeUrl).AbsoluteUri,
-            TimeLastModified = x.TimeLastModified
-          });
-      var retVal = new List<BlobInfo>();
-
-      retVal.Add(claimFolderInfo);
-      retVal.AddRange(claimSubFolderInfos);
-      retVal.AddRange(claimFileInfos);
-
-      return retVal;
+      return _evidenceBlobStoreDatastore.EnumerateFolder(this, claimId, subFolder);
     }
 
     public void PrepareForSolution(string solutionId)
     {
       _validator.ValidateAndThrow(solutionId, ruleSet: nameof(IEvidenceBlobStoreLogic.PrepareForSolution));
 
-      var soln = _solutionsDatastore.ById(solutionId);
-      if (soln == null)
-      {
-        throw new KeyNotFoundException($"Could not find solution: {solutionId}");
-      }
-      var org = _organisationsDatastore.ById(soln.OrganisationId);
-      var claimedCapNames = _capabilitiesImplementedDatastore
-        .BySolution(solutionId)
-        .Select(x => _capabilitiesDatastore.ById(x.CapabilityId).Name);
-      var claimedNameStds = _standardsApplicableDatastore
-        .BySolution(solutionId)
-        .Select(x => _standardsDatastore.ById(x.StandardId).Name);
-
-      CreateSubFolder(SharePoint_OrganisationsRelativeUrl, org.Name);
-      CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}", soln.Name);
-      CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}", CapabilityFolderName);
-      CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}", StandardsFolderName);
-      foreach (var folderName in claimedCapNames)
-      {
-        CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{CapabilityFolderName}", folderName);
-      }
-      foreach (var folderName in claimedNameStds)
-      {
-        CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{StandardsFolderName}", folderName);
-      }
+      _evidenceBlobStoreDatastore.PrepareForSolution(this, solutionId);
     }
 
-    protected virtual string GetFolderName()
+    public virtual string GetFolderName()
     {
       throw new NotImplementedException();
     }
 
-    protected virtual string GetFolderClaimName(ClaimsBase claim)
+    public virtual string GetFolderClaimName(ClaimsBase claim)
     {
       throw new NotImplementedException();
+    }
+
+    public ClaimsBase GetClaimById(string claimId)
+    {
+      return ClaimsDatastore.ById(claimId);
+    }
+
+    public string GetCapabilityFolderName()
+    {
+      return CapabilityFolderName;
+    }
+
+    public string GetStandardsFolderName()
+    {
+      return StandardsFolderName;
     }
 
     protected virtual IClaimsDatastore<ClaimsBase> ClaimsDatastore
@@ -234,45 +115,6 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       {
         throw new NotImplementedException();
       }
-    }
-
-    // can only create sub-folder immediately under baseUrl
-    private void CreateSubFolder(string baseUrl, string subFolder)
-    {
-      var baseFolderExists = true;
-      var baseFolder = _context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString($"{baseUrl}"));
-      _context.Load(baseFolder);
-      try
-      {
-        _context.ExecuteQuery();
-      }
-      catch
-      {
-        baseFolderExists = false;
-      }
-      if (!baseFolderExists)
-      {
-        return;
-      }
-
-      var targetFolderExists = true;
-      var targetFolder = _context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString($"{baseUrl}/{subFolder}"));
-      _context.Load(targetFolder);
-      try
-      {
-        _context.ExecuteQuery();
-      }
-      catch
-      {
-        targetFolderExists = false;
-      }
-      if (targetFolderExists)
-      {
-        return;
-      }
-
-      baseFolder.AddSubFolder(subFolder);
-      _context.ExecuteQuery();
     }
   }
 }

@@ -1,15 +1,12 @@
 ﻿using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using Microsoft.Extensions.Configuration;
 
 namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 {
   public sealed class StandardsApplicableEvidenceBlobStoreLogic : EvidenceBlobStoreLogic, IStandardsApplicableEvidenceBlobStoreLogic
   {
     public StandardsApplicableEvidenceBlobStoreLogic(
-      IConfiguration config,
-      IOrganisationsDatastore organisationsDatastore,
-      ISolutionsDatastore solutionsDatastore,
+      IEvidenceBlobStoreDatastore evidenceBlobStoreDatastore,
       ICapabilitiesImplementedDatastore capabilitiesImplementedDatastore,
       IStandardsApplicableDatastore standardsApplicableDatastore,
       ICapabilitiesDatastore capabilitiesDatastore,
@@ -17,9 +14,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       IEvidenceBlobStoreValidator validator,
       IStandardsApplicableEvidenceBlobStoreValidator claimValidator) :
       base(
-        config,
-        organisationsDatastore,
-        solutionsDatastore,
+        evidenceBlobStoreDatastore,
         capabilitiesImplementedDatastore,
         standardsApplicableDatastore,
         capabilitiesDatastore,
@@ -29,12 +24,12 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     {
     }
 
-    protected override string GetFolderName()
+    public override string GetFolderName()
     {
       return StandardsFolderName;
     }
 
-    protected override string GetFolderClaimName(ClaimsBase claim)
+    public override string GetFolderClaimName(ClaimsBase claim)
     {
       var specifiClaim = (StandardsApplicable)claim;
       var std = _standardsDatastore.ById(specifiClaim.StandardId);
