@@ -64,6 +64,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [Route("AddEvidenceForClaim")]
     [SwaggerOperationFilter(typeof(EvidenceForClaimFileUploadOperation))]
     [ValidateModelState]
+    [DisableRequestSizeLimit]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(string), description: "Success")]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Claim not found in CRM")]
     public IActionResult AddEvidenceForClaim([Required]string claimId, [Required]IFormFile file, [Required]string filename, string subFolder = null)
