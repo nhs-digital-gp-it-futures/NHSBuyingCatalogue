@@ -11,7 +11,7 @@ module.exports = function (Handlebars, localesPath) {
       },
       lng: 'en',
       fallbackLng: false,
-      debug: true,
+      debug: 'DEBUG_I18N' in process.env,
       ns: ['common', 'pages'],
       defaultNS: 'pages',
       fallbackNS: 'common'

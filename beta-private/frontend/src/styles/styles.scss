@@ -1,6 +1,11 @@
-header .nhs-digital-logo {
-  height: 3em;
-  width: 3em;
+#home-link {
+  text-decoration: none;
+  vertical-align: top;
+
+  .nhs-digital-logo {
+    height: 3em;
+    width: 3em;
+  }
 }
 
 .sr {

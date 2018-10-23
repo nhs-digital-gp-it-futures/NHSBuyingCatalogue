@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>{{meta.title}}{{#meta.title}} - {{/meta.title}}NHS Digital Buying Catalogue Private Beta</title>
+    <title>{{meta.title}}{{#meta.title}} - {{/meta.title}}{{t 'Catalogue.Fullname'}}</title>
     <link rel="stylesheet" href="/styles.css">
     <script type="text/javascript" src="/js/app.js"></script>
   </head>
@@ -10,8 +10,9 @@
     <header role="banner" aria-label="Site header">
       <nav aria-label="Main">
         <a href="#content" class="sr" id="skip-to-main-content-link">Skip to main content</a>
-        <a href="/#content" aria-label="Home">
+        <a id="home-link" href="/#content" aria-label="Home">
           {{> nhs-digital-logo }}
+          {{t 'Catalogue.Title'}}
         </a>
         <div id="account" role="group" aria-label="Account">
           {{> user-authentication-nav }}
