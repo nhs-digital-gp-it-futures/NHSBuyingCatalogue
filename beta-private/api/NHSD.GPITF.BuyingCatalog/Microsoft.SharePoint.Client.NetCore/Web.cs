@@ -2826,50 +2826,50 @@ namespace Microsoft.SharePoint.Client.NetCore
     //    }));
     //}
 
-    //[Remote]
-    //public File GetFileByServerRelativeUrl(string serverRelativeUrl)
-    //{
-    //    ClientRuntimeContext context = base.Context;
-    //    if (base.Context.ValidateOnClient)
-    //    {
-    //        if (serverRelativeUrl == null)
-    //        {
-    //            throw ClientUtility.CreateArgumentNullException("serverRelativeUrl");
-    //        }
-    //        if (serverRelativeUrl != null && serverRelativeUrl.Length == 0)
-    //        {
-    //            throw ClientUtility.CreateArgumentException("serverRelativeUrl");
-    //        }
-    //    }
-    //    object obj;
-    //    Dictionary<string, File> dictionary;
-    //    if (base.ObjectData.MethodReturnObjects.TryGetValue("GetFileByServerRelativeUrl", out obj))
-    //    {
-    //        dictionary = (Dictionary<string, File>)obj;
-    //    }
-    //    else
-    //    {
-    //        dictionary = new Dictionary<string, File>(StringComparer.OrdinalIgnoreCase);
-    //        base.ObjectData.MethodReturnObjects["GetFileByServerRelativeUrl"] = dictionary;
-    //    }
-    //    File file = null;
-    //    if (!context.DisableReturnValueCache && dictionary.TryGetValue(serverRelativeUrl, out file))
-    //    {
-    //        return file;
-    //    }
-    //    file = new File(context, new ObjectPathMethod(context, base.Path, "GetFileByServerRelativeUrl", new object[]
-    //    {
-    //        serverRelativeUrl
-    //    }));
-    //    if (!context.DisableReturnValueCache)
-    //    {
-    //        dictionary[serverRelativeUrl] = file;
-    //    }
-    //    ObjectIdentityQuery objectIdentityQuery = new ObjectIdentityQuery(file.Path);
-    //    context.AddQueryIdAndResultObject(objectIdentityQuery.Id, file);
-    //    context.AddQuery(objectIdentityQuery);
-    //    return file;
-    //}
+    [Remote]
+    public File GetFileByServerRelativeUrl(string serverRelativeUrl)
+    {
+      ClientRuntimeContext context = base.Context;
+      if (base.Context.ValidateOnClient)
+      {
+        if (serverRelativeUrl == null)
+        {
+          throw ClientUtility.CreateArgumentNullException("serverRelativeUrl");
+        }
+        if (serverRelativeUrl != null && serverRelativeUrl.Length == 0)
+        {
+          throw ClientUtility.CreateArgumentException("serverRelativeUrl");
+        }
+      }
+      object obj;
+      Dictionary<string, File> dictionary;
+      if (base.ObjectData.MethodReturnObjects.TryGetValue("GetFileByServerRelativeUrl", out obj))
+      {
+        dictionary = (Dictionary<string, File>)obj;
+      }
+      else
+      {
+        dictionary = new Dictionary<string, File>(StringComparer.OrdinalIgnoreCase);
+        base.ObjectData.MethodReturnObjects["GetFileByServerRelativeUrl"] = dictionary;
+      }
+      File file = null;
+      if (!context.DisableReturnValueCache && dictionary.TryGetValue(serverRelativeUrl, out file))
+      {
+        return file;
+      }
+      file = new File(context, new ObjectPathMethod(context, base.Path, "GetFileByServerRelativeUrl", new object[]
+      {
+            serverRelativeUrl
+      }));
+      if (!context.DisableReturnValueCache)
+      {
+        dictionary[serverRelativeUrl] = file;
+      }
+      ObjectIdentityQuery objectIdentityQuery = new ObjectIdentityQuery(file.Path);
+      context.AddQueryIdAndResultObject(objectIdentityQuery.Id, file);
+      context.AddQuery(objectIdentityQuery);
+      return file;
+    }
 
     //[Remote]
     //public File GetFileByServerRelativePath(ResourcePath serverRelativePath)
