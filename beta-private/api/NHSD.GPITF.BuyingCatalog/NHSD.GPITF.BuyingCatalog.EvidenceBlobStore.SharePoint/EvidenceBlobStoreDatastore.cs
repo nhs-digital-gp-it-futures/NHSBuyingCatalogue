@@ -63,15 +63,24 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       };
     }
 
-    public string AddEvidenceForClaim(IClaimsInfoProvider claimsInfoProvider, string claimId, Stream file, string filename, string subFolder = null)
+    public string AddEvidenceForClaim(IClaimsInfoProvider claimsInfoProvider, string claimId, Stream file, string fileName, string subFolder = null)
     {
+      return UploadFileSlicePerSlice(claimsInfoProvider, claimId, file, fileName, subFolder);
+    }
+
+    private string UploadFileSlicePerSlice(IClaimsInfoProvider claimsInfoProvider, string claimId, Stream file, string fileName, string subFolder, int fileChunkSizeInMB = 3)
+    {
+      // Each sliced upload requires a unique id
+      var uploadId = Guid.NewGuid();
+
+      // Get to folder to upload into
       var claim = claimsInfoProvider.GetClaimById(claimId);
       var soln = _solutionsDatastore.ById(claim.SolutionId);
       var org = _organisationsDatastore.ById(soln.OrganisationId);
-      var subFolderseparator = !string.IsNullOrEmpty(subFolder) ? "/" : string.Empty;
+      var subFolderSeparator = !string.IsNullOrEmpty(subFolder) ? "/" : string.Empty;
       var claimFolder = $"{SharePoint_BaseUrl}/{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{claimsInfoProvider.GetFolderName()}/{claimsInfoProvider.GetFolderClaimName(claim)}";
-      var absUri = new Uri($"{claimFolder}/{subFolder ?? string.Empty}{subFolderseparator}{filename}");
-      var serverRelativeUrl = $"/{absUri.GetComponents(UriComponents.Path, UriFormat.Unescaped)}";
+      var absUri = new Uri($"{claimFolder}/{subFolder ?? string.Empty}{subFolderSeparator}{fileName}");
+      var claimFolderRelUrl = $"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{claimsInfoProvider.GetFolderName()}/{claimsInfoProvider.GetFolderClaimName(claim)}/{subFolder ?? string.Empty}{subFolderSeparator}";
 
       // create subFolder if not exists
       if (!string.IsNullOrEmpty(subFolder))
@@ -79,13 +88,105 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         CreateSubFolder(claimFolder, subFolder);
       }
 
-      //  Setting:
-      //    overwriteIfExists =true
-      // will create a new version of the file, if it already exists:
-      //    https://sunbin0704.wordpress.com/2013/10/11/csom-update-file-and-create-new-version-in-document-library/
-      Microsoft.SharePoint.Client.NetCore.File.SaveBinaryDirect(_context, serverRelativeUrl, file, true);
+      var docClaimFolder = _context.Web.GetFolderByServerRelativeUrl(claimFolderRelUrl);
+      _context.ExecuteQuery();
 
-      return absUri.AbsoluteUri;
+      // Get the information about the folder that will hold the file
+      _context.Load(docClaimFolder.Files);
+      _context.Load(docClaimFolder, folder => folder.ServerRelativeUrl);
+      _context.ExecuteQuery();
+
+      using (var br = new BinaryReader(file))
+      {
+        var fileSize = file.Length;
+        ClientResult<long> bytesUploaded = null;
+        Microsoft.SharePoint.Client.NetCore.File uploadFile = null;
+
+        // Calculate block size in bytes
+        var blockSize = fileChunkSizeInMB * 1024 * 1024;
+
+        byte[] buffer = new byte[blockSize];
+        byte[] lastBuffer = null;
+        long fileoffset = 0;
+        long totalBytesRead = 0;
+        int bytesRead;
+        bool first = true;
+        bool last = false;
+
+        // Read data from stream in blocks 
+        while ((bytesRead = br.Read(buffer, 0, buffer.Length)) > 0)
+        {
+          totalBytesRead += bytesRead;
+
+          // We've reached the end of the file
+          if (totalBytesRead == fileSize)
+          {
+            last = true;
+
+            // Copy to a new buffer that has the correct size
+            lastBuffer = new byte[bytesRead];
+            Array.Copy(buffer, 0, lastBuffer, 0, bytesRead);
+          }
+
+          if (first)
+          {
+            using (var contentStream = new MemoryStream())
+            {
+              // Add an empty file.
+              var fileInfo = new FileCreationInformation
+              {
+                ContentStream = contentStream,
+                Url = fileName,
+                Overwrite = true
+              };
+              uploadFile = docClaimFolder.Files.Add(fileInfo);
+
+              // Start upload by uploading the first slice
+              using (var strm = new MemoryStream(buffer))
+              {
+                // Call the start upload method on the first slice
+                bytesUploaded = uploadFile.StartUpload(uploadId, strm);
+                _context.ExecuteQuery();
+
+                // fileoffset is the pointer where the next slice will be added
+                fileoffset = bytesUploaded.Value;
+              }
+
+              // we can only start the upload once
+              first = false;
+            }
+          }
+
+          // Get a reference to our file
+          uploadFile = _context.Web.GetFileByServerRelativeUrl(docClaimFolder.ServerRelativeUrl + Path.AltDirectorySeparatorChar + fileName);
+
+          if (last)
+          {
+            // Is this the last slice of data?
+            using (var strm = new MemoryStream(lastBuffer))
+            {
+              // End sliced upload by calling FinishUpload
+              uploadFile = uploadFile.FinishUpload(uploadId, fileoffset, strm);
+              _context.ExecuteQuery();
+
+              // return the url for the uploaded file
+              return absUri.AbsoluteUri;
+            }
+          }
+
+          using (var strm = new MemoryStream(buffer))
+          {
+            // Continue sliced upload
+            bytesUploaded = uploadFile.ContinueUpload(uploadId, fileoffset, strm);
+            _context.ExecuteQuery();
+
+            // update fileoffset for the next slice
+            fileoffset = bytesUploaded.Value;
+          }
+        }
+      }
+
+      return string.Empty;
     }
 
     public IEnumerable<BlobInfo> EnumerateFolder(IClaimsInfoProvider claimsInfoProvider, string claimId, string subFolder = null)
