@@ -33,14 +33,17 @@ app.use(require('serve-static')(path.join(__dirname, 'static'), {
 }))
 
 const viewPath = path.join(__dirname, 'views')
-app.engine('html', expresshbs({
+const hbs = expresshbs.create({
   layoutsDir: path.join(viewPath, 'layouts'),
   defaultLayout: 'layout.html',
   extname: '.html',
   partialsDir: path.join(viewPath, 'partials')
-}))
+})
+app.engine('html', hbs.engine)
 app.set('view engine', 'html')
 app.set('views', viewPath)
+
+require('catalogue-i18n')(hbs.handlebars, path.join(__dirname, 'locales'))
 
 const { authentication, authorisation } = require('catalogue-authn-authz')
 
