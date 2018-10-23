@@ -5,6 +5,7 @@ All URIs are relative to *https://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**apiCapabilitiesImplementedEvidenceBlobStoreAddEvidenceForClaimPost**](CapabilitiesImplementedEvidenceBlobStoreApi.md#apiCapabilitiesImplementedEvidenceBlobStoreAddEvidenceForClaimPost) | **POST** /api/CapabilitiesImplementedEvidenceBlobStore/AddEvidenceForClaim | Upload a file to support a claim
+[**apiCapabilitiesImplementedEvidenceBlobStoreDownloadByClaimIdPost**](CapabilitiesImplementedEvidenceBlobStoreApi.md#apiCapabilitiesImplementedEvidenceBlobStoreDownloadByClaimIdPost) | **POST** /api/CapabilitiesImplementedEvidenceBlobStore/Download/{claimId} | Download a file which is supporting a claim
 [**apiCapabilitiesImplementedEvidenceBlobStoreEnumerateFolderByClaimIdGet**](CapabilitiesImplementedEvidenceBlobStoreApi.md#apiCapabilitiesImplementedEvidenceBlobStoreEnumerateFolderByClaimIdGet) | **GET** /api/CapabilitiesImplementedEvidenceBlobStore/EnumerateFolder/{claimId} | List all files and sub-folders for a claim including folder for claim
 
 
@@ -70,6 +71,61 @@ Name | Type | Description  | Notes
 
  - **Content-Type**: multipart/form-data
  - **Accept**: application/json
+
+<a name="apiCapabilitiesImplementedEvidenceBlobStoreDownloadByClaimIdPost"></a>
+# **apiCapabilitiesImplementedEvidenceBlobStoreDownloadByClaimIdPost**
+> FileResult apiCapabilitiesImplementedEvidenceBlobStoreDownloadByClaimIdPost(claimId, opts)
+
+Download a file which is supporting a claim
+
+### Example
+```javascript
+var CatalogueApi = require('catalogue-api');
+var defaultClient = CatalogueApi.ApiClient.instance;
+
+// Configure HTTP basic authorization: basic
+var basic = defaultClient.authentications['basic'];
+basic.username = 'YOUR USERNAME';
+basic.password = 'YOUR PASSWORD';
+
+// Configure OAuth2 access token for authorization: oauth2
+var oauth2 = defaultClient.authentications['oauth2'];
+oauth2.accessToken = 'YOUR ACCESS TOKEN';
+
+var apiInstance = new CatalogueApi.CapabilitiesImplementedEvidenceBlobStoreApi();
+
+var claimId = "claimId_example"; // String | unique identifier of solution claim
+
+var opts = { 
+  'extUrl': "extUrl_example" // String | externally accessible URL of file
+};
+apiInstance.apiCapabilitiesImplementedEvidenceBlobStoreDownloadByClaimIdPost(claimId, opts).then(function(data) {
+  console.log('API called successfully. Returned data: ' + data);
+}, function(error) {
+  console.error(error);
+});
+
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **claimId** | **String**| unique identifier of solution claim | 
+ **extUrl** | **String**| externally accessible URL of file | [optional] 
+
+### Return type
+
+[**FileResult**](FileResult.md)
+
+### Authorization
+
+[basic](../README.md#basic), [oauth2](../README.md#oauth2)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
 
 <a name="apiCapabilitiesImplementedEvidenceBlobStoreEnumerateFolderByClaimIdGet"></a>
 # **apiCapabilitiesImplementedEvidenceBlobStoreEnumerateFolderByClaimIdGet**

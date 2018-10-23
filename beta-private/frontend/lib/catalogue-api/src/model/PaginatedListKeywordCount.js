@@ -16,33 +16,33 @@
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['ApiClient', 'model/SolutionEx'], factory);
+    define(['ApiClient', 'model/KeywordCount'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('../ApiClient'), require('./SolutionEx'));
+    module.exports = factory(require('../ApiClient'), require('./KeywordCount'));
   } else {
     // Browser globals (root is window)
     if (!root.CatalogueApi) {
       root.CatalogueApi = {};
     }
-    root.CatalogueApi.PaginatedListSolutionEx = factory(root.CatalogueApi.ApiClient, root.CatalogueApi.SolutionEx);
+    root.CatalogueApi.PaginatedListKeywordCount = factory(root.CatalogueApi.ApiClient, root.CatalogueApi.KeywordCount);
   }
-}(this, function(ApiClient, SolutionEx) {
+}(this, function(ApiClient, KeywordCount) {
   'use strict';
 
 
 
 
   /**
-   * The PaginatedListSolutionEx model module.
-   * @module model/PaginatedListSolutionEx
+   * The PaginatedListKeywordCount model module.
+   * @module model/PaginatedListKeywordCount
    * @version 1.0.0-private-beta
    */
 
   /**
-   * Constructs a new <code>PaginatedListSolutionEx</code>.
+   * Constructs a new <code>PaginatedListKeywordCount</code>.
    * A paged list of objects
-   * @alias module:model/PaginatedListSolutionEx
+   * @alias module:model/PaginatedListKeywordCount
    * @class
    */
   var exports = function() {
@@ -57,11 +57,11 @@
   };
 
   /**
-   * Constructs a <code>PaginatedListSolutionEx</code> from a plain JavaScript object, optionally creating a new instance.
+   * Constructs a <code>PaginatedListKeywordCount</code> from a plain JavaScript object, optionally creating a new instance.
    * Copies all relevant properties from <code>data</code> to <code>obj</code> if supplied or a new instance if not.
    * @param {Object} data The plain JavaScript object bearing properties of interest.
-   * @param {module:model/PaginatedListSolutionEx} obj Optional instance to populate.
-   * @return {module:model/PaginatedListSolutionEx} The populated <code>PaginatedListSolutionEx</code> instance.
+   * @param {module:model/PaginatedListKeywordCount} obj Optional instance to populate.
+   * @return {module:model/PaginatedListKeywordCount} The populated <code>PaginatedListKeywordCount</code> instance.
    */
   exports.constructFromObject = function(data, obj) {
     if (data) {
@@ -77,7 +77,7 @@
         obj['pageSize'] = ApiClient.convertToType(data['pageSize'], 'Number');
       }
       if (data.hasOwnProperty('items')) {
-        obj['items'] = ApiClient.convertToType(data['items'], [SolutionEx]);
+        obj['items'] = ApiClient.convertToType(data['items'], [KeywordCount]);
       }
       if (data.hasOwnProperty('hasPreviousPage')) {
         obj['hasPreviousPage'] = ApiClient.convertToType(data['hasPreviousPage'], 'Boolean');
@@ -106,7 +106,7 @@
   exports.prototype['pageSize'] = undefined;
   /**
    * List of items
-   * @member {Array.<module:model/SolutionEx>} items
+   * @member {Array.<module:model/KeywordCount>} items
    */
   exports.prototype['items'] = undefined;
   /**

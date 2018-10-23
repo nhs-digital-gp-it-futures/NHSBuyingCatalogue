@@ -30,7 +30,7 @@
   var instance;
 
   beforeEach(function() {
-    instance = new CatalogueApi.SearchApi();
+    instance = new CatalogueApi.KeywordSearchHistoryApi();
   });
 
   var getProperty = function(object, getter, property) {
@@ -49,11 +49,11 @@
       object[property] = value;
   }
 
-  describe('SearchApi', function() {
-    describe('apiPorcelainSearchByKeywordByKeywordGet', function() {
-      it('should call apiPorcelainSearchByKeywordByKeywordGet successfully', function(done) {
-        //uncomment below and update the code to test apiPorcelainSearchByKeywordByKeywordGet
-        //instance.apiPorcelainSearchByKeywordByKeywordGet(function(error) {
+  describe('KeywordSearchHistoryApi', function() {
+    describe('apiPorcelainKeywordSearchHistoryGet', function() {
+      it('should call apiPorcelainKeywordSearchHistoryGet successfully', function(done) {
+        //uncomment below and update the code to test apiPorcelainKeywordSearchHistoryGet
+        //instance.apiPorcelainKeywordSearchHistoryGet(function(error) {
         //  if (error) throw error;
         //expect().to.be();
         //});

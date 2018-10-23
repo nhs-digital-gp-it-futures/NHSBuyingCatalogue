@@ -30,7 +30,7 @@
   var instance;
 
   beforeEach(function() {
-    instance = new CatalogueApi.PaginatedListSolutionEx();
+    instance = new CatalogueApi.PaginatedListSearchResult();
   });
 
   var getProperty = function(object, getter, property) {
@@ -49,46 +49,46 @@
       object[property] = value;
   }
 
-  describe('PaginatedListSolutionEx', function() {
-    it('should create an instance of PaginatedListSolutionEx', function() {
-      // uncomment below and update the code to test PaginatedListSolutionEx
-      //var instance = new CatalogueApi.PaginatedListSolutionEx();
-      //expect(instance).to.be.a(CatalogueApi.PaginatedListSolutionEx);
+  describe('PaginatedListSearchResult', function() {
+    it('should create an instance of PaginatedListSearchResult', function() {
+      // uncomment below and update the code to test PaginatedListSearchResult
+      //var instance = new CatalogueApi.PaginatedListSearchResult();
+      //expect(instance).to.be.a(CatalogueApi.PaginatedListSearchResult);
     });
 
     it('should have the property pageIndex (base name: "pageIndex")', function() {
       // uncomment below and update the code to test the property pageIndex
-      //var instance = new CatalogueApi.PaginatedListSolutionEx();
+      //var instance = new CatalogueApi.PaginatedListSearchResult();
       //expect(instance).to.be();
     });
 
     it('should have the property totalPages (base name: "totalPages")', function() {
       // uncomment below and update the code to test the property totalPages
-      //var instance = new CatalogueApi.PaginatedListSolutionEx();
+      //var instance = new CatalogueApi.PaginatedListSearchResult();
       //expect(instance).to.be();
     });
 
     it('should have the property pageSize (base name: "pageSize")', function() {
       // uncomment below and update the code to test the property pageSize
-      //var instance = new CatalogueApi.PaginatedListSolutionEx();
+      //var instance = new CatalogueApi.PaginatedListSearchResult();
       //expect(instance).to.be();
     });
 
     it('should have the property items (base name: "items")', function() {
       // uncomment below and update the code to test the property items
-      //var instance = new CatalogueApi.PaginatedListSolutionEx();
+      //var instance = new CatalogueApi.PaginatedListSearchResult();
       //expect(instance).to.be();
     });
 
     it('should have the property hasPreviousPage (base name: "hasPreviousPage")', function() {
       // uncomment below and update the code to test the property hasPreviousPage
-      //var instance = new CatalogueApi.PaginatedListSolutionEx();
+      //var instance = new CatalogueApi.PaginatedListSearchResult();
       //expect(instance).to.be();
     });
 
     it('should have the property hasNextPage (base name: "hasNextPage")', function() {
       // uncomment below and update the code to test the property hasNextPage
-      //var instance = new CatalogueApi.PaginatedListSolutionEx();
+      //var instance = new CatalogueApi.PaginatedListSearchResult();
       //expect(instance).to.be();
     });
 

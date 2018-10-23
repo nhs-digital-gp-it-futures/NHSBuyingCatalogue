@@ -16,18 +16,18 @@
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['ApiClient', 'model/CapabilitiesImplemented', 'model/Solutions', 'model/StandardsApplicable', 'model/TechnicalContacts'], factory);
+    define(['ApiClient', 'model/CapabilitiesImplemented', 'model/CapabilitiesImplementedEvidence', 'model/CapabilitiesImplementedReviews', 'model/Solutions', 'model/StandardsApplicable', 'model/StandardsApplicableEvidence', 'model/StandardsApplicableReviews', 'model/TechnicalContacts'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('../ApiClient'), require('./CapabilitiesImplemented'), require('./Solutions'), require('./StandardsApplicable'), require('./TechnicalContacts'));
+    module.exports = factory(require('../ApiClient'), require('./CapabilitiesImplemented'), require('./CapabilitiesImplementedEvidence'), require('./CapabilitiesImplementedReviews'), require('./Solutions'), require('./StandardsApplicable'), require('./StandardsApplicableEvidence'), require('./StandardsApplicableReviews'), require('./TechnicalContacts'));
   } else {
     // Browser globals (root is window)
     if (!root.CatalogueApi) {
       root.CatalogueApi = {};
     }
-    root.CatalogueApi.SolutionEx = factory(root.CatalogueApi.ApiClient, root.CatalogueApi.CapabilitiesImplemented, root.CatalogueApi.Solutions, root.CatalogueApi.StandardsApplicable, root.CatalogueApi.TechnicalContacts);
+    root.CatalogueApi.SolutionEx = factory(root.CatalogueApi.ApiClient, root.CatalogueApi.CapabilitiesImplemented, root.CatalogueApi.CapabilitiesImplementedEvidence, root.CatalogueApi.CapabilitiesImplementedReviews, root.CatalogueApi.Solutions, root.CatalogueApi.StandardsApplicable, root.CatalogueApi.StandardsApplicableEvidence, root.CatalogueApi.StandardsApplicableReviews, root.CatalogueApi.TechnicalContacts);
   }
-}(this, function(ApiClient, CapabilitiesImplemented, Solutions, StandardsApplicable, TechnicalContacts) {
+}(this, function(ApiClient, CapabilitiesImplemented, CapabilitiesImplementedEvidence, CapabilitiesImplementedReviews, Solutions, StandardsApplicable, StandardsApplicableEvidence, StandardsApplicableReviews, TechnicalContacts) {
   'use strict';
 
 
@@ -52,6 +52,10 @@
 
 
 
+
+
+
+
   };
 
   /**
@@ -71,8 +75,20 @@
       if (data.hasOwnProperty('claimedCapability')) {
         obj['claimedCapability'] = ApiClient.convertToType(data['claimedCapability'], [CapabilitiesImplemented]);
       }
+      if (data.hasOwnProperty('claimedCapabilityEvidence')) {
+        obj['claimedCapabilityEvidence'] = ApiClient.convertToType(data['claimedCapabilityEvidence'], [CapabilitiesImplementedEvidence]);
+      }
+      if (data.hasOwnProperty('claimedCapabilityReview')) {
+        obj['claimedCapabilityReview'] = ApiClient.convertToType(data['claimedCapabilityReview'], [CapabilitiesImplementedReviews]);
+      }
       if (data.hasOwnProperty('claimedStandard')) {
         obj['claimedStandard'] = ApiClient.convertToType(data['claimedStandard'], [StandardsApplicable]);
+      }
+      if (data.hasOwnProperty('claimedStandardEvidence')) {
+        obj['claimedStandardEvidence'] = ApiClient.convertToType(data['claimedStandardEvidence'], [StandardsApplicableEvidence]);
+      }
+      if (data.hasOwnProperty('claimedStandardReview')) {
+        obj['claimedStandardReview'] = ApiClient.convertToType(data['claimedStandardReview'], [StandardsApplicableReviews]);
       }
       if (data.hasOwnProperty('technicalContact')) {
         obj['technicalContact'] = ApiClient.convertToType(data['technicalContact'], [TechnicalContacts]);
@@ -92,10 +108,30 @@
    */
   exports.prototype['claimedCapability'] = undefined;
   /**
+   * A list of ClaimedCapabilityEvidence
+   * @member {Array.<module:model/CapabilitiesImplementedEvidence>} claimedCapabilityEvidence
+   */
+  exports.prototype['claimedCapabilityEvidence'] = undefined;
+  /**
+   * A list of ClaimedCapabilityReview
+   * @member {Array.<module:model/CapabilitiesImplementedReviews>} claimedCapabilityReview
+   */
+  exports.prototype['claimedCapabilityReview'] = undefined;
+  /**
    * A list of ClaimedStandard
    * @member {Array.<module:model/StandardsApplicable>} claimedStandard
    */
   exports.prototype['claimedStandard'] = undefined;
+  /**
+   * A list of ClaimedStandardEvidence
+   * @member {Array.<module:model/StandardsApplicableEvidence>} claimedStandardEvidence
+   */
+  exports.prototype['claimedStandardEvidence'] = undefined;
+  /**
+   * A list of ClaimedStandardReview
+   * @member {Array.<module:model/StandardsApplicableReviews>} claimedStandardReview
+   */
+  exports.prototype['claimedStandardReview'] = undefined;
   /**
    * A list of TechnicalContact
    * @member {Array.<module:model/TechnicalContacts>} technicalContact

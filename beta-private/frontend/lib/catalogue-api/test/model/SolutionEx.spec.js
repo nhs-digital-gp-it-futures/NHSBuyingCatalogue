@@ -68,8 +68,32 @@
       //expect(instance).to.be();
     });
 
+    it('should have the property claimedCapabilityEvidence (base name: "claimedCapabilityEvidence")', function() {
+      // uncomment below and update the code to test the property claimedCapabilityEvidence
+      //var instance = new CatalogueApi.SolutionEx();
+      //expect(instance).to.be();
+    });
+
+    it('should have the property claimedCapabilityReview (base name: "claimedCapabilityReview")', function() {
+      // uncomment below and update the code to test the property claimedCapabilityReview
+      //var instance = new CatalogueApi.SolutionEx();
+      //expect(instance).to.be();
+    });
+
     it('should have the property claimedStandard (base name: "claimedStandard")', function() {
       // uncomment below and update the code to test the property claimedStandard
+      //var instance = new CatalogueApi.SolutionEx();
+      //expect(instance).to.be();
+    });
+
+    it('should have the property claimedStandardEvidence (base name: "claimedStandardEvidence")', function() {
+      // uncomment below and update the code to test the property claimedStandardEvidence
+      //var instance = new CatalogueApi.SolutionEx();
+      //expect(instance).to.be();
+    });
+
+    it('should have the property claimedStandardReview (base name: "claimedStandardReview")', function() {
+      // uncomment below and update the code to test the property claimedStandardReview
       //var instance = new CatalogueApi.SolutionEx();
       //expect(instance).to.be();
     });

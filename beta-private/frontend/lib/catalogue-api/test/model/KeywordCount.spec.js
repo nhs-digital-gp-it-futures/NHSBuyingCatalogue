@@ -30,7 +30,7 @@
   var instance;
 
   beforeEach(function() {
-    instance = new CatalogueApi.SearchApi();
+    instance = new CatalogueApi.KeywordCount();
   });
 
   var getProperty = function(object, getter, property) {
@@ -49,17 +49,25 @@
       object[property] = value;
   }
 
-  describe('SearchApi', function() {
-    describe('apiPorcelainSearchByKeywordByKeywordGet', function() {
-      it('should call apiPorcelainSearchByKeywordByKeywordGet successfully', function(done) {
-        //uncomment below and update the code to test apiPorcelainSearchByKeywordByKeywordGet
-        //instance.apiPorcelainSearchByKeywordByKeywordGet(function(error) {
-        //  if (error) throw error;
-        //expect().to.be();
-        //});
-        done();
-      });
+  describe('KeywordCount', function() {
+    it('should create an instance of KeywordCount', function() {
+      // uncomment below and update the code to test KeywordCount
+      //var instance = new CatalogueApi.KeywordCount();
+      //expect(instance).to.be.a(CatalogueApi.KeywordCount);
     });
+
+    it('should have the property keyword (base name: "keyword")', function() {
+      // uncomment below and update the code to test the property keyword
+      //var instance = new CatalogueApi.KeywordCount();
+      //expect(instance).to.be();
+    });
+
+    it('should have the property count (base name: "count")', function() {
+      // uncomment below and update the code to test the property count
+      //var instance = new CatalogueApi.KeywordCount();
+      //expect(instance).to.be();
+    });
+
   });
 
 }));

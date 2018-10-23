@@ -78,6 +78,19 @@ class DataProvider {
     }
   }
 
+  async updateSolutionForRegistration (solution) {
+    const solnEx = await this.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet(solution.id)
+
+    // reformat the input back into a SolutionEx
+    _.merge(solnEx.solution, _.omit(solution, ['capabilities', 'standards', 'contacts']))
+    solnEx.claimedCapability = solution.capabilities
+    solnEx.claimedStandard = solution.standards
+    solnEx.technicalContact = solution.contacts
+
+    await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
+    return this.solutionForRegistration(solution.id)
+  }
+
   async capabilityMappings () {
     const {
       capabilityMapping,

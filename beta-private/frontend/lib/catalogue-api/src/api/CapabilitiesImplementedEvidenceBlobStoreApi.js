@@ -16,18 +16,18 @@
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['ApiClient', 'model/PaginatedListBlobInfo'], factory);
+    define(['ApiClient', 'model/FileResult', 'model/PaginatedListBlobInfo'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('../ApiClient'), require('../model/PaginatedListBlobInfo'));
+    module.exports = factory(require('../ApiClient'), require('../model/FileResult'), require('../model/PaginatedListBlobInfo'));
   } else {
     // Browser globals (root is window)
     if (!root.CatalogueApi) {
       root.CatalogueApi = {};
     }
-    root.CatalogueApi.CapabilitiesImplementedEvidenceBlobStoreApi = factory(root.CatalogueApi.ApiClient, root.CatalogueApi.PaginatedListBlobInfo);
+    root.CatalogueApi.CapabilitiesImplementedEvidenceBlobStoreApi = factory(root.CatalogueApi.ApiClient, root.CatalogueApi.FileResult, root.CatalogueApi.PaginatedListBlobInfo);
   }
-}(this, function(ApiClient, PaginatedListBlobInfo) {
+}(this, function(ApiClient, FileResult, PaginatedListBlobInfo) {
   'use strict';
 
   /**
@@ -117,6 +117,63 @@
      */
     this.apiCapabilitiesImplementedEvidenceBlobStoreAddEvidenceForClaimPost = function(claimId, file, filename, opts) {
       return this.apiCapabilitiesImplementedEvidenceBlobStoreAddEvidenceForClaimPostWithHttpInfo(claimId, file, filename, opts)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
+
+    /**
+     * Download a file which is supporting a claim
+     * @param {String} claimId unique identifier of solution claim
+     * @param {Object} opts Optional parameters
+     * @param {String} opts.extUrl externally accessible URL of file
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/FileResult} and HTTP response
+     */
+    this.apiCapabilitiesImplementedEvidenceBlobStoreDownloadByClaimIdPostWithHttpInfo = function(claimId, opts) {
+      opts = opts || {};
+      var postBody = null;
+
+      // verify the required parameter 'claimId' is set
+      if (claimId === undefined || claimId === null) {
+        throw new Error("Missing the required parameter 'claimId' when calling apiCapabilitiesImplementedEvidenceBlobStoreDownloadByClaimIdPost");
+      }
+
+
+      var pathParams = {
+        'claimId': claimId
+      };
+      var queryParams = {
+        'extUrl': opts['extUrl'],
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
+
+      var authNames = ['basic', 'oauth2'];
+      var contentTypes = [];
+      var accepts = ['text/plain', 'application/json', 'text/json'];
+      var returnType = FileResult;
+
+      return this.apiClient.callApi(
+        '/api/CapabilitiesImplementedEvidenceBlobStore/Download/{claimId}', 'POST',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType
+      );
+    }
+
+    /**
+     * Download a file which is supporting a claim
+     * @param {String} claimId unique identifier of solution claim
+     * @param {Object} opts Optional parameters
+     * @param {String} opts.extUrl externally accessible URL of file
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/FileResult}
+     */
+    this.apiCapabilitiesImplementedEvidenceBlobStoreDownloadByClaimIdPost = function(claimId, opts) {
+      return this.apiCapabilitiesImplementedEvidenceBlobStoreDownloadByClaimIdPostWithHttpInfo(claimId, opts)
         .then(function(response_and_data) {
           return response_and_data.data;
         });
