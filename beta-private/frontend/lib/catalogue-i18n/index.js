@@ -12,11 +12,12 @@ module.exports = function (Handlebars, localesPath) {
       lng: 'en',
       fallbackLng: false,
       debug: 'DEBUG_I18N' in process.env,
-      ns: ['common', 'pages'],
+      ns: ['common', 'pages', 'validation'],
       defaultNS: 'pages',
-      fallbackNS: 'common'
+      fallbackNS: ['common', 'validation']
     }, function (err, t) {
       if (err) throw new Error(err)
+      module.exports.t = t
       registerI18nHelper(Handlebars, i18next, 't')
     })
 }

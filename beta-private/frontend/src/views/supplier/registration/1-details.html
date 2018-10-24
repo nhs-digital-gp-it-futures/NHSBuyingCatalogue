@@ -1,32 +1,51 @@
 {{> errors}}
 
-<h1>Solution Details</h1>
+<header class="page-main-heading">
+  <h1>{{t 'Onboarding.Details.Title' }}</h1>
+  <h2>{{t 'Onboarding.Details.Subtitle'}}</h2>
+</header>
+
 {{#> form}}
-  <fieldset>
-    <legend>Enter Solution name, description, version</legend>
+  {{#> collapsible-fieldset legend="Onboarding.Details.Fieldsets.NameDescVersion.Legend"}}
+  <p class="preamble">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Preamble'}}</p>
 
-    <label>
-      Solution name
-      <input id="solution.name" type="text" name="solution[name]" value="{{solution.name}}"
-        autocomplete="off" aria-required="true" maxlength="60"
-        {{#if errors.controls.[solution.name]}}aria-invalid="true" aria-errormessage="error-solution.name"{{/if}}>
-    </label>
+  <div class="control">
+    <label for="solution.name">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Name.Label'}}</label>
+    <ul class="validations">
+      <li>{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Name.Validations.0'}}</li>
+    </ul>
+    <input id="solution.name" type="text" name="solution[name]" value="{{solution.name}}"
+      autocomplete="off" aria-required="true" maxlength="60"
+      {{#if errors.controls.[solution.name]}}aria-invalid="true" aria-errormessage="error-solution.name"{{/if}}>
+  </div>
 
-    <label>
-      Description
-      <textarea id="solution.description" name="solution[description]"
-        aria-required="true" maxlength="300"
-        {{#if errors.controls.[solution.description]}}aria-invalid="true" aria-errormessage="error-solution.description"{{/if}}>{{solution.description}}</textarea>
-    </label>
+  <div class="control">
+    <label for="solution.description">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Description.Label'}}</label>
+    <p class="info">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Description.Info'}}
+    <ul class="validations">
+      <li>{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Description.Validations.0'}}</li>
+    </ul>
+    <textarea id="solution.description" name="solution[description]"
+      aria-required="true" maxlength="300"
+      {{#if errors.controls.[solution.description]}}aria-invalid="true" aria-errormessage="error-solution.description"{{/if}}>{{solution.description}}</textarea>
+  </div>
 
-    <label>
-      Version
-      <input id="solution.version" type="text" name="solution[version]" value="{{solution.version}}"
-        autocomplete="off" maxlength="10"
-        {{#if errors.controls.[solution.version]}}aria-invalid="true" aria-errormessage="error-solution.version"{{/if}}>
-    </label>
-  </fieldset>
+  <div class="control">
+    <label for="solution.version">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Label'}}</label>
+    {{#> help-reveal
+      title='Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Help.Title'}}
+      <p>{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Help.Text.0'}}</p>
+      <p>{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Help.Text.1'}}</p>
+    {{/help-reveal}}
+    <input id="solution.version" type="text" name="solution[version]" value="{{solution.version}}"
+      autocomplete="off" maxlength="10"
+      {{#if errors.controls.[solution.version]}}aria-invalid="true" aria-errormessage="error-solution.version"{{/if}}>
+  </div>
+  {{/collapsible-fieldset}}
 
-  <input type="submit" name="action[save]" value="Save">
-  <input type="submit" name="action[continue]" value="Continue">
+  <input type="submit"
+    class="button primary"
+    name="action[continue]"
+    value="{{t 'Buttons.Save and continue'}}">
 {{/form}}
+<a class="back-link" href="../">{{t 'Onboarding.Details.Backlink.Title'}}</a>

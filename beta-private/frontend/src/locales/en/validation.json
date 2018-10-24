@@ -1,0 +1,17 @@
+{
+  "Validation": {
+    "Solution": {
+      "Name": {
+        "Missing": "$t(Solution) name is missing",
+        "TooLong": "$t(Solution) name exceeds maximum length of 60 characters"
+      },
+      "Description": {
+        "Missing": "$t(Solution) description is missing",
+        "TooLong": "$t(Solution) description exceeds maximum length of 300 characters"
+      },
+      "Version": {
+        "TooLong": "$t(Solution) version exceeds maximum length of 10 characters"
+      }
+    }
+  }
+}

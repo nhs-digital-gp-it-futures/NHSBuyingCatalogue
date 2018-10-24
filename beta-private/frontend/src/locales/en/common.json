@@ -1,7 +1,18 @@
 {
+  "NHSD": {
+    "Name": "NHS Digital"
+  },
   "Catalogue": {
     "Title": "Marketplace",
-    "Fullname": "NHS Digital Marketplace"
+    "Fullname": "$t(NHSD.Name) $t(Catalogue.Title)"
   },
-  "Solution": "Solution"
+  "Solution": "Solution",
+  "Solution_plural": "Solutions",
+  "Capability": "Capability",
+  "Capability_plural": "Capabilities",
+  "Capabilities Assessment": "$t(Capability_plural) Assessment",
+  "Standards Compliance": "Standards Compliance",
+  "Buttons": {
+    "Save and continue": "Save and continue"
+  }
 }

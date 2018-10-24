@@ -1,5 +1,47 @@
 {
-  "Registration": {
-    "Title": "$t(Solution) Onboarding Status"
+  "Onboarding": {
+    "Title": "Onboarding a $t(Solution)",
+    "Status": {
+      "Title": "$t(Solution) Onboarding Status"
+    },
+    "Details": {
+      "Breadcrumb": "Register $t(Solution) (1 of 4)",
+      "Backlink": {
+        "Title": "$t(Onboarding.Title)"
+      },
+      "Title": "Enter $t(Solution) details and key contacts.",
+      "Subtitle": "Provide basic information and key contacts for your $t(Solution) below.",
+      "Fieldsets": {
+        "NameDescVersion": {
+          "Legend": "Enter $t(Solution) name, description, version",
+          "Preamble": "‘$t(Solution) name’ ‘Description’ and ‘Version’ will be sent to $t(NHSD.Name) to identify your $t(Solution). They will also be shown to buyers at the conclusion of onboarding.",
+          "Fields": {
+            "Name": {
+              "Label": "$t(Solution) name",
+              "Validations": [
+                "60 characters max"
+              ]
+            },
+            "Description": {
+              "Label": "Description",
+              "Info": "Description will not affect $t(Capabilities Assessment) or $t(Standards Compliance) outcomes. You can edit this later when building your $t(Solution) page.",
+              "Validations": [
+                "300 characters max"
+              ]
+            },
+            "Version": {
+              "Label": "Version (optional)",
+              "Help": {
+                "Title": "Help - What is this?",
+                "Text": [
+                  "$t(Solution) version is a numbering system used to distinguish between instances or releases of a particular $t(Solution). On the $t(Catalogue.Title), $t(Solution) version is intended to be used when new $t(Solution_plural) are released with significant feature developments. In other words, when the ‘major number’ has changed, in standard semantic versioning schemes.",
+                  "A version number might be used, for example, to describe a new release that has expanded functionality or different $t(Capability_plural) from the version previously onboarded to the $t(Catalogue.Title)."
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

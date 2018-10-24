@@ -4,7 +4,7 @@
          "trim" : {},
          "in" : "body",
          "isLength" : {
-            "errorMessage" : "Solution version exceeds maximum length of 10 characters",
+            "errorMessage" : "Validation.Solution.Version.TooLong",
             "options" : {
                "max" : 10
             }
@@ -13,11 +13,11 @@
       "solution.description" : {
          "isEmpty" : {
             "negated" : true,
-            "errorMessage" : "Solution description is missing"
+            "errorMessage" : "Validation.Solution.Description.Missing"
          },
          "trim" : {},
          "isLength" : {
-            "errorMessage" : "Solution description exceeds maximum length of 300 characters",
+            "errorMessage" : "Validation.Solution.Description.TooLong",
             "options" : {
                "max" : 300
             }
@@ -29,11 +29,11 @@
             "options" : {
                "max" : 60
             },
-            "errorMessage" : "Solution name exceeds maximum length of 60 characters"
+            "errorMessage" : "Validation.Solution.Name.TooLong"
          },
          "in" : "body",
          "isEmpty" : {
-            "errorMessage" : "Solution name is missing",
+            "errorMessage" : "Validation.Solution.Name.Missing",
             "negated" : true
          },
          "trim" : {}
