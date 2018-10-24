@@ -11,9 +11,13 @@
 
   <div class="control">
     <label for="solution.name">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Name.Label'}}</label>
+    {{#if (tt 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Name.Validations')}}
     <ul class="validations">
-      <li>{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Name.Validations.0'}}</li>
+    {{#each (tt 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Name.Validations')}}
+      <li>{{.}}</li>
+    {{/each}}
     </ul>
+    {{/if}}
     <input id="solution.name" type="text" name="solution[name]" value="{{solution.name}}"
       autocomplete="off" aria-required="true" maxlength="60"
       {{#if errors.controls.[solution.name]}}aria-invalid="true" aria-errormessage="error-solution.name"{{/if}}>
@@ -22,9 +26,13 @@
   <div class="control">
     <label for="solution.description">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Description.Label'}}</label>
     <p class="info">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Description.Info'}}
+    {{#if (tt 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Description.Validations')}}
     <ul class="validations">
-      <li>{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Description.Validations.0'}}</li>
+    {{#each (tt 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Description.Validations')}}
+      <li>{{.}}</li>
+    {{/each}}
     </ul>
+    {{/if}}
     <textarea id="solution.description" name="solution[description]"
       aria-required="true" maxlength="300"
       {{#if errors.controls.[solution.description]}}aria-invalid="true" aria-errormessage="error-solution.description"{{/if}}>{{solution.description}}</textarea>
@@ -34,9 +42,17 @@
     <label for="solution.version">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Label'}}</label>
     {{#> help-reveal
       title='Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Help.Title'}}
-      <p>{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Help.Text.0'}}</p>
-      <p>{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Help.Text.1'}}</p>
+      {{#each (tt 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Help.Text')}}
+        <p>{{.}}</p>
+      {{/each}}
     {{/help-reveal}}
+    {{#if (tt 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Validations')}}
+    <ul class="validations">
+    {{#each (tt 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Validations')}}
+      <li>{{.}}</li>
+    {{/each}}
+    </ul>
+    {{/if}}
     <input id="solution.version" type="text" name="solution[version]" value="{{solution.version}}"
       autocomplete="off" maxlength="10"
       {{#if errors.controls.[solution.version]}}aria-invalid="true" aria-errormessage="error-solution.version"{{/if}}>
