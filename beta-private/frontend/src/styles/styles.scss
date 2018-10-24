@@ -1,4 +1,14 @@
 @import 'normalize';
+@import 'fonts';
+
+html {
+  box-sizing: border-box;
+  font-family: 'Frutiger W01';
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
 
 #home-link {
   text-decoration: none;
