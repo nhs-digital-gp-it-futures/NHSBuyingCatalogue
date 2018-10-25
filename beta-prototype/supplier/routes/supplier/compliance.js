@@ -98,9 +98,9 @@ async function loadEnrichedSolution (solutionId, baseUrl) {
     standard.standardOwner = {};
     if(standard.evidence) {
 
-      const standardOwner = solutionEx.technicalContact.filter((contact) =>{
-        return contact.id === standard.evidence.owner
-      })[0]
+      const standardOwner = solutionEx.technicalContact.find((contact) => {
+        return contact.id === standard.evidence.owner;
+      })
 
       if(standardOwner) {
         standard.standardOwner = {
