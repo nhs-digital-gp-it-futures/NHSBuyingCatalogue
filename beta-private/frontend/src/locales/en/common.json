@@ -14,5 +14,10 @@
   "Standards Compliance": "Standards Compliance",
   "Buttons": {
     "Save and continue": "Save and continue"
+  },
+  "Authentication": {
+    "Login": "Log In",
+    "Logout": "Log Out",
+    "Greeting": "Hi, {{name}}"
   }
 }

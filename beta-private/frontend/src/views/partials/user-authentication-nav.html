@@ -4,13 +4,13 @@
     <span class='sr'>
       You are logged in.
     </span>
-    Hello, {{user.first_name}}
+    {{t 'Authentication.Greeting' name=user.first_name}}
   </span>
   <span class='account'>
-    <a href='/logout'>Your Account</a>
+    <a href='/logout'>{{t 'Authentication.Logout'}}</a>
   </span>
   {{else}}
   <span class='sr'>You are logged out.</span>
-  <a href='/oidc/authenticate'>Log In</a>
+  <a href='/oidc/authenticate'>{{t 'Authentication.Login'}}</a>
   {{/if}}
 </div>
