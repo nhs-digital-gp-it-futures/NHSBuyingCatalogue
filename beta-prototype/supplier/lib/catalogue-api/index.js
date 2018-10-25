@@ -116,7 +116,7 @@ class API {
 
   async get_solutions_for_user (user) {
     const { org } = await this.get_org_for_user(user)
-    const paged = await get_api(`Solution/ByOrganisation/${org.id}?pageSize=100`) // offset if paginated?
+    const paged = await get_api(`Solution/ByOrganisation/${org.id}?pageSize=100`)
     return paged ? paged.items : []
   }
 
