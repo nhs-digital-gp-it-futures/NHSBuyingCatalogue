@@ -36,9 +36,7 @@
 #compliance section.standard-description {
   width:50%;
 }
-#compliance section.standard-description textarea{
-  border: 1px solid var(--color-nhs-blue)!important;
-}
+
 #compliance section.standard-description label{
   color: var(--color-nhs-dark-grey)
 }
