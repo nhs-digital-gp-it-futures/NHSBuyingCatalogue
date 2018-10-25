@@ -111,10 +111,6 @@ async function loadEnrichedSolution (solutionId, baseUrl) {
       }
     }
     return standard
-  }).map((standard) => {
-    standard.latestDate = ''
-
-    return standard;
   })
 
   function relatedCapabilities (standardId) {
