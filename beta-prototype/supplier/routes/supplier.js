@@ -149,7 +149,7 @@ app.get('/solutions', async (req, res) => {
   }
 
   function notificationMapper(solutionCtx) {
-    const notificationCount = Math.floor((Math.random()*5));
+    const notificationCount = _.random(5)
     // await api.request_solution_notifications;
     return {
       ...solutionCtx,
