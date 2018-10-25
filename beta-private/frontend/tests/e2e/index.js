@@ -19,7 +19,6 @@ const continueRegistrationButton = Selector('#content a[href^=register]')
 const solutionNameInput = Selector('#content [name="solution\\[name\\]"]')
 const solutionDescriptionInput = Selector('#content [name="solution\\[description\\]"]')
 const solutionVersionInput = Selector('#content [name="solution\\[version\\]"]')
-const saveButton = Selector('[name="action\\[save\\]"]')
 const continueButton = Selector('[name="action\\[continue\\]"]')
 
 fixture('Getting started')
@@ -44,6 +43,7 @@ test('a11y: supplier homepage', async t => {
 test('Clicking logo returns to supplier homepage', async t => {
   await t
     .useRole(supplierRole)
+    .click('body > header a[href^="/about"]')
     .click(homeLink)
 
     .expect(Selector('#content > h1').innerText).eql('Supplier Home')
@@ -74,7 +74,7 @@ test('Registration page validation is correct and accessible', async t => {
     .click(continueRegistrationButton)
     .selectText(solutionNameInput).pressKey('backspace')
     .selectText(solutionDescriptionInput).pressKey('backspace')
-    .click(saveButton)
+    .click(continueButton)
 
     .expect(Selector('#errors #error-solution\\.name').innerText).contains('Solution name is missing')
     .expect(Selector('#errors #error-solution\\.description').innerText).contains('Solution description is missing')

@@ -11,12 +11,20 @@ html {
 }
 
 #home-link {
+  display: block;
   text-decoration: none;
   vertical-align: top;
 
   .nhs-digital-logo {
-    height: 3em;
-    width: 3em;
+    display: inline-block;
+    height: 4rem;
+    width: 4rem;
+  }
+
+  .title {
+    display: inline-block;
+    padding-top: 1.25rem;
+    vertical-align: top;
   }
 }
 
