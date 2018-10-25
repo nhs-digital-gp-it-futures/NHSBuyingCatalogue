@@ -12,12 +12,22 @@ const app = express()
 app.enable('strict routing')
 
 const session = require('express-session')
-app.use(session({
+const sessionConfig = {
   secret: process.env.SESSION_SECRET ||
             Math.floor(Math.random() * Number.MAX_SAFE_INTEGER).toString(36),
   resave: false,
   saveUninitialized: false
-}))
+}
+
+if (process.env.CACHE_HOST) {
+  const CacheSessionStore = require('connect-redis')(session)
+  sessionConfig.store = new CacheSessionStore({
+    host: process.env.CACHE_HOST,
+    logErrors: true
+  })
+}
+
+app.use(session(sessionConfig))
 
 app.use(require('body-parser').urlencoded({ extended: true }))
 

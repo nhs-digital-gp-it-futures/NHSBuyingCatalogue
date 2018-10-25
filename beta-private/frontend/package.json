@@ -17,6 +17,7 @@
     "catalogue-authn-authz": "./lib/catalogue-authn-authz",
     "catalogue-data": "./lib/catalogue-data",
     "catalogue-i18n": "./lib/catalogue-i18n",
+    "connect-redis": "^3.4.0",
     "csurf": "^1.9.0",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
