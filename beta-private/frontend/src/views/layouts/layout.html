@@ -8,17 +8,24 @@
   </head>
   <body>
     <header role="banner" aria-label="Site header">
-      <nav aria-label="Main">
-        <a href="#content" class="sr" id="skip-to-main-content-link">Skip to main content</a>
-        <a id="home-link" href="/#content" aria-label="Home">
-          {{> nhs-digital-logo }}
-          <span class="title">{{t 'Catalogue.Title'}}</span>
-        </a>
-        <div id="account" role="group" aria-label="Account">
+      <div class="top">
+        <nav aria-label="Main">
+          <a href="#content" class="sr" id="skip-to-main-content-link">Skip to main content</a>
+          <a id="home-link" href="/#content" aria-label="Home">
+            {{> nhs-digital-logo }}
+            <span class="title">{{t 'Catalogue.Title'}}</span>
+          </a>
+        </nav>
+        <div id="account" aria-label="Account">
           {{> user-authentication-nav }}
         </div>
-        <a href="/about#content">About</a>
-      </nav>
+      </div>
+      <div class="bottom">
+        <nav aria-label="Secondary">
+          <a href="/about#standards-and-capabilities">{{t 'Standards and Capabilities'}}</a>
+          <a href="/about#content">Support</a>
+        </nav>
+      </div>
     </header>
     <main id="content">
       {{{body}}}

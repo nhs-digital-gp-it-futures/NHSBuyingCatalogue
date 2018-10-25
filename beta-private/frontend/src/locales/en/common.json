@@ -10,8 +10,11 @@
   "Solution_plural": "Solutions",
   "Capability": "Capability",
   "Capability_plural": "Capabilities",
+  "Standard": "Standard",
+  "Standard_plural": "Standards",
   "Capabilities Assessment": "$t(Capability_plural) Assessment",
   "Standards Compliance": "Standards Compliance",
+  "Standards and Capabilities": "$t(Standard_plural) and $t(Capability_plural)",
   "Buttons": {
     "Save and continue": "Save and continue"
   },

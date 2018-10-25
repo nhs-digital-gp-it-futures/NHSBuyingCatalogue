@@ -1,0 +1,13 @@
+// concrete colour palette based on NHS Digital branding guidelines
+$color-nhs-white: #FFF;
+$color-nhs-blue: #005EB8;
+$color-nhs-mid-grey: #768692;
+$color-nhs-dark-grey: #425563;
+$color-nhs-warm-yellow: #FFB81C;
+
+// abstract colour palette - use this in actual styles
+$color-bg: $color-nhs-white;
+$color-fg: $color-nhs-dark-grey;
+
+$color-reversed-bg: $color-nhs-blue;
+$color-reversed-fg: $color-nhs-white;

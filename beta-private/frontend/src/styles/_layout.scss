@@ -1,0 +1,76 @@
+html {
+  background-color: $color-bg;
+  box-sizing: border-box;
+  color: $color-fg;
+  font-family: 'Frutiger W01';
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+a {
+  text-decoration: none;
+}
+
+%reversed {
+  background-color: $color-reversed-bg;
+  color: $color-reversed-fg;
+
+  a {
+    color: $color-reversed-fg;
+  }
+}
+
+body {
+  padding-top: 8rem; // account for fixed header
+}
+
+body > header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+
+  .top {
+    background-color: $color-bg;
+    display: flex;
+    height: 5rem;
+    padding: 1rem;
+
+    > nav {
+      flex: auto;
+    }
+  }
+
+  .bottom {
+    @extend %reversed;
+    height: 3rem;
+    padding: 1rem;
+
+    nav {
+      margin: 0 auto;
+      width: 30%;
+
+      a {
+        margin-right: 2rem;
+      }
+    }
+  }
+
+  #home-link {
+    display: block;
+    text-decoration: none;
+    vertical-align: top;
+
+    .nhs-digital-logo {
+      display: inline-block;
+      height: 3rem;
+    }
+
+    .title {
+      display: inline-block;
+      padding-top: 1.25rem;
+      vertical-align: top;
+    }
+  }
+}

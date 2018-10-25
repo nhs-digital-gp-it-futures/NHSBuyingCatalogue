@@ -31,7 +31,7 @@ test('a11y: logged out homepage', async t => {
 test('Login as supplier', async t => {
   await t
     .useRole(supplierRole)
-    .expect(Selector('#account .user').innerText).contains('Hello, Dr')
+    .expect(Selector('#account .user').innerText).contains('Hi, Dr')
 })
 
 test('a11y: supplier homepage', async t => {

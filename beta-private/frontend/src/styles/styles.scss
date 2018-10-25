@@ -1,32 +1,7 @@
 @import 'normalize';
 @import 'fonts';
-
-html {
-  box-sizing: border-box;
-  font-family: 'Frutiger W01';
-}
-
-*, *:before, *:after {
-  box-sizing: inherit;
-}
-
-#home-link {
-  display: block;
-  text-decoration: none;
-  vertical-align: top;
-
-  .nhs-digital-logo {
-    display: inline-block;
-    height: 4rem;
-    width: 4rem;
-  }
-
-  .title {
-    display: inline-block;
-    padding-top: 1.25rem;
-    vertical-align: top;
-  }
-}
+@import 'palette';
+@import 'layout';
 
 .sr {
   left: 0;
