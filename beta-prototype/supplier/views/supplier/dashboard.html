@@ -1,8 +1,26 @@
+<div id="dashboard-greeting">
+  <div class="greeting">
+      Welcome, {{#if user.first_name}}{{user.first_name}}
+        {{else}}
+            {{#if user.email}}{{user.email}}
+            {{else}}you?
+            {{/if}}
+        {{/if}}
+  </div>
+  <a href="#">Manage my account</a>
+</div>
+<div id="dashboard-info">
+  <p>
+    <!-- Need to find the handlebars for lorem -->
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+  </p>
+</div>
 <div id="supplier-dashboard">
+  
   <ul class="sections">
-    <li class="add-solution"><h3><a href="/suppliers/solutions/new">Add New Solution</a></h3></li>
-    <li class="my-solutions"><h3><a href="/suppliers/solutions">My Solutions</a></h3></li>
-    <li class="transactions"><h3><a href="#">Transactions</a></h3></li>
-    <li class="analytics"><h3><a href="#">Analytics</a></h3></li>
+    <li class="solution"><h3><a href="/suppliers/solutions/new">Add New Solution</a></h3></li>
+    <li class="solution"><h3><a href="/suppliers/solutions">My Solutions</a></h3></li>
+    <li class="solution coming-soon"><h3><a href="#">Transactions</a></h3></li>
+    <li class="solution coming-soon"><h3><a href="#">Analytics</a></h3></li>
   </ul>
 </div>

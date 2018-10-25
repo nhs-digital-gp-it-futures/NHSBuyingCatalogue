@@ -1,69 +1,81 @@
 {{#*inline "evidence-form"}}
-<fieldset class="standard-evidence{{#statusClass}} {{.}}{{/statusClass}}" id="std-{{id}}">
-  <legend>
-    <span class="name">Evidence Requirements</span>
-    <span class="status">{{status}}</span>
-  </legend>
-  <section class="requirements">
-    <p>Follow link to view &amp; add evidence requirements:</p>
+
+{{#if editUrl}}
+<section>
+  <div class="matrix">
+    <header>Download your latest TM</header>
     <p><a download href="/Dummy TraceabilityMatrix.xlsx">{{name}} Traceability Matrix (TM)</a></p>
-  </section>
-  {{#if editUrl}}
-  <section class="evidence{{^saved}} editing{{/saved}}">
-    <div class="editable">
-      <h4>Add Link to Completed TM</h4>
-      <label>
-        Copy/paste link from File Sharing platform here.
-        <input type="text"
-               name="evidence[{{id}}]"
-               value="{{evidence.savedLink}}">
-      </label>
-      <h4>Message (Optional)</h4>
-      <label>
-        Include a message to for Compliance officer’s attention or to describe changes from previous submission.<br>&nbsp;• 300 character limit
-      </label>
-      <textarea name="message[{{id}}]">{{evidence.savedMessage}}</textarea>
-    </div>
-    <div class="controls">
-      <a class="saved-link" href="{{evidence.savedLink}}" target="_blank">{{evidence.savedLink}}</a>
-      <p class="saved-message">{{evidence.savedMessage}}</p>
-      <a href="#" class="edit">edit</a>
-    </div>
-  </section>
-  {{/if}}
-  {{#if editUrl}}
-  {{#if owners}}
-  <section class="owner">
-    <label>
-      <h4>Select Owner</h4>
-      <select name="owner[{{id}}]">
-        <option value="">-- Select Owner --</option>
-        {{#owners}}
-        <option value="{{id}}"{{#selected}} selected{{/selected}}>{{lastName}}, {{firstName}}</option>
-        {{/owners}}
-      </select>
-    </label>
-    <p class="help">
-      Owner is Lead Contact by default. Only registered Marketplace users are available to select. If you don’t see the colleague you wish to select, you must invite them to register.
-      <a href="{{ inviteUserUrl }}">Send an Invitation</a>.
-      Learn more about <a href="{{ selectOwnerHelpUrl }}">Select Owner</a>.
-    </p>
-  </section>
-  {{/if}}
-  <section class="controls">
-    <input type="submit"
-           class="button"
-           name="save[{{id}}]"
-           value="Save">
-    {{#if submittable}}
-    <input type="submit"
-           class="button primary"
-           name="submit[{{id}}]"
-           value="Submit for Compliance ❯">
+    {{#if standard.latestSubmissionDate}} {{standard.latestSubmissionDate}} {{/if}}
+  </div>
+</section>
+{{/if}}
+
+<section>
+  <fieldset class="standard-evidence{{#statusClass}} {{.}}{{/statusClass}}" id="std-{{id}}">
+    {{#if editUrl}}
+    <section class="evidence{{^saved}} editing{{/saved}}">
+      <div class="editable">
+        <h4>Upload Completed TM</h4>
+          <label id="file-input-label" class="file-input">
+            Choose a File
+            <input id="file-input" class="file-input" type="file" name="evidence[{{id}}]" valu={{evidence.savedLink}}>
+          </label>
+          <p id="file-name">{{#if evidence.savedLink}} {{evidence.savedLink}} {{else}}No File Selected{{/if}}</p>
+          <br>
+          <input type="submit" class="button save" name="save[{{id}}]" value="Save">
+      </div>
+
+      <div class="controls">
+        <h4>Uploaded TM</h4>
+        <a class="saved-link" href="{{evidence.savedLink}}" target="_blank">{{evidence.savedLink}}</a>
+        <p class="saved-message">{{evidence.savedMessage}}</p>
+        <a href="#" class="edit">edit</a>
+      </div>
+
+      <section class="standard-description">
+        <label>
+            Add any special instructions or bring something to the Compliance officer’s attention. This can also be use to describe changes between versions of submissions. (optional)<br>300 character limit
+        </label>
+        <textarea name="message[{{id}}]" rows="5">{{evidence.savedMessage}}</textarea>
+      </section>
+
+      {{#if contacts}}
+      <section class="owner">
+
+        <label>
+          {{#if standardOwner.firstName}}
+            <h3>Standard Owner: {{standardOwner.firstName}} {{standardOwner.lastName}}</h3>
+          {{/if}}
+          <h4>Select Owner</h4>
+          <select name="owner[{{id}}]">
+            <option value="">-- Select Owner --</option>
+            {{#contacts}}
+            <option value="{{id}}"{{#selected}} selected{{/selected}}>{{lastName}}, {{firstName}}</option>
+            {{/contacts}}
+          </select>
+        </label>
+        <p class="help">
+            Only registered users from your company will display in the list. If you don’t see the name you want,  you can <a href="{{ inviteUserUrl }}">invite colleagues</a> to register.
+        </p>
+      </section>
+      {{/if}}
+    </section>
     {{/if}}
-  </section>
-  {{/if}}
-</fieldset>
+    
+    {{#if editUrl}}
+    <section class="controls">
+      
+      {{#if submittable}}
+      <input type="submit"
+              class="button primary"
+              name="submit[{{id}}]"
+              value="Submit for Compliance ❯">
+      {{/if}}
+    </section>
+    {{/if}}
+  </fieldset>
+</section>
+
 {{/inline}}
 
 <div id="compliance" class="supplier edit">
@@ -82,8 +94,6 @@
         title=subtitle
         subtitle="Standards Compliance"}}
 
-  {{> solution-info solution}}
-
   {{#if errors.general}}
   <div class="errors">
     {{#errors.general}}
@@ -93,17 +103,13 @@
   {{/if}}
 
   <section class="instructions">
-    <header>
-      <h3>Add link to evidence requirements.</h3>
-    </header>
     <p class="help">
-      Follow the link provided to the Traceability Matrix (TM). When you have completed the TM, create a link to the file and paste it below in the space provided. Once Submitted, our Assurance team will review your evidence to ensure your Solution is compliant with the Standard.
-    </p>
+        Find the TM for this Standard below. Download the latest version, and upload it when it’s complete. For Clarifications and other queries, see: Contact Us.    </p>
   </section>
 
-  {{#if standard.url}}
+  <!-- {{#if standard.url}}
   <p><a class="standard-url" target="_blank" href="{{standard.url}}">View {{standard.name}}</a></p>
-  {{/if}}
+  {{/if}} -->
 
   {{#if standard.capabilities}}
   <details class="capabilities">
@@ -136,12 +142,9 @@
   </section>
   {{/if}}
 
-  <p>Need help? For Clarifications and other queries, see:
-    <a href="{{ contactUsUrl }}">Contact Us.</a></p>
-
   <form method="POST" class="standards">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    {{> evidence-form standard submittable=submittable}}
+    {{> evidence-form standard submittable=submittable contacts=contacts}}
   </form>
 </div>
 
@@ -156,10 +159,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function enableSubmitIfAllStandardsHaveEvidence () {
     const elSubmit = $('.controls [name^=submit]')
     if (elSubmit) {
-      const allEvidenceInputs = $$('input[name^=evidence]')
+      const allEvidenceInputs = $$('input[name^=evidence], select[name^=owner]')
       const allEvidenceValues = allEvidenceInputs.map(el => el.value.trim()).filter(_ => _)
-
-      elSubmit.disabled = allEvidenceInputs.length !== allEvidenceValues.length
+      const fileTextEle = $('#file-name')
+      const alreadyUploaded = fileTextEle.innerText && fileTextEle.innerText !== 'No File Selected';
+      elSubmit.disabled = allEvidenceInputs.length !== (allEvidenceValues.length - (alreadyUploaded ? 1 : 0))
     }
   }
 
@@ -169,6 +173,22 @@ document.addEventListener('DOMContentLoaded', () => {
       el.closest('.evidence').classList.add('editing')
     })
   })
+
+  function buildLabelUpdater(fileInput, fileInputLabel) {
+    return function () {
+      const fileString= fileInput.value.split('/').pop().split('\\').pop();
+      if(fileString) {
+        fileInputLabel.innerText = fileString;
+      }
+    }
+  }
+
+  const fileInputLabel = $('#file-name');
+  const fileInput = $('#file-input');
+
+  const labelUpdater = buildLabelUpdater(fileInput, fileInputLabel);
+  fileInput.addEventListener('change', labelUpdater);
+  labelUpdater();
 
   // if the URL has a target, collapse fieldsets that aren't the target
   function handleLocationHashChange () {
@@ -184,7 +204,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+
   window.addEventListener('hashchange', handleLocationHashChange, false)
   handleLocationHashChange()
+  
 })
 </script>

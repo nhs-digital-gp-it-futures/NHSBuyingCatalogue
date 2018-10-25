@@ -1,193 +1,361 @@
-  <nav class="toc">
+{{#*inline "info-table"}}
+<table>
+    {{#each info as |data|}}
+    <tr>
+      <td class="title">{{data.title}}</td>
+      <td class="items">
+        {{#each data.items as |item|}}
+          {{#if item.link}}
+            <a href="{{item.link}}">{{item.text}}</a>
+          {{else}}
+            {{item.text}}
+          {{/if}}
+          <br>
+        {{/each}}
+      </td>
+    </tr>
+    {{/each}}
+  </table>
+{{/inline}}
+
+{{#*inline "toc"}}
+<nav class="toc">
     <h3>Page Contents</h3>
     <ul>
-      <li><a href="#capabilities-and-standards">Capabilities and Standards</a></li>
-      {{#if productPage.requirements}}
-      <li><a href="#requirements">System requirements</a></li>
-      {{/if}}
-      {{#if productPage.case-study}}
-      <li><a href="#case-studies">Case Studies</a></li>
-      {{/if}}
-      {{#if optionals.additional-services}}
-      <li><a href="#additional-services">Optional additional services</a></li>
-      {{/if}}
-      {{#if productPage.contact}}
-      <li><a href="#contact-details">Contact details</a></li>
-      {{/if}}
-      {{#if productPage.about}}
-      <li><a href="#about">About {{organisationName}}</a></li>
-      {{/if}}
+      <li><a href="#summary">Summary</a></li>
+      <li><a href="#features">Features</ahr></li>
+      <li><a href="#integrations">Integrations</a></li>
+      <li><a href="#commercial-arrangements">Commercial Arrangements</></li>
+        <li><a href="#pricing">Pricing</></li>
+      <li><a href="#associated-services">Associated Services</a></li>
+      <li><a href="#additional-services">Additional Services</a></li>
+      <li><a href="#service-scope">Service Scope</a></li>
+      <li><a href="#assessment-standards">NHS Assessments & Standards</a></li>
+      <li><a href="#customer-insights">Customer Insights</a></li>
+      <li><a href="#importing-exporting">Data Importing and Exporting</a></li>
+      <li><a href="#user-support">User Support</a></li>
+      <li><a href="#migration-switching">Migration and Switching</a></li>
+      <li><a href="#audit-info">Audit Information for Users</a></li>
+      <li><a href="#about">About {{solution.name}}</a></li>
+      <li><a href="#contact-details">Contact Details</a></li>
     </ul>
   </nav>
+{{/inline}}
 
-  <section class="solution">
-    <h2 class="name">{{solution.name}}</h2>
+{{#*inline "contents"}}
+  <section class="solution" id="summary">
+    <h2 class="name">{{solution.name}}, {{solution.version}}</h2>
     <p class="description">{{solution.description}}
   </section>
 
-  <table class="product-data">
-    <tbody>
-      {{#if productPage.benefits}}
-      <tr>
-        <th colspan="3">
-          <h3>Benefits</h3>
-        </th>
-      </tr>
-      <tr>
-        <td colspan="3">
-          <ul class="benefits">
-            {{#productPage.benefits}}
-            <li>{{.}}</li>
-            {{/productPage.benefits}}
-          </ul>
-        </td>
-      </tr>
-      {{/if}}
-      {{#if solution.version}}
-      <tr>
-        <th colspan="3">
-          <h3>Version</h3>
-        </th>
-      </tr>
-      <tr>
-        <td colspan="3">{{solution.version}}</td>
-      </tr>
-      {{/if}}
-      {{#if productPage.interop}}
-      <tr>
-        <th colspan="3">
-          <h3>Interoperability</h3>
-        </th>
-      </tr>
-      <tr>
-        <td colspan="3">
-          <ul class="interop">
-            {{#productPage.interop}}
-            <li>{{.}}</li>
-            {{/productPage.interop}}
-          </ul>
-        </td>
-      </tr>
-      {{/if}}
-      <tr>
-        <th colspan="3">
-          <h3>Pricing</h3>
-        </th>
-      </tr>
-      <tr>
-        <td colspan="3">{To come}</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <section id="capabilities-and-standards">
-    <h3>Capabilities and Standards</h3>
-    <details class="explanation">
-      <summary>What are capabilities &amp; standards?</summary>
-      <div class="help">
-        <p>All purchaseable solutions on the catalogue have passed a rigorous NHS assessment & compliance process. They have evidenced that the solution provides each of the capabilities that define its functionality, and that it meets both the standards associated with the solution, as well as the overarching standards with which all solutions must comply.</p>
-      </div>
-    </details>
-
-    {{#if carousel}}
-    <div class="carousel">
-      <p class="help">Watch how this solution meets its capabilities</p>
-      <div class="glide">
-        <div class="glide__track" data-glide-el="track">
-          <ul class="capabilities glide__slides">
-            {{#carousel}}
-            <li class="capability glide__slide">
-              <div class="details">
-                <h4 class="name">{{name}}</h4>
-                <p class="description">{{description}}</p>
-              </div>
-              <div class="video">
-                {{#youtubeUrl}}
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/{{.}}?controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                {{/youtubeUrl}}
-              </div>
-            </li>
-            {{/carousel}}
-          </ul>
-        </div>
-        <div class="glide__arrows" data-glide-el="controls">
-          <button class="glide__arrow glide__arrow--left" data-glide-dir="<">&lt;</button>
-          <button class="glide__arrow glide__arrow--right" data-glide-dir=">">&gt;</button>
-        </div>
-        <div class="glide__bullets" data-glide-el="controls[nav]">
-          {{#carousel}}
-          <button class="glide__bullet" data-glide-dir="={{@index}}"></button>
-          {{/carousel}}
-        </div>
-      </div>
-    </div>
-    {{/if}}
-
-    <div class="list-view">
-      <section class="capabilities">
-        <header><h4>Capabilities &amp; associated standards</h4></header>
-        <ul>
-          {{#productPage.capabilities}}
-          <li>
-            <details>
-              <summary>{{name}}</summary>
-              <p class="description">{{description}}</p>
-              <ul>
-                {{#standards.mandatory}}
-                <li>
-                  <details>
-                    <summary>{{name}}</summary>
-                    <p class="description">{{description}}</p>
-                  </details>
-                </li>
-                {{/standards.mandatory}}
-                {{#standards.optional}}
-                <li>
-                  <details>
-                    <summary>{{name}}</summary>
-                    <p class="description">{{description}}</p>
-                  </details>
-                </li>
-                {{/standards.optional}}
-                {{#standards.interop}}
-                <li>
-                  <details>
-                    <summary>{{name}}</summary>
-                    <p class="description">{{description}}</p>
-                  </details>
-                </li>
-                {{/standards.interop}}
-              </ul>
-            </details>
-          </li>
-          {{/productPage.capabilities}}
-        </ul>
-      </section>
-      <section class="standards">
-        <header><h4>Overarching standards</h4></header>
-        <ul>
-          {{#standards.overarching}}
-          <li>
-            <details>
-              <summary>{{name}}</summary>
-              <p class="description">{{description}}</p>
-            </details>
-          </li>
-          {{/standards.overarching}}
-      </section>
-    </div>
+  <section id="features">
+    <h3>Features</h3>
+    <ul class="features">
+      {{#each benefitOptions as |option|}}
+        <li>{{option}}</li>
+      {{/each}}
+  </ul>
   </section>
-
-  {{#if productPage.requirements}}
-  <section id="requirements">
-    <h3>System Requirements</h3>
-    <ul class="requirements">
-      {{#productPage.requirements}}
-      <li>{{.}}</li>
-      {{/productPage.requirements}}
+  
+  <section id="integrations">
+    <h3>Integrations</h3>
+    <h4>The following is a list of proven integrations</h4>
+    <ul class="interop">
+      {{#each interopOptions as |option|}}
+        <li>{{option}}</li>
+      {{/each}}
     </ul>
   </section>
-  {{/if}}
+  
+  <section id="commercial-arrangements">
+    <h3>Commercial Arrangements</h3>
+    <h4>{{commercialArrangements}}</h4>
+  </section>
+
+  <section id="pricing">
+    <h3>Pricing and add-on Services</h3>
+    <h4>{{pricing}}</h4>
+  </section>
+  
+  <section class="subsection" id="associated-services">
+    <h3>Associated Services (Not Optional)</h3>
+    <table>
+      {{#each services.associated-services as |service|}}
+        {{#if service.enabled}}
+          <tr>
+            <td class="lable">
+              {{service.label}}
+            </td>
+            <td class="price">
+              {{service.price}}
+            </td>
+          </tr>
+        {{/if}}
+      {{/each}}
+    </table>
+  </section>
+
+  <section class="subsection" id="additional-services">
+    <h3>Additional Services (Optional)</h3>
+    <table>
+      {{#each services.additional-services as |service|}}
+        {{#if service.enabled}}
+          <tr>
+            <td class="lable">
+              {{service.label}}
+            </td>
+            <td class="price">
+              {{service.price}}
+            </td>
+          </tr>
+        {{/if}}
+      {{/each}}
+    </table>
+  </section>
+  
+  <section class="subsection" id="service-scope">
+    <h3>Service Scope</h3>
+    <table>
+      {{#each requirementOptions as |req|}}
+      <tr>
+        <td>{{req.group}}</td>
+        <td>
+          {{#each req.items as |item|}}
+            {{item}}<br>
+          {{/each}}
+        </td>
+      </tr>
+      {{/each}}
+      {{#if productPage.requirements}}      
+      <tr>
+        <td>Additional Requirements</td>
+        <td>
+          {{#each productPage.requirements as |req|}}
+          {{req}}<br>
+          {{/each}}
+        </td>
+      </tr>
+    {{/if}}
+    </table>
+  </section>
+
+  <section class="section-group" id="assessment-standards">
+    <h3>NHS Assessments & Standards*</h3>
+    <div>
+      {{#> help-reveal title="Help - What is this?"}}
+      <p>All purchaseable Solutions on the catalogue have passed a rigorous NHS Capabilities Assessment & Standards Compliance process. They have evidenced that the Solution provides each of the Capabilities that define its functionality, and that it meets all the Standards associated with the Solution.    </p>
+      <p>*Information in the NHS Assessment & Standards section has been fully assessed and assured by NHS Digital. All information outside this section has been provided by the Supplier, and not been validated by NHS Digital. </p>
+      {{/help-reveal}}
+    </div>
+
+    <div>
+      {{#if carousel}}
+      <div class="carousel">
+        <p>Capability Videos</p>
+        <p class="help">Watch how this solution meets its Capabilities.</p>
+        <div class="glide">
+          <div class="glide__track" data-glide-el="track">
+            <ul class="capabilities glide__slides">
+              {{#carousel}}
+              <li class="capability glide__slide">
+                  <h4 class="name">{{name}}</h4>
+                  <div class="video">
+                    <iframe width="500" height="400" src="https://www.youtube.com/embed/uv-F9pxUECc?controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                  {{#youtubeUrl}}
+                  <iframe width="217.5" height="315" src="https://www.youtube.com/embed/{{.}}?controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                  {{/youtubeUrl}}
+                </div>
+              </li>
+              {{/carousel}}
+            </ul>
+          </div>
+          <div class="glide__arrows" data-glide-el="controls">
+            <button class="glide__arrow glide__arrow--left" data-glide-dir="<">&lt;</button>
+            <button class="glide__arrow glide__arrow--right" data-glide-dir=">">&gt;</button>
+          </div>
+          <div class="glide__bullets" data-glide-el="controls[nav]">
+            {{#carousel}}
+            <button class="glide__bullet" data-glide-dir="={{@index}}"></button>
+            {{/carousel}}
+          </div>
+        </div>
+      </div>
+      {{/if}}
+    </div>
+
+    <div>
+      <details class="explanation">
+        <summary class="heading">Capabilities</summary>
+        <ul>
+          {{#productPage.capabilities}}
+            <li>
+              <details class="explanation capability-details">
+                <summary><a>{{name}}</a></summary>
+                <div class="detail-text">
+                  <table class="capability-details">
+                    <tr>
+                      <td class="description">
+                        <p>{{description}}</p>
+                      </td>
+                      <td>
+                        <a href="{{url}}">Request Supplier Assessment Evidence</a>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </details>
+            </li>
+          {{/productPage.capabilities}}
+        </ul>
+      </details>
+    </div>
+
+    <div>
+      <details class="explanation">
+          <summary class="heading">Capability Specific Standards</summary>
+          <ul>
+            {{#standards.mandatory}}
+              <li>
+                <details class="explanation capability-details">
+                  <summary><a>{{name}}</a></summary>
+                  <div class="detail-text">
+                    <table class="capability-details">
+                      <tr>
+                        <td class="description">
+                          <p>{{description}}</p>
+                        </td>
+                        <td>
+                          <a href="{{url}}">Request Supplier Assessment Evidence</a>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </details>
+              </li>
+            {{/standards.mandatory}}
+          </ul>
+        </details>
+    </div>
+
+    <div>
+        <details class="explanation">
+            <summary class="heading">Solution Specific Standards</summary>
+            <ul>
+              {{#standards.interop}}
+                <li>
+                  <details class="explanation capability-details">
+                    <summary><a>{{name}}</a></summary>
+                    <div class="detail-text">
+                      <table class="capability-details">
+                        <tr>
+                          <td class="description">
+                            <p>{{description}}</p>
+                          </td>
+                          <td>
+                            <a href="{{url}}">Request Supplier Assessment Evidence</a>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </details>
+                </li>
+              {{/standards.interop}}
+            </ul>
+          </details>
+        </div>
+
+    <div>
+        <details class="explanation">
+            <summary class="heading">General Standards</summary>
+            <ul>
+              {{#standards.overarching}}
+                <li>
+                  <details class="explanation capability-details">
+                    <summary><a>{{name}}</a></summary>
+                    <div class="detail-text">
+                      <table class="capability-details">
+                        <tr>
+                          <td class="description">
+                            <p>{{description}}</p>
+                          </td>
+                          <td>
+                            <a href="{{url}}">Request Supplier Assessment Evidence</a>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </details>
+                </li>
+              {{/standards.overarching}}
+            </ul>
+          </details>
+    </div>
+  </section>
+  
+  <section id="customer-insights">
+    <h3>Customer Insights</h3>
+    {{>info-table info=customerInsights}}
+
+  </section>
+  
+  <section id="importing-exporting">
+    <h3>Data Importing & Exporting</h3>
+    {{>info-table info=dataImportExport}}
+  </section>
+  
+  <section id="user-support">
+    <h3>User Support</h3>
+    {{>info-table info=userSupport}}
+  </section>
+  
+  <section id="migration-switching">
+    <h3>Migration & Switching</h3>
+    {{>info-table info=migrationSwitching}}
+  </section>
+  
+  <section id="audit-info">
+    <h3>Audit Information for Users</h3>
+    {{>info-table info=auditInfo}}
+
+  </section>
+  
+  <section id="about">
+    <h3>About {{organisationName}}{{#productPage.logoUrl}} <img src="{{.}}">{{/productPage.logoUrl}}</h3>
+    <p class="about">{{productPage.about}}</p>
+
+  </section>
+  
+  <section id="contact-details">
+
+      {{#productPage.contact}}
+      <section id="contact-details" class="optional">
+        <h3>Contact Details</h3>
+        <ul>
+          <li>
+            <span class="label">Name</span>
+            <span class="value">{{firstName}} {{lastName}}</span>
+          </li>
+          {{#phoneNumber}}
+          <li>
+            <span class="label">Phone number</span>
+            <span class="value">{{.}}</span>
+          </li>
+          {{/phoneNumber}}
+          {{#emailAddress}}
+          <li>
+            <span class="label">Email</span>
+            <span class="value"><a href="mailto:{{.}}">{{.}}</a></span>
+          </li>
+          {{/emailAddress}}
+          {{#url}}
+          <li>
+            <span class="label">Website</span>
+            <span class="value"><a href="{{.}}" target="_blank">{{.}}</a></span>
+          </li>
+          {{/url}}
+        </ul>
+      </section>
+      {{/productPage.contact}}  </section>
 
   {{#if productPage.case-study}}
   <section id="case-studies" class="optional">
@@ -202,54 +370,13 @@
     </ul>
   </section>
   {{/if}}
+{{/inline}}
 
-  {{#if optionals.additional-services}}
-  <section id="additional-services" class="optional">
-    <h3>Optional Additional Services</h3>
-    <ul class="additional">
-      {{#optionals.additional-services}}
-      <li>
-        <span class="label">{{label}}</span>
-        <span class="value">{{value}}</span>
-      </li>
-      {{/optionals.additional-services}}
-    </ul>
-  </section>
-  {{/if}}
-
-  {{#productPage.contact}}
-  <section id="contact-details" class="optional">
-    <h3>Contact Details</h3>
-    <ul>
-      <li>
-        <span class="label">Name</span>
-        <span class="value">{{firstName}} {{lastName}}</span>
-      </li>
-      {{#phoneNumber}}
-      <li>
-        <span class="label">Phone number</span>
-        <span class="value">{{.}}</span>
-      </li>
-      {{/phoneNumber}}
-      {{#emailAddress}}
-      <li>
-        <span class="label">Email</span>
-        <span class="value"><a href="mailto:{{.}}">{{.}}</a></span>
-      </li>
-      {{/emailAddress}}
-      {{#url}}
-      <li>
-        <span class="label">Website</span>
-        <span class="value"><a href="{{.}}" target="_blank">{{.}}</a></span>
-      </li>
-      {{/url}}
-    </ul>
-  </section>
-  {{/productPage.contact}}
-
-  {{#if productPage.about}}
-  <section id="about">
-    <h3>About {{organisationName}}{{#productPage.logoUrl}} <img src="{{.}}">{{/productPage.logoUrl}}</h3>
-    <p class="about">{{productPage.about}}</p>
-  </section>
-  {{/if}}
+<div class="page-container">
+  <div class="toc-wrapper">
+      {{>toc}}
+  </div>
+  <div class="section-wrapper">
+      {{>contents}}
+  </div>
+</div>

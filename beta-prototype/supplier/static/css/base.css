@@ -11,6 +11,11 @@ img {
   width: 100%;
 }
 
+#content {
+  width: 60em;
+  margin: auto;
+}
+
 a {
   text-decoration: none;
 }
@@ -39,4 +44,10 @@ nav.backlink a {
 
 nav.backlink a .title {
   font-weight: var(--font-weight-breadcrumbs-bold);
+}
+
+.logout > a,
+.login > a,
+.user > a {
+  color:#425563 !important;
 }

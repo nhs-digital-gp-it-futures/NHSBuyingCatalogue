@@ -30,6 +30,17 @@
   border-bottom: 2px solid var(--color-nhs-pale-grey);
   padding-bottom: 0.4em;
   padding-top: 0.4em;
+  margin-bottom: 0.5em;
+}
+
+#compliance section.standard-description {
+  width:50%;
+}
+#compliance section.standard-description textarea{
+  border: 1px solid var(--color-nhs-blue)!important;
+}
+#compliance section.standard-description label{
+  color: var(--color-nhs-dark-grey)
 }
 
 #compliance .standards > section.standard {
@@ -37,21 +48,58 @@
   font-size: var(--font-size-main-standard);
 }
 
-#compliance section.standard > .name {
-  display: inline-block;
-  width: 58%;
+input.save {
+  width:15%;
+  min-width:10em;
 }
 
+.editable label input.file-input {
+  display:none;
+}
+
+.editable label.file-input {
+  background:white;
+  border: solid 2px var(--color-nhs-blue);
+  color: var(--color-nhs-blue);
+  display: inline-block;
+  width:15%;
+  min-width:10em;
+  text-align: center;
+  cursor: pointer;
+}
+
+
+#compliance section div.matrix {
+  margin-left:1em;
+  padding:1em;
+  background: var(--color-nhs-pale-grey)
+}
+
+#compliance section.matrix {
+  padding:1em;
+}
+
+#compliance section.standard > .name {
+  text-decoration: none;
+  display: inline-block;
+  width: 50%;
+}
+#compliance section.standard > .name:hover {
+  text-decoration: underline;
+}
 #compliance section.standard.interop > .name::before {
   color: var(--color-fg);
   content: 'Interop ';
   font-weight: bold;
 }
 
-#compliance section.standard > .status,
+#compliance section.standard > .status{
+  width:30%;
+  display: inline-block;
+}
+
 #compliance section.standard > .controls {
   display: inline-block;
-  width: 19%;
 }
 
 #compliance section.standard > .status,
@@ -146,9 +194,7 @@
 }
 
 #compliance.edit fieldset.standard-evidence {
-  border: 1px solid var(--color-nhs-blue);
-  border-radius: 2px;
-  margin: 1.5em 0 0 0;
+  border: none;
   padding: 1.5em 1em;
   position: relative;
 }
@@ -283,6 +329,10 @@
   border: 1px solid var(--color-nhs-blue);
 }
 
+#compliance section header h2 {
+  color: var(--color-nhs-dark-grey)
+}
+
 #compliance.edit .evidence-history header {
   margin-left: 2em;
 }
@@ -353,8 +403,9 @@
 #compliance.edit section.owner label,
 #compliance.edit section.owner .help {
   display: block;
-  margin: 0 auto;
-  width: 75%;
+  width: 40%;
+  text-align: right;
+  margin-left: auto;
 }
 
 #compliance.edit section.owner .help {

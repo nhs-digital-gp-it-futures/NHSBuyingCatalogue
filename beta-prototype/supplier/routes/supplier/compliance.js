@@ -70,6 +70,7 @@ async function loadEnrichedSolution (solutionId, baseUrl) {
     api.get_solution_by_id(solutionId),
     api.get_all_capabilities()
   ])
+
   const owners = await api.get_contacts_for_org(solutionEx.solution.organisationId)
 
   const allStandards = _.keyBy(standards, 'id')
@@ -93,7 +94,28 @@ async function loadEnrichedSolution (solutionId, baseUrl) {
   const allClaimedStandards = _.each(
     solutionEx.claimedStandard,
     stdWithEvidenceParsed
-  )
+  ).map((standard) => {
+    standard.standardOwner = {};
+    if(standard.evidence) {
+
+      const standardOwner = solutionEx.technicalContact.filter((contact) =>{
+        return contact.id === standard.evidence.owner
+      })[0]
+
+      if(standardOwner) {
+        standard.standardOwner = {
+          firstName: standardOwner.firstName,
+          lastName: standardOwner.lastName,
+          contactType: standardOwner.contactType
+        }  
+      }
+    }
+    return standard
+  }).map((standard) => {
+    standard.latestDate = ''
+
+    return standard;
+  })
 
   function relatedCapabilities (standardId) {
     const candidateCapabilities = _.intersectionWith(
@@ -180,6 +202,8 @@ async function loadEnrichedSolution (solutionId, baseUrl) {
     .value()
     .sort(standardOrdering)
 
+    console.log(solutionEx.solution.capabilitySpecificStandards.filter((standard) => standard.standardOwner));
+
   return solutionEx
 }
 
@@ -257,6 +281,8 @@ async function complianceEditHandler (req, res) {
   try {
     const solutionEx = await loadEnrichedSolution(req.params.solution_id, req.baseUrl)
 
+    context.contacts = solutionEx.technicalContact;
+    
     context.standard = _.find(
       _.concat(
         solutionEx.solution.standards,
@@ -274,6 +300,7 @@ async function complianceEditHandler (req, res) {
   } catch (err) {
     context.errors.general = err
   }
+
 
   res.render('supplier/compliance-edit', context)
 }

@@ -116,7 +116,7 @@ class API {
 
   async get_solutions_for_user (user) {
     const { org } = await this.get_org_for_user(user)
-    const paged = await get_api(`Solution/ByOrganisation/${org.id}?pageSize=100`)
+    const paged = await get_api(`Solution/ByOrganisation/${org.id}?pageSize=100`) // offset if paginated?
     return paged ? paged.items : []
   }
 
@@ -499,6 +499,16 @@ API.prototype.CAPABILITY_STATUS = {
   APPROVED: 2,
   REJECTED: 3
 }
+
+API.prototype.stageIndicators = [
+  '1 of 4', '2 of 4', '2 of 4', '3 of 4', '4 of 4', 'Complete',
+];
+
+API.prototype.solutionStages = [
+  'Registration', 'Capabilities Assessment', 'Capabilities Review', 'Standards Compliance',
+  'Solution Page', 'Approved'
+]
+
 
 API.prototype.standardStatuses = [
   'Submitted', 'Remediation', 'Approved', 'Rejected', 'Partially Approved'

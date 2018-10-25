@@ -1,17 +1,18 @@
 <div id="add-edit-solution" class="supplier mobile">
   {{> onboarding-progress-header
-        title="Confirm Mobile"
+        title="Can your Solution be used on a mobile device?"
         subtitle="Register Solution (3 of 4)"}}
-  <p class="help">If your Solution can be used on a mobile device, you will have to comply with relevant Standards. During the Standards Compliance stage of Onboarding, you will be asked to describe to what extent your Solution is available for mobile working.</p>
-  <p><a href="{{standard.url}}" target="_blank">See {{standard.name}} Standard</a></p>
-
+    <p><i>Select Yes or No*.</i></p>
   {{#errors}}
   <p class="error">{{.}}</p>
   {{/errors}}
 
+
+  {{#> help-reveal title="Help - What if only some Capabilities are available on a mobile device?"}}
+  <p>If <b>any</b> parts of your Solution can be used on a mobile device, you will have to comply with the Mobile Working Standard. During the Standards Compliance stage, you will be asked to provide evidence applicable to the extent your Solution is available for mobile working.<a href="#">See Mobile Working Standard.</a></p>
+  {{/help-reveal}}
   <form method="POST">
     <fieldset class="is-mobile">
-      <h3>Can your Solution be used on a mobile device?</h3>
       <label>
         <input type="radio" name="isMobile" value="yes"{{#if isMobile}} checked{{/if}}>
         Yes
@@ -22,10 +23,38 @@
       </label>
     </fieldset>
 
+    <fieldset class="hidden mobile-compliance-note">
+      <div class="mobile-compliance-note">
+        <p><i>Based on your selection, compliance with 1 additional Solution-specific Standard will be required.</i></p>
+        <p><a href="#">Mobile Working</a></p>
+      <div>
+    </fieldset>
+
     <fieldset class="controls">
-      <button name="action" value="save" type="submit">Save</button>
-      <button class="primary" name="action" value="submit" type="submit">Continue</button>
+      <!-- <button name="action" value="save" type="submit">Save</button> -->
+      <button class="primary-button" name="action" value="continue" type="submit">Save & Continue</button>
       <input type="hidden" name="_csrf" value="{{csrfToken}}">
     </fieldset>
   </form>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const yesRadio = $('input[type="radio"][value="yes"]');
+  const noRadio = $('input[type="radio"][value="no"]');
+  function toggleComplianceNote() {
+    const complianceNote = $('fieldset.mobile-compliance-note');
+    if(yesRadio.checked) {
+      complianceNote.classList.remove('hidden')
+    }
+    else {
+      complianceNote.classList.add('hidden')
+    }
+  }
+
+  yesRadio.addEventListener('click', toggleComplianceNote);
+  noRadio.addEventListener('click', toggleComplianceNote);
+
+  toggleComplianceNote();
+})
+</script>

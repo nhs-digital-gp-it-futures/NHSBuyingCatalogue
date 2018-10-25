@@ -5,20 +5,13 @@
 {{/if}}
 <div id="assessment">
   {{> onboarding-progress-header
-        title="Enter Capabilities Assessment Evidence"
+        title="Provide Assessment evidence for your Solution."
         subtitle="Stage 2—Capabilities Assessment"}}
 
-  {{> solution-info solution}}
-
+  <!-- {{> solution-info solution}} -->
   <div>
-    <p>For each Capability below, provide a video showing how your Solution meets that Capability. The  video must be downloadable from the link provided.</p>
-
-    <p>The videos and answers will be used by our Commercial team to assess whether your Solution satisfies the Capabilities selected. We will also display the videos on your Solution’s catalogue page to support buyers in making purchasing decisions, unless you opt out.</p>
-
-    <p>You can opt out, and miss out on showing videos to buyers, when building your Solution's catalogue page during Onboarding Stage 4.</p>
-
-    <p>Need help? For Clarifications and other queries, see:
-      <a href="{{ contactUsUrl }}">Contact Us.</a></p>
+    <p> Answer both parts of the requirements for this Capability below. You can edit these responses until you submit all your Solution’s Capability Assessment responses from the Capability Dashboard. </p>
+    <p>All Clarifications should be submitted in <a href="#">Bravo</a>.</p> 
   </div>
 
   {{#if messages}}
@@ -42,22 +35,46 @@
     {{#solution.capabilities}}
     <fieldset id="evidence-{{id}}" class="capability {{statusClass}}">
       <legend>{{ name }} <span class="status">{{status}}</span></legend>
-      <p class="description">1. Provide video(s) demonstrating that the Solution meets all the qualifying user stories defined in the Capability description.
+      <p class="description">
+          Provide a video showing how your Solution meets each of this Capabilities’ Epics and Acceptance Criteria. Find all Epics and Acceptance Criteria here: 
         <a href="{{ url }}" target="_blank">View Capability description.</a>
       </p>
-      <fieldset class="evidence">
-        <h3>Add video link</h3>
-        <p class="label">Upload video to file share platform, and provide link to video here.
-          <a href="{{ filesharePlatformUrl }}" target="_blank">Open file share platform.</a></p>
-        <input type="text"
-               name="evidence[{{id}}]"
-               value="{{evidence}}">
+
+      <fieldset class="evidence video" id="video-fieldset-{{id}}">
+        <h3>Part 1. Add Video</h3>
+        <!-- <p class="label">Upload video to file share platform, and provide link to video here. -->
+        <!-- <a href="{{ filesharePlatformUrl }}" target="_blank">Open file share platform.</a></p> -->
+        <label id="video-input-label-{{id}}"
+               class="file-input">
+          Choose a File
+          <input id="video-input-{{id}}"
+                 class="file-input"
+                 type="file"
+                 name="video_evidence[{{id}}]"
+                 value="{{video_evidence}}">
+        </label>
+        <p id="video-file-name-{{id}}">{{#if video_evidence}} {{video_evidence}} {{else}} No File Selected {{/if}}</p>
+        <br>
+        <button class="video-save" name="action" value="save" type="">Save</button>
       </fieldset>
+
+      <fieldset class="evidence description">
+          <h3>Part 2. How does your Solution deliver value for this Capability? </h3>
+          <!-- <p class="label">Upload video to file share platform, and provide link to video here. -->
+          <!-- <a href="{{ filesharePlatformUrl }}" target="_blank">Open file share platform.</a></p> -->
+          <input class="description"
+                 type="textarea"
+                 maxlength="300"
+                 name="evidence_description[{{id}}]"
+                 value="{{evidence_description}}"
+                 style="resize:both;overflow:auto;">
+        </fieldset>
+
     </fieldset>
     {{/solution.capabilities}}
     <div class="controls">
-        <button name="action" value="save" type="submit">Save</button>
-        <button class="primary" name="action" value="submit" type="submit">Submit for Assessment ❯</button>
+        <!-- <button name="action" value="save" type="">Save</button> -->
+        <button class="primary-button" name="action" value="submit" type="submit">Submit for Assessment ❯</button>
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
     </div>
   </form>
@@ -85,5 +102,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     $('button[name=action][value=submit]').disabled = allEvidenceInputs.length !== allEvidenceValues.length
   }
+
+  function buildLabelUpdater(fileInput, fileNameStringEle) {
+    return function () {
+      const fileString= fileInput.value.split('/').pop().split('\\').pop();
+      if(fileString) {
+        fileNameStringEle.innerText = fileString;
+      }
+    }
+  }
+
+  const videoFieldsets = $$('form fieldset.evidence.video');
+
+  videoFieldsets.forEach((fieldSet) => {
+    const idElements = fieldSet.id.split('-');
+    const capID = idElements[idElements.length-1];
+    const vidInput = $(`#video-input-${capID}`);
+    const vidLabel = $(`#video-file-name-${capID}`);
+    const labelUpdater = buildLabelUpdater(vidInput, vidLabel);
+    vidInput.addEventListener('change', labelUpdater)
+    labelUpdater();
+  })
+
 })
 </script>

@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  supplier:
+    volumes:
+      - ./supplier:/home/node/app
+      - /home/node/app/node_modules/
+    environment:
+      NODE_ENV: development
+    command: npx nodemon index.js

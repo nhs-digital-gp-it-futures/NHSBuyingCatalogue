@@ -37,6 +37,12 @@
   left: -0.5em;
 }
 
+div.capabilities {
+  width:100%;
+  padding:0.4em 0em;
+  background: var(--color-nhs-pale-grey);
+}
+
 #solution-capabilities fieldset.capability-group {
   background-color: var(--color-nhs-pale-grey);
   border-top: solid 3px var(--color-nhs-blue);
@@ -48,7 +54,8 @@
 
 #solution-capabilities fieldset.capability-group legend {
   color: var(--color-nhs-blue);
-  font-size: var(--font-size-high-density);
+  /* font-size: var(--font-size-high-density); */
+  font-size:1.2em;
   font-weight: var(--font-weight-high-density-bold);
 }
 

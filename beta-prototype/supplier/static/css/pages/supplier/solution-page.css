@@ -138,7 +138,7 @@
 #solution-page fieldset.capabilities table {
   border-collapse: collapse;
   font-size: var(--font-size-button-label);
-  width: 80%;
+  width: 70%;
 }
 
 #solution-page fieldset.capabilities table tbody tr {
@@ -276,8 +276,9 @@
 #solution-page-preview .preview-header {
   background-color: #F9A181;
   color: white;
-  font-size: var(--font-size-page-title);
+  font-size: 1.5em;;
   padding: 0.5em 0;
+  width:100%;
   text-align: center;
 }
 
@@ -285,11 +286,27 @@
   background-color: rgba(120, 190, 32, 0.45);
 }
 
-#solution-page-preview .toc {
-  float: right;
+#solution-page-preview .page-container{
+  display: flex;
+}
+
+#solution-page-preview .toc-wrapper {
+  width:15%;
+  position: fixed;
+  overflow: auto;
+  max-height: 75%
+}
+
+#solution-page-preview .section-wrapper {
+  width:75%;
+  margin-left: 25%
+}
+
+/* #solution-page-preview .toc {
+  float: left;
   margin-top: 3em;
   width: 25%;
-}
+} */
 
 #solution-page-preview .toc h3 {
   border-bottom: 2px solid var(--color-fg);
@@ -350,12 +367,39 @@
   padding-left: 1.25em;
 }
 
-#solution-page-preview .product-data h3 {
+#solution-page-preview section h2 {
+  font-weight: bolder;
+  color: var(--color-nhs-dark-grey);
+}
+
+#solution-page-preview section h3 {
   background-color: var(--color-nhs-pale-grey);
   color: var(--color-fg);
-  font-size: var(--font-size-navigation);
+  font-size: 1.25em;
   margin: 0 0 0.25em 0;
-  padding: 0.5em 1em;
+  padding: 0.5em 0.5em;
+}
+
+#solution-page-preview section h4 {
+  color: var(--color-nhs-dark-grey);
+  margin:0;
+  font-size: 0.8em;
+}
+
+
+#solution-page-preview ul.features li {
+  padding:0.25em;
+  font-size: 1em;
+}
+
+#solution-page-preview ul.interop {
+  padding-left: 0;
+}
+
+#solution-page-preview ul.interop li {
+  color: var(--color-nhs-dark-grey);
+  list-style: none;
+  font-size: var(--font-size-high-density)
 }
 
 #solution-page-preview .product-data th {
@@ -394,12 +438,12 @@
 }
 
 #solution-page-preview .capabilities .capability {
-  display: flex;
+  /* display: flex; */
 }
 
 #solution-page-preview .capabilities .capability .details {
-  flex: 1;
-  padding: 1em;
+  /* flex: 1; */
+  padding: 0.2em;
 }
 
 #solution-page-preview .capabilities .capability .details .name {
@@ -412,7 +456,7 @@
 }
 
 #solution-page-preview .capabilities .capability .video {
-  flex: 1;
+  /* flex: 1; */
 }
 
 #solution-page-preview .carousel {
@@ -420,7 +464,7 @@
 }
 
 #solution-page-preview .glide {
-  border: 1px solid var(--color-nhs-blue);
+  /* border: 1px solid var(--color-nhs-blue); */
 }
 
 #solution-page-preview .glide__arrow--left {
@@ -432,12 +476,12 @@
 #solution-page-preview .glide__arrow--right {
   background-color: var(--color-bg);
   color: var(--color-fg);
-  right: -2em;
+  right: -1em;
 }
 
 #solution-page-preview .glide__bullets {
-  left: unset;
-  right: 25%;
+  /* left: unset; */
+  /* right: 25%; */
 }
 
 #solution-page-preview .list-view {
@@ -482,6 +526,31 @@
   margin-top: 2em;
   padding-bottom: 0.25em;
 }
+#solution-page-preview  section.subsection  h3 {
+  border-bottom: 4px solid var(--color-nhs-pale-grey);
+  background: none !important;
+  font-weight: 500;
+  margin-bottom: 0;
+  margin-top: 2em;
+  padding-bottom: 0.25em;
+}
+#solution-page-preview section table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#solution-page-preview section table tr td.price {
+  width:25%
+}
+
+#solution-page-preview section table tr td.label {
+width:80%
+}
+
+#solution-page-preview section table tr td {
+  padding: 0.5em;
+  border-bottom: 2px solid var(--color-nhs-pale-grey);
+}
 
 #solution-page-preview p.description,
 #solution-page-preview ul.benefits li,
@@ -493,4 +562,52 @@
   float: right;
   max-height: 4em;
   width: inherit;
+}
+
+#solution-page-preview section.section-group{
+  background: var(--color-nhs-pale-grey);
+  padding:0.7em;
+}
+
+#solution-page-preview section div {
+  background: var(--color-nhs-white);
+  margin-bottom:1em;
+  padding:0.7em;
+}
+
+#solution-page-preview section div ul {
+  margin-left:0;
+  padding-left:0;
+  list-style-type: none;
+}
+
+
+table.capability-details tr td.description {
+  width:70%;
+  font-size: 0.8em;
+}
+
+table.capability-details tr td a {
+  text-decoration: none;
+}
+table.capability-details tr td a:hover {
+  text-decoration: underline;
+}
+
+details.capability-details summary a{
+  color: var(--color-nhs-dark-grey);
+}
+
+summary.heading {
+  font-size: 1.25em !important;
+}
+
+td.title {
+  width:50%; 
+}
+
+td.items {
+  font-size: var(--font-size-high-density);
+  color: var(--color-nhs-dark-grey);
+  width:50%;
 }

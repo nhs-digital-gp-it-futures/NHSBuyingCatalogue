@@ -49,34 +49,123 @@ function enrichContextForProductPage (context, solutionEx) {
   // build lists of options for specs
   context.interopOptions = ['EMIS', 'TPP', 'Vision', 'Microtest']
   context.requirementOptions = [
-    'None',
+    {group: 'Software add-on or Extension', items:['Yes']},
+    {group: 'Cloud deployment model', items:['Private Cloud']},
     {group: 'Operating Systems', items: ['Linux Debian 8 or Ubuntu 16.04 OS', 'Windows', 'macOS']},
     {group: 'Processor Speed', items: ['Multi-core processor is recommended']},
     {group: 'Miscellaneous', items: ['Users must have internet connectivity', 'Users must have access to a common browser platform']}
   ]
 
+
+  function boltSolutionPricing(context) {
+    context.pricing = '£ / max per patient'
+  }
+
+  function boltCommercialArrangements(context){
+    context.commercialArrangements = 'NHS 1.0';
+  }
+
+  boltSolutionPricing(context);
+  boltCommercialArrangements(context);
+
   // construct the optional sets from the product page data
-  context.optionals = {
-    'additional-services': _.map({
-      'training-onsite': 'Training (on site)',
-      'training-online': 'Training (online)',
-      'training-virtual': 'Training (virtual classroom)',
-      'deployment-support': 'Deployment Support',
-      'data-migration': 'Data Migration',
-      'designated-service-contact': 'Designated Service Contact',
-      'audit-trail-retrieval': 'Audit Trail Retrieval'
-    }, (label, name) => {
-      const path = ['optionals', 'additional-services', name]
+  const placeholderServiceMap = {
+    'training-onsite': 'Training (on site)',
+    'training-online': 'Training (online)',
+    'training-virtual': 'Training (virtual classroom)',
+    'deployment-support': 'Deployment Support',
+    'data-migration': 'Data Migration',
+    'designated-service-contact': 'Designated Service Contact',
+    'audit-trail-retrieval': 'Audit Trail Retrieval'
+  };
+
+  const placeholderCustomerInsights = [
+    {title:'Customer Ref 1',items:[ {text:'Dr. Ranj Singh, GP'}, {text:'Leeds North'}, {text:'Email Dr. Ranj', link:'a@a.com'} ]},
+    {title:'User Group',    items:[ {text:'Group Page', link:'#'} ]},
+    {title:'Case Study',    items:[ {text:'Case Study Document', link:'#'} ]}
+  ];
+
+  const placeholderUserSupport = [
+    {title:'Availability',      items:[ {text:'99.99%'} ]},
+    {title:'Email Ticketing',   items:[ {text:'Yes'} ]},
+    {title:'Online Ticketing',  items:[ {text:'Yes'} ]},
+    {title:'Phone Support',     items:[ {text:'Yes'} ]},
+    {title:'Phone Availability',items:[ {text:'09:00-17:00 (GMT)'} ]},
+    {title:'Web Chat Support',  items:[ {text:'No'} ]}
+  ];
+
+  const placeholderDataImportExport = [
+    {title:'Export Approach',items:[{text:'The population reporting module enables users to build reports on patients and other criteria, which can be exported to Microsoft Excel. Data extraction services allow users to analyse more complex criteria, and a data analytics service can be purchased separately.'}]},
+    {title:'Export Format',items:[{text:'CSV'},{text:'TSV'}]},
+    {title:'Import Format',items:[{text:'CSV'},{text:'TSV'}]}
+  ];
+
+  const placeholderMigrationSwitching = [
+    {title:'Getting Started', items:[{text:'Training provided at additional cost. All users provided with access to online support centre, which provides extensive system guidance and training videos. Regular online live webinars are also available.'}]},
+    {title:'Service documentation', items:[{text:'Yes'}]},
+    {title:'Documentation Format',items:[{text:'PDF'}, {text:'Markdown'}]},
+    {title:'End-of-contract data extraction',items:[{text:'Data extraction provided to cutomers when contract period ends and the customer intends to move to another provider. '}]}
+  ];
+
+  const placeholderAuditInfo = [
+    {title:'Access to user activity audit information', items:[{text:'Users have access to real-time audit information'}]},
+    {title:'How long user audit data is stored for', items:[{text:'At least 12 months'}]},
+    {title:'Access to supplier activity audit information', items:[{text:'Users have access to real-time audit information'}]}
+  ];
+  
+  if(!context.productPage.optionals) {
+    context.productPage.optionals = {};
+  }
+  (function TEMP_addAdditionalAndAssociated(placeholderServiceMap, productPage) {
+    const keys = Object.keys(placeholderServiceMap);
+    const numberOfOptions = keys.length;
+    
+    const randomAssociatedIdx = Math.floor(Math.random()*numberOfOptions)
+    let randomAdditionalIdx = randomAssociatedIdx;
+    
+    // select a different random service.
+    while(randomAssociatedIdx === randomAdditionalIdx) {randomAdditionalIdx = Math.floor(Math.random()*numberOfOptions)};
+
+    const assoc = keys[randomAssociatedIdx];
+    const addit = keys[randomAdditionalIdx]
+
+    productPage.optionals['associated-services'] = {[assoc] : placeholderServiceMap[assoc]};
+    productPage.optionals['additional-services'] = {[addit] : placeholderServiceMap[addit]};
+  })(placeholderServiceMap, context.productPage)
+
+  /**
+   * is this map really needed? presumably the associated and additional services that
+   * a solution provides will be in the DB, which will then just be retrieved no?
+   *
+   * Can then just render what is in there?
+   */
+  function mapServices(serviceType, serviceMap) {
+    return _.map(serviceMap, (label, name) => {
+      const path = ['optionals', serviceType, name]
       const chosen = _.has(context.productPage, path)
       const enabled = !!_.get(context.productPage, path)
       return {
         label,
-        name: `additional-services[${name}]`,
+        name: name,
         enabled: chosen && enabled,
-        disabled: chosen && !enabled
+        disabled: chosen && !enabled,
+        price: `£${Math.floor(Math.random()*999).toFixed(2)}/day`
       }
     })
   }
+
+  context.migrationSwitching = placeholderMigrationSwitching;
+  context.userSupport = placeholderUserSupport;
+  context.dataImportExport = placeholderDataImportExport;
+  context.customerInsights = placeholderCustomerInsights;
+  context.auditInfo = placeholderAuditInfo;
+  
+
+  context.services = {
+    'associated-services': mapServices('associated-services', placeholderServiceMap),
+    'additional-services': mapServices('additional-services', placeholderServiceMap)
+  }
+
 }
 
 async function enrichContextForProductPagePreview (context, solutionEx) {

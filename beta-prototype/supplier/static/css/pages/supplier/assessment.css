@@ -111,12 +111,38 @@
   font-weight: var(--font-weight-high-density);
 }
 
-#assessment form fieldset.evidence input {
+#assessment form fieldset.evidence input.description {
   border: 1px solid var(--color-capability-border);
   height: 2.5em;
   padding-left: 1em;
   margin-left: 1em;
   width: 90%;
+  resize: vertical;
+}
+
+#file-name, #file-input-label {
+  display:inline-block;
+}
+
+form fieldset.evidence button.video-save {
+  background: var(--color-nhs-blue);
+  color: white;
+  border:none;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+form fieldset.evidence label input.file-input {
+  display:none;
+}
+
+#file-input-label, .file-input {
+  background:white;
+  border: solid 2px var(--color-nhs-blue);
+  color: var(--color-nhs-blue);
+  cursor: pointer;
+  padding:0.25em 2em;
 }
 
 #assessment form fieldset.capability .controls {
@@ -233,4 +259,8 @@
 #saved-notification span {
   color: var(--color-nhs-dark-green);
   font-size: var(--font-size-page-title);
+}
+
+#capability-assessment-introduction > form > fieldset {
+  border: none;
 }

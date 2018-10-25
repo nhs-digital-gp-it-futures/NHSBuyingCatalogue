@@ -20,28 +20,31 @@
   First Name{{#required}} <span class="required">*</span>{{/required}}
   <input type="text"
          name="contacts[{{contactType}}][firstName]"
-         value="{{ firstName }}">
+         value="{{ firstName }}" placeholder="Enter First Name">
 </label>
 {{> errors errors=errors.firstName }}
 <label{{#if errors.lastName}} class="has-errors"{{/if}}>
   Last Name{{#required}} <span class="required">*</span>{{/required}}
   <input type="text"
          name="contacts[{{contactType}}][lastName]"
-         value="{{ lastName }}">
+         value="{{ lastName }}"
+         placeholder="Enter Last Name">
 </label>
 {{> errors errors=errors.lastName }}
 <label{{#if errors.emailAddress}} class="has-errors"{{/if}}>
   Email{{#required}} <span class="required">*</span>{{/required}}
   <input type="email"
          name="contacts[{{contactType}}][emailAddress]"
-         value="{{ emailAddress }}">
+         value="{{ emailAddress }}"
+         placeholder="Enter Email Address">
 </label>
 {{> errors errors=errors.emailAddress }}
 <label{{#if errors.phoneNumber}} class="has-errors"{{/if}}>
   Phone Number{{#required}} <span class="required">*</span>{{/required}}
   <input type="text"
          name="contacts[{{contactType}}][phoneNumber]"
-         value="{{ phoneNumber }}">
+         value="{{ phoneNumber }}"
+         placeholder="Enter Phone Number">
 </label>
 {{> errors errors=errors.phoneNumber }}
 {{/inline}}
@@ -91,7 +94,7 @@
 
 <div id="add-edit-solution">
   {{> onboarding-progress-header
-        title="Enter Solution details & contacts"
+        title="Enter Solution details and lead contact. "
         subtitle="Register Solution (1 of 4)"}}
   <div class="help">
     <p>Provide basic information and key contacts for your Solution below to NHS Digital.</p>
@@ -100,7 +103,7 @@
   {{> errors errors=errors.general }}
   <form action="#errors" method="post" novalidate>
     {{#> accordion legend="Enter Solution name, description, version"}}
-      <p class="instructions">‘Solution name’ ‘Description’ and ‘Version’ will be sent to NHS Digital to identify your Solution. They will also be shown to buyers at the conclusion of onboarding.  You can edit the ‘Description’ field later before displaying your Solution page to buyers.</p>
+      <p class="instructions">‘Solution name’ ‘Description’ and ‘Version’ will be sent to NHS Digital to identify your Solution. They will also be shown to buyers at the conclusion of onboarding.</p>
 
       <div class="inputs">
         <label{{#if errors.name}} class="has-errors"{{/if}}>
@@ -108,26 +111,27 @@
           <ul class="validation-rules">
             <li>max 60 characters</li>
           </ul>
-          <input type="text" name="name" value="{{ name }}">
+          <input type="text" name="name" value="{{ name }}" placeholder="Enter Solution Name">
         </label>
         {{> errors errors=errors.name }}
         <label{{#if errors.description}} class="has-errors"{{/if}}>
           Description <span class="required">*</span>
-          <p class="instructions">Your Solution description will be displayed on your Solution page and in search results, but it will not affect search ranking. You can edit this later.</p>
+          <p class="instructions">Your Solution description will be displayed on your Solution page and in search results, but it will not affect search ranking or Capabilities Assessment. You can edit this later.</p>
           <ul class="validation-rules">
             <li>max 300 characters</li>
           </ul>
           <textarea name="description"
-                    rows="4">{{ description }}</textarea>
+                    rows="4"
+                    placeholder="Enter a Description">{{ description }}</textarea>
         </label>
         {{> errors errors=errors.description }}
         <label{{#if errors.version}} class="has-errors"{{/if}}>
           Version
           {{#> help-reveal title="Help - What is this?" class="version-help"}}
-          <p>Solution version is used to distinguish between instances of a solution. On the Catalogue, Solution version is intended to be used to describe Solutions with significant feature developments. In other words, when the ‘major number’ has changed, in standard semantic versioning schemes.</p>
-          <p>Version might be used, for example, to describe a new version of a Solution with expanded functionality or additional Capabilities.</p>
+          <p>Solution version is a numbering system used to distinguish between instances or releases of a particular Solution. On the Catalogue, Solution version is intended to be used when new Solutions are released with significant feature developments. In other words, when the ‘major number’ has changed, in standard semantic versioning schemes.</p>
+          <p> A version number might be used, for example, to describe a new release that has expanded functionality or different Capabilities from the version previously onboarded to the Catalogue.</p> 
           {{/help-reveal}}
-          <input type="text" name="version" value="{{ version }}">
+          <input type="text" name="version" value="{{ version }}" placeholder="Enter a Version Number">
         </label>
         {{> errors errors=errors.version }}
       </div>
@@ -149,35 +153,31 @@
           {{/with}}
         </div>
       {{/accordion}}
-      {{#> accordion class="contact" legend="Add Clinical Safety Officer (optional)"}}
-        <p class="instructions">
-          Provide a Clinical Safety Officer to enable communication with NHS Digital during the onboarding process. This contact will not be shared publicly. This contact is optional, however if you choose to provide any part of the contact details, all fields are required.
-        </p>
-        <div class="inputs">
-          {{#> help-reveal title="Help - Who is this?"}}
-          <p>The person in a Manufacturer’s organisation responsible for ensuring the safety of a Health IT System in that organisation through the application of clinical risk management.</p>
-          {{/help-reveal}}
-          {{#with 'Clinical Safety Officer'}}
-            {{> contact (lookup ../primaryContacts this)
-                        contactType=this
-                        errors=(lookup ../errors.contacts this)}}
-          {{/with}}
-        </div>
-      {{/accordion}}
+      
       <p class="help">Some organisations work with multiple people in similar roles, for example when working with cohort organisations. Please add any additional contacts, as relevant.</p>
+
       <div id="secondary-contacts">
       {{#secondaryContacts}}
         {{> secondaryContact . errors=(lookup ../errors.secondaryContacts @index)}}
       {{/secondaryContacts}}
       </div>
-      <p><a href="#" class="add-contact">⊕ Add Contact</a></p>
+
+      <a href="#" class="add-contact">
+        <div class="add-contact">
+          <h2>⊕</h2>
+          <div class="add-contact">Add Contact</div>
+        </div>
+      </a>
+
       <template id="contact-template">
         {{>secondaryContact}}
       </template>
+
     </div>
     <fieldset class="controls">
-        <button name="action" value="save" type="submit">Save</button>
-        <button class="primary" name="action" value="continue" type="submit">Continue</button>
+        <button class="primary-button" name="action" value="continue" type="submit">Save & Continue</button>
+        <!-- <button name="action" value="save" type="submit">Save</button> -->
+        <!-- <button class="primary" name="action" value="continue" type="submit">Continue</button> -->
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
     </fieldset>
   </form>
@@ -185,10 +185,15 @@
 
 <script>
 /* global $, $$ */
+
 document.addEventListener('DOMContentLoaded', () => {
   $$('form fieldset.collapsible > legend').forEach(el => {
-    el.addEventListener('click', toggleFieldsetCollapse)
+    addCollapseToggle(el)
   })
+
+  function addCollapseToggle(el) {
+    el.addEventListener('click', toggleFieldsetCollapse)
+  }
 
   function collapseAllFieldsets () {
     $$('form fieldset.collapsible').forEach(el => el.classList.add('collapsed'))
@@ -196,17 +201,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function toggleFieldsetCollapse (ev) {
     ev.preventDefault()
+    const fieldIsclosed = ev.target.closest('fieldset').classList.contains('collapsed')
     collapseAllFieldsets()
-    ev.target.closest('fieldset').classList.remove('collapsed')
+    if(fieldIsclosed) {
+      ev.target.closest('fieldset').classList.remove('collapsed')
+    }
   }
 
   $('.contacts a.add-contact').addEventListener('click', ev => {
     ev.preventDefault()
-    const newContact = $('#secondary-contacts').appendChild(
-      document.importNode($('#contact-template').content, true)
-    )
-
+    const newContactForm = document.importNode($('#contact-template').content, true)
+    const newContact = $('#secondary-contacts').appendChild(newContactForm)
     $('#secondary-contacts fieldset:last-of-type input[type=text]').focus()
+    addCollapseToggle($('#secondary-contacts fieldset:last-of-type legend'))
   })
 
   collapseAllFieldsets()
