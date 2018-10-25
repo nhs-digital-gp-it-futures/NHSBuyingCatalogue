@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const allEvidenceValues = allEvidenceInputs.map(el => el.value.trim()).filter(_ => _)
       const fileTextEle = $('#file-name')
       const alreadyUploaded = fileTextEle.innerText && fileTextEle.innerText !== 'No File Selected';
-      elSubmit.disabled = allEvidenceInputs.length !== (allEvidenceValues.length - (alreadyUploaded ? 1 : 0))
+      elSubmit.disabled = allEvidenceInputs.length !== allEvidenceValues.length
     }
   }
 
