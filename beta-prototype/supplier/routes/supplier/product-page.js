@@ -119,8 +119,10 @@ function enrichContextForProductPage (context, solutionEx) {
 
   (function TEMP_addAdditionalAndAssociated(placeholderServiceMap, productPage) {
     const keys = _.shuffle(Object.keys(placeholderServiceMap));
-    productPage.optionals['associated-services'] = {[assoc] : placeholderServiceMap[keys.pop()]};
-    productPage.optionals['additional-services'] = {[addit] : placeholderServiceMap[keys.pop()]};
+    const assoc = keys.pop()
+    const addit = keys.pop()
+    productPage.optionals['associated-services'] = {[assoc] : placeholderServiceMap[assoc]};
+    productPage.optionals['additional-services'] = {[addit] : placeholderServiceMap[addit]};
   })(placeholderServiceMap, context.productPage)
 
   /**
