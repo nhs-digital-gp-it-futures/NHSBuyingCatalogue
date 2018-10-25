@@ -112,25 +112,15 @@ function enrichContextForProductPage (context, solutionEx) {
     {title:'How long user audit data is stored for', items:[{text:'At least 12 months'}]},
     {title:'Access to supplier activity audit information', items:[{text:'Users have access to real-time audit information'}]}
   ];
-  
+
   if(!context.productPage.optionals) {
     context.productPage.optionals = {};
   }
+
   (function TEMP_addAdditionalAndAssociated(placeholderServiceMap, productPage) {
-    const keys = Object.keys(placeholderServiceMap);
-    const numberOfOptions = keys.length;
-    
-    const randomAssociatedIdx = Math.floor(Math.random()*numberOfOptions)
-    let randomAdditionalIdx = randomAssociatedIdx;
-    
-    // select a different random service.
-    while(randomAssociatedIdx === randomAdditionalIdx) {randomAdditionalIdx = Math.floor(Math.random()*numberOfOptions)};
-
-    const assoc = keys[randomAssociatedIdx];
-    const addit = keys[randomAdditionalIdx]
-
-    productPage.optionals['associated-services'] = {[assoc] : placeholderServiceMap[assoc]};
-    productPage.optionals['additional-services'] = {[addit] : placeholderServiceMap[addit]};
+    const keys = _.shuffle(Object.keys(placeholderServiceMap));
+    productPage.optionals['associated-services'] = {[assoc] : placeholderServiceMap[keys.pop()]};
+    productPage.optionals['additional-services'] = {[addit] : placeholderServiceMap[keys.pop()]};
   })(placeholderServiceMap, context.productPage)
 
   /**
