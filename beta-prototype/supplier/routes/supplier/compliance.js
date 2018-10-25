@@ -198,8 +198,6 @@ async function loadEnrichedSolution (solutionId, baseUrl) {
     .value()
     .sort(standardOrdering)
 
-    console.log(solutionEx.solution.capabilitySpecificStandards.filter((standard) => standard.standardOwner));
-
   return solutionEx
 }
 
