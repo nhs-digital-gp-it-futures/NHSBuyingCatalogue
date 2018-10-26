@@ -6,9 +6,11 @@
     <div class="links">
         <div class="left">
             <button id="nav-save-button">Save</button>
+            {{#if solution.name}} <div class="nav-item">{{solution.name}}</div> {{/if}}
             {{#if nav-title}} <div class="nav-item">{{nav-title}}</div> {{/if}}
         </div>
         <div class="right">
+            <a href="#support" class="nav-item">Support</a>
             <button id="nav-save-exit-button">Save &amp; Exit</button>
         </div>
     </div>
@@ -17,10 +19,11 @@
 
     <div class="links">
         <div class="left">
-            <div class="nav-item">Something Something Something</div>
+            {{#if solution.name}} <div class="nav-item">{{solution.name}}</div> {{/if}}
+            {{#if nav-title}} <div class="nav-item">{{nav-title}}</div> {{/if}}
         </div>
         <div class="right">
-            <div class="nav-item">Something Something Something</div>
+            <a href="#support" class="nav-item">Support</a>
         </div>
     </div>
     {{/if}}

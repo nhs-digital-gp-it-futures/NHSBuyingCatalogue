@@ -96,6 +96,7 @@ nav.backlink a .title {
 
 #save-nav .nav-item {
   padding: 0.25em;
+  margin:0 0.5em;
 }
 
 #save-nav.fixed-nav {

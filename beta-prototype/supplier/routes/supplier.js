@@ -900,6 +900,8 @@ app.get('/solutions/:solution_id/product-page', csrfProtection, async (req, res)
     context.errors.general = err
   }
 
+  context.pageHasForm = true;
+
   renderProductPageEditor(req, res, solutionEx, context)
 })
 
