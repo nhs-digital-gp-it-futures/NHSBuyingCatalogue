@@ -303,7 +303,7 @@
 
 #solution-page-preview .fixed-nav {
   position: fixed;
-  top: 0;
+  /* top: 0; */
 }
 
 #solution-page-preview .section-wrapper {

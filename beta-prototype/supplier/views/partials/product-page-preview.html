@@ -26,7 +26,7 @@
       <li><a href="#features">Features</ahr></li>
       <li><a href="#integrations">Integrations</a></li>
       <li><a href="#commercial-arrangements">Commercial Arrangements</></li>
-        <li><a href="#pricing">Pricing</></li>
+      <li><a href="#pricing">Pricing</></li>
       <li><a href="#associated-services">Associated Services</a></li>
       <li><a href="#additional-services">Additional Services</a></li>
       <li><a href="#service-scope">Service Scope</a></li>
@@ -388,18 +388,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const nav = $('#toc-nav');
   const navTop = nav.offsetTop;
   const content = $('#page-content')
-  
+  const barNav = $('#save-nav-wrapper');
+
+  const barNavHeight = parseInt(barNav.style.height.replace('px',''));
 
   function elementTopOnPage(elementTop) {
-    return elementTop < window.pageYOffset;
+    return elementTop < window.pageYOffset+barNavHeight;
   }
 
   window.addEventListener('scroll', function() {
       if (elementTopOnPage(navTop)) {
         nav.classList.add('fixed-nav');
+        nav.style.top = barNav.style.height;
       }
       else {
         nav.classList.remove('fixed-nav');
+        nav.style.top = null;
       }
   });
 });
