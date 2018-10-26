@@ -1062,7 +1062,7 @@ app.post('/solutions/:solution_id/product-page/preview', csrfProtection, async (
   if (action === 'review' &&
       solutionEx.solution.status === api.SOLUTION_STATUS.SOLUTION_PAGE) {
     solutionEx.solution.productPage.status = 'SUBMITTED'
-    redirect = `${req.baseUrl}/solutions/${solutionEx.solution.id}/submitted`
+    redirect = `${req.baseUrl}/solutions/${solutionEx.solution.id}?submitted`
   } else if (action === 'publish' &&
       solutionEx.solution.status === api.SOLUTION_STATUS.APPROVED) {
     solutionEx.solution.productPage.status = 'PUBLISH'
