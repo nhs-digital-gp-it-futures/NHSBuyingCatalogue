@@ -53,12 +53,13 @@ document.addEventListener('DOMContentLoaded', () => {
     buttons.forEach((button) => {
         button.addEventListener('click', () => {
             Array.from(document.forms).forEach((form) => {
-                form.appendChild(button);
+                const buttonClone = button.cloneNode(true);
+                button.parentElement.insertBefore(buttonClone, button)
+                form.appendChild(button); // Appending the clone doesn't work for some reason.
                 form.submit();
             });
         })
     })
-
-  });
+});
 
 </script>

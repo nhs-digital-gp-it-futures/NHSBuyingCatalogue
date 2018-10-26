@@ -111,6 +111,8 @@ app.post('/capabilities', csrfProtection, async (req, res) => {
     }
   })
 
+  console.log(req.body)
+
   if (req.body.action === 'save') {
     redirectUrl = '?saved'
   }
