@@ -82,7 +82,8 @@ app.get('/capabilities', csrfProtection, async (req, res) => {
     messages: _.orderBy(messages, 'timestamp', 'desc'),
     questions,
     saved: 'saved' in req.query,
-    csrfToken: req.csrfToken()
+    csrfToken: req.csrfToken(),
+    pageHasForm: true
   })
 })
 

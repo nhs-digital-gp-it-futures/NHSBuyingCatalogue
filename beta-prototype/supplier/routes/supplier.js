@@ -42,7 +42,7 @@ app.get('/solutions', async (req, res) => {
     ],
     created: 'created' in req.query,
     errors: {},
-    addSolutionUrl: `${req.baseUrl}/solutions/add`
+    addSolutionUrl: `${req.baseUrl}/solutions/add`,
   }
   let solutions = []
 
@@ -198,7 +198,8 @@ app.get('/solutions/add', csrfProtection, async (req, res) => {
     },
     primaryContactTypes,
     primaryContactHelp,
-    csrfToken: req.csrfToken()
+    csrfToken: req.csrfToken(),
+    pageHasForm: true
   })
 })
 
@@ -369,7 +370,8 @@ app.post('/solutions/add', csrfProtection, (req, res) => {
       primaryContacts: contacts,
       secondaryContacts,
       errors,
-      csrfToken: req.csrfToken()
+      csrfToken: req.csrfToken(),
+      pageHasForm: true
     }
 
     res.render('supplier/add-solution', context)
@@ -599,7 +601,8 @@ app.get('/solutions/:solution_id/capabilities', csrfProtection, async (req, res)
     capabilities: enrichedCapabilities,
     groupedCapabilities,
     standards: groupedStandards,
-    csrfToken: req.csrfToken()
+    csrfToken: req.csrfToken(),
+    pageHasForm:true
   })
 })
 
@@ -683,7 +686,8 @@ app.post('/solutions/:solution_id/capabilities', csrfProtection, async (req, res
       }),
       standards: groupedStandards,
       errors: err,
-      csrfToken: req.csrfToken()
+      csrfToken: req.csrfToken(),
+      pageHasForm:true
     })
   }
 })
@@ -706,7 +710,8 @@ app.get('/solutions/:solution_id/mobile', csrfProtection, async (req, res) => {
     },
     csrfToken: req.csrfToken(),
     isMobile: _.some(solutionEx.claimedStandard, ['standardId', 'CSS3']),
-    standard: _.find(standards, ['id', 'CSS3'])
+    standard: _.find(standards, ['id', 'CSS3']),
+    pageHasForm: true
   }
 
   res.render('supplier/solution-mobile', context)
@@ -734,7 +739,8 @@ app.post('/solutions/:solution_id/mobile', csrfProtection, async (req, res) => {
       href: `/suppliers/solutions/${req.params.solution_id}/capabilities`
     },
     csrfToken: req.csrfToken(),
-    isMobile: _.some(solutionEx.claimedStandard, ['standardId', 'CSS3'])
+    isMobile: _.some(solutionEx.claimedStandard, ['standardId', 'CSS3']),
+    pageHasForm: true
   }
 
   try {
@@ -742,6 +748,9 @@ app.post('/solutions/:solution_id/mobile', csrfProtection, async (req, res) => {
 
     if (req.body.action === 'continue') {
       redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/review`
+    }
+    if(req.body.action === 'save') {
+      2
     }
 
     await api.update_solution(solutionEx)
@@ -766,7 +775,8 @@ app.get('/solutions/:solution_id/review', csrfProtection, async (req, res) => {
       contacts:`/suppliers/solutions/${req.params.solution_id}/edit`,
       capabilities:`/suppliers/solutions/${req.params.solution_id}/capabilities`,
       mobile:`/suppliers/solutions/${req.params.solution_id}/mobile`
-    }
+    },
+    pageHasForm: true
   }
 
   try {

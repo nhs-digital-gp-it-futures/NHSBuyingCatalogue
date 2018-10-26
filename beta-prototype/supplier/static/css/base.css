@@ -61,7 +61,10 @@ nav.backlink a .title {
   padding-right: 1em;
   padding-left: 1em;
   z-index: 3;
+  /* border-bottom: 2px solid white; */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
+
 
 #save-nav > div a, #save-nav .nav-item{
   color: var(--color-nhs-white);

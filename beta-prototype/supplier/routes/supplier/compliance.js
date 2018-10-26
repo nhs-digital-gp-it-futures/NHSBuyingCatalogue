@@ -269,7 +269,8 @@ async function complianceEditHandler (req, res) {
       { label: 'Standards Compliance', url: `/suppliers/solutions/${req.params.solution_id}/compliance` }
     ],
     errors: {},
-    csrfToken: req.csrfToken()
+    csrfToken: req.csrfToken(),
+    pageHasForm: true
   }
 
   try {
