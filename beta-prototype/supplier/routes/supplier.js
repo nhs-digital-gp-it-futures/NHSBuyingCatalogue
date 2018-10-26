@@ -346,11 +346,17 @@ app.post('/solutions/add', csrfProtection, (req, res) => {
             .then(() => solutionEx)
         })
         .then(solutionEx => {
-          res.redirect(
-            req.body.action === 'continue'
-            ? `${req.baseUrl}/solutions/${solutionEx.solution.id}/capabilities`
-            : `${req.baseUrl}/solutions?created=${solutionEx.solution.id}`
-          )
+          let redirect = `${req.baseUrl}/solutions?created=${solutionEx.solution.id}`
+                    
+          if(req.body.action === 'continue') {
+            redirect = `${req.baseUrl}/solutions/${solutionEx.solution.id}/capabilities`
+          }
+
+          if(req.body.action === 'save') {
+            redirect = `${req.baseUrl}/solutions/${solutionEx.solution.id}/edit`
+          }
+
+          res.redirect(redirect)
         })
         .catch(err => {
           addError(errors, 'general', err)
@@ -488,7 +494,8 @@ app.get('/solutions/:solution_id/edit', csrfProtection, async (req, res) => {
       primaryContactHelp,
       primaryContacts: _.keyBy(primaryContacts, 'contactType'),
       secondaryContacts,
-      csrfToken: req.csrfToken()
+      csrfToken: req.csrfToken(),
+      pageHasForm: true
     })
   } catch (err) {
     throw err
@@ -527,11 +534,17 @@ app.post('/solutions/:solution_id/edit', csrfProtection, (req, res) => {
             .then(() => solutionToUpdate)
         })
         .then(({solution}) => {
-          res.redirect(
-            req.body.action === 'continue'
-            ? `${req.baseUrl}/solutions/${solution.id}/capabilities`
-            : `${req.baseUrl}/solutions`
-          )
+          let redirect = `${req.baseUrl}/solutions?created=${solution.id}`
+
+          if(req.body.action === 'continue') {
+            redirect = `${req.baseUrl}/solutions/${solution.id}/capabilities`
+          }
+
+          if(req.body.action === 'save') {
+            redirect = `${req.baseUrl}/solutions/${solution.id}/edit`
+          }
+
+          res.redirect(redirect)
         })
         .catch(err => {
           addError(errors, 'general', err)
@@ -551,7 +564,8 @@ app.post('/solutions/:solution_id/edit', csrfProtection, (req, res) => {
       primaryContacts: contacts,
       secondaryContacts,
       errors,
-      csrfToken: req.csrfToken()
+      csrfToken: req.csrfToken(),
+      pageHasForm: true
     }
 
     res.render('supplier/add-solution', context)
@@ -667,6 +681,9 @@ app.post('/solutions/:solution_id/capabilities', csrfProtection, async (req, res
     if (req.body.action === 'continue') {
       redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/mobile`
     }
+    if(req.body.action === 'save') {
+      redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/capabilities`
+    }
 
     await api.update_solution(solutionEx)
 
@@ -750,7 +767,7 @@ app.post('/solutions/:solution_id/mobile', csrfProtection, async (req, res) => {
       redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/review`
     }
     if(req.body.action === 'save') {
-      2
+      redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/mobile`
     }
 
     await api.update_solution(solutionEx)
@@ -776,7 +793,6 @@ app.get('/solutions/:solution_id/review', csrfProtection, async (req, res) => {
       capabilities:`/suppliers/solutions/${req.params.solution_id}/capabilities`,
       mobile:`/suppliers/solutions/${req.params.solution_id}/mobile`
     },
-    pageHasForm: true
   }
 
   try {

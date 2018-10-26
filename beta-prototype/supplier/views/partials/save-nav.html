@@ -5,13 +5,13 @@
     {{#if pageHasForm}}
     <div class="links">
         <div class="left">
-            <button id="nav-save-button">Save</button>
+            <button id="nav-save-button" name="action" value="save" type="submit">Save</button>
             {{#if solution.name}} <div class="nav-item">{{solution.name}}</div> {{/if}}
             {{#if nav-title}} <div class="nav-item">{{nav-title}}</div> {{/if}}
         </div>
         <div class="right">
             <a href="#support" class="nav-item">Support</a>
-            <button id="nav-save-exit-button">Save &amp; Exit</button>
+            <button id="nav-save-exit-button" name="action" value="saveAndExit" type="submit">Save &amp; Exit</button>
         </div>
     </div>
 
@@ -47,6 +47,18 @@ document.addEventListener('DOMContentLoaded', () => {
             nav.classList.remove('fixed-nav');
         }
     });
+
+    const pageForms = document.forms;
+    const buttons = $$('button');
+    buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+            Array.from(document.forms).forEach((form) => {
+                form.appendChild(button);
+                form.submit();
+            });
+        })
+    })
+
   });
 
 </script>
