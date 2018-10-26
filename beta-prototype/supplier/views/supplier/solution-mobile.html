@@ -42,6 +42,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const yesRadio = $('input[type="radio"][value="yes"]');
   const noRadio = $('input[type="radio"][value="no"]');
+  
   function toggleComplianceNote() {
     const complianceNote = $('fieldset.mobile-compliance-note');
     if(yesRadio.checked) {

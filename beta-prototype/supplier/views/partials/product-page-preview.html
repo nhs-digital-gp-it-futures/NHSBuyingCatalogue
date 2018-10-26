@@ -373,10 +373,35 @@
 {{/inline}}
 
 <div class="page-container">
-  <div class="toc-wrapper">
+  <div class="toc-wrapper" id="toc-nav">
       {{>toc}}
   </div>
-  <div class="section-wrapper">
+  <div class="section-wrapper" id="page-content">
       {{>contents}}
   </div>
 </div>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', () => {
+
+  const nav = $('#toc-nav');
+  const navTop = nav.offsetTop;
+  const content = $('#page-content')
+  
+
+  function elementTopOnPage(elementTop) {
+    return elementTop < window.pageYOffset;
+  }
+
+  window.addEventListener('scroll', function() {
+      if (elementTopOnPage(navTop)) {
+        nav.classList.add('fixed-nav');
+      }
+      else {
+        nav.classList.remove('fixed-nav');
+      }
+  });
+});
+
+</script>

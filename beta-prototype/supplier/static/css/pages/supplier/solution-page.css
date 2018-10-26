@@ -286,34 +286,37 @@
   background-color: rgba(120, 190, 32, 0.45);
 }
 
-#solution-page-preview .page-container{
+
+#solution-page-preview .page-container {
   display: flex;
 }
 
-#solution-page-preview .toc-wrapper {
-  width:15%;
-  position: fixed;
+#solution-page-preview nav.toc {
+  width:100%;
   overflow: auto;
-  max-height: 75%
+}
+#solution-page-preview .toc-wrapper {
+  width:25%;
+  vertical-align: top;
+}
+
+
+#solution-page-preview .fixed-nav {
+  position: fixed;
+  top: 0;
 }
 
 #solution-page-preview .section-wrapper {
-  width:75%;
-  margin-left: 25%
+  width: 70%;
+  margin-left: auto;
 }
 
-/* #solution-page-preview .toc {
-  float: left;
-  margin-top: 3em;
-  width: 25%;
-} */
-
 #solution-page-preview .toc h3 {
-  border-bottom: 2px solid var(--color-fg);
   color: var(--color-fg);
   font-weight: 300;
   margin: 0 0 0.5em 0;
   padding-bottom: 0.1em;
+  text-decoration: underline;
 }
 
 #solution-page-preview .toc ul {
