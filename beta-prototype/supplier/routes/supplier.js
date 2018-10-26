@@ -1025,7 +1025,8 @@ app.post('/solutions/:solution_id/product-page', [
 
   // save, preview or submit based on the action
   const action = _.head(_.keys(req.body.action))
-  if (action === 'save' || action === 'submit') {
+  console.log(action)
+  if (action === 'save' || action === 'submit' || req.body.action === 'saveAndExit' || req.body.action == 'save') {
     try {
       delete req.session.solutionEx
 
@@ -1034,6 +1035,12 @@ app.post('/solutions/:solution_id/product-page', [
       if (action === 'submit') {
         solutionEx.solution.productPage.status = 'SUBMITTED'
         redirect = `${req.baseUrl}/solutions/${solutionEx.solution.id}?submitted`
+      }
+      else if(req.body.action === 'saveAndExit') {
+        redirect = `${req.baseUrl}/solutions`;
+      }
+      else if(req.body.action === 'save') {
+        redirect = `${req.baseUrl}/solutions/${solutionEx.solution.id}/product-page`
       }
 
       solutionEx = await api.update_solution(solutionEx)
