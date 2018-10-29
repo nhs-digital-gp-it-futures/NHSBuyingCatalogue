@@ -263,3 +263,9 @@ form fieldset.evidence label input.file-input {
 #capability-assessment-introduction > form > fieldset {
   border: none;
 }
+
+p.notice {
+  width:70%;
+  font-size: var(--font-size-high-density);
+  color: var(--color-nhs-black)
+}
