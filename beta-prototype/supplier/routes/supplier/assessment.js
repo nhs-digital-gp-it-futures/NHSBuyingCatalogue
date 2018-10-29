@@ -41,29 +41,25 @@ app.get('/capabilities', csrfProtection, async (req, res) => {
 
   const allCapabilities = _.keyBy(capabilities, 'id')
 
-  solutionEx.solution.capabilities = _.map(solutionEx.claimedCapability, cap => ({
-    ...cap,
-    ...allCapabilities[cap.capabilityId],
-    evidence: cap.evidence,
-    video_evidence: cap.evidence,
-    evidence_description: cap.evidence,
-    status: solutionEx.solution.status === api.SOLUTION_STATUS.CAPABILITIES_ASSESSMENT
+  solutionEx.solution.capabilities = _.map(solutionEx.claimedCapability, cap => {
+    const evidence = cap.evidence ? JSON.parse(cap.evidence) : {}
+    return {
+      ...cap,
+      ...allCapabilities[cap.capabilityId],
+      evidence: evidence,
+      video_evidence: evidence.videoEvidence,
+      evidence_description: evidence.evidenceDescription,
+      status: solutionEx.solution.status === api.SOLUTION_STATUS.CAPABILITIES_ASSESSMENT
             ? _.get(api.capabilityStatuses, cap.status)
             : cap.evidence ? 'Draft Saved' : 'Not Started',
-    statusClass: (
-                   solutionEx.solution.status === api.SOLUTION_STATUS.CAPABILITIES_ASSESSMENT
-                   ? _.get(api.capabilityStatuses, cap.status, '').toLowerCase()
-                   : ''
-                 ) +
-                 (
-                   req.query.saved === cap.capabilityId
-                                     ? ' expanded'
-                                     : ''
-                 ) +
-                 (
-                   cap.evidence ? '' : ' editing'
-                 )
-  }))
+      statusClass: (
+        solutionEx.solution.status === api.SOLUTION_STATUS.CAPABILITIES_ASSESSMENT
+        ? _.get(api.capabilityStatuses, cap.status, '').toLowerCase()
+        : ''
+      ) + ( req.query.saved === cap.capabilityId ? ' expanded' : '')
+        + ( cap.evidence ? '' : ' editing' )
+    }
+  })
 
   const questions = _.mapValues(await api.get_capability_assessment_questions(), qs => ({
     lede: _.head(qs),
@@ -101,10 +97,16 @@ app.post('/capabilities', csrfProtection, async (req, res) => {
   // always save all the evidence
   Object.keys(req.body.video_evidence).forEach(capabilityIdToSave => {
     const cap = _.find(solutionEx.claimedCapability, ['capabilityId', capabilityIdToSave])
-    const evidence = _.get(req.body.video_evidence, capabilityIdToSave, '').trim()
 
-    if (cap && evidence) {
-      cap.evidence = evidence
+    const videoEvidence = _.get(req.body.video_evidence, capabilityIdToSave, '').trim()
+    const evidenceDescription = _.get(req.body.evidence_description, capabilityIdToSave, '').trim()
+
+    const evidenceJSONString = JSON.stringify({
+      videoEvidence: videoEvidence,
+      evidenceDescription: evidenceDescription
+    });
+    if (cap && evidenceJSONString) {
+      cap.evidence = evidenceJSONString
 
       // update the solution
       updateSolution = true
