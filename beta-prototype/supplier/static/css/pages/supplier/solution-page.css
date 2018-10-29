@@ -376,11 +376,11 @@
 }
 
 #solution-page-preview section h3 {
-  background-color: var(--color-nhs-pale-grey);
+  /* background-color: var(--color-nhs-pale-grey); */
   color: var(--color-fg);
   font-size: 1.25em;
   margin: 0 0 0.25em 0;
-  padding: 0.5em 0.5em;
+  /* padding: 0.5em 0.5em; */
 }
 
 #solution-page-preview section h4 {
@@ -395,14 +395,8 @@
   font-size: 1em;
 }
 
-#solution-page-preview ul.interop {
-  padding-left: 0;
-}
-
 #solution-page-preview ul.interop li {
-  color: var(--color-nhs-dark-grey);
-  list-style: none;
-  font-size: var(--font-size-high-density)
+  padding: 0.25em 0;
 }
 
 #solution-page-preview .product-data th {
@@ -552,6 +546,8 @@ width:80%
 
 #solution-page-preview section table tr td {
   padding: 0.5em;
+  margin-left: 0.5em;
+  color: var(--color-nhs-dark-grey);
   border-bottom: 2px solid var(--color-nhs-pale-grey);
 }
 
@@ -613,4 +609,27 @@ td.items {
   font-size: var(--font-size-high-density);
   color: var(--color-nhs-dark-grey);
   width:50%;
+}
+
+div.section-header {
+  margin-top:1em;
+  display:flex;
+  border-bottom: 4px solid var(--color-nhs-pale-grey);
+  justify-content: space-between;
+  align-content: center;
+  width:100%;
+}
+
+div.section-header h3 {
+  background: none;
+}
+
+div.section-header h3 a{
+  text-decoration: underline;
+  color: var(--color-nhs-blue);
+}
+
+#assessment-standards  {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
 }

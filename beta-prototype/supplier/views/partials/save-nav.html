@@ -37,7 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const navTop = nav.offsetTop;
     const navHeight = nav.clientHeight;
     const navWrapper = $('#save-nav-wrapper');
-    navWrapper.style.height = `${navHeight}px`;
+    
+    const additionalHeight = 20;
+    navWrapper.style.height = `${navHeight + additionalHeight}px`;
 
     window.addEventListener('scroll', function() {
         if (navTop < window.pageYOffset) {
