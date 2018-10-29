@@ -119,26 +119,30 @@
   {{/section}}
   
   {{#>section id="features"}}
-    {{#if benefitOptions}}
-      {{>section-header title="Features" side-text="Edit Section" side-link="#" }}
+    {{#if productPage.features}}
+      {{>section-header title="Features" side-text="Edit Section" side-link=pageEditLinks.features }}
       <ul class="features">
-          {{#each benefitOptions as |option|}}
+          {{#each productPage.features as |option|}}
             <li>{{option}}</li>
           {{/each}}
       </ul>
     {{else}}
-      {{>section-header title="Features" side-text="Add Section" side-link="#"}}
+      {{>section-header title="Features" side-text="Add Section" side-link=pageEditLinks.features}}
     {{/if}}
   {{/section}}
 
   {{#>section id="integrations"}}
-  {{>section-header title="Integrations" side-text="Edit Section" side-link="#" }}
-    <h4>The following is a list of proven integrations</h4>
-    <ul class="interop">
-      {{#each interopOptions as |option|}}
-        <li>{{option}}</li>
-      {{/each}}
-    </ul>
+  {{#if productPage.integrations}}
+    {{>section-header title="Integrations" side-text="Edit Section" side-link=pageEditLinks.integrations }}
+      <h4>The following is a list of proven integrations</h4>
+      <ul class="interop">
+        {{#each productPage.integrations as |option|}}
+          <li>{{option}}</li>
+        {{/each}}
+      </ul>
+    {{else}}
+      {{>section-header title="Integrations" side-text="Add Section" side-link=pageEditLinks.integrations }}
+    {{/if}}
   {{/section}}
 
   {{#>section id="pricing"}}
@@ -371,38 +375,39 @@
   <p class="about">{{productPage.about}}</p>
 {{/section}}
   
-  <section id="contact-details">
-      {{#productPage.contact}}
-      <section id="contact-details" class="optional">
-        <h3>Contact Details</h3>
-        <ul>
-          <li>
-            <span class="label">Name</span>
-            <span class="value">{{firstName}} {{lastName}}</span>
-          </li>
-          {{#phoneNumber}}
-          <li>
-            <span class="label">Phone number</span>
-            <span class="value">{{.}}</span>
-          </li>
-          {{/phoneNumber}}
-          {{#emailAddress}}
-          <li>
-            <span class="label">Email</span>
-            <span class="value"><a href="mailto:{{.}}">{{.}}</a></span>
-          </li>
-          {{/emailAddress}}
-          {{#url}}
-          <li>
-            <span class="label">Website</span>
-            <span class="value"><a href="{{.}}" target="_blank">{{.}}</a></span>
-          </li>
-          {{/url}}
-        </ul>
-      </section>
-      {{/productPage.contact}}  </section>
+{{#>section id="contact-details"}}
+  {{>section-header title="Contact Details " side-text="Edit Section" side-link="#"}}
+  {{#productPage.contact}}
+  <section id="contact-details" class="optional">
+    <ul>
+      <li>
+        <span class="label">Name</span>
+        <span class="value">{{firstName}} {{lastName}}</span>
+      </li>
+      {{#phoneNumber}}
+      <li>
+        <span class="label">Phone number</span>
+        <span class="value">{{.}}</span>
+      </li>
+      {{/phoneNumber}}
+      {{#emailAddress}}
+      <li>
+        <span class="label">Email</span>
+        <span class="value"><a href="mailto:{{.}}">{{.}}</a></span>
+      </li>
+      {{/emailAddress}}
+      {{#url}}
+      <li>
+        <span class="label">Website</span>
+        <span class="value"><a href="{{.}}" target="_blank">{{.}}</a></span>
+      </li>
+      {{/url}}
+    </ul>
+  </section>
+  {{/productPage.contact}}
+{{/section}}
 
-  {{#if productPage.case-study}}
+  <!-- {{#if productPage.case-study}}
   <section id="case-studies" class="optional">
     <h3>Case Studies</h3>
     <ul class="case-studies">
@@ -414,7 +419,7 @@
       {{/productPage.case-study}}
     </ul>
   </section>
-  {{/if}}
+  {{/if}} -->
 {{/inline}}
 
 <div class="page-container">

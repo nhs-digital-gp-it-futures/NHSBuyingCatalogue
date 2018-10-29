@@ -37,7 +37,7 @@ function enrichContextForProductPage (context, solutionEx) {
     })
   )
 
-  context.benefitOptions = [
+  context.features = [
     'Export functionality',
     'Customisable reporting suite',
     'GDPR compliant',
@@ -47,7 +47,7 @@ function enrichContextForProductPage (context, solutionEx) {
   ]
 
   // build lists of options for specs
-  context.interopOptions = ['EMIS', 'TPP', 'Vision', 'Microtest']
+  context.integrations = ['EMIS', 'TPP', 'Vision', 'Microtest']
   context.requirementOptions = [
     {group: 'Software add-on or Extension', items:['Yes']},
     {group: 'Cloud deployment model', items:['Private Cloud']},
@@ -157,6 +157,7 @@ function enrichContextForProductPage (context, solutionEx) {
     'associated-services': mapServices('associated-services', placeholderServiceMap),
     'additional-services': mapServices('additional-services', placeholderServiceMap)
   }
+
 
 }
 

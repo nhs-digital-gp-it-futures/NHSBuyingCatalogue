@@ -1,0 +1,14 @@
+
+{{#if errors}}
+    <div>
+        {{errors.general}}
+    </div>
+{{/if}}
+<h2>Build — {{section-title}}</h2>
+<p>Do you want to add {{item-name-plural}} to your solution page?</p>
+
+{{#if section-clarification}}
+    <p class="clarification">{{section-clarification}}</p>
+{{/if}}
+
+{{> @partial-block}}

@@ -890,6 +890,14 @@ function renderProductPageEditor (req, res, solutionEx, context) {
     { label: 'Solution Page' }
   ]
   context.csrfToken = req.csrfToken()
+  context.productPage = solutionEx.solution.productPage ? JSON.parse(solutionEx.solution.productPage) : {}
+  
+  const pageEditLinkPrefix = `/suppliers/solutions/${req.params.solution_id}/product-page`;
+  context.pageEditLinks = {
+    features: `${pageEditLinkPrefix}/features`,
+    integrations: `${pageEditLinkPrefix}/integrations`
+  }
+  
   res.render('supplier/solution-page-edit', context)
 }
 
@@ -1025,7 +1033,7 @@ app.post('/solutions/:solution_id/product-page', [
 
   // save, preview or submit based on the action
   const action = _.head(_.keys(req.body.action))
-  console.log(action)
+
   if (action === 'save' || action === 'submit' || req.body.action === 'saveAndExit' || req.body.action == 'save') {
     try {
       delete req.session.solutionEx
@@ -1083,6 +1091,7 @@ app.get('/solutions/:solution_id/product-page/preview', csrfProtection, async (r
   context.isPublished = solutionEx.solution.status === api.SOLUTION_STATUS.APPROVED &&
                         context.productPage.status === 'PUBLISH'
 
+                      
   context.editUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/product-page`
   context.csrfToken = req.csrfToken()
   res.render('supplier/solution-page-preview', context)
@@ -1105,6 +1114,63 @@ app.post('/solutions/:solution_id/product-page/preview', csrfProtection, async (
 
   req.session.solutionEx = await api.update_solution(solutionEx)
   res.redirect(redirect)
+})
+
+app.get('/solutions/:solution_id/product-page/:section_name', csrfProtection, async (req, res) => {
+  const context = {
+    errors : '',
+    csrfToken: req.csrfToken(),
+    pageHasForm:true
+  }
+
+  context.breadcrumbs = [
+    { label: 'My Dashboard', url: '/suppliers' },
+    { label: 'My Solutions', url: '/suppliers/solutions' },
+    { label: 'Onboarding Solution', url: `/suppliers/solutions/${req.params.solution_id}` },
+    { label: 'Solution Page', url: `/suppliers/solutions/${req.params.solution_id}/product-page`},
+    { label: req.params.section_name}
+  ]
+
+  let solutionEx = req.session.solutionEx
+  solutionEx = await api.get_solution_by_id(req.params.solution_id)
+
+  const productPage = solutionEx.solution.productPage ? JSON.parse(solutionEx.solution.productPage) : {}
+
+
+  enrichContextForProductPage(context, solutionEx)
+
+  context.productPage = productPage;
+
+  res.render(`supplier/product-page/${req.params.section_name}`, context)
+});
+
+app.post('/solutions/:solution_id/product-page/:section_name', csrfProtection, async (req,res) => {
+
+
+  let solutionEx = req.session.solutionEx
+  solutionEx = await api.get_solution_by_id(req.params.solution_id)
+
+  const productPage = solutionEx.solution.productPage ? JSON.parse(solutionEx.solution.productPage) : {};
+
+  const arrayForms = ['features', 'integrations'];
+  const tableForms = ['service-scope', 'customer-insights', 'data-import-export', 'user-support', 'migration-switching', 'audit-info'];
+
+  const sectionName = req.params.section_name
+  if(arrayForms.indexOf(sectionName) > -1) {
+    
+    productPage[sectionName] = req.body.items ? req.body.items.filter((item) => item != '') : [];
+  }
+
+  let redirectURL = `${req.baseUrl}/solutions/${req.params.solution_id}/product-page`;
+  if(req.body.action === 'save') {
+    redirectURL = `${req.baseUrl}/solutions/${req.params.solution_id}/product-page/${req.params.section_name}`;
+  }
+
+  solutionEx.solution.productPage = JSON.stringify(productPage);
+
+  req.session.solutionEx = await api.update_solution(solutionEx)
+
+  res.redirect(redirectURL)
 })
 
 app.use('/solutions/:solution_id/assessment', require('./supplier/assessment'))
