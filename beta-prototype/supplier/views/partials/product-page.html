@@ -202,7 +202,7 @@
 {{/section}}
 
 {{#>section id="service-scope"}}
-{{>section-header title="Service Scope" side-text="Edit Section" side-link="#"}}
+{{>section-header title="Service Scope"}}
   <table>
   {{#each requirementOptions as |req|}}
   <tr>
@@ -345,27 +345,27 @@
   </section>
   
   {{#>section id="customer-insights"}}
-    {{>section-header title="Customer Insights" side-text="Edit Section" side-link="#"}}
+    {{>section-header title="Customer Insights"}}
     {{>info-table info=customerInsights}}
   {{/section}}
 
   {{#>section id="importing-exporting"}}
-    {{>section-header title="Data Importing & Exporting" side-text="Edit Section" side-link="#"}}
+    {{>section-header title="Data Importing & Exporting"}}
     {{>info-table info=dataImportExport}}
   {{/section}}
 
   {{#>section id="user-support"}}
-    {{>section-header title="User Support" side-text="Edit Section" side-link="#"}}
+    {{>section-header title="User Support"}}
     {{>info-table info=userSupport}}
   {{/section}}
 
   {{#>section id="migration-switching"}}
-    {{>section-header title="Migration & Switching" side-text="Edit Section" side-link="#"}}
+    {{>section-header title="Migration & Switching"}}
     {{>info-table info=migrationSwitching}}
   {{/section}}
   
   {{#>section id="audit-info"}}
-    {{>section-header title="Audit Information for Users" side-text="Edit Section" side-link="#"}}
+    {{>section-header title="Audit Information for Users"}}
     {{>info-table info=auditInfo}}
   {{/section}}
 
@@ -382,8 +382,8 @@
 {{/section}}
   
 {{#>section id="contact-details"}}
-  {{>section-header title="Contact Details " side-text="Edit Section" side-link="#"}}
-  {{#technicalContact}}
+  {{>section-header title="Contact Details"}}
+  {{#contact}}
   <section id="contact-details" class="optional">
     <ul>
       <li>
@@ -410,7 +410,7 @@
       {{/url}}
     </ul>
   </section>
-  {{/technicalContact}}
+  {{/contact}}
 {{/section}}
 
   <!-- {{#if productPage.case-study}}

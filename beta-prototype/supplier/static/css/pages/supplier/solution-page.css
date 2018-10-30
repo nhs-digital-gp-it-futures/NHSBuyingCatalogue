@@ -273,6 +273,9 @@
   width: 50%;
 }
 
+#solution-page-preview {
+  padding-bottom: 2em;
+}
 #solution-page-preview .preview-header {
   background-color: #F9A181;
   color: white;

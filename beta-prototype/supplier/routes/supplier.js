@@ -901,6 +901,8 @@ function renderProductPageEditor (req, res, solutionEx, context) {
     summary: `${pageEditLinkPrefix}/summary`,
     about: `${pageEditLinkPrefix}/about`
   }
+
+  context.contact = solutionEx.technicalContact;
   
   res.render('supplier/solution-page-edit', context)
 }
@@ -940,7 +942,6 @@ app.get('/solutions/:solution_id/product-page', csrfProtection, async (req, res)
   } catch (err) {
     context.errors.general = err
   }
-
   renderProductPageEditor(req, res, solutionEx, context)
 })
 
