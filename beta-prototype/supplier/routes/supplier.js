@@ -898,7 +898,8 @@ function renderProductPageEditor (req, res, solutionEx, context) {
   context.pageEditLinks = {
     features: `${pageEditLinkPrefix}/features`,
     integrations: `${pageEditLinkPrefix}/integrations`,
-    summary: `${pageEditLinkPrefix}/summary`
+    summary: `${pageEditLinkPrefix}/summary`,
+    about: `${pageEditLinkPrefix}/about`
   }
   
   res.render('supplier/solution-page-edit', context)
@@ -1049,9 +1050,6 @@ app.get('/solutions/:solution_id/product-page/:section_name', csrfProtection, as
   res.render(`supplier/product-page/${req.params.section_name}`, context)
 });
 
-
-
-
 const validateSolutionName = (fieldName = 'name') =>
   check(fieldName, 'Solution name must be present and has a maximum length of 60 characters')
   .exists()
@@ -1073,7 +1071,7 @@ const validateAbout = (fieldName = 'about') =>
   check(fieldName, 'Company information has a maximum length of 400 characters')
   .isLength({max: 400})
   .trim()
-  
+
 function validateFormArray(array) {
   const maxLengthCheck = (array) => array.length <= 9;
   const minLengthChcek = (array) => array.length > 0;
@@ -1133,7 +1131,6 @@ app.post('/solutions/:solution_id/product-page/:section_name', csrfProtection, a
   solutionEx.solution.productPage = JSON.stringify(productPage);
 
   req.session.solutionEx = await api.update_solution(solutionEx)
-  console.log(req.session.solutionEx);
 
   res.redirect(redirectURL)
 })

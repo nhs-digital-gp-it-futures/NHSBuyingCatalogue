@@ -370,14 +370,14 @@
   {{/section}}
 
 {{#>section id="about"}}
-  {{>section-header title="About " side-text="Edit Section" side-link="#"}}
+  {{>section-header title="About " side-text="Edit Section" side-link=pageEditLinks.about}}
   <h3>{{organisationName}}{{#productPage.logoUrl}} <img src="{{.}}">{{/productPage.logoUrl}}</h3>
   <p class="about">{{productPage.about}}</p>
 {{/section}}
   
 {{#>section id="contact-details"}}
   {{>section-header title="Contact Details " side-text="Edit Section" side-link="#"}}
-  {{#productPage.contact}}
+  {{#technicalContact}}
   <section id="contact-details" class="optional">
     <ul>
       <li>
@@ -404,7 +404,7 @@
       {{/url}}
     </ul>
   </section>
-  {{/productPage.contact}}
+  {{/technicalContact}}
 {{/section}}
 
   <!-- {{#if productPage.case-study}}
