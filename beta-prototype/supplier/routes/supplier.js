@@ -1034,58 +1034,6 @@ app.post('/solutions/:solution_id/product-page', csrfProtection, async (req, res
   res.redirect(redirect)
 })
 
-app.get('/solutions/:solution_id/product-page/preview', csrfProtection, async (req, res) => {
-  const context = {
-    errors: {}
-  }
-  let solutionEx = req.session.solutionEx
-
-  try {
-    if (!solutionEx) {
-      solutionEx = await api.get_solution_by_id(req.params.solution_id)
-      req.session.solutionEx = solutionEx
-    }
-    await enrichContextForProductPagePreview(context, solutionEx)
-  } catch (err) {
-    context.errors.general = err
-  }
-
-  // if the page has not been approved, allow the user to submit for review
-  context.allowReview = solutionEx.solution.status === api.SOLUTION_STATUS.SOLUTION_PAGE
-
-  // if the page has been approved, allow the user to publish
-  context.allowPublish = solutionEx.solution.status === api.SOLUTION_STATUS.APPROVED &&
-                         context.productPage.status === 'APPROVED'
-
-  // flag if the page is published
-  context.isPublished = solutionEx.solution.status === api.SOLUTION_STATUS.APPROVED &&
-                        context.productPage.status === 'PUBLISH'
-
-                      
-  context.editUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/product-page`
-  context.csrfToken = req.csrfToken()
-  res.render('supplier/solution-page-preview', context)
-})
-
-app.post('/solutions/:solution_id/product-page/preview', csrfProtection, async (req, res) => {
-  const solutionEx = req.session.solutionEx
-
-  const action = _.head(_.keys(req.body.action))
-  let redirect = `${req.baseUrl}/solutions`
-
-  if (action === 'review' &&
-      solutionEx.solution.status === api.SOLUTION_STATUS.SOLUTION_PAGE) {
-    solutionEx.solution.productPage.status = 'SUBMITTED'
-    redirect = `${req.baseUrl}/solutions/${solutionEx.solution.id}?submitted`
-  } else if (action === 'publish' &&
-      solutionEx.solution.status === api.SOLUTION_STATUS.APPROVED) {
-    solutionEx.solution.productPage.status = 'PUBLISH'
-  }
-
-  req.session.solutionEx = await api.update_solution(solutionEx)
-  res.redirect(redirect)
-})
-
 app.get('/solutions/:solution_id/product-page/:section_name', csrfProtection, async (req, res) => {
   const context = {
     errors : '',
@@ -1106,7 +1054,6 @@ app.get('/solutions/:solution_id/product-page/:section_name', csrfProtection, as
 
   const productPage = solutionEx.solution.productPage ? JSON.parse(solutionEx.solution.productPage) : {}
 
-
   enrichContextForProductPage(context, solutionEx)
 
   context.productPage = productPage;
@@ -1115,8 +1062,6 @@ app.get('/solutions/:solution_id/product-page/:section_name', csrfProtection, as
 });
 
 app.post('/solutions/:solution_id/product-page/:section_name', csrfProtection, async (req,res) => {
-
-
   let solutionEx = req.session.solutionEx
   solutionEx = await api.get_solution_by_id(req.params.solution_id)
 
@@ -1126,8 +1071,8 @@ app.post('/solutions/:solution_id/product-page/:section_name', csrfProtection, a
   const tableForms = ['service-scope', 'customer-insights', 'data-import-export', 'user-support', 'migration-switching', 'audit-info'];
 
   const sectionName = req.params.section_name
+
   if(arrayForms.indexOf(sectionName) > -1) {
-    
     productPage[sectionName] = req.body.items ? req.body.items.filter((item) => item != '') : [];
   }
 
