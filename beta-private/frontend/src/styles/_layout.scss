@@ -1,3 +1,8 @@
+$header-top-height: 5rem;
+$header-bottom-height: 3rem;
+$header-total-height: $header-top-height + $header-bottom-height;
+$header-padding: 1rem;
+
 html {
   background-color: $color-bg;
   box-sizing: border-box;
@@ -10,7 +15,14 @@ html {
 }
 
 a {
+  color: $color-link-fg;
   text-decoration: none;
+
+  &:visited,
+  &:active,
+  &:focus {
+    color: $color-link-fg;
+  }
 }
 
 %reversed {
@@ -18,12 +30,19 @@ a {
   color: $color-reversed-fg;
 
   a {
-    color: $color-reversed-fg;
+    color: $color-link-reversed-fg;
+
+    &:visited,
+    &:active,
+    &:focus {
+      color: $color-link-reversed-fg;
+    }
   }
 }
 
-body {
-  padding-top: 8rem; // account for fixed header
+// account for fixed header with JS support @see src/static/js/app.js
+#content {
+  padding-top: $header-total-height;
 }
 
 body > header {
@@ -34,8 +53,8 @@ body > header {
   .top {
     background-color: $color-bg;
     display: flex;
-    height: 5rem;
-    padding: 1rem;
+    height: $header-top-height;
+    padding: $header-padding;
 
     > nav {
       flex: auto;
@@ -44,8 +63,8 @@ body > header {
 
   .bottom {
     @extend %reversed;
-    height: 3rem;
-    padding: 1rem;
+    height: $header-bottom-height;
+    padding: $header-padding;
 
     nav {
       margin: 0 auto;
@@ -64,12 +83,13 @@ body > header {
 
     .nhs-digital-logo {
       display: inline-block;
-      height: 3rem;
+      height: $header-top-height - 2 * $header-padding;
     }
 
     .title {
       display: inline-block;
-      padding-top: 1.25rem;
+      font-size: 1.5rem;
+      font-weight: bold;
       vertical-align: top;
     }
   }
