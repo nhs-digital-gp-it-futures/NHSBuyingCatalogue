@@ -22,5 +22,56 @@
     "Login": "Log In",
     "Logout": "Log Out",
     "Greeting": "Hi, {{name}}"
+  },
+  "Footer": {
+    "Sections": [
+      {
+        "Heading": "Support",
+        "Links": [
+          {
+            "Text": "About the $t(Catalogue.Title)",
+            "Url": "/about#catalogue"
+          },
+          {
+            "Text": "Adding a $t(Solution)",
+            "Url": ""
+          },
+          {
+            "Text": "Transitioning from GPSOC",
+            "Url": ""
+          }
+        ]
+      },
+      {
+        "Heading": "Contact us",
+        "Links": [
+          {
+            "Text": "Email: gpitfutures@digital.nhs.uk",
+            "Url": "mailto:gpitfutures@digital.nhs.uk"
+          }
+        ]
+      },
+      {
+        "Heading": "Further information",
+        "Links": [
+          {
+            "Text": "$t(NHSD.Name)",
+            "Url": "/about#nhs-digital"
+          },
+          {
+            "Text": "$t(Standards and Capabilities) Model",
+            "Url": ""
+          }
+        ]
+      }
+    ],
+    "Legal": {
+      "Heading": "Legal",
+      "Text": "See Terms of Use, Cookie Policy, and Commercial Policies on",
+      "Link": {
+        "Text": "Bravo",
+        "Url": "http://example.com/bravo"
+      }
+    }
   }
 }

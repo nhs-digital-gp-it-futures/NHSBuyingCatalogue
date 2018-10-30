@@ -32,11 +32,25 @@
       {{{body}}}
     </main>
     <footer aria-label="Site footer">
-      <section aria-labelledby="footer-about-section-label">
-        <h2 id="footer-about-section-label" role="none">About</h2>
-        <a href="/about#catalogue"><span class="sr">About the</span> {{t 'Catalogue.Title'}}</a>
-        <a href="/about#nhs-digital"><span class="sr">About</span> {{t 'NHSD.Name'}}</a>
-      </section>
+      <div class="top">
+        {{#each (tt 'Footer.Sections') as |section|}}
+        <section aria-labelledby="footer-section-{{@index}}-label">
+          <h2 id="footer-section-{{@index}}-label" role="none">{{section.Heading}}</h2>
+          <ul>
+          {{#each section.Links as |link|}}
+            <li><a href="{{link.Url}}">{{link.Text}}</a></li>
+          {{/each}}
+          </ul>
+        </section>
+        {{/each}}
+      </div>
+      <div class="bottom">
+        <p class="legal">
+          <span class="heading">{{t 'Footer.Legal.Heading'}}</span>
+          <span class="text">{{t 'Footer.Legal.Text'}}</span>
+          <a href="{{t 'Footer.Legal.Link.Url'}}">{{t 'Footer.Legal.Link.Text'}}</a>
+        </p>
+      </div>
     </footer>
   </body>
 </html>

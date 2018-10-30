@@ -14,6 +14,13 @@ html {
   box-sizing: inherit;
 }
 
+ul,
+ol {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
 a {
   color: $color-link-fg;
   text-decoration: none;
@@ -40,8 +47,11 @@ a {
   }
 }
 
-// account for fixed header with JS support @see src/static/js/app.js
 #content {
+  // set general padding as per design
+  padding: 1em;
+
+  // account for fixed header with JS support @see src/static/js/app.js
   padding-top: $header-total-height;
 }
 
@@ -91,6 +101,53 @@ body > header {
       font-size: 1.5rem;
       font-weight: bold;
       vertical-align: top;
+    }
+  }
+}
+
+body > footer {
+  a {
+    color: $color-footer-link-fg;
+
+    &:visited,
+    &:active,
+    &:focus {
+      color: $color-footer-link-fg;
+    }
+  }
+
+  .top {
+    background-color: $color-footer-top-bg;
+    color: $color-footer-top-fg;
+    display: flex;
+    justify-content: space-between;
+    min-height: 11rem;
+    padding: 1em 2em;
+
+    h2 {
+      margin: 0 0 1em;
+    }
+
+    li {
+      padding-bottom: .5em;
+    }
+  }
+
+  .bottom {
+    background-color: $color-footer-bottom-bg;
+    color: $color-footer-bottom-fg;
+
+    .legal {
+      margin: 0;
+      padding: 1em;
+
+      .heading {
+        margin-right: 1em;
+      }
+
+      a {
+        text-decoration: underline;
+      }
     }
   }
 }
