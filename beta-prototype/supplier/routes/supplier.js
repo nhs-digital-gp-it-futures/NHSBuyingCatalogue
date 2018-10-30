@@ -616,7 +616,8 @@ app.get('/solutions/:solution_id/capabilities', csrfProtection, async (req, res)
     groupedCapabilities,
     standards: groupedStandards,
     csrfToken: req.csrfToken(),
-    pageHasForm:true
+    pageHasForm:true,
+    solution: {name: solutionEx.solution.name}
   })
 })
 
@@ -728,7 +729,8 @@ app.get('/solutions/:solution_id/mobile', csrfProtection, async (req, res) => {
     csrfToken: req.csrfToken(),
     isMobile: _.some(solutionEx.claimedStandard, ['standardId', 'CSS3']),
     standard: _.find(standards, ['id', 'CSS3']),
-    pageHasForm: true
+    pageHasForm: true,
+    solution: {name: solutionEx.solution.name}
   }
 
   res.render('supplier/solution-mobile', context)
