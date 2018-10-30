@@ -1,14 +1,19 @@
 <form method="POST">
     <fieldset>
-        <label>
+        <!-- <label>
             <input type="radio" name="wantThese" value="yes">
             Yes
         </label>
         <label>
             <input type="radio" name="wantThese" value="no">
             No
-        </label>
+        </label> -->
         <div class="array-input">
+            {{#if errors}}
+                <div>
+                    {{errors}}
+                </div>
+            {{/if}}
             <h3>Add {{item-name}}</h3>
             <p class="clarification">{{item-clarification}}</p>
             <div>

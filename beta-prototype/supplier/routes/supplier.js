@@ -926,35 +926,12 @@ app.get('/solutions/:solution_id/product-page', csrfProtection, async (req, res)
     // if the page has been approved, allow the user to publish
     context.allowPublish = solutionEx.solution.status === api.SOLUTION_STATUS.APPROVED &&
                           context.productPage.status === 'APPROVED'
-    console.log('Context', context);
   } catch (err) {
     context.errors.general = err
   }
 
   renderProductPageEditor(req, res, solutionEx, context)
 })
-
-const validateSolutionName = (fieldName = 'name') =>
-  check(fieldName, 'Solution name must be present and has a maximum length of 60 characters')
-  .exists()
-  .isLength({min: 1, max: 60})
-  .trim()
-
-const validateSolutionVersion = (fieldName = 'version') =>
-  check(fieldName, 'Solution version has a maximum length of 10 characters')
-  .isLength({max: 10})
-  .trim()
-
-const validateSolutionDescription = (fieldName = 'description') =>
-  check(fieldName, 'Solution description must be present and has a maximum length of 1000 characters')
-  .exists()
-  .isLength({min: 1, max: 1000})
-  .trim()
-
-const validateAbout = (fieldName = 'about') =>
-  check(fieldName, 'Company information has a maximum length of 400 characters')
-  .isLength({max: 400})
-  .trim()
 
 app.post('/solutions/:solution_id/product-page', csrfProtection, async (req, res) => {
   const context = {
@@ -1061,7 +1038,45 @@ app.get('/solutions/:solution_id/product-page/:section_name', csrfProtection, as
   res.render(`supplier/product-page/${req.params.section_name}`, context)
 });
 
+
+
+
+const validateSolutionName = (fieldName = 'name') =>
+  check(fieldName, 'Solution name must be present and has a maximum length of 60 characters')
+  .exists()
+  .isLength({min: 1, max: 60})
+  .trim()
+
+const validateSolutionVersion = (fieldName = 'version') =>
+  check(fieldName, 'Solution version has a maximum length of 10 characters')
+  .isLength({max: 10})
+  .trim()
+
+const validateSolutionDescription = (fieldName = 'description') =>
+  check(fieldName, 'Solution description must be present and has a maximum length of 1000 characters')
+  .exists()
+  .isLength({min: 1, max: 1000})
+  .trim()
+
+const validateAbout = (fieldName = 'about') =>
+  check(fieldName, 'Company information has a maximum length of 400 characters')
+  .isLength({max: 400})
+  .trim()
+  
+function validateFormArray(array) {
+  return (array.length <= 9) && (array.length > 0) ? '' : 'Invalid Submission';
+}
+function parseArrayItems(items) {
+  return items ? items.filter((item => item != '')) : [];
+}
+
 app.post('/solutions/:solution_id/product-page/:section_name', csrfProtection, async (req,res) => {
+  const context = {
+    errors : '',
+    csrfToken: req.csrfToken(),
+    pageHasForm:true
+  }
+
   let solutionEx = req.session.solutionEx
   solutionEx = await api.get_solution_by_id(req.params.solution_id)
 
@@ -1073,12 +1088,18 @@ app.post('/solutions/:solution_id/product-page/:section_name', csrfProtection, a
   const sectionName = req.params.section_name
 
   if(arrayForms.indexOf(sectionName) > -1) {
-    productPage[sectionName] = req.body.items ? req.body.items.filter((item) => item != '') : [];
+    const sectionElements = parseArrayItems(req.body.items)
+    context.errors = validateFormArray(sectionElements);
+    productPage[sectionName] = sectionElements;
   }
 
   let redirectURL = `${req.baseUrl}/solutions/${req.params.solution_id}/product-page`;
 
-  if(req.body.action === 'save') {
+  if(context.errors) {
+    redirectURL = `${req.baseUrl}/solutions/${req.params.solution_id}/product-page/${req.params.section_name}`;
+    return res.render(`supplier/product-page/${req.params.section_name}`, context)
+  }
+  else if(req.body.action === 'save') {
     redirectURL = `${req.baseUrl}/solutions/${req.params.solution_id}/product-page/${req.params.section_name}`;
   }
 
