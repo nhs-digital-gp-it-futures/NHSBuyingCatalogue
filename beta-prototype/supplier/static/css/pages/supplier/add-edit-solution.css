@@ -25,6 +25,11 @@
   font-weight: 400;
   padding: 0.5em 1em;
   position: absolute;
+  /*
+   * For some reason legends were renderign full width in chrome, but not firefox.
+   * Who knows what edge/IE11 would have done...
+   */
+  width: auto; 
   top: 0;
   left: 0;
   right: 0;
@@ -140,6 +145,15 @@
   margin-bottom: 0.5em;
 }
 
+#add-edit-solution div.add-contact {
+  display: flex;
+  align-items: center;
+}
+#add-edit-solution div.add-contact > div.add-contact {
+  color: var(--color-nhs-black);
+  padding:0.5em;
+}
+
 #add-edit-solution fieldset.contact.secondary {
   margin-bottom: 2em;
 }
@@ -160,8 +174,18 @@
   margin-top: 0;
 }
 
+div.mobile-compliance-note {
+  background: var(--color-nhs-pale-grey);
+  padding: 0.5em 1em;
+}
+
+fieldset.hidden {
+  display: none;
+}
+
+
 #add-edit-solution.review .counter {
-  color: var(--color-nhs-blue);
+  color: var(--color-nhs-black);
   font-style: italic;
 }
 
@@ -178,10 +202,10 @@
 }
 
 #add-edit-solution.review .capabilities-selected li {
-  border-bottom: solid 2px var(--color-nhs-pale-grey);
-  color: var(--color-nhs-blue);
-  font-size: larger;
-  padding: 0.5em 0;
+  border-bottom: none;
+  color: var(--color-nhs-black);
+  font-size: 1em;
+  padding: 0.25em 0;
 }
 
 #add-edit-solution.review summary:focus {
@@ -193,17 +217,18 @@
 }
 
 #add-edit-solution.review .group summary {
-  color: var(--color-nhs-blue);
+  color: var(--color-nhs-blue);;
+  margin-top:1.3em;
   margin-bottom: 0.25em;
 }
 
 #add-edit-solution.review .group li {
-  font-size: smaller;
+  font-size: 1em;
   padding: 0.25em 0;
 }
 
 #add-edit-solution.review .group li a {
-  color: var(--color-nhs-blue);
+  color: var(--color-nhs-black);
   text-decoration: none;
 }
 
@@ -213,4 +238,37 @@
 
 #add-edit-solution .controls .primary {
   float: right;
+}
+
+div.block-title {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+div.block-title .link {
+  margin-left: auto;
+}
+
+div.details-block {
+  margin-bottom: 1em;
+  padding:1em;
+  background: var(--color-nhs-pale-grey)
+}
+
+p.details {
+  font-size: 1em;
+  margin:0.5em 0 0 0;
+}
+
+div.title {
+  font-size: 1.3em;
+}
+
+div.subtitle {
+  font-size: 1.2em;
+  margin-top:1.3em;
+}
+
+#onboarding-status section{
+  padding: 1em;
 }

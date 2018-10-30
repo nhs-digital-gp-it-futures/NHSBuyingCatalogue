@@ -1,3 +1,18 @@
+{{#*inline "notification"}}
+{{#if count}}
+<div class="notification-icon">  
+  <svg xmlns="http://www.w3.org/2000/svg" width="21" height="16" viewBox="0 0 21 16">
+    <path fill="#DA291C" fill-rule="evenodd" d="M10.595 9.867L8.457 8.013 1 16h19l-7.32-8-2.085 1.867zM14 7.175L20.932 15c.04-.152.068-.31.068-.475V1l-7 6.175zM0 1v13.526c0 .166.028.322.068.474L7 7.218 0 1zm21-1H1l10 8 10-8z"/>
+  </svg> 
+   <sup>{{#count}}{{.}}{{/count}}</sup>
+</div>
+{{else}}
+<div>
+-
+</div>
+{{/if}}
+{{/inline}}
+
 <div id="supplier-solutions" class="supplier">
   <h2>My Solutions</h2>
   {{#if created }}
@@ -6,45 +21,66 @@
   {{#errors.general}}
   <p class="error">{{.}}</p>
   {{/errors.general}}
-  {{#each groupedSolutions as |solutions group|}}
+
   <section class="solution-group">
-    <header><h3>{{group}}</h3></header>
+    <header><h3>On-boarding in Progress</h3></header>
     <table class="solutions">
       <thead>
         <tr>
-          <th class="solution-id">solution ID #</th>
-          <th class="name">Name</th>
-          <th class="version">Version</th>
+          <th class="name end-header">Name | Version</th>
+          <th class="current-stage">Current Stage</th>
+          <th class="stage-number">Stage no.</th>
           <th class="status">Status</th>
-          <th class="notifications">Notifications</th>
+          <th class="notifications end-header">Notifications</th>
         </tr>
       </thead>
       <tbody>
-        {{#solutions}}
-        <tr>
-          <td class="solution-id">
-            {{#continueUrl}}<a href="{{.}}">{{/continueUrl}}
-            {{id}}
-            {{#continueUrl}}</a>{{/continueUrl}}
-          </td>
+        {{#each onboardingSolutions as |solution|}}
+        <tr class="solution-row">
           <td class="name">
             {{#continueUrl}}<a href="{{.}}">{{/continueUrl}}
-            {{name}}
+            {{name}} {{#if version}}| {{version}}{{/if}}
             {{#continueUrl}}</a>{{/continueUrl}}
           </td>
-          <td class="version">{{ version }}</td>
+          <td class="current-stage">{{currentStage}}</td>
+          <td class="stage-number">{{stageNumber}}</td>
           <td class="status">{{ computedStatus }}</td>
           <td class="notifications">
-            {{#notificationUrl}}<a href="{{.}}">{{/notificationUrl}}
-            {{notification}}
-            {{#notificationUrl}}</a>{{/notificationUrl}}
+            {{> notification count = notificationCount}}
           </td>
         </tr>
-        {{/solutions}}
+        {{/each}}
       </tbody>
     </table>
   </section>
-  {{else}}
-  <p>No solutions registered. <a href="{{addSolutionUrl}}">Start onboarding a solution</a>.</p>
-  {{/each}}
+
+  <section class="solution-group">
+    <header><h3>Live In Marketplace</h3></header>
+    <table class="solutions">
+      <thead>
+        <tr>
+          <th class="name end-header">Name | Version</th>
+          <th class="status">Status</th>
+          <th class="contracts-signed">Contracts Signed</th>
+          <th class="notifications end-header">Notifications</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each liveSolutions as |solution|}}
+        <tr class="solution-row">
+          <td class="name">
+            {{#continueUrl}}<a href="{{.}}">{{/continueUrl}}
+            {{name}} {{#if version}}| {{version}}{{/if}}
+            {{#continueUrl}}</a>{{/continueUrl}}
+          </td>
+          <td class="status">Accepting call-offs</td>
+          <td class="contracts-signed">{{contractCount}}</td>
+          <td class="notifications">
+              {{> notification count = notificationCount}}
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </section>
 </div>

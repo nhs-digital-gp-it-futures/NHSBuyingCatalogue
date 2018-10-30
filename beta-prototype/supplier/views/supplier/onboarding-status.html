@@ -25,7 +25,7 @@
     {{else if stages.register.complete}}
       <h3>Solution registration complete.</h3>
       <p>You can now continue with Capabilities Assessment as soon as you’re ready.</p>
-      <p>While you are working on Capabilities Assessment responses, you are free to view and start working on evidence requirements for Standards Compliance. However, you cannot submit Standards Compliance evidence until you have passed Capabilities Assessment.</p>
+      <p>You can also view Standards Compliance requirements, and start saving evidence against requirements. However, you cannot submit Standards Compliance evidence until you have passed Capabilities Assessment.</p>
     {{/if}}
   </section>
   {{/if}}
@@ -34,23 +34,29 @@
         title="Onboarding a Solution" }}
 
   {{#if solution}}
-  {{> solution-info solution}}
+  <!-- {{> solution-info solution}} -->
   <p class="help">Continue on-boarding your solution to the catalogue by accessing the relevant stage below.</p>
   {{else}}
   <p class="help">There are 4 stages to on-boarding a solution to the catalogue. Start with Register Solution.</p>
   {{/if}}
 
+  {{#> help-reveal title="Help - How is Stage 2 Capabilities Assessment different from Stage 3 Standards Compliance?"}}
+    <p>Capabilities describe what your Solution does at a high level</p>
+    <p>Standards describe how your Solution should be delivered to provide a minimum level of quality.</p>
+    <p>Your Capabilities Assessment must be complete before you can submit evidence for Standards Compliance.</p>
+  {{/help-reveal}}
+
   <ol class="stages">
     {{> stage
           stages.register 
           name="Register Solution"
-          instructions="Provide basic information and key contacts for your Solution. Review the full menu of Capabilities, and associated Standards and requirements. Select the Capabilities that define what your Solution can do, and the Mobile Standard if relevant."
+          instructions="Provide basic information and key contacts for your Solution. Familiarise yourself with the full range of Capabilities and associated Standards. Select the Capabilities that define what your Solution does."
     }}
 
     {{> stage
           stages.assessment
           name="Capabilities Assessment"
-          instructions="For each selected Capability, answer open-response questions and provide video evidence that demonstrates how your Solution meets that Capability. Our Commercial team will review submitted Assessent videos and responses to make sure your Solution is within the scope of the Catalogue."
+          instructions="For each selected Capability, answer open-response questions and provide video evidence that demonstrates how your Solution meets that Capability. Our Commercial team will review submitted assessent videos and responses to make sure your Solution is within the scope of the Capabilities."
     }}
 
     {{> stage

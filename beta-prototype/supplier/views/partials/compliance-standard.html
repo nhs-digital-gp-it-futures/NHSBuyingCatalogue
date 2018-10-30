@@ -1,8 +1,20 @@
 <section id="std-{{id}}" class="standard {{interopClass}} {{statusClass}}">
-  <span class="name">{{name}}</span>
-  <span class="status">{{status}}</span>
+  {{#if editUrl}}
+    <span class="name"><a href="{{editUrl}}">{{name}}</a></span>
+  {{/if}}
+
+  {{#if viewUrl}}
+    <span class="name"><a href="{{viewUrl}}">{{name}}</a></span>
+  {{/if}}
+
+  <tr>
+
+  </tr>
+  <span class="status">
+    {{status}} {{#if latestSubmissionDate}}On {{latestSubmissionDate}}{{/if}}
+  </span> 
+  
   <span class="controls">
-    {{#editUrl}}<a href="{{ . }}">Edit</a>{{/editUrl}}
-    {{#viewUrl}}<a href="{{ . }}">View</a>{{/viewUrl}}
+   {{#if standardOwner.firstName}} With {{standardOwner.firstName}} {{standardOwner.lastName}}{{/if}}
   </span>
 </section>

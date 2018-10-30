@@ -25,12 +25,12 @@ p.help, div.help p {
   border-left: 5px solid var(--color-nhs-blue);
   color: var(--color-fg);
   padding: .5em 0 .5em 1em;
-  width: 65%;
+  width: 85%;
 }
 
 .help-reveal .help p {
   font-size: var(--font-size-high-density);
-  font-weight: var(--font-weight-high-density);
+  font-weight: 400; /* var(--font-weight-high-density); */
   margin-bottom: 0.5em;
   margin-top: 0.5em;
 }
@@ -40,6 +40,11 @@ header.onboarding-progress h1 small {
   display: block;
   font-size: var(--font-size-navigation);
   margin-bottom: -0.25em;
+}
+
+header.onboarding-progress h1 {
+  color: #000000;
+  font-size: 2em;
 }
 
 nav.breadcrumbs ul {

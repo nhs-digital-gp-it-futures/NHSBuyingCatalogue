@@ -54,6 +54,7 @@ app.get('/solutions', async (req, res) => {
         soln => api.get_solution_by_id(soln.id)
       )
     )
+
   } catch (err) {
     if (err.status === 404) {
       solutions = []
@@ -88,7 +89,6 @@ app.get('/solutions', async (req, res) => {
     const hasSubmittedStd = _.some(decodedStandards, 'evidence.submissions.length')
 
     const productPageStatus = solutionEx.solution.productPage.status
-
     switch (solnStatus) {
       case api.SOLUTION_STATUS.DRAFT:
         if (hasFailedCapAss) computedStatus = 'Assessment Failed'
@@ -96,7 +96,7 @@ app.get('/solutions', async (req, res) => {
       case api.SOLUTION_STATUS.REGISTERED:
         break
       case api.SOLUTION_STATUS.CAPABILITIES_ASSESSMENT:
-        computedStatus = 'Submitted for Assessment'
+        computedStatus = 'Submitted'
         if (hasRemediationCapAss) computedStatus = 'Assessment Remediation'
         if (hasFailedCapAss) computedStatus = 'Assessment Failed'
         break
@@ -137,16 +137,55 @@ app.get('/solutions', async (req, res) => {
     }
   }
 
+  function solutionStageMapper(solutionCtx) {
+    const stageNumber = solutionCtx.status;
+    const stageNumberString = api.stageIndicators[stageNumber];
+    const currStage = api.solutionStages[stageNumber]
+    return {
+      ...solutionCtx,
+      stageNumber : stageNumberString,
+      currentStage : currStage
+    }
+  }
+
+  function notificationMapper(solutionCtx) {
+    const notificationCount = _.random(5)
+    // await api.request_solution_notifications;
+    return {
+      ...solutionCtx,
+      notificationCount : notificationCount
+    }
+  }
+
+  function contractsMapper(solutionCtx) {
+    const contractCount = 0;
+    // await api.request_solution_contracts;
+    return {
+      ...solutionCtx,
+      contractCount : contractCount
+    }
+  }
+
+  const liveGroupName = 'Live Solutions';
+  const onboardingGroupName = 'Onboarding in Progress'
   function solutionDashboardGroup (solution) {
     return solution.status === api.SOLUTION_STATUS.APPROVED
-           ? 'Live Solutions'
-           : 'Onboarding in Progress'
+           ? liveGroupName
+           : onboardingGroupName
   }
+
 
   context.groupedSolutions = _(solutions)
     .map(solutionDashboardContext)
+    .map(solutionStageMapper)
+    .map(notificationMapper)
+    .map(contractsMapper)
     .groupBy(solutionDashboardGroup)
     .value()
+
+  context.liveSolutions = context.groupedSolutions[liveGroupName]
+
+  context.onboardingSolutions = context.groupedSolutions[onboardingGroupName]
 
   res.render('supplier/solutions', context)
 })
@@ -622,7 +661,7 @@ app.post('/solutions/:solution_id/capabilities', csrfProtection, async (req, res
   try {
     let redirectUrl = `${req.baseUrl}/solutions`
 
-    if (req.body.action === 'submit') {
+    if (req.body.action === 'continue') {
       redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/mobile`
     }
 
@@ -701,7 +740,7 @@ app.post('/solutions/:solution_id/mobile', csrfProtection, async (req, res) => {
   try {
     let redirectUrl = `${req.baseUrl}/solutions`
 
-    if (req.body.action === 'submit') {
+    if (req.body.action === 'continue') {
       redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/review`
     }
 
@@ -722,7 +761,12 @@ app.get('/solutions/:solution_id/review', csrfProtection, async (req, res) => {
       href: `/suppliers/solutions/${req.params.solution_id}/mobile`
     },
     csrfToken: req.csrfToken(),
-    errors: {}
+    errors: {},
+    editLinks:{
+      contacts:`/suppliers/solutions/${req.params.solution_id}/edit`,
+      capabilities:`/suppliers/solutions/${req.params.solution_id}/capabilities`,
+      mobile:`/suppliers/solutions/${req.params.solution_id}/mobile`
+    }
   }
 
   try {
@@ -748,6 +792,11 @@ app.get('/solutions/:solution_id/review', csrfProtection, async (req, res) => {
       ({capabilityId}) => allCaps[capabilityId].name
     )
 
+
+    context.contacts = solutionEx.technicalContact;
+    context.supportsMobile = _.some(solutionEx.claimedStandard, ['standardId', 'CSS3'])
+
+
     // merge optional with interop standards prior to display, so that Mobile Working
     // is considered solution-specific
     groupedStandards.interop = _.concat(groupedStandards.interop, groupedStandards.optional)
@@ -763,6 +812,7 @@ app.get('/solutions/:solution_id/review', csrfProtection, async (req, res) => {
       .filter(([, stds]) => stds.length)
       .fromPairs()
       .value()
+
   } catch (err) {
     context.errors.general = err
   }
@@ -791,7 +841,7 @@ app.post('/solutions/:solution_id/review', csrfProtection, async (req, res) => {
   try {
     let redirectUrl = `${req.baseUrl}/solutions`
 
-    if (req.body.action === 'submit') {
+    if (req.body.action === 'continue') {
       solutionEx.solution.status = api.SOLUTION_STATUS.REGISTERED
       redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}?submitted`
     }
@@ -1012,7 +1062,7 @@ app.post('/solutions/:solution_id/product-page/preview', csrfProtection, async (
   if (action === 'review' &&
       solutionEx.solution.status === api.SOLUTION_STATUS.SOLUTION_PAGE) {
     solutionEx.solution.productPage.status = 'SUBMITTED'
-    redirect = `${req.baseUrl}/solutions/${solutionEx.solution.id}/submitted`
+    redirect = `${req.baseUrl}/solutions/${solutionEx.solution.id}?submitted`
   } else if (action === 'publish' &&
       solutionEx.solution.status === api.SOLUTION_STATUS.APPROVED) {
     solutionEx.solution.productPage.status = 'PUBLISH'

@@ -9,9 +9,7 @@
 
   {{> onboarding-progress-header
         title="All Standards"
-        subtitle="Standards Compliance"}}
-
-  {{> solution-info solution}}
+        subtitle="Stage 3—Standards Compliance"}}
 
   {{#if errors.general}}
   <div class="errors">
@@ -32,7 +30,7 @@
     </header>
 
     {{#> help-reveal title="Help - What Are These?"}}
-    <p>Capability-Specific Standards are requirements related to the individual Capabilities you have selected.</p>
+    <p>These Standards contain requirements that relate to the corresponding Capability.</p>
     {{/help-reveal}}
 
     {{#solution.capabilitySpecificStandards}}
@@ -48,7 +46,7 @@
     </header>
 
     {{#> help-reveal title="Help - What Are These?"}}
-    <p>Solution-Specific Standards are requirements related to one or more of the Capabilities you have selected.</p>
+    <p>These Standards contain requirements that relate to one or more of the selected Capabilities. </p>
     {{/help-reveal}}
 
     {{#solution.solutionSpecificStandards}}
@@ -68,7 +66,7 @@
     </header>
 
     {{#> help-reveal title="Help - What Are These?"}}
-    <p>General Standards are requirements that apply to all Solutions, regardless of Capabilities selected, and cover the full scope of your Solution.</p>
+    <p>These Standards contain requirements that apply to all Solutions. They relate to the Solution as a whole. </p>
     {{/help-reveal}}
 
     {{#solution.standards}}

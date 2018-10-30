@@ -5,6 +5,26 @@ const csrfProtection = require('csurf')()
 const { formatting } = require('catalogue-utils')
 
 app.get('/', csrfProtection, async (req, res) => {
+  res.render(
+    'assessment/capability-assessment-introduction',
+      {
+        csrfToken: req.csrfToken(),
+        breadcrumbs: [
+          { label: 'My Dashboard', url: '/suppliers' },
+          { label: 'My Solutions', url: '/suppliers/solutions' },
+          { label: 'Onboarding Solution', url: `/suppliers/solutions/${req.params.solution_id}` },
+          { label: 'Capabilities Introduction' }
+        ]
+      }
+    )
+})
+
+app.post('/', csrfProtection, async (req, res) => {
+    const redirectRoute = `${req.baseUrl}/capabilities`
+    res.redirect(redirectRoute)
+})
+
+app.get('/capabilities', csrfProtection, async (req, res) => {
   const dashboardUrl = `${req.baseUrl}/solutions`
   const [solutionEx, messages, { capabilities }] = await Promise.all([
     api.get_solution_by_id(req.params.solution_id),
@@ -25,6 +45,8 @@ app.get('/', csrfProtection, async (req, res) => {
     ...cap,
     ...allCapabilities[cap.capabilityId],
     evidence: cap.evidence,
+    video_evidence: cap.evidence,
+    evidence_description: cap.evidence,
     status: solutionEx.solution.status === api.SOLUTION_STATUS.CAPABILITIES_ASSESSMENT
             ? _.get(api.capabilityStatuses, cap.status)
             : cap.evidence ? 'Draft Saved' : 'Not Started',
@@ -53,6 +75,7 @@ app.get('/', csrfProtection, async (req, res) => {
       { label: 'My Dashboard', url: '/suppliers' },
       { label: 'My Solutions', url: '/suppliers/solutions' },
       { label: 'Onboarding Solution', url: `/suppliers/solutions/${req.params.solution_id}` },
+      { label: 'Capabilities Introduction', url: `/suppliers/solutions/${req.params.solution_id}/assessment`},
       { label: 'Capabilities Assessment' }
     ],
     solution: solutionEx.solution,
@@ -63,7 +86,7 @@ app.get('/', csrfProtection, async (req, res) => {
   })
 })
 
-app.post('/', csrfProtection, async (req, res) => {
+app.post('/capabilities', csrfProtection, async (req, res) => {
   const solutionEx = await api.get_solution_by_id(req.params.solution_id)
   let redirectUrl = `/suppliers/solutions/${solutionEx.solution.id}`
   let updateSolution = false
@@ -75,9 +98,9 @@ app.post('/', csrfProtection, async (req, res) => {
   }
 
   // always save all the evidence
-  Object.keys(req.body.evidence).forEach(capabilityIdToSave => {
+  Object.keys(req.body.video_evidence).forEach(capabilityIdToSave => {
     const cap = _.find(solutionEx.claimedCapability, ['capabilityId', capabilityIdToSave])
-    const evidence = _.get(req.body.evidence, capabilityIdToSave, '').trim()
+    const evidence = _.get(req.body.video_evidence, capabilityIdToSave, '').trim()
 
     if (cap && evidence) {
       cap.evidence = evidence
@@ -90,7 +113,6 @@ app.post('/', csrfProtection, async (req, res) => {
   if (req.body.action === 'save') {
     redirectUrl = '?saved'
   }
-
   // set the status on submission to send the solution to the capabilities assessment team
   if (req.body.action === 'submit') {
     solutionEx.solution.status = api.SOLUTION_STATUS.CAPABILITIES_ASSESSMENT
@@ -105,12 +127,13 @@ app.post('/', csrfProtection, async (req, res) => {
   // post a new message if one was supplied
   const message = (req.body.message || '').trim()
   if (message && (req.body.action === 'save' || req.body.action === 'submit')) {
-    await api.post_assessment_message({
+    const assessmentMessage = {
       solutionId: solutionEx.solution.id,
       contactId: req.user.contact.id,
       timestamp: new Date().toJSON(),
       message
-    })
+    }
+    await api.post_assessment_message(assessmentMessage)
   }
 
   res.redirect(redirectUrl)

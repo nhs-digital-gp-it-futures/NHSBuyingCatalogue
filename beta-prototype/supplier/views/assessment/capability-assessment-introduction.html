@@ -1,0 +1,14 @@
+<div id="capability-assessment-introduction">
+    {{> onboarding-progress-header
+        title="Introduction to Capability Assessment"
+        subtitle="Stage 2—Capabilities Assessment"}}
+
+    <form action="#errors" method="post" novalidate>
+        <fieldset class="controls">
+            <button class="primary-button" name="action" value="continue" type="submit">Continue</button>
+            <!-- <button name="action" value="save" type="submit">Save</button> -->
+            <!-- <button class="primary" name="action" value="continue" type="submit">Continue</button> -->
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        </fieldset>
+    </form>
+</div>

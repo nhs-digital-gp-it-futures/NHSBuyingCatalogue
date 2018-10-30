@@ -500,6 +500,16 @@ API.prototype.CAPABILITY_STATUS = {
   REJECTED: 3
 }
 
+API.prototype.stageIndicators = [
+  '1 of 4', '2 of 4', '2 of 4', '3 of 4', '4 of 4', 'Complete',
+];
+
+API.prototype.solutionStages = [
+  'Registration', 'Capabilities Assessment', 'Capabilities Review', 'Standards Compliance',
+  'Solution Page', 'Approved'
+]
+
+
 API.prototype.standardStatuses = [
   'Submitted', 'Remediation', 'Approved', 'Rejected', 'Partially Approved'
 ]

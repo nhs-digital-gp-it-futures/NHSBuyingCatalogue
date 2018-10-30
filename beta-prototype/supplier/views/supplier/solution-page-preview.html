@@ -14,13 +14,17 @@
   <form method="POST">
     <div class="controls">
       <input type="hidden" name="_csrf" value="{{csrfToken}}">
+
       <a class="button" href="{{editUrl}}">Edit</a>
+
       {{#if allowReview}}
       <input type="submit" name="action[review]" class="button primary" value="Submit for review">
       {{/if}}
+
       {{#if allowPublish}}
       <input type="submit" name="action[publish]" class="button primary" value="Publish to Catalogue">
       {{/if}}
+
     </div>
   </form>
 </div>

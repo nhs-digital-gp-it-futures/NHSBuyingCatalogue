@@ -1,24 +1,33 @@
 <div id="solution-capabilities" class="supplier">
   {{> onboarding-progress-header
-        title="Select Capabilities"
+        title="Which Capabilities does your Solution provide? "
         subtitle="Register Solution (2 of 4)"}}
-  <h3 class="question">Which Capability(-ies) does your Solution provide?</h3>
-  <p>Select all that apply.</p>
-  <p class="commercial-warning">
-    <strong>Commercial Warning</strong>
-    You must select ALL the Capabilities your Solution provides. If your Solution provides Capabilities that are not outlined below, please {info on this to come}.
-  </p>
+  <h3 class="question">Select all that apply.* </h3>
+  <p>For queries and feedback, email: <a href="mailto:gpitfutures@nhs.net">gpitfutures@nhs.net</a>.</p>
+  
   {{#> help-reveal title="Help - What are Capabilities?"}}
-    <p>Capabilities describe what your Solution does. Your Solution will be assessed against the Capabilities that it provides to ensure that it is within the scope of the Catalogue.
+    <p>Capabilities describe what your Solution does.</p>
+    <p> Standards describe how your solution should be delivered to provide a minimum level of quality. </p>
+    <p>
       <a href="{{capabilitiesHelpUrl}}" target="_blank">Learn more and view all Capabilities &amp; Standards.</a>
     </p>
   {{/help-reveal}}
+  
+  <p class="commercial-warning">
+    <strong>Commercial Disclaimers</strong>
+    You must select ALL the Capabilities your Solution provides. If your Solution provides Capabilities that are not outlined below, please contact <a href="capability-overlords@nhs.gov.uk">capability-overlords@nhs.gov.uk</a>
+    <br><br>{info on this to come}.  
+    <br><br><a href="#">Placeholder Link 1</a>
+    <br><br><a href="#">Placeholder Link 2</a>
+  </p>
+
 
   {{#errors}}
   <p class="error">{{.}}</p>
   {{/errors}}
   <form method="post" novalidate>
     {{#each groupedCapabilities as |capabilities group|}}
+    
     <fieldset class="capability-group">
       <legend>{{group}}</legend>
       <ul class="capabilities">
@@ -26,6 +35,7 @@
         <li class="capability {{types}}" data-cap-id="{{id}}" data-std-ids="{{standardIds}}">
           <h4 class="name">{{name}}</h4>
           <a class="toggle-reveal" href="#">﹀</a>
+          
           <section class="reveal">
             <p class="description">
               {{description}}
@@ -34,6 +44,7 @@
               {{/url}}
             </p>
             <p>To comply with this Capability, you will have to meet these associated Standards.</p>
+            
             <div>
             <section class="standards">
               <section class="cap-specific">
@@ -66,6 +77,7 @@
               {{/if}}
             </section>
             </div>
+
             <section class="selection">
               <p>By selecting this Capability, I acknowledge the set of standards my solution must meet to attain compliance with this Capability.</p>
               <div>
@@ -83,6 +95,8 @@
       </ul>
     </fieldset>
     {{/each}}
+
+
     <section class="summary">
       <header>
         <h3>Summary</h3>
@@ -100,6 +114,8 @@
           </ul>
         </details>
       </section>
+
+
       <section class="standards">
         <p class="counter">Compliance with <span class="count"></span> will be required</p>
         <ul>
@@ -138,10 +154,12 @@
     </section>
 
     <fieldset class="controls">
-      <button name="action" value="save" type="submit">Save</button>
-      <button class="primary" name="action" value="submit" type="submit">Continue</button>
+      <!-- <button name="action" value="save" type="submit">Save</button> -->
+      <!-- <button class="primary" name="action" value="submit" type="submit">Continue</button> -->
+      <button class="primary-button" name="action" value="continue" type="submit">Save & Continue</button>
       <input type="hidden" name="_csrf" value="{{csrfToken}}">
     </fieldset>
+
   </form>
 </div>
 
@@ -217,7 +235,8 @@ document.addEventListener('DOMContentLoaded', () => {
       standardCount + (standardCount !== 1 ? ' standards' : ' standard')
 
     // only allow form submission if at least one capability is selected
-    elPage.$('.controls [name=action][value=submit]').disabled = !capabilityCount
+    elPage.$('.controls [name=action][value=continue]').disabled = !capabilityCount
+    
   }
 
   // initial synchronisation of capability selected states
