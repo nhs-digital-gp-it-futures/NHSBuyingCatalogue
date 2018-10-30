@@ -370,9 +370,15 @@
   {{/section}}
 
 {{#>section id="about"}}
-  {{>section-header title="About " side-text="Edit Section" side-link=pageEditLinks.about}}
-  <h3>{{organisationName}}{{#productPage.logoUrl}} <img src="{{.}}">{{/productPage.logoUrl}}</h3>
-  <p class="about">{{productPage.about}}</p>
+  {{#if productPage.about}}
+    {{>section-header title="About " side-text="Edit Section" side-link=pageEditLinks.about}}
+    <h3>{{organisationName}}
+      <!-- {{#productPage.logoUrl}} <img src="{{.}}">{{/productPage.logoUrl}} -->
+    </h3>
+    <p class="about">{{productPage.about}}</p>
+  {{else}}
+    {{>section-header title="About " side-text="Add Section" side-link=pageEditLinks.about}}
+  {{/if}}
 {{/section}}
   
 {{#>section id="contact-details"}}

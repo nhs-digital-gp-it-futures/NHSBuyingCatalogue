@@ -1117,6 +1117,9 @@ app.post('/solutions/:solution_id/product-page/:section_name', csrfProtection, a
   else if (sectionName === 'summary') {
     solutionEx.solution.description = req.body.text || '';
   }
+  else if (sectionName === 'about') {
+    productPage[sectionName] = req.body.text || '';
+  }
 
   let redirectURL = `${req.baseUrl}/solutions/${req.params.solution_id}/product-page`;
 
