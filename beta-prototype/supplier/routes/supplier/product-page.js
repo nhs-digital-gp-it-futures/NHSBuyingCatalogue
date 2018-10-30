@@ -37,17 +37,7 @@ function enrichContextForProductPage (context, solutionEx) {
     })
   )
 
-  context.features = [
-    'Export functionality',
-    'Customisable reporting suite',
-    'GDPR compliant',
-    'Responsive design for accessing via all screen sizes - mobile, desktop, etc',
-    'Time saving for GPs and staff',
-    'User role & permission management'
-  ]
-
   // build lists of options for specs
-  context.integrations = ['EMIS', 'TPP', 'Vision', 'Microtest']
   context.requirementOptions = [
     {group: 'Software add-on or Extension', items:['Yes']},
     {group: 'Cloud deployment model', items:['Private Cloud']},
@@ -56,17 +46,11 @@ function enrichContextForProductPage (context, solutionEx) {
     {group: 'Miscellaneous', items: ['Users must have internet connectivity', 'Users must have access to a common browser platform']}
   ]
 
-
-  function boltSolutionPricing(context) {
+    // placeholder data
     context.pricing = '£ / max per patient'
-  }
 
-  function boltCommercialArrangements(context){
+    // placeholder data
     context.commercialArrangements = 'NHS 1.0';
-  }
-
-  boltSolutionPricing(context);
-  boltCommercialArrangements(context);
 
   // construct the optional sets from the product page data
   const placeholderServiceMap = {

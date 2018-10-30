@@ -920,6 +920,13 @@ app.get('/solutions/:solution_id/product-page', csrfProtection, async (req, res)
     }
     context.organisationName = _.get(await api.get_org_by_id(solutionEx.solution.organisationId), 'name')
     context.allowSubmit = solutionEx.solution.status === api.SOLUTION_STATUS.SOLUTION_PAGE
+    // if the page has not been approved, allow the user to submit for review
+    context.allowReview = solutionEx.solution.status === api.SOLUTION_STATUS.SOLUTION_PAGE
+
+    // if the page has been approved, allow the user to publish
+    context.allowPublish = solutionEx.solution.status === api.SOLUTION_STATUS.APPROVED &&
+                          context.productPage.status === 'APPROVED'
+    console.log('Context', context);
   } catch (err) {
     context.errors.general = err
   }
@@ -949,27 +956,7 @@ const validateAbout = (fieldName = 'about') =>
   .isLength({max: 400})
   .trim()
 
-app.post('/solutions/:solution_id/product-page', [
-  multipartBodyParser(),
-  // middleware to produce a req.body that matches body-parser's extended mode
-  (req, res, next) => {
-    const qs = require('qs')
-
-    // construct a qs.parse()able string from the body, taking care to present array-valued
-    // items as a sequence of multiple values for the same key
-    const parsable = _.map(req.body, (v, k) =>
-      (Array.isArray(v) ? v : [v]).map(v => k + '=' + encodeURIComponent(v)).join('&')
-    ).join('&')
-    req.body = qs.parse(parsable)
-    next()
-  },
-  csrfProtection,
-  validateSolutionName(),
-  validateSolutionVersion(),
-  validateSolutionDescription(),
-  validateAbout()
-], async (req, res) => {
-  let redirect = req.originalUrl
+app.post('/solutions/:solution_id/product-page', csrfProtection, async (req, res) => {
   const context = {
     errors: _.mapValues(
       _.groupBy(validationResult(req).array(), 'param'),
@@ -987,78 +974,63 @@ app.post('/solutions/:solution_id/product-page', [
     return renderProductPageEditor(req, res, solutionEx, context)
   }
 
-  const validated = matchedData(req)
-  solutionEx.solution.name = validated.name || req.body.name
-  solutionEx.solution.version = validated.version || req.body.version
-  solutionEx.solution.description = validated.description || req.body.description
+  // Sanity Validation should be done at a per-form page basis.
+  // This post handler Just needs to ensure that all elements are actually present and have been validated.
+  
+  // const validated = matchedData(req)
+  // solutionEx.solution.name = validated.name || req.body.name
+  // solutionEx.solution.version = validated.version || req.body.version
+  // solutionEx.solution.description = validated.description || req.body.description
 
-  const updateForProductPage = {
-    benefits: _.filter(_.map(_.castArray(req.body.benefits), _.trim)),
-    interop: _.filter(_.map(_.castArray(req.body.interop), _.trim)),
-    contact: _.pickBy(_.mapValues(req.body.contact, _.trim)),
-    capabilities: req.body.capabilities ? _.castArray(req.body.capabilities) : [],
-    requirements: _.filter(_.map(_.castArray(req.body.requirements), _.trim)),
-    'case-study': _.filter(_.castArray(req.body['case-study']), cs => cs.title),
-    optionals: {
-      'additional-services': _.mapValues(
-        _.pickBy(req.body['additional-services']),
-        val => val === 'yes'
-      )
-    },
-    about: validated.about || req.body.about
-  }
+  // const updateForProductPage = {
+  //   benefits: _.filter(_.map(_.castArray(req.body.benefits), _.trim)),
+  //   interop: _.filter(_.map(_.castArray(req.body.interop), _.trim)),
+  //   contact: _.pickBy(_.mapValues(req.body.contact, _.trim)),
+  //   capabilities: req.body.capabilities ? _.castArray(req.body.capabilities) : [],
+  //   requirements: _.filter(_.map(_.castArray(req.body.requirements), _.trim)),
+  //   'case-study': _.filter(_.castArray(req.body['case-study']), cs => cs.title),
+  //   optionals: {
+  //     'additional-services': _.mapValues(
+  //       _.pickBy(req.body['additional-services']),
+  //       val => val === 'yes'
+  //     )
+  //   },
+  //   about: validated.about || req.body.about
+  // }
 
   // encode the uploaded logo (if any)
-  if (req.files.logo) {
-    const logo = req.files.logo
-    updateForProductPage.logoUrl = `data:${logo.mimetype};base64,${logo.data.toString('base64')}`
-  } else if (req.body.preserveLogo && req.session.solutionEx) {
-    updateForProductPage.logoUrl = _.get(req.session.solutionEx, 'solution.productPage.logoUrl', '')
-  } else if (!req.body.preserveLogo) {
-    updateForProductPage.logoUrl = ''
-  }
+  // if (req.files.logo) {
+  //   const logo = req.files.logo
+  //   updateForProductPage.logoUrl = `data:${logo.mimetype};base64,${logo.data.toString('base64')}`
+  // } else if (req.body.preserveLogo && req.session.solutionEx) {
+  //   updateForProductPage.logoUrl = _.get(req.session.solutionEx, 'solution.productPage.logoUrl', '')
+  // } else if (!req.body.preserveLogo) {
+  //   updateForProductPage.logoUrl = ''
+  // }
 
-  solutionEx.solution.productPage = _.assign(
-    {},
-    solutionEx.solution.productPage,
-    updateForProductPage
-  )
+  // solutionEx.solution.productPage = _.assign(
+  //   {},
+  //   solutionEx.solution.productPage,
+  //   updateForProductPage
+  // )
 
   // if there are validation errors, re-render the editor
   if (!_.isEmpty(context.errors)) {
     return renderProductPageEditor(req, res, solutionEx, context)
   }
 
-  // save, preview or submit based on the action
   const action = _.head(_.keys(req.body.action))
+  let redirect = `${req.baseUrl}/solutions`
 
-  if (action === 'save' || action === 'submit' || req.body.action === 'saveAndExit' || req.body.action == 'save') {
-    try {
-      delete req.session.solutionEx
-
-      redirect = `${req.baseUrl}/solutions`
-
-      if (action === 'submit') {
-        solutionEx.solution.productPage.status = 'SUBMITTED'
-        redirect = `${req.baseUrl}/solutions/${solutionEx.solution.id}?submitted`
-      }
-      else if(req.body.action === 'saveAndExit') {
-        redirect = `${req.baseUrl}/solutions`;
-      }
-      else if(req.body.action === 'save') {
-        redirect = `${req.baseUrl}/solutions/${solutionEx.solution.id}/product-page`
-      }
-
-      solutionEx = await api.update_solution(solutionEx)
-    } catch (err) {
-      context.errors.general = err
-      return renderProductPageEditor(req, res, solutionEx, context)
-    }
-  } else if (action === 'preview') {
-    req.session.solutionEx = solutionEx
-    redirect = `${req.baseUrl}/solutions/${solutionEx.solution.id}/product-page/preview`
+  if (action === 'review' && solutionEx.solution.status === api.SOLUTION_STATUS.SOLUTION_PAGE) {
+    solutionEx.solution.productPage.status = 'SUBMITTED'
+    redirect = `${req.baseUrl}/solutions/${solutionEx.solution.id}?submitted`
+  }
+  else if (action === 'publish' && solutionEx.solution.status === api.SOLUTION_STATUS.APPROVED) {
+    solutionEx.solution.productPage.status = 'PUBLISH'
   }
 
+  req.session.solutionEx = await api.update_solution(solutionEx)
   res.redirect(redirect)
 })
 
