@@ -897,7 +897,8 @@ function renderProductPageEditor (req, res, solutionEx, context) {
   const pageEditLinkPrefix = `/suppliers/solutions/${req.params.solution_id}/product-page`;
   context.pageEditLinks = {
     features: `${pageEditLinkPrefix}/features`,
-    integrations: `${pageEditLinkPrefix}/integrations`
+    integrations: `${pageEditLinkPrefix}/integrations`,
+    summary: `${pageEditLinkPrefix}/summary`
   }
   
   res.render('supplier/solution-page-edit', context)
@@ -907,27 +908,34 @@ app.get('/solutions/:solution_id/product-page', csrfProtection, async (req, res)
   const context = {
     errors: {}
   }
+
   let solutionEx
 
   try {
     // load from session when coming back from preview, if ID is the same
     solutionEx = req.session.solutionEx && req.session.solutionEx.solution.id === req.params.solution_id
-               ? req.session.solutionEx
-               : await api.get_solution_by_id(req.params.solution_id)
+              ? req.session.solutionEx
+              : await api.get_solution_by_id(req.params.solution_id)
+
     context.capabilities = _.get(await api.get_all_capabilities(), 'capabilities')
+
     if (solutionEx.solution.productPage.message) {
       context.message = await formatting.formatMessagesForDisplay([
         _.merge({}, solutionEx.solution.productPage.message)
       ])
     }
+
     context.organisationName = _.get(await api.get_org_by_id(solutionEx.solution.organisationId), 'name')
+
     context.allowSubmit = solutionEx.solution.status === api.SOLUTION_STATUS.SOLUTION_PAGE
+
     // if the page has not been approved, allow the user to submit for review
     context.allowReview = solutionEx.solution.status === api.SOLUTION_STATUS.SOLUTION_PAGE
 
     // if the page has been approved, allow the user to publish
     context.allowPublish = solutionEx.solution.status === api.SOLUTION_STATUS.APPROVED &&
                           context.productPage.status === 'APPROVED'
+
   } catch (err) {
     context.errors.general = err
   }
@@ -1036,6 +1044,7 @@ app.get('/solutions/:solution_id/product-page/:section_name', csrfProtection, as
   enrichContextForProductPage(context, solutionEx)
 
   context.productPage = productPage;
+  context.solution = solutionEx.solution;
 
   res.render(`supplier/product-page/${req.params.section_name}`, context)
 });
@@ -1066,10 +1075,23 @@ const validateAbout = (fieldName = 'about') =>
   .trim()
   
 function validateFormArray(array) {
-  return (array.length <= 9) && (array.length > 0) ? '' : 'Invalid Submission';
+  const maxLengthCheck = (array) => array.length <= 9;
+  const minLengthChcek = (array) => array.length > 0;
+  return _.defaults(
+    !maxLengthCheck(array) ? {message: 'Please enter 9 or fewer items'} : {},
+    !minLengthChcek(array) ? {message: 'Please enter at least one item'} : {}
+  );
 }
 function parseArrayItems(items) {
-  return items ? items.filter((item => item != '')) : [];
+  if(!items) {
+    return [];
+  }
+  else if(items.filter) {
+    return items.filter((item => item != ''));
+  }
+  else {
+    return [items];
+  }
 }
 
 app.post('/solutions/:solution_id/product-page/:section_name', csrfProtection, async (req,res) => {
@@ -1094,10 +1116,13 @@ app.post('/solutions/:solution_id/product-page/:section_name', csrfProtection, a
     context.errors = validateFormArray(sectionElements);
     productPage[sectionName] = sectionElements;
   }
+  else if (sectionName === 'summary') {
+    solutionEx.solution.description = req.body.text || '';
+  }
 
   let redirectURL = `${req.baseUrl}/solutions/${req.params.solution_id}/product-page`;
 
-  if(context.errors) {
+  if(context.errors.message) {
     redirectURL = `${req.baseUrl}/solutions/${req.params.solution_id}/product-page/${req.params.section_name}`;
     return res.render(`supplier/product-page/${req.params.section_name}`, context)
   }
@@ -1108,6 +1133,7 @@ app.post('/solutions/:solution_id/product-page/:section_name', csrfProtection, a
   solutionEx.solution.productPage = JSON.stringify(productPage);
 
   req.session.solutionEx = await api.update_solution(solutionEx)
+  console.log(req.session.solutionEx);
 
   res.redirect(redirectURL)
 })

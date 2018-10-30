@@ -10,8 +10,8 @@
         </label> -->
         <div class="array-input">
             {{#if errors}}
-                <div>
-                    {{errors}}
+                <div class="error">
+                    {{errors.message}}
                 </div>
             {{/if}}
             <h3>Add {{item-name}}</h3>
@@ -23,14 +23,13 @@
                 {{/existingData}}
             </div>
             
-            <a class="button" id="add-item-button">+</a> Add {{item-name}}
+            <a class="button" id="add-item-button">+</a> Add {{item-name}} (9 Max)
         </div>
 
     </fieldset>
     <div class="controls">
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
         <button class="button" name="action" value="submit">Save &amp; Return</button>
-
     </div>
 </form>
 
@@ -41,9 +40,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputParent = inputField.parentNode;
 
     addButton.addEventListener('click', (event) => {
-        const cloneNode = inputField.cloneNode(true);
-        cloneNode.value = "";
-        inputParent.appendChild(cloneNode);
+        const allItemInputs = $$('[name="items"]');
+        if(allItemInputs.length < 9) {
+            const cloneNode = inputField.cloneNode(true);
+            cloneNode.value = "";
+            inputParent.appendChild(cloneNode);
+        }
         return false;
     })
 });
