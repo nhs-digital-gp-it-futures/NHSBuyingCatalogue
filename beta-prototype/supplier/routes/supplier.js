@@ -924,8 +924,6 @@ app.get('/solutions/:solution_id/product-page', csrfProtection, async (req, res)
     context.errors.general = err
   }
 
-  context.pageHasForm = true;
-
   renderProductPageEditor(req, res, solutionEx, context)
 })
 
@@ -1162,6 +1160,7 @@ app.post('/solutions/:solution_id/product-page/:section_name', csrfProtection, a
   }
 
   let redirectURL = `${req.baseUrl}/solutions/${req.params.solution_id}/product-page`;
+
   if(req.body.action === 'save') {
     redirectURL = `${req.baseUrl}/solutions/${req.params.solution_id}/product-page/${req.params.section_name}`;
   }
