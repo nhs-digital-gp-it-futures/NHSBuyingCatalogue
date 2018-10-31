@@ -34,7 +34,7 @@
     </ul>
     {{/if}}
     <textarea id="solution.description" name="solution[description]"
-      aria-required="true" maxlength="300"
+      aria-required="true" maxlength="300" rows="5"
       {{#if errors.controls.[solution.description]}}aria-invalid="true" aria-errormessage="error-solution.description"{{/if}}>{{solution.description}}</textarea>
   </div>
 
@@ -53,7 +53,7 @@
     {{/each}}
     </ul>
     {{/if}}
-    <input id="solution.version" type="text" name="solution[version]" value="{{solution.version}}"
+    <input id="solution.version" type="text" name="solution[version]" value="{{solution.version}}" class="narrow"
       autocomplete="off" maxlength="10"
       {{#if errors.controls.[solution.version]}}aria-invalid="true" aria-errormessage="error-solution.version"{{/if}}>
   </div>
