@@ -108,3 +108,7 @@ nav.backlink a .title {
 #save-nav button:disabled {
   color: var(--color-nhs-pale-grey)
 }
+
+.hidden {
+  display: none;
+}

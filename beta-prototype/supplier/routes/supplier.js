@@ -1093,6 +1093,10 @@ function parseArrayItems(items) {
   }
 }
 
+function parseWantThis(wantThis) {
+  return wantThis === 'yes'
+}
+
 app.post('/solutions/:solution_id/product-page/:section_name', csrfProtection, async (req,res) => {
   const context = {
     errors : '',
@@ -1111,9 +1115,15 @@ app.post('/solutions/:solution_id/product-page/:section_name', csrfProtection, a
   const sectionName = req.params.section_name
 
   if(arrayForms.indexOf(sectionName) > -1) {
+    const wantThis = parseWantThis(req.body.wantThis)
     const sectionElements = parseArrayItems(req.body.items)
-    context.errors = validateFormArray(sectionElements);
-    productPage[sectionName] = sectionElements;
+    if(wantThis) {
+      context.errors = validateFormArray(sectionElements);
+      productPage[sectionName] = sectionElements;  
+    }
+    else {
+      productPage[sectionName] = [];
+    }
   }
   else if (sectionName === 'summary') {
     solutionEx.solution.description = req.body.text || '';
