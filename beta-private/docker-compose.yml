@@ -16,6 +16,8 @@ services:
       - OIDC_CLIENT_SECRET
       - SESSION_SECRET
     restart: always
+    depends_on:
+      - cache
 
   api:
     image: gpitf/catalogue-api:private-beta
@@ -41,6 +43,8 @@ services:
     ports:
       - "3000:80"
     restart: always
+    depends_on:
+      - frontend
 
   cache:
     image: redis:alpine
