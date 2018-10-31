@@ -52,7 +52,7 @@ test('Clicking logo returns to supplier homepage', async t => {
 test('Solutions that are currently onboarding are listed', async t => {
   await t
     .useRole(supplierRole)
-    .expect(firstOnboardingSolutionName.innerText).eql('Really Kool Document Manager | 1')
+    .expect(firstOnboardingSolutionName.textContent).eql('Really Kool Document Manager | 1')
 })
 
 test('Registration page shows correct information accessibly', async t => {
