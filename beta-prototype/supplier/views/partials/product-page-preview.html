@@ -89,16 +89,14 @@
     <h3>
       {{title}}
     </h3>
-    {{#if side-link-text}}
-      {{#if side-link}}
-        <h3>
-            <a href={{side-link}}>{{side-text}}</a>
-        </h3>
-      {{/if}}
-    {{else}}
-      {{#if side-text}}
-        <h3>{{side-text}}</h3>
-      {{/if}}
+    {{#if side-text}}
+      <h3>
+        {{#if side-link}}
+          <a href={{side-link}}>{{side-text}}</a>
+        {{else}}
+          {{side-text}}
+        {{/if}}
+      </h3>
     {{/if}}
   </div>
 {{/inline}}
@@ -116,26 +114,26 @@
   </section>
 
   {{#>section id="summary"}}
-      {{>section-header title="Summary Description" side-link-text="Edit Section" side-link=pageEditLinks.summary}}
+      {{>section-header title="Summary Description" side-text="Edit Section" side-link=pageEditLinks.summary}}
       <p class="description">{{solution.description}}
   {{/section}}
   
   {{#>section id="features"}}
     {{#if productPage.features}}
-      {{>section-header title="Features" side-link-text="Edit Section" side-link=pageEditLinks.features }}
+      {{>section-header title="Features" side-text="Edit Section" side-link=pageEditLinks.features }}
       <ul class="features">
           {{#each productPage.features as |option|}}
             <li>{{option}}</li>
           {{/each}}
       </ul>
     {{else}}
-      {{>section-header title="Features" side-link-text="Add Section" side-link=pageEditLinks.features}}
+      {{>section-header title="Features" side-text="Add Section" side-link=pageEditLinks.features}}
     {{/if}}
   {{/section}}
 
   {{#>section id="integrations"}}
   {{#if productPage.integrations}}
-    {{>section-header title="Integrations" side-link-text="Edit Section" side-link=pageEditLinks.integrations }}
+    {{>section-header title="Integrations" side-text="Edit Section" side-link=pageEditLinks.integrations }}
       <h4>The following is a list of proven integrations</h4>
       <ul class="interop">
         {{#each productPage.integrations as |option|}}
@@ -373,13 +371,13 @@
 
 {{#>section id="about"}}
   {{#if productPage.about}}
-    {{>section-header title="About " side-link-text="Edit Section" side-link=pageEditLinks.about}}
+    {{>section-header title="About " side-text="Edit Section" side-link=pageEditLinks.about}}
     <h3>{{organisationName}}
       <!-- {{#productPage.logoUrl}} <img src="{{.}}">{{/productPage.logoUrl}} -->
     </h3>
     <p class="about">{{productPage.about}}</p>
   {{else}}
-    {{>section-header title="About " side-link-text="Add Section" side-link=pageEditLinks.about}}
+    {{>section-header title="About " side-text="Add Section" side-link=pageEditLinks.about}}
   {{/if}}
 {{/section}}
   

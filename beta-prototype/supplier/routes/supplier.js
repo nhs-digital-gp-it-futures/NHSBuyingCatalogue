@@ -893,19 +893,42 @@ function renderProductPageEditor (req, res, solutionEx, context) {
   ]
   context.csrfToken = req.csrfToken()
   context.productPage = solutionEx.solution.productPage ? JSON.parse(solutionEx.solution.productPage) : {}
-  
-  const pageEditLinkPrefix = `/suppliers/solutions/${req.params.solution_id}/product-page`;
-  context.pageEditLinks = {
-    features: `${pageEditLinkPrefix}/features`,
-    integrations: `${pageEditLinkPrefix}/integrations`,
-    summary: `${pageEditLinkPrefix}/summary`,
-    about: `${pageEditLinkPrefix}/about`
-  }
 
   context.contact = solutionEx.technicalContact;
   
   res.render('supplier/solution-page-edit', context)
 }
+
+app.get('/solutions/:solution_id/product-page/preview', csrfProtection, async (req, res) => {
+  const context = {
+    errors : {}
+  }
+  
+  let solutionEx
+
+  try {
+    // load from session when coming back from preview, if ID is the same
+    solutionEx = req.session.solutionEx && req.session.solutionEx.solution.id === req.params.solution_id
+              ? req.session.solutionEx
+              : await api.get_solution_by_id(req.params.solution_id)
+
+    context.capabilities = _.get(await api.get_all_capabilities(), 'capabilities')
+
+    if (solutionEx.solution.productPage.message) {
+      context.message = await formatting.formatMessagesForDisplay([
+        _.merge({}, solutionEx.solution.productPage.message)
+      ])
+    }
+
+    context.organisationName = _.get(await api.get_org_by_id(solutionEx.solution.organisationId), 'name')
+
+  } catch (err) {
+    context.errors.general = err
+  }
+
+  renderProductPageEditor(req, res, solutionEx, context)
+  
+})
 
 app.get('/solutions/:solution_id/product-page', csrfProtection, async (req, res) => {
   const context = {
@@ -942,6 +965,15 @@ app.get('/solutions/:solution_id/product-page', csrfProtection, async (req, res)
   } catch (err) {
     context.errors.general = err
   }
+
+  const pageEditLinkPrefix = `/suppliers/solutions/${req.params.solution_id}/product-page`;
+  context.pageEditLinks = {
+    features: `${pageEditLinkPrefix}/features`,
+    integrations: `${pageEditLinkPrefix}/integrations`,
+    summary: `${pageEditLinkPrefix}/summary`,
+    about: `${pageEditLinkPrefix}/about`
+  }
+  
   renderProductPageEditor(req, res, solutionEx, context)
 })
 
