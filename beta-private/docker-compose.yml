@@ -7,6 +7,8 @@ services:
     image: gpitf/catalogue-frontend:private-beta
     networks:
       - beta_network
+    ports:
+      - "8000:8000"
     environment:
       - NODE_ENV
       - BASE_URL
