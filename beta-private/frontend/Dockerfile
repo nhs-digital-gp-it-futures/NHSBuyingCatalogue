@@ -1,5 +1,6 @@
 FROM index.docker.io/node:8 AS base
 WORKDIR /home/node/app
+EXPOSE 8000
 
 FROM base AS dependencies
 COPY package.json .
