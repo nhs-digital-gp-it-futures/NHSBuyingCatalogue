@@ -11,13 +11,14 @@
             </label> 
         </fieldset>
         <div class="array-input">
+
+            <h3>Add {{item-name}}</h3>
+            <p class="clarification">{{item-clarification}}</p>
             {{#if errors}}
-                <div class="error">
+                <div class="error-message">
                     {{errors.message}}
                 </div>
             {{/if}}
-            <h3>Add {{item-name}}</h3>
-            <p class="clarification">{{item-clarification}}</p>
             <div>
                 <input id="first-input-element" type="text" name="items" placeholder={{example-item}}>
                 {{# existingData}}
@@ -25,7 +26,7 @@
                 {{/existingData}}
             </div>
             
-            <a class="button" id="add-item-button">+</a> Add {{item-name}} (9 Max)
+            <button type="button" id="add-item-button">+</button> Add {{item-name}} (9 Max)
         </div>
 
     </fieldset>
@@ -52,7 +53,14 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     const radioFieldset = $('#array-toggle');
+    const arrayFieldset = $('.array-input');
+    const yesRadio = $('input[type="radio"][value="yes"]');
 
-    radioFieldset
+    function toggleArrayInput() {
+        arrayFieldset.classList.toggle('hidden', !yesRadio.checked);
+    }
+    radioFieldset.addEventListener('change', toggleArrayInput)
+
+    toggleArrayInput();
 });
 </script>

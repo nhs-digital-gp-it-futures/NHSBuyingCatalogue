@@ -671,3 +671,7 @@ div.solution-page-form fieldset div a.button {
   margin:10px 0px;
   font-weight: bolder;
 }
+
+.error-message {
+  color: var(--color-nhs-dark-red)
+}
