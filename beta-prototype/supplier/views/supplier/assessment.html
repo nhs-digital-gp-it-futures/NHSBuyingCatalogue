@@ -35,11 +35,13 @@
     {{#solution.capabilities}}
     <fieldset id="evidence-{{id}}" class="capability {{statusClass}}">
       <legend>{{ name }} <span class="status">{{status}}</span></legend>
-      <p class="description">
+      <p>
           Provide a video showing how your Solution meets each of this Capabilities’ Epics and Acceptance Criteria. Find all Epics and Acceptance Criteria here: 
         <a href="{{ url }}" target="_blank">View Capability description.</a>
       </p>
-
+      {{#errors.message}}
+      <p class="error-message">{{.}}</p>
+      {{/errors.message}}
       <fieldset class="evidence video" id="video-fieldset-{{id}}">
         <h3>Part 1. Add Video</h3>
         <!-- <p class="label">Upload video to file share platform, and provide link to video here. -->
