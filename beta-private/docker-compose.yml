@@ -7,15 +7,12 @@ services:
     image: gpitf/catalogue-frontend:private-beta
     networks:
       - beta_network
-    ports:
-      - "8000:8000"
     environment:
       - NODE_ENV
       - BASE_URL
       - OIDC_ISSUER_URL
       - OIDC_CLIENT_ID
       - OIDC_CLIENT_SECRET
-    restart: always
 
   api:
     image: gpitf/catalogue-api:private-beta
