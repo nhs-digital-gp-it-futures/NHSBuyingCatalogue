@@ -1,5 +1,4 @@
 FROM index.docker.io/node:8 AS base
-EXPOSE 8000
 WORKDIR /home/node/app
 
 FROM base AS dependencies
