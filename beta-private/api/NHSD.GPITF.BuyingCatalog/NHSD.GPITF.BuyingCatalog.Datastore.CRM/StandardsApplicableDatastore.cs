@@ -2,7 +2,6 @@
 using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using System;
 using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
@@ -17,29 +16,61 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
     }
 
+    private string ResourceBase { get; } = "/StandardsApplicable";
+
     public StandardsApplicable ById(string id)
     {
-      throw new NotImplementedException();
+      return GetInternal(() =>
+      {
+        var request = GetRequest($"{ResourceBase}/ById/{id}");
+        var retval = GetResponse<StandardsApplicable>(request);
+
+        return retval;
+      });
     }
 
     public IEnumerable<StandardsApplicable> BySolution(string solutionId)
     {
-      throw new NotImplementedException();
+      return GetInternal(() =>
+      {
+        var request = GetAllRequest($"{ResourceBase}/BySolution/{solutionId}");
+        var retval = GetResponse<PaginatedList<StandardsApplicable>>(request);
+
+        return retval.Items;
+      });
     }
 
     public StandardsApplicable Create(StandardsApplicable claimedstandard)
     {
-      throw new NotImplementedException();
+      return GetInternal(() =>
+      {
+        var request = GetPutRequest($"{ResourceBase}", claimedstandard);
+        var retval = GetResponse<StandardsApplicable>(request);
+
+        return retval;
+      });
     }
 
     public void Delete(StandardsApplicable claimedstandard)
     {
-      throw new NotImplementedException();
+      GetInternal(() =>
+      {
+        var request = GetDeleteRequest($"{ResourceBase}", claimedstandard);
+        var resp = GetRawResponse(request);
+
+        return 0;
+      });
     }
 
     public void Update(StandardsApplicable claimedstandard)
     {
-      throw new NotImplementedException();
+      GetInternal(() =>
+      {
+        var request = GetPostRequest($"{ResourceBase}", claimedstandard);
+        var resp = GetRawResponse(request);
+
+        return 0;
+      });
     }
   }
 }
