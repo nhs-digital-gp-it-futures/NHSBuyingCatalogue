@@ -46,13 +46,6 @@
         <p>{{.}}</p>
       {{/each}}
     {{/help-reveal}}
-    {{#if (tt 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Validations')}}
-    <ul class="validations">
-    {{#each (tt 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Validations')}}
-      <li>{{.}}</li>
-    {{/each}}
-    </ul>
-    {{/if}}
     <input id="solution.version" type="text" name="solution[version]" value="{{solution.version}}" class="narrow"
       autocomplete="off" maxlength="10"
       {{#if errors.controls.[solution.version]}}aria-invalid="true" aria-errormessage="error-solution.version"{{/if}}>

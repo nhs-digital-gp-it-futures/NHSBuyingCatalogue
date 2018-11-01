@@ -16,7 +16,7 @@
   "Standards Compliance": "Standards Compliance",
   "Standards and Capabilities": "$t(Standard_plural) and $t(Capability_plural)",
   "Buttons": {
-    "Save and continue": "Save and continue"
+    "Save and continue": "Save & continue"
   },
   "Authentication": {
     "Login": "Log In",
