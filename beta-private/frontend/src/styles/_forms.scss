@@ -14,6 +14,10 @@ textarea {
   &.narrow {
     width: 20%;
   }
+
+  .control.invalid & {
+    border-color: $color-input-invalid-border;
+  }
 }
 
 fieldset {
@@ -36,13 +40,13 @@ fieldset {
       width: 100%;
 
       &::before {
-        content: $icon-downward-pointing-arrow;
+        content: $icon-upward-pointing-arrow;
         font-size: smaller;
         padding-right: 1rem;
       }
     }
 
-    &.error {
+    &.invalid {
       border: $border-collapsible-fieldset-error;
 
       > legend {
@@ -58,9 +62,13 @@ fieldset {
       > legend {
         background-color: $color-collapsible-fieldset-legend-collapsed-bg;
         color: $color-collapsible-fieldset-legend-collapsed-fg;
+
+        &::before {
+          content: $icon-downward-pointing-arrow;
+        }
       }
 
-      &.error {
+      &.invalid {
         > legend {
           background-color: $color-collapsible-fieldset-legend-error-collapsed-bg;
           color: $color-collapsible-fieldset-legend-error-collapsed-fg;
@@ -76,7 +84,7 @@ fieldset {
     }
 
     .control {
-      padding: 1rem 3rem;
+      margin: 1rem 3rem;
 
       label {
         font-size: larger;
@@ -97,6 +105,22 @@ fieldset {
         color: $color-collapsible-fieldset-validations-fg;
         font-size: smaller;
         margin: .5em 0;
+      }
+
+      .action {
+        display: none;
+      }
+
+      &.invalid {
+        border-left: 4px solid $color-input-invalid-border;
+        padding-left: .5rem;
+
+        .action {
+          color: $color-input-invalid-message-fg;
+          display: block;
+          font-size: smaller;
+          margin: .5em 0;
+        }
       }
     }
 

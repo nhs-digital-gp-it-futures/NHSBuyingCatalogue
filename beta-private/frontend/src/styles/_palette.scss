@@ -24,6 +24,8 @@ $color-footer-bottom-fg: $color-nhs-white;
 $color-footer-link-fg: $color-nhs-white;
 
 $color-input-border: $color-nhs-blue;
+$color-input-invalid-border: $color-nhs-red;
+$color-input-invalid-message-fg: $color-nhs-red;
 
 $color-collapsible-fieldset-bg: $color-nhs-light-grey;
 $color-collapsible-fieldset-fg: $color-fg;
@@ -48,3 +50,4 @@ $color-help-reveal-summary-fg: $color-nhs-blue;
 $color-help-reveal-contents-bg: $color-bg;
 $color-help-reveal-contents-fg: $color-fg;
 $color-help-reveal-contents-border: $color-nhs-blue;
+

@@ -6,12 +6,18 @@
 </header>
 
 {{#> form}}
-  {{#> collapsible-fieldset legend="Onboarding.Details.Fieldsets.NameDescVersion.Legend"}}
+  {{#> collapsible-fieldset
+    legend="Onboarding.Details.Fieldsets.NameDescVersion.Legend"
+    invalid=errors.fieldsets.NameDescVersion
+  }}
   <p class="preamble">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Preamble'}}</p>
 
-  <div class="control">
+  {{#> control invalid=errors.controls.[solution.name]}}
     <label for="solution.name">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Name.Label'}}</label>
     {{#if (tt 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Name.Validations')}}
+    {{#if errors.controls.[solution.name]}}
+    <p class="action">{{t errors.controls.[solution.name].action}}</p>
+    {{/if}}
     <ul class="validations">
     {{#each (tt 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Name.Validations')}}
       <li>{{.}}</li>
@@ -21,11 +27,14 @@
     <input id="solution.name" type="text" name="solution[name]" value="{{solution.name}}"
       autocomplete="off" aria-required="true" maxlength="60"
       {{#if errors.controls.[solution.name]}}aria-invalid="true" aria-errormessage="error-solution.name"{{/if}}>
-  </div>
+  {{/control}}
 
-  <div class="control">
+  {{#> control invalid=errors.controls.[solution.description]}}
     <label for="solution.description">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Description.Label'}}</label>
-    <p class="info">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Description.Info'}}
+    <p class="info">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Description.Info'}}</p>
+    {{#if errors.controls.[solution.description]}}
+    <p class="action">{{t errors.controls.[solution.description].action}}</p>
+    {{/if}}
     {{#if (tt 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Description.Validations')}}
     <ul class="validations">
     {{#each (tt 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Description.Validations')}}
@@ -36,9 +45,9 @@
     <textarea id="solution.description" name="solution[description]"
       aria-required="true" maxlength="300" rows="5"
       {{#if errors.controls.[solution.description]}}aria-invalid="true" aria-errormessage="error-solution.description"{{/if}}>{{solution.description}}</textarea>
-  </div>
+  {{/control}}
 
-  <div class="control">
+  {{#> control invalid=errors.controls.[solution.version]}}
     <label for="solution.version">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Label'}}</label>
     {{#> help-reveal
       title='Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Help.Title'}}
@@ -49,7 +58,7 @@
     <input id="solution.version" type="text" name="solution[version]" value="{{solution.version}}" class="narrow"
       autocomplete="off" maxlength="10"
       {{#if errors.controls.[solution.version]}}aria-invalid="true" aria-errormessage="error-solution.version"{{/if}}>
-  </div>
+  {{/control}}
   {{/collapsible-fieldset}}
 
   <input type="submit"

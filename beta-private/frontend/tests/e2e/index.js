@@ -77,7 +77,9 @@ test('Registration page validation is correct and accessible', async t => {
     .click(continueButton)
 
     .expect(Selector('#errors #error-solution\\.name').innerText).contains('Solution name is missing')
-    .expect(Selector('#errors #error-solution\\.description').innerText).contains('Solution description is missing')
+    .expect(Selector('#errors #error-solution\\.description').innerText).contains('Summary description is missing')
+    .expect(solutionNameInput.parent('.control.invalid').child('.action').textContent).contains('Please enter a Solution name')
+    .expect(solutionDescriptionInput.parent('.control.invalid').child('.action').textContent).contains('Please enter a Summary description')
 
   await axeCheck(t)
 })

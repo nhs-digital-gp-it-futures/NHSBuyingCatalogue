@@ -3,11 +3,13 @@
     "Solution": {
       "Name": {
         "Missing": "$t(Solution) name is missing",
+        "MissingAction": "Please enter a $t(Solution) name",
         "TooLong": "$t(Solution) name exceeds maximum length of 60 characters"
       },
       "Description": {
-        "Missing": "$t(Solution) description is missing",
-        "TooLong": "$t(Solution) description exceeds maximum length of 300 characters"
+        "Missing": "Summary description is missing",
+        "MissingAction": "Please enter a Summary description",
+        "TooLong": "Summary description exceeds maximum length of 300 characters"
       },
       "Version": {
         "TooLong": "$t(Solution) version exceeds maximum length of 10 characters"
