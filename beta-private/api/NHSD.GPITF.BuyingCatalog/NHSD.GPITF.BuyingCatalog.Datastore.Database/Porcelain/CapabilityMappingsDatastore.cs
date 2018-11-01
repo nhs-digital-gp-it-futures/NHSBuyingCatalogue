@@ -1,9 +1,7 @@
-﻿using Dapper;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
-using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 using System.Linq;
 
@@ -11,9 +9,22 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
 {
   public sealed class CapabilityMappingsDatastore : DatastoreBase<CapabilityMapping>, ICapabilityMappingsDatastore
   {
-    public CapabilityMappingsDatastore(IDbConnectionFactory dbConnectionFactory, ILogger<CapabilityMappingsDatastore> logger, ISyncPolicyFactory policy) :
+    private readonly ICapabilityStandardDatastore _capabilityStandardDatastore;
+    private readonly ICapabilitiesDatastore _capabilitiesDatastore;
+    private readonly IStandardsDatastore _standardsDatastore;
+
+    public CapabilityMappingsDatastore(
+      IDbConnectionFactory dbConnectionFactory,
+      ILogger<CapabilityMappingsDatastore> logger,
+      ISyncPolicyFactory policy,
+      ICapabilityStandardDatastore capabilityStandardDatastore,
+      ICapabilitiesDatastore capabilitiesDatastore,
+      IStandardsDatastore standardsDatastore) :
       base(dbConnectionFactory, logger, policy)
     {
+      _capabilityStandardDatastore = capabilityStandardDatastore;
+      _capabilitiesDatastore = capabilitiesDatastore;
+      _standardsDatastore = standardsDatastore;
     }
 
     public CapabilityMappings GetAll()
@@ -21,41 +32,36 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
       return GetInternal(() =>
       {
         var retval = new CapabilityMappings();
-        const string sql = @"
-select cap.*, '|' as '|', std.*, '|' as '|', cs.*
-from CapabilityStandard cs
-join Capabilities cap on cap.Id = cs.CapabilityId
-join Standards std on std.Id = cs.StandardId
-";
-        _dbConnection.Value.Query<Capabilities, Standards, CapabilityStandard, CapabilityMapping>(sql,
-          (cap, std, cs) =>
+
+        var capStds = _capabilityStandardDatastore.GetAll();
+        var caps = _capabilitiesDatastore.GetAll();
+        var stds = _standardsDatastore.GetAll();
+
+        foreach (var cap in caps)
+        {
+          var thisCapMap = retval.CapabilityMapping.SingleOrDefault(x => x.Capability.Id == cap.Id);
+          if (thisCapMap == null)
           {
-            var thisCapMap = retval.CapabilityMapping.SingleOrDefault(x => x.Capability.Id == cap.Id);
-            if (thisCapMap == null)
+            thisCapMap = new CapabilityMapping
             {
-              thisCapMap = new CapabilityMapping
-              {
-                Capability = cap
-              };
-              retval.CapabilityMapping.Add(thisCapMap);
-            }
+              Capability = cap
+            };
 
-            thisCapMap.OptionalStandard.Add(
-              new OptionalStandard
-              {
-                StandardId = std.Id,
-                IsOptional = cs.IsOptional
-              });
+            var optStds = capStds
+              .Where(cs => cs.CapabilityId == cap.Id)
+              .Select(cs =>
+                new OptionalStandard
+                {
+                  StandardId = cs.StandardId,
+                  IsOptional = cs.IsOptional
+                });
+            thisCapMap.OptionalStandard.AddRange(optStds);
 
-            var thiStd = retval.Standard.SingleOrDefault(x => x.Id == std.Id);
-            if (thiStd == null)
-            {
-              retval.Standard.Add(std);
-            }
+            retval.CapabilityMapping.Add(thisCapMap);
+          }
+        }
 
-            return thisCapMap;
-          },
-          splitOn: "|,|");
+        retval.Standard.AddRange(stds);
 
         return retval;
       });
