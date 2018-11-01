@@ -54,20 +54,28 @@
                  value="{{video_evidence}}">
         </label>
         <p id="video-file-name-{{id}}">{{#if video_evidence}} {{video_evidence}} {{else}} No File Selected {{/if}}</p>
-        <br>
         <button class="video-save" name="action" value="save" type="">Save</button>
+        <br>
+        <p class="description">Enter a timestamp for each epic where the epic is evidenced. </p>
+        <p class="description">For example, Epic 3 at 4:56.</p>
+        <textarea
+          name="video-description[{{id}}]"
+          columns="150"
+          rows="4">{{video_description}}</textarea>
+
+
+
       </fieldset>
 
       <fieldset class="evidence description">
           <h3>Part 2. How does your Solution deliver value for this Capability? </h3>
-          <!-- <p class="label">Upload video to file share platform, and provide link to video here. -->
-          <!-- <a href="{{ filesharePlatformUrl }}" target="_blank">Open file share platform.</a></p> -->
-          <input class="description"
-                 type="textarea"
-                 maxlength="300"
-                 name="evidence_description[{{id}}]"
-                 value="{{evidence_description}}"
-                 style="resize:both;overflow:auto;">
+          <p class="description">300 character limit </p>
+          <textarea 
+            maxlength="300"
+            columns="150"
+            rows="4"
+            name="evidence_description[{{id}}]">{{evidence_description}}</textarea>
+
         </fieldset>
 
     </fieldset>

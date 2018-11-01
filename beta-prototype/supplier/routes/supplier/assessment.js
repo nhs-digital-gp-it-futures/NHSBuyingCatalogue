@@ -42,12 +42,23 @@ app.get('/capabilities', csrfProtection, async (req, res) => {
   const allCapabilities = _.keyBy(capabilities, 'id')
 
   solutionEx.solution.capabilities = _.map(solutionEx.claimedCapability, cap => {
-    const evidence = cap.evidence ? JSON.parse(cap.evidence) : {}
+    let evidence = {};
+    let errors = {}
+
+    try{
+      evidence = cap.evidence ? JSON.parse(cap.evidence) : {}
+    }
+    catch(err) {
+      errors.message = 'Error: Failed to Parse Evidence JSON on the server';
+    }
+
     return {
       ...cap,
       ...allCapabilities[cap.capabilityId],
+      errors : errors,
       evidence: evidence,
       video_evidence: evidence.videoEvidence,
+      video_description : evidence.video_description,
       evidence_description: evidence.evidenceDescription,
       status: solutionEx.solution.status === api.SOLUTION_STATUS.CAPABILITIES_ASSESSMENT
             ? _.get(api.capabilityStatuses, cap.status)
@@ -103,6 +114,7 @@ app.post('/capabilities', csrfProtection, async (req, res) => {
 
     const evidenceJSONString = JSON.stringify({
       videoEvidence: videoEvidence,
+      videoDescription: videoDescription,
       evidenceDescription: evidenceDescription
     });
     if (cap && evidenceJSONString) {
