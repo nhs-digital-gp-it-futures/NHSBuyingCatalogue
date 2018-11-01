@@ -110,6 +110,7 @@ app.post('/capabilities', csrfProtection, async (req, res) => {
     const cap = _.find(solutionEx.claimedCapability, ['capabilityId', capabilityIdToSave])
 
     const videoEvidence = _.get(req.body.video_evidence, capabilityIdToSave, '').trim()
+    const videoDescription = _.get(req.body.video_description, capabilityIdToSave, '').trim()
     const evidenceDescription = _.get(req.body.evidence_description, capabilityIdToSave, '').trim()
 
     const evidenceJSONString = JSON.stringify({
