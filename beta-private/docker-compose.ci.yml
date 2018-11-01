@@ -9,6 +9,11 @@ services:
     volumes:
       - "${VSTS_WORKING_DIR}:/home/node/app/results"
 
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.deploy
+
   oidc-provider:
     image: qlik/simple-oidc-provider
     environment:
