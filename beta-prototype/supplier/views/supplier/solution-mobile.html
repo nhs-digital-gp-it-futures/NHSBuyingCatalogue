@@ -39,17 +39,18 @@
 </div>
 
 <script>
+/* global $ */
 document.addEventListener('DOMContentLoaded', () => {
-  const yesRadio = $('input[type="radio"][value="yes"]');
-  const fieldset = $('fieldset.is-mobile');
-  const complianceNote = $('fieldset.mobile-compliance-note');
+  const yesRadio = $('input[type="radio"][value="yes"]')
+  const fieldset = $('fieldset.is-mobile')
+  const complianceNote = $('fieldset.mobile-compliance-note')
 
-  function toggleComplianceNote() {
+  function toggleComplianceNote () {
     complianceNote.classList.toggle('hidden', !yesRadio.checked)
   }
 
-  fieldset.addEventListener('click', toggleComplianceNote);
+  fieldset.addEventListener('change', toggleComplianceNote)
 
-  toggleComplianceNote();
+  toggleComplianceNote()
 })
 </script>
