@@ -51,3 +51,62 @@ nav.backlink a .title {
 .user > a {
   color:#425563 !important;
 }
+
+#save-nav {
+  display: block;
+  position: static;
+  background-color: var(--color-nhs-blue);
+  text-align: right;
+  padding:0.5em 1em;
+  z-index: 3;
+  /* border-bottom: 2px solid white; */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+
+#save-nav > div a, #save-nav .nav-item{
+  color: var(--color-nhs-white);
+}
+
+#save-nav > div a.button, #save-nav button {
+  background-color: var(--color-nhs-white);
+  color: var(--color-nhs-dark-blue);
+  font-weight: bold;
+  border: 1px solid var(--color-nhs-white);
+  padding: 0.25em 0.75em;
+  border-radius: 4px;
+}
+
+#save-nav > div a.button:hover, #save-nav button:hover{
+  background-color: var(--color-nhs-pale-grey);
+  cursor: pointer;
+}
+
+
+#save-nav div.links {
+  display: flex;
+  justify-content: space-around;
+}
+
+#save-nav div.left, #save-nav div.right {
+  display: flex;
+}
+
+#save-nav .nav-item {
+  padding: 0.25em;
+  margin:0 0.5em;
+}
+
+#save-nav.fixed-nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+#save-nav button:disabled {
+  color: var(--color-nhs-pale-grey)
+}
+
+.hidden {
+  display: none;
+}

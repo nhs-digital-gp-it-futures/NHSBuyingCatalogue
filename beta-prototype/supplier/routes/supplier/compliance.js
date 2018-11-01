@@ -269,7 +269,7 @@ async function complianceEditHandler (req, res) {
       { label: 'Standards Compliance', url: `/suppliers/solutions/${req.params.solution_id}/compliance` }
     ],
     errors: {},
-    csrfToken: req.csrfToken()
+    csrfToken: req.csrfToken(),
   }
 
   try {
@@ -294,7 +294,6 @@ async function complianceEditHandler (req, res) {
   } catch (err) {
     context.errors.general = err
   }
-
 
   res.render('supplier/compliance-edit', context)
 }
@@ -327,12 +326,21 @@ async function complianceEditPostHandler (req, res) {
     const linkToSave = _.get(req.body, ['evidence', stdIdToUpdate], '')
     const messageToSave = _.get(req.body, ['message', stdIdToUpdate], '')
 
-    evidence.owner = _.get(req.body, ['owner', stdIdToUpdate], '')
+    if(evidence) {
+      evidence.owner = _.get(req.body, ['owner', stdIdToUpdate], '')
+    }
 
     if (req.body.save) {
-      evidence.savedLink = linkToSave
-      evidence.savedMessage = messageToSave
-      redirect = `${req.baseUrl}#std-${stdIdToUpdate}`
+      if(evidence){
+        evidence.savedLink = linkToSave
+        evidence.savedMessage = messageToSave
+      }
+      if (req.body.action === 'saveAndExit') {
+        redirect = `${req.baseUrl}`
+      }
+      else{
+        redirect = `${req.baseUrl}#std-${stdIdToUpdate}`
+      }
     } else {
       // submitting pushes the current link and message into the submission array
       delete evidence.savedLink
@@ -346,7 +354,9 @@ async function complianceEditPostHandler (req, res) {
       }]
 
       evidence.submissions = _.concat(submission, evidence.submissions || [])
+
       redirect = `${req.baseUrl}?submitted&std=${_.find(standards, ['id', stdIdToUpdate]).name}`
+
     }
 
     stdToUpdate.evidence = JSON.stringify(evidence)

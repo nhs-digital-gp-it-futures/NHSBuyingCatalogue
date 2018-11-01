@@ -119,6 +119,10 @@
   width: 90%;
 }
 
+#assessment form fieldset textarea {
+  width: 75%;
+}
+
 #file-name, #file-input-label {
   display:inline-block;
 }
@@ -262,4 +266,15 @@ form fieldset.evidence label input.file-input {
 
 #capability-assessment-introduction > form > fieldset {
   border: none;
+}
+
+p.notice {
+  width:70%;
+  font-size: var(--font-size-high-density);
+  color: var(--color-nhs-black)
+}
+
+p.description {
+  font-size: var(--font-size-high-density);
+  color: var(--color-nhs-mid-grey);
 }

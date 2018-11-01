@@ -1,0 +1,12 @@
+<div class="solution-page-form">{{#> build-form-page
+    section-title="Features"
+    item-name-plural="features"
+}}
+    {{> array-fieldset
+        item-name="feature"
+        example-item="Responsive Design"
+        item-clarification="Features typically include techincal features, for example, ‘real-time data sharing’ or ‘version management’."
+        existingData=productPage.features
+    }}
+{{/build-form-page}}
+</div>

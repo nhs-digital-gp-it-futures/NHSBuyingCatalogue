@@ -1,0 +1,14 @@
+<div class="solution-page-form">
+{{#> build-form-page
+    section-title="Integrations"
+    item-name-plural="integrations"
+    section-clarification="Please contact gpitfutures@nhs.net for information on what a proven integration is."
+}}
+    {{> array-fieldset
+        item-name="integration"
+        item-clarification="Features typically include techincal features, for example, ‘real-time data sharing’ or ‘version management’."
+        example-item="EMIS"
+        existingData=productPage.integrations
+    }}
+{{/build-form-page}}
+</div>

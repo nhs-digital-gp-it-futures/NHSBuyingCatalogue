@@ -1,0 +1,16 @@
+<div class="solution-page-form">
+{{#> build-form-page
+    section-title="Summary"
+    section-clarification="This is the text you provided during Stage 1, Solution Registration. You may edit as you wish before it appears on your Solution page.  "
+}}
+
+{{> text-area-fieldset
+    form-title="Solution Summary"
+    title-clarification="Your Summary description will be displayed on your Solution page and in search results, but it will not affect search ranking."
+    field-length=300
+    example-text="What features does your solution provide, and how will it benefit buyers of it."
+    form-data=solution.description
+}}
+
+{{/build-form-page}}
+</div>

@@ -157,14 +157,14 @@ document.addEventListener('DOMContentLoaded', () => {
   enableSubmitIfAllStandardsHaveEvidence()
 
   function enableSubmitIfAllStandardsHaveEvidence () {
-    const elSubmit = $('.controls [name^=submit]')
-    if (elSubmit) {
+    const elSubmit = $$('.controls [name^=submit], [name=action]')
+    elSubmit.forEach((elSubmit) => {
       const allEvidenceInputs = $$('input[name^=evidence], select[name^=owner]')
       const allEvidenceValues = allEvidenceInputs.map(el => el.value.trim()).filter(_ => _)
       const fileTextEle = $('#file-name')
       const alreadyUploaded = fileTextEle.innerText && fileTextEle.innerText !== 'No File Selected';
       elSubmit.disabled = allEvidenceInputs.length !== allEvidenceValues.length
-    }
+    })
   }
 
   $$('fieldset.standard-evidence .evidence .controls .edit').forEach(el => {

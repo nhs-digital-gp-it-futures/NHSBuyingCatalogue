@@ -37,17 +37,7 @@ function enrichContextForProductPage (context, solutionEx) {
     })
   )
 
-  context.benefitOptions = [
-    'Export functionality',
-    'Customisable reporting suite',
-    'GDPR compliant',
-    'Responsive design for accessing via all screen sizes - mobile, desktop, etc',
-    'Time saving for GPs and staff',
-    'User role & permission management'
-  ]
-
   // build lists of options for specs
-  context.interopOptions = ['EMIS', 'TPP', 'Vision', 'Microtest']
   context.requirementOptions = [
     {group: 'Software add-on or Extension', items:['Yes']},
     {group: 'Cloud deployment model', items:['Private Cloud']},
@@ -56,17 +46,11 @@ function enrichContextForProductPage (context, solutionEx) {
     {group: 'Miscellaneous', items: ['Users must have internet connectivity', 'Users must have access to a common browser platform']}
   ]
 
-
-  function boltSolutionPricing(context) {
+    // placeholder data
     context.pricing = '£ / max per patient'
-  }
 
-  function boltCommercialArrangements(context){
+    // placeholder data
     context.commercialArrangements = 'NHS 1.0';
-  }
-
-  boltSolutionPricing(context);
-  boltCommercialArrangements(context);
 
   // construct the optional sets from the product page data
   const placeholderServiceMap = {
@@ -158,6 +142,7 @@ function enrichContextForProductPage (context, solutionEx) {
     'additional-services': mapServices('additional-services', placeholderServiceMap)
   }
 
+
 }
 
 async function enrichContextForProductPagePreview (context, solutionEx) {
@@ -181,14 +166,6 @@ async function enrichContextForProductPagePreview (context, solutionEx) {
     })
     .value()
 
-  // process optionals for display
-  context.optionals['additional-services'] = _.map(
-    _.filter(context.optionals['additional-services'], opt => opt.enabled || opt.disabled),
-    opt => ({
-      ...opt,
-      value: opt.enabled ? 'yes' : 'no'
-    })
-  )
 }
 
 module.exports = {
