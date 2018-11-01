@@ -5,13 +5,13 @@
     {{#if pageHasForm}}
     <div class="links">
         <div class="left">
-            <button id="nav-save-button" name="action" value="save" type="submit">Save</button>
+            <button class="nav-bar-button" id="nav-save-button" name="action" value="save" type="submit">Save</button>
             {{#if solution.name}} <div class="nav-item">{{solution.name}}</div> {{/if}}
             {{#if nav-title}} <div class="nav-item">{{nav-title}}</div> {{/if}}
         </div>
         <div class="right">
             <a href="#support" class="nav-item">Support</a>
-            <button id="nav-save-exit-button" name="action" value="saveAndExit" type="submit">Save &amp; Exit</button>
+            <button class="nav-bar-button" id="nav-save-exit-button" name="action" value="saveAndExit" type="submit">Save &amp; Exit</button>
         </div>
     </div>
 
@@ -51,12 +51,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const pageForms = document.forms;
-    const buttons = $$('button');
+    const buttons = $$('button.nav-bar-button');
     buttons.forEach((button) => {
         button.addEventListener('click', () => {
             Array.from(document.forms).forEach((form) => {
                 const buttonClone = button.cloneNode(true);
                 button.parentElement.insertBefore(buttonClone, button)
+                button.classList.add('hidden')
                 form.appendChild(button); // Appending the clone doesn't work for some reason.
                 form.submit();
             });
