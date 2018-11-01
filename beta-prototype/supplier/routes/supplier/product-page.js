@@ -166,14 +166,6 @@ async function enrichContextForProductPagePreview (context, solutionEx) {
     })
     .value()
 
-  // process optionals for display
-  // context.services['additional-services'] = _.map(
-  //   _.filter(context.services['additional-services'], opt => opt.enabled || opt.disabled),
-  //   opt => ({
-  //     ...opt,
-  //     value: opt.enabled ? 'yes' : 'no'
-  //   })
-  // )
 }
 
 module.exports = {
