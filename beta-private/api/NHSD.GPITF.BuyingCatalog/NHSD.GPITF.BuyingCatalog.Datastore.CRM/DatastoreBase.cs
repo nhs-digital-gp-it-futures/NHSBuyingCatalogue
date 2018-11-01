@@ -100,6 +100,14 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       return request;
     }
 
+    protected RestRequest GetDeleteRequest(string path, object body)
+    {
+      var request = GetRequest(path, body);
+      request.Method = Method.DELETE;
+
+      return request;
+    }
+
     protected IRestResponse GetRawResponse(RestRequest request)
     {
       return _crmConnection.Execute(request);
