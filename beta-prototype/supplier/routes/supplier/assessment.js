@@ -58,7 +58,7 @@ app.get('/capabilities', csrfProtection, async (req, res) => {
       errors : errors,
       evidence: evidence,
       video_evidence: evidence.videoEvidence,
-      video_description : evidence.video_description,
+      video_description : evidence.videoDescription,
       evidence_description: evidence.evidenceDescription,
       status: solutionEx.solution.status === api.SOLUTION_STATUS.CAPABILITIES_ASSESSMENT
             ? _.get(api.capabilityStatuses, cap.status)

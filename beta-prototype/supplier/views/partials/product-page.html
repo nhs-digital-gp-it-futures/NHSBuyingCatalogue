@@ -107,7 +107,7 @@
 
   <section id="title">
     <h2>
-      {{#if ^isPublished}}<a>[Draft]</a> {{/if}} {{solution.name}}, {{solution.version}}
+      {{#unless isPublished}}<a>[Draft]</a> {{/unless}} {{solution.name}}, {{solution.version}}
     </h2>
   </section>
 
