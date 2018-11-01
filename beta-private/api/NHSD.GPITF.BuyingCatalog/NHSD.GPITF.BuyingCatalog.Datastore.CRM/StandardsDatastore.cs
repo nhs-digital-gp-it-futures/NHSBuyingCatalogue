@@ -3,8 +3,6 @@ using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
@@ -18,11 +16,13 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
     }
 
+    private string ResourceBase { get; } = "/Standards";
+
     public IEnumerable<Standards> ByCapability(string capabilityId, bool isOptional)
     {
       return GetInternal(() =>
       {
-        var request = GetRequest($"/Standard/ByCapability/{capabilityId}");
+        var request = GetAllRequest($"{ResourceBase}/ByCapability/{capabilityId}");
         request.AddQueryParameter("isOptional", isOptional.ToString().ToLowerInvariant());
         var retval = GetResponse<PaginatedList<Standards>>(request);
 
@@ -34,7 +34,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        var request = GetRequest($"/Standard/ByFramework/{frameworkId}");
+        var request = GetAllRequest($"{ResourceBase}/ByFramework/{frameworkId}");
         var retval = GetResponse<PaginatedList<Standards>>(request);
 
         return retval.Items;
@@ -45,7 +45,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        var request = GetRequest($"/Standard/ById/{id}");
+        var request = GetRequest($"{ResourceBase}/ById/{id}");
         var retval = GetResponse<Standards>(request);
 
         return retval;
@@ -56,9 +56,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        var request = GetPostRequest("/Standard/ByIds", ids);
-        request.AddQueryParameter("pageIndex", "1");
-        request.AddQueryParameter("pageSize", int.MaxValue.ToString(CultureInfo.InvariantCulture));
+        var request = GetAllPostRequest($"{ResourceBase}/ByIds", ids);
         var retval = GetResponse<PaginatedList<Standards>>(request);
 
         return retval.Items;
@@ -69,9 +67,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        var request = GetRequest("/Standard");
-        request.AddQueryParameter("pageIndex", "1");
-        request.AddQueryParameter("pageSize", int.MaxValue.ToString(CultureInfo.InvariantCulture));
+        var request = GetAllRequest($"{ResourceBase}");
         var retval = GetResponse<PaginatedList<Standards>>(request);
 
         return retval.Items;

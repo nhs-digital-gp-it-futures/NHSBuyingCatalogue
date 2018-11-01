@@ -8,6 +8,7 @@ using Polly;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
@@ -59,6 +60,14 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       return request;
     }
 
+    protected RestRequest GetAllRequest(string path)
+    {
+      var request = GetRequest(path);
+      AddGetAllParameters(request);
+
+      return request;
+    }
+
     protected RestRequest GetRequest(string path, object body)
     {
       var request = GetRequest(path);
@@ -71,6 +80,14 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       var request = GetRequest(path, body);
       request.Method = Method.POST;
+
+      return request;
+    }
+
+    protected RestRequest GetAllPostRequest(string path, object body)
+    {
+      var request = GetPostRequest(path, body);
+      AddGetAllParameters(request);
 
       return request;
     }
@@ -94,6 +111,15 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       var retval = JsonConvert.DeserializeObject<TOther>(resp.Content);
 
       return retval;
+    }
+
+    private static void AddGetAllParameters(RestRequest request)
+    {
+      const int StartPageIndex = 1;
+      const int GetAllPageSize = 2000;
+
+      request.AddQueryParameter("PageIndex", StartPageIndex.ToString(CultureInfo.InvariantCulture));
+      request.AddQueryParameter("PageSize", GetAllPageSize.ToString(CultureInfo.InvariantCulture));
     }
   }
 }

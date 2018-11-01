@@ -17,23 +17,34 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     /// 1-based index of which page this page
     /// Defaults to 1
     /// </summary>
-    public int PageIndex { get; private set; }
+    // TODO   should not be nullable
+    public int? PageIndex { get; set; }
 
     /// <summary>
     /// Total number of pages based on <see cref="PageSize"/>
     /// </summary>
-    public int TotalPages { get; private set; }
+    // TODO   should not be nullable
+    public int? TotalPages { get; set; }
 
     /// <summary>
     /// Maximum number of items in this page
     /// Defaults to 20
     /// </summary>
-    public int PageSize { get; private set; }
+    // TODO   should not be nullable
+    public int? PageSize { get; set; }
 
     /// <summary>
     /// List of items
     /// </summary>
-    public IEnumerable<T> Items { get; private set; }
+    public IEnumerable<T> Items { get; set; }
+
+    /// <summary>
+    /// public constructor required for JSON deserialisation
+    /// </summary>
+    // TODO   should be removed - use Create()
+    public PaginatedList()
+    {
+    }
 
     private PaginatedList(IEnumerable<T> items, int count, int pageIndex, int pageSize)
     {

@@ -40,14 +40,11 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 
     public IRestClient Get()
     {
-      var clientCredential = new ClientCredential(ClientId, Secret);
-      var authContext = new AuthenticationContext(AuthorityUri);
-      var accessToken = authContext.AcquireTokenAsync(ResourceUri, clientCredential).Result;
-      var authenticator = new OAuth2AuthorizationRequestHeaderAuthenticator(accessToken.CreateAuthorizationHeader());
-      var client = new RestClient(ServiceUri)
-      {
-        Authenticator = authenticator
-      };
+      //var clientCredential = new ClientCredential(ClientId, Secret);
+      //var authContext = new AuthenticationContext(AuthorityUri);
+      //var accessToken = authContext.AcquireTokenAsync(ResourceUri, clientCredential).Result;
+      //var authenticator = new OAuth2AuthorizationRequestHeaderAuthenticator(accessToken.CreateAuthorizationHeader());
+      var client = new RestClient(ServiceUri);
 
       return client;
     }
