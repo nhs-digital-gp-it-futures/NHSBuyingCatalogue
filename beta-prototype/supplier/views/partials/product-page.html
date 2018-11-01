@@ -374,9 +374,7 @@
 {{#>section id="about"}}
   {{#if productPage.about}}
     {{>section-header title="About " side-link-text="Edit Section" side-link=pageEditLinks.about}}
-    <h3>{{organisationName}}
-      <!-- {{#productPage.logoUrl}} <img src="{{.}}">{{/productPage.logoUrl}} -->
-    </h3>
+    <h3>{{organisationName}}</h3>
     <p class="about">{{productPage.about}}</p>
   {{else}}
     {{>section-header title="About " side-link-text="Add Section" side-link=pageEditLinks.about}}
@@ -415,19 +413,6 @@
   {{/contact}}
 {{/section}}
 
-  <!-- {{#if productPage.case-study}}
-  <section id="case-studies" class="optional">
-    <h3>Case Studies</h3>
-    <ul class="case-studies">
-      {{#productPage.case-study}}
-      <li>
-        <span class="label">{{title}}</span>
-        <span class="value"><a href="/dummy.pdf" target="_blank">📄 download PDF</a></span>
-      </li>
-      {{/productPage.case-study}}
-    </ul>
-  </section>
-  {{/if}} -->
 {{/inline}}
 
 <div class="page-container">
