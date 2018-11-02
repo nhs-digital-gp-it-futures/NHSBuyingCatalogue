@@ -56,7 +56,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
         Method = Method.GET
       };
       request.AddHeader("Content-Type", "application/json");
-      request.AddHeader("Authorization", "Bearer " + _crmFactory.GetAccessToken()?.access_token);
+      request.AddHeader("Authorization", $"{_crmFactory.GetAccessToken()?.token_type} {_crmFactory.GetAccessToken()?.access_token}");
 
       return request; 
     }
