@@ -26,17 +26,17 @@ WORKDIR /src/NHSD.GPITF.BuyingCatalog
 RUN dotnet build -c Release -o /app
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.Datastore.Database
-RUN dotnet build -c Release -o /app
+RUN dotnet build -c Release -o
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.Datastore.Database.Tests
-RUN dotnet build -c Release -o /app
+RUN dotnet build -c Release -o
 RUN dotnet test -c Release
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.Datastore.Database.Importer
-RUN dotnet build -c Release -o /app
+RUN dotnet build -c Release -o
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.Datastore.CRM
-RUN dotnet build -c Release
+RUN dotnet build -c Release /app
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.Logic
 RUN dotnet build -c Release -o /app
