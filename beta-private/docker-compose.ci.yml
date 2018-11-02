@@ -7,7 +7,7 @@ services:
       target: test
     command: npm run test:ci
     volumes:
-      - ".:/home/node/app/results"
+      - .:/home/node/app/results
 
   nginx:
     build:
