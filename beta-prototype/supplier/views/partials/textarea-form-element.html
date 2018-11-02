@@ -39,7 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateForm(evt) {
         const hasInput = !!triggeringField.value
-        console.log(hasInput)
         dependantFieldset.classList.toggle('hidden', !hasInput);
     }
 

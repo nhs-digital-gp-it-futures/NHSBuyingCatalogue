@@ -4,7 +4,7 @@
     "inputs" : [
         {
             "type":"radio-form-element",
-            "name":"first-radio-element",
+            "name":"has-user-support",
             "title":"Do you want to add service scope to your Solution page?",
             "clarification":"Service scope is 4 parts. You can include as many or few as you wish. Sections that are left blank will not be displayed on your Solution page. ",
             "value":"no",
@@ -56,6 +56,14 @@
                     "value": "",
                     "placeholder":"Really Kool Document Manager is one of the most popular document management suites in the UK.",
                     "character-limit":300
+                },
+                {
+                    "type":"array-form-element",
+                    "name":"system-requirements",
+                    "title":"4. What system requirements does your Solution have?",
+                    "clarification":"System requirements might be specific versions of browers or operating systems.",
+                    "value": [],
+                    "maximum": 10
                 }
             ]
         }

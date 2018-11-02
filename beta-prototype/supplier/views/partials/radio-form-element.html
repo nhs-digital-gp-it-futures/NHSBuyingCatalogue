@@ -35,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const triggeringFieldset = $(triggeringFieldsetID);
 
     const checkedValue = "{{value}}";
-    console.log('checked value', checkedValue)
     const optionToCheck = $(`input[name=${"{{name}}"}][value=${checkedValue}]`)
     optionToCheck.checked = true;
 
