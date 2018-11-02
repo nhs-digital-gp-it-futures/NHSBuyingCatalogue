@@ -1,27 +1,31 @@
 ﻿using Microsoft.Extensions.Logging;
-using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
+using Polly;
+using System;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
 {
-  public sealed class CapabilityMappingsDatastore : DatastoreBase<CapabilityMapping>, ICapabilityMappingsDatastore
+  // TODO   refactor into separate assembly NHSD.GPITF.BuyingCatalog.Meta.Porcelain
+  public sealed class CapabilityMappingsDatastore : ICapabilityMappingsDatastore
   {
+    private readonly ILogger<CapabilityMappingsDatastore> _logger;
+    private readonly ISyncPolicy _policy;
     private readonly ICapabilityStandardDatastore _capabilityStandardDatastore;
     private readonly ICapabilitiesDatastore _capabilitiesDatastore;
     private readonly IStandardsDatastore _standardsDatastore;
 
     public CapabilityMappingsDatastore(
-      IDbConnectionFactory dbConnectionFactory,
       ILogger<CapabilityMappingsDatastore> logger,
       ISyncPolicyFactory policy,
       ICapabilityStandardDatastore capabilityStandardDatastore,
       ICapabilitiesDatastore capabilitiesDatastore,
-      IStandardsDatastore standardsDatastore) :
-      base(dbConnectionFactory, logger, policy)
+      IStandardsDatastore standardsDatastore)
     {
+      _logger = logger;
+      _policy = policy.Build(_logger);
       _capabilityStandardDatastore = capabilityStandardDatastore;
       _capabilitiesDatastore = capabilitiesDatastore;
       _standardsDatastore = standardsDatastore;
@@ -65,6 +69,11 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
 
         return retval;
       });
+    }
+
+    private TOther GetInternal<TOther>(Func<TOther> get)
+    {
+      return _policy.Execute(get);
     }
   }
 }
