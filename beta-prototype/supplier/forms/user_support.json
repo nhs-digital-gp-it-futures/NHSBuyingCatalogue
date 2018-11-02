@@ -1,0 +1,39 @@
+{
+    "name": "test_form",
+    "title": "Test Form",
+    "inputs" : [
+        {
+            "type":"radio-form-element",
+            "name":"first-radio-element",
+            "title":"First Radio",
+            "options":[
+                {"value":"yes", "label":"Yes"},
+                {"value":"yesWithCost", "label":"Yes, With Cost."},
+                {"value":"no", "label":"No"}
+            ],
+            "dependant-on" : ["yes", "yesWithCost"],
+            "dependants":[
+                {
+                    "type":"radio-form-element",
+                    "name":"dependant-radio-element",
+                    "title":"Choose an Option",
+                    "options":[
+                        {"value":"a", "label":"A"},
+                        {"value":"b", "label":"B"},
+                        {"value":"c", "label":"C"}
+                    ]
+                }
+            ]
+        },
+        {
+            "type":"radio-form-element",
+            "name":"dependant-radio-element",
+            "title": "Choose a Storage Suffix",
+            "options":[
+                {"value":"giga", "label":"GB"},
+                {"value":"mega", "label":"MB"},
+                {"value":"kilo", "label":"KB"}
+            ]
+        }
+    ]
+}

@@ -971,9 +971,10 @@ app.get('/solutions/:solution_id/product-page', csrfProtection, async (req, res)
     features: `${pageEditLinkPrefix}/features`,
     integrations: `${pageEditLinkPrefix}/integrations`,
     summary: `${pageEditLinkPrefix}/summary`,
-    about: `${pageEditLinkPrefix}/about`
+    about: `${pageEditLinkPrefix}/about`,
+    user_support: `${pageEditLinkPrefix}/user_support`,
   }
-  
+
   renderProductPageEditor(req, res, solutionEx, context)
 })
 
@@ -1079,6 +1080,10 @@ app.get('/solutions/:solution_id/product-page/:section_name', csrfProtection, as
 
   context.productPage = productPage;
   context.solution = solutionEx.solution;
+
+  const form = require(`../forms/${req.params.section_name}.json`)
+
+  context.form = form;
 
   res.render(`supplier/product-page/${req.params.section_name}`, context)
 });

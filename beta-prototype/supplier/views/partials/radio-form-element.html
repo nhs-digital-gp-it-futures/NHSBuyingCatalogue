@@ -1,0 +1,19 @@
+<fieldset id={{id}} class="radio-fieldset">
+    {{#title}}<h3>{{.}}</h3>{{/title}}
+    {{#options}}
+        <label>
+            {{#if default}} 
+                <input type="radio" name={{name}} value={{value}} checked>
+            {{else}}
+                <input type="radio" name={{name}} value={{value}} >
+            {{/if}}
+            {{#label}} {{.}} {{/label}}
+        </label>
+    {{/options}}
+    
+    <p>Check one of {{#dependant-on}} {{.}}, {{/dependant-on}} to display rest of form.</p>
+
+    {{#dependants}}
+        {{> (lookup . 'type')}}
+    {{/dependants}}
+</fieldset>
