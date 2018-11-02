@@ -9,15 +9,19 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
   public sealed class RestClientFactory : IRestClientFactory
   {
+    private static readonly object _lockObject = new object();
+
     private readonly string ApiUri;
     private readonly string AccessTokenUri;
 
     private readonly string ClientId;
     private readonly string ClientSecret;
 
+    private AccessToken _cachedAccessToken;
+
     public RestClientFactory(IConfiguration config)
     {
-    // read out of user secret or environment
+      // read out of user secret or environment
       ApiUri = config["CRM:ApiUri"] ?? Environment.GetEnvironmentVariable("CRM:ApiUri");
       AccessTokenUri = config["CRM:AccessTokenUri"] ?? Environment.GetEnvironmentVariable("CRM:AccessTokenUri");
 
@@ -32,6 +36,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       {
         throw new ConfigurationErrorsException("Missing CRM configuration - check UserSecrets or environment variables");
       }
+
+      _cachedAccessToken = GetAccessToken();
     }
 
     public IRestClient GetRestClient()
@@ -40,6 +46,22 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     }
 
     public AccessToken GetAccessToken()
+    {
+      lock (_lockObject)
+      {
+        _cachedAccessToken = _cachedAccessToken ?? CreateAccessToken();
+
+        var expiry = _cachedAccessToken.CreatedOn.AddSeconds(_cachedAccessToken.expires_in);
+        if (DateTime.UtcNow >= expiry)
+        {
+          _cachedAccessToken = CreateAccessToken();
+        }
+
+        return _cachedAccessToken;
+      }
+    }
+
+    private AccessToken CreateAccessToken()
     {
       var restclient = new RestClient(AccessTokenUri);
       var request = new RestRequest() { Method = Method.POST };

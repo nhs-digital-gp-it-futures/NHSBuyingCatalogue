@@ -1,4 +1,6 @@
-﻿namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
+﻿using System;
+
+namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
   public sealed class AccessToken
   {
@@ -16,5 +18,10 @@
     /// The token expiry in seconds.
     /// </summary>
     public int expires_in { get; set; }
+
+    /// <summary>
+    /// UTC time when this access token was created
+    /// </summary>
+    public DateTime CreatedOn { get; } = DateTime.UtcNow;
   }
 }
