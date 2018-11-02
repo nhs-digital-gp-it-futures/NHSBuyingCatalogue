@@ -30,8 +30,7 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     /// Maximum number of items in this page
     /// Defaults to 20
     /// </summary>
-    // TODO   should not be nullable
-    public int? PageSize { get; set; }
+    public int PageSize { get; set; }
 
     /// <summary>
     /// List of items
