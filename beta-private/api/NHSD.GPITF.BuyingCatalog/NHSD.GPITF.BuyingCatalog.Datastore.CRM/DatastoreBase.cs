@@ -130,5 +130,20 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       request.AddQueryParameter("PageIndex", StartPageIndex.ToString(CultureInfo.InvariantCulture));
       request.AddQueryParameter("PageSize", GetAllPageSize.ToString(CultureInfo.InvariantCulture));
     }
+
+    protected static string UpdateId(string proposedId)
+    {
+      if (Guid.Empty.ToString() == proposedId)
+      {
+        return Guid.NewGuid().ToString();
+      }
+
+      if (string.IsNullOrWhiteSpace(proposedId))
+      {
+        return Guid.NewGuid().ToString();
+      }
+
+      return proposedId;
+    }
   }
 }

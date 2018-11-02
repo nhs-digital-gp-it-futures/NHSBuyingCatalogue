@@ -44,6 +44,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
+        claimedstandard.Id = UpdateId(claimedstandard.Id);
         var request = GetPostRequest($"{ResourceBase}", claimedstandard);
         var retval = GetResponse<StandardsApplicable>(request);
 

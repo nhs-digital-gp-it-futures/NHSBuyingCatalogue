@@ -55,6 +55,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
+        solution.Id = UpdateId(solution.Id);
         var request = GetPostRequest($"{ResourceBase}", solution);
         var retval = GetResponse<Solutions>(request);
 

@@ -44,6 +44,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
+        claimedcapability.Id = UpdateId(claimedcapability.Id);
         var request = GetPostRequest($"{ResourceBase}", claimedcapability);
         var retval = GetResponse<CapabilitiesImplemented>(request);
 

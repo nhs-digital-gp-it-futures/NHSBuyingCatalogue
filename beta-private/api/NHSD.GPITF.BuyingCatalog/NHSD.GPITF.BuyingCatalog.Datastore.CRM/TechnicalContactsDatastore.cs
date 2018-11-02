@@ -33,6 +33,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
+        techCont.Id = UpdateId(techCont.Id);
         var request = GetPostRequest($"{ResourceBase}", techCont);
         var retval = GetResponse<TechnicalContacts>(request);
 
