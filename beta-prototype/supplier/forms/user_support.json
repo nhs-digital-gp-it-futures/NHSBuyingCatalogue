@@ -9,7 +9,7 @@
             "options":[
                 {"value":"yes", "label":"Yes"},
                 {"value":"yesWithCost", "label":"Yes, With Cost."},
-                {"value":"no", "label":"No", "default":true}
+                {"value":"no", "label":"No", "checked":true}
             ],
             "dependant-on" : ["yes", "yesWithCost"],
             "dependants":[
@@ -19,7 +19,7 @@
                     "title":"Choose an Option",
                     "options":[
                         {"value":"a", "label":"A"},
-                        {"value":"b", "label":"B", "default":true},
+                        {"value":"b", "label":"B", "checked":true},
                         {"value":"c", "label":"C"}
                     ],
                     "dependant-on" : ["a", "c"],
@@ -29,7 +29,7 @@
                             "name":"another-dependant-radio-element",
                             "title":"Choose an Option",
                             "options":[
-                                {"value":"a", "label":"A","default":true},
+                                {"value":"a", "label":"A","checked":true},
                                 {"value":"b", "label":"B"},
                                 {"value":"c", "label":"C"}
                             ]
@@ -40,10 +40,10 @@
         },
         {
             "type":"radio-form-element",
-            "name":"dependant-radio-element",
+            "name":"some-other-radio-element",
             "title": "Choose a Storage Suffix",
             "options":[
-                {"value":"giga", "label":"GB"},
+                {"value":"giga", "label":"GB", "checked":true},
                 {"value":"mega", "label":"MB"},
                 {"value":"kilo", "label":"KB"}
             ]
