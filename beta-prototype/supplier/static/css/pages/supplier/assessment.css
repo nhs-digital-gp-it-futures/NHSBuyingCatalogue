@@ -141,12 +141,17 @@ form fieldset.evidence label input.file-input {
 }
 
 #file-input-label, .file-input {
-  background:white;
-  border: solid 2px var(--color-nhs-blue);
-  color: var(--color-nhs-blue);
+  background:var(--color-nhs-blue);
+  color: var(--color-nhs-white);
+  border: 1px solid var(--color-nhs-dark-blue);
   cursor: pointer;
   padding:0.25em 2em;
 }
+
+#file-input-label, .file-input:hover {
+  box-shadow: 2px 2px 3px 0.5px var(--color-button-active-shadow);
+}
+
 
 #assessment form fieldset.capability .controls {
   padding: 0 3em;
