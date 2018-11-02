@@ -123,7 +123,7 @@
                         },
                         {
                             "type":"textarea-form-element",
-                            "name":"ticketing-response-info",
+                            "name":"web-testing-info",
                             "title":"3c.  Describe any web chat testing you've done with assistive technology users. ",
                             "value": "",
                             "placeholder":"Really Kool Document Manager is one of the most popular document management suites in the UK.",
@@ -133,7 +133,7 @@
                 },
                 {
                     "type":"radio-form-element",
-                    "name":"phone-support",
+                    "name":"on-site-support",
                     "title": "4. Do you provide on-site support? ",
                     "value":"no",
                     "options":[
