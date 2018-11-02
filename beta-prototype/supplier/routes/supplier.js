@@ -973,6 +973,7 @@ app.get('/solutions/:solution_id/product-page', csrfProtection, async (req, res)
     summary: `${pageEditLinkPrefix}/summary`,
     about: `${pageEditLinkPrefix}/about`,
     user_support: `${pageEditLinkPrefix}/user-support`,
+    service_scope: `${pageEditLinkPrefix}/service-scope`,
   }
 
   renderProductPageEditor(req, res, solutionEx, context)

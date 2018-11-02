@@ -5,8 +5,8 @@
         {
             "type":"radio-form-element",
             "name":"has-user-support",
-            "title":"Do you want to add service scope to your Solution page?",
-            "clarification":"Service scope is 4 parts. You can include as many or few as you wish. Sections that are left blank will not be displayed on your Solution page. ",
+            "title":"Do you want to add user support information to your Solution page?  ",
+            "clarification":"Questions that you leave blank will not be displayed on your Solution page.",
             "value":"no",
             "options":[
                 {"value":"yes", "label":"Yes"},
@@ -16,54 +16,150 @@
             "dependants":[
                 {
                     "type":"radio-form-element",
-                    "name":"extention-support",
-                    "title":"1. Is your service an add-on or extension to other software services? ",
+                    "name":"ticketing-support",
+                    "title":"1. Do you provide email or online ticketing support? ",
                     "value":"no",
                     "options":[
                         {"value":"yes", "label":"Yes"},
-                        {"value":"yesBut", "label":"Yes, but can also be used as a standalone service" },
+                        {"value":"yesBut", "label":"Yes, at extra cost." },
                         {"value":"no", "label":"No"}
                     ],
                     "dependant-on" : ["yes", "yesBut"],
                     "dependants":[
                         {
                             "type":"textarea-form-element",
-                            "name":"additional-extention-information",
-                            "title":"What other software services is your service an extension to?",
+                            "name":"ticketing-response-info",
+                            "title":"1a.  How quickly do you respond to questions? ",
+                            "clarification": "Include whether response times are different at weekends. ",
                             "value": "",
                             "placeholder":"Really Kool Document Manager is one of the most popular document management suites in the UK.",
-                            "character-limit":300
+                            "character-limit":100
+                        },
+                        {
+                            "type":"radio-form-element",
+                            "name":"user-management",
+                            "title": "1b. Can users manage the status and priority of their support tickets? ",
+                            "value":"no",
+                            "options":[
+                                {"value":"yes", "label":"Yes"},
+                                {"value":"no", "label":"No"}
+                            ]
+                        },
+                        {
+                            "type":"radio-form-element",
+                            "name":"management-accessibility-standard",
+                            "title": "1c. What accessibility standards does your online ticketing support management meet? ",
+                            "value":"no",
+                            "options":[
+                                {"value":"aaa", "label":"WCAG 2.0 AAA"},
+                                {"value":"aa", "label":"WCAG 2.0 AA or EN 301549"},
+                                {"value":"a", "label":"WCAG 2.0 A"},
+                                {"value":"none", "label":"None or Don't know."}
+                            ]
                         }
                     ]
                 },
                 {
                     "type":"radio-form-element",
-                    "name":"cloud-information",
-                    "title": "2. Is the service a public, private, community, or hybrid cloud service? ",
-                    "value":"public",
+                    "name":"phone-support",
+                    "title": "2. Do you provide phone support? ",
+                    "value":"no",
                     "options":[
-                        {"value":"public", "label":"Public Cloud"},
-                        {"value":"private", "label":"Private Cloud"},
-                        {"value":"community", "label":"Community Cloud"},
-                        {"value":"hybrid", "label":"Hybrid Cloud"}
+                        {"value":"yes", "label":"Yes"},
+                        {"value":"yesBut", "label":"Yes, at extra cost." },
+                        {"value":"no", "label":"No"}
+                    ],
+                    "dependant-on":["yes","yesBut"],
+                    "dependants":[
+                        {
+                            "type":"radio-form-element",
+                            "name":"phone-support-availability",
+                            "title": "2a. When can users get phone support? ",
+                            "clarificaton":"Choose the closest match to your phone support hours",
+                            "value":"no",
+                            "options":[
+                                {"value":"24/7", "label":"24 hours, 7 days a week"},
+                                {"value":"11/7", "label":"9 to 5 (UK time), 7 days a week"},
+                                {"value":"11/5", "label":"9 to 5 (UK time) Monday to Friday"}
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type":"radio-form-element",
+                    "name":"web-chat-support",
+                    "title": "3. Do you provide web chat support? ",
+                    "value":"no",
+                    "options":[
+                        {"value":"yes", "label":"Yes"},
+                        {"value":"yesBut", "label":"Yes, at extra cost." },
+                        {"value":"no", "label":"No"}
+                    ],
+                    "dependant-on":["yes","yesBut"],
+                    "dependants":[
+                        {
+                            "type":"radio-form-element",
+                            "name":"web-support-availability",
+                            "title": "3a. When can users get web-chat support? ",
+                            "clarificaton":"Choose the closest match to your phone support hours",
+                            "value":"no",
+                            "options":[
+                                {"value":"24/7", "label":"24 hours, 7 days a week"},
+                                {"value":"11/7", "label":"9 to 5 (UK time), 7 days a week"},
+                                {"value":"11/5", "label":"9 to 5 (UK time) Monday to Friday"}
+                            ]
+                        },
+                        {
+                            "type":"radio-form-element",
+                            "name":"phone-support-accessibility-standard",
+                            "title": "3b. What accessibility standards does your online ticketing support management meet? ",
+                            "value":"no",
+                            "options":[
+                                {"value":"aaa", "label":"WCAG 2.0 AAA"},
+                                {"value":"aa", "label":"WCAG 2.0 AA or EN 301549"},
+                                {"value":"a", "label":"WCAG 2.0 A"},
+                                {"value":"none", "label":"None or Don't know."}
+                            ]
+                        },
+                        {
+                            "type":"textarea-form-element",
+                            "name":"ticketing-response-info",
+                            "title":"3c.  Describe any web chat testing you've done with assistive technology users. ",
+                            "value": "",
+                            "placeholder":"Really Kool Document Manager is one of the most popular document management suites in the UK.",
+                            "character-limit":100
+                        }
+                    ]
+                },
+                {
+                    "type":"radio-form-element",
+                    "name":"phone-support",
+                    "title": "4. Do you provide on-site support? ",
+                    "value":"no",
+                    "options":[
+                        {"value":"yes", "label":"Yes"},
+                        {"value":"yesBut", "label":"Yes, at extra cost." },
+                        {"value":"no", "label":"No"}
                     ]
                 },
                 {
                     "type":"textarea-form-element",
-                    "name":"additional-constraints",
-                    "clarification":"Constraints might include... ",
-                    "title":"3. Does your service have any constraints that buyers should be aware of? ",
+                    "name":"support-levels",
+                    "title":"5. Describe your support levels.",
+                    "clarification":"Describe:\n •the support levels you provide\n •how much the different support levels you provide cost;\n • whether you provide a technical account manager or cloud support engineer",
                     "value": "",
                     "placeholder":"Really Kool Document Manager is one of the most popular document management suites in the UK.",
-                    "character-limit":300
+                    "character-limit":100
                 },
                 {
-                    "type":"array-form-element",
-                    "name":"system-requirements",
-                    "title":"4. What system requirements does your Solution have?",
-                    "clarification":"System requirements might be specific versions of browers or operating systems.",
-                    "value": [],
-                    "maximum": 10
+                    "type":"radio-form-element",
+                    "name":"third-parties",
+                    "title": "6. Can third parties engaged by the buyer access the support featured by your service? ",
+                    "value":"no",
+                    "options":[
+                        {"value":"yes", "label":"Yes"},
+                        {"value":"no", "label":"No"}
+                    ]
                 }
             ]
         }
