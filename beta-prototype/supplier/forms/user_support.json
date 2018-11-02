@@ -9,7 +9,7 @@
             "options":[
                 {"value":"yes", "label":"Yes"},
                 {"value":"yesWithCost", "label":"Yes, With Cost."},
-                {"value":"no", "label":"No"}
+                {"value":"no", "label":"No", "default":true}
             ],
             "dependant-on" : ["yes", "yesWithCost"],
             "dependants":[
@@ -19,8 +19,21 @@
                     "title":"Choose an Option",
                     "options":[
                         {"value":"a", "label":"A"},
-                        {"value":"b", "label":"B"},
+                        {"value":"b", "label":"B", "default":true},
                         {"value":"c", "label":"C"}
+                    ],
+                    "dependant-on" : ["a", "c"],
+                    "dependants":[
+                        {
+                            "type":"radio-form-element",
+                            "name":"another-dependant-radio-element",
+                            "title":"Choose an Option",
+                            "options":[
+                                {"value":"a", "label":"A","default":true},
+                                {"value":"b", "label":"B"},
+                                {"value":"c", "label":"C"}
+                            ]
+                        }
                     ]
                 }
             ]

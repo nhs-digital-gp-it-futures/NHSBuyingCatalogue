@@ -1,19 +1,40 @@
-<fieldset id={{id}} class="radio-fieldset">
+<fieldset id={{id}}>
     {{#title}}<h3>{{.}}</h3>{{/title}}
-    {{#options}}
-        <label>
-            {{#if default}} 
-                <input type="radio" name={{name}} value={{value}} checked>
-            {{else}}
-                <input type="radio" name={{name}} value={{value}} >
-            {{/if}}
-            {{#label}} {{.}} {{/label}}
-        </label>
-    {{/options}}
-    
-    <p>Check one of {{#dependant-on}} {{.}}, {{/dependant-on}} to display rest of form.</p>
-
-    {{#dependants}}
-        {{> (lookup . 'type')}}
-    {{/dependants}}
+    <fieldset id="{{name}}-trigger">
+        {{#options}}
+            <label>
+                {{#if default}} 
+                    <input type="radio" name={{../name}} value={{value}} checked>
+                {{else}}
+                    <input type="radio" name={{../name}} value={{value}} >
+                {{/if}}
+                {{#label}} {{.}} {{/label}}
+            </label>
+        {{/options}}
+    </fieldset>
+    <fieldset id="{{name}}-dependants">
+        {{#dependants}}
+            {{> (lookup . 'type')}}
+        {{/dependants}}
+    </fieldset>
 </fieldset>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const dependantsFieldsetID = `#${"{{name}}"}-dependants`;
+    const triggeringFieldsetID = `#${"{{name}}"}-trigger`;
+    
+    const enablingOptions = "{{dependant-on}}";
+    
+    const dependantFieldset = $(dependantsFieldsetID);
+    const triggeringFieldset = $(triggeringFieldsetID);
+
+
+    if(enablingOptions && !!dependantFieldset) {
+        triggeringFieldset.addEventListener('change', (evt) => {
+            const enablingValue = enablingOptions.indexOf(evt.target.value) > -1;
+            dependantFieldset.classList.toggle('hidden', !enablingValue);
+        })
+    }
+});
+</script>
