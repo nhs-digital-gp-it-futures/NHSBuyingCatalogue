@@ -33,7 +33,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        var request = GetPutRequest($"{ResourceBase}", techCont);
+        var request = GetPostRequest($"{ResourceBase}", techCont);
         var retval = GetResponse<TechnicalContacts>(request);
 
         return retval;
@@ -55,7 +55,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       GetInternal(() =>
       {
-        var request = GetPostRequest($"{ResourceBase}", techCont);
+        var request = GetPutRequest($"{ResourceBase}", techCont);
         var resp = GetRawResponse(request);
 
         return 0;

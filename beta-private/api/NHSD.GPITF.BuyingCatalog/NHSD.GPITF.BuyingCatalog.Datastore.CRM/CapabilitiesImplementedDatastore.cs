@@ -44,7 +44,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        var request = GetPutRequest($"{ResourceBase}", claimedcapability);
+        var request = GetPostRequest($"{ResourceBase}", claimedcapability);
         var retval = GetResponse<CapabilitiesImplemented>(request);
 
         return retval;
@@ -66,7 +66,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       GetInternal(() =>
       {
-        var request = GetPostRequest($"{ResourceBase}", claimedcapability);
+        var request = GetPutRequest($"{ResourceBase}", claimedcapability);
         var resp = GetRawResponse(request);
 
         return 0;
