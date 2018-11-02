@@ -40,34 +40,34 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       });
     }
 
-    public StandardsApplicable Create(StandardsApplicable claimedstandard)
+    public StandardsApplicable Create(StandardsApplicable claim)
     {
       return GetInternal(() =>
       {
-        claimedstandard.Id = UpdateId(claimedstandard.Id);
-        var request = GetPostRequest($"{ResourceBase}", claimedstandard);
+        claim.Id = UpdateId(claim.Id);
+        var request = GetPostRequest($"{ResourceBase}", claim);
         var retval = GetResponse<StandardsApplicable>(request);
 
         return retval;
       });
     }
 
-    public void Delete(StandardsApplicable claimedstandard)
+    public void Delete(StandardsApplicable claim)
     {
       GetInternal(() =>
       {
-        var request = GetDeleteRequest($"{ResourceBase}", claimedstandard);
+        var request = GetDeleteRequest($"{ResourceBase}", claim);
         var resp = GetRawResponse(request);
 
         return 0;
       });
     }
 
-    public void Update(StandardsApplicable claimedstandard)
+    public void Update(StandardsApplicable claim)
     {
       GetInternal(() =>
       {
-        var request = GetPutRequest($"{ResourceBase}", claimedstandard);
+        var request = GetPutRequest($"{ResourceBase}", claim);
         var resp = GetRawResponse(request);
 
         return 0;

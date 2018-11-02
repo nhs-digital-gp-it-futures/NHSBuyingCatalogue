@@ -40,34 +40,34 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       });
     }
 
-    public CapabilitiesImplemented Create(CapabilitiesImplemented claimedcapability)
+    public CapabilitiesImplemented Create(CapabilitiesImplemented claim)
     {
       return GetInternal(() =>
       {
-        claimedcapability.Id = UpdateId(claimedcapability.Id);
-        var request = GetPostRequest($"{ResourceBase}", claimedcapability);
+        claim.Id = UpdateId(claim.Id);
+        var request = GetPostRequest($"{ResourceBase}", claim);
         var retval = GetResponse<CapabilitiesImplemented>(request);
 
         return retval;
       });
     }
 
-    public void Delete(CapabilitiesImplemented claimedcapability)
+    public void Delete(CapabilitiesImplemented claim)
     {
       GetInternal(() =>
       {
-        var request = GetDeleteRequest($"{ResourceBase}", claimedcapability);
+        var request = GetDeleteRequest($"{ResourceBase}", claim);
         var resp = GetRawResponse(request);
 
         return 0;
       });
     }
 
-    public void Update(CapabilitiesImplemented claimedcapability)
+    public void Update(CapabilitiesImplemented claim)
     {
       GetInternal(() =>
       {
-        var request = GetPutRequest($"{ResourceBase}", claimedcapability);
+        var request = GetPutRequest($"{ResourceBase}", claim);
         var resp = GetRawResponse(request);
 
         return 0;
