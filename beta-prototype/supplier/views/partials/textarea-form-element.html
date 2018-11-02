@@ -1,7 +1,9 @@
 <fieldset class="root-fieldset">
-    {{#title}}<h3>{{.}}</h3>{{/title}}
-    <fieldset id="{{name}}-trigger" {{#dependants}} class="triggering-fieldset" {{/dependants}}>
+    <fieldset class="triggering-fieldset">
+        {{#title}}<h3>{{.}}</h3>{{/title}}
+        {{#clarification}}<p>{{.}}</p>{{/clarification}}
         <textarea 
+            id="{{name}}-trigger"
             name="{{name}}"
             cols="75"
             rows="4"
@@ -28,20 +30,22 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const dependantsFieldsetID = `#${"{{name}}"}-dependants`;
-    const triggeringFieldsetID = `#${"{{name}}"}-trigger`;
-    const enablingOptions = "{{dependant-on}}";
-    
+    const triggeringFieldID = `#${"{{name}}"}-trigger`;
+    const remainingCharactersID = `#${"{{name}}"}-remaining`;
+
     const dependantFieldset = $(dependantsFieldsetID);
-    const triggeringFieldset = $(triggeringFieldsetID);
+    const triggeringField = $(triggeringFieldID);
+    const reminingCharacters = $(remainingCharactersID);
 
-    if(enablingOptions && !!dependantFieldset) {
-        triggeringFieldset.addEventListener('change', (evt) => {
-            const enablingValue = enablingOptions.indexOf(evt.target.value) > -1;
-            dependantFieldset.classList.toggle('hidden', !enablingValue);
-        })
+    function updateForm(evt) {
+        const hasInput = !!triggeringField.value
+        console.log(hasInput)
+        dependantFieldset.classList.toggle('hidden', !hasInput);
+    }
 
-        const triggeringFieldChecked = enablingOptions.indexOf(checkedOptionValue) > -1
-        dependantFieldset.classList.toggle('hidden', !triggeringFieldChecked);
+    if(!!dependantFieldset) {
+        triggeringField.addEventListener('input', updateForm)
+        updateForm();
     }
 });
 </script>

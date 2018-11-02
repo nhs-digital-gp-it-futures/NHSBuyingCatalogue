@@ -6,7 +6,7 @@
             "type":"radio-form-element",
             "name":"first-radio-element",
             "title":"Do you want to add service scope to your Solution page?",
-            "clarification":"Service scope is 4 parts. You can include as many or few as you wish. Sections that leave blank will not be displayed on your Solution page. ",
+            "clarification":"Service scope is 4 parts. You can include as many or few as you wish. Sections that are left blank will not be displayed on your Solution page. ",
             "options":[
                 {"value":"yes", "label":"Yes"},
                 {"value":"no", "label":"No", "checked":true}
@@ -26,7 +26,7 @@
                     "dependants":[
                         {
                             "type":"textarea-form-element",
-                            "name":"additional-extentino-information",
+                            "name":"additional-extention-information",
                             "title":"What other software services is your service an extension to?",
                             "value": "",
                             "placeholder":"Really Kool Document Manager is one of the most popular document management suites in the UK.",
@@ -44,6 +44,15 @@
                         {"value":"community", "label":"Community Cloud"},
                         {"value":"hybrid", "label":"Hybrid Cloud"}
                     ]
+                },
+                {
+                    "type":"textarea-form-element",
+                    "name":"additional-constraints",
+                    "clarification":"Constraints might include... ",
+                    "title":"3. Does your service have any constraints that buyers should be aware of? ",
+                    "value": "",
+                    "placeholder":"Really Kool Document Manager is one of the most popular document management suites in the UK.",
+                    "character-limit":300
                 }
             ]
         }

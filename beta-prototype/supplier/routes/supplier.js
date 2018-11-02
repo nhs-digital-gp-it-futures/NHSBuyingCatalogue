@@ -1081,9 +1081,15 @@ app.get('/solutions/:solution_id/product-page/:section_name', csrfProtection, as
   context.productPage = productPage;
   context.solution = solutionEx.solution;
 
-  const form = require(`../forms/${req.params.section_name}.json`)
+  const formLayout = require(`../forms/${req.params.section_name}.json`)
 
-  context.form = form;
+  /**
+   * Merge Product Page Values with Form placeholder Values
+   */
+  const mergedForm = formLayout;
+
+  context.form = mergedForm;
+  context.form.csrfToken = req.csrfToken();
 
   res.render(`supplier/product-page/${req.params.section_name}`, context)
 });
@@ -1145,6 +1151,11 @@ app.post('/solutions/:solution_id/product-page/:section_name', csrfProtection, a
   solutionEx = await api.get_solution_by_id(req.params.solution_id)
 
   const productPage = solutionEx.solution.productPage ? JSON.parse(solutionEx.solution.productPage) : {};
+
+  const form = require(`../forms/${req.params.section_name}`);
+  console.log(form);
+  console.log(req.body);
+
 
   const arrayForms = ['features', 'integrations'];
   const tableForms = ['service-scope', 'customer-insights', 'data-import-export', 'user-support', 'migration-switching', 'audit-info'];
