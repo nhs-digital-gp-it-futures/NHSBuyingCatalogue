@@ -679,8 +679,10 @@ fieldset.triggering-fieldset {
   margin-bottom: 1.5em;
 }
 
+a.dependant-input-field {
+  background: var(--color-nhs-pale-grey);  
+}
 fieldset.dependant-fieldset {
-  background: var(--color-nhs-pale-grey);
   margin-left: 2em;
   border-left: 10px solid var(--color-nhs-mid-grey);
 }

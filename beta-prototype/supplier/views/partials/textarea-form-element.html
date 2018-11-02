@@ -1,26 +1,26 @@
 <fieldset class="root-fieldset">
     {{#title}}<h3>{{.}}</h3>{{/title}}
-    {{#clarification}}<p>{{.}}</p>{{/clarification}}
-    <fieldset id="{{name}}-trigger" class="triggering-fieldset">
-        {{#options}}
-            <label>
-                {{#if checked}} 
-                    <input type="radio" name={{../name}} value={{value}} checked>
-                {{else}}
-                    <input type="radio" name={{../name}} value={{value}} >
-                {{/if}}
-                {{#label}} {{.}} {{/label}}
-            </label>
-        {{/options}}
+    <fieldset id="{{name}}-trigger" {{#dependants}} class="triggering-fieldset" {{/dependants}}>
+        <textarea 
+            name="{{name}}"
+            cols="75"
+            rows="4"
+            maxlength="{{character-limit}}"
+            placeholder="{{placeholder}}"
+        >{{value}}</textarea>
+
+        {{#if character-limit}}
+            <p class="description"> You have <a id="{{name}}-remaining"></a>(out of {{character-limit}}) characters remaining</p>
+        {{/if}}
     </fieldset>
 
     {{#if dependants}}
     <fieldset id="{{name}}-dependants" class="dependant-fieldset">
-        <span class="dependant-input-field">
+        <a>
             {{#dependants}}
                 {{> (lookup . 'type')}}
             {{/dependants}}
-        </span>
+        </a>
     </fieldset>
     {{/if}}
 </fieldset>
@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const dependantFieldset = $(dependantsFieldsetID);
     const triggeringFieldset = $(triggeringFieldsetID);
-    const checkedOptionValue = $(`input[name=${"{{name}}"}][checked]`).value
 
     if(enablingOptions && !!dependantFieldset) {
         triggeringFieldset.addEventListener('change', (evt) => {
