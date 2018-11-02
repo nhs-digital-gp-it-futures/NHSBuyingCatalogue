@@ -125,7 +125,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     private static void AddGetAllParameters(RestRequest request)
     {
       const int StartPageIndex = 1;
-      const int GetAllPageSize = 2000;
+      const int GetAllPageSize = int.MaxValue;
 
       request.AddQueryParameter("PageIndex", StartPageIndex.ToString(CultureInfo.InvariantCulture));
       request.AddQueryParameter("PageSize", GetAllPageSize.ToString(CultureInfo.InvariantCulture));
