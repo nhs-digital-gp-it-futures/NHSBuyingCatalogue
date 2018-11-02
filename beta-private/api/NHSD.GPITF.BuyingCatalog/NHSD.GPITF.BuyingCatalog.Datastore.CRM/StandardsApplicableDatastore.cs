@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
-  public sealed class StandardsApplicableDatastore : DatastoreBase<StandardsApplicable>, IStandardsApplicableDatastore
+  public sealed class StandardsApplicableDatastore : DatastoreBase<StandardsApplicable>, IStandardsApplicableDatastore, IClaimsDatastore<ClaimsBase>
   {
     public StandardsApplicableDatastore(
       IRestClientFactory crmConnectionFactory,
@@ -71,6 +71,31 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 
         return 0;
       });
+    }
+
+    ClaimsBase IClaimsDatastore<ClaimsBase>.ById(string id)
+    {
+      return ById(id);
+    }
+
+    IEnumerable<ClaimsBase> IClaimsDatastore<ClaimsBase>.BySolution(string solutionId)
+    {
+      return BySolution(solutionId);
+    }
+
+    ClaimsBase IClaimsDatastore<ClaimsBase>.Create(ClaimsBase claim)
+    {
+      return Create((StandardsApplicable)claim);
+    }
+
+    void IClaimsDatastore<ClaimsBase>.Delete(ClaimsBase claim)
+    {
+      Delete((StandardsApplicable)claim);
+    }
+
+    void IClaimsDatastore<ClaimsBase>.Update(ClaimsBase claim)
+    {
+      Update((StandardsApplicable)claim);
     }
   }
 }
