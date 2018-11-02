@@ -33,7 +33,11 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const dependantFieldset = $(dependantsFieldsetID);
     const triggeringFieldset = $(triggeringFieldsetID);
-    const checkedOptionValue = $(`input[name=${"{{name}}"}][checked]`).value
+
+    const checkedValue = "{{value}}";
+    console.log('checked value', checkedValue)
+    const optionToCheck = $(`input[name=${"{{name}}"}][value=${checkedValue}]`)
+    optionToCheck.checked = true;
 
     if(enablingOptions && !!dependantFieldset) {
         triggeringFieldset.addEventListener('change', (evt) => {
@@ -41,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dependantFieldset.classList.toggle('hidden', !enablingValue);
         })
 
-        const triggeringFieldChecked = enablingOptions.indexOf(checkedOptionValue) > -1
+        const triggeringFieldChecked = enablingOptions.indexOf(checkedValue) > -1
         dependantFieldset.classList.toggle('hidden', !triggeringFieldChecked);
     }
 });

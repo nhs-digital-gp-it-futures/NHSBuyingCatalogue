@@ -7,9 +7,10 @@
             "name":"first-radio-element",
             "title":"Do you want to add service scope to your Solution page?",
             "clarification":"Service scope is 4 parts. You can include as many or few as you wish. Sections that are left blank will not be displayed on your Solution page. ",
+            "value":"no",
             "options":[
                 {"value":"yes", "label":"Yes"},
-                {"value":"no", "label":"No", "checked":true}
+                {"value":"no", "label":"No"}
             ],
             "dependant-on" : ["yes"],
             "dependants":[
@@ -17,10 +18,11 @@
                     "type":"radio-form-element",
                     "name":"extention-support",
                     "title":"1. Is your service an add-on or extension to other software services? ",
+                    "value":"no",
                     "options":[
                         {"value":"yes", "label":"Yes"},
                         {"value":"yesBut", "label":"Yes, but can also be used as a standalone service" },
-                        {"value":"no", "label":"No", "checked":true}
+                        {"value":"no", "label":"No"}
                     ],
                     "dependant-on" : ["yes", "yesBut"],
                     "dependants":[
@@ -38,8 +40,9 @@
                     "type":"radio-form-element",
                     "name":"cloud-information",
                     "title": "2. Is the service a public, private, community, or hybrid cloud service? ",
+                    "value":"public",
                     "options":[
-                        {"value":"public", "label":"Public Cloud", "checked":true},
+                        {"value":"public", "label":"Public Cloud"},
                         {"value":"private", "label":"Private Cloud"},
                         {"value":"community", "label":"Community Cloud"},
                         {"value":"hybrid", "label":"Hybrid Cloud"}
