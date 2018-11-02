@@ -43,7 +43,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// Get existing solution/s on which were onboarded onto a framework,
     /// given the CRM identifier of the framework
     /// </summary>
-    /// <param name="frameworkId">CRM identifier of organisation to find</param>
+    /// <param name="frameworkId">CRM identifier of framework</param>
     /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
     /// <param name="pageSize">number of items per page.  Defaults to 20</param>
     /// <response code="200">Success</response>
