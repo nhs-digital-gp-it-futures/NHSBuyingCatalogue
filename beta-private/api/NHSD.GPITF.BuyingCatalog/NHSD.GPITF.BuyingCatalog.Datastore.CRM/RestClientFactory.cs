@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Newtonsoft.Json;
 using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
 using RestSharp;
-using RestSharp.Authenticators;
 using System;
 using System.Configuration;
 
@@ -10,43 +9,50 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
   public sealed class RestClientFactory : IRestClientFactory
   {
-    private readonly string AuthorityUri;
-    private readonly string ServiceUri;
+    private readonly string ApiUri;
+    private readonly string AccessTokenUri;
 
-    private readonly string ResourceUri;
     private readonly string ClientId;
-    private readonly string Secret;
+    private readonly string ClientSecret;
 
     public RestClientFactory(IConfiguration config)
     {
     // read out of user secret or environment
-      AuthorityUri = config["CRM:AuthorityUri"] ?? Environment.GetEnvironmentVariable("CRM:AuthorityUri");
-      ServiceUri = config["CRM:ServiceUri"] ?? Environment.GetEnvironmentVariable("CRM:ServiceUri");
+      ApiUri = config["CRM:ApiUri"] ?? Environment.GetEnvironmentVariable("CRM:ApiUri");
+      AccessTokenUri = config["CRM:AccessTokenUri"] ?? Environment.GetEnvironmentVariable("CRM:AccessTokenUri");
 
-      ResourceUri = config["CRM:ResourceUri"] ?? Environment.GetEnvironmentVariable("CRM_:esourceUri");
       ClientId = config["CRM:ClientId"] ?? Environment.GetEnvironmentVariable("CRM:ClientId");
-      Secret = config["CRM:Secret"] ?? Environment.GetEnvironmentVariable("CRM:Secret");
+      ClientSecret = config["CRM:ClientSecret"] ?? Environment.GetEnvironmentVariable("CRM:ClientSecret");
 
-      if (string.IsNullOrWhiteSpace(AuthorityUri) ||
-        string.IsNullOrWhiteSpace(ServiceUri) ||
-        string.IsNullOrWhiteSpace(ResourceUri) ||
+      if (string.IsNullOrWhiteSpace(ApiUri) ||
+        string.IsNullOrWhiteSpace(AccessTokenUri) ||
         string.IsNullOrWhiteSpace(ClientId) ||
-        string.IsNullOrWhiteSpace(Secret)
+        string.IsNullOrWhiteSpace(ClientSecret)
         )
       {
         throw new ConfigurationErrorsException("Missing CRM configuration - check UserSecrets or environment variables");
       }
     }
 
-    public IRestClient Get()
+    public IRestClient GetRestClient()
     {
-      //var clientCredential = new ClientCredential(ClientId, Secret);
-      //var authContext = new AuthenticationContext(AuthorityUri);
-      //var accessToken = authContext.AcquireTokenAsync(ResourceUri, clientCredential).Result;
-      //var authenticator = new OAuth2AuthorizationRequestHeaderAuthenticator(accessToken.CreateAuthorizationHeader());
-      var client = new RestClient(ServiceUri);
+      return new RestClient(ApiUri);
+    }
 
-      return client;
+    public AccessToken GetAccessToken()
+    {
+      var restclient = new RestClient(AccessTokenUri);
+      var request = new RestRequest() { Method = Method.POST };
+      request.AddHeader("Accept", "application/json");
+      request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+      request.AddParameter("client_id", ClientId);
+      request.AddParameter("client_secret", ClientSecret);
+      request.AddParameter("grant_type", "client_credentials");
+      var resp = restclient.Execute(request);
+      var responseJson = resp.Content;
+      var token = JsonConvert.DeserializeObject<AccessToken>(responseJson);
+
+      return token.access_token.Length > 0 ? token : null;
     }
   }
 }

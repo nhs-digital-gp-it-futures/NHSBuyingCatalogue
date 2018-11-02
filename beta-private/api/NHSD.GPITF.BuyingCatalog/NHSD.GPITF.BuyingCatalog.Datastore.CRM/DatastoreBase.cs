@@ -15,16 +15,16 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
   public abstract class DatastoreBase<T>
   {
-    protected readonly IRestClient _crmConnection;
+    protected readonly IRestClientFactory _crmFactory;
     protected readonly ILogger<DatastoreBase<T>> _logger;
     private readonly ISyncPolicy _policy;
 
     public DatastoreBase(
-      IRestClientFactory crmConnectionFactory,
+      IRestClientFactory crmFactory,
       ILogger<DatastoreBase<T>> logger,
       ISyncPolicyFactory policy)
     {
-      _crmConnection = crmConnectionFactory.Get();
+      _crmFactory = crmFactory;
       _logger = logger;
       _policy = policy.Build(_logger);
     }
@@ -56,8 +56,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
         Method = Method.GET
       };
       request.AddHeader("Content-Type", "application/json");
+      request.AddHeader("Authorization", "Bearer " + _crmFactory.GetAccessToken()?.access_token);
 
-      return request;
+      return request; 
     }
 
     protected RestRequest GetAllRequest(string path)
@@ -110,7 +111,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 
     protected IRestResponse GetRawResponse(RestRequest request)
     {
-      return _crmConnection.Execute(request);
+      return _crmFactory.GetRestClient().Execute(request);
     }
 
     protected TOther GetResponse<TOther>(RestRequest request)
