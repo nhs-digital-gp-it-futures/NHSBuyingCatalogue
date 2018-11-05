@@ -5,7 +5,7 @@
     <header>Download your latest TM</header>
     <p><a download href="/Dummy TraceabilityMatrix.xlsx">{{name}} Traceability Matrix (TM)</a></p>
     {{#if editUrl}}
-      <p class="comment">Message: {{#latestSubmission}} {{message}} {{/latestSubmission}}</p>
+      <p class="comment" id="latestMessage">{{#latestSubmission}} {{message}} {{/latestSubmission}}</p>
     {{/if}}
     <p class="comment">{{#latestSubmissionDate}} {{.}} {{/latestSubmissionDate}}</p>
   </div>
@@ -80,12 +80,12 @@
 <div id="compliance" class="supplier edit">
   {{#if standard.isWithAssessmentTeam}}
   <p class="in-assessment">
-    <span>Evidence submitted {{standard.latestSubmissionDate}}. You can expect a reply from our Compliance Officer within xx business days of submitting your evidence.</span>
+    <span>Status: Submitted. Awaiting Compliance Outcome</span>
   </p>
   {{/if}}
   {{#if standard.hasFeedback}}
   <p class="has-feedback">
-    <span>Find new evidence feedback below. <img class="feedback-icon" src="/img/red-envelope.svg"></span>
+    <span>Status: Response received from Compliance Officer. See <a href="#latestMessage">below</a>.</span>
   </p>
   {{/if}}
 

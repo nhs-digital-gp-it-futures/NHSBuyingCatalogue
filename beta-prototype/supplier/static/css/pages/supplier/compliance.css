@@ -245,6 +245,7 @@ input.save {
 
 #compliance.edit .in-assessment,
 #compliance.edit .has-feedback {
+  border: solid 1px var(--color-nhs-blue);
   background-color: var(--color-standout-bg);
   margin: 0;
   padding: 0.5em 0;
@@ -257,8 +258,8 @@ input.save {
 
 #compliance.edit .in-assessment span,
 #compliance.edit .has-feedback span {
-  font-size: var(--font-size-high-density);
-  font-weight: var(--font-weight-high-density);
+  font-size: var(--font-size-subsubtitle);
+  font-weight: var(--font-weight-message-metadata);
 }
 
 #compliance.edit .feedback-icon {
@@ -349,6 +350,7 @@ input.save {
 
 #compliance.edit .submissions .submission .text,
 #compliance.edit .submissions .submission .link {
+  font-size: var(--font-size-sub-standard);
   background-color: var(--color-message-bg);
   color: var(--color-message-fg);
   margin: 0;
@@ -432,5 +434,6 @@ input.save {
 
 #compliance section.evidence-history details summary {
   font-size: var(--font-size-evidence);
+  color: var(--color-nhs-blue);
   padding-bottom: 1em;
 }
