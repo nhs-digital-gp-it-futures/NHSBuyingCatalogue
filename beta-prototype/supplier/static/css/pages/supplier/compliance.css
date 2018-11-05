@@ -325,15 +325,11 @@ input.save {
 }
 
 #compliance.edit .evidence-history {
-  border: 1px solid var(--color-nhs-blue);
+  border: none;
 }
 
 #compliance section header h2 {
   color: var(--color-nhs-dark-grey)
-}
-
-#compliance.edit .evidence-history header {
-  margin-left: 2em;
 }
 
 #compliance.edit .evidence-history header h4 {
@@ -343,7 +339,7 @@ input.save {
 
 #compliance.edit .submissions {
   list-style-type: none;
-  padding: 0;
+  padding: 1em;
 }
 
 #compliance.edit .submissions .submission {
@@ -362,8 +358,8 @@ input.save {
 
 #compliance.edit .submissions .submission.assessment-team .text,
 #compliance.edit .submissions .submission.assessment-team .link {
-  background-color: var(--color-message-nhsd-bg);
-  color: var(--color-message-nhsd-fg);
+  background-color: var(--color-message-bg);
+  color: var(--color-message-fg);
   text-align: left;
 }
 
@@ -372,6 +368,7 @@ input.save {
 }
 
 #compliance.edit .submissions .submission .metadata {
+  background-color: var(--color-message-bg);
   font-size: var(--font-size-message-metadata);
   font-weight: var(--font-weight-message-metadata);
   margin: 0;
@@ -431,4 +428,9 @@ input.save {
 
 #compliance div p.comment {
   font-size: var(--font-size-evidence)
+}
+
+#compliance section.evidence-history details summary {
+  font-size: var(--font-size-evidence);
+  padding-bottom: 1em;
 }

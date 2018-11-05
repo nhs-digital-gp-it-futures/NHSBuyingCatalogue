@@ -124,20 +124,23 @@
   {{#if standard.evidence.submissions}}
   <section class="evidence-history">
     <header>
-      <h4>Evidence History</h4>
+      <h4>File History &amp; Messaging</h4>
     </header>
-    <ul class="submissions">
-      {{#standard.evidence.submissions}}
-      <li class="submission {{originatorClass}}">
-        {{#link}}<p class="link"><a href="{{.}}" target="_blank">{{.}}</a></p>{{/link}}
-        <pre class="text">{{message}}</pre>
-        <p class="metadata">
-          <span class="originator">{{contact.firstName}} {{contact.lastName}}</span>
-          <span class="timestamp">{{displayTimestamp}}</span>
-        </p>
-      </li>
-      {{/standard.evidence.submissions}}
-    </ul>
+    <details>
+      <summary>Show History</summary>
+      <ul class="submissions">
+        {{#standard.evidence.submissions}}
+        <li class="submission {{originatorClass}}">
+          {{#link}}<p class="link"><a href="{{.}}" target="_blank">{{.}}</a></p>{{/link}}
+          <pre class="text">{{message}}</pre>
+          <p class="metadata">
+            <span class="originator">{{contact.firstName}} {{contact.lastName}}</span>
+            <span class="timestamp">{{displayTimestamp}}</span>
+          </p>
+        </li>
+        {{/standard.evidence.submissions}}
+      </ul>
+    </details>
   </section>
   {{/if}}
 
