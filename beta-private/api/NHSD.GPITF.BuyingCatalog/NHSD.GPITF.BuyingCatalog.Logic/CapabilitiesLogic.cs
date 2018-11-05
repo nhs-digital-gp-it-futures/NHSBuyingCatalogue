@@ -2,7 +2,6 @@
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
