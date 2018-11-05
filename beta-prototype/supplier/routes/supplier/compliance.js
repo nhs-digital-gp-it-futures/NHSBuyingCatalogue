@@ -357,7 +357,6 @@ async function complianceEditPostHandler (req, res) {
       evidence.submissions = _.concat(submission, evidence.submissions || [])
 
       redirect = `${req.baseUrl}?submitted&std=${_.find(standards, ['id', stdIdToUpdate]).name}`
-
     }
 
     stdToUpdate.evidence = JSON.stringify(evidence)
