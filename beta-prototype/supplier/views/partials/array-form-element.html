@@ -1,0 +1,48 @@
+<fieldset class="root-fieldset">
+    <fieldset id="{{name}}-trigger" class="triggering-fieldset">
+        {{#title}}<h3>{{.}}</h3>{{/title}}
+        {{#clarification}}<p>{{.}}</p>{{/clarification}}
+        <div>
+            <input id="{{name}}-first-input" type="text" name="{{name}}" placeholder="{{example-item}}">
+            {{# value}}
+                <input type="text" name="{{../name}}" value="{{.}}">
+            {{/value}}
+        </div>
+        
+        <button type="button" id="{{name}}-add-item-button">+</button> Add another? <a id="{{name}}-remaining"></a>
+    </fieldset>
+    
+    {{#if dependants}}
+    <fieldset id="{{name}}-dependants" class="dependant-fieldset">
+        <span class="dependant-input-field">
+            {{#dependants}}
+                {{> (lookup . 'type')}}
+            {{/dependants}}
+        </span>
+    </fieldset>
+    {{/if}}
+</fieldset>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const addButton = $(`#${"{{name}}"}-add-item-button`)
+    const inputField = $(`#${"{{name}}"}-first-input`);
+    const inputParent = inputField.parentNode;
+    const remainingTag = $(`#${"{{name}}"}-remaining`);
+
+    const maximumElements = parseInt("{{maximum}}")
+
+    addButton.addEventListener('click', (event) => {
+        const allItemInputs = $$(`[name=${"{{name}}"}]`);
+        if(allItemInputs.length < maximumElements) {
+            const cloneNode = inputField.cloneNode(true);
+            cloneNode.value = "";
+            inputParent.appendChild(cloneNode);
+            remainingTag.innerText = `(${maximumElements - allItemInputs.length} Remaining)`;
+        }
+        return false;
+    })
+
+});
+</script>

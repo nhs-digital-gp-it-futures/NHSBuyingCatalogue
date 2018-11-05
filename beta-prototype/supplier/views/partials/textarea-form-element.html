@@ -1,0 +1,50 @@
+<fieldset class="root-fieldset">
+    <fieldset class="triggering-fieldset">
+        {{#title}}<h3>{{.}}</h3>{{/title}}
+        {{#clarification}}<p>{{.}}</p>{{/clarification}}
+        <textarea 
+            id="{{name}}-trigger"
+            name="{{name}}"
+            cols="75"
+            rows="4"
+            maxlength="{{character-limit}}"
+            placeholder="{{placeholder}}"
+        >{{value}}</textarea>
+
+        {{#if character-limit}}
+            <p class="description"> You have <a id="{{name}}-remaining"></a>(out of {{character-limit}}) characters remaining</p>
+        {{/if}}
+    </fieldset>
+
+    {{#if dependants}}
+    <fieldset id="{{name}}-dependants" class="dependant-fieldset">
+        <a>
+            {{#dependants}}
+                {{> (lookup . 'type')}}
+            {{/dependants}}
+        </a>
+    </fieldset>
+    {{/if}}
+</fieldset>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const dependantsFieldsetID = `#${"{{name}}"}-dependants`;
+    const triggeringFieldID = `#${"{{name}}"}-trigger`;
+    const remainingCharactersID = `#${"{{name}}"}-remaining`;
+
+    const dependantFieldset = $(dependantsFieldsetID);
+    const triggeringField = $(triggeringFieldID);
+    const reminingCharacters = $(remainingCharactersID);
+
+    function updateForm(evt) {
+        const hasInput = !!triggeringField.value
+        dependantFieldset.classList.toggle('hidden', !hasInput);
+    }
+
+    if(!!dependantFieldset) {
+        triggeringField.addEventListener('input', updateForm)
+        updateForm();
+    }
+});
+</script>

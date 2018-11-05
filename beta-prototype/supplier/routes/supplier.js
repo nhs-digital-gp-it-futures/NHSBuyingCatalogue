@@ -971,9 +971,11 @@ app.get('/solutions/:solution_id/product-page', csrfProtection, async (req, res)
     features: `${pageEditLinkPrefix}/features`,
     integrations: `${pageEditLinkPrefix}/integrations`,
     summary: `${pageEditLinkPrefix}/summary`,
-    about: `${pageEditLinkPrefix}/about`
+    about: `${pageEditLinkPrefix}/about`,
+    user_support: `${pageEditLinkPrefix}/user-support`,
+    service_scope: `${pageEditLinkPrefix}/service-scope`,
   }
-  
+
   renderProductPageEditor(req, res, solutionEx, context)
 })
 
@@ -1080,8 +1082,40 @@ app.get('/solutions/:solution_id/product-page/:section_name', csrfProtection, as
   context.productPage = productPage;
   context.solution = solutionEx.solution;
 
+  const tableForms = ['service-scope', 'customer-insights', 'data-import-export', 'user-support', 'migration-switching', 'audit-info'];
+  if(tableForms.indexOf(req.params.section_name) > -1) {
+    const formLayout = require(`../forms/${req.params.section_name}.json`)
+
+    /**
+     * Merge Product Page Values with Form placeholder Values
+     */
+    function searchAndAssign(name, value, inputs) {
+      return inputs.map((input) => {
+        if(input.name === name) {
+          input.value = value;
+          return input;
+        }
+        else if(input.dependants) {
+          input.dependants = searchAndAssign(name, value, input.dependants);
+          return input;
+        }
+        return input;
+      })
+    }
+    const formValues = productPage[req.params.section_name];
+    _.forEach(formValues, (value, key) => {
+      formLayout.inputs = searchAndAssign(key, value, formLayout.inputs);
+    })
+  
+    const mergedForm = formLayout
+  
+    context.form = mergedForm;
+    context.form.csrfToken = req.csrfToken();
+  
+  }
   res.render(`supplier/product-page/${req.params.section_name}`, context)
 });
+
 
 const validateSolutionName = (fieldName = 'name') =>
   check(fieldName, 'Solution name must be present and has a maximum length of 60 characters')
@@ -1141,20 +1175,22 @@ app.post('/solutions/:solution_id/product-page/:section_name', csrfProtection, a
 
   const productPage = solutionEx.solution.productPage ? JSON.parse(solutionEx.solution.productPage) : {};
 
-  const arrayForms = ['features', 'integrations'];
-  const tableForms = ['service-scope', 'customer-insights', 'data-import-export', 'user-support', 'migration-switching', 'audit-info'];
+  const arrayForms = ['features', 'integrations']
+  const tableForms = ['service-scope', 'customer-insights', 'data-import-export', 'user-support', 'migration-switching', 'audit-info']
 
   const sectionName = req.params.section_name
 
-  if(arrayForms.indexOf(sectionName) > -1) {
+  if (tableForms.indexOf(sectionName) > -1) {
+    let sectionInput = _.omit(req.body, ['_csrf', 'action'])
+    productPage[sectionName] = sectionInput
+  } else if (arrayForms.indexOf(sectionName) > -1) {
     const wantThis = parseWantThis(req.body.wantThis)
     const sectionElements = parseArrayItems(req.body.items)
-    if(wantThis) {
-      context.errors = validateFormArray(sectionElements);
-      productPage[sectionName] = sectionElements;  
-    }
-    else {
-      productPage[sectionName] = [];
+    if (wantThis) {
+      context.errors = validateFormArray(sectionElements)
+      productPage[sectionName] = sectionElements
+    } else {
+      productPage[sectionName] = []
     }
   }
   else if (sectionName === 'summary') {

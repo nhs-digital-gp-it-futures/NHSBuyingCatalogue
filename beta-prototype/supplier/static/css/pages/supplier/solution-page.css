@@ -379,11 +379,9 @@
 }
 
 #solution-page-preview section h3 {
-  /* background-color: var(--color-nhs-pale-grey); */
   color: var(--color-fg);
   font-size: 1.25em;
   margin: 0 0 0.25em 0;
-  /* padding: 0.5em 0.5em; */
 }
 
 #solution-page-preview section h4 {
@@ -637,17 +635,8 @@ div.section-header h3 a{
   margin-bottom: 1.5em;
 }
 
-div.solution-page-form {
-
-}
-
 div.solution-page-form p.clarification {
   color: var(--color-nhs-dark-grey);
-}
-
-div.solution-page-form fieldset {
-  border: none;
-  background: var(--color-nhs-pale-grey);
 }
 
 div.solution-page-form fieldset label {
@@ -674,4 +663,26 @@ div.solution-page-form fieldset div a.button {
 
 .error-message {
   color: var(--color-nhs-dark-red)
+}
+
+
+form h1, form h2, form h3 {
+  color: var(--nhs-color-black); 
+}
+
+fieldset {
+  border:none;
+}
+
+fieldset.triggering-fieldset {
+  background: var(--color-nhs-pale-grey);
+  margin-bottom: 1.5em;
+}
+
+a.dependant-input-field {
+  background: var(--color-nhs-pale-grey);  
+}
+fieldset.dependant-fieldset {
+  margin-left: 2em;
+  border-left: 10px solid var(--color-nhs-mid-grey);
 }

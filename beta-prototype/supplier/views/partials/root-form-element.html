@@ -1,0 +1,11 @@
+{{#title}}<h2>{{.}}</h2>{{/title}}
+<form method="POST">
+    {{#inputs}}
+        {{> (lookup . 'type')}}
+    {{/inputs}}
+
+    <div class="controls">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <button class="button" name="action" value="submit">Save &amp; Return</button>
+    </div>
+</form>
