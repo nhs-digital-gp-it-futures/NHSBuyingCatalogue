@@ -1,14 +1,15 @@
 {{#*inline "evidence-form"}}
 
-{{#if editUrl}}
 <section>
   <div class="matrix">
     <header>Download your latest TM</header>
     <p><a download href="/Dummy TraceabilityMatrix.xlsx">{{name}} Traceability Matrix (TM)</a></p>
-    {{#if standard.latestSubmissionDate}} {{standard.latestSubmissionDate}} {{/if}}
+    {{#if editUrl}}
+      <p class="comment">Message: {{#latestSubmission}} {{message}} {{/latestSubmission}}</p>
+    {{/if}}
+    <p class="comment">{{#latestSubmissionDate}} {{.}} {{/latestSubmissionDate}}</p>
   </div>
 </section>
-{{/if}}
 
 <section>
   <fieldset class="standard-evidence{{#statusClass}} {{.}}{{/statusClass}}" id="std-{{id}}">
@@ -59,10 +60,10 @@
       {{/if}}
     </section>
     {{/if}}
-    
+
     {{#if editUrl}}
     <section class="controls">
-      
+
       {{#if submittable}}
       <input type="submit"
               class="button primary"

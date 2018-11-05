@@ -428,3 +428,7 @@ input.save {
   min-width: 50%;
   padding: 0.25em 1em;
 }
+
+#compliance div p.comment {
+  font-size: var(--font-size-evidence)
+}
