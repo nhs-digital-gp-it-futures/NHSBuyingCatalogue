@@ -892,18 +892,17 @@ function renderProductPageEditor (req, res, solutionEx, context) {
     { label: 'Solution Page' }
   ]
   context.csrfToken = req.csrfToken()
-  context.productPage = solutionEx.solution.productPage ? JSON.parse(solutionEx.solution.productPage) : {}
 
-  context.contact = solutionEx.technicalContact;
-  
+  context.contact = solutionEx.technicalContact
+
   res.render('supplier/solution-page-edit', context)
 }
 
 app.get('/solutions/:solution_id/product-page/preview', csrfProtection, async (req, res) => {
   const context = {
-    errors : {}
+    errors: {}
   }
-  
+
   let solutionEx
 
   try {
@@ -927,7 +926,7 @@ app.get('/solutions/:solution_id/product-page/preview', csrfProtection, async (r
   }
 
   renderProductPageEditor(req, res, solutionEx, context)
-  
+
 })
 
 app.get('/solutions/:solution_id/product-page', csrfProtection, async (req, res) => {
@@ -966,7 +965,7 @@ app.get('/solutions/:solution_id/product-page', csrfProtection, async (req, res)
     context.errors.general = err
   }
 
-  const pageEditLinkPrefix = `/suppliers/solutions/${req.params.solution_id}/product-page`;
+  const pageEditLinkPrefix = `/suppliers/solutions/${req.params.solution_id}/product-page`
   context.pageEditLinks = {
     features: `${pageEditLinkPrefix}/features`,
     integrations: `${pageEditLinkPrefix}/integrations`,
@@ -974,6 +973,8 @@ app.get('/solutions/:solution_id/product-page', csrfProtection, async (req, res)
     about: `${pageEditLinkPrefix}/about`,
     user_support: `${pageEditLinkPrefix}/user-support`,
     service_scope: `${pageEditLinkPrefix}/service-scope`,
+    customer_insights: `${pageEditLinkPrefix}/customer-insights`,
+    import_exports: `${pageEditLinkPrefix}/import-exports`
   }
 
   renderProductPageEditor(req, res, solutionEx, context)
@@ -1210,7 +1211,7 @@ app.post('/solutions/:solution_id/product-page/:section_name', csrfProtection, a
     redirectURL = `${req.baseUrl}/solutions/${req.params.solution_id}/product-page/${req.params.section_name}`;
   }
 
-  solutionEx.solution.productPage = JSON.stringify(productPage);
+  solutionEx.solution.productPage = JSON.stringify(productPage)
 
   req.session.solutionEx = await api.update_solution(solutionEx)
 

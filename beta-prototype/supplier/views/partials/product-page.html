@@ -2,16 +2,15 @@
 <table>
     {{#each info as |data|}}
     <tr>
-      <td class="title">{{data.title}}</td>
+      <td class="title">{{data.key}}</td>
       <td class="items">
-        {{#each data.items as |item|}}
-          {{#if item.link}}
-            <a href="{{item.link}}">{{item.text}}</a>
-          {{else}}
-            {{item.text}}
-          {{/if}}
+        {{#each data.value as |item|}}
+            {{item}}
           <br>
+        {{else}}
+          {{data.value}}
         {{/each}}
+        
       </td>
     </tr>
     {{/each}}
@@ -41,47 +40,23 @@
   </nav>
 {{/inline}}
 
-{{#*inline "carousel"}}
-{{#if carousel}}
-<div>
-  <div class="carousel">
-    <p>Capability Videos</p>
-    <p class="help">Watch how this solution meets its Capabilities.</p>
-    <div class="glide">
-      <div class="glide__track" data-glide-el="track">
-        <ul class="capabilities glide__slides">
-          {{#carousel}}
-          <li class="capability glide__slide">
-              <h4 class="name">{{name}}</h4>
-              <div class="video">
-                <iframe width="500" height="400" src="https://www.youtube.com/embed/uv-F9pxUECc?controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-              {{#youtubeUrl}}
-              <iframe width="217.5" height="315" src="https://www.youtube.com/embed/{{.}}?controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-              {{/youtubeUrl}}
-            </div>
-          </li>
-          {{/carousel}}
-        </ul>
-      </div>
-      <div class="glide__arrows" data-glide-el="controls">
-        <button class="glide__arrow glide__arrow--left" data-glide-dir="<">&lt;</button>
-        <button class="glide__arrow glide__arrow--right" data-glide-dir=">">&gt;</button>
-      </div>
-      <div class="glide__bullets" data-glide-el="controls[nav]">
-        {{#carousel}}
-        <button class="glide__bullet" data-glide-dir="={{@index}}"></button>
-        {{/carousel}}
-      </div>
-    </div>
-  </div>
-</div>
-{{/if}}
-{{/inline}}
-
 {{#*inline "section"}}
   <section class="solution" id={{id}}>
     {{> @partial-block}}
   </section>
+{{/inline}}
+
+{{#*inline "collapsible"}}
+  <details class="collapsible-details">
+    <summary>
+      {{#if summary-text}} 
+        {{summary-text}}
+      {{else}}
+        Show/Hide
+      {{/if}}
+    </summary>
+      {{> @partial-block}}
+  </details>
 {{/inline}}
 
 {{#*inline "section-header"}}
@@ -91,13 +66,13 @@
     </h3>
     {{#if side-link-text}}
       {{#if side-link}}
-        <h3>
+        <h3 class="side-text">
             <a href={{side-link}}>{{side-link-text}}</a>
         </h3>
       {{/if}}
     {{else}}
       {{#if side-text}}
-        <h3>{{side-text}}</h3>
+        <h3 class="side-text">{{side-text}}</h3>
       {{/if}}
     {{/if}}
   </div>
@@ -113,7 +88,7 @@
 
   {{#>section id="summary"}}
       {{>section-header title="Summary Description" side-link-text="Edit Section" side-link=pageEditLinks.summary}}
-      <p class="description">{{solution.description}}
+        <p class="description">{{solution.description}}</p>
   {{/section}}
   
   {{#>section id="features"}}
@@ -125,7 +100,7 @@
           {{/each}}
       </ul>
     {{else}}
-      {{>section-header title="Features" side-link-text="Add Section" side-link=pageEditLinks.features}}
+      {{>section-header title="Features" side-link-text="Complete Section" side-link=pageEditLinks.features}}
     {{/if}}
   {{/section}}
 
@@ -139,13 +114,16 @@
         {{/each}}
       </ul>
     {{else}}
-      {{>section-header title="Integrations" side-link-text="Add Section" side-link=pageEditLinks.integrations }}
+      {{>section-header title="Integrations" side-link-text="Complete Section" side-link=pageEditLinks.integrations }}
     {{/if}}
+    <h4>The following are IAM1 Integrations</h4>
+    <h4 class="notice">NHS Digital will add IAM1 Integrations here when available.</h4>
   {{/section}}
 
   {{#>section id="pricing"}}
-    {{>section-header title="Pricing and add-on Services" }}
-    <h4>NHS Digital will add pricing to your Solution once agreed in Bravo.</h4>
+    {{>section-header title="Pricing" }}
+    {{#>collapsible}}
+    <h4 class="notice">NHS Digital will add pricing to your Solution once agreed in Bravo.</h4>
     <table>
         {{#each services.associated-services as |service|}}
           {{#if service.enabled}}
@@ -159,11 +137,14 @@
             </tr>
           {{/if}}
         {{/each}}
-      </table>    {{/section}}
+      </table>
+      {{/collapsible}}
+    {{/section}}
 
   {{#>section id="associated-services"}}
     {{>section-header title="Associated Services (Not Optional)"}}
-    <h4>This is placeholder text to show how Additional Services could display. NHS Digital will add Associated Services, if relevant to this Solution, and pricing once agreed in Bravo.</h4>
+    {{#>collapsible}}
+    <h4 class="notice">This is placeholder text to show how Additional Services could display. NHS Digital will add Associated Services, if relevant to this Solution, and pricing once agreed in Bravo.</h4>
     <table>
       {{#each services.associated-services as |service|}}
         {{#if service.enabled}}
@@ -178,11 +159,13 @@
         {{/if}}
       {{/each}}
     </table>  
+    {{/collapsible}}
   {{/section}}
 
   {{#>section id="additional-services"}}
   {{>section-header title="Additional Services (Optional)"}}
-  <h4>This is placeholder text to show how Additional Services could display. NHS Digital will add Additional Services, if relevant to this Solution, and pricing once agreed in Bravo.</h4>
+  {{#>collapsible}}
+  <h4 class="notice">This is placeholder text to show how Additional Services could display. NHS Digital will add Additional Services, if relevant to this Solution, and pricing once agreed in Bravo.</h4>
   <table>
     {{#each services.additional-services as |service|}}
       {{#if service.enabled}}
@@ -196,42 +179,25 @@
         </tr>
       {{/if}}
     {{/each}}
-  </table>  
+  </table>
+  {{/collapsible}}
 {{/section}}
 
 {{#>section id="service-scope"}}
-{{>section-header title="Service Scope" side-link-text="Edit Section" side-link=pageEditLinks.service_scope}}
-  <table>
-  {{#each requirementOptions as |req|}}
-  <tr>
-    <td>{{req.group}}</td>
-    <td>
-      {{#each req.items as |item|}}
-        {{item}}<br>
-      {{/each}}
-    </td>
-  </tr>
-  {{/each}}
-  {{#if productPage.requirements}}      
-  <tr>
-    <td>Additional Requirements</td>
-    <td>
-      {{#each productPage.requirements as |req|}}
-      {{req}}<br>
-      {{/each}}
-    </td>
-  </tr>
-{{/if}}
-</table>
+  {{#if productPage.service-scope}}
+    {{>section-header title="Service Scope" side-link-text="Edit Section" side-link=pageEditLinks.service_scope}}
+    {{>info-table info=productPage.service-scope}}
+  {{else}}
+    {{>section-header title="Service Scope" side-link-text="Complete Section" side-link=pageEditLinks.service_scope}}
+  {{/if}}
 {{/section}}
 
   <section class="section-group" id="assessment-standards">
     <h3>NHS Assessments &amp; Standards*</h3>
-    <p>
+    {{#>collapsible}}
+    <p class="notice">
         This sections shows the Capabilities asserted and Standards met by your Solution. NHS Digital will share Compliance evidence with Buyers upon request.
     </p>
-
-    {{> carousel}}
 
     <div>
       <details class="explanation">
@@ -340,21 +306,34 @@
             </ul>
           </details>
     </div>
+    {{/collapsible}}
   </section>
   
   {{#>section id="customer-insights"}}
-    {{>section-header title="Customer Insights"}}
-    {{>info-table info=customerInsights}}
+    {{#if productPage.customer-insights}}
+      {{>section-header title="Customer Insights" side-link-text="Edit Section" side-link=pageEditLinks.customer_insights }}
+      {{>info-table info=productPage.customer-insights}}
+    {{else}}
+      {{>section-header title="Customer Insights" side-link-text="Complete Section" side-link=pageEditLinks.customer_insights }}
+    {{/if}}
   {{/section}}
 
   {{#>section id="importing-exporting"}}
-    {{>section-header title="Data Importing & Exporting"}}
-    {{>info-table info=dataImportExport}}
+    {{#if importExport}}
+      {{>section-header title="Data Importing & Exporting" side-link-text="Edit Section" side-link=pageEditLinks.import_exports}}
+      {{>info-table info=dataImportExport}}
+    {{else}}
+      {{>section-header title="Data Importing & Exporting" side-link-text="Complete Section" side-link=pageEditLinks.import_exports}}
+    {{/if}}
   {{/section}}
 
   {{#>section id="user-support"}}
-    {{>section-header title="User Support" side-link-text="Edit Section" side-link=pageEditLinks.user_support}}
-    {{>info-table info=userSupport}}
+    {{#if productPage.user-support}}
+      {{>section-header title="User Support" side-link-text="Edit Section" side-link=pageEditLinks.user_support}}
+      {{>info-table info=productPage.user-support}}
+    {{else}}
+      {{>section-header title="User Support" side-link-text="Complete Section" side-link=pageEditLinks.user_support}}
+    {{/if}}
   {{/section}}
 
   {{#>section id="migration-switching"}}
@@ -373,7 +352,7 @@
     <h3>{{organisationName}}</h3>
     <p class="about">{{productPage.about}}</p>
   {{else}}
-    {{>section-header title="About " side-link-text="Add Section" side-link=pageEditLinks.about}}
+    {{>section-header title="About " side-link-text="Complete Section" side-link=pageEditLinks.about}}
   {{/if}}
 {{/section}}
   
