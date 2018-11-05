@@ -9,6 +9,7 @@ services:
   oidc-provider:
     build:
       context: ./ci-auth-db
+    image: gpitf/catalogue-oidc-provider:private-beta
     ports:
       - "9000:9000"
     networks:
