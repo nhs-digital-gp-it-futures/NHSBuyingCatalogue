@@ -1175,27 +1175,22 @@ app.post('/solutions/:solution_id/product-page/:section_name', csrfProtection, a
 
   const productPage = solutionEx.solution.productPage ? JSON.parse(solutionEx.solution.productPage) : {};
 
-  const arrayForms = ['features', 'integrations'];
-  const tableForms = ['service-scope', 'customer-insights', 'data-import-export', 'user-support', 'migration-switching', 'audit-info'];
+  const arrayForms = ['features', 'integrations']
+  const tableForms = ['service-scope', 'customer-insights', 'data-import-export', 'user-support', 'migration-switching', 'audit-info']
 
   const sectionName = req.params.section_name
 
-  if(tableForms.indexOf(sectionName) > -1) {
-    let sectionInput = {...req.body};
-    delete sectionInput['_csrf'];
-    delete sectionInput['action'];
-
-    productPage[sectionName] = sectionInput;
-  }
-  else if(arrayForms.indexOf(sectionName) > -1) {
+  if (tableForms.indexOf(sectionName) > -1) {
+    let sectionInput = _.omit(req.body, ['_csrf', 'action'])
+    productPage[sectionName] = sectionInput
+  } else if (arrayForms.indexOf(sectionName) > -1) {
     const wantThis = parseWantThis(req.body.wantThis)
     const sectionElements = parseArrayItems(req.body.items)
-    if(wantThis) {
-      context.errors = validateFormArray(sectionElements);
-      productPage[sectionName] = sectionElements;  
-    }
-    else {
-      productPage[sectionName] = [];
+    if (wantThis) {
+      context.errors = validateFormArray(sectionElements)
+      productPage[sectionName] = sectionElements
+    } else {
+      productPage[sectionName] = []
     }
   }
   else if (sectionName === 'summary') {
