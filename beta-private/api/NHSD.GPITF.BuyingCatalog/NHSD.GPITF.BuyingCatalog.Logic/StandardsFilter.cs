@@ -3,9 +3,9 @@ using NHSD.GPITF.BuyingCatalog.Models;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
-  public sealed class FrameworksFilter : PassThroughFilterBase<Frameworks>, IFrameworksFilter
+  public sealed class StandardsFilter : PassThroughFilterBase<Standards>, IStandardsFilter
   {
-    public FrameworksFilter(IHttpContextAccessor context) :
+    public StandardsFilter(IHttpContextAccessor context) :
       base(context)
     {
     }

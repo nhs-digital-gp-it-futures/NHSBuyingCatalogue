@@ -27,13 +27,15 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
     public static Organisations GetOrganisation(
       string id = "NHS Digital",
-      string primaryRoleId = PrimaryRole.GovernmentDepartment)
+      string primaryRoleId = PrimaryRole.GovernmentDepartment,
+      string odsCode = "NHS Digital ODS Code")
     {
       return new Organisations
       {
         Id = id,
         Name = id,
-        PrimaryRoleId = primaryRoleId
+        PrimaryRoleId = primaryRoleId,
+        OdsCode = odsCode
       };
     }
 
@@ -41,26 +43,38 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       string id = null,
       string previousId = null,
       string orgId = null,
-      SolutionStatus status = SolutionStatus.Draft)
+      SolutionStatus status = SolutionStatus.Draft,
+      string createdById = null,
+      DateTime? createdOn = null,
+      string modifiedById = null,
+      DateTime? modifiedOn = null)
     {
       return new Solutions
       {
         Id = id ?? Guid.NewGuid().ToString(),
         PreviousId = previousId,
         OrganisationId = orgId ?? Guid.NewGuid().ToString(),
-        Status = status
+        Status = status,
+        CreatedById = createdById ?? Guid.NewGuid().ToString(),
+        CreatedOn = createdOn ?? DateTime.Now,
+        ModifiedById = modifiedById ?? Guid.NewGuid().ToString(),
+        ModifiedOn = modifiedOn ?? DateTime.Now
       };
     }
 
     public static TechnicalContacts GetTechnicalContact(
       string id = null,
-      string solutionId = null
+      string solutionId = null,
+      string contactType = "Technical Contact",
+      string emailAddress = "jon.dough@tpp.com"
       )
     {
       return new TechnicalContacts
       {
         Id = id ?? Guid.NewGuid().ToString(),
-        SolutionId = solutionId ?? Guid.NewGuid().ToString()
+        SolutionId = solutionId ?? Guid.NewGuid().ToString(),
+        ContactType = contactType,
+        EmailAddress = emailAddress
       };
     }
 
@@ -103,12 +117,14 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
     public static Contacts GetContact(
       string id = null,
-      string orgId = null)
+      string orgId = null,
+      string emailAddress1 = null)
     {
       return new Contacts
       {
         Id = id ?? Guid.NewGuid().ToString(),
-        OrganisationId = orgId ?? Guid.NewGuid().ToString()
+        OrganisationId = orgId ?? Guid.NewGuid().ToString(),
+        EmailAddress1 = emailAddress1 ?? "jon.dough@tpp.com"
       };
     }
 
