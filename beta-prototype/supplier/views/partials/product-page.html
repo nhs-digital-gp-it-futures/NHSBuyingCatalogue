@@ -319,9 +319,9 @@
   {{/section}}
 
   {{#>section id="importing-exporting"}}
-    {{#if importExport}}
+    {{#if productPage.import-exports}}
       {{>section-header title="Data Importing & Exporting" side-link-text="Edit Section" side-link=pageEditLinks.import_exports}}
-      {{>info-table info=dataImportExport}}
+      {{>info-table info=productPage.import-exports}}
     {{else}}
       {{>section-header title="Data Importing & Exporting" side-link-text="Complete Section" side-link=pageEditLinks.import_exports}}
     {{/if}}

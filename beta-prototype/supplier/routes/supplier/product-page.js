@@ -43,14 +43,13 @@ function enrichContextForProductPage (context, solutionEx) {
 
   context.productPage = solutionEx.solution.productPage ? JSON.parse(solutionEx.solution.productPage) : {}
 
-  const sections = ['service-scope', 'customer-insights', 'user-support']
+  const sections = ['service-scope', 'customer-insights', 'user-support', 'import-exports']
   sections.forEach((section) => {
+    console.log(section, context.productPage[section]);
     context.productPage[section] = _.map(context.productPage[section], (value, key) => {
       return { key: key, value: value }
     })
   })
-
-  console.log(context.productPage)
 }
 
 async function enrichContextForProductPagePreview (context, solutionEx) {

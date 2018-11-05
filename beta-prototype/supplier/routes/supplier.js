@@ -1060,17 +1060,17 @@ app.post('/solutions/:solution_id/product-page', csrfProtection, async (req, res
 
 app.get('/solutions/:solution_id/product-page/:section_name', csrfProtection, async (req, res) => {
   const context = {
-    errors : '',
+    errors: '',
     csrfToken: req.csrfToken(),
-    pageHasForm:true
+    pageHasForm: true
   }
 
   context.breadcrumbs = [
     { label: 'My Dashboard', url: '/suppliers' },
     { label: 'My Solutions', url: '/suppliers/solutions' },
     { label: 'Onboarding Solution', url: `/suppliers/solutions/${req.params.solution_id}` },
-    { label: 'Solution Page', url: `/suppliers/solutions/${req.params.solution_id}/product-page`},
-    { label: req.params.section_name}
+    { label: 'Solution Page', url: `/suppliers/solutions/${req.params.solution_id}/product-page` },
+    { label: req.params.section_name }
   ]
 
   let solutionEx = req.session.solutionEx
@@ -1080,11 +1080,11 @@ app.get('/solutions/:solution_id/product-page/:section_name', csrfProtection, as
 
   enrichContextForProductPage(context, solutionEx)
 
-  context.productPage = productPage;
-  context.solution = solutionEx.solution;
+  context.productPage = productPage
+  context.solution = solutionEx.solution
 
-  const tableForms = ['service-scope', 'customer-insights', 'data-import-export', 'user-support', 'migration-switching', 'audit-info'];
-  if(tableForms.indexOf(req.params.section_name) > -1) {
+  const tableForms = ['service-scope', 'customer-insights', 'import-exports', 'user-support', 'migration-switching', 'audit-info']
+  if (tableForms.indexOf(req.params.section_name) > -1) {
     const formLayout = require(`../forms/${req.params.section_name}.json`)
 
     /**
@@ -1149,26 +1149,24 @@ function validateFormArray(array) {
   );
 }
 function parseArrayItems(items) {
-  if(!items) {
-    return [];
-  }
-  else if(items.filter) {
-    return items.filter((item => item != ''));
-  }
-  else {
-    return [items];
+  if (!items) {
+    return []
+  } else if (items.filter) {
+    return items.filter((item) => item !== '')
+  } else {
+    return [items]
   }
 }
 
-function parseWantThis(wantThis) {
+function parseWantThis (wantThis) {
   return wantThis === 'yes'
 }
 
 app.post('/solutions/:solution_id/product-page/:section_name', csrfProtection, async (req,res) => {
   const context = {
-    errors : '',
+    errors: '',
     csrfToken: req.csrfToken(),
-    pageHasForm:true
+    pageHasForm: true
   }
 
   let solutionEx = req.session.solutionEx
@@ -1177,7 +1175,7 @@ app.post('/solutions/:solution_id/product-page/:section_name', csrfProtection, a
   const productPage = solutionEx.solution.productPage ? JSON.parse(solutionEx.solution.productPage) : {};
 
   const arrayForms = ['features', 'integrations']
-  const tableForms = ['service-scope', 'customer-insights', 'data-import-export', 'user-support', 'migration-switching', 'audit-info']
+  const tableForms = ['service-scope', 'customer-insights', 'import-exports', 'user-support', 'migration-switching', 'audit-info']
 
   const sectionName = req.params.section_name
 
