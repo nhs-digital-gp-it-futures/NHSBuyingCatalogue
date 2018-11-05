@@ -29,7 +29,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSD.GPITF.BuyingCatalog.Ev
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSD.GPITF.BuyingCatalog.Search.Tests", "NHSD.GPITF.BuyingCatalog.Search.Tests\NHSD.GPITF.BuyingCatalog.Search.Tests.csproj", "{75CD02F5-1745-437E-940A-4185C6D82A93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSD.GPITF.BuyingCatalog.Search", "NHSD.GPITF.BuyingCatalog.Search\NHSD.GPITF.BuyingCatalog.Search.csproj", "{6A707E7F-A236-4179-9247-04BDC1DA4D66}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSD.GPITF.BuyingCatalog.Search", "NHSD.GPITF.BuyingCatalog.Search\NHSD.GPITF.BuyingCatalog.Search.csproj", "{6A707E7F-A236-4179-9247-04BDC1DA4D66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSD.GPITF.BuyingCatalog.Datastore.CRM.Tests", "NHSD.GPITF.BuyingCatalog.Datastore.CRM.Tests\NHSD.GPITF.BuyingCatalog.Datastore.CRM.Tests.csproj", "{FAD48F34-E722-4288-9E41-2D1DA79FB748}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +95,10 @@ Global
 		{6A707E7F-A236-4179-9247-04BDC1DA4D66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A707E7F-A236-4179-9247-04BDC1DA4D66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A707E7F-A236-4179-9247-04BDC1DA4D66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAD48F34-E722-4288-9E41-2D1DA79FB748}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAD48F34-E722-4288-9E41-2D1DA79FB748}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAD48F34-E722-4288-9E41-2D1DA79FB748}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAD48F34-E722-4288-9E41-2D1DA79FB748}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

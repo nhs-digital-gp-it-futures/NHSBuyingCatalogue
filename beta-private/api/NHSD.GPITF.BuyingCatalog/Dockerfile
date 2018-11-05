@@ -10,6 +10,7 @@ COPY NHSD.GPITF.BuyingCatalog.Datastore.Database/NHSD.GPITF.BuyingCatalog.Datast
 COPY NHSD.GPITF.BuyingCatalog.Datastore.Database.Tests/NHSD.GPITF.BuyingCatalog.Datastore.Database.Tests.csproj NHSD.GPITF.BuyingCatalog.Datastore.Database.Tests/
 COPY NHSD.GPITF.BuyingCatalog.Datastore.Database.Importer/NHSD.GPITF.BuyingCatalog.Datastore.Database.Importer.csproj NHSD.GPITF.BuyingCatalog.Datastore.Database.Importer/
 COPY NHSD.GPITF.BuyingCatalog.Datastore.CRM/NHSD.GPITF.BuyingCatalog.Datastore.CRM.csproj NHSD.GPITF.BuyingCatalog.Datastore.CRM/
+COPY NHSD.GPITF.BuyingCatalog.Datastore.CRM.Tests/NHSD.GPITF.BuyingCatalog.Datastore.CRM.Tests.csproj NHSD.GPITF.BuyingCatalog.Datastore.CRM.Tests/
 COPY NHSD.GPITF.BuyingCatalog.Logic/NHSD.GPITF.BuyingCatalog.Logic.csproj NHSD.GPITF.BuyingCatalog.Logic/
 COPY NHSD.GPITF.BuyingCatalog.Logic.Tests/NHSD.GPITF.BuyingCatalog.Logic.Tests.csproj NHSD.GPITF.BuyingCatalog.Logic.Tests/
 COPY NHSD.GPITF.BuyingCatalog.Tests/NHSD.GPITF.BuyingCatalog.Tests.csproj NHSD.GPITF.BuyingCatalog.Tests/
@@ -37,6 +38,10 @@ RUN dotnet build -c Release -o
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.Datastore.CRM
 RUN dotnet build -c Release /app
+
+WORKDIR /src/NHSD.GPITF.BuyingCatalog.Datastore.CRM.Tests
+RUN dotnet build -c Release -o
+RUN dotnet test -c Release
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.Logic
 RUN dotnet build -c Release -o /app
