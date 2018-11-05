@@ -44,8 +44,6 @@
       {{/errors.message}}
       <fieldset class="evidence video" id="video-fieldset-{{id}}">
         <h3>Part 1. Add Video</h3>
-        <!-- <p class="label">Upload video to file share platform, and provide link to video here. -->
-        <!-- <a href="{{ filesharePlatformUrl }}" target="_blank">Open file share platform.</a></p> -->
         <label id="video-input-label-{{id}}"
                class="file-input">
           Choose a File
@@ -56,19 +54,15 @@
                  value="{{video_evidence}}">
         </label>
         <p id="video-file-name-{{id}}">{{#if video_evidence}} {{video_evidence}} {{else}} No File Selected {{/if}}</p>
-        <button class="video-save" name="action" value="save" type="">Save</button>
-        <br>
-        <p class="description">Enter a timestamp for each epic where the epic is evidenced. </p>
-        <p class="description">For example, Epic 3 at 4:56.</p>
-        <textarea
-          name="video_description[{{id}}]"
-          columns="150"
-          rows="4">{{video_description}}</textarea>
-
-
-
+        <div id="toggleable-fieldset-{{id}}">
+          <p class="description">Enter a timestamp for each epic where the epic is evidenced. </p>
+          <p class="description">For example, Epic 3 at 4:56.</p>
+          <textarea
+            name="video_description[{{id}}]"
+            columns="150"
+            rows="4">{{video_description}}</textarea>
+        </div>
       </fieldset>
-
       <fieldset class="evidence description">
           <h3>Part 2. How does your Solution deliver value for this Capability? </h3>
           <p class="description">300 character limit </p>
@@ -123,16 +117,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function buildFieldsetToggler(fileInput, fieldset) {
+    return function () {
+      const input = fileInput.value;
+      fieldset.classList.toggle('hidden', !input);
+    }
+  }
+
   const videoFieldsets = $$('form fieldset.evidence.video');
 
   videoFieldsets.forEach((fieldSet) => {
     const idElements = fieldSet.id.split('-');
     const capID = idElements[idElements.length-1];
+
     const vidInput = $(`#video-input-${capID}`);
     const vidLabel = $(`#video-file-name-${capID}`);
+    const fieldset = $(`#toggleable-fieldset-${capID}`);
+
     const labelUpdater = buildLabelUpdater(vidInput, vidLabel);
+    const fieldSetToggler = buildFieldsetToggler(vidInput, fieldset)
+
     vidInput.addEventListener('change', labelUpdater)
+    vidInput.addEventListener('change', fieldSetToggler);
+
     labelUpdater();
+    fieldSetToggler();
   })
 
 })

@@ -22,6 +22,7 @@
 
 /* Abstract applied colour palette */
 :root {
+
   --color-bg: var(--color-nhs-white);
   --color-fg: var(--color-nhs-black);
 
