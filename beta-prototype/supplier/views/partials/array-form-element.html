@@ -3,9 +3,9 @@
         {{#title}}<h3>{{.}}</h3>{{/title}}
         {{#clarification}}<p>{{.}}</p>{{/clarification}}
         <div>
-            <input id="{{name}}-first-input" type="text" name="{{name}}" placeholder={{example-item}}>
+            <input id="{{name}}-first-input" type="text" name="{{name}}" placeholder="{{example-item}}">
             {{# value}}
-                <input type="text" name="{{../name}}" value={{.}}>
+                <input type="text" name="{{../name}}" value="{{.}}">
             {{/value}}
         </div>
         

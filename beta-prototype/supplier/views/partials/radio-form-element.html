@@ -5,9 +5,9 @@
         {{#options}}
             <label>
                 {{#if checked}} 
-                    <input type="radio" name={{../name}} value={{value}} checked>
+                    <input type="radio" name="{{../name}}" value="{{value}}" checked>
                 {{else}}
-                    <input type="radio" name={{../name}} value={{value}} >
+                    <input type="radio" name="{{../name}}" value="{{value}}" >
                 {{/if}}
                 {{#label}} {{.}} {{/label}}
             </label>
