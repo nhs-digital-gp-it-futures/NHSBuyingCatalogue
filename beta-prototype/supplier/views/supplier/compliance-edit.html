@@ -4,7 +4,7 @@
   <div class="matrix">
     <header>Download your latest TM</header>
     <p><a download href="/Dummy TraceabilityMatrix.xlsx">{{name}} Traceability Matrix (TM)</a></p>
-    {{#if editUrl}}
+    {{#if hasFeedback}}
       <p class="comment" id="latestMessage">{{#latestSubmission}} {{message}} {{/latestSubmission}}</p>
     {{/if}}
     <p class="comment">{{#latestSubmissionDate}} {{.}} {{/latestSubmissionDate}}</p>
