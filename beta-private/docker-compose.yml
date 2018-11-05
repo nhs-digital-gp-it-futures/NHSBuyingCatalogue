@@ -10,9 +10,14 @@ services:
     environment:
       - NODE_ENV
       - BASE_URL
+      - CACHE_HOST
       - OIDC_ISSUER_URL
       - OIDC_CLIENT_ID
       - OIDC_CLIENT_SECRET
+      - SESSION_SECRET
+    restart: always
+    depends_on:
+      - cache
 
   api:
     image: gpitf/catalogue-api:private-beta
@@ -37,6 +42,15 @@ services:
       - beta_network
     ports:
       - "3000:80"
+    restart: always
+    depends_on:
+      - frontend
+
+  cache:
+    image: redis:alpine
+    networks:
+      - beta_network
+    restart: always
 
 networks:
   beta_network:

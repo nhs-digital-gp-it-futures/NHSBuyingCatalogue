@@ -1,32 +1,69 @@
 {{> errors}}
 
-<h1>Solution Details</h1>
+<header class="page-main-heading">
+  <h1>{{t 'Onboarding.Details.Title' }}</h1>
+  <h2>{{t 'Onboarding.Details.Subtitle'}}</h2>
+</header>
+
 {{#> form}}
-  <fieldset>
-    <legend>Enter Solution name, description, version</legend>
+  {{#> collapsible-fieldset
+    legend="Onboarding.Details.Fieldsets.NameDescVersion.Legend"
+    invalid=errors.fieldsets.NameDescVersion
+  }}
+  <p class="preamble">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Preamble'}}</p>
 
-    <label>
-      Solution name
-      <input id="solution.name" type="text" name="solution[name]" value="{{solution.name}}"
-        autocomplete="off" aria-required="true" maxlength="60"
-        {{#if errors.controls.[solution.name]}}aria-invalid="true" aria-errormessage="error-solution.name"{{/if}}>
-    </label>
+  {{#> control invalid=errors.controls.[solution.name]}}
+    <label for="solution.name">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Name.Label'}}</label>
+    {{#if (tt 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Name.Validations')}}
+    {{#if errors.controls.[solution.name]}}
+    <p class="action">{{t errors.controls.[solution.name].action}}</p>
+    {{/if}}
+    <ul class="validations">
+    {{#each (tt 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Name.Validations')}}
+      <li>{{.}}</li>
+    {{/each}}
+    </ul>
+    {{/if}}
+    <input id="solution.name" type="text" name="solution[name]" value="{{solution.name}}"
+      autocomplete="off" aria-required="true" maxlength="60"
+      {{#if errors.controls.[solution.name]}}aria-invalid="true" aria-errormessage="error-solution.name"{{/if}}>
+  {{/control}}
 
-    <label>
-      Description
-      <textarea id="solution.description" name="solution[description]"
-        aria-required="true" maxlength="300"
-        {{#if errors.controls.[solution.description]}}aria-invalid="true" aria-errormessage="error-solution.description"{{/if}}>{{solution.description}}</textarea>
-    </label>
+  {{#> control invalid=errors.controls.[solution.description]}}
+    <label for="solution.description">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Description.Label'}}</label>
+    <p class="info">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Description.Info'}}</p>
+    {{#if errors.controls.[solution.description]}}
+    <p class="action">{{t errors.controls.[solution.description].action}}</p>
+    {{/if}}
+    {{#if (tt 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Description.Validations')}}
+    <ul class="validations">
+    {{#each (tt 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Description.Validations')}}
+      <li>{{.}}</li>
+    {{/each}}
+    </ul>
+    {{/if}}
+    <textarea id="solution.description" name="solution[description]"
+      aria-required="true" maxlength="300" rows="5"
+      {{#if errors.controls.[solution.description]}}aria-invalid="true" aria-errormessage="error-solution.description"{{/if}}>{{solution.description}}</textarea>
+  {{/control}}
 
-    <label>
-      Version
-      <input id="solution.version" type="text" name="solution[version]" value="{{solution.version}}"
-        autocomplete="off" maxlength="10"
-        {{#if errors.controls.[solution.version]}}aria-invalid="true" aria-errormessage="error-solution.version"{{/if}}>
-    </label>
-  </fieldset>
+  {{#> control invalid=errors.controls.[solution.version]}}
+    <label for="solution.version">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Label'}}</label>
+    {{#> help-reveal
+      title='Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Help.Title'}}
+      {{#each (tt 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Help.Text')}}
+        <p>{{.}}</p>
+      {{/each}}
+    {{/help-reveal}}
+    <input id="solution.version" type="text" name="solution[version]" value="{{solution.version}}" class="narrow"
+      autocomplete="off" maxlength="10"
+      {{#if errors.controls.[solution.version]}}aria-invalid="true" aria-errormessage="error-solution.version"{{/if}}>
+  {{/control}}
+  {{/collapsible-fieldset}}
 
-  <input type="submit" name="action[save]" value="Save">
-  <input type="submit" name="action[continue]" value="Continue">
+  <input type="submit"
+    class="button primary"
+    name="action[continue]"
+    value="{{t 'Buttons.Save and continue'}}">
 {{/form}}
+<a class="back-link" href="../">{{t 'Onboarding.Details.Backlink.Title'}}</a>

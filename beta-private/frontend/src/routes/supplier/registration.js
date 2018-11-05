@@ -89,7 +89,15 @@ async function registrationPagePost (req, res) {
   if (!valres.isEmpty()) {
     context.errors = {
       items: valres.array({ onlyFirstError: true }),
-      controls: valres.mapped()
+      controls: _.mapValues(valres.mapped(), res => ({
+        ...res,
+        action: res.msg + 'Action'
+      }))
+    }
+    context.errors.fieldsets = {
+      'NameDescVersion': 'solution.name' in context.errors.controls ||
+        'solution.description' in context.errors.controls ||
+        'solution.version' in context.errors.controls
     }
   } else {
     // TODO create solution if necessary

@@ -19,7 +19,6 @@ const continueRegistrationButton = Selector('#content a[href^=register]')
 const solutionNameInput = Selector('#content [name="solution\\[name\\]"]')
 const solutionDescriptionInput = Selector('#content [name="solution\\[description\\]"]')
 const solutionVersionInput = Selector('#content [name="solution\\[version\\]"]')
-const saveButton = Selector('[name="action\\[save\\]"]')
 const continueButton = Selector('[name="action\\[continue\\]"]')
 
 fixture('Getting started')
@@ -32,7 +31,7 @@ test('a11y: logged out homepage', async t => {
 test('Login as supplier', async t => {
   await t
     .useRole(supplierRole)
-    .expect(Selector('#account .user').innerText).contains('Hello, Dr')
+    .expect(Selector('#account .user').innerText).contains('Hi, Dr')
 })
 
 test('a11y: supplier homepage', async t => {
@@ -44,6 +43,7 @@ test('a11y: supplier homepage', async t => {
 test('Clicking logo returns to supplier homepage', async t => {
   await t
     .useRole(supplierRole)
+    .click('body > header a[href^="/about"]')
     .click(homeLink)
 
     .expect(Selector('#content > h1').innerText).eql('Supplier Home')
@@ -52,7 +52,7 @@ test('Clicking logo returns to supplier homepage', async t => {
 test('Solutions that are currently onboarding are listed', async t => {
   await t
     .useRole(supplierRole)
-    .expect(firstOnboardingSolutionName.innerText).eql('Really Kool Document Manager | 1')
+    .expect(firstOnboardingSolutionName.textContent).eql('Really Kool Document Manager | 1')
 })
 
 test('Registration page shows correct information accessibly', async t => {
@@ -74,10 +74,12 @@ test('Registration page validation is correct and accessible', async t => {
     .click(continueRegistrationButton)
     .selectText(solutionNameInput).pressKey('backspace')
     .selectText(solutionDescriptionInput).pressKey('backspace')
-    .click(saveButton)
+    .click(continueButton)
 
     .expect(Selector('#errors #error-solution\\.name').innerText).contains('Solution name is missing')
-    .expect(Selector('#errors #error-solution\\.description').innerText).contains('Solution description is missing')
+    .expect(Selector('#errors #error-solution\\.description').innerText).contains('Summary description is missing')
+    .expect(solutionNameInput.parent('.control.invalid').child('.action').textContent).contains('Please enter a Solution name')
+    .expect(solutionDescriptionInput.parent('.control.invalid').child('.action').textContent).contains('Please enter a Summary description')
 
   await axeCheck(t)
 })

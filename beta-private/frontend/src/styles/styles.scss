@@ -1,7 +1,9 @@
-header .nhs-digital-logo {
-  height: 3em;
-  width: 3em;
-}
+@import 'normalize';
+@import 'fonts';
+@import 'palette';
+@import 'icons';
+@import 'forms';
+@import 'layout';
 
 .sr {
   left: 0;
