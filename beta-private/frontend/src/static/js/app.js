@@ -19,13 +19,17 @@ Document.prototype.$$ = Element.prototype.$$ = function (selector) {
 
 // Compensate for fixed page header height causing anchored links to appear
 // off-screen on page load. Note that this can't be DOMContentLoaded as the
-// initial scroll position isn't set at that point.
-// FIXME: does not work in IE or Edge - scrollingElement.scrollTop is always 0 here
+// initial scroll position isn't set at that point. Nor is it set during the
+// load event on IE and Edge. So, the actual compensatory scroll is deferred
+// for a brief period to allow all browsers to settle on the required state.
 window.onload = window.onhashchange = function () {
   const adjustmentElement = $('body > header')
   const adjustment = adjustmentElement.offsetHeight
   const scrollingElement = document.scrollingElement || document.documentElement
-  scrollingElement.scrollTop = Math.max(0, scrollingElement.scrollTop - adjustment)
+
+  setTimeout(function () {
+    scrollingElement.scrollTop = Math.max(0, scrollingElement.scrollTop - adjustment)
+  }, 25)
 }
 
 // Simulate support for the form attribute on inputs for IE11
