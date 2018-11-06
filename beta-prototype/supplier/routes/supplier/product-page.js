@@ -61,10 +61,7 @@ function enrichContextForProductPage (context, solutionEx) {
 
     inputs.forEach((input) => {
       const value = filterBlanks(valueMap[input.name])
-
       displayMap.push(mapInputValue(input, value))
-
-      // cheating right now, as only radio elements can have dependants.
       if (dependantsActive(input, value)) {
         displayMap = displayMap.concat(mapDisplayValues(input.dependants, valueMap))
       }
@@ -74,6 +71,7 @@ function enrichContextForProductPage (context, solutionEx) {
   }
 
   function dependantsActive (input, value) {
+    // abusing the fact that right now, as only radio elements can have dependants.
     if (!hasDependants(input)) {
       return false
     } else if (hasTriggers(input)) {
@@ -123,19 +121,19 @@ function enrichContextForProductPage (context, solutionEx) {
   }
 
   function hasDependants (input) {
-    return !!input['dependants']
+    return !_.isEmpty(input['dependants'])
   }
 
   function hasValue (input) {
-    return !!input['value']
+    return !_.isEmpty(input['value'])
   }
 
   function hasHideTriggers (input) {
-    return Array.isArray(input['hidden-on'])
+    return Array.isArray(input['hidden-on']) && !_.isEmpty(input['hidden-on'])
   }
 
   function hasTriggers (input) {
-    return Array.isArray(input['dependant-on'])
+    return Array.isArray(input['dependant-on']) && !_.isEmpty(input['dependant-on'])
   }
 
   function hasTriggeringValue (input, value) {
