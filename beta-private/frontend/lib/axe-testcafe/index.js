@@ -40,14 +40,16 @@ var runAxe = ClientFunction(function (context, options) {
 
             if (results.violations.length !== 0) {
                 results.violations.forEach(function (violation) {
-                    errors += JSON.stringify(violation) + violation.help + '\n\tnodes:\n';
+                    errors += violation.help + '\n\n';
 
                     violation.nodes.forEach(function (node) {
                         var targetNodes = node.target.map(function (target) {
                             return '"' + target + '"';
                         }).join(', ');
-                        errors += '\t\t' + targetNodes + '\n';
+                        errors += targetNodes + '\n' + node.html + '\n' + node.failureSummary + '\n\n';
                     });
+
+                    errors += '\n--- BEGIN JSON ---\n' + JSON.stringify(violation) + '\n--- END JSON ---\n';
                 });
             }
 
