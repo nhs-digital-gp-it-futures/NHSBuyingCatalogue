@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
-  public sealed class CapabilityStandardDatastore //: ICapabilityStandardDatastore
+  public sealed class CapabilityStandardDatastore : ICapabilityStandardDatastore
   {
     public IEnumerable<CapabilityStandard> GetAll()
     {
