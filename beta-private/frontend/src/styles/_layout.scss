@@ -80,15 +80,38 @@ body > header {
 
   .bottom {
     @extend %reversed;
-    height: $header-bottom-height;
+    min-height: $header-bottom-height;
     padding: $header-padding;
 
     nav {
-      margin: 0 auto;
-      width: 40%;
+      &.no-active-form {
+        margin: 0 auto;
+        width: 40%;
 
-      a {
-        margin-right: 2rem;
+        a {
+          margin-right: 2rem;
+        }
+      }
+
+      &.active-form {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        input {
+          flex-shrink: 0
+        }
+
+        .title {
+          flex-grow: 2;
+          font-weight: bold;
+          padding: 0 1em;
+        }
+
+        a {
+          padding-right: 1em;
+        }
       }
     }
   }
