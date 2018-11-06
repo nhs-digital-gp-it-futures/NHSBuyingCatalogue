@@ -139,6 +139,18 @@ function enrichContextForProductPage (context, solutionEx) {
   function hasTriggeringValue (input, value) {
     return input['dependant-on'].includes(value)
   }
+
+  // Placeholder pricing information
+
+  const placeholderServicePricing = [
+    { label: 'Training (on site)', price: '£1000/day' },
+    { label: 'Training (online)', price: '£2000/contract' },
+    { label: 'Training (virtual classroom)', price: '£1500/contract' }
+  ]
+  context.services = {
+    'associated-services': placeholderServicePricing,
+    'additional-services': placeholderServicePricing
+  }
 }
 
 async function enrichContextForProductPagePreview (context, solutionEx) {

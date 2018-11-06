@@ -583,6 +583,15 @@ width:80%
   padding: 0.7em;
 }
 
+#solution-page-preview  details  table  tbody  tr th{
+  border-bottom: solid 3px var(--color-nhs-pale-grey);
+  padding: 1em;
+}
+
+#solution-page-preview  details  table  tbody  tr {
+  border-collapse: collapse;
+}
+
 #solution-page-preview section div ul {
   margin-left:0;
   padding-left:0;

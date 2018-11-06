@@ -124,18 +124,10 @@
     {{#>collapsible summary-text="Pricing"}}
     <h4 class="notice">NHS Digital will add pricing to your Solution once agreed in Bravo.</h4>
     <table>
-        {{#each services.associated-services as |service|}}
-          {{#if service.enabled}}
-            <tr>
-              <td class="lable">
-                List Price
-              </td>
-              <td class="price">
-                {{service.price}}
-              </td>
-            </tr>
-          {{/if}}
-        {{/each}}
+      <tr class="table-header">
+        <th>List Price</th>
+        <th>£ / max per patient</th>
+      </tr>
       </table>
       {{/collapsible}}
     {{/section}}
@@ -145,7 +137,6 @@
     <h4 class="notice">This is placeholder text to show how Additional Services could display. NHS Digital will add Associated Services, if relevant to this Solution, and pricing once agreed in Bravo.</h4>
     <table>
       {{#each services.associated-services as |service|}}
-        {{#if service.enabled}}
           <tr>
             <td class="lable">
               {{service.label}}
@@ -154,7 +145,6 @@
               {{service.price}}
             </td>
           </tr>
-        {{/if}}
       {{/each}}
     </table>  
     {{/collapsible}}
@@ -165,7 +155,6 @@
   <h4 class="notice">This is placeholder text to show how Additional Services could display. NHS Digital will add Additional Services, if relevant to this Solution, and pricing once agreed in Bravo.</h4>
   <table>
     {{#each services.additional-services as |service|}}
-      {{#if service.enabled}}
         <tr>
           <td class="lable">
             {{service.label}}
@@ -174,7 +163,6 @@
             {{service.price}}
           </td>
         </tr>
-      {{/if}}
     {{/each}}
   </table>
   {{/collapsible}}
