@@ -121,8 +121,7 @@
   {{/section}}
 
   {{#>section id="pricing"}}
-    {{>section-header title="Pricing" }}
-    {{#>collapsible}}
+    {{#>collapsible summary-text="Pricing"}}
     <h4 class="notice">NHS Digital will add pricing to your Solution once agreed in Bravo.</h4>
     <table>
         {{#each services.associated-services as |service|}}
@@ -142,8 +141,7 @@
     {{/section}}
 
   {{#>section id="associated-services"}}
-    {{>section-header title="Associated Services (Not Optional)"}}
-    {{#>collapsible}}
+    {{#>collapsible summary-text="Associated Services (Not Optional)"}}
     <h4 class="notice">This is placeholder text to show how Additional Services could display. NHS Digital will add Associated Services, if relevant to this Solution, and pricing once agreed in Bravo.</h4>
     <table>
       {{#each services.associated-services as |service|}}
@@ -163,8 +161,7 @@
   {{/section}}
 
   {{#>section id="additional-services"}}
-  {{>section-header title="Additional Services (Optional)"}}
-  {{#>collapsible}}
+  {{#>collapsible summary-text="Additional Services (Optional)"}}
   <h4 class="notice">This is placeholder text to show how Additional Services could display. NHS Digital will add Additional Services, if relevant to this Solution, and pricing once agreed in Bravo.</h4>
   <table>
     {{#each services.additional-services as |service|}}
@@ -193,8 +190,7 @@
 {{/section}}
 
   <section class="section-group" id="assessment-standards">
-    <h3>NHS Assessments &amp; Standards*</h3>
-    {{#>collapsible}}
+      {{#>collapsible summary-text="NHS Assessments & Standards*"}}
     <p class="notice">
         This sections shows the Capabilities asserted and Standards met by your Solution. NHS Digital will share Compliance evidence with Buyers upon request.
     </p>
