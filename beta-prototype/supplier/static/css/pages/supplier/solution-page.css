@@ -588,6 +588,10 @@ width:80%
   padding: 1em;
 }
 
+#solution-page-preview  details  table{
+  background: none;
+}
+
 #solution-page-preview  details  table  tbody  tr {
   border-collapse: collapse;
 }
