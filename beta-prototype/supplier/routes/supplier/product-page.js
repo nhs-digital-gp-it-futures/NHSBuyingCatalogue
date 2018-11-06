@@ -50,7 +50,7 @@ function enrichContextForProductPage (context, solutionEx) {
     const form = require(`../../forms/${section}`)
 
     if (values && form) {
-      context.productPage[section] = mapDisplayValues(form.inputs, values)
+      context.productPage[section] = filterBlanks(mapDisplayValues(form.inputs, values))
     } else {
       _.omit(context.productPage, section)
     }
@@ -76,7 +76,7 @@ function enrichContextForProductPage (context, solutionEx) {
   function dependantsActive (input, value) {
     if (!hasDependants(input)) {
       return false
-    } else if (hasTriggerArray(input)) {
+    } else if (hasTriggers(input)) {
       return hasTriggeringValue(input, value)
     } else {
       return hasValue(input)
@@ -84,23 +84,40 @@ function enrichContextForProductPage (context, solutionEx) {
   }
 
   function mapInputValue (input, value) {
-    let label = ''
+    let valueLabel = ''
+
+    if (valueTriggersHidden(input, value)) {
+      return {}
+    }
 
     if (hasOptions(input)) {
       const option = _.find(input['options'], (o) => o.value === value)
-      label = option.label
+      valueLabel = option.label
     }
 
-    return { key: input.title, value: label || value }
+    return {
+      key: input.label || input.title,
+      value: valueLabel || value
+    }
   }
 
   function hasOptions (input) {
     return Array.isArray(input['options'])
   }
 
+  function valueTriggersHidden (input, value) {
+    if (hasHideTriggers(input)) {
+      return input['hidden-on'].includes(value)
+    } else {
+      return false
+    }
+  }
+
   function filterBlanks (values) {
     if (Array.isArray(values)) {
-      return values.filter((val) => val !== '')
+      return values.filter((val) => {
+        return !_.isEmpty(val)
+      })
     }
     return values
   }
@@ -113,7 +130,11 @@ function enrichContextForProductPage (context, solutionEx) {
     return !!input['value']
   }
 
-  function hasTriggerArray (input) {
+  function hasHideTriggers (input) {
+    return Array.isArray(input['hidden-on'])
+  }
+
+  function hasTriggers (input) {
     return Array.isArray(input['dependant-on'])
   }
 
