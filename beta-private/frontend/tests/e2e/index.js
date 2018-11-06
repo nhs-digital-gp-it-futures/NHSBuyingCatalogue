@@ -19,6 +19,11 @@ const continueRegistrationButton = Selector('#content a[href^=register]')
 const solutionNameInput = Selector('#content [name="solution\\[name\\]"]')
 const solutionDescriptionInput = Selector('#content [name="solution\\[description\\]"]')
 const solutionVersionInput = Selector('#content [name="solution\\[version\\]"]')
+
+const globalSolutionName = Selector('body > header .active-form .title')
+const globalSaveButton = Selector('body > header .active-form [name="action\\[save\\]"]')
+const globalSaveAndExitButton = Selector('body > header .active-form [name="action\\[exit\\]"]')
+
 const continueButton = Selector('[name="action\\[continue\\]"]')
 
 fixture('Getting started')
@@ -82,6 +87,47 @@ test('Registration page validation is correct and accessible', async t => {
     .expect(solutionDescriptionInput.parent('.control.invalid').child('.action').textContent).contains('Please enter a Summary description')
 
   await axeCheck(t)
+})
+
+test('Solution name shows in top bar and updates correctly when saved', async t => {
+  await t
+    .useRole(supplierRole)
+    .click(firstOnboardingSolutionName)
+    .click(continueRegistrationButton)
+    .expect(globalSolutionName.textContent).eql('Really Kool Document Manager, 1')
+
+  await t
+    .selectText(solutionNameInput).typeText(solutionNameInput, 'Really Really Kool Document Manager')
+    .selectText(solutionVersionInput).pressKey('backspace')
+    .click(globalSaveButton)
+    .expect(solutionNameInput.value).eql('Really Really Kool Document Manager')
+    .expect(solutionVersionInput.value).eql('')
+    .expect(globalSolutionName.textContent).eql('Really Really Kool Document Manager')
+
+  await t
+    .selectText(solutionNameInput).typeText(solutionNameInput, 'Really Kool Document Manager')
+    .selectText(solutionVersionInput).typeText(solutionVersionInput, '1')
+    .click(globalSaveAndExitButton)
+    .click(continueRegistrationButton)
+    .expect(globalSolutionName.textContent).eql('Really Kool Document Manager, 1')
+})
+
+test('Global save buttons trigger validation and does not update top bar', async t => {
+  await t
+    .useRole(supplierRole)
+    .click(firstOnboardingSolutionName)
+    .click(continueRegistrationButton)
+    .selectText(solutionNameInput).pressKey('backspace')
+    .selectText(solutionDescriptionInput).pressKey('backspace')
+    .click(globalSaveButton)
+
+    .expect(Selector('#errors #error-solution\\.name').innerText).contains('Solution name is missing')
+    .expect(globalSolutionName.textContent).eql('Really Kool Document Manager, 1')
+
+  await t
+    .click(globalSaveAndExitButton)
+    .expect(Selector('#errors #error-solution\\.description').innerText).contains('Summary description is missing')
+    .expect(globalSolutionName.textContent).eql('Really Kool Document Manager, 1')
 })
 
 test('Capabilities page shows correct information accessibly', async t => {
