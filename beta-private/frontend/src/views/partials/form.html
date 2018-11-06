@@ -1,7 +1,7 @@
 <form
   method="{{#if method}}{{method}}{{else}}POST{{/if}}"
   action="{{#if action}}{{action}}{{else}}#errors{{/if}}"
-  {{#id}}id="{{.}}"{{/id}}
+  {{#form_id}}id="{{.}}"{{/form_id}}
   {{#class}}class="{{.}}"{{/class}}
   {{#encoding}} enctype="{{.}}"{{/encoding}}>
   <input type="hidden" name="_csrf" value="{{csrfToken}}">
