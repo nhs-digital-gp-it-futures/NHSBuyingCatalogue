@@ -13,9 +13,9 @@ properties:
         - name: 'DATASTORE_CONNECTIONTYPE'
           value: 'SqlServer'
         - name: 'DATASTORE_CONNECTIONSTRING'
-          value: 'Server=tcp:bcpbtestdb01.database.windows.net,1433;Initial Catalog=buyingcatprivatebeta_test;Persist Security Info=False;User ID=bcadmin;Password=Ac1!w3fdsh3kl;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+          secureValue: 'Server=tcp:bcpbtestdb01.database.windows.net,1433;Initial Catalog=buyingcatprivatebeta_test;Persist Security Info=False;User ID=bcadmin;Password=Ac1!w3fdsh3kl;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
         - name: 'LOG_CONNECTIONSTRING'
-          value: 'Server=tcp:bcpbtestdb01.database.windows.net,1433;Initial Catalog=buyingcatprivatebeta_test;Persist Security Info=False;User ID=bcadmin;Password=Ac1!w3fdsh3kl;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'      
+          secureValue: 'Server=tcp:bcpbtestdb01.database.windows.net,1433;Initial Catalog=buyingcatprivatebeta_test;Persist Security Info=False;User ID=bcadmin;Password=Ac1!w3fdsh3kl;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'      
       image: buyingcat01.azurecr.io/gpitf/catalogue-api:bc-prototype
       resources:
         requests:
@@ -33,7 +33,7 @@ properties:
       - name: 'OIDC_CLIENT_ID'
         value: 'catalogue-private-beta-ci'
       - name: 'OIDC_CLIENT_SECRET'
-        value: 'ptjqjbxbdxryshjbsqelfwoonibgnnee'  
+        secureValue: 'ptjqjbxbdxryshjbsqelfwoonibgnnee'  
       image: buyingcat01.azurecr.io/gpitf/catalogue-frontend:bc-prototype
       resources:
         requests:
