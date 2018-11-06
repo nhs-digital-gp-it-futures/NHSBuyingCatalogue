@@ -6,9 +6,8 @@ using Polly;
 using System;
 using System.Linq;
 
-namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
+namespace NHSD.GPITF.BuyingCatalog.Meta.Porcelain
 {
-  // TODO   refactor into separate assembly NHSD.GPITF.BuyingCatalog.Meta.Porcelain
   public sealed class CapabilityMappingsDatastore : ICapabilityMappingsDatastore
   {
     private readonly ILogger<CapabilityMappingsDatastore> _logger;
