@@ -982,7 +982,6 @@ app.get('/solutions/:solution_id/product-page', csrfProtection, async (req, res)
                           context.productPage.status === 'APPROVED'
   } catch (err) {
     context.errors.general = err
-    console.log('Error',err )
   }
 
   const pageEditLinkPrefix = `/suppliers/solutions/${req.params.solution_id}/product-page`
