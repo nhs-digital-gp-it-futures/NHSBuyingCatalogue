@@ -153,3 +153,20 @@ fieldset {
     }
   }
 }
+
+button,
+[type='button'],
+[type='submit'],
+.button {
+  background-color: $color-button-bg;
+  border-radius: 3px;
+  color: $color-button-fg;
+  min-width: 5em;
+  padding: .25em 1em;
+  transition: background-color .25s;
+
+  &:hover {
+    background-color: $color-button-hover-bg;
+    color: $color-button-hover-fg;
+  }
+}

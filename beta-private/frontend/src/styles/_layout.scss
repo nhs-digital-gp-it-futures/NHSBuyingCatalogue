@@ -45,6 +45,12 @@ a {
       color: $color-link-reversed-fg;
     }
   }
+
+  button,
+  .button {
+    background-color: $color-button-reversed-bg;
+    color: $color-button-reversed-fg;
+  }
 }
 
 #content {
