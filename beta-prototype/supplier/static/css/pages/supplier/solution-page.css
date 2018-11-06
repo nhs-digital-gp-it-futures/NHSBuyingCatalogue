@@ -563,7 +563,7 @@ width:80%
   padding:0.7em;
 }
 
-#solution-page-preview section > div {
+#solution-page-preview section details div {
   background: var(--color-nhs-white);
   margin-bottom:1em;
   padding:0.7em;
