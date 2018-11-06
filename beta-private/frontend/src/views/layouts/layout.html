@@ -22,10 +22,27 @@
         </div>
       </div>
       <div class="bottom">
+        {{#if activeFormId}}
+        <nav class="active-form" aria-label="Save controls">
+          <input type="submit"
+            form="{{activeFormId}}"
+            class="button"
+            name="action[save]"
+            value="{{t 'Buttons.Save'}}">
+          {{#activeFormTitle}}<span class="title">{{.}}</span>{{/activeFormTitle}}
+          <a href="/about#content">Support</a>
+          <input type="submit"
+            form="{{activeFormId}}"
+            class="button"
+            name="action[exit]"
+            value="{{t 'Buttons.Save and exit'}}">
+        </nav>
+        {{else}}
         <nav aria-label="Secondary">
           <a href="/about#standards-and-capabilities">{{t 'Standards and Capabilities'}}</a>
           <a href="/about#content">Support</a>
         </nav>
+        {{/if}}
       </div>
     </header>
     <main id="content">
