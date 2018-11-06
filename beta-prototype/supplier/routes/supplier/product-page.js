@@ -62,7 +62,7 @@ function enrichContextForProductPage (context, solutionEx) {
     inputs.forEach((input) => {
       const value = filterBlanks(valueMap[input.name])
 
-      displayMap.push({ key: input.title, value: value })
+      displayMap.push(mapInputValue(input, value))
 
       // cheating right now, as only radio elements can have dependants.
       if (dependantsActive(input, value)) {
@@ -81,6 +81,21 @@ function enrichContextForProductPage (context, solutionEx) {
     } else {
       return hasValue(input)
     }
+  }
+
+  function mapInputValue (input, value) {
+    let label = ''
+
+    if (hasOptions(input)) {
+      const option = _.find(input['options'], (o) => o.value === value)
+      label = option.label
+    }
+
+    return { key: input.title, value: label || value }
+  }
+
+  function hasOptions (input) {
+    return Array.isArray(input['options'])
   }
 
   function filterBlanks (values) {
