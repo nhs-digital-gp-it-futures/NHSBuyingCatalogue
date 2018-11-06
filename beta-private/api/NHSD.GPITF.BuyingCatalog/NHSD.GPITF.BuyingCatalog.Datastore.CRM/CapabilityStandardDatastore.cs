@@ -1,5 +1,6 @@
 ﻿using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
+using System;
 using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
@@ -8,7 +9,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
   {
     public IEnumerable<CapabilityStandard> GetAll()
     {
-      throw new System.NotImplementedException();
+      throw new NotImplementedException();
     }
   }
 }
