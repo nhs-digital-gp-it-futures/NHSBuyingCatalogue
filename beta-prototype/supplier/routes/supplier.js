@@ -885,6 +885,7 @@ app.post('/solutions/:solution_id/review', csrfProtection, async (req, res) => {
 
 function renderProductPageEditor (req, res, solutionEx, context) {
   enrichContextForProductPage(context, solutionEx)
+
   context.breadcrumbs = [
     { label: 'My Dashboard', url: '/suppliers' },
     { label: 'My Solutions', url: '/suppliers/solutions' },
@@ -1140,15 +1141,16 @@ const validateAbout = (fieldName = 'about') =>
   .isLength({max: 400})
   .trim()
 
-function validateFormArray(array) {
-  const maxLengthCheck = (array) => array.length <= 9;
-  const minLengthChcek = (array) => array.length > 0;
+function validateFormArray (array) {
+  const maxLengthCheck = (array) => array.length <= 9
+  const minLengthChcek = (array) => array.length > 0
   return _.defaults(
-    !maxLengthCheck(array) ? {message: 'Please enter 9 or fewer items'} : {},
-    !minLengthChcek(array) ? {message: 'Please enter at least one item'} : {}
-  );
+    !maxLengthCheck(array) ? { message: 'Please enter 9 or fewer items' } : {},
+    !minLengthChcek(array) ? { message: 'Please enter at least one item' } : {}
+  )
 }
-function parseArrayItems(items) {
+
+function parseArrayItems (items) {
   if (!items) {
     return []
   } else if (items.filter) {

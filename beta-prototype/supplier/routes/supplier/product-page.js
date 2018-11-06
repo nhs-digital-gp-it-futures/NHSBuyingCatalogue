@@ -44,12 +44,67 @@ function enrichContextForProductPage (context, solutionEx) {
   context.productPage = solutionEx.solution.productPage ? JSON.parse(solutionEx.solution.productPage) : {}
 
   const sections = ['service-scope', 'customer-insights', 'user-support', 'import-exports']
+
   sections.forEach((section) => {
-    console.log(section, context.productPage[section]);
-    context.productPage[section] = _.map(context.productPage[section], (value, key) => {
-      return { key: key, value: value }
-    })
+    const values = context.productPage[section]
+    const form = require(`../../forms/${section}`)
+
+    if (values && form) {
+      context.productPage[section] = mapDisplayValues(form.inputs, values)
+    } else {
+      _.omit(context.productPage, section)
+    }
   })
+
+  function mapDisplayValues (inputs, valueMap) {
+    let displayMap = []
+
+    inputs.forEach((input) => {
+      const value = filterBlanks(valueMap[input.name])
+
+      displayMap.push({ key: input.title, value: value })
+
+      // cheating right now, as only radio elements can have dependants.
+      if (dependantsActive(input, value)) {
+        displayMap = displayMap.concat(mapDisplayValues(input.dependants, valueMap))
+      }
+    })
+
+    return displayMap
+  }
+
+  function dependantsActive (input, value) {
+    if (!hasDependants(input)) {
+      return false
+    } else if (hasTriggerArray(input)) {
+      return hasTriggeringValue(input, value)
+    } else {
+      return hasValue(input)
+    }
+  }
+
+  function filterBlanks (values) {
+    if (Array.isArray(values)) {
+      return values.filter((val) => val !== '')
+    }
+    return values
+  }
+
+  function hasDependants (input) {
+    return !!input['dependants']
+  }
+
+  function hasValue (input) {
+    return !!input['value']
+  }
+
+  function hasTriggerArray (input) {
+    return Array.isArray(input['dependant-on'])
+  }
+
+  function hasTriggeringValue (input, value) {
+    return input['dependant-on'].includes(value)
+  }
 }
 
 async function enrichContextForProductPagePreview (context, solutionEx) {
@@ -72,7 +127,6 @@ async function enrichContextForProductPagePreview (context, solutionEx) {
       return cap
     })
     .value()
-
 }
 
 module.exports = {
