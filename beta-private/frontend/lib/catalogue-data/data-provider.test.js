@@ -111,7 +111,9 @@ describe('solutionForRegistration', () => {
         { claimedStandardId: 'testCSId' }
       ],
       technicalContact: [
-        { contactId: 'testCId' }
+        { contactId: 'testCId3', contactType: '3rd type' },
+        { contactId: 'testCId1', contactType: 'Lead Contact' },
+        { contactId: 'testCId2', contactType: '2nd type' }
       ]
     })
 
@@ -125,7 +127,9 @@ describe('solutionForRegistration', () => {
         { claimedStandardId: 'testCSId' }
       ],
       contacts: [
-        { contactId: 'testCId' }
+        { contactId: 'testCId1', contactType: 'Lead Contact' },
+        { contactId: 'testCId2', contactType: '2nd type' },
+        { contactId: 'testCId3', contactType: '3rd type' }
       ]
     })
   })

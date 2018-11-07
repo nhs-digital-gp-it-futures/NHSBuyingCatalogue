@@ -74,7 +74,10 @@ class DataProvider {
       ...solutionEx.solution,
       capabilities: solutionEx.claimedCapability,
       standards: solutionEx.claimedStandard,
-      contacts: solutionEx.technicalContact
+      contacts: _.orderBy(solutionEx.technicalContact, c => {
+        // Lead Contact sorts above all others, then alphabetic by type
+        return c.contactType === 'Lead Contact' ? '' : c.contactType
+      })
     }
   }
 
