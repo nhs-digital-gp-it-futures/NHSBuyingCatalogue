@@ -1,14 +1,15 @@
 {{#*inline "evidence-form"}}
 
-{{#if editUrl}}
 <section>
   <div class="matrix">
     <header>Download your latest TM</header>
     <p><a download href="/Dummy TraceabilityMatrix.xlsx">{{name}} Traceability Matrix (TM)</a></p>
-    {{#if standard.latestSubmissionDate}} {{standard.latestSubmissionDate}} {{/if}}
+    {{#if hasFeedback}}
+      <p class="comment" id="latestMessage">{{#latestSubmission}} {{message}} {{/latestSubmission}}</p>
+    {{/if}}
+    <p class="comment">{{#latestSubmissionDate}} {{.}} {{/latestSubmissionDate}}</p>
   </div>
 </section>
-{{/if}}
 
 <section>
   <fieldset class="standard-evidence{{#statusClass}} {{.}}{{/statusClass}}" id="std-{{id}}">
@@ -59,10 +60,10 @@
       {{/if}}
     </section>
     {{/if}}
-    
+
     {{#if editUrl}}
     <section class="controls">
-      
+
       {{#if submittable}}
       <input type="submit"
               class="button primary"
@@ -79,12 +80,12 @@
 <div id="compliance" class="supplier edit">
   {{#if standard.isWithAssessmentTeam}}
   <p class="in-assessment">
-    <span>Evidence submitted {{standard.latestSubmissionDate}}. You can expect a reply from our Compliance Officer within xx business days of submitting your evidence.</span>
+    <span>Status: Submitted. Awaiting Compliance Outcome</span>
   </p>
   {{/if}}
   {{#if standard.hasFeedback}}
   <p class="has-feedback">
-    <span>Find new evidence feedback below. <img class="feedback-icon" src="/img/red-envelope.svg"></span>
+    <span>Status: Response received from Compliance Officer. See <a href="#latestMessage">below</a>.</span>
   </p>
   {{/if}}
 
@@ -123,20 +124,23 @@
   {{#if standard.evidence.submissions}}
   <section class="evidence-history">
     <header>
-      <h4>Evidence History</h4>
+      <h4>File History &amp; Messaging</h4>
     </header>
-    <ul class="submissions">
-      {{#standard.evidence.submissions}}
-      <li class="submission {{originatorClass}}">
-        {{#link}}<p class="link"><a href="{{.}}" target="_blank">{{.}}</a></p>{{/link}}
-        <pre class="text">{{message}}</pre>
-        <p class="metadata">
-          <span class="originator">{{contact.firstName}} {{contact.lastName}}</span>
-          <span class="timestamp">{{displayTimestamp}}</span>
-        </p>
-      </li>
-      {{/standard.evidence.submissions}}
-    </ul>
+    <details>
+      <summary>Show History</summary>
+      <ul class="submissions">
+        {{#standard.evidence.submissions}}
+        <li class="submission {{originatorClass}}">
+          {{#link}}<p class="link"><a href="{{.}}" target="_blank">{{.}}</a></p>{{/link}}
+          <pre class="text">{{message}}</pre>
+          <p class="metadata">
+            <span class="originator">{{contact.firstName}} {{contact.lastName}}</span>
+            <span class="timestamp">{{displayTimestamp}}</span>
+          </p>
+        </li>
+        {{/standard.evidence.submissions}}
+      </ul>
+    </details>
   </section>
   {{/if}}
 
