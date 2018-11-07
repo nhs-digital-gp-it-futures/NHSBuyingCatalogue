@@ -3,7 +3,8 @@
   action="{{#if action}}{{action}}{{else}}#errors{{/if}}"
   {{#form_id}}id="{{.}}"{{/form_id}}
   {{#class}}class="{{.}}"{{/class}}
-  {{#encoding}} enctype="{{.}}"{{/encoding}}>
+  {{#encoding}} enctype="{{.}}"{{/encoding}}
+  novalidate>
   <input type="hidden" name="_csrf" value="{{csrfToken}}">
   {{> @partial-block}}
 </form>

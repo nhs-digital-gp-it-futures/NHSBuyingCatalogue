@@ -90,6 +90,9 @@ class DataProvider {
     solnEx.claimedStandard = solution.standards
     solnEx.technicalContact = solution.contacts
 
+    // contacts can only be for this solution
+    _.each(solnEx.technicalContact, c => { c.solutionId = solnEx.solution.id })
+
     await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
     return this.solutionForRegistration(solution.id)
   }

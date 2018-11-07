@@ -40,6 +40,44 @@
               }
             }
           }
+        },
+        "LeadContact": {
+          "Legend": "Add Lead Contact *",
+          "Preamble": "The Lead Contact is responsible for ensuring the accuracy of information provided. This contact will receive an invitation to register and all this $t(Solution)’s email notifications. All contact information subject to $t(NHSD.Name)’s privacy policy.",
+          "Fields": {
+            "FirstName": {
+              "Label": "First name *"
+            },
+            "LastName": {
+              "Label": "Last name *"
+            },
+            "Email": {
+              "Label": "Email *"
+            },
+            "Phone": {
+              "Label": "Phone number *"
+            }
+          }
+        },
+        "OtherContact": {
+          "Legend": "Add another contact (optional)",
+          "Fields": {
+            "ContactType": {
+              "Label": "Role or Title *"
+            },
+            "FirstName": {
+              "Label": "First name *"
+            },
+            "LastName": {
+              "Label": "Last name *"
+            },
+            "Email": {
+              "Label": "Email *"
+            },
+            "Phone": {
+              "Label": "Phone number *"
+            }
+          }
         }
       }
     }

@@ -63,11 +63,23 @@ function onboardingStatusPage (req, res) {
 }
 
 function registrationPageContext (req) {
-  return {
+  const context = {
     ...commonOnboardingContext(req),
     activeFormId: 'registration-form',
     activeFormTitle: _.join(_.filter([req.solution.name, req.solution.version]), ', ')
   }
+
+  // Handlebars templates can't do string synthesis and that is needed to lookup
+  // the name of a field in the errors.controls array. Instead, pass a dictionary for the
+  // contacts that yields the control names.
+  context.contactFields = _.map(context.solution.contacts,
+    (c, i) => _(['contactType', 'firstName', 'lastName', 'emailAddress', 'phoneNumber'])
+      .map(f => [f, `solution.contacts[${i}].${f}`])
+      .fromPairs()
+      .value()
+  )
+
+  return context
 }
 
 function registrationPageGet (req, res) {
@@ -99,7 +111,12 @@ async function registrationPagePost (req, res) {
     context.errors.fieldsets = {
       'NameDescVersion': 'solution.name' in context.errors.controls ||
         'solution.description' in context.errors.controls ||
-        'solution.version' in context.errors.controls
+        'solution.version' in context.errors.controls,
+      // FIXME the following opaque monstrosity yields an object keyed by the index
+      // of any contact that has validation errors (_.toPath being ideal here)
+      'Contacts': _(context.errors.controls)
+        .keys().map(_.toPath).filter(p => p[0] === 'solution' && p[1] === 'contacts')
+        .map(p => p[2]).uniq().map(k => [k, true]).fromPairs().value()
     }
   } else {
     // TODO create solution if necessary
@@ -107,6 +124,8 @@ async function registrationPagePost (req, res) {
     req.solution.name = context.solution.name
     req.solution.description = context.solution.description
     req.solution.version = context.solution.version
+
+    req.solution.contacts = context.solution.contacts
 
     try {
       await dataProvider.updateSolutionForRegistration(req.solution)
