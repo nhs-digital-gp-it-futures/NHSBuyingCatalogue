@@ -23,21 +23,10 @@ const primaryContactHelp = {
   'Clinical Safety Officer': 'The person in a Supplier’s organisation responsible for ensuring the safety of a Health IT System in that organisation through the application of clinical risk management.'
 }
 
-app.get('/', (req, res) => {
-  const context = {
-    breadcrumbs: [
-      { label: 'My Dashboard' }
-    ]
-  }
-
-  res.render('supplier/dashboard', context)
-})
-
-app.get('/solutions', async (req, res) => {
+app.get('/', async (req, res) => {
   delete req.session.solutionEx
   const context = {
     breadcrumbs: [
-      { label: 'My Dashboard', url: '/suppliers' },
       { label: 'My Solutions' }
     ],
     created: 'created' in req.query,
@@ -397,8 +386,7 @@ app.get('/solutions/:solution_id', async (req, res) => {
 
   const context = {
     breadcrumbs: [
-      { label: 'My Dashboard', url: '/suppliers' },
-      { label: 'My Solutions', url: '/suppliers/solutions' },
+      { label: 'My Solutions', url: '/suppliers' },
       { label: 'Onboarding Solution' }
     ],
     errors: {},
@@ -884,8 +872,7 @@ function renderProductPageEditor (req, res, solutionEx, context) {
   enrichContextForProductPage(context, solutionEx)
 
   context.breadcrumbs = [
-    { label: 'My Dashboard', url: '/suppliers' },
-    { label: 'My Solutions', url: '/suppliers/solutions' },
+    { label: 'My Solutions', url: '/suppliers' },
     { label: 'Onboarding Solution', url: `/suppliers/solutions/${req.params.solution_id}` },
     { label: 'Solution Page' }
   ]
@@ -1086,8 +1073,7 @@ app.get('/solutions/:solution_id/product-page/:section_name', csrfProtection, as
   }
 
   context.breadcrumbs = [
-    { label: 'My Dashboard', url: '/suppliers' },
-    { label: 'My Solutions', url: '/suppliers/solutions' },
+    { label: 'My Solutions', url: '/suppliers' },
     { label: 'Onboarding Solution', url: `/suppliers/solutions/${req.params.solution_id}` },
     { label: 'Solution Page', url: `/suppliers/solutions/${req.params.solution_id}/product-page` },
     { label: req.params.section_name }
