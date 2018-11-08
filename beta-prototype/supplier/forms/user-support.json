@@ -1,5 +1,5 @@
 {
-    "name": "user_support",
+    "name": "user-support",
     "title": "",
     "inputs" : [
         {
@@ -12,12 +12,14 @@
                 {"value":"yes", "label":"Yes"},
                 {"value":"no", "label":"No"}
             ],
+            "hidden-on":["yes"],
             "dependant-on" : ["yes"],
             "dependants":[
                 {
                     "type":"radio-form-element",
                     "name":"ticketing-support",
                     "title":"1. Do you provide email or online ticketing support? ",
+                    "label":"Email or online ticketing support",
                     "value":"no",
                     "options":[
                         {"value":"yes", "label":"Yes"},
@@ -30,6 +32,7 @@
                             "type":"textarea-form-element",
                             "name":"ticketing-response-info",
                             "title":"1a.  How quickly do you respond to questions? ",
+                            "label":"Support response times",
                             "clarification": "Include whether response times are different at weekends. ",
                             "value": "",
                             "placeholder":"Really Kool Document Manager is one of the most popular document management suites in the UK.",
@@ -39,6 +42,7 @@
                             "type":"radio-form-element",
                             "name":"user-management",
                             "title": "1b. Can users manage the status and priority of their support tickets? ",
+                            "label":"User can manage status and priority of support tickets",
                             "value":"no",
                             "options":[
                                 {"value":"yes", "label":"Yes"},
@@ -49,6 +53,7 @@
                             "type":"radio-form-element",
                             "name":"management-accessibility-standard",
                             "title": "1c. What accessibility standards does your online ticketing support management meet? ",
+                            "label": "Online ticketing support accessibility",
                             "value":"none",
                             "options":[
                                 {"value":"aaa", "label":"WCAG 2.0 AAA"},
@@ -63,6 +68,7 @@
                     "type":"radio-form-element",
                     "name":"phone-support",
                     "title": "2. Do you provide phone support? ",
+                    "label": "Phone support",
                     "value":"no",
                     "options":[
                         {"value":"yes", "label":"Yes"},
@@ -75,6 +81,7 @@
                             "type":"radio-form-element",
                             "name":"phone-support-availability",
                             "title": "2a. When can users get phone support? ",
+                            "label": "Phone support availability",
                             "clarificaton":"Choose the closest match to your phone support hours",
                             "value":"no",
                             "options":[
@@ -89,6 +96,7 @@
                     "type":"radio-form-element",
                     "name":"web-chat-support",
                     "title": "3. Do you provide web chat support? ",
+                    "label": "Web chat support",
                     "value":"no",
                     "options":[
                         {"value":"yes", "label":"Yes"},
@@ -101,6 +109,7 @@
                             "type":"radio-form-element",
                             "name":"web-support-availability",
                             "title": "3a. When can users get web-chat support? ",
+                            "label": "Web chat support availability",
                             "clarificaton":"Choose the closest match to your phone support hours",
                             "value":"no",
                             "options":[
@@ -113,6 +122,7 @@
                             "type":"radio-form-element",
                             "name":"phone-support-accessibility-standard",
                             "title": "3b. What accessibility standards does your online ticketing support management meet? ",
+                            "label": "Web chat support accessibility",
                             "value":"no",
                             "options":[
                                 {"value":"aaa", "label":"WCAG 2.0 AAA"},
@@ -125,6 +135,7 @@
                             "type":"textarea-form-element",
                             "name":"web-testing-info",
                             "title":"3c.  Describe any web chat testing you've done with assistive technology users. ",
+                            "label": "Web chat support testing",
                             "value": "",
                             "placeholder":"Really Kool Document Manager is one of the most popular document management suites in the UK.",
                             "character-limit":100
@@ -135,6 +146,7 @@
                     "type":"radio-form-element",
                     "name":"on-site-support",
                     "title": "4. Do you provide on-site support? ",
+                    "label":"Onsite support",
                     "value":"no",
                     "options":[
                         {"value":"yes", "label":"Yes"},
@@ -145,6 +157,7 @@
                 {
                     "type":"textarea-form-element",
                     "name":"support-levels",
+                    "label":"Support levels",
                     "title":"5. Describe your support levels.",
                     "clarification":"Describe:\n •the support levels you provide\n •how much the different support levels you provide cost;\n • whether you provide a technical account manager or cloud support engineer",
                     "value": "",
@@ -154,6 +167,7 @@
                 {
                     "type":"radio-form-element",
                     "name":"third-parties",
+                    "label":"Support available for 3rd parties",
                     "title": "6. Can third parties engaged by the buyer access the support featured by your service? ",
                     "value":"no",
                     "options":[
