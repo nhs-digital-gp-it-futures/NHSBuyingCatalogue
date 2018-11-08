@@ -79,6 +79,10 @@
             }
           }
         }
+      },
+      "AddContact": {
+        "Help": "Some organisations work with multiple people in similar roles. Please add any additional $t(Solution) contacts, as relevant.",
+        "Button": "Add another contact (optional)"
       }
     }
   }

@@ -3,7 +3,7 @@
 const { DataProvider } = require('./index')
 let subject
 
-beforeAll(() => {
+beforeEach(() => {
   function MockApi () {
   }
 
@@ -21,6 +21,7 @@ beforeAll(() => {
 
   function MockSolutionsExApi () {
     this.apiPorcelainSolutionsExBySolutionBySolutionIdGet = jest.fn()
+    this.apiPorcelainSolutionsExUpdatePut = jest.fn()
   }
 
   function MockCapabilityMappingsApi () {
@@ -131,6 +132,85 @@ describe('solutionForRegistration', () => {
         { contactId: 'testCId2', contactType: '2nd type' },
         { contactId: 'testCId3', contactType: '3rd type' }
       ]
+    })
+  })
+})
+
+describe('updateSolutionForRegistration', () => {
+  beforeEach(() => {
+    subject.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet.mockReturnValue({
+      solution: {},
+      claimedCapability: [],
+      claimedStandard: [],
+      technicalContact: []
+    })
+  })
+
+  it('should reformat input into a SolutionEx and send to API', async () => {
+    const input = {
+      id: 'testid',
+      name: 'testname',
+      capabilities: [
+        { claimedCapabilityId: 'testCCId' }
+      ],
+      standards: [
+        { claimedStandardId: 'testCSId' }
+      ],
+      contacts: [
+        { id: '1234', contactId: 'testCId1', contactType: 'Lead Contact' },
+        { id: '4567', contactId: 'testCId2', contactType: '2nd type' },
+        { id: '8910', contactId: 'testCId3', contactType: '3rd type' }
+      ]
+    }
+
+    await subject.updateSolutionForRegistration(input)
+    expect(subject.solutionsExApi.apiPorcelainSolutionsExUpdatePut.mock.calls.length).toBe(1)
+    expect(subject.solutionsExApi.apiPorcelainSolutionsExUpdatePut.mock.calls[0][0]).toMatchObject({
+      solnEx: {
+        solution: {
+          id: 'testid',
+          name: 'testname'
+        },
+        claimedCapability: [
+          { claimedCapabilityId: 'testCCId' }
+        ],
+        claimedStandard: [
+          { claimedStandardId: 'testCSId' }
+        ],
+        technicalContact: [
+          { id: '1234', contactId: 'testCId1', contactType: 'Lead Contact' },
+          { id: '4567', contactId: 'testCId2', contactType: '2nd type' },
+          { id: '8910', contactId: 'testCId3', contactType: '3rd type' }
+        ]
+      }
+    })
+  })
+
+  it('should set correct dummy IDs for new technical contact entitites', async () => {
+    const input = {
+      id: 'testid',
+      name: 'testname',
+      contacts: [
+        { id: '1234', contactId: 'testCId1', contactType: 'Lead Contact' },
+        { contactId: 'testCId2', contactType: '2nd type' },
+        { id: '8910', contactId: 'testCId3', contactType: '3rd type' }
+      ]
+    }
+
+    await subject.updateSolutionForRegistration(input)
+    expect(subject.solutionsExApi.apiPorcelainSolutionsExUpdatePut.mock.calls.length).toBe(1)
+    expect(subject.solutionsExApi.apiPorcelainSolutionsExUpdatePut.mock.calls[0][0]).toMatchObject({
+      solnEx: {
+        solution: {
+          id: 'testid',
+          name: 'testname'
+        },
+        technicalContact: [
+          { id: '1234', contactId: 'testCId1', contactType: 'Lead Contact' },
+          { id: expect.stringMatching(/^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i), contactId: 'testCId2', contactType: '2nd type' },
+          { id: '8910', contactId: 'testCId3', contactType: '3rd type' }
+        ]
+      }
     })
   })
 })

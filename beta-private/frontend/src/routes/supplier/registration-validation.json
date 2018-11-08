@@ -38,6 +38,9 @@
          },
          "trim" : {}
       },
+      "solution.contacts.*.id": {
+         "in": "body"
+      },
       "solution.contacts.*.contactType": {
          "in": "body",
          "trim": {},

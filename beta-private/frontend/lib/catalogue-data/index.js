@@ -91,7 +91,13 @@ class DataProvider {
     solnEx.technicalContact = solution.contacts
 
     // contacts can only be for this solution
-    _.each(solnEx.technicalContact, c => { c.solutionId = solnEx.solution.id })
+    // new contacts need a dummy ID
+    _.each(solnEx.technicalContact, c => {
+      c.solutionId = solnEx.solution.id
+      if (!c.id) {
+        c.id = require('node-uuid-generator').generate()
+      }
+    })
 
     await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
     return this.solutionForRegistration(solution.id)

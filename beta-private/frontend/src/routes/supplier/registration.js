@@ -38,7 +38,7 @@ router
 router
   .route('/:solution_id/register/')
   .get(registrationPageGet)
-  .post(registrationPageValidation, registrationPagePost)
+  .post(registrationPreValidation, registrationPageValidation, registrationPagePost)
 
 router
   .route('/:solution_id/capabilities/')
@@ -69,17 +69,19 @@ function registrationPageContext (req) {
     activeFormTitle: _.join(_.filter([req.solution.name, req.solution.version]), ', ')
   }
 
-  // Handlebars templates can't do string synthesis and that is needed to lookup
-  // the name of a field in the errors.controls array. Instead, pass a dictionary for the
-  // contacts that yields the control names.
+  return context
+}
+
+// Handlebars templates can't do string synthesis and that is needed to lookup
+// the name of a field in the errors.controls array. Instead, pass a dictionary for the
+// contacts that yields the control names.
+function addContactFieldsToContext (context) {
   context.contactFields = _.map(context.solution.contacts,
     (c, i) => _(['contactType', 'firstName', 'lastName', 'emailAddress', 'phoneNumber'])
       .map(f => [f, `solution.contacts[${i}].${f}`])
       .fromPairs()
       .value()
   )
-
-  return context
 }
 
 function registrationPageGet (req, res) {
@@ -87,17 +89,36 @@ function registrationPageGet (req, res) {
     ...registrationPageContext(req)
   }
 
+  addContactFieldsToContext(context)
+
   res.render('supplier/registration/1-details', context)
 }
 
+// before attempting to validate the body for registration,
+// remove any contacts that are entirely empty
+function registrationPreValidation (req, res, next) {
+  if (req.body && req.body.solution && req.body.solution.contacts) {
+    req.body.solution.contacts = _.filter(
+      req.body.solution.contacts,
+      c => `${c.contactType}${c.firstName}${c.lastName}${c.emailAddress}${c.phoneNumber}`.trim().length
+    )
+  }
+
+  next()
+}
+
 async function registrationPagePost (req, res) {
-  const context = _.merge({
-    ...registrationPageContext(req)
-  }, matchedData(req, {
+  const sanitisedInput = matchedData(req, {
     locations: 'body',
     includeOptionals: true,
     onlyValidData: false
-  }))
+  })
+  const context = _.merge({
+    ...registrationPageContext(req)
+  }, sanitisedInput)
+  context.solution.contacts = sanitisedInput.solution.contacts
+
+  addContactFieldsToContext(context)
 
   const valres = validationResult(req)
   if (!valres.isEmpty()) {
