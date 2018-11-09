@@ -22,10 +22,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        var request = GetRequest($"{ResourceBase}/ByClaim/{claimId}");
-        var retval = GetResponse<IEnumerable<IEnumerable<T>>>(request);
+        var request = GetAllRequest($"{ResourceBase}/ByClaim/{claimId}");
+        var retval = GetResponse<PaginatedList<IEnumerable<T>>>(request);
 
-        return retval;
+        return retval.Items;
       });
     }
 
