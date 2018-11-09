@@ -16,7 +16,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
     }
 
-    private string ResourceBase { get; } = "/CapabilityStandard";
+    private string ResourceBase { get; } = "/CapabilityStandards";
 
     public IEnumerable<CapabilityStandard> GetAll()
     {
