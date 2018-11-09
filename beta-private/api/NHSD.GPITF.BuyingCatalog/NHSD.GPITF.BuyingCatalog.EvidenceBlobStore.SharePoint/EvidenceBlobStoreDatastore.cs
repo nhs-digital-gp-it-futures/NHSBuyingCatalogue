@@ -195,7 +195,6 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       var soln = _solutionsDatastore.ById(claim.SolutionId);
       var org = _organisationsDatastore.ById(soln.OrganisationId);
 
-      var claimFolderExists = true;
       var claimFolderUrl = $"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{claimsInfoProvider.GetFolderName()}/{claimsInfoProvider.GetFolderClaimName(claim)}/{subFolder ?? string.Empty}";
       var claimFolder = _context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString(claimFolderUrl));
 
@@ -206,13 +205,9 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       {
         _context.ExecuteQuery();
       }
-      catch
+      catch (Exception ex)
       {
-        claimFolderExists = false;
-      }
-      if (!claimFolderExists)
-      {
-        throw new KeyNotFoundException($"Folder does not exist!: {_context.Url}/{claimFolderUrl}");
+        throw new KeyNotFoundException($"Folder does not exist!: {_context.Url}/{claimFolderUrl}", ex);
       }
 
       var claimFolderInfo = new BlobInfo
