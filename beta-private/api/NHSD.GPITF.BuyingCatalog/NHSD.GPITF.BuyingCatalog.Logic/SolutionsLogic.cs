@@ -51,7 +51,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _validator.ValidateAndThrow(solution, ruleSet: nameof(ISolutionsLogic.Create));
 
       var email = Context.Email();
-      solution.CreatedById = _contacts.ByEmail(email).Id;
+      solution.CreatedById = solution.ModifiedById = _contacts.ByEmail(email).Id;
 
       return _datastore.Create(solution);
     }
@@ -61,7 +61,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _validator.ValidateAndThrow(solution, ruleSet: nameof(ISolutionsLogic.Update));
 
       var email = Context.Email();
-      solution.CreatedById = _contacts.ByEmail(email).Id;
+      solution.CreatedById = solution.ModifiedById = _contacts.ByEmail(email).Id;
 
       // create SharePoint folder structure
       if (solution.Status == SolutionStatus.CapabilitiesAssessment)
