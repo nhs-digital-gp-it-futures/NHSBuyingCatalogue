@@ -26,6 +26,20 @@ const globalSaveAndExitButton = Selector('body > header .active-form [name="acti
 
 const continueButton = Selector('[name="action\\[continue\\]"]')
 
+const leadContactFieldset = Selector('.contact[data-contact-index="0"] > fieldset > legend')
+const leadContactFirstNameInput = Selector('input#solution\\.contacts\\[0\\]\\.firstName')
+const leadContactLastNameInput = Selector('input#solution\\.contacts\\[0\\]\\.lastName')
+const leadContactEmailInput = Selector('input#solution\\.contacts\\[0\\]\\.emailAddress')
+const leadContactPhoneInput = Selector('input#solution\\.contacts\\[0\\]\\.phoneNumber')
+
+const addNewContactButton = Selector('#add-contact-button')
+const newContactFieldset = Selector('.contact[data-contact-index="1"] > fieldset > legend')
+const newContactContactTypeInput = Selector('input#solution\\.contacts\\[1\\]\\.contactType')
+const newContactFirstNameInput = Selector('input#solution\\.contacts\\[1\\]\\.firstName')
+const newContactLastNameInput = Selector('input#solution\\.contacts\\[1\\]\\.lastName')
+const newContactEmailInput = Selector('input#solution\\.contacts\\[1\\]\\.emailAddress')
+const newContactPhoneInput = Selector('input#solution\\.contacts\\[1\\]\\.phoneNumber')
+
 fixture('Getting started')
   .page('http://localhost:3000')
 
@@ -63,6 +77,7 @@ test('Solutions that are currently onboarding are listed', async t => {
 function navigateToSupplierOnboardingSolution (t) {
   return t
     .useRole(supplierRole)
+    .click(homeLink)
     .click(firstOnboardingSolutionName)
     .click(continueRegistrationButton)
 }
@@ -123,6 +138,139 @@ test('Global save buttons trigger validation and does not update top bar', async
     .click(globalSaveAndExitButton)
     .expect(Selector('#errors #error-solution\\.description').innerText).contains('Summary description is missing')
     .expect(globalSolutionName.textContent).eql('Really Kool Document Manager, 1')
+})
+
+test('Lead contact details can be changed and saved', async t => {
+  await navigateToSupplierOnboardingSolution(t)
+    .click(leadContactFieldset)
+
+    .expect(leadContactFirstNameInput.value).eql('Helpma')
+    .expect(leadContactLastNameInput.value).eql('Boab')
+    .expect(leadContactEmailInput.value).eql('helpma.boab@example.com')
+    .expect(leadContactPhoneInput.value).eql('N/A')
+
+  await t
+    .selectText(leadContactFirstNameInput).typeText(leadContactFirstNameInput, 'Automated')
+    .selectText(leadContactLastNameInput).typeText(leadContactLastNameInput, 'Testing')
+    .selectText(leadContactEmailInput).typeText(leadContactEmailInput, 'autotest@example.com')
+    .selectText(leadContactPhoneInput).typeText(leadContactPhoneInput, '123 456 78910')
+    .click(globalSaveAndExitButton)
+
+  await navigateToSupplierOnboardingSolution(t)
+    .click(leadContactFieldset)
+
+    .expect(leadContactFirstNameInput.value).eql('Automated')
+    .expect(leadContactLastNameInput.value).eql('Testing')
+    .expect(leadContactEmailInput.value).eql('autotest@example.com')
+    .expect(leadContactPhoneInput.value).eql('123 456 78910')
+
+  await t
+    .selectText(leadContactFirstNameInput).typeText(leadContactFirstNameInput, 'Helpma')
+    .selectText(leadContactLastNameInput).typeText(leadContactLastNameInput, 'Boab')
+    .selectText(leadContactEmailInput).typeText(leadContactEmailInput, 'helpma.boab@example.com')
+    .selectText(leadContactPhoneInput).typeText(leadContactPhoneInput, 'N/A')
+    .click(globalSaveAndExitButton)
+
+  await navigateToSupplierOnboardingSolution(t)
+    .click(leadContactFieldset)
+
+    .expect(leadContactFirstNameInput.value).eql('Helpma')
+    .expect(leadContactLastNameInput.value).eql('Boab')
+    .expect(leadContactEmailInput.value).eql('helpma.boab@example.com')
+    .expect(leadContactPhoneInput.value).eql('N/A')
+})
+
+test('Blanking any and all Lead Contact fields triggers validation', async t => {
+  await navigateToSupplierOnboardingSolution(t)
+    .click(leadContactFieldset)
+    .selectText(leadContactFirstNameInput).pressKey('backspace')
+    .click(globalSaveButton)
+
+    .expect(Selector('#errors #error-solution\\.contacts\\[0\\]\\.firstName').textContent).contains('Contact first name is missing')
+
+  await t
+    .selectText(leadContactLastNameInput).pressKey('backspace')
+    .selectText(leadContactEmailInput).pressKey('backspace')
+    .selectText(leadContactPhoneInput).pressKey('backspace')
+    .click(globalSaveButton)
+
+    .expect(Selector('#errors #error-solution\\.contacts\\[0\\]\\.firstName').textContent).contains('Contact first name is missing')
+    .expect(Selector('#errors #error-solution\\.contacts\\[0\\]\\.lastName').textContent).contains('Contact last name is missing')
+    .expect(Selector('#errors #error-solution\\.contacts\\[0\\]\\.emailAddress').textContent).contains('Contact email is missing')
+    .expect(Selector('#errors #error-solution\\.contacts\\[0\\]\\.phoneNumber').textContent).contains('Contact phone number is missing')
+})
+
+test('Creating a new contact requires all fields to be filled', async t => {
+  await navigateToSupplierOnboardingSolution(t)
+    .expect(newContactFieldset.exists).notOk()
+
+  await t
+    .click(addNewContactButton)
+    .typeText(newContactContactTypeInput, 'Clinical Safety Unicorn')
+    .click(globalSaveButton)
+
+    .expect(Selector('#errors #error-solution\\.contacts\\[1\\]\\.firstName').textContent).contains('Contact first name is missing')
+    .expect(Selector('#errors #error-solution\\.contacts\\[1\\]\\.lastName').textContent).contains('Contact last name is missing')
+    .expect(Selector('#errors #error-solution\\.contacts\\[1\\]\\.emailAddress').textContent).contains('Contact email is missing')
+    .expect(Selector('#errors #error-solution\\.contacts\\[1\\]\\.phoneNumber').textContent).contains('Contact phone number is missing')
+
+  await t
+    .typeText(newContactFirstNameInput, 'Zyra')
+    .typeText(newContactLastNameInput, 'Smith Fotheringham-Shaw')
+    .typeText(newContactEmailInput, 'safety.unicorn@example.com')
+    .typeText(newContactPhoneInput, '555 123 4567')
+    .click(globalSaveButton)
+
+  await navigateToSupplierOnboardingSolution(t)
+    .click(newContactFieldset)
+
+    .expect(newContactContactTypeInput.value).eql('Clinical Safety Unicorn')
+    .expect(newContactFirstNameInput.value).eql('Zyra')
+    .expect(newContactLastNameInput.value).eql('Smith Fotheringham-Shaw')
+    .expect(newContactEmailInput.value).eql('safety.unicorn@example.com')
+    .expect(newContactPhoneInput.value).eql('555 123 4567')
+})
+
+test('New contact details can be changed and saved', async t => {
+  await navigateToSupplierOnboardingSolution(t)
+    .click(newContactFieldset)
+    .selectText(newContactContactTypeInput).typeText(newContactContactTypeInput, 'Chief Safety Unicorn')
+    .selectText(newContactEmailInput).typeText(newContactEmailInput, 'chief.safety.unicorn@example.com')
+    .click(globalSaveAndExitButton)
+
+  await navigateToSupplierOnboardingSolution(t)
+    .click(newContactFieldset)
+
+    .expect(newContactContactTypeInput.value).eql('Chief Safety Unicorn')
+    .expect(newContactFirstNameInput.value).eql('Zyra')
+    .expect(newContactLastNameInput.value).eql('Smith Fotheringham-Shaw')
+    .expect(newContactEmailInput.value).eql('chief.safety.unicorn@example.com')
+    .expect(newContactPhoneInput.value).eql('555 123 4567')
+})
+
+test('Blanking some optional contact fields triggers validation', async t => {
+  await navigateToSupplierOnboardingSolution(t)
+    .click(newContactFieldset)
+    .selectText(newContactContactTypeInput).pressKey('backspace')
+    .selectText(newContactEmailInput).pressKey('backspace')
+    .click(globalSaveButton)
+
+    .expect(Selector('#errors #error-solution\\.contacts\\[1\\]\\.contactType').textContent).contains('Contact type is missing')
+    .expect(Selector('#errors #error-solution\\.contacts\\[1\\]\\.emailAddress').textContent).contains('Contact email is missing')
+})
+
+test('Blanking all optional contact fields removes the contact', async t => {
+  await navigateToSupplierOnboardingSolution(t)
+    .click(newContactFieldset)
+    .selectText(newContactContactTypeInput).pressKey('backspace')
+    .selectText(newContactFirstNameInput).pressKey('backspace')
+    .selectText(newContactLastNameInput).pressKey('backspace')
+    .selectText(newContactEmailInput).pressKey('backspace')
+    .selectText(newContactPhoneInput).pressKey('backspace')
+    .click(globalSaveButton)
+
+    .expect(Selector('#errors').exists).notOk()
+    .expect(newContactFieldset.exists).notOk()
 })
 
 function navigateToSupplierOnboardingSolutionCapabilities (t) {
