@@ -60,11 +60,15 @@ test('Solutions that are currently onboarding are listed', async t => {
     .expect(firstOnboardingSolutionName.textContent).eql('Really Kool Document Manager | 1')
 })
 
-test('Registration page shows correct information accessibly', async t => {
-  await t
+function navigateToSupplierOnboardingSolution (t) {
+  return t
     .useRole(supplierRole)
     .click(firstOnboardingSolutionName)
     .click(continueRegistrationButton)
+}
+
+test('Registration page shows correct information accessibly', async t => {
+  await navigateToSupplierOnboardingSolution(t)
     .expect(solutionNameInput.value).eql('Really Kool Document Manager')
     .expect(solutionDescriptionInput.value).eql('"Does Really Kool document management"')
     .expect(solutionVersionInput.value).eql('1')
@@ -73,10 +77,7 @@ test('Registration page shows correct information accessibly', async t => {
 })
 
 test('Registration page validation is correct and accessible', async t => {
-  await t
-    .useRole(supplierRole)
-    .click(firstOnboardingSolutionName)
-    .click(continueRegistrationButton)
+  await navigateToSupplierOnboardingSolution(t)
     .selectText(solutionNameInput).pressKey('backspace')
     .selectText(solutionDescriptionInput).pressKey('backspace')
     .click(continueButton)
@@ -90,10 +91,7 @@ test('Registration page validation is correct and accessible', async t => {
 })
 
 test('Solution name shows in top bar and updates correctly when saved', async t => {
-  await t
-    .useRole(supplierRole)
-    .click(firstOnboardingSolutionName)
-    .click(continueRegistrationButton)
+  await navigateToSupplierOnboardingSolution(t)
     .expect(globalSolutionName.textContent).eql('Really Kool Document Manager, 1')
 
   await t
@@ -113,10 +111,7 @@ test('Solution name shows in top bar and updates correctly when saved', async t 
 })
 
 test('Global save buttons trigger validation and does not update top bar', async t => {
-  await t
-    .useRole(supplierRole)
-    .click(firstOnboardingSolutionName)
-    .click(continueRegistrationButton)
+  await navigateToSupplierOnboardingSolution(t)
     .selectText(solutionNameInput).pressKey('backspace')
     .selectText(solutionDescriptionInput).pressKey('backspace')
     .click(globalSaveButton)
@@ -130,12 +125,13 @@ test('Global save buttons trigger validation and does not update top bar', async
     .expect(globalSolutionName.textContent).eql('Really Kool Document Manager, 1')
 })
 
-test('Capabilities page shows correct information accessibly', async t => {
-  await t
-    .useRole(supplierRole)
-    .click(firstOnboardingSolutionName)
-    .click(continueRegistrationButton)
+function navigateToSupplierOnboardingSolutionCapabilities (t) {
+  return navigateToSupplierOnboardingSolution(t)
     .click(continueButton)
+}
+
+test('Capabilities page shows correct information accessibly', async t => {
+  await navigateToSupplierOnboardingSolutionCapabilities(t)
 
     .expect(Selector('[type=checkbox][name^=capabilities]').count).eql(18)
     .expect(Selector('[type=checkbox][name^=capabilities] ~ .name').nth(0).innerText).eql('Appointments Management - Citizen')
@@ -146,11 +142,7 @@ test('Capabilities page shows correct information accessibly', async t => {
 })
 
 test('Capabilities page validation is correct and accessible', async t => {
-  await t
-    .useRole(supplierRole)
-    .click(firstOnboardingSolutionName)
-    .click(continueRegistrationButton)
-    .click(continueButton)
+  await navigateToSupplierOnboardingSolutionCapabilities(t)
 
   const checkedCapabilities = Selector('[type=checkbox][name^=capabilities]:checked')
   const checkedCapabilitiesCount = await checkedCapabilities.count
