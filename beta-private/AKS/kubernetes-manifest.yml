@@ -27,7 +27,7 @@ spec:
           limits:
             cpu: 500m
         env:
-		- name: OIDC_USERINFO_URL
+		    - name: OIDC_USERINFO_URL
           value: "http://localhost:9000/me"
         - name: OIDC_ISSUER_URL
           value: "http://localhost:9000"
@@ -125,7 +125,7 @@ spec:
       - name: regcred
       containers:
       - name: bc-pribate-beta-oidc-provider
-        image: oidc-provider
+        image: buyingcat01.azurecr.io/gpitf/catalogue-oidc-provider:bc-prototype
         ports:
         - containerPort: 9000
         resources:
@@ -140,9 +140,9 @@ metadata:
   name: api
 spec:
   ports:
-  - port: 8001
+  - port: 5100
   selector:
-    app: buywolf-app-api
+    app: bc-pb-app-api
 ---
 apiVersion: v1
 kind: Service
@@ -152,16 +152,26 @@ spec:
   ports:
   - port: 8000
   selector:
-    app: buywolf-app-frontend
+    app: bc-pb-app-frontend
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: buywolf-lb-nginx
+  name: bc-lb-nginx
 spec:
   loadBalancerIP: 40.118.23.230
   type: LoadBalancer
   ports:
   - port: 80
   selector:
-    app: buywolf-app-nginx
+    app: bc_pb-app-nginx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oidc
+spec:
+  ports:
+  - port: 9000
+  selector:
+    app: bc-pb-app-oidc-provider
