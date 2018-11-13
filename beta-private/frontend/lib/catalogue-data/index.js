@@ -103,6 +103,21 @@ class DataProvider {
     return this.solutionForRegistration(solution.id)
   }
 
+  /**
+   * Given a solution (id, organisationId, name and version), check that they are unique
+   *
+   * Returns true if the supplied details are unique
+   */
+  async validateSolutionUniqueness (solution) {
+    const allSolns = await this.solutionsApi.apiSolutionsByOrganisationByOrganisationIdGet(solution.organisationId, {
+      pageSize: 9999
+    })
+
+    return _(allSolns.items)
+      .filter(soln => !solution.id || soln.id !== solution.id)
+      .every(soln => soln.version !== solution.version || soln.name !== solution.name)
+  }
+
   async capabilityMappings () {
     const {
       capabilityMapping,
