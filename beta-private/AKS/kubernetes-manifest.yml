@@ -27,8 +27,6 @@ spec:
           limits:
             cpu: 500m
         env:
-		    - name: OIDC_USERINFO_URL
-          value: "https://buying-catalogue-beta-prototype.eu.auth0.com"
         - name: OIDC_ISSUER_URL
           value: "https://buying-catalogue-beta-prototype.eu.auth0.com"
         - name: DATASTORE_CONNECTIONTYPE
