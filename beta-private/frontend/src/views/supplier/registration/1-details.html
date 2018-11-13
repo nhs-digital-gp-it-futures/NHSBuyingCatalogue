@@ -5,7 +5,7 @@
   <h2>{{t 'Onboarding.Details.Subtitle'}}</h2>
 </header>
 
-{{#> form}}
+{{#> form form_id=activeFormId}}
   {{#> collapsible-fieldset
     legend="Onboarding.Details.Fieldsets.NameDescVersion.Legend"
     invalid=errors.fieldsets.NameDescVersion

@@ -6,6 +6,8 @@ $color-nhs-mid-grey: #768692;
 $color-nhs-dark-grey: #425563;
 $color-nhs-warm-yellow: #FFB81C;
 $color-nhs-red: #DA291C;
+$color-nhs-green: #007F3B;
+$color-nhs-dark-green: #005326;
 
 // abstract colour palette - use this in actual styles
 $color-bg: $color-nhs-white;
@@ -51,3 +53,15 @@ $color-help-reveal-contents-bg: $color-bg;
 $color-help-reveal-contents-fg: $color-fg;
 $color-help-reveal-contents-border: $color-nhs-blue;
 
+$color-button-bg: $color-nhs-green;
+$color-button-hover-bg: $color-nhs-dark-green;
+$color-button-fg: $color-nhs-white;
+$color-button-hover-fg: $color-nhs-white;
+$color-button-primary-bg: $color-nhs-green;
+$color-button-primary-hover-bg: $color-nhs-dark-green;
+$color-button-primary-fg: $color-nhs-white;
+$color-button-primary-hover-fg: $color-nhs-white;
+$color-button-reversed-bg: $color-nhs-white;
+$color-button-reversed-hover-bg: $color-nhs-white;
+$color-button-reversed-fg: $color-nhs-blue;
+$color-button-reversed-hover-fg: $color-nhs-blue;

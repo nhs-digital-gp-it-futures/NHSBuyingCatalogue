@@ -64,7 +64,9 @@ function onboardingStatusPage (req, res) {
 
 function registrationPageContext (req) {
   return {
-    ...commonOnboardingContext(req)
+    ...commonOnboardingContext(req),
+    activeFormId: 'registration-form',
+    activeFormTitle: _.join(_.filter([req.solution.name, req.solution.version]), ', ')
   }
 }
 
@@ -118,7 +120,12 @@ async function registrationPagePost (req, res) {
   if (context.errors) {
     res.render('supplier/registration/1-details', context)
   } else {
-    res.redirect(req.body.action && req.body.action.continue ? '../capabilities/' : '../')
+    let redirectUrl = '.'
+    if (req.body.action) {
+      if (req.body.action.continue) redirectUrl = '../capabilities/'
+      if (req.body.action.exit) redirectUrl = '../'
+    }
+    res.redirect(redirectUrl)
   }
 }
 

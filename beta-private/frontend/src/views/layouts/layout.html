@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>{{meta.title}}{{#meta.title}} - {{/meta.title}}{{t 'Catalogue.Fullname'}}</title>
     <link rel="stylesheet" href="/styles.css">
+    <script type="text/javascript" src="/js/vendor/modernizr-custom.js"></script>
     <script type="text/javascript" src="/js/vendor/details-element-polyfill.js"></script>
     <script type="text/javascript" src="/js/app.js"></script>
   </head>
@@ -22,10 +23,27 @@
         </div>
       </div>
       <div class="bottom">
-        <nav aria-label="Secondary">
+        {{#if activeFormId}}
+        <nav class="active-form" aria-label="Save controls">
+          <input type="submit"
+            form="{{activeFormId}}"
+            class="button"
+            name="action[save]"
+            value="{{t 'Buttons.Save'}}">
+          {{#activeFormTitle}}<span class="title">{{.}}</span>{{/activeFormTitle}}
+          <a href="/about#content">Support</a>
+          <input type="submit"
+            form="{{activeFormId}}"
+            class="button"
+            name="action[exit]"
+            value="{{t 'Buttons.Save and exit'}}">
+        </nav>
+        {{else}}
+        <nav class="no-active-form" aria-label="Secondary">
           <a href="/about#standards-and-capabilities">{{t 'Standards and Capabilities'}}</a>
           <a href="/about#content">Support</a>
         </nav>
+        {{/if}}
       </div>
     </header>
     <main id="content">
