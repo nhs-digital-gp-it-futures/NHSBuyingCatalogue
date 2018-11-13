@@ -26,15 +26,17 @@ fieldset {
     border: $border-collapsible-fieldset;
     border-radius: $radius-collapsible-fieldset-border;
     color: $color-fg;
-    padding: 0;
+    margin-bottom: .5em;
+    padding: 2rem 0 0;
     position: relative;
 
     > legend {
       background-color: $color-collapsible-fieldset-legend-bg;
       color: $color-collapsible-fieldset-legend-fg;
+      cursor: pointer;
       height: 2rem;
       left: 0;
-      padding: .5rem 1rem;      
+      padding: .5rem 1rem;
       position: absolute;
       top: 0;
       width: 100%;
@@ -68,6 +70,10 @@ fieldset {
         }
       }
 
+      > *:not(legend) {
+        display: none;
+      }
+
       &.invalid {
         > legend {
           background-color: $color-collapsible-fieldset-legend-error-collapsed-bg;
@@ -80,7 +86,7 @@ fieldset {
       background-color: $color-collapsible-fieldset-preamble-bg;
       color: $color-collapsible-fieldset-preamble-fg;
       margin: 0;
-      padding: 3rem 3rem 1rem;
+      padding: 1rem 3rem 1rem;
     }
 
     .control {

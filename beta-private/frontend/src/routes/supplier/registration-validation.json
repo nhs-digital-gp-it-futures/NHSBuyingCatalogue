@@ -37,6 +37,82 @@
             "negated" : true
          },
          "trim" : {}
+      },
+      "solution.contacts.*.id": {
+         "in": "body"
+      },
+      "solution.contacts.*.contactType": {
+         "in": "body",
+         "trim": {},
+         "isEmpty": {
+            "errorMessage": "Validation.Solution.Contacts.ContactType.Missing",
+            "negated": true
+         },
+         "isLength": {
+            "options": {
+               "max": 100
+            },
+            "errorMessage": "Validation.Solution.Contacts.ContactType.TooLong"
+         }
+      },
+      "solution.contacts.*.firstName": {
+         "in": "body",
+         "trim": {},
+         "isEmpty": {
+            "errorMessage": "Validation.Solution.Contacts.FirstName.Missing",
+            "negated": true
+         },
+         "isLength": {
+            "options": {
+               "max": 80
+            },
+            "errorMessage": "Validation.Solution.Contacts.FirstName.TooLong"
+         }
+      },
+      "solution.contacts.*.lastName": {
+         "in": "body",
+         "trim": {},
+         "isEmpty": {
+            "errorMessage": "Validation.Solution.Contacts.LastName.Missing",
+            "negated": true
+         },
+         "isLength": {
+            "options": {
+               "max": 80
+            },
+            "errorMessage": "Validation.Solution.Contacts.LastName.TooLong"
+         }
+      },
+      "solution.contacts.*.emailAddress": {
+         "in": "body",
+         "trim": {},
+         "isEmpty": {
+            "errorMessage": "Validation.Solution.Contacts.Email.Missing",
+            "negated": true
+         },
+         "isLength": {
+            "options": {
+               "max": 100
+            },
+            "errorMessage": "Validation.Solution.Contacts.Email.TooLong"
+         },
+         "isEmail": {
+            "errorMessage": "Validation.Solution.Contacts.Email.Format"
+         }
+      },
+      "solution.contacts.*.phoneNumber": {
+         "in": "body",
+         "trim": {},
+         "isEmpty": {
+            "errorMessage": "Validation.Solution.Contacts.Phone.Missing",
+            "negated": true
+         },
+         "isLength": {
+            "options": {
+               "max": 88
+            },
+            "errorMessage": "Validation.Solution.Contacts.Phone.TooLong"
+         }
       }
    },
    "capabilities" : {

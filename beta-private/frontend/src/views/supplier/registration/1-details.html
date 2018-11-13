@@ -61,9 +61,316 @@
   {{/control}}
   {{/collapsible-fieldset}}
 
+  <div class="contact" data-contact-index="0">
+  {{#> collapsible-fieldset
+    legend='Onboarding.Details.Fieldsets.LeadContact.Legend'
+    invalid=errors.fieldsets.Contacts.[0]}}
+    <input type="hidden"
+      name="solution[contacts][0][id]"
+      value="{{solution.contacts.0.id}}">
+    <input type="hidden"
+      name="solution[contacts][0][contactType]"
+      value="Lead Contact">
+
+    <p class="preamble">{{t 'Onboarding.Details.Fieldsets.LeadContact.Preamble'}}</p>
+
+    {{#> control invalid=(lookup errors.controls 'solution.contacts[0].firstName')}}
+      <label for="solution.contacts[0].firstName">{{t 'Onboarding.Details.Fieldsets.LeadContact.Fields.FirstName.Label'}}</label>
+      {{#with (lookup errors.controls 'solution.contacts[0].firstName')}}
+      <p class="action">{{t action}}</p>
+      {{/with}}
+      <input id="solution.contacts[0].firstName"
+        type="text"
+        name="solution[contacts][0][firstName]"
+        value="{{solution.contacts.0.firstName}}"
+        maxlength="80"
+        {{#if (lookup errors.controls 'solution.contacts[0].firstName')}}
+          aria-invalid="true"
+          aria-errormessage="error-solution.contacts[0].firstName"
+        {{/if}}>
+    {{/control}}
+
+    {{#> control invalid=(lookup errors.controls 'solution.contacts[0].lastName')}}
+      <label for="solution.contacts[0].lastName">{{t 'Onboarding.Details.Fieldsets.LeadContact.Fields.LastName.Label'}}</label>
+      {{#with (lookup errors.controls 'solution.contacts[0].lastName')}}
+      <p class="action">{{t action}}</p>
+      {{/with}}
+      <input id="solution.contacts[0].lastName"
+        type="text"
+        name="solution[contacts][0][lastName]"
+        value="{{solution.contacts.0.lastName}}"
+        maxlength="80"
+        {{#if (lookup errors.controls 'solution.contacts[0].lastName')}}
+          aria-invalid="true"
+          aria-errormessage="error-solution.contacts[0].lastName"
+        {{/if}}>
+    {{/control}}
+
+    {{#> control invalid=(lookup errors.controls 'solution.contacts[0].emailAddress')}}
+      <label for="solution.contacts[0].emailAddress">{{t 'Onboarding.Details.Fieldsets.LeadContact.Fields.Email.Label'}}</label>
+      {{#with (lookup errors.controls 'solution.contacts[0].emailAddress')}}
+      <p class="action">{{t action}}</p>
+      {{/with}}
+      <input id="solution.contacts[0].emailAddress"
+        type="email"
+        name="solution[contacts][0][emailAddress]"
+        value="{{solution.contacts.0.emailAddress}}"
+        maxlength="100"
+        {{#if (lookup errors.controls 'solution.contacts[0].emailAddress')}}
+          aria-invalid="true"
+          aria-errormessage="error-solution.contacts[0].emailAddress"
+        {{/if}}>
+    {{/control}}
+
+    {{#> control invalid=(lookup errors.controls 'solution.contacts[0].phoneNumber')}}
+      <label for="solution.contacts[0].phoneNumber">{{t 'Onboarding.Details.Fieldsets.LeadContact.Fields.Phone.Label'}}</label>
+      {{#with (lookup errors.controls 'solution.contacts[0].phoneNumber')}}
+      <p class="action">{{t action}}</p>
+      {{/with}}
+      <input id="solution.contacts[0].phoneNumber"
+        type="tel"
+        name="solution[contacts][0][phoneNumber]"
+        value="{{solution.contacts.0.phoneNumber}}"
+        maxlength="88"
+        {{#if (lookup errors.controls 'solution.contacts[0].phoneNumber')}}
+          aria-invalid="true"
+          aria-errormessage="error-solution.contacts[0].phoneNumber"
+        {{/if}}>
+    {{/control}}
+  {{/collapsible-fieldset}}
+  </div>
+
+  {{#each contactFields as |fieldNames contactIndex|}}
+    {{#unless @first}}
+      <div class="contact" data-contact-index="{{contactIndex}}">
+      {{#> collapsible-fieldset
+        legend='Onboarding.Details.Fieldsets.OtherContact.Legend'
+        invalid=(lookup ../errors.fieldsets.Contacts contactIndex)
+        contact=(lookup ../solution.contacts contactIndex)}}
+
+        <input type="hidden"
+          name="solution[contacts][{{contactIndex}}][id]"
+          value="{{contact.id}}">
+
+        {{#> control invalid=(lookup ../../errors.controls fieldNames.contactType)}}
+          <label for="solution.contacts[{{contactIndex}}].contactType">{{t 'Onboarding.Details.Fieldsets.OtherContact.Fields.ContactType.Label'}}</label>
+          {{#if invalid}}
+          <p class="action">{{t invalid.action}}</p>
+          {{/if}}
+          <input id="solution.contacts[{{contactIndex}}].contactType"
+            type="text"
+            name="solution[contacts][{{contactIndex}}][contactType]"
+            value="{{contact.contactType}}"
+            maxlength="100"
+            {{#if invalid}}
+              aria-invalid="true"
+              aria-errormessage="error-solution.contacts[{{contactIndex}}].contactType"
+            {{/if}}>
+        {{/control}}
+
+        {{#> control invalid=(lookup ../../errors.controls fieldNames.firstName)}}
+          <label for="solution.contacts[{{contactIndex}}].firstName">{{t 'Onboarding.Details.Fieldsets.OtherContact.Fields.FirstName.Label'}}</label>
+          {{#if invalid}}
+          <p class="action">{{t invalid.action}}</p>
+          {{/if}}
+          <input id="solution.contacts[{{contactIndex}}].firstName"
+            type="text"
+            name="solution[contacts][{{contactIndex}}][firstName]"
+            value="{{contact.firstName}}"
+            maxlength="80"
+            {{#if invalid}}
+              aria-invalid="true"
+              aria-errormessage="error-solution.contacts[{{contactIndex}}].firstName"
+            {{/if}}>
+        {{/control}}
+
+        {{#> control invalid=(lookup ../../errors.controls fieldNames.lastName)}}
+          <label for="solution.contacts[{{contactIndex}}].lastName">{{t 'Onboarding.Details.Fieldsets.OtherContact.Fields.LastName.Label'}}</label>
+          {{#if invalid}}
+          <p class="action">{{t invalid.action}}</p>
+          {{/if}}
+          <input id="solution.contacts[{{contactIndex}}].lastName"
+            type="text"
+            name="solution[contacts][{{contactIndex}}][lastName]"
+            value="{{contact.lastName}}"
+            maxlength="80"
+            {{#if invalid}}
+              aria-invalid="true"
+              aria-errormessage="error-solution.contacts[{{contactIndex}}].lastName"
+            {{/if}}>
+        {{/control}}
+
+        {{#> control invalid=(lookup ../../errors.controls fieldNames.emailAddress)}}
+          <label for="solution.contacts[{{contactIndex}}].emailAddress">{{t 'Onboarding.Details.Fieldsets.OtherContact.Fields.Email.Label'}}</label>
+          {{#if invalid}}
+          <p class="action">{{t invalid.action}}</p>
+          {{/if}}
+          <input id="solution.contacts[{{contactIndex}}].emailAddress"
+            type="email"
+            name="solution[contacts][{{contactIndex}}][emailAddress]"
+            value="{{contact.emailAddress}}"
+            maxlength="100"
+            {{#if invalid}}
+              aria-invalid="true"
+              aria-errormessage="error-solution.contacts[{{contactIndex}}].emailAddress"
+            {{/if}}>
+        {{/control}}
+
+        {{#> control invalid=(lookup ../../errors.controls fieldNames.phoneNumber)}}
+          <label for="solution.contacts[{{contactIndex}}].phoneNumber">{{t 'Onboarding.Details.Fieldsets.OtherContact.Fields.Phone.Label'}}</label>
+          {{#if invalid}}
+          <p class="action">{{t invalid.action}}</p>
+          {{/if}}
+          <input id="solution.contacts[{{contactIndex}}].phoneNumber"
+            type="tel"
+            name="solution[contacts][{{contactIndex}}][phoneNumber]"
+            value="{{contact.phoneNumber}}"
+            maxlength="88"
+            {{#if invalid}}
+              aria-invalid="true"
+              aria-errormessage="error-solution.contacts[{{contactIndex}}].phoneNumber"
+            {{/if}}>
+        {{/control}}
+      {{/collapsible-fieldset}}
+      </div>
+    {{/unless}}
+  {{/each}}
+
+  <div id="add-contact">
+    <p>{{t 'Onboarding.Details.AddContact.Help'}}</p>
+    <a id="add-contact-button" href="#">{{t 'Onboarding.Details.AddContact.Button'}}</a>
+  </div>
+
   <input type="submit"
     class="button primary"
     name="action[continue]"
     value="{{t 'Buttons.Save and continue'}}">
 {{/form}}
 <a class="back-link" href="../">{{t 'Onboarding.Details.Backlink.Title'}}</a>
+
+<script type="text/javascript">
+/* global $, $$ */
+'use strict'
+
+document.addEventListener('DOMContentLoaded', function () {
+  $('#add-contact-button').addEventListener('click', function (ev) {
+    ev.preventDefault()
+
+    // index of new contact is one higher than the highest already in the form
+    const newContactIndex = 1 + Math.max.apply(null,
+      $$('#content form .contact[data-contact-index]').map(function (el) {
+        return +el.dataset.contactIndex
+      })
+    )
+
+    // clone the template and apply the new index to each label and control as appropriate
+    const contactTemplate = $('#contact-template .contact').cloneNode(true)
+
+    contactTemplate.setAttribute('data-contact-index', newContactIndex)
+
+    $$('label[for], input[id]', contactTemplate).forEach(function (el) {
+      ['for', 'id', 'name'].forEach(function (attrToReplace) {
+        if (el.hasAttribute(attrToReplace)) {
+          el.setAttribute(
+            attrToReplace,
+            el.getAttribute(attrToReplace).replace('?', newContactIndex)
+          )
+        }
+      })
+    })
+
+    // insert the new contact template and expand it
+    const elInsertPoint = $('#add-contact')
+    const elInsertedTemplate = elInsertPoint.parentNode.insertBefore(contactTemplate, elInsertPoint)
+
+    const elNewContact = $('fieldset.collapsible', elInsertedTemplate)
+    elNewContact.classList.remove('collapsed')
+    collapseAllFieldsetsExcept(elNewContact)
+    window.location.hash = $('input[type=text]', elNewContact).id
+  })
+
+  // collapse all but the first collapsible fieldsets by default, except ones that contain
+  // invalid fields
+  function collapseAllFieldsetsExcept (elCurrent) {
+    $$('fieldset.collapsible').forEach(function (el) {
+      if (el !== elCurrent && !el.classList.contains('invalid')) {
+        el.classList.add('collapsed')
+      }
+    })
+  }
+
+  collapseAllFieldsetsExcept($('fieldset.collapsible:first-of-type'))
+
+  function handleCollapsibleFieldset (ev) {
+    if (ev.target.tagName === 'LEGEND') {
+      const elFieldset = ev.target.parentNode
+      if (elFieldset.classList.contains('collapsible')) {
+        ev.preventDefault()
+
+        elFieldset.classList.toggle('collapsed')
+        if (!elFieldset.classList.contains('collapsed')) {
+          collapseAllFieldsetsExcept(elFieldset)
+        }
+
+        return true
+      }
+    }
+  }
+
+  // support both mouse and keyboard access
+  $('#content').addEventListener('click', handleCollapsibleFieldset)
+  $('#content').addEventListener('keypress', function (ev) {
+    if (ev.key === ' ' || ev.key === 'Enter') {
+      handleCollapsibleFieldset(ev)
+    }
+  })
+})
+</script>
+
+<div id="contact-template" style="display: none">
+  <div class="contact">
+  {{#> collapsible-fieldset
+    legend='Onboarding.Details.Fieldsets.OtherContact.Legend'}}
+
+    {{#> control}}
+      <label for="solution.contacts[?].contactType">{{t 'Onboarding.Details.Fieldsets.OtherContact.Fields.ContactType.Label'}}</label>
+      <input id="solution.contacts[?].contactType"
+        type="text"
+        name="solution[contacts][?][contactType]"
+        maxlength="100">
+    {{/control}}
+
+    {{#> control}}
+      <label for="solution.contacts[?].firstName">{{t 'Onboarding.Details.Fieldsets.OtherContact.Fields.FirstName.Label'}}</label>
+      <input id="solution.contacts[?].firstName"
+        type="text"
+        name="solution[contacts][?][firstName]"
+        maxlength="80">
+    {{/control}}
+
+    {{#> control}}
+      <label for="solution.contacts[?].lastName">{{t 'Onboarding.Details.Fieldsets.OtherContact.Fields.LastName.Label'}}</label>
+      <input id="solution.contacts[?].lastName"
+        type="text"
+        name="solution[contacts][?][lastName]"
+        maxlength="80">
+    {{/control}}
+
+    {{#> control}}
+      <label for="solution.contacts[?].emailAddress">{{t 'Onboarding.Details.Fieldsets.OtherContact.Fields.Email.Label'}}</label>
+      <input id="solution.contacts[?].emailAddress"
+        type="email"
+        name="solution[contacts][?][emailAddress]"
+        maxlength="100">
+    {{/control}}
+
+    {{#> control}}
+      <label for="solution.contacts[?].phoneNumber">{{t 'Onboarding.Details.Fieldsets.OtherContact.Fields.Phone.Label'}}</label>
+      <input id="solution.contacts[?].phoneNumber"
+        type="tel"
+        name="solution[contacts][?][phoneNumber]"
+        maxlength="88">
+    {{/control}}
+  {{/collapsible-fieldset}}
+  </div>
+</div>

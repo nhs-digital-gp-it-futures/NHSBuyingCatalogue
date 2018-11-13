@@ -74,7 +74,10 @@ class DataProvider {
       ...solutionEx.solution,
       capabilities: solutionEx.claimedCapability,
       standards: solutionEx.claimedStandard,
-      contacts: solutionEx.technicalContact
+      contacts: _.orderBy(solutionEx.technicalContact, c => {
+        // Lead Contact sorts above all others, then alphabetic by type
+        return c.contactType === 'Lead Contact' ? '' : c.contactType
+      })
     }
   }
 
@@ -86,6 +89,15 @@ class DataProvider {
     solnEx.claimedCapability = solution.capabilities
     solnEx.claimedStandard = solution.standards
     solnEx.technicalContact = solution.contacts
+
+    // contacts can only be for this solution
+    // new contacts need a dummy ID
+    _.each(solnEx.technicalContact, c => {
+      c.solutionId = solnEx.solution.id
+      if (!c.id) {
+        c.id = require('node-uuid-generator').generate()
+      }
+    })
 
     await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
     return this.solutionForRegistration(solution.id)

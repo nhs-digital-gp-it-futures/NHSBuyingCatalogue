@@ -32,7 +32,7 @@ a {
   }
 }
 
-%reversed {
+@mixin reversed {
   background-color: $color-reversed-bg;
   color: $color-reversed-fg;
 
@@ -79,7 +79,8 @@ body > header {
   }
 
   .bottom {
-    @extend %reversed;
+    @include reversed;
+
     min-height: $header-bottom-height;
     padding: $header-padding;
 

@@ -13,6 +13,40 @@
       },
       "Version": {
         "TooLong": "$t(Solution) version exceeds maximum length of 10 characters"
+      },
+      "Contacts": {        
+        "ContactType": {
+          "Missing": "Contact type is missing",
+          "MissingAction": "Please enter the contact type",
+          "TooLong": "Contact type is too long",
+          "TooLongAction": "Please shorten. Contact type maximum length is 100 characters"
+        },
+        "FirstName": {
+          "Missing": "Contact first name is missing",
+          "MissingAction": "Please enter a first name",
+          "TooLong": "Contact first name is too long",
+          "TooLongAction": "Please shorten. Contact first name maximum length is 80 characters"
+        },
+        "LastName": {
+          "Missing": "Contact last name is missing",
+          "MissingAction": "Please enter a last name",
+          "TooLong": "Contact last name is too long",
+          "TooLongAction": "Please shorten. Contact last name maximum length is 80 characters"
+        },
+        "Email": {
+          "Missing": "Contact email is missing",
+          "MissingAction": "Please enter an email address",
+          "TooLong": "Contact email is too long",
+          "TooLongAction": "Please shorten. Contact email maximum length is 100 characters",
+          "Format": "Contact email is not valid",
+          "FormatAction": "Please enter a valid email address"
+        },
+        "Phone": {
+          "Missing": "Contact phone number is missing",
+          "MissingAction": "Please enter a phone number",
+          "TooLong": "Contact phone number is too long",
+          "TooLongAction": "Please shorten. Contact phone number maximum length is 88 characters"
+        }
       }
     }
   }
