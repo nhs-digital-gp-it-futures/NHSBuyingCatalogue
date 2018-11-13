@@ -9,6 +9,8 @@ const solutionOnboardingStatusMap = {
   5: { stageName: 'Solution Page', stageStep: '4 of 4', status: 'In progress' }
 }
 
+const EMPTY_UUID = '00000000-0000-0000-0000-000000000000'
+
 class DataProvider {
   constructor (CatalogueApi) {
     this.CatalogueApi = CatalogueApi
@@ -64,6 +66,23 @@ class DataProvider {
       onboarding: paginatedSolutions.items.filter(isOnboarding).map(forDashboard).map(forOnboarding).map(solutionMapper),
       live: paginatedSolutions.items.filter(isLive).map(forDashboard).map(forLive).map(solutionMapper)
     }
+  }
+
+  async createSolutionForRegistration (solution, user) {
+    const payload = {
+      solution: {
+        ...solution,
+        status: 'Draft',
+        id: EMPTY_UUID,
+        createdById: user.contact.id,
+        modifiedById: user.contact.id,
+        organisationId: user.org.id
+      }
+    }
+console.dir(payload, {depth:null, colors:true})
+    const newSolution = await this.solutionsApi.apiSolutionsPost(payload)
+console.dir(newSolution, {depth:null, colors:true})
+    return this.solutionForRegistration(newSolution.id)
   }
 
   async solutionForRegistration (solutionId) {

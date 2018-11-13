@@ -65,8 +65,16 @@ function onboardingStatusPage (req, res) {
 function registrationPageContext (req) {
   const context = {
     ...commonOnboardingContext(req),
-    activeFormId: 'registration-form',
-    activeFormTitle: _.join(_.filter([req.solution.name, req.solution.version]), ', ')
+    activeFormId: 'registration-form'
+  }
+
+  if (context.solution) {
+    context.activeFormTitle = _.join(
+      _.filter([context.solution.name, context.solution.version]),
+      ', '
+    )
+  } else {
+    context.solution = { id: 'new' }
   }
 
   return context
@@ -140,11 +148,21 @@ async function registrationPagePost (req, res) {
         .map(p => p[2]).uniq().map(k => [k, true]).fromPairs().value()
     }
   } else {
-    // TODO create solution if necessary
-
-    req.solution.name = context.solution.name
-    req.solution.description = context.solution.description
-    req.solution.version = context.solution.version
+    if (context.solution.id === 'new') {
+      try {
+      req.solution = await dataProvider.createSolutionForRegistration({
+        name: context.solution.name,
+        description: context.solution.description,
+        version: context.solution.version
+      }, req.user)
+      } catch (ex) {
+        console.log(ex)
+      }
+    } else {
+      req.solution.name = context.solution.name
+      req.solution.description = context.solution.description
+      req.solution.version = context.solution.version
+    }
 
     req.solution.contacts = context.solution.contacts
 
