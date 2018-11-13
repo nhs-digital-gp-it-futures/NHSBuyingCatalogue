@@ -65,8 +65,16 @@ function onboardingStatusPage (req, res) {
 function registrationPageContext (req) {
   const context = {
     ...commonOnboardingContext(req),
-    activeFormId: 'registration-form',
-    activeFormTitle: _.join(_.filter([req.solution.name, req.solution.version]), ', ')
+    activeFormId: 'registration-form'
+  }
+
+  if (context.solution) {
+    context.activeFormTitle = _.join(
+      _.filter([context.solution.name, context.solution.version]),
+      ', '
+    )
+  } else {
+    context.solution = { id: 'new' }
   }
 
   return context
@@ -140,15 +148,21 @@ async function registrationPagePost (req, res) {
         .map(p => p[2]).uniq().map(k => [k, true]).fromPairs().value()
     }
   } else {
-    // TODO create solution if necessary
-
-    req.solution.name = context.solution.name
-    req.solution.description = context.solution.description
-    req.solution.version = context.solution.version
-
-    req.solution.contacts = context.solution.contacts
-
     try {
+      if (context.solution.id === 'new') {
+        req.solution = await dataProvider.createSolutionForRegistration({
+          name: context.solution.name,
+          description: context.solution.description,
+          version: context.solution.version
+        }, req.user)
+      } else {
+        req.solution.name = context.solution.name
+        req.solution.description = context.solution.description
+        req.solution.version = context.solution.version
+      }
+
+      req.solution.contacts = context.solution.contacts
+
       await dataProvider.updateSolutionForRegistration(req.solution)
     } catch (err) {
       context.errors = {
@@ -160,11 +174,16 @@ async function registrationPagePost (req, res) {
   if (context.errors) {
     res.render('supplier/registration/1-details', context)
   } else {
-    let redirectUrl = '.'
+    // redirect based on action chosen and whether a new solution was just created
+    let redirectUrl = context.solution.id === 'new'
+      ? `../../${req.solution.id}/register/`
+      : './'
+
     if (req.body.action) {
-      if (req.body.action.continue) redirectUrl = '../capabilities/'
-      if (req.body.action.exit) redirectUrl = '../'
+      if (req.body.action.continue) redirectUrl += '../capabilities/'
+      if (req.body.action.exit) redirectUrl += '../'
     }
+
     res.redirect(redirectUrl)
   }
 }
