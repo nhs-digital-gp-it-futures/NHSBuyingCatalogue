@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: bcazurefile
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: bcazurefile
+  resources:
+    requests:
+      storage: 8Gi

@@ -23,21 +23,10 @@ const primaryContactHelp = {
   'Clinical Safety Officer': 'The person in a Supplier’s organisation responsible for ensuring the safety of a Health IT System in that organisation through the application of clinical risk management.'
 }
 
-app.get('/', (req, res) => {
-  const context = {
-    breadcrumbs: [
-      { label: 'My Dashboard' }
-    ]
-  }
-
-  res.render('supplier/dashboard', context)
-})
-
-app.get('/solutions', async (req, res) => {
+app.get('/', async (req, res) => {
   delete req.session.solutionEx
   const context = {
     breadcrumbs: [
-      { label: 'My Dashboard', url: '/suppliers' },
       { label: 'My Solutions' }
     ],
     created: 'created' in req.query,
@@ -397,8 +386,7 @@ app.get('/solutions/:solution_id', async (req, res) => {
 
   const context = {
     breadcrumbs: [
-      { label: 'My Dashboard', url: '/suppliers' },
-      { label: 'My Solutions', url: '/suppliers/solutions' },
+      { label: 'My Solutions', url: '/suppliers' },
       { label: 'Onboarding Solution' }
     ],
     errors: {},
@@ -616,8 +604,8 @@ app.get('/solutions/:solution_id/capabilities', csrfProtection, async (req, res)
     groupedCapabilities,
     standards: groupedStandards,
     csrfToken: req.csrfToken(),
-    pageHasForm:true,
-    solution: {name: solutionEx.solution.name}
+    pageHasForm: true,
+    solution: { name: solutionEx.solution.name }
   })
 })
 
@@ -658,7 +646,7 @@ app.post('/solutions/:solution_id/capabilities', csrfProtection, async (req, res
       _.flatten(
         _.map(
           solutionEx.claimedCapability,
-          ({capabilityId}) => _.flatMap(
+          ({ capabilityId }) => _.flatMap(
             _.pick(
               _.get(_.find(capabilities, ['id', capabilityId]), 'standards', {}),
               ['interop', 'mandatory', 'overarching']
@@ -666,7 +654,7 @@ app.post('/solutions/:solution_id/capabilities', csrfProtection, async (req, res
           )
         )
       ),
-      std => ({standardId: std.id})
+      std => ({ standardId: std.id })
     ),
     'standardId'
   )
@@ -682,7 +670,7 @@ app.post('/solutions/:solution_id/capabilities', csrfProtection, async (req, res
     if (req.body.action === 'continue') {
       redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/mobile`
     }
-    if(req.body.action === 'save') {
+    if (req.body.action === 'save') {
       redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/capabilities`
     }
 
@@ -705,7 +693,7 @@ app.post('/solutions/:solution_id/capabilities', csrfProtection, async (req, res
       standards: groupedStandards,
       errors: err,
       csrfToken: req.csrfToken(),
-      pageHasForm:true
+      pageHasForm: true
     })
   }
 })
@@ -730,7 +718,7 @@ app.get('/solutions/:solution_id/mobile', csrfProtection, async (req, res) => {
     isMobile: _.some(solutionEx.claimedStandard, ['standardId', 'CSS3']),
     standard: _.find(standards, ['id', 'CSS3']),
     pageHasForm: true,
-    solution: {name: solutionEx.solution.name}
+    solution: { name: solutionEx.solution.name }
   }
 
   res.render('supplier/solution-mobile', context)
@@ -768,7 +756,7 @@ app.post('/solutions/:solution_id/mobile', csrfProtection, async (req, res) => {
     if (req.body.action === 'continue') {
       redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/review`
     }
-    if(req.body.action === 'save') {
+    if (req.body.action === 'save') {
       redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/mobile`
     }
 
@@ -790,11 +778,11 @@ app.get('/solutions/:solution_id/review', csrfProtection, async (req, res) => {
     },
     csrfToken: req.csrfToken(),
     errors: {},
-    editLinks:{
-      contacts:`/suppliers/solutions/${req.params.solution_id}/edit`,
-      capabilities:`/suppliers/solutions/${req.params.solution_id}/capabilities`,
-      mobile:`/suppliers/solutions/${req.params.solution_id}/mobile`
-    },
+    editLinks: {
+      contacts: `/suppliers/solutions/${req.params.solution_id}/edit`,
+      capabilities: `/suppliers/solutions/${req.params.solution_id}/capabilities`,
+      mobile: `/suppliers/solutions/${req.params.solution_id}/mobile`
+    }
   }
 
   try {
@@ -817,13 +805,11 @@ app.get('/solutions/:solution_id/review', csrfProtection, async (req, res) => {
 
     context.capabilities = _.map(
       solutionEx.claimedCapability,
-      ({capabilityId}) => allCaps[capabilityId].name
+      ({ capabilityId }) => allCaps[capabilityId].name
     )
 
-
-    context.contacts = solutionEx.technicalContact;
+    context.contacts = solutionEx.technicalContact
     context.supportsMobile = _.some(solutionEx.claimedStandard, ['standardId', 'CSS3'])
-
 
     // merge optional with interop standards prior to display, so that Mobile Working
     // is considered solution-specific
@@ -840,7 +826,6 @@ app.get('/solutions/:solution_id/review', csrfProtection, async (req, res) => {
       .filter(([, stds]) => stds.length)
       .fromPairs()
       .value()
-
   } catch (err) {
     context.errors.general = err
   }
@@ -885,25 +870,24 @@ app.post('/solutions/:solution_id/review', csrfProtection, async (req, res) => {
 
 function renderProductPageEditor (req, res, solutionEx, context) {
   enrichContextForProductPage(context, solutionEx)
+
   context.breadcrumbs = [
-    { label: 'My Dashboard', url: '/suppliers' },
-    { label: 'My Solutions', url: '/suppliers/solutions' },
+    { label: 'My Solutions', url: '/suppliers' },
     { label: 'Onboarding Solution', url: `/suppliers/solutions/${req.params.solution_id}` },
     { label: 'Solution Page' }
   ]
   context.csrfToken = req.csrfToken()
-  context.productPage = solutionEx.solution.productPage ? JSON.parse(solutionEx.solution.productPage) : {}
 
-  context.contact = solutionEx.technicalContact;
-  
+  context.contact = solutionEx.technicalContact
+
   res.render('supplier/solution-page-edit', context)
 }
 
 app.get('/solutions/:solution_id/product-page/preview', csrfProtection, async (req, res) => {
   const context = {
-    errors : {}
+    errors: {}
   }
-  
+
   let solutionEx
 
   try {
@@ -912,8 +896,6 @@ app.get('/solutions/:solution_id/product-page/preview', csrfProtection, async (r
               ? req.session.solutionEx
               : await api.get_solution_by_id(req.params.solution_id)
 
-    context.capabilities = _.get(await api.get_all_capabilities(), 'capabilities')
-
     if (solutionEx.solution.productPage.message) {
       context.message = await formatting.formatMessagesForDisplay([
         _.merge({}, solutionEx.solution.productPage.message)
@@ -921,13 +903,11 @@ app.get('/solutions/:solution_id/product-page/preview', csrfProtection, async (r
     }
 
     context.organisationName = _.get(await api.get_org_by_id(solutionEx.solution.organisationId), 'name')
-
   } catch (err) {
     context.errors.general = err
   }
 
   renderProductPageEditor(req, res, solutionEx, context)
-  
 })
 
 app.get('/solutions/:solution_id/product-page', csrfProtection, async (req, res) => {
@@ -943,7 +923,33 @@ app.get('/solutions/:solution_id/product-page', csrfProtection, async (req, res)
               ? req.session.solutionEx
               : await api.get_solution_by_id(req.params.solution_id)
 
-    context.capabilities = _.get(await api.get_all_capabilities(), 'capabilities')
+    const allCaps = _.get(await api.get_all_capabilities(), 'capabilities')
+    const allCapsMap = allCaps.reduce((acc, cap) => ({ ...acc, [cap.id]: cap }), {})
+
+    const claimedCaps = solutionEx.claimedCapability.map((cap) => ({
+      ...cap,
+      ..._.omit(allCapsMap[cap.capabilityId], 'id')
+    }))
+
+
+    const uniqCapStd = (caps, std) => {
+      return _.uniqBy(
+        caps.reduce((acc, cap) => {
+          return cap.standards[std] ? acc.concat(cap.standards[std]) : acc
+        }, []), 'id')
+    }
+
+    const optional = uniqCapStd(claimedCaps, 'optional')
+    const overarching = uniqCapStd(claimedCaps, 'overarching')
+    const interop = uniqCapStd(claimedCaps, 'interop')
+    const mandatory = uniqCapStd(claimedCaps, 'mandatory')
+
+    context.capabilities = claimedCaps.map((cap) => ({ name: cap.name, description: cap.description }))
+    context.standards = {
+      overarching,
+      interop: interop.concat(optional),
+      mandatory
+    }
 
     if (solutionEx.solution.productPage.message) {
       context.message = await formatting.formatMessagesForDisplay([
@@ -961,12 +967,12 @@ app.get('/solutions/:solution_id/product-page', csrfProtection, async (req, res)
     // if the page has been approved, allow the user to publish
     context.allowPublish = solutionEx.solution.status === api.SOLUTION_STATUS.APPROVED &&
                           context.productPage.status === 'APPROVED'
-
   } catch (err) {
     context.errors.general = err
   }
 
-  const pageEditLinkPrefix = `/suppliers/solutions/${req.params.solution_id}/product-page`;
+  const pageEditLinkPrefix = `/suppliers/solutions/${req.params.solution_id}/product-page`
+
   context.pageEditLinks = {
     features: `${pageEditLinkPrefix}/features`,
     integrations: `${pageEditLinkPrefix}/integrations`,
@@ -974,6 +980,8 @@ app.get('/solutions/:solution_id/product-page', csrfProtection, async (req, res)
     about: `${pageEditLinkPrefix}/about`,
     user_support: `${pageEditLinkPrefix}/user-support`,
     service_scope: `${pageEditLinkPrefix}/service-scope`,
+    customer_insights: `${pageEditLinkPrefix}/customer-insights`,
+    import_exports: `${pageEditLinkPrefix}/import-exports`
   }
 
   renderProductPageEditor(req, res, solutionEx, context)
@@ -1059,17 +1067,16 @@ app.post('/solutions/:solution_id/product-page', csrfProtection, async (req, res
 
 app.get('/solutions/:solution_id/product-page/:section_name', csrfProtection, async (req, res) => {
   const context = {
-    errors : '',
+    errors: '',
     csrfToken: req.csrfToken(),
-    pageHasForm:true
+    pageHasForm: true
   }
 
   context.breadcrumbs = [
-    { label: 'My Dashboard', url: '/suppliers' },
-    { label: 'My Solutions', url: '/suppliers/solutions' },
+    { label: 'My Solutions', url: '/suppliers' },
     { label: 'Onboarding Solution', url: `/suppliers/solutions/${req.params.solution_id}` },
-    { label: 'Solution Page', url: `/suppliers/solutions/${req.params.solution_id}/product-page`},
-    { label: req.params.section_name}
+    { label: 'Solution Page', url: `/suppliers/solutions/${req.params.solution_id}/product-page` },
+    { label: req.params.section_name }
   ]
 
   let solutionEx = req.session.solutionEx
@@ -1079,11 +1086,11 @@ app.get('/solutions/:solution_id/product-page/:section_name', csrfProtection, as
 
   enrichContextForProductPage(context, solutionEx)
 
-  context.productPage = productPage;
-  context.solution = solutionEx.solution;
+  context.productPage = productPage
+  context.solution = solutionEx.solution
 
-  const tableForms = ['service-scope', 'customer-insights', 'data-import-export', 'user-support', 'migration-switching', 'audit-info'];
-  if(tableForms.indexOf(req.params.section_name) > -1) {
+  const tableForms = ['service-scope', 'customer-insights', 'import-exports', 'user-support', 'migration-switching', 'audit-info']
+  if (tableForms.indexOf(req.params.section_name) > -1) {
     const formLayout = require(`../forms/${req.params.section_name}.json`)
 
     /**
@@ -1139,35 +1146,34 @@ const validateAbout = (fieldName = 'about') =>
   .isLength({max: 400})
   .trim()
 
-function validateFormArray(array) {
-  const maxLengthCheck = (array) => array.length <= 9;
-  const minLengthChcek = (array) => array.length > 0;
+function validateFormArray (array) {
+  const maxLengthCheck = (array) => array.length <= 9
+  const minLengthChcek = (array) => array.length > 0
   return _.defaults(
-    !maxLengthCheck(array) ? {message: 'Please enter 9 or fewer items'} : {},
-    !minLengthChcek(array) ? {message: 'Please enter at least one item'} : {}
-  );
+    !maxLengthCheck(array) ? { message: 'Please enter 9 or fewer items' } : {},
+    !minLengthChcek(array) ? { message: 'Please enter at least one item' } : {}
+  )
 }
-function parseArrayItems(items) {
-  if(!items) {
-    return [];
-  }
-  else if(items.filter) {
-    return items.filter((item => item != ''));
-  }
-  else {
-    return [items];
+
+function parseArrayItems (items) {
+  if (!items) {
+    return []
+  } else if (items.filter) {
+    return items.filter((item) => item !== '')
+  } else {
+    return [items]
   }
 }
 
-function parseWantThis(wantThis) {
+function parseWantThis (wantThis) {
   return wantThis === 'yes'
 }
 
 app.post('/solutions/:solution_id/product-page/:section_name', csrfProtection, async (req,res) => {
   const context = {
-    errors : '',
+    errors: '',
     csrfToken: req.csrfToken(),
-    pageHasForm:true
+    pageHasForm: true
   }
 
   let solutionEx = req.session.solutionEx
@@ -1176,7 +1182,7 @@ app.post('/solutions/:solution_id/product-page/:section_name', csrfProtection, a
   const productPage = solutionEx.solution.productPage ? JSON.parse(solutionEx.solution.productPage) : {};
 
   const arrayForms = ['features', 'integrations']
-  const tableForms = ['service-scope', 'customer-insights', 'data-import-export', 'user-support', 'migration-switching', 'audit-info']
+  const tableForms = ['service-scope', 'customer-insights', 'import-exports', 'user-support', 'migration-switching', 'audit-info']
 
   const sectionName = req.params.section_name
 
@@ -1210,7 +1216,7 @@ app.post('/solutions/:solution_id/product-page/:section_name', csrfProtection, a
     redirectURL = `${req.baseUrl}/solutions/${req.params.solution_id}/product-page/${req.params.section_name}`;
   }
 
-  solutionEx.solution.productPage = JSON.stringify(productPage);
+  solutionEx.solution.productPage = JSON.stringify(productPage)
 
   req.session.solutionEx = await api.update_solution(solutionEx)
 

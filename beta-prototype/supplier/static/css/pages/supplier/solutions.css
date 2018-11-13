@@ -83,3 +83,10 @@ div.notification-icon {
 #supplier-solutions section {
   margin-bottom: 3em;
 }
+
+#supplier-solutions #dashboard-greeting a.button.primary {
+  text-align: center;
+  padding:0.2em;
+  border-bottom: 1px solid black;
+  font-size: var(--font-size-subsubheading)
+}

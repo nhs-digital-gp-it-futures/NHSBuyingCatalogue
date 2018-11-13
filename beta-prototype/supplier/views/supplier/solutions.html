@@ -14,13 +14,27 @@
 {{/inline}}
 
 <div id="supplier-solutions" class="supplier">
-  <h2>My Solutions</h2>
+  <div id="dashboard-greeting">
+    <h2>My Solutions</h2>
+    <a href="#">Manage my account</a>
+        <p>
+          Welcome, {{#if user.first_name}}{{user.first_name}}
+              {{else}}
+                  {{#if user.email}}{{user.email}}
+                  {{else}}you?
+                  {{/if}}
+              {{/if}} Here you can add a new Solution and manage all your Solutions — both those in progress and published.
+        </p>
+    <a class="button primary" href="/suppliers/solutions/new">Add a Solution</a>
+  </div>
+  
   {{#if created }}
   <p class="created">Solution created successfully</p>
   {{/if}}
   {{#errors.general}}
   <p class="error">{{.}}</p>
   {{/errors.general}}
+  
 
   <section class="solution-group">
     <header><h3>On-boarding in Progress</h3></header>
