@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bc-pb-deployment-api
@@ -8,7 +8,10 @@ spec:
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1
-  minReadySeconds: 5 
+  minReadySeconds: 5
+  selector:
+    matchLabels:
+      app: bc-pb-app-api  
   template:
     metadata:
       labels:
@@ -36,7 +39,7 @@ spec:
         - name: LOG_CONNECTIONSTRING
           value: "Server=tcp:bcpbtestdb01.database.windows.net,1433;Initial Catalog=buyingcatprivatebeta_test;Persist Security Info=False;User ID=bcadmin;Password=Ac1!w3fdsh3kl;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"      
 ---
-apiVersion: apps/v1beta
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bc-pb-deployment-frontend
@@ -46,7 +49,10 @@ spec:
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1
-  minReadySeconds: 5 
+  minReadySeconds: 5
+  selector:
+    matchLabels:
+      app: bc-pb-app-frontend
   template:
     metadata:
       labels:
@@ -66,7 +72,7 @@ spec:
             cpu: 500m
         env:
         - name: BASE_URL
-          value: ""http://51.140.48.244"
+          value: "http://51.140.48.244"
         - name: OIDC_ISSUER_URL
           value: "https://buying-catalogue-beta-prototype.eu.auth0.com"
         - name: OIDC_CLIENT_ID
@@ -80,7 +86,7 @@ spec:
               name: bcoidcsecret
               key: OIDC_CLIENT_SECRET
 ---  
-apiVersion: apps/v1beta
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bc-pb-deployment-nginx
@@ -90,7 +96,10 @@ spec:
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1
-  minReadySeconds: 5 
+  minReadySeconds: 5
+  selector:
+    matchLabels:
+      app: bc-pb-app-nginx  
   template:
     metadata:
       labels:
@@ -109,7 +118,7 @@ spec:
           limits:
             cpu: 500m
 ---  
-apiVersion: apps/v1beta
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bc-pb-deployment-oidc-provider
@@ -119,7 +128,10 @@ spec:
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1
-  minReadySeconds: 5 
+  minReadySeconds: 5
+  selector:
+    matchLabels:
+      app: bc-pb-app-oidc-provider   
   template:
     metadata:
       labels:
