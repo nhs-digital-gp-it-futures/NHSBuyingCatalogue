@@ -4,7 +4,9 @@
       "Name": {
         "Missing": "$t(Solution) name is missing",
         "MissingAction": "Please enter a $t(Solution) name",
-        "TooLong": "$t(Solution) name exceeds maximum length of 60 characters"
+        "TooLong": "$t(Solution) name exceeds maximum length of 60 characters",
+        "Duplicate": "$t(Solution) name and version already exists",
+        "DuplicateAction": "A $t(Solution) with this name and version has already been created. Please change $t(Solution) name or version."
       },
       "Description": {
         "Missing": "Summary description is missing",
