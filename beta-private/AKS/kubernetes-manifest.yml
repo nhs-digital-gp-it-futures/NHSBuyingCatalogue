@@ -1,0 +1,177 @@
+apiVersion: apps/v1beta
+kind: Deployment
+metadata:
+  name: bc-pb-deployment-api
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: bc-pb-app-api
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: bc-private-beta-api
+        image: buyingcat01.azurecr.io/gpitf/catalogue-api:bc-prototype
+        ports:
+        - containerPort: 5100
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+		    - name: OIDC_USERINFO_URL
+          value: "http://localhost:9000/me"
+        - name: OIDC_ISSUER_URL
+          value: "http://localhost:9000"
+        - name: DATASTORE_CONNECTIONTYPE
+          value: "SqlServer"
+        - name: DATASTORE_CONNECTIONSTRING
+          secureValue: "Server=tcp:bcpbtestdb01.database.windows.net,1433;Initial Catalog=buyingcatprivatebeta_test;Persist Security Info=False;User ID=bcadmin;Password=Ac1!w3fdsh3kl;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+        - name: LOG_CONNECTIONSTRING
+          secureValue: "Server=tcp:bcpbtestdb01.database.windows.net,1433;Initial Catalog=buyingcatprivatebeta_test;Persist Security Info=False;User ID=bcadmin;Password=Ac1!w3fdsh3kl;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"      
+---
+apiVersion: apps/v1beta
+kind: Deployment
+metadata:
+  name: bc-pb-deployment-frontend
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: bc-pb-app-frontend
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: bc-private-beta-frontend
+        image: buyingcat01.azurecr.io/gpitf/catalogue-frontend:bc-prototype
+        ports:
+        - containerPort: 8000
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+        - name: BASE_URL
+          value: "http://localhost:8000"
+        - name: OIDC_ISSUER_URL
+          value: "http://localhost:9000"
+        - name: OIDC_CLIENT_ID
+          value: "catalogue-private-beta-ci"
+        - name: OIDC_CLIENT_SECRET
+          secureValue: "ptjqjbxbdxryshjbsqelfwoonibgnnee" 
+---  
+apiVersion: apps/v1beta
+kind: Deployment
+metadata:
+  name: bc-pb-deployment-nginx
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: bc-pb-app-nginx
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: bc-pribate-beta-nginx
+        image: buyingcat01.azurecr.io/gpitf/catalogue-frontend-proxy:bc-prototype
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+---  
+apiVersion: apps/v1beta
+kind: Deployment
+metadata:
+  name: bc-pb-deployment-oidc-provider
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: bc-pb-app-oidc-provider
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: bc-pribate-beta-oidc-provider
+        image: buyingcat01.azurecr.io/gpitf/catalogue-oidc-provider:bc-prototype
+        ports:
+        - containerPort: 9000
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+spec:
+  ports:
+  - port: 5100
+  selector:
+    app: bc-pb-app-api
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  ports:
+  - port: 8000
+  selector:
+    app: bc-pb-app-frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bc-lb-nginx
+spec:
+  loadBalancerIP: 40.118.23.230
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: bc_pb-app-nginx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oidc
+spec:
+  ports:
+  - port: 9000
+  selector:
+    app: bc-pb-app-oidc-provider
