@@ -89,6 +89,11 @@ namespace Gif.Service.Services
         {
             Repository.UpdateEntity(solution.EntityName, solution.Id, solution.SerializeToODataPut("cc_solutionid"));
         }
+
+        public void Delete(Solution solution)
+        {
+            Repository.Delete(solution.EntityName, solution.Id);
+        }
     }
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

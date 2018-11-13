@@ -216,7 +216,7 @@ namespace Gif.Service.Crm
 
         public virtual void UpdateEntity(string entityName, Guid id, string entityData)
         {
-            var response = Patch(entityName, id, entityData);
+            Patch(entityName, id, entityData);
         }
 
         public HttpResponseMessage Patch(string entityName, Guid id, string entityData)
@@ -241,6 +241,23 @@ namespace Gif.Service.Crm
                 throw new CrmApiException(response.ReasonPhrase, response.StatusCode);
 
             return response;
+        }
+
+        public virtual void Delete(string entityName, Guid id)
+        {
+            HttpResponseMessage response;
+            var method = new HttpMethod("DELETE");
+
+            using (var httpClient = getCrmConnection())
+            {
+                var requestUri = new Uri($"{httpClient.BaseAddress.AbsoluteUri}{entityName}({id})");
+
+                var request = new HttpRequestMessage(method, requestUri);
+                response = httpClient.SendAsync(request).Result;
+            }
+
+            if (response.StatusCode != HttpStatusCode.NoContent)
+                throw new CrmApiException(response.ReasonPhrase, response.StatusCode);
         }
 
         #endregion

@@ -13,6 +13,7 @@ namespace Gif.Service.Crm
         void UpdateField(string entityName, string entityField, Guid entityId, string value);
         Guid CreateEntity(string entityName, string entityData, bool update = false);
         void UpdateEntity(string entityName, Guid id, string entityData);
+        void Delete(string entityName, Guid id);
     }
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

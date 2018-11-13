@@ -11,6 +11,7 @@ namespace Gif.Service.Contracts
         IEnumerable<Solution> ByOrganisation(string organisationId);
         Solution Create(Solution solution);
         void Update(Solution solution);
+        void Delete(Solution solution);
     }
 #pragma warning restore CS1591
 }

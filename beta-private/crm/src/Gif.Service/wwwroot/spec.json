@@ -1111,6 +1111,33 @@
         "security" : [ {
           "Bearer" : [ ]
         } ]
+      },
+	  "delete" : {
+        "tags" : [ "Solutions" ],
+        "summary" : "Delete an existing solution (will cascade delete to child entities)",
+        "operationId" : "ApiSolutionsDelete",
+        "consumes" : [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces" : [ ],
+        "parameters" : [ {
+          "name" : "solution",
+          "in" : "body",
+          "description" : "existing solution id",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Solutions"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "404" : {
+            "description" : "Solution not found in CRM"
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ]
       }
     },
     "/api/porcelain/SolutionsEx/Update" : {
