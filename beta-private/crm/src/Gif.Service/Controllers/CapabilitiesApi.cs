@@ -92,7 +92,7 @@ namespace Gif.Service.Controllers
             {
                 var capability = new CapabilitiesService(new Repository()).ById(id);
 
-                if (capability == null)
+                if (capability.Id == Guid.Empty)
                     return StatusCode(404);
 
                 return new ObjectResult(capability);
