@@ -127,7 +127,7 @@ class DataProvider {
 class RealDataProvider extends DataProvider {
   constructor () {
     super(require('catalogue-api'))
-    this.CatalogueApi.ApiClient.instance.basePath = 'http://api:5100'
+    this.CatalogueApi.ApiClient.instance.basePath = process.env.API_BASE_URL || 'http://api:5100'
   }
 
   // support for the authentication layer

@@ -10,6 +10,7 @@ services:
     environment:
       - NODE_ENV
       - BASE_URL
+      - API_BASE_URL
       - CACHE_HOST
       - OIDC_ISSUER_URL
       - OIDC_CLIENT_ID
@@ -25,6 +26,7 @@ services:
     networks:
       - beta_network
     environment:
+      - CACHE_HOST
       - OIDC_ISSUER_URL
       - OIDC_USERINFO_URL
       - DATASTORE_CONNECTIONTYPE
