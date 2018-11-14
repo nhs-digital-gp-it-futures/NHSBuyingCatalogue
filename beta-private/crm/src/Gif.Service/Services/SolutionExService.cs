@@ -2,6 +2,7 @@
 using Gif.Service.Contracts;
 using Gif.Service.Crm;
 using Gif.Service.Models;
+using System.Collections.Generic;
 
 namespace Gif.Service.Services
 {
@@ -18,43 +19,46 @@ namespace Gif.Service.Services
 
         public void Update(SolutionEx solnEx)
         {
-            //TODO: wrap in a transaction using a web api BATCH post
+            List<BatchData> batchData = new List<BatchData>();
+
             foreach (var standardEvidence in solnEx.ClaimedStandardEvidence)
             {
-                Repository.UpdateEntity(standardEvidence.EntityName, standardEvidence.Id, standardEvidence.SerializeToODataPut("cc_evidenceid"));
+                batchData.Add(new BatchData { Id = standardEvidence.Id, Name = standardEvidence.EntityName, EntityData = standardEvidence.SerializeToODataPut("cc_evidenceid") });
             }
 
             foreach (var standardReview in solnEx.ClaimedStandardReview)
             {
-                Repository.UpdateEntity(standardReview.EntityName, standardReview.Id, standardReview.SerializeToODataPut("cc_reviewid"));
+                batchData.Add(new BatchData { Id = standardReview.Id, Name = standardReview.EntityName, EntityData = standardReview.SerializeToODataPut("cc_reviewid") });
             }
 
             foreach (var capabilityEvidence in solnEx.ClaimedCapabilityEvidence)
             {
-                Repository.UpdateEntity(capabilityEvidence.EntityName, capabilityEvidence.Id, capabilityEvidence.SerializeToODataPut("cc_evidenceid"));
+                batchData.Add(new BatchData { Id = capabilityEvidence.Id, Name = capabilityEvidence.EntityName, EntityData = capabilityEvidence.SerializeToODataPut("cc_evidenceid") });
             }
 
             foreach (var capabilityReview in solnEx.ClaimedCapabilityReview)
             {
-                Repository.UpdateEntity(capabilityReview.EntityName, capabilityReview.Id, capabilityReview.SerializeToODataPut("cc_reviewid"));
+                batchData.Add(new BatchData { Id = capabilityReview.Id, Name = capabilityReview.EntityName, EntityData = capabilityReview.SerializeToODataPut("cc_reviewid") });
             }
 
             foreach (var capabilityImplemented in solnEx.ClaimedCapability)
             {
-                Repository.UpdateEntity(capabilityImplemented.EntityName, capabilityImplemented.Id, capabilityImplemented.SerializeToODataPut("cc_capabilityimplementedid"));
+                batchData.Add(new BatchData { Id = capabilityImplemented.Id, Name = capabilityImplemented.EntityName, EntityData = capabilityImplemented.SerializeToODataPut("cc_capabilityimplementedid") });
             }
 
             foreach (var standardApplicable in solnEx.ClaimedStandard)
             {
-                Repository.UpdateEntity(standardApplicable.EntityName, standardApplicable.Id, standardApplicable.SerializeToODataPut("cc_standardapplicableid"));
+                batchData.Add(new BatchData { Id = standardApplicable.Id, Name = standardApplicable.EntityName, EntityData = standardApplicable.SerializeToODataPut("cc_standardapplicableid") });
             }
 
             foreach (var technicalContact in solnEx.TechnicalContact)
             {
-                Repository.UpdateEntity(technicalContact.EntityName, technicalContact.Id, technicalContact.SerializeToODataPut("cc_technicalcontactid"));
+                batchData.Add(new BatchData { Id = technicalContact.Id, Name = technicalContact.EntityName, EntityData = technicalContact.SerializeToODataPut("cc_technicalcontactid") });
             }
 
-            Repository.UpdateEntity(solnEx.Solution.EntityName, solnEx.Solution.Id, solnEx.Solution.SerializeToODataPut("cc_solutionid"));
+            batchData.Add(new BatchData { Id = solnEx.Solution.Id, Name = solnEx.Solution.EntityName, EntityData = solnEx.Solution.SerializeToODataPut("cc_solutionid") });
+
+            Repository.UpdateBatch(batchData);
         }
     }
 }

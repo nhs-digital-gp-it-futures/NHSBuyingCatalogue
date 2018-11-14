@@ -1,4 +1,5 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+using Gif.Service.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Newtonsoft.Json.Linq;
@@ -216,11 +217,6 @@ namespace Gif.Service.Crm
 
         public virtual void UpdateEntity(string entityName, Guid id, string entityData)
         {
-            Patch(entityName, id, entityData);
-        }
-
-        public HttpResponseMessage Patch(string entityName, Guid id, string entityData)
-        {
             HttpResponseMessage response;
             var method = new HttpMethod("PATCH");
             var content = new StringContent(entityData, Encoding.UTF8, "application/json");
@@ -240,7 +236,6 @@ namespace Gif.Service.Crm
             if (response.StatusCode != HttpStatusCode.NoContent)
                 throw new CrmApiException(response.ReasonPhrase, response.StatusCode);
 
-            return response;
         }
 
         public virtual void Delete(string entityName, Guid id)
@@ -260,6 +255,69 @@ namespace Gif.Service.Crm
                 throw new CrmApiException(response.ReasonPhrase, response.StatusCode);
         }
 
+        public void UpdateBatch(List<BatchData> batchData)
+        {
+            HttpResponseMessage response;
+            var method = new HttpMethod("PATCH");
+
+            using (var httpClient = getCrmConnection())
+            {
+                // batch setup
+                var batchId = Guid.NewGuid();
+                var changeSetId = Guid.NewGuid();
+                var batchUrl = new Uri($"{httpClient.BaseAddress.AbsoluteUri}$batch");
+
+                var batchRequest = new HttpRequestMessage(HttpMethod.Post, batchUrl);
+
+                var batchContent = new MultipartContent("mixed", "batch_" + batchId);
+
+                // changeset setup
+                var changeSet = new MultipartContent("mixed", "changeset_" + changeSetId);
+
+                // patch calls
+                int count = 1;
+                foreach (var batch in batchData)
+                {
+                    var content = new StringContent(batch.EntityData, Encoding.UTF8, "application/json");
+                    var requestUri = new Uri($"{httpClient.BaseAddress.AbsoluteUri}{batch.Name}({batch.Id})");
+                    content.Headers.Remove("Content-Type");
+                    content.Headers.Add("Content-Type", "application/json;type=entry");
+                    content.Headers.Add("Content-Transfer-Encoding", "binary");
+                    content.Headers.Add("Content-Id", count.ToString());
+
+                    var request = new HttpRequestMessage(method, requestUri)
+                    {
+                        Content = content
+                    };
+
+                    // Add this content to the changeset
+                    changeSet.Add(new HttpMessageContent(request));
+
+                    count++;
+                }
+
+                using (var enumChangeSet = changeSet.GetEnumerator())
+                {
+                    while (enumChangeSet.MoveNext())
+                    {
+                        var currentChangeSet = enumChangeSet.Current;
+                        currentChangeSet.Headers.ContentType = new MediaTypeHeaderValue("application/http");
+                        currentChangeSet.Headers.Add("Content-Transfer-Encoding", "binary");
+                    }
+                }
+
+                // Add the changeset to the batch content
+                batchContent.Add(changeSet);
+
+                // send batch
+                batchRequest.Content = batchContent;
+                response = httpClient.SendAsync(batchRequest).Result;
+
+                if (response.StatusCode != HttpStatusCode.NoContent)
+                    throw new CrmApiException(response.ReasonPhrase, response.StatusCode);
+            }
+
+        }
         #endregion
 
     }

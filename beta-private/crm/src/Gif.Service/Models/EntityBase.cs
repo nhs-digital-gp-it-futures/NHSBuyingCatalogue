@@ -125,7 +125,16 @@ namespace Gif.Service.Models
                         continue;
                     }
 
-                    dataString = ReplaceDataBind(entityName, targetField, dataString, p.Name);
+                    if (p.PropertyType.FullName.ToLower().Contains("system.string"))
+                    {
+                        dataString = ReplaceNullString(dataString, p.Name);
+                    }
+
+                    if (p.PropertyType.FullName.ToLower().Contains("system.datetime"))
+                    {
+                        dataString = ReplaceNullDate(dataString, p.Name);
+                    }
+
                     dataString = dataString.Replace("\"" + p.Name + "\"", "\"" + targetField + "\"");
                 }
             }
@@ -218,12 +227,9 @@ namespace Gif.Service.Models
 
         private string ReplaceDataBind(string entityName, string targetField, string dataString, string name)
         {
-            int startEntity;
-            var entityVal = "null";
-            string replace;
-
-            startEntity = dataString.IndexOf($"{name}{doubleQuote}{colon}{entityVal}", 0, StringComparison.Ordinal);
-            replace = $"{doubleQuote}{name}{doubleQuote}{colon}null";
+            string entityVal = "null";
+            var startEntity = dataString.IndexOf($"{name}{doubleQuote}{colon}{entityVal}", 0, StringComparison.Ordinal);
+            var replace = $"{doubleQuote}{name}{doubleQuote}{colon}null";
 
             if (startEntity == -1)
             {
@@ -237,6 +243,34 @@ namespace Gif.Service.Models
             var newFormat = $"{targetField}{jsonSeparator}{forwardSlash}{entityName.ToLower()}{openParenthesis}{entityVal}{closeParenthesis}";
 
             dataString = ReplaceLookups(dataString, entityVal, replace, newFormat);
+
+            return dataString;
+        }
+
+        private string ReplaceNullString(string dataString, string name)
+        {
+            string entityVal = "null";
+            var startEntity = dataString.IndexOf($"{name}{doubleQuote}{colon}{entityVal}", 0, StringComparison.Ordinal);
+
+            if (startEntity != -1)
+            {
+                var replace = $"{doubleQuote}{name}{doubleQuote}{colon}null";
+                dataString = ReplaceLookups(dataString, entityVal, replace, string.Empty);
+            }
+
+            return dataString;
+        }
+
+        private string ReplaceNullDate(string dataString, string name)
+        {
+            string entityVal = "0001-01-01T00:00:00";
+            var startEntity = dataString.IndexOf($"{name}{doubleQuote}{colon}{doubleQuote}{entityVal}", 0, StringComparison.Ordinal);
+
+            if (startEntity != -1)
+            {
+                var replace = $"{doubleQuote}{name}{doubleQuote}{colon}{doubleQuote}0001-01-01T00:00:00{doubleQuote}";
+                dataString = ReplaceLookups(dataString, entityVal, replace, string.Empty);
+            }
 
             return dataString;
         }

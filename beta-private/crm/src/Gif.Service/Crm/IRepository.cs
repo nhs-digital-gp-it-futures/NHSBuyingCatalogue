@@ -1,6 +1,8 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+using Gif.Service.Models;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 
 namespace Gif.Service.Crm
 {
@@ -13,6 +15,7 @@ namespace Gif.Service.Crm
         void UpdateField(string entityName, string entityField, Guid entityId, string value);
         Guid CreateEntity(string entityName, string entityData, bool update = false);
         void UpdateEntity(string entityName, Guid id, string entityData);
+        void UpdateBatch(List<BatchData> batchData);
         void Delete(string entityName, Guid id);
     }
 }

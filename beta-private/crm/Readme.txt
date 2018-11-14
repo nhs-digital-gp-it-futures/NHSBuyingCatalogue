@@ -1,4 +1,4 @@
-It should be possible to build, package restore and run the API locally in Visual Studio by simply opening GifService.sln and doing a build/run. Local host is spun up at https://localhost:44365/swagger/
+It should be possible to build, package restore and run the API locally in Visual Studio by simply pulling down the solution folder. Local host is spun up at https://localhost:44365/swagger/
 
 TODO Productionisation tasks
 
