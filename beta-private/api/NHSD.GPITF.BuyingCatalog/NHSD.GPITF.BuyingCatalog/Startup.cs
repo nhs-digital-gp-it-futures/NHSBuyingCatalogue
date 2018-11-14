@@ -42,11 +42,8 @@ namespace NHSD.GPITF.BuyingCatalog
           .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
           .AddJsonFile("hosting.json", optional: true, reloadOnChange: true)
           .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-          .AddEnvironmentVariables();
-      if (CurrentEnvironment.IsDevelopment())
-      {
-        builder.AddUserSecrets<Program>();
-      }
+          .AddEnvironmentVariables()
+          .AddUserSecrets<Program>();
 
       DumpEnvironment();
 
