@@ -151,9 +151,7 @@ namespace Gif.Service.Models
             var entityVal = dataString.Substring(startGuid, endGuid - startGuid);
 
             var replace = $"{name}{jsonSeparator}{entityVal}";
-            var newFormat = string.Empty;
-
-            dataString = ReplaceLookups(dataString, entityVal, replace, newFormat);
+            dataString = dataString.Replace(replace, string.Empty);
 
             return dataString;
         }
@@ -255,7 +253,7 @@ namespace Gif.Service.Models
             if (startEntity != -1)
             {
                 var replace = $"{doubleQuote}{name}{doubleQuote}{colon}null";
-                dataString = ReplaceLookups(dataString, entityVal, replace, string.Empty);
+                dataString = dataString.Replace(replace, string.Empty);
             }
 
             return dataString;
@@ -269,7 +267,7 @@ namespace Gif.Service.Models
             if (startEntity != -1)
             {
                 var replace = $"{doubleQuote}{name}{doubleQuote}{colon}{doubleQuote}0001-01-01T00:00:00{doubleQuote}";
-                dataString = ReplaceLookups(dataString, entityVal, replace, string.Empty);
+                dataString = dataString.Replace(replace, string.Empty);
             }
 
             return dataString;
