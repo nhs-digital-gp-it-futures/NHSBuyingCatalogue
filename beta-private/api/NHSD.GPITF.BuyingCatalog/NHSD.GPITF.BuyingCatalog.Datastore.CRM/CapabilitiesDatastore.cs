@@ -44,10 +44,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        var request = GetAllPostRequest($"{ResourceBase}/ByIds", ids);
-        var retval = GetResponse<PaginatedList<Capabilities>>(request);
+        var request = GetPostRequest($"{ResourceBase}/ByIds", ids);
+        var retval = GetResponse<IEnumerable<Capabilities>>(request);
 
-        return retval.Items;
+        return retval;
       });
     }
 
