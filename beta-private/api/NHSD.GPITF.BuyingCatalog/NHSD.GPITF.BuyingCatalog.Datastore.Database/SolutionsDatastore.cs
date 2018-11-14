@@ -83,5 +83,18 @@ select * from Solutions where Id not in
         }
       });
     }
+
+    public void Delete(Solutions solution)
+    {
+      GetInternal(() =>
+      {
+        using (var trans = _dbConnection.Value.BeginTransaction())
+        {
+          _dbConnection.Value.Delete(solution, trans);
+          trans.Commit();
+          return 0;
+        }
+      });
+    }
   }
 }

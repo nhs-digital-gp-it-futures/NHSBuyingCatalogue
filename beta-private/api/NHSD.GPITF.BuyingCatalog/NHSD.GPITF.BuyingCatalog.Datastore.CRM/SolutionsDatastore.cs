@@ -73,5 +73,16 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
         return 0;
       });
     }
+
+    public void Delete(Solutions solution)
+    {
+      GetInternal(() =>
+      {
+        var request = GetDeleteRequest($"{ResourceBase}", solution);
+        var resp = GetRawResponse(request);
+
+        return 0;
+      });
+    }
   }
 }

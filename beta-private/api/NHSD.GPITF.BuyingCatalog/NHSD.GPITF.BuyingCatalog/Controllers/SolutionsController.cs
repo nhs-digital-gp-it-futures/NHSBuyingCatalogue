@@ -133,7 +133,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// <summary>
     /// Update an existing solution with new information
     /// </summary>
-    /// <param name="solution">contact with updated information</param>
+    /// <param name="solution">solution with updated information</param>
     /// <response code="200">Success</response>
     /// <response code="404">Organisation or solution not found in CRM</response>
     [HttpPut]
@@ -146,6 +146,35 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
       try
       {
         _logic.Update(solution);
+        return new OkResult();
+      }
+      catch (FluentValidation.ValidationException ex)
+      {
+        return new InternalServerErrorObjectResult(ex);
+      }
+      catch (Exception ex)
+      {
+        return new NotFoundObjectResult(ex);
+      }
+    }
+
+    /// <summary>
+    /// Delete an existing solution
+    /// DEVELOPMENT MODE ONLY
+    /// </summary>
+    /// <param name="solution">solution</param>
+    /// <response code="200">Success</response>
+    /// <response code="404">Organisation or solution not found in CRM</response>
+    [HttpDelete]
+    [ValidateModelState]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, description: "Success")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Organisation or solution not found in CRM")]
+    [SwaggerRequestExample(typeof(Solutions), typeof(SolutionsExample), jsonConverter: typeof(StringEnumConverter))]
+    public IActionResult Delete([FromBody]Solutions solution)
+    {
+      try
+      {
+        _logic.Delete(solution);
         return new OkResult();
       }
       catch (FluentValidation.ValidationException ex)
