@@ -20,6 +20,7 @@ const cacheStoreParams = process.env.CACHE_HOST
 // cache for long-term storage of data that doesn't change regularly (e.g. capability map)
 const dataCache = cacheManager.caching({
   ...cacheStoreParams,
+  prefix: 'bcbeta-data:',
   ttl: 24 * 60 * 60
 })
 
@@ -158,21 +159,23 @@ class DataProvider {
   }
 
   async capabilityMappings () {
-    const {
-      capabilityMapping,
-      standard
-    } = await this.capabilityMappingsApi.apiPorcelainCapabilityMappingsGet()
+    return dataCache.wrap('capabilityMappings', async () => {
+      const {
+        capabilityMapping,
+        standard
+      } = await this.capabilityMappingsApi.apiPorcelainCapabilityMappingsGet()
 
-    return {
-      capabilities: _(capabilityMapping)
-        .map(({ capability, optionalStandard }) => ({
-          ...capability,
-          standards: optionalStandard
-        }))
-        .keyBy('id')
-        .value(),
-      standards: _.keyBy(standard, 'id')
-    }
+      return {
+        capabilities: _(capabilityMapping)
+          .map(({ capability, optionalStandard }) => ({
+            ...capability,
+            standards: optionalStandard
+          }))
+          .keyBy('id')
+          .value(),
+        standards: _.keyBy(standard, 'id')
+      }
+    })
   }
 }
 
