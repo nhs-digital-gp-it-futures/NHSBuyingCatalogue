@@ -11,6 +11,27 @@ const solutionOnboardingStatusMap = {
 
 const EMPTY_UUID = '00000000-0000-0000-0000-000000000000'
 
+// set up the data layer caches
+const cacheManager = require('cache-manager')
+const cacheStoreParams = process.env.CACHE_HOST
+  ? { store: require('cache-manager-redis-store'), host: process.env.CACHE_HOST }
+  : { store: 'memory' }
+
+// cache for long-term storage of data that doesn't change regularly (e.g. capability map)
+const dataCache = cacheManager.caching({
+  ...cacheStoreParams,
+  ttl: 24 * 60 * 60
+})
+
+// cache for short-term storage of session data
+const CacheManagerStore = require('express-session-cache-manager').default
+const sessionStore = new CacheManagerStore(cacheManager.caching({
+  ...cacheStoreParams,
+  ttl: 60 * 60
+}), {
+  prefix: 'bcbeta-sess:'
+})
+
 class DataProvider {
   constructor (CatalogueApi) {
     this.CatalogueApi = CatalogueApi
@@ -170,6 +191,7 @@ class RealDataProvider extends DataProvider {
 }
 
 module.exports = {
+  sessionStore,
   dataProvider: new RealDataProvider(),
   DataProvider
 }
