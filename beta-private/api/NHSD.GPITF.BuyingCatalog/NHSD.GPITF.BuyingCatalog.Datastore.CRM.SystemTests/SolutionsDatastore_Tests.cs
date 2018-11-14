@@ -1,0 +1,83 @@
+﻿using FluentAssertions;
+using Microsoft.Extensions.Logging;
+using Moq;
+using NHSD.GPITF.BuyingCatalog.Logic;
+using NUnit.Framework;
+using System;
+using System.Linq;
+
+namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
+{
+  [TestFixture]
+  public sealed class SolutionsDatastore_Tests : DatastoreBase_Tests<SolutionsDatastore>
+  {
+    [Test]
+    public void Constructor_Completes()
+    {
+      Assert.DoesNotThrow(() => new SolutionsDatastore(_crmConnectionFactory, _logger, _policy));
+    }
+
+    [Test]
+    public void ByFramework_ReturnsData()
+    {
+      var otherDatastore = new FrameworksDatastore(_crmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
+      var others = otherDatastore.GetAll();
+      var datastore = new SolutionsDatastore(_crmConnectionFactory, _logger, _policy);
+
+      var datas = others.ToList().SelectMany(other => datastore.ByFramework(other.Id));
+
+      datas.Should().NotBeEmpty();
+      datas.ToList().ForEach(data => Verifier.Verify(data));
+    }
+
+    [Test]
+    public void ById_UnknownId_ReturnsNull()
+    {
+      var datastore = new SolutionsDatastore(_crmConnectionFactory, _logger, _policy);
+
+      var data = datastore.ById(Guid.NewGuid().ToString());
+
+      data.Should().BeNull();
+    }
+
+    [Test]
+    public void ById_KnownId_ReturnsData()
+    {
+      var otherDatastore = new FrameworksDatastore(_crmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
+      var others = otherDatastore.GetAll();
+      var datastore = new SolutionsDatastore(_crmConnectionFactory, _logger, _policy);
+      var allData = others.ToList().SelectMany(other => datastore.ByFramework(other.Id));
+
+      var allDataById = allData.Select(data => datastore.ById(data.Id));
+
+      allDataById.Should().BeEquivalentTo(allData);
+    }
+
+    [Test]
+    public void ByOrganisation_UnknownId_ReturnsEmpty()
+    {
+      var datastore = new SolutionsDatastore(_crmConnectionFactory, _logger, _policy);
+
+      var data = datastore.ByOrganisation(Guid.NewGuid().ToString());
+
+      data.Should().BeEmpty();
+    }
+
+    [Test]
+    public void ByOrganisation_KnownId_ReturnsData()
+    {
+      var otherDatastore = new FrameworksDatastore(_crmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
+      var others = otherDatastore.GetAll();
+      var datastore = new SolutionsDatastore(_crmConnectionFactory, _logger, _policy);
+      var orgIds = others.ToList()
+        .SelectMany(other => datastore.ByFramework(other.Id))
+        .Select(soln => soln.OrganisationId)
+        .Distinct();
+
+      var allDataByOrg = orgIds.SelectMany(orgId => datastore.ByOrganisation(orgId));
+
+      allDataByOrg.Should().NotBeEmpty();
+      allDataByOrg.ToList().ForEach(soln => Verifier.Verify(soln));
+    }
+  }
+}
