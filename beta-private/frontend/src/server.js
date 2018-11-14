@@ -16,15 +16,8 @@ const sessionConfig = {
   secret: process.env.SESSION_SECRET ||
             Math.floor(Math.random() * Number.MAX_SAFE_INTEGER).toString(36),
   resave: false,
-  saveUninitialized: false
-}
-
-if (process.env.CACHE_HOST) {
-  const CacheSessionStore = require('connect-redis')(session)
-  sessionConfig.store = new CacheSessionStore({
-    host: process.env.CACHE_HOST,
-    logErrors: true
-  })
+  saveUninitialized: false,
+  store: require('catalogue-data').sessionStore
 }
 
 app.use(session(sessionConfig))
