@@ -11,8 +11,12 @@ const supplierRole = Role('http://localhost:3000/oidc/authenticate', async t => 
 })
 
 const homeLink = Selector('body > header a[aria-label=Home]')
+const addNewSolutionButton = Selector('#add-new-solution')
 const firstOnboardingSolutionName = Selector(
   '#solutions-onboarding table > tbody > tr:first-child > td:first-child'
+)
+const lastOnboardingSolutionName = Selector(
+  '#solutions-onboarding table > tbody > tr:last-child > td:first-child'
 )
 const continueRegistrationButton = Selector('#content a[href^=register]')
 
@@ -271,6 +275,65 @@ test('Blanking all optional contact fields removes the contact', async t => {
 
     .expect(Selector('#errors').exists).notOk()
     .expect(newContactFieldset.exists).notOk()
+})
+
+test('Creating a new solution leads to an empty form via a customised status page', async t => {
+  await t
+    .useRole(supplierRole)
+    .click(homeLink)
+    .click(addNewSolutionButton)
+
+    .expect(continueRegistrationButton.textContent).eql('Get Started')
+
+    .click(continueRegistrationButton)
+    .click(leadContactFieldset)
+
+    .expect(globalSolutionName.exists).notOk()
+    .expect(solutionNameInput.value).eql('')
+    .expect(solutionDescriptionInput.value).eql('')
+    .expect(solutionVersionInput.value).eql('')
+    .expect(leadContactFirstNameInput.value).eql('')
+    .expect(leadContactLastNameInput.value).eql('')
+    .expect(leadContactEmailInput.value).eql('')
+    .expect(leadContactPhoneInput.value).eql('')
+})
+
+test('Solution cannot have the same name and version as another existing solution', async t => {
+  await t
+    .useRole(supplierRole)
+    .click(homeLink)
+    .click(addNewSolutionButton)
+    .click(continueRegistrationButton)
+
+    .typeText(solutionNameInput, 'Really Kool Document Manager')
+    .typeText(solutionDescriptionInput, 'This is the koolest kore system')
+    .typeText(solutionVersionInput, '1')
+
+    .click(leadContactFieldset)
+    .typeText(leadContactFirstNameInput, 'Automated')
+    .typeText(leadContactLastNameInput, 'Testing')
+    .typeText(leadContactEmailInput, 'autotest@example.com')
+    .typeText(leadContactPhoneInput, '123 456 78910')
+
+    .click(globalSaveButton)
+
+    .expect(Selector('#errors #error-solution\\.name').textContent).contains('Solution name and version already exists')
+
+    .selectText(solutionNameInput)
+    .typeText(solutionNameInput, 'Really Kool Kore System')
+
+    .click(globalSaveButton)
+
+    .expect(Selector('#errors').exists).notOk()
+    .expect(globalSolutionName.textContent).eql('Really Kool Kore System, 1')
+})
+
+test('Newly created solution appears in the correct place on the supplier dashboard', async t => {
+  await t
+    .useRole(supplierRole)
+    .click(homeLink)
+
+    .expect(lastOnboardingSolutionName.textContent).eql('Really Kool Kore System | 1')
 })
 
 function navigateToSupplierOnboardingSolutionCapabilities (t) {
