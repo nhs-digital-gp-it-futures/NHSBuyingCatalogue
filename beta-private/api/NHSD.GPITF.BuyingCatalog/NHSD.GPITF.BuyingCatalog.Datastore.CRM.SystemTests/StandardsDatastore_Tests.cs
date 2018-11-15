@@ -14,13 +14,13 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new StandardsDatastore(_crmConnectionFactory, _logger, _policy));
+      Assert.DoesNotThrow(() => new StandardsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy));
     }
 
     [Test]
     public void GetAll_ReturnsData()
     {
-      var datastore = new StandardsDatastore(_crmConnectionFactory, _logger, _policy);
+      var datastore = new StandardsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
       var datas = datastore.GetAll();
 
@@ -31,7 +31,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void ById_UnknownId_ReturnsNull()
     {
-      var datastore = new StandardsDatastore(_crmConnectionFactory, _logger, _policy);
+      var datastore = new StandardsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
       var data = datastore.ById(Guid.NewGuid().ToString());
 
@@ -41,7 +41,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void ById_KnownId_ReturnsData()
     {
-      var datastore = new StandardsDatastore(_crmConnectionFactory, _logger, _policy);
+      var datastore = new StandardsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
       var allData = datastore.GetAll().ToList();
 
       var allDataById = allData.Select(data => datastore.ById(data.Id));
@@ -52,7 +52,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void ByIds_KnownIds_ReturnsData()
     {
-      var datastore = new StandardsDatastore(_crmConnectionFactory, _logger, _policy);
+      var datastore = new StandardsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
       var allData = datastore.GetAll();
       var allDataIds = allData.Select(data => data.Id);
 
@@ -64,9 +64,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void ByFramework_KnownIds_ReturnsData()
     {
-      var otherDatastore = new FrameworksDatastore(_crmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
+      var otherDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
       var others = otherDatastore.GetAll();
-      var datastore = new StandardsDatastore(_crmConnectionFactory, _logger, _policy);
+      var datastore = new StandardsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
       var datas = others.ToList().SelectMany(fw => datastore.ByFramework(fw.Id));
 
@@ -77,9 +77,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void ByCapability_KnownIds_ReturnsData()
     {
-      var otherDatastore = new CapabilitiesDatastore(_crmConnectionFactory, new Mock<ILogger<CapabilitiesDatastore>>().Object, _policy);
+      var otherDatastore = new CapabilitiesDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<CapabilitiesDatastore>>().Object, _policy);
       var others = otherDatastore.GetAll();
-      var datastore = new StandardsDatastore(_crmConnectionFactory, _logger, _policy);
+      var datastore = new StandardsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
       var datas = others.ToList().SelectMany(other => datastore.ByCapability(other.Id, true));
 

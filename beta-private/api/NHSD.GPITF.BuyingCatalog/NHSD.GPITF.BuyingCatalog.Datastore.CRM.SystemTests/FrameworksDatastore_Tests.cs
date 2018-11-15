@@ -12,13 +12,13 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new FrameworksDatastore(_crmConnectionFactory, _logger, _policy));
+      Assert.DoesNotThrow(() => new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy));
     }
 
     [Test]
     public void GetAll_ReturnsData()
     {
-      var datastore = new FrameworksDatastore(_crmConnectionFactory, _logger, _policy);
+      var datastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
       var datas = datastore.GetAll();
 
@@ -29,7 +29,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void ById_UnknownId_ReturnsNull()
     {
-      var datastore = new FrameworksDatastore(_crmConnectionFactory, _logger, _policy);
+      var datastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
       var data = datastore.ById(Guid.NewGuid().ToString());
 
@@ -39,7 +39,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void ById_KnownId_ReturnsData()
     {
-      var datastore = new FrameworksDatastore(_crmConnectionFactory, _logger, _policy);
+      var datastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
       var allData = datastore.GetAll().ToList();
 
       var allDataById = allData.Select(data => datastore.ById(data.Id));
@@ -50,7 +50,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void ByCapability_UnknownId_ReturnsEmpty()
     {
-      var datastore = new FrameworksDatastore(_crmConnectionFactory, _logger, _policy);
+      var datastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
       var frameworks = datastore.ByCapability(Guid.NewGuid().ToString());
 
