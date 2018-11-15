@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -52,6 +53,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
       var email = Context.Email();
       solution.CreatedById = solution.ModifiedById = _contacts.ByEmail(email).Id;
+      solution.CreatedOn = solution.ModifiedOn = DateTime.UtcNow;
 
       return _datastore.Create(solution);
     }
@@ -61,7 +63,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _validator.ValidateAndThrow(solution, ruleSet: nameof(ISolutionsLogic.Update));
 
       var email = Context.Email();
-      solution.CreatedById = solution.ModifiedById = _contacts.ByEmail(email).Id;
+      solution.ModifiedById = _contacts.ByEmail(email).Id;
+      solution.ModifiedOn = DateTime.UtcNow;
 
       // create SharePoint folder structure
       if (solution.Status == SolutionStatus.CapabilitiesAssessment)
