@@ -9,8 +9,11 @@
  */
 
 using Gif.Service.Attributes;
+using Gif.Service.Const;
 using Gif.Service.Crm;
 using Gif.Service.Models;
+using Gif.Service.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -18,9 +21,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Gif.Service.Const;
-using Gif.Service.Services;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Gif.Service.Controllers
 {
@@ -85,7 +85,13 @@ namespace Gif.Service.Controllers
         {
             try
             {
-                new TechnicalContactService(new Repository()).Delete(techCont);
+                var svc = new TechnicalContactService(new Repository());
+                var techContGet = svc.ById(techCont.Id.ToString());
+
+                if (techContGet.Id == Guid.Empty)
+                    return StatusCode(404);
+
+                svc.Delete(techCont);
             }
             catch (Crm.CrmApiException ex)
             {

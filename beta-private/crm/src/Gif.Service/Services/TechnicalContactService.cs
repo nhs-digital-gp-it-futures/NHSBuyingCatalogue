@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Gif.Service.Attributes;
+﻿using Gif.Service.Attributes;
 using Gif.Service.Contracts;
 using Gif.Service.Crm;
 using Gif.Service.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Gif.Service.Services
 {
@@ -38,6 +36,20 @@ namespace Gif.Service.Services
             return contacts;
         }
 
+        public TechnicalContact ById(string id)
+        {
+            var filterAttributes = new List<CrmFilterAttribute>
+            {
+                new CrmFilterAttribute("SolutionId") {FilterName = "cc_technicalcontactid", FilterValue = id},
+                new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
+            };
+
+            var appJson = Repository.RetrieveMultiple(new TechnicalContact().GetQueryString(null, filterAttributes), out int? count);
+            var tcJson = appJson?.FirstOrDefault();
+
+            return new TechnicalContact(tcJson);
+        }
+
         public TechnicalContact Create(TechnicalContact techCont)
         {
             Repository.CreateEntity(techCont.EntityName, techCont.SerializeToODataPost());
@@ -53,5 +65,6 @@ namespace Gif.Service.Services
         {
             Repository.UpdateField(techCont.EntityName, "statecode", techCont.Id, "1");
         }
+
     }
 }
