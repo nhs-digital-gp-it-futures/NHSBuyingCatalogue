@@ -119,7 +119,7 @@ namespace Gif.Service.Models
                         continue;
                     }
 
-                    if (p.Name.ToLower() == "createdon" || p.Name.ToLower() == "modifiedon" || p.Name.ToLower() == "status")
+                    if (p.Name.ToLower() == "createdon" || p.Name.ToLower() == "modifiedon")
                     {
                         dataString = ReplaceDataBind(entityName, targetField, dataString, p.Name);
                         continue;
@@ -133,6 +133,11 @@ namespace Gif.Service.Models
                     if (p.PropertyType.FullName.ToLower().Contains("system.datetime"))
                     {
                         dataString = ReplaceNullDate(dataString, p.Name);
+                    }
+
+                    if (p.Name.ToLower() == "status")
+                    {
+                        dataString = ReplaceNullString(dataString, p.Name);
                     }
 
                     dataString = dataString.Replace("\"" + p.Name + "\"", "\"" + targetField + "\"");
@@ -150,8 +155,10 @@ namespace Gif.Service.Models
             var endGuid = dataString.IndexOf(doubleQuote, startGuid + 1, StringComparison.Ordinal);
             var entityVal = dataString.Substring(startGuid, endGuid - startGuid);
 
-            var replace = $"{name}{jsonSeparator}{entityVal}";
-            dataString = dataString.Replace(replace, string.Empty);
+            var replace1 = $"{doubleQuote}{name}{jsonSeparator}{entityVal}{doubleQuote}{comma}";
+            dataString = dataString.Replace(replace1, string.Empty);
+            var replace2 = $"{doubleQuote}{name}{jsonSeparator}{entityVal}{doubleQuote}";
+            dataString = dataString.Replace(replace2, string.Empty);
 
             return dataString;
         }
@@ -188,7 +195,7 @@ namespace Gif.Service.Models
                     continue;
                 }
 
-                if (p.Name.ToLower() == "createdon" || p.Name.ToLower() == "modifiedon" || p.Name.ToLower() == "status")
+                if (p.Name.ToLower() == "createdon" || p.Name.ToLower() == "modifiedon")
                 {
                     dataString = ReplaceDataBind(entityName, targetField, dataString, p.Name);
                     continue;
@@ -202,6 +209,11 @@ namespace Gif.Service.Models
                 if (p.PropertyType.FullName.ToLower().Contains("system.datetime"))
                 {
                     dataString = ReplaceNullDate(dataString, p.Name);
+                }
+
+                if (p.Name.ToLower() == "status")
+                {
+                    dataString = ReplaceNullString(dataString, p.Name);
                 }
 
                 dataString = dataString.Replace("\"" + p.Name + "\"", "\"" + targetField + "\"");
@@ -218,7 +230,6 @@ namespace Gif.Service.Models
         {
             dataString = RemoveDoubleCharacters(dataString, $"{comma}");
             dataString = dataString.Replace($"{comma}{closeBracket}", $"{closeBracket}");
-            //dataString = dataString.Replace("\"\",", string.Empty);
             dataString = dataString.Replace(",\"\"", string.Empty);
             return dataString;
         }
