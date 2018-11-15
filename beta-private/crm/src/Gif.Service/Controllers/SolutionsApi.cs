@@ -89,7 +89,7 @@ namespace Gif.Service.Controllers
             {
                 var solution = new SolutionsService(new Repository()).ById(id);
 
-                if (solution == null)
+                if (solution.Id == Guid.Empty)
                     return StatusCode(404);
 
                 return new ObjectResult(solution);
