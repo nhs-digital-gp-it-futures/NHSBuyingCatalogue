@@ -1,10 +1,10 @@
 ﻿using Gif.Service.Attributes;
 using Gif.Service.Const;
+using Gif.Service.Enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Gif.Service.Enums;
 
 namespace Gif.Service.Models
 {
@@ -27,7 +27,7 @@ namespace Gif.Service.Models
 
         [DataMember]
         [CrmFieldName("statuscode")]
-        public SolutionStatusEnum Status { get; set; }
+        public SolutionStatusEnum? Status { get; set; }
 
         [DataMember]
         [CrmFieldName("_cc_previous_version_value")]
@@ -55,7 +55,7 @@ namespace Gif.Service.Models
         [CrmFieldName("_cc_modifiedby_value")]
         [CrmFieldNameDataBind("cc_ModifiedBy@odata.bind")]
         [CrmFieldEntityDataBind("contacts")]
-        public Guid? ModifiedById { get; set; } 
+        public Guid? ModifiedById { get; set; }
 
         [DataMember]
         [CrmFieldName("cc_productpage")]
