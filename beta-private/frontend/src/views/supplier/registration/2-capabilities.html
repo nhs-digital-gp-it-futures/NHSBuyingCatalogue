@@ -1,9 +1,26 @@
 {{> errors}}
 
-<h1>Which Capabilities does your Solution provide?</h1>
-{{#> form}}
+<header class="page-main-heading">
+  <h1>{{t 'Onboarding.Capabilities.Title' }}</h1>
+  <h2>{{t 'Onboarding.Capabilities.Subtitle'}}</h2>
+</header>
+
+<section class="preamble">
+  {{#each (tt 'Onboarding.Capabilities.Preamble')}}
+  <p>{{{.}}}</p>
+  {{/each}}
+</section>
+
+{{#> help-reveal
+  title='Onboarding.Capabilities.Help.Title'}}
+  {{#each (tt 'Onboarding.Capabilities.Help.Text')}}
+    <p>{{{.}}}</p>
+  {{/each}}
+{{/help-reveal}}
+
+{{#> form form_id=activeFormId}}
   <fieldset id="capabilities-core">
-    <legend>Core Capabilities</legend>
+    <legend>{{t 'Onboarding.Capabilities.Fieldsets.Core.Legend'}}</legend>
     <ul>
       {{#capabilities}}
       <li>
@@ -17,9 +34,11 @@
     </ul>
   </fieldset>
   <fieldset id="capabilities-non-core">
-    <legend>Non-Core Capabilities</legend>
+    <legend>{{t 'Onboarding.Capabilities.Fieldsets.Core.Legend'}}</legend>
   </fieldset>
 
-  <input type="submit" name="action[save]" value="Save">
-  <input type="submit" name="action[continue]" value="Continue">
+  <input type="submit"
+    class="button primary"
+    name="action[continue]"
+    value="{{t 'Buttons.Save and continue'}}">
 {{/form}}

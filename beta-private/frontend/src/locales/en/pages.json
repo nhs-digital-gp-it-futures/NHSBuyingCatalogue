@@ -84,6 +84,31 @@
         "Help": "Some organisations work with multiple people in similar roles. Please add any additional $t(Solution) contacts, as relevant.",
         "Button": "Add another contact (optional)"
       }
+    },
+    "Capabilities": {
+      "Title": "Which $t(Capability_plural) does your $t(Solution) provide?*",
+      "Subtitle": "Select all that apply to build the requirements for the next two stages.",
+      "Preamble": [
+        "You may change your $t(Capability) selections until you have submitted responses for assessment in Stage 2.",
+        "Asserted $t(Capability_plural) will be shown to the public on your $t(Solution) page once you’ve complete all four stages of Adding a $t(Solution).",
+        "For queries, email: <a href='#'>{email address}</a>."
+      ],
+      "Help": {
+        "Title": "Help - What are $t(Capability_plural)?",
+        "Text": [
+          "$t(Capability_plural) describe what your $t(Solution) does.",
+          "Some $t(Standard_plural) are associated with $t(Capability_plural). Others are overarching and required for all $t(Solution_plural). $t(Standard_plural) contain requirements your $t(Solution) must meet to provide a minimum level of quality.",
+          "<a href='#'>Learn more and view all $t(Standards and Capabilities).</a>"
+        ]
+      },
+      "Fieldsets": {
+        "Core": {
+          "Legend": "Core $t(Capability_plural)"
+        },
+        "NonCore": {
+          "Legend": "Non-Core $t(Capability_plural)"
+        }
+      }
     }
   }
 }

@@ -48,7 +48,8 @@ router
 function commonOnboardingContext (req) {
   return {
     solution: req.solution,
-    csrfToken: req.csrfToken()
+    csrfToken: req.csrfToken(),
+    activeFormTitle: req.solution && _([req.solution.name, req.solution.version]).filter().join(', ')
   }
 }
 
@@ -68,12 +69,7 @@ function registrationPageContext (req) {
     activeFormId: 'registration-form'
   }
 
-  if (context.solution) {
-    context.activeFormTitle = _.join(
-      _.filter([context.solution.name, context.solution.version]),
-      ', '
-    )
-  } else {
+  if (!context.solution) {
     context.solution = { id: 'new' }
   }
 
@@ -191,7 +187,8 @@ async function registrationPagePost (req, res) {
 async function capabilitiesPageContext (req) {
   const context = {
     ...commonOnboardingContext(req),
-    ...await dataProvider.capabilityMappings()
+    ...await dataProvider.capabilityMappings(),
+    activeFormId: 'capability-selector-form'
   }
 
   context.capabilities = _(context.capabilities)
