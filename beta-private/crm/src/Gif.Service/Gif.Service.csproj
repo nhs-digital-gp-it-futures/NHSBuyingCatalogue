@@ -1,0 +1,64 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <Description>IO.Swagger</Description>
+    <Copyright>IO.Swagger</Copyright>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <AssemblyName>Gif.Service</AssemblyName>
+    <PackageId>IO.Swagger</PackageId>
+	<NoWarn>NU1605</NoWarn>
+	<UserSecretsId>626ab5c7-7b51-49fe-acea-005970d864c3</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Controllers\ContactApi.cs" />
+    <Compile Remove="Models\Capabilities.cs" />
+    <Compile Remove="Models\CapabilitiesImplemented.cs" />
+    <Compile Remove="Models\CapabilitiesImplementedEvidence.cs" />
+    <Compile Remove="Models\CapabilitiesImplementedReviews.cs" />
+    <Compile Remove="Models\Frameworks.cs" />
+    <Compile Remove="Models\GenCode.cs" />
+    <Compile Remove="Models\Solutions.cs" />
+    <Compile Remove="Models\Standards.cs" />
+    <Compile Remove="Models\StandardsApplicable.cs" />
+    <Compile Remove="Models\StandardsApplicableEvidence.cs" />
+    <Compile Remove="Models\TechnicalContacts.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="Models\GenCode.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="IdentityServer4" Version="2.2.0" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.6.0" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.3" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
+    <PackageReference Include="Microsoft.OData.Client" Version="7.5.1" />
+    <PackageReference Include="Microsoft.OData.Core" Version="7.5.1" />
+    <PackageReference Include="Microsoft.OData.Edm" Version="7.5.1" />
+    <PackageReference Include="Microsoft.Spatial" Version="7.5.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="1.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.1" />
+    <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Samc4.CipherUtil">
+      <HintPath>..\..\lib\Samc4.CipherUtil.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ServiceModel.Web">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\System.ServiceModel.Web.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+</Project>

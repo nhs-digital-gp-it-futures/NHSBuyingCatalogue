@@ -1,0 +1,83 @@
+apiVersion: 2018-06-01
+location: westeurope
+name: BCContainerGroup
+properties:
+  containers:
+  - name: bc-prototype-api
+    properties:
+      environmentVariables:
+        - name: 'OIDC_USERINFO_URL'
+          value: 'http://localhost:9000/me'
+        - name: 'OIDC_ISSUER_URL'
+          value: 'http://localhost:9000'
+        - name: 'DATASTORE_CONNECTIONTYPE'
+          value: 'SqlServer'
+        - name: 'DATASTORE_CONNECTIONSTRING'
+          secureValue: 'Server=tcp:bcpbtestdb01.database.windows.net,1433;Initial Catalog=buyingcatprivatebeta_test;Persist Security Info=False;User ID=bcadmin;Password=Ac1!w3fdsh3kl;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+        - name: 'LOG_CONNECTIONSTRING'
+          secureValue: 'Server=tcp:bcpbtestdb01.database.windows.net,1433;Initial Catalog=buyingcatprivatebeta_test;Persist Security Info=False;User ID=bcadmin;Password=Ac1!w3fdsh3kl;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'      
+      image: buyingcat01.azurecr.io/gpitf/catalogue-api:bc-prototype
+      resources:
+        requests:
+          cpu: 1
+          memoryInGb: 1.5
+      ports:
+      - port: 5100
+  - name: bc-prototype-frontend
+    properties:
+      environmentVariables:
+      - name: 'BASE_URL'
+        value: 'http://localhost:8000'
+      - name: 'OIDC_ISSUER_URL'
+        value: 'http://localhost:9000' 
+      - name: 'OIDC_CLIENT_ID'
+        value: 'catalogue-private-beta-ci'
+      - name: 'OIDC_CLIENT_SECRET'
+        secureValue: 'ptjqjbxbdxryshjbsqelfwoonibgnnee'  
+      image: buyingcat01.azurecr.io/gpitf/catalogue-frontend:bc-prototype
+      resources:
+        requests:
+          cpu: 1
+          memoryInGb: 1.5
+      ports:
+      - port: 8000
+  - name: bc-prototype-nginx
+    properties:
+      image: buyingcat01.azurecr.io/gpitf/catalogue-frontend-proxy:bc-prototype
+      resources:
+        requests:
+          cpu: 1
+          memoryInGb: 1.5
+      ports:
+      - port: 80
+  - name: bc-prototype-oidc-provider
+    properties:
+      image: buyingcat01.azurecr.io/gpitf/catalogue-oidc-provider:bc-prototype
+      resources:
+        requests:
+          cpu: 1
+          memoryInGb: 1.5
+      ports:
+      - port: 9000 
+  osType: Linux
+  restartPolicy: Always  
+  ipAddress:
+    type: Public
+    dnsNameLabel: buyingcatapp
+    fqdn: buyingcatapp.azure-container.io
+    ports:
+    - protocol: tcp
+      port: '5100'
+    - protocol: tcp
+      port: '8000'
+    - protocol: tcp
+      port: '80'
+    - protocol: tcp
+      port: '9000'
+  imageRegistryCredentials:
+  - server: buyingcat01.azurecr.io
+    username: buyingcat01
+    password: yAq6A6J9dWg3tDoTAEE4PYgil=GJNHWk
+tags: null
+type: Microsoft.ContainerInstance/containerGroups
+

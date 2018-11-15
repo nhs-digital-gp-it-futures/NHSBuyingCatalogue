@@ -1,0 +1,55 @@
+<form method="POST">
+    <fieldset>
+        <!-- <label>
+            <input type="radio" name="wantThese" value="yes">
+            Yes
+        </label>
+        <label>
+            <input type="radio" name="wantThese" value="no">
+            No
+        </label> -->
+        <div class="array-input">
+            {{#if errors}}
+                <div class="error">
+                    {{errors.message}}
+                </div>
+            {{/if}}
+            <h3>{{form-title}}</h3>
+            {{#if title-clarification}} <p class="clarification">{{title-clarification}}</p> {{/if}}
+            {{#if field-length}} <p class="clarification">{{field-length}} characters max</p> {{/if}}
+            <div>
+                {{#if field-length}}
+                    <textarea name="text" rows="4" cols="50" placeholder="{{example-text}}" maxlength="{{field-length}}"">{{form-data}}</textarea>
+                    <p  class="clarification">You have <a id="text-area-length-remaining"></a> (out of {{field-length}}) characters remaining</p>
+
+                {{else}}
+                    <textarea name="text" rows="4" cols="35" placeholder="{{example-text}}">{{form-data}}</textarea>
+                {{/if}}
+
+            </div>
+            
+        </div>
+
+    </fieldset>
+    <div class="controls">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <button class="button" name="action" value="submit">Save &amp; Return</button>
+    </div>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const textArea = $('textarea');
+    const lengthRemaining = $('#text-area-length-remaining');
+
+    function updateLengthRemaining() {
+        lengthRemaining.innerText = `${textArea.maxLength - textArea.value.length}`;
+    }
+
+    textArea.addEventListener('input', () => {
+        updateLengthRemaining()
+    })
+
+    updateLengthRemaining();
+});
+</script>

@@ -23,26 +23,15 @@ const primaryContactHelp = {
   'Clinical Safety Officer': 'The person in a Supplier’s organisation responsible for ensuring the safety of a Health IT System in that organisation through the application of clinical risk management.'
 }
 
-app.get('/', (req, res) => {
-  const context = {
-    breadcrumbs: [
-      { label: 'My Dashboard' }
-    ]
-  }
-
-  res.render('supplier/dashboard', context)
-})
-
-app.get('/solutions', async (req, res) => {
+app.get('/', async (req, res) => {
   delete req.session.solutionEx
   const context = {
     breadcrumbs: [
-      { label: 'My Dashboard', url: '/suppliers' },
       { label: 'My Solutions' }
     ],
     created: 'created' in req.query,
     errors: {},
-    addSolutionUrl: `${req.baseUrl}/solutions/add`
+    addSolutionUrl: `${req.baseUrl}/solutions/add`,
   }
   let solutions = []
 
@@ -198,7 +187,8 @@ app.get('/solutions/add', csrfProtection, async (req, res) => {
     },
     primaryContactTypes,
     primaryContactHelp,
-    csrfToken: req.csrfToken()
+    csrfToken: req.csrfToken(),
+    pageHasForm: true
   })
 })
 
@@ -345,11 +335,17 @@ app.post('/solutions/add', csrfProtection, (req, res) => {
             .then(() => solutionEx)
         })
         .then(solutionEx => {
-          res.redirect(
-            req.body.action === 'continue'
-            ? `${req.baseUrl}/solutions/${solutionEx.solution.id}/capabilities`
-            : `${req.baseUrl}/solutions?created=${solutionEx.solution.id}`
-          )
+          let redirect = `${req.baseUrl}/solutions?created=${solutionEx.solution.id}`
+                    
+          if(req.body.action === 'continue') {
+            redirect = `${req.baseUrl}/solutions/${solutionEx.solution.id}/capabilities`
+          }
+
+          if(req.body.action === 'save') {
+            redirect = `${req.baseUrl}/solutions/${solutionEx.solution.id}/edit`
+          }
+
+          res.redirect(redirect)
         })
         .catch(err => {
           addError(errors, 'general', err)
@@ -369,7 +365,8 @@ app.post('/solutions/add', csrfProtection, (req, res) => {
       primaryContacts: contacts,
       secondaryContacts,
       errors,
-      csrfToken: req.csrfToken()
+      csrfToken: req.csrfToken(),
+      pageHasForm: true
     }
 
     res.render('supplier/add-solution', context)
@@ -389,8 +386,7 @@ app.get('/solutions/:solution_id', async (req, res) => {
 
   const context = {
     breadcrumbs: [
-      { label: 'My Dashboard', url: '/suppliers' },
-      { label: 'My Solutions', url: '/suppliers/solutions' },
+      { label: 'My Solutions', url: '/suppliers' },
       { label: 'Onboarding Solution' }
     ],
     errors: {},
@@ -486,7 +482,8 @@ app.get('/solutions/:solution_id/edit', csrfProtection, async (req, res) => {
       primaryContactHelp,
       primaryContacts: _.keyBy(primaryContacts, 'contactType'),
       secondaryContacts,
-      csrfToken: req.csrfToken()
+      csrfToken: req.csrfToken(),
+      pageHasForm: true
     })
   } catch (err) {
     throw err
@@ -525,11 +522,17 @@ app.post('/solutions/:solution_id/edit', csrfProtection, (req, res) => {
             .then(() => solutionToUpdate)
         })
         .then(({solution}) => {
-          res.redirect(
-            req.body.action === 'continue'
-            ? `${req.baseUrl}/solutions/${solution.id}/capabilities`
-            : `${req.baseUrl}/solutions`
-          )
+          let redirect = `${req.baseUrl}/solutions?created=${solution.id}`
+
+          if(req.body.action === 'continue') {
+            redirect = `${req.baseUrl}/solutions/${solution.id}/capabilities`
+          }
+
+          if(req.body.action === 'save') {
+            redirect = `${req.baseUrl}/solutions/${solution.id}/edit`
+          }
+
+          res.redirect(redirect)
         })
         .catch(err => {
           addError(errors, 'general', err)
@@ -549,7 +552,8 @@ app.post('/solutions/:solution_id/edit', csrfProtection, (req, res) => {
       primaryContacts: contacts,
       secondaryContacts,
       errors,
-      csrfToken: req.csrfToken()
+      csrfToken: req.csrfToken(),
+      pageHasForm: true
     }
 
     res.render('supplier/add-solution', context)
@@ -599,7 +603,9 @@ app.get('/solutions/:solution_id/capabilities', csrfProtection, async (req, res)
     capabilities: enrichedCapabilities,
     groupedCapabilities,
     standards: groupedStandards,
-    csrfToken: req.csrfToken()
+    csrfToken: req.csrfToken(),
+    pageHasForm: true,
+    solution: { name: solutionEx.solution.name }
   })
 })
 
@@ -640,7 +646,7 @@ app.post('/solutions/:solution_id/capabilities', csrfProtection, async (req, res
       _.flatten(
         _.map(
           solutionEx.claimedCapability,
-          ({capabilityId}) => _.flatMap(
+          ({ capabilityId }) => _.flatMap(
             _.pick(
               _.get(_.find(capabilities, ['id', capabilityId]), 'standards', {}),
               ['interop', 'mandatory', 'overarching']
@@ -648,7 +654,7 @@ app.post('/solutions/:solution_id/capabilities', csrfProtection, async (req, res
           )
         )
       ),
-      std => ({standardId: std.id})
+      std => ({ standardId: std.id })
     ),
     'standardId'
   )
@@ -663,6 +669,9 @@ app.post('/solutions/:solution_id/capabilities', csrfProtection, async (req, res
 
     if (req.body.action === 'continue') {
       redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/mobile`
+    }
+    if (req.body.action === 'save') {
+      redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/capabilities`
     }
 
     await api.update_solution(solutionEx)
@@ -683,7 +692,8 @@ app.post('/solutions/:solution_id/capabilities', csrfProtection, async (req, res
       }),
       standards: groupedStandards,
       errors: err,
-      csrfToken: req.csrfToken()
+      csrfToken: req.csrfToken(),
+      pageHasForm: true
     })
   }
 })
@@ -706,7 +716,9 @@ app.get('/solutions/:solution_id/mobile', csrfProtection, async (req, res) => {
     },
     csrfToken: req.csrfToken(),
     isMobile: _.some(solutionEx.claimedStandard, ['standardId', 'CSS3']),
-    standard: _.find(standards, ['id', 'CSS3'])
+    standard: _.find(standards, ['id', 'CSS3']),
+    pageHasForm: true,
+    solution: { name: solutionEx.solution.name }
   }
 
   res.render('supplier/solution-mobile', context)
@@ -734,7 +746,8 @@ app.post('/solutions/:solution_id/mobile', csrfProtection, async (req, res) => {
       href: `/suppliers/solutions/${req.params.solution_id}/capabilities`
     },
     csrfToken: req.csrfToken(),
-    isMobile: _.some(solutionEx.claimedStandard, ['standardId', 'CSS3'])
+    isMobile: _.some(solutionEx.claimedStandard, ['standardId', 'CSS3']),
+    pageHasForm: true
   }
 
   try {
@@ -742,6 +755,9 @@ app.post('/solutions/:solution_id/mobile', csrfProtection, async (req, res) => {
 
     if (req.body.action === 'continue') {
       redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/review`
+    }
+    if (req.body.action === 'save') {
+      redirectUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/mobile`
     }
 
     await api.update_solution(solutionEx)
@@ -762,10 +778,10 @@ app.get('/solutions/:solution_id/review', csrfProtection, async (req, res) => {
     },
     csrfToken: req.csrfToken(),
     errors: {},
-    editLinks:{
-      contacts:`/suppliers/solutions/${req.params.solution_id}/edit`,
-      capabilities:`/suppliers/solutions/${req.params.solution_id}/capabilities`,
-      mobile:`/suppliers/solutions/${req.params.solution_id}/mobile`
+    editLinks: {
+      contacts: `/suppliers/solutions/${req.params.solution_id}/edit`,
+      capabilities: `/suppliers/solutions/${req.params.solution_id}/capabilities`,
+      mobile: `/suppliers/solutions/${req.params.solution_id}/mobile`
     }
   }
 
@@ -789,13 +805,11 @@ app.get('/solutions/:solution_id/review', csrfProtection, async (req, res) => {
 
     context.capabilities = _.map(
       solutionEx.claimedCapability,
-      ({capabilityId}) => allCaps[capabilityId].name
+      ({ capabilityId }) => allCaps[capabilityId].name
     )
 
-
-    context.contacts = solutionEx.technicalContact;
+    context.contacts = solutionEx.technicalContact
     context.supportsMobile = _.some(solutionEx.claimedStandard, ['standardId', 'CSS3'])
-
 
     // merge optional with interop standards prior to display, so that Mobile Working
     // is considered solution-specific
@@ -812,7 +826,6 @@ app.get('/solutions/:solution_id/review', csrfProtection, async (req, res) => {
       .filter(([, stds]) => stds.length)
       .fromPairs()
       .value()
-
   } catch (err) {
     context.errors.general = err
   }
@@ -857,41 +870,259 @@ app.post('/solutions/:solution_id/review', csrfProtection, async (req, res) => {
 
 function renderProductPageEditor (req, res, solutionEx, context) {
   enrichContextForProductPage(context, solutionEx)
+
   context.breadcrumbs = [
-    { label: 'My Dashboard', url: '/suppliers' },
-    { label: 'My Solutions', url: '/suppliers/solutions' },
+    { label: 'My Solutions', url: '/suppliers' },
     { label: 'Onboarding Solution', url: `/suppliers/solutions/${req.params.solution_id}` },
     { label: 'Solution Page' }
   ]
   context.csrfToken = req.csrfToken()
+
+  context.contact = solutionEx.technicalContact
+
   res.render('supplier/solution-page-edit', context)
 }
 
-app.get('/solutions/:solution_id/product-page', csrfProtection, async (req, res) => {
+app.get('/solutions/:solution_id/product-page/preview', csrfProtection, async (req, res) => {
   const context = {
     errors: {}
   }
+
   let solutionEx
 
   try {
     // load from session when coming back from preview, if ID is the same
     solutionEx = req.session.solutionEx && req.session.solutionEx.solution.id === req.params.solution_id
-               ? req.session.solutionEx
-               : await api.get_solution_by_id(req.params.solution_id)
-    context.capabilities = _.get(await api.get_all_capabilities(), 'capabilities')
+              ? req.session.solutionEx
+              : await api.get_solution_by_id(req.params.solution_id)
+
     if (solutionEx.solution.productPage.message) {
       context.message = await formatting.formatMessagesForDisplay([
         _.merge({}, solutionEx.solution.productPage.message)
       ])
     }
+
     context.organisationName = _.get(await api.get_org_by_id(solutionEx.solution.organisationId), 'name')
-    context.allowSubmit = solutionEx.solution.status === api.SOLUTION_STATUS.SOLUTION_PAGE
   } catch (err) {
     context.errors.general = err
   }
 
   renderProductPageEditor(req, res, solutionEx, context)
 })
+
+app.get('/solutions/:solution_id/product-page', csrfProtection, async (req, res) => {
+  const context = {
+    errors: {}
+  }
+
+  let solutionEx
+
+  try {
+    // load from session when coming back from preview, if ID is the same
+    solutionEx = req.session.solutionEx && req.session.solutionEx.solution.id === req.params.solution_id
+              ? req.session.solutionEx
+              : await api.get_solution_by_id(req.params.solution_id)
+
+    const allCaps = _.get(await api.get_all_capabilities(), 'capabilities')
+    const allCapsMap = allCaps.reduce((acc, cap) => ({ ...acc, [cap.id]: cap }), {})
+
+    const claimedCaps = solutionEx.claimedCapability.map((cap) => ({
+      ...cap,
+      ..._.omit(allCapsMap[cap.capabilityId], 'id')
+    }))
+
+
+    const uniqCapStd = (caps, std) => {
+      return _.uniqBy(
+        caps.reduce((acc, cap) => {
+          return cap.standards[std] ? acc.concat(cap.standards[std]) : acc
+        }, []), 'id')
+    }
+
+    const optional = uniqCapStd(claimedCaps, 'optional')
+    const overarching = uniqCapStd(claimedCaps, 'overarching')
+    const interop = uniqCapStd(claimedCaps, 'interop')
+    const mandatory = uniqCapStd(claimedCaps, 'mandatory')
+
+    context.capabilities = claimedCaps.map((cap) => ({ name: cap.name, description: cap.description }))
+    context.standards = {
+      overarching,
+      interop: interop.concat(optional),
+      mandatory
+    }
+
+    if (solutionEx.solution.productPage.message) {
+      context.message = await formatting.formatMessagesForDisplay([
+        _.merge({}, solutionEx.solution.productPage.message)
+      ])
+    }
+
+    context.organisationName = _.get(await api.get_org_by_id(solutionEx.solution.organisationId), 'name')
+
+    context.allowSubmit = solutionEx.solution.status === api.SOLUTION_STATUS.SOLUTION_PAGE
+
+    // if the page has not been approved, allow the user to submit for review
+    context.allowReview = solutionEx.solution.status === api.SOLUTION_STATUS.SOLUTION_PAGE
+
+    // if the page has been approved, allow the user to publish
+    context.allowPublish = solutionEx.solution.status === api.SOLUTION_STATUS.APPROVED &&
+                          context.productPage.status === 'APPROVED'
+  } catch (err) {
+    context.errors.general = err
+  }
+
+  const pageEditLinkPrefix = `/suppliers/solutions/${req.params.solution_id}/product-page`
+
+  context.pageEditLinks = {
+    features: `${pageEditLinkPrefix}/features`,
+    integrations: `${pageEditLinkPrefix}/integrations`,
+    summary: `${pageEditLinkPrefix}/summary`,
+    about: `${pageEditLinkPrefix}/about`,
+    user_support: `${pageEditLinkPrefix}/user-support`,
+    service_scope: `${pageEditLinkPrefix}/service-scope`,
+    customer_insights: `${pageEditLinkPrefix}/customer-insights`,
+    import_exports: `${pageEditLinkPrefix}/import-exports`
+  }
+
+  renderProductPageEditor(req, res, solutionEx, context)
+})
+
+app.post('/solutions/:solution_id/product-page', csrfProtection, async (req, res) => {
+  const context = {
+    errors: _.mapValues(
+      _.groupBy(validationResult(req).array(), 'param'),
+      errs => _.map(errs, 'msg')
+    )
+  }
+  let solutionEx
+
+  try {
+    solutionEx = await api.get_solution_by_id(req.params.solution_id)
+    context.capabilities = _.get(await api.get_all_capabilities(), 'capabilities')
+    context.organisationName = _.get(await api.get_org_by_id(solutionEx.solution.organisationId), 'name')
+  } catch (err) {
+    context.errors.general = err
+    return renderProductPageEditor(req, res, solutionEx, context)
+  }
+
+  // Sanity Validation should be done at a per-form page basis.
+  // This post handler Just needs to ensure that all elements are actually present and have been validated.
+  
+  // const validated = matchedData(req)
+  // solutionEx.solution.name = validated.name || req.body.name
+  // solutionEx.solution.version = validated.version || req.body.version
+  // solutionEx.solution.description = validated.description || req.body.description
+
+  // const updateForProductPage = {
+  //   benefits: _.filter(_.map(_.castArray(req.body.benefits), _.trim)),
+  //   interop: _.filter(_.map(_.castArray(req.body.interop), _.trim)),
+  //   contact: _.pickBy(_.mapValues(req.body.contact, _.trim)),
+  //   capabilities: req.body.capabilities ? _.castArray(req.body.capabilities) : [],
+  //   requirements: _.filter(_.map(_.castArray(req.body.requirements), _.trim)),
+  //   'case-study': _.filter(_.castArray(req.body['case-study']), cs => cs.title),
+  //   optionals: {
+  //     'additional-services': _.mapValues(
+  //       _.pickBy(req.body['additional-services']),
+  //       val => val === 'yes'
+  //     )
+  //   },
+  //   about: validated.about || req.body.about
+  // }
+
+  // encode the uploaded logo (if any)
+  // if (req.files.logo) {
+  //   const logo = req.files.logo
+  //   updateForProductPage.logoUrl = `data:${logo.mimetype};base64,${logo.data.toString('base64')}`
+  // } else if (req.body.preserveLogo && req.session.solutionEx) {
+  //   updateForProductPage.logoUrl = _.get(req.session.solutionEx, 'solution.productPage.logoUrl', '')
+  // } else if (!req.body.preserveLogo) {
+  //   updateForProductPage.logoUrl = ''
+  // }
+
+  // solutionEx.solution.productPage = _.assign(
+  //   {},
+  //   solutionEx.solution.productPage,
+  //   updateForProductPage
+  // )
+
+  // if there are validation errors, re-render the editor
+  if (!_.isEmpty(context.errors)) {
+    return renderProductPageEditor(req, res, solutionEx, context)
+  }
+
+  const action = _.head(_.keys(req.body.action))
+  let redirect = `${req.baseUrl}/solutions`
+
+  if (action === 'review' && solutionEx.solution.status === api.SOLUTION_STATUS.SOLUTION_PAGE) {
+    solutionEx.solution.productPage.status = 'SUBMITTED'
+    redirect = `${req.baseUrl}/solutions/${solutionEx.solution.id}?submitted`
+  }
+  else if (action === 'publish' && solutionEx.solution.status === api.SOLUTION_STATUS.APPROVED) {
+    solutionEx.solution.productPage.status = 'PUBLISH'
+  }
+
+  req.session.solutionEx = await api.update_solution(solutionEx)
+  res.redirect(redirect)
+})
+
+app.get('/solutions/:solution_id/product-page/:section_name', csrfProtection, async (req, res) => {
+  const context = {
+    errors: '',
+    csrfToken: req.csrfToken(),
+    pageHasForm: true
+  }
+
+  context.breadcrumbs = [
+    { label: 'My Solutions', url: '/suppliers' },
+    { label: 'Onboarding Solution', url: `/suppliers/solutions/${req.params.solution_id}` },
+    { label: 'Solution Page', url: `/suppliers/solutions/${req.params.solution_id}/product-page` },
+    { label: req.params.section_name }
+  ]
+
+  let solutionEx = req.session.solutionEx
+  solutionEx = await api.get_solution_by_id(req.params.solution_id)
+
+  const productPage = solutionEx.solution.productPage ? JSON.parse(solutionEx.solution.productPage) : {}
+
+  enrichContextForProductPage(context, solutionEx)
+
+  context.productPage = productPage
+  context.solution = solutionEx.solution
+
+  const tableForms = ['service-scope', 'customer-insights', 'import-exports', 'user-support', 'migration-switching', 'audit-info']
+  if (tableForms.indexOf(req.params.section_name) > -1) {
+    const formLayout = require(`../forms/${req.params.section_name}.json`)
+
+    /**
+     * Merge Product Page Values with Form placeholder Values
+     */
+    function searchAndAssign(name, value, inputs) {
+      return inputs.map((input) => {
+        if(input.name === name) {
+          input.value = value;
+          return input;
+        }
+        else if(input.dependants) {
+          input.dependants = searchAndAssign(name, value, input.dependants);
+          return input;
+        }
+        return input;
+      })
+    }
+    const formValues = productPage[req.params.section_name];
+    _.forEach(formValues, (value, key) => {
+      formLayout.inputs = searchAndAssign(key, value, formLayout.inputs);
+    })
+  
+    const mergedForm = formLayout
+  
+    context.form = mergedForm;
+    context.form.csrfToken = req.csrfToken();
+  
+  }
+  res.render(`supplier/product-page/${req.params.section_name}`, context)
+});
+
 
 const validateSolutionName = (fieldName = 'name') =>
   check(fieldName, 'Solution name must be present and has a maximum length of 60 characters')
@@ -915,161 +1146,81 @@ const validateAbout = (fieldName = 'about') =>
   .isLength({max: 400})
   .trim()
 
-app.post('/solutions/:solution_id/product-page', [
-  multipartBodyParser(),
-  // middleware to produce a req.body that matches body-parser's extended mode
-  (req, res, next) => {
-    const qs = require('qs')
-
-    // construct a qs.parse()able string from the body, taking care to present array-valued
-    // items as a sequence of multiple values for the same key
-    const parsable = _.map(req.body, (v, k) =>
-      (Array.isArray(v) ? v : [v]).map(v => k + '=' + encodeURIComponent(v)).join('&')
-    ).join('&')
-    req.body = qs.parse(parsable)
-    next()
-  },
-  csrfProtection,
-  validateSolutionName(),
-  validateSolutionVersion(),
-  validateSolutionDescription(),
-  validateAbout()
-], async (req, res) => {
-  let redirect = req.originalUrl
-  const context = {
-    errors: _.mapValues(
-      _.groupBy(validationResult(req).array(), 'param'),
-      errs => _.map(errs, 'msg')
-    )
-  }
-  let solutionEx
-
-  try {
-    solutionEx = await api.get_solution_by_id(req.params.solution_id)
-    context.capabilities = _.get(await api.get_all_capabilities(), 'capabilities')
-    context.organisationName = _.get(await api.get_org_by_id(solutionEx.solution.organisationId), 'name')
-  } catch (err) {
-    context.errors.general = err
-    return renderProductPageEditor(req, res, solutionEx, context)
-  }
-
-  const validated = matchedData(req)
-  solutionEx.solution.name = validated.name || req.body.name
-  solutionEx.solution.version = validated.version || req.body.version
-  solutionEx.solution.description = validated.description || req.body.description
-
-  const updateForProductPage = {
-    benefits: _.filter(_.map(_.castArray(req.body.benefits), _.trim)),
-    interop: _.filter(_.map(_.castArray(req.body.interop), _.trim)),
-    contact: _.pickBy(_.mapValues(req.body.contact, _.trim)),
-    capabilities: req.body.capabilities ? _.castArray(req.body.capabilities) : [],
-    requirements: _.filter(_.map(_.castArray(req.body.requirements), _.trim)),
-    'case-study': _.filter(_.castArray(req.body['case-study']), cs => cs.title),
-    optionals: {
-      'additional-services': _.mapValues(
-        _.pickBy(req.body['additional-services']),
-        val => val === 'yes'
-      )
-    },
-    about: validated.about || req.body.about
-  }
-
-  // encode the uploaded logo (if any)
-  if (req.files.logo) {
-    const logo = req.files.logo
-    updateForProductPage.logoUrl = `data:${logo.mimetype};base64,${logo.data.toString('base64')}`
-  } else if (req.body.preserveLogo && req.session.solutionEx) {
-    updateForProductPage.logoUrl = _.get(req.session.solutionEx, 'solution.productPage.logoUrl', '')
-  } else if (!req.body.preserveLogo) {
-    updateForProductPage.logoUrl = ''
-  }
-
-  solutionEx.solution.productPage = _.assign(
-    {},
-    solutionEx.solution.productPage,
-    updateForProductPage
+function validateFormArray (array) {
+  const maxLengthCheck = (array) => array.length <= 9
+  const minLengthChcek = (array) => array.length > 0
+  return _.defaults(
+    !maxLengthCheck(array) ? { message: 'Please enter 9 or fewer items' } : {},
+    !minLengthChcek(array) ? { message: 'Please enter at least one item' } : {}
   )
+}
 
-  // if there are validation errors, re-render the editor
-  if (!_.isEmpty(context.errors)) {
-    return renderProductPageEditor(req, res, solutionEx, context)
+function parseArrayItems (items) {
+  if (!items) {
+    return []
+  } else if (items.filter) {
+    return items.filter((item) => item !== '')
+  } else {
+    return [items]
   }
+}
 
-  // save, preview or submit based on the action
-  const action = _.head(_.keys(req.body.action))
-  if (action === 'save' || action === 'submit') {
-    try {
-      delete req.session.solutionEx
+function parseWantThis (wantThis) {
+  return wantThis === 'yes'
+}
 
-      redirect = `${req.baseUrl}/solutions`
-
-      if (action === 'submit') {
-        solutionEx.solution.productPage.status = 'SUBMITTED'
-        redirect = `${req.baseUrl}/solutions/${solutionEx.solution.id}?submitted`
-      }
-
-      solutionEx = await api.update_solution(solutionEx)
-    } catch (err) {
-      context.errors.general = err
-      return renderProductPageEditor(req, res, solutionEx, context)
-    }
-  } else if (action === 'preview') {
-    req.session.solutionEx = solutionEx
-    redirect = `${req.baseUrl}/solutions/${solutionEx.solution.id}/product-page/preview`
-  }
-
-  res.redirect(redirect)
-})
-
-app.get('/solutions/:solution_id/product-page/preview', csrfProtection, async (req, res) => {
+app.post('/solutions/:solution_id/product-page/:section_name', csrfProtection, async (req,res) => {
   const context = {
-    errors: {}
+    errors: '',
+    csrfToken: req.csrfToken(),
+    pageHasForm: true
   }
+
   let solutionEx = req.session.solutionEx
+  solutionEx = await api.get_solution_by_id(req.params.solution_id)
 
-  try {
-    if (!solutionEx) {
-      solutionEx = await api.get_solution_by_id(req.params.solution_id)
-      req.session.solutionEx = solutionEx
+  const productPage = solutionEx.solution.productPage ? JSON.parse(solutionEx.solution.productPage) : {};
+
+  const arrayForms = ['features', 'integrations']
+  const tableForms = ['service-scope', 'customer-insights', 'import-exports', 'user-support', 'migration-switching', 'audit-info']
+
+  const sectionName = req.params.section_name
+
+  if (tableForms.indexOf(sectionName) > -1) {
+    let sectionInput = _.omit(req.body, ['_csrf', 'action'])
+    productPage[sectionName] = sectionInput
+  } else if (arrayForms.indexOf(sectionName) > -1) {
+    const wantThis = parseWantThis(req.body.wantThis)
+    const sectionElements = parseArrayItems(req.body.items)
+    if (wantThis) {
+      context.errors = validateFormArray(sectionElements)
+      productPage[sectionName] = sectionElements
+    } else {
+      productPage[sectionName] = []
     }
-    await enrichContextForProductPagePreview(context, solutionEx)
-  } catch (err) {
-    context.errors.general = err
+  }
+  else if (sectionName === 'summary') {
+    solutionEx.solution.description = req.body.text || '';
+  }
+  else if (sectionName === 'about') {
+    productPage[sectionName] = req.body.text || '';
   }
 
-  // if the page has not been approved, allow the user to submit for review
-  context.allowReview = solutionEx.solution.status === api.SOLUTION_STATUS.SOLUTION_PAGE
+  let redirectURL = `${req.baseUrl}/solutions/${req.params.solution_id}/product-page`;
 
-  // if the page has been approved, allow the user to publish
-  context.allowPublish = solutionEx.solution.status === api.SOLUTION_STATUS.APPROVED &&
-                         context.productPage.status === 'APPROVED'
-
-  // flag if the page is published
-  context.isPublished = solutionEx.solution.status === api.SOLUTION_STATUS.APPROVED &&
-                        context.productPage.status === 'PUBLISH'
-
-  context.editUrl = `${req.baseUrl}/solutions/${solutionEx.solution.id}/product-page`
-  context.csrfToken = req.csrfToken()
-  res.render('supplier/solution-page-preview', context)
-})
-
-app.post('/solutions/:solution_id/product-page/preview', csrfProtection, async (req, res) => {
-  const solutionEx = req.session.solutionEx
-
-  const action = _.head(_.keys(req.body.action))
-  let redirect = `${req.baseUrl}/solutions`
-
-  if (action === 'review' &&
-      solutionEx.solution.status === api.SOLUTION_STATUS.SOLUTION_PAGE) {
-    solutionEx.solution.productPage.status = 'SUBMITTED'
-    redirect = `${req.baseUrl}/solutions/${solutionEx.solution.id}?submitted`
-  } else if (action === 'publish' &&
-      solutionEx.solution.status === api.SOLUTION_STATUS.APPROVED) {
-    solutionEx.solution.productPage.status = 'PUBLISH'
+  if(context.errors.message) {
+    redirectURL = `${req.baseUrl}/solutions/${req.params.solution_id}/product-page/${req.params.section_name}`;
+    return res.render(`supplier/product-page/${req.params.section_name}`, context)
   }
+  else if(req.body.action === 'save') {
+    redirectURL = `${req.baseUrl}/solutions/${req.params.solution_id}/product-page/${req.params.section_name}`;
+  }
+
+  solutionEx.solution.productPage = JSON.stringify(productPage)
 
   req.session.solutionEx = await api.update_solution(solutionEx)
-  res.redirect(redirect)
+
+  res.redirect(redirectURL)
 })
 
 app.use('/solutions/:solution_id/assessment', require('./supplier/assessment'))

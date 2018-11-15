@@ -1,14 +1,15 @@
 {{#*inline "evidence-form"}}
 
-{{#if editUrl}}
 <section>
   <div class="matrix">
     <header>Download your latest TM</header>
     <p><a download href="/Dummy TraceabilityMatrix.xlsx">{{name}} Traceability Matrix (TM)</a></p>
-    {{#if standard.latestSubmissionDate}} {{standard.latestSubmissionDate}} {{/if}}
+    {{#if hasFeedback}}
+      <p class="comment" id="latestMessage">{{#latestSubmission}} {{message}} {{/latestSubmission}}</p>
+    {{/if}}
+    <p class="comment">{{#latestSubmissionDate}} {{.}} {{/latestSubmissionDate}}</p>
   </div>
 </section>
-{{/if}}
 
 <section>
   <fieldset class="standard-evidence{{#statusClass}} {{.}}{{/statusClass}}" id="std-{{id}}">
@@ -16,13 +17,11 @@
     <section class="evidence{{^saved}} editing{{/saved}}">
       <div class="editable">
         <h4>Upload Completed TM</h4>
-          <label id="file-input-label" class="file-input">
+          <label id="file-label" class="file-input">
             Choose a File
-            <input id="file-input" class="file-input" type="file" name="evidence[{{id}}]">
+            <input id="file-input-field" class="file-input" type="file" name="evidence[{{id}}]">
           </label>
           <p id="file-name">{{#if evidence.savedLink}} {{evidence.savedLink}} {{else}}No File Selected{{/if}}</p>
-          <br>
-          <input type="submit" class="button save" name="save[{{id}}]" value="Save">
       </div>
 
       <div class="controls">
@@ -61,10 +60,10 @@
       {{/if}}
     </section>
     {{/if}}
-    
+
     {{#if editUrl}}
     <section class="controls">
-      
+
       {{#if submittable}}
       <input type="submit"
               class="button primary"
@@ -81,12 +80,12 @@
 <div id="compliance" class="supplier edit">
   {{#if standard.isWithAssessmentTeam}}
   <p class="in-assessment">
-    <span>Evidence submitted {{standard.latestSubmissionDate}}. You can expect a reply from our Compliance Officer within xx business days of submitting your evidence.</span>
+    <span>Status: Submitted. Awaiting Compliance Outcome</span>
   </p>
   {{/if}}
   {{#if standard.hasFeedback}}
   <p class="has-feedback">
-    <span>Find new evidence feedback below. <img class="feedback-icon" src="/img/red-envelope.svg"></span>
+    <span>Status: Response received from Compliance Officer. See <a href="#latestMessage">below</a>.</span>
   </p>
   {{/if}}
 
@@ -125,20 +124,23 @@
   {{#if standard.evidence.submissions}}
   <section class="evidence-history">
     <header>
-      <h4>Evidence History</h4>
+      <h4>File History &amp; Messaging</h4>
     </header>
-    <ul class="submissions">
-      {{#standard.evidence.submissions}}
-      <li class="submission {{originatorClass}}">
-        {{#link}}<p class="link"><a href="{{.}}" target="_blank">{{.}}</a></p>{{/link}}
-        <pre class="text">{{message}}</pre>
-        <p class="metadata">
-          <span class="originator">{{contact.firstName}} {{contact.lastName}}</span>
-          <span class="timestamp">{{displayTimestamp}}</span>
-        </p>
-      </li>
-      {{/standard.evidence.submissions}}
-    </ul>
+    <details>
+      <summary>Show History</summary>
+      <ul class="submissions">
+        {{#standard.evidence.submissions}}
+        <li class="submission {{originatorClass}}">
+          {{#link}}<p class="link"><a href="{{.}}" target="_blank">{{.}}</a></p>{{/link}}
+          <pre class="text">{{message}}</pre>
+          <p class="metadata">
+            <span class="originator">{{contact.firstName}} {{contact.lastName}}</span>
+            <span class="timestamp">{{displayTimestamp}}</span>
+          </p>
+        </li>
+        {{/standard.evidence.submissions}}
+      </ul>
+    </details>
   </section>
   {{/if}}
 
@@ -157,14 +159,14 @@ document.addEventListener('DOMContentLoaded', () => {
   enableSubmitIfAllStandardsHaveEvidence()
 
   function enableSubmitIfAllStandardsHaveEvidence () {
-    const elSubmit = $('.controls [name^=submit]')
-    if (elSubmit) {
+    const elSubmit = $$('.controls [name^=submit], [name=action]')
+    elSubmit.forEach((elSubmit) => {
       const allEvidenceInputs = $$('input[name^=evidence], select[name^=owner]')
       const allEvidenceValues = allEvidenceInputs.map(el => el.value.trim()).filter(_ => _)
       const fileTextEle = $('#file-name')
       const alreadyUploaded = fileTextEle.innerText && fileTextEle.innerText !== 'No File Selected';
       elSubmit.disabled = allEvidenceInputs.length !== allEvidenceValues.length
-    }
+    })
   }
 
   $$('fieldset.standard-evidence .evidence .controls .edit').forEach(el => {
@@ -184,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const fileInputLabel = $('#file-name');
-  const fileInput = $('#file-input');
+  const fileInput = $('#file-input-field');
 
   const labelUpdater = buildLabelUpdater(fileInput, fileInputLabel);
   fileInput.addEventListener('change', labelUpdater);

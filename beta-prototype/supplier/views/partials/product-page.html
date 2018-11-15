@@ -1,0 +1,413 @@
+{{#*inline "info-table"}}
+<table>
+    {{#each info as |data|}}
+    <tr>
+      <td class="title">{{data.key}}</td>
+      <td class="items">
+        {{#each data.value as |item|}}
+            {{item}}
+          <br>
+        {{else}}
+          {{data.value}}
+        {{/each}}
+        
+      </td>
+    </tr>
+    {{/each}}
+  </table>
+{{/inline}}
+
+{{#*inline "toc"}}
+<nav class="toc">
+    <h3>Page Contents</h3>
+    <ul>
+      <li><a href="#summary">Summary</a></li>
+      <li><a href="#features">Features</ahr></li>
+      <li><a href="#integrations">Integrations</a></li>
+      <li><a href="#pricing">Pricing</></li>
+      <li><a href="#associated-services">Associated Services</a></li>
+      <li><a href="#additional-services">Additional Services</a></li>
+      <li><a href="#service-scope">Service Scope</a></li>
+      <li><a href="#assessment-standards">NHS Assessments &amp; Standards</a></li>
+      <li><a href="#customer-insights">Customer Insights</a></li>
+      <li><a href="#importing-exporting">Data Importing and Exporting</a></li>
+      <li><a href="#user-support">User Support</a></li>
+      <li><a href="#migration-switching">Migration and Switching</a></li>
+      <li><a href="#audit-info">Audit Information for Users</a></li>
+      <li><a href="#about">About {{solution.name}}</a></li>
+      <li><a href="#contact-details">Contact Details</a></li>
+    </ul>
+  </nav>
+{{/inline}}
+
+{{#*inline "section"}}
+  <section class="solution" id={{id}}>
+    {{> @partial-block}}
+  </section>
+{{/inline}}
+
+{{#*inline "collapsible"}}
+  <details class="collapsible-details">
+    <summary>
+      {{#if summary-text}} 
+        {{summary-text}}
+      {{else}}
+        Show/Hide
+      {{/if}}
+    </summary>
+      {{> @partial-block}}
+  </details>
+{{/inline}}
+
+{{#*inline "section-header"}}
+  <div class="section-header">
+    <h3>
+      {{title}}
+    </h3>
+    {{#if side-link-text}}
+      {{#if side-link}}
+        <h3 class="side-text">
+            <a href={{side-link}}>{{side-link-text}}</a>
+        </h3>
+      {{/if}}
+    {{else}}
+      {{#if side-text}}
+        <h3 class="side-text">{{side-text}}</h3>
+      {{/if}}
+    {{/if}}
+  </div>
+{{/inline}}
+
+{{#*inline "contents"}}
+
+  <section id="title">
+    <h2>
+      {{#unless isPublished}}<a>[Draft]</a> {{/unless}} {{solution.name}}, {{solution.version}}
+    </h2>
+  </section>
+
+  {{#>section id="summary"}}
+      {{>section-header title="Summary Description" side-link-text="Edit Section" side-link=pageEditLinks.summary}}
+        <p class="description">{{solution.description}}</p>
+  {{/section}}
+  
+  {{#>section id="features"}}
+    {{#if productPage.features}}
+      {{>section-header title="Features" side-link-text="Edit Section" side-link=pageEditLinks.features }}
+      <ul class="features">
+          {{#each productPage.features as |option|}}
+            <li>{{option}}</li>
+          {{/each}}
+      </ul>
+    {{else}}
+      {{>section-header title="Features" side-link-text="Complete Section" side-link=pageEditLinks.features}}
+    {{/if}}
+  {{/section}}
+
+  {{#>section id="integrations"}}
+  {{#if productPage.integrations}}
+    {{>section-header title="Integrations" side-link-text="Edit Section" side-link=pageEditLinks.integrations }}
+      <h4>The following is a list of proven integrations</h4>
+      <ul class="interop">
+        {{#each productPage.integrations as |option|}}
+          <li>{{option}}</li>
+        {{/each}}
+      </ul>
+    {{else}}
+      {{>section-header title="Integrations" side-link-text="Complete Section" side-link=pageEditLinks.integrations }}
+    {{/if}}
+    <h4>The following are IAM1 Integrations</h4>
+    <h4 class="notice">NHS Digital will add IAM1 Integrations here when available.</h4>
+  {{/section}}
+
+  {{#>section id="pricing"}}
+    {{#>collapsible summary-text="Pricing"}}
+    <h4 class="notice">NHS Digital will add pricing to your Solution once agreed in Bravo.</h4>
+    <table>
+      <tr class="table-header">
+        <th>List Price</th>
+        <th>£ / max per patient</th>
+      </tr>
+      </table>
+      {{/collapsible}}
+    {{/section}}
+
+  {{#>section id="associated-services"}}
+    {{#>collapsible summary-text="Associated Services (Not Optional)"}}
+    <h4 class="notice">This is placeholder text to show how Additional Services could display. NHS Digital will add Associated Services, if relevant to this Solution, and pricing once agreed in Bravo.</h4>
+    <table>
+      {{#each services.associated-services as |service|}}
+          <tr>
+            <td class="lable">
+              {{service.label}}
+            </td>
+            <td class="price">
+              {{service.price}}
+            </td>
+          </tr>
+      {{/each}}
+    </table>  
+    {{/collapsible}}
+  {{/section}}
+
+  {{#>section id="additional-services"}}
+  {{#>collapsible summary-text="Additional Services (Optional)"}}
+  <h4 class="notice">This is placeholder text to show how Additional Services could display. NHS Digital will add Additional Services, if relevant to this Solution, and pricing once agreed in Bravo.</h4>
+  <table>
+    {{#each services.additional-services as |service|}}
+        <tr>
+          <td class="lable">
+            {{service.label}}
+          </td>
+          <td class="price">
+            {{service.price}}
+          </td>
+        </tr>
+    {{/each}}
+  </table>
+  {{/collapsible}}
+{{/section}}
+
+{{#>section id="service-scope"}}
+  {{#if productPage.service-scope}}
+    {{>section-header title="Service Scope" side-link-text="Edit Section" side-link=pageEditLinks.service_scope}}
+    {{>info-table info=productPage.service-scope}}
+  {{else}}
+    {{>section-header title="Service Scope" side-link-text="Complete Section" side-link=pageEditLinks.service_scope}}
+  {{/if}}
+{{/section}}
+
+  <section class="section-group" id="assessment-standards">
+      {{#>collapsible summary-text="NHS Assessments & Standards*"}}
+    <p class="notice">
+        This sections shows the Capabilities asserted and Standards met by your Solution. NHS Digital will share Compliance evidence with Buyers upon request.
+    </p>
+
+    <div>
+      <details class="explanation">
+        <summary class="heading">Capabilities</summary>
+        <ul>
+          {{#capabilities}}
+            <li>
+              <details class="explanation capability-details">
+                <summary><a>{{name}}</a></summary>
+                <div class="detail-text">
+                  <table class="capability-details">
+                    <tr>
+                      <td class="description">
+                        <p>{{description}}</p>
+                      </td>
+                      <td>
+                        <a href="{{url}}">Request Supplier Assessment Evidence</a>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </details>
+            </li>
+          {{/capabilities}}
+        </ul>
+      </details>
+    </div>
+
+    <div>
+      <details class="explanation">
+          <summary class="heading">Capability Specific Standards</summary>
+          <ul>
+            {{#standards.mandatory}}
+              <li>
+                <details class="explanation capability-details">
+                  <summary><a>{{name}}</a></summary>
+                  <div class="detail-text">
+                    <table class="capability-details">
+                      <tr>
+                        <td class="description">
+                          <p>{{description}}</p>
+                        </td>
+                        <td>
+                          <a href="{{url}}">Request Supplier Assessment Evidence</a>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </details>
+              </li>
+            {{/standards.mandatory}}
+          </ul>
+        </details>
+    </div>
+
+    <div>
+        <details class="explanation">
+            <summary class="heading">Solution Specific Standards</summary>
+            <ul>
+              {{#standards.interop}}
+                <li>
+                  <details class="explanation capability-details">
+                    <summary><a>{{name}}</a></summary>
+                    <div class="detail-text">
+                      <table class="capability-details">
+                        <tr>
+                          <td class="description">
+                            <p>{{description}}</p>
+                          </td>
+                          <td>
+                            <a href="{{url}}">Request Supplier Assessment Evidence</a>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </details>
+                </li>
+              {{/standards.interop}}
+            </ul>
+          </details>
+        </div>
+
+    <div>
+        <details class="explanation">
+            <summary class="heading">General Standards</summary>
+            <ul>
+              {{#standards.overarching}}
+                <li>
+                  <details class="explanation capability-details">
+                    <summary><a>{{name}}</a></summary>
+                    <div class="detail-text">
+                      <table class="capability-details">
+                        <tr>
+                          <td class="description">
+                            <p>{{description}}</p>
+                          </td>
+                          <td>
+                            <a href="{{url}}">Request Supplier Assessment Evidence</a>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </details>
+                </li>
+              {{/standards.overarching}}
+            </ul>
+          </details>
+    </div>
+    {{/collapsible}}
+  </section>
+  
+  {{#>section id="customer-insights"}}
+    {{#if productPage.customer-insights}}
+      {{>section-header title="Customer Insights" side-link-text="Edit Section" side-link=pageEditLinks.customer_insights }}
+      {{>info-table info=productPage.customer-insights}}
+    {{else}}
+      {{>section-header title="Customer Insights" side-link-text="Complete Section" side-link=pageEditLinks.customer_insights }}
+    {{/if}}
+  {{/section}}
+
+  {{#>section id="importing-exporting"}}
+    {{#if productPage.import-exports}}
+      {{>section-header title="Data Importing & Exporting" side-link-text="Edit Section" side-link=pageEditLinks.import_exports}}
+      {{>info-table info=productPage.import-exports}}
+    {{else}}
+      {{>section-header title="Data Importing & Exporting" side-link-text="Complete Section" side-link=pageEditLinks.import_exports}}
+    {{/if}}
+  {{/section}}
+
+  {{#>section id="user-support"}}
+    {{#if productPage.user-support}}
+      {{>section-header title="User Support" side-link-text="Edit Section" side-link=pageEditLinks.user_support}}
+      {{>info-table info=productPage.user-support}}
+    {{else}}
+      {{>section-header title="User Support" side-link-text="Complete Section" side-link=pageEditLinks.user_support}}
+    {{/if}}
+  {{/section}}
+
+  {{#>section id="migration-switching"}}
+    {{>section-header title="Migration & Switching"}}
+    {{>info-table info=migrationSwitching}}
+  {{/section}}
+  
+  {{#>section id="audit-info"}}
+    {{>section-header title="Audit Information for Users"}}
+    {{>info-table info=auditInfo}}
+  {{/section}}
+
+{{#>section id="about"}}
+  {{#if productPage.about}}
+    {{>section-header title="About " side-link-text="Edit Section" side-link=pageEditLinks.about}}
+    <h3>{{organisationName}}</h3>
+    <p class="about">{{productPage.about}}</p>
+  {{else}}
+    {{>section-header title="About " side-link-text="Complete Section" side-link=pageEditLinks.about}}
+  {{/if}}
+{{/section}}
+  
+{{#>section id="contact-details"}}
+  {{>section-header title="Contact Details"}}
+  {{#contact}}
+  <section id="contact-details" class="optional">
+    <ul>
+      <li>
+        <span class="label">Name</span>
+        <span class="value">{{firstName}} {{lastName}}</span>
+      </li>
+      {{#phoneNumber}}
+      <li>
+        <span class="label">Phone number</span>
+        <span class="value">{{.}}</span>
+      </li>
+      {{/phoneNumber}}
+      {{#emailAddress}}
+      <li>
+        <span class="label">Email</span>
+        <span class="value"><a href="mailto:{{.}}">{{.}}</a></span>
+      </li>
+      {{/emailAddress}}
+      {{#url}}
+      <li>
+        <span class="label">Website</span>
+        <span class="value"><a href="{{.}}" target="_blank">{{.}}</a></span>
+      </li>
+      {{/url}}
+    </ul>
+  </section>
+  {{/contact}}
+{{/section}}
+
+{{/inline}}
+
+<div class="page-container">
+  <div class="toc-wrapper" id="toc-nav">
+      {{>toc}}
+  </div> 
+  <div class="section-wrapper" id="page-content">
+      {{>contents}}
+  </div>
+</div>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', () => {
+
+  const nav = $('#toc-nav');
+  const navTop = nav.offsetTop;
+  const content = $('#page-content')
+  const barNav = $('#save-nav-wrapper');
+
+  const barNavHeight = parseInt(barNav.style.height.replace('px',''));
+
+  function elementTopOnPage(elementTop) {
+    return elementTop < window.pageYOffset + barNavHeight;
+  }
+
+  window.addEventListener('scroll', function() {
+      if (elementTopOnPage(navTop)) {
+        nav.classList.add('fixed-nav');
+        nav.style.top = barNav.style.height;
+      }
+      else {
+        nav.classList.remove('fixed-nav');
+        nav.style.top = null;
+      }
+  });
+});
+
+</script>

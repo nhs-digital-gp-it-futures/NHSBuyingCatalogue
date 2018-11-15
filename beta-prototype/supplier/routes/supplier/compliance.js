@@ -95,19 +95,21 @@ async function loadEnrichedSolution (solutionId, baseUrl) {
     solutionEx.claimedStandard,
     stdWithEvidenceParsed
   ).map((standard) => {
-    standard.standardOwner = {};
-    if(standard.evidence) {
-
+    standard.standardOwner = {}
+    if (standard.evidence) {
       const standardOwner = solutionEx.technicalContact.find((contact) => {
-        return contact.id === standard.evidence.owner;
+        return contact.id === standard.evidence.owner
       })
 
-      if(standardOwner) {
+      if (standardOwner) {
         standard.standardOwner = {
           firstName: standardOwner.firstName,
           lastName: standardOwner.lastName,
           contactType: standardOwner.contactType
-        }  
+        }
+      }
+      if (standard.evidence.submissions) {
+        standard.evidence.latestSubmission = _.maxBy(standard.evidence.submissions, 'timestamp')
       }
     }
     return standard
@@ -122,7 +124,7 @@ async function loadEnrichedSolution (solutionId, baseUrl) {
 
     // related capabilities are either as chosen by the user for optional standards,
     // or derived from the mandatory standards associated with each capability
-    const predicate = _.some(allClaimedCapabilityStandards, {standardId})
+    const predicate = _.some(allClaimedCapabilityStandards, { standardId })
       ? cap => _.some(allClaimedCapabilityStandards,
                       { capabilityId: cap.id, standardId })
       : cap => _.some(_.flatMap(cap.standards), ['id', standardId])
@@ -214,7 +216,7 @@ function standardContext (std, baseUrl, cap = undefined) {
 
   if (hasSubmissions) {
     evidence.submissions = _.orderBy(evidence.submissions, 'timestamp')
-    latestSubmission = _.last(evidence.submissions)
+    latestSubmission = evidence.latestSubmission
     latestContact = latestSubmission.contact
     latestSubmissionDate = new Date(latestSubmission.timestamp).toLocaleDateString('en-gb', {
       timeZone: 'Europe/London',
@@ -244,7 +246,8 @@ function standardContext (std, baseUrl, cap = undefined) {
     evidence,
     isWithAssessmentTeam,
     hasFeedback,
-    latestSubmissionDate,
+    latestSubmission: latestSubmission,
+    latestSubmissionDate: latestSubmissionDate,
     saved: hasSaved,
     viewUrl: !isEditable(std) && `${baseUrl}/edit/${urlSuffix}`,
     editUrl: isEditable(std) && `${baseUrl}/edit/${urlSuffix}`
@@ -275,8 +278,7 @@ async function complianceEditHandler (req, res) {
   try {
     const solutionEx = await loadEnrichedSolution(req.params.solution_id, req.baseUrl)
 
-    context.contacts = solutionEx.technicalContact;
-    
+    context.contacts = solutionEx.technicalContact
     context.standard = _.find(
       _.concat(
         solutionEx.solution.standards,
@@ -295,12 +297,11 @@ async function complianceEditHandler (req, res) {
     context.errors.general = err
   }
 
-
   res.render('supplier/compliance-edit', context)
 }
 
 function findStandardToUpdate (solutionEx, standardId) {
-  return _.find(solutionEx.claimedStandard, {standardId})
+  return _.find(solutionEx.claimedStandard, { standardId })
 }
 
 async function complianceEditPostHandler (req, res) {
@@ -327,12 +328,20 @@ async function complianceEditPostHandler (req, res) {
     const linkToSave = _.get(req.body, ['evidence', stdIdToUpdate], '')
     const messageToSave = _.get(req.body, ['message', stdIdToUpdate], '')
 
-    evidence.owner = _.get(req.body, ['owner', stdIdToUpdate], '')
+    if (evidence) {
+      evidence.owner = _.get(req.body, ['owner', stdIdToUpdate], '')
+    }
 
     if (req.body.save) {
-      evidence.savedLink = linkToSave
-      evidence.savedMessage = messageToSave
-      redirect = `${req.baseUrl}#std-${stdIdToUpdate}`
+      if (evidence) {
+        evidence.savedLink = linkToSave
+        evidence.savedMessage = messageToSave
+      }
+      if (req.body.action === 'saveAndExit') {
+        redirect = `${req.baseUrl}`
+      } else {
+        redirect = `${req.baseUrl}#std-${stdIdToUpdate}`
+      }
     } else {
       // submitting pushes the current link and message into the submission array
       delete evidence.savedLink
@@ -346,6 +355,7 @@ async function complianceEditPostHandler (req, res) {
       }]
 
       evidence.submissions = _.concat(submission, evidence.submissions || [])
+
       redirect = `${req.baseUrl}?submitted&std=${_.find(standards, ['id', stdIdToUpdate]).name}`
     }
 

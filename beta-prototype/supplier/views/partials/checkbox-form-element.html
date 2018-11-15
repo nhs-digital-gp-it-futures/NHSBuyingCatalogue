@@ -1,0 +1,52 @@
+<fieldset class="root-fieldset">
+    <fieldset id="{{name}}-trigger" class="triggering-fieldset">
+        {{#title}}<h3>{{.}}</h3>{{/title}}
+        {{#clarification}}<p>{{.}}</p>{{/clarification}}
+        {{#options}}
+            <label>
+                {{#if checked}} 
+                    <input type="checkbox" name="{{../name}}" value="{{value}}" checked>
+                {{else}}
+                    <input type="checkbox" name="{{../name}}" value="{{value}}" >
+                {{/if}}
+                {{#label}} {{.}} {{/label}}
+            </label>
+        {{/options}}
+    </fieldset>
+
+    {{#if dependants}}
+    <fieldset id="{{name}}-dependants" class="dependant-fieldset">
+        <span class="dependant-input-field">
+            {{#dependants}}
+                {{> (lookup . 'type')}}
+            {{/dependants}}
+        </span>
+    </fieldset>
+    {{/if}}
+</fieldset>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const dependantsFieldsetID = `#${"{{name}}"}-dependants`;
+    const triggeringFieldsetID = `#${"{{name}}"}-trigger`;
+    const enablingOptions = "{{dependant-on}}";
+    
+    const dependantFieldset = $(dependantsFieldsetID);
+    const triggeringFieldset = $(triggeringFieldsetID);
+
+    // This needs to select all the checked options.
+    const checkedValue = "{{value}}";
+    const optionToCheck = $(`input[name="${"{{name}}"}"][value="${checkedValue}"]`)
+    optionToCheck.checked = true;
+
+    if(enablingOptions && !!dependantFieldset) {
+        triggeringFieldset.addEventListener('change', (evt) => {
+            const enablingValue = enablingOptions.indexOf(evt.target.value) > -1;
+            dependantFieldset.classList.toggle('hidden', !enablingValue);
+        })
+
+        const triggeringFieldChecked = enablingOptions.indexOf(checkedValue) > -1
+        dependantFieldset.classList.toggle('hidden', !triggeringFieldChecked);
+    }
+});
+</script>

@@ -12,12 +12,22 @@ const app = express()
 app.enable('strict routing')
 
 const session = require('express-session')
-app.use(session({
+const sessionConfig = {
   secret: process.env.SESSION_SECRET ||
             Math.floor(Math.random() * Number.MAX_SAFE_INTEGER).toString(36),
   resave: false,
   saveUninitialized: false
-}))
+}
+
+if (process.env.CACHE_HOST) {
+  const CacheSessionStore = require('connect-redis')(session)
+  sessionConfig.store = new CacheSessionStore({
+    host: process.env.CACHE_HOST,
+    logErrors: true
+  })
+}
+
+app.use(session(sessionConfig))
 
 app.use(require('body-parser').urlencoded({ extended: true }))
 
@@ -33,14 +43,17 @@ app.use(require('serve-static')(path.join(__dirname, 'static'), {
 }))
 
 const viewPath = path.join(__dirname, 'views')
-app.engine('html', expresshbs({
+const hbs = expresshbs.create({
   layoutsDir: path.join(viewPath, 'layouts'),
   defaultLayout: 'layout.html',
   extname: '.html',
   partialsDir: path.join(viewPath, 'partials')
-}))
+})
+app.engine('html', hbs.engine)
 app.set('view engine', 'html')
 app.set('views', viewPath)
+
+require('catalogue-i18n')(hbs.handlebars, path.join(__dirname, 'locales'))
 
 const { authentication, authorisation } = require('catalogue-authn-authz')
 

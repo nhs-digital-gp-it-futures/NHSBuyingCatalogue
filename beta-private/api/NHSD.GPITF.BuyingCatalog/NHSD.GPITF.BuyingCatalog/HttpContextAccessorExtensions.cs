@@ -21,8 +21,12 @@ namespace NHSD.GPITF.BuyingCatalog
 
     public static string Email(this HttpContext context)
     {
+      // ClaimTypes.Email --> 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'
+      // but some OIDC providers use 'email'
       return context.User.Claims
-        .FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+        .FirstOrDefault(x =>
+          x.Type == ClaimTypes.Email ||
+          x.Type.ToLowerInvariant() == "email")?.Value;
     }
 
     public static bool HasRole(this IHttpContextAccessor context, string role)

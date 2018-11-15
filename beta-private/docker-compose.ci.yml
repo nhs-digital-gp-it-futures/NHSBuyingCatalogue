@@ -7,7 +7,12 @@ services:
       target: test
     command: npm run test:ci
     volumes:
-      - "${VSTS_WORKING_DIR}:/home/node/app/results"
+      - .:/home/node/app/results
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.deploy
 
   oidc-provider:
     image: qlik/simple-oidc-provider

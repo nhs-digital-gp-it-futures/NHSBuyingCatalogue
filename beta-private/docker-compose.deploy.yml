@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.deploy
+
+  oidc-provider:
+    build:
+      context: ./ci-auth-db
+    image: gpitf/catalogue-oidc-provider:private-beta
+    ports:
+      - "9000:9000"
+    networks:
+      - beta_network

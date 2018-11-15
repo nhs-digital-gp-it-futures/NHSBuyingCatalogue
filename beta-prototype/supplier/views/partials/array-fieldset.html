@@ -1,0 +1,66 @@
+<form method="POST">
+    <fieldset>
+        <fieldset id="array-toggle">
+            <label>
+                <input type="radio" name="wantThis" value="yes" checked>
+                Yes
+            </label>
+            <label>
+                <input type="radio" name="wantThis" value="no">
+                No
+            </label> 
+        </fieldset>
+        <div class="array-input">
+
+            <h3>Add {{item-name}}</h3>
+            <p class="clarification">{{item-clarification}}</p>
+            {{#if errors}}
+                <div class="error-message">
+                    {{errors.message}}
+                </div>
+            {{/if}}
+            <div>
+                <input id="first-input-element" type="text" name="items" placeholder={{example-item}}>
+                {{# existingData}}
+                    <input type="text" name="items" value={{.}}>
+                {{/existingData}}
+            </div>
+            
+            <button type="button" id="add-item-button">+</button> Add {{item-name}} (9 Max)
+        </div>
+
+    </fieldset>
+    <div class="controls">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <button class="button" name="action" value="submit">Save &amp; Return</button>
+    </div>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const addButton = $('#add-item-button')
+    const inputField = $('#first-input-element');
+    const inputParent = inputField.parentNode;
+
+    addButton.addEventListener('click', (event) => {
+        const allItemInputs = $$('[name="items"]');
+        if(allItemInputs.length < 9) {
+            const cloneNode = inputField.cloneNode(true);
+            cloneNode.value = "";
+            inputParent.appendChild(cloneNode);
+        }
+        return false;
+    })
+
+    const radioFieldset = $('#array-toggle');
+    const arrayFieldset = $('.array-input');
+    const yesRadio = $('input[type="radio"][value="yes"]');
+
+    function toggleArrayInput() {
+        arrayFieldset.classList.toggle('hidden', !yesRadio.checked);
+    }
+    radioFieldset.addEventListener('change', toggleArrayInput)
+
+    toggleArrayInput();
+});
+</script>

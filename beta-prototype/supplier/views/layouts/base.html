@@ -5,14 +5,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- framework and vendor styles and scripts -->
-    <link rel="stylesheet"
-          href="/css/vendor/glide.core.min.css">
-    <link rel="stylesheet"
-          href="/css/vendor/glide.theme.min.css">
-    <script type="text/javascript"
-            src="/js/vendor/glide.min.js"></script>
-
     <!-- application foundation styles and scripts -->
     <link rel="stylesheet"
           href="/css/app.css">
@@ -58,17 +50,8 @@
                 {{/if}}
             </ul>
         </nav>
-        <nav class="main">
-            <ul>
-                <li>
-                    <a href="#">About</a>
-                <li>
-                    <a href="#">Standards &amp; Compliance</a>
-                <li>
-                    <a class="button">Buy</a>
-            </ul>
-        </nav>
     </header>
+    {{>save-nav}}
     <main id="content">
       {{#if breadcrumbs}}
       <nav class="breadcrumbs">

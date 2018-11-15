@@ -1,0 +1,17 @@
+{
+    "name": "customer-insights",
+    "title": "",
+    "inputs" : [
+        {
+            "type":"radio-form-element",
+            "name":"has-user-support",
+            "title":"Do you want to add customer insight information to your Solution page?",
+            "clarification":"Questions that you leave blank will not be displayed on your Solution page.",
+            "value":"no",
+            "options":[
+                {"value":"yes", "label":"Yes"},
+                {"value":"no", "label":"No"}
+            ]
+        }
+    ]
+}

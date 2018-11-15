@@ -9,6 +9,8 @@ const solutionOnboardingStatusMap = {
   5: { stageName: 'Solution Page', stageStep: '4 of 4', status: 'In progress' }
 }
 
+const EMPTY_UUID = '00000000-0000-0000-0000-000000000000'
+
 class DataProvider {
   constructor (CatalogueApi) {
     this.CatalogueApi = CatalogueApi
@@ -66,6 +68,22 @@ class DataProvider {
     }
   }
 
+  async createSolutionForRegistration (solution, user) {
+    const payload = {
+      solution: {
+        ...solution,
+        status: 'Draft',
+        id: EMPTY_UUID,
+        createdById: user.contact.id,
+        modifiedById: user.contact.id,
+        organisationId: user.org.id
+      }
+    }
+
+    const newSolution = await this.solutionsApi.apiSolutionsPost(payload)
+    return this.solutionForRegistration(newSolution.id)
+  }
+
   async solutionForRegistration (solutionId) {
     const solutionEx = await this.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet(solutionId)
 
@@ -74,7 +92,10 @@ class DataProvider {
       ...solutionEx.solution,
       capabilities: solutionEx.claimedCapability,
       standards: solutionEx.claimedStandard,
-      contacts: solutionEx.technicalContact
+      contacts: _.orderBy(solutionEx.technicalContact, c => {
+        // Lead Contact sorts above all others, then alphabetic by type
+        return c.contactType === 'Lead Contact' ? '' : c.contactType
+      })
     }
   }
 
@@ -87,8 +108,32 @@ class DataProvider {
     solnEx.claimedStandard = solution.standards
     solnEx.technicalContact = solution.contacts
 
+    // contacts can only be for this solution
+    // new contacts need a dummy ID
+    _.each(solnEx.technicalContact, c => {
+      c.solutionId = solnEx.solution.id
+      if (!c.id) {
+        c.id = require('node-uuid-generator').generate()
+      }
+    })
+
     await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
     return this.solutionForRegistration(solution.id)
+  }
+
+  /**
+   * Given a solution (id, organisationId, name and version), check that they are unique
+   *
+   * Returns true if the supplied details are unique
+   */
+  async validateSolutionUniqueness (solution) {
+    const allSolns = await this.solutionsApi.apiSolutionsByOrganisationByOrganisationIdGet(solution.organisationId, {
+      pageSize: 9999
+    })
+
+    return _(allSolns.items)
+      .filter(soln => !solution.id || soln.id !== solution.id)
+      .every(soln => soln.version !== solution.version || soln.name !== solution.name)
   }
 
   async capabilityMappings () {
@@ -115,7 +160,7 @@ class DataProvider {
 class RealDataProvider extends DataProvider {
   constructor () {
     super(require('catalogue-api'))
-    this.CatalogueApi.ApiClient.instance.basePath = 'http://api:5100'
+    this.CatalogueApi.ApiClient.instance.basePath = process.env.API_BASE_URL || 'http://api:5100'
   }
 
   // support for the authentication layer

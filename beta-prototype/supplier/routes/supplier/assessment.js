@@ -41,29 +41,36 @@ app.get('/capabilities', csrfProtection, async (req, res) => {
 
   const allCapabilities = _.keyBy(capabilities, 'id')
 
-  solutionEx.solution.capabilities = _.map(solutionEx.claimedCapability, cap => ({
-    ...cap,
-    ...allCapabilities[cap.capabilityId],
-    evidence: cap.evidence,
-    video_evidence: cap.evidence,
-    evidence_description: cap.evidence,
-    status: solutionEx.solution.status === api.SOLUTION_STATUS.CAPABILITIES_ASSESSMENT
+  solutionEx.solution.capabilities = _.map(solutionEx.claimedCapability, cap => {
+    let evidence = {};
+    let errors = {}
+
+    try{
+      evidence = cap.evidence ? JSON.parse(cap.evidence) : {}
+    }
+    catch(err) {
+      errors.message = 'Error: Failed to Parse Evidence JSON on the server';
+    }
+
+    return {
+      ...cap,
+      ...allCapabilities[cap.capabilityId],
+      errors : errors,
+      evidence: evidence,
+      video_evidence: evidence.videoEvidence,
+      video_description : evidence.videoDescription,
+      evidence_description: evidence.evidenceDescription,
+      status: solutionEx.solution.status === api.SOLUTION_STATUS.CAPABILITIES_ASSESSMENT
             ? _.get(api.capabilityStatuses, cap.status)
             : cap.evidence ? 'Draft Saved' : 'Not Started',
-    statusClass: (
-                   solutionEx.solution.status === api.SOLUTION_STATUS.CAPABILITIES_ASSESSMENT
-                   ? _.get(api.capabilityStatuses, cap.status, '').toLowerCase()
-                   : ''
-                 ) +
-                 (
-                   req.query.saved === cap.capabilityId
-                                     ? ' expanded'
-                                     : ''
-                 ) +
-                 (
-                   cap.evidence ? '' : ' editing'
-                 )
-  }))
+      statusClass: (
+        solutionEx.solution.status === api.SOLUTION_STATUS.CAPABILITIES_ASSESSMENT
+        ? _.get(api.capabilityStatuses, cap.status, '').toLowerCase()
+        : ''
+      ) + ( req.query.saved === cap.capabilityId ? ' expanded' : '')
+        + ( cap.evidence ? '' : ' editing' )
+    }
+  })
 
   const questions = _.mapValues(await api.get_capability_assessment_questions(), qs => ({
     lede: _.head(qs),
@@ -82,7 +89,8 @@ app.get('/capabilities', csrfProtection, async (req, res) => {
     messages: _.orderBy(messages, 'timestamp', 'desc'),
     questions,
     saved: 'saved' in req.query,
-    csrfToken: req.csrfToken()
+    csrfToken: req.csrfToken(),
+    pageHasForm: true
   })
 })
 
@@ -100,10 +108,18 @@ app.post('/capabilities', csrfProtection, async (req, res) => {
   // always save all the evidence
   Object.keys(req.body.video_evidence).forEach(capabilityIdToSave => {
     const cap = _.find(solutionEx.claimedCapability, ['capabilityId', capabilityIdToSave])
-    const evidence = _.get(req.body.video_evidence, capabilityIdToSave, '').trim()
 
-    if (cap && evidence) {
-      cap.evidence = evidence
+    const videoEvidence = _.get(req.body.video_evidence, capabilityIdToSave, '').trim()
+    const videoDescription = _.get(req.body.video_description, capabilityIdToSave, '').trim()
+    const evidenceDescription = _.get(req.body.evidence_description, capabilityIdToSave, '').trim()
+
+    const evidenceJSONString = JSON.stringify({
+      videoEvidence: videoEvidence,
+      videoDescription: videoDescription,
+      evidenceDescription: evidenceDescription
+    });
+    if (cap && evidenceJSONString) {
+      cap.evidence = evidenceJSONString
 
       // update the solution
       updateSolution = true

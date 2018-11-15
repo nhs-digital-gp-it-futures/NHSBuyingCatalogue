@@ -52,28 +52,6 @@ body > header nav.controls {
   right: 1em;
 }
 
-body > header nav.main {
-  display: block;
-  background-color: var(--color-nhs-blue);
-  text-align: right;
-  height: 2em;
-  padding-top: 0.8em;
-  padding-right: 48px;
-  margin-top: 0.5em;
-}
-
-body > header nav.main li a {
-  color: var(--color-nhs-white);
-}
-
-body > header nav.main li a.button {
-  background-color: var(--color-nhs-white);
-  color: var(--color-nhs-dark-blue);
-  font-weight: bold;
-  border: 1px solid var(--color-nhs-white);
-  padding: 0.25em 0.75em;
-  border-radius: 4px;
-}
 
 body > footer {
   background-color: var(--color-nhs-blue);

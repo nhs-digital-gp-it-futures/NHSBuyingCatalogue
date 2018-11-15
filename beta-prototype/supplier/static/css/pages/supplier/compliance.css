@@ -56,13 +56,14 @@ input.save {
 }
 
 .editable label.file-input {
-  background:white;
-  border: solid 2px var(--color-nhs-blue);
-  color: var(--color-nhs-blue);
+  background:var(--color-nhs-blue);
+  border: solid 1px var(--color-nhs-dark-blue);
+  color: var(--color-nhs-white);
   display: inline-block;
   width:15%;
   min-width:10em;
   text-align: center;
+  padding: 0.5em 1em;
   cursor: pointer;
 }
 
@@ -244,6 +245,7 @@ input.save {
 
 #compliance.edit .in-assessment,
 #compliance.edit .has-feedback {
+  border: solid 1px var(--color-nhs-blue);
   background-color: var(--color-standout-bg);
   margin: 0;
   padding: 0.5em 0;
@@ -256,8 +258,8 @@ input.save {
 
 #compliance.edit .in-assessment span,
 #compliance.edit .has-feedback span {
-  font-size: var(--font-size-high-density);
-  font-weight: var(--font-weight-high-density);
+  font-size: var(--font-size-subsubtitle);
+  font-weight: var(--font-weight-message-metadata);
 }
 
 #compliance.edit .feedback-icon {
@@ -324,15 +326,11 @@ input.save {
 }
 
 #compliance.edit .evidence-history {
-  border: 1px solid var(--color-nhs-blue);
+  border: none;
 }
 
 #compliance section header h2 {
   color: var(--color-nhs-dark-grey)
-}
-
-#compliance.edit .evidence-history header {
-  margin-left: 2em;
 }
 
 #compliance.edit .evidence-history header h4 {
@@ -342,7 +340,7 @@ input.save {
 
 #compliance.edit .submissions {
   list-style-type: none;
-  padding: 0;
+  padding: 1em;
 }
 
 #compliance.edit .submissions .submission {
@@ -352,6 +350,7 @@ input.save {
 
 #compliance.edit .submissions .submission .text,
 #compliance.edit .submissions .submission .link {
+  font-size: var(--font-size-sub-standard);
   background-color: var(--color-message-bg);
   color: var(--color-message-fg);
   margin: 0;
@@ -361,8 +360,8 @@ input.save {
 
 #compliance.edit .submissions .submission.assessment-team .text,
 #compliance.edit .submissions .submission.assessment-team .link {
-  background-color: var(--color-message-nhsd-bg);
-  color: var(--color-message-nhsd-fg);
+  background-color: var(--color-message-bg);
+  color: var(--color-message-fg);
   text-align: left;
 }
 
@@ -371,6 +370,7 @@ input.save {
 }
 
 #compliance.edit .submissions .submission .metadata {
+  background-color: var(--color-message-bg);
   font-size: var(--font-size-message-metadata);
   font-weight: var(--font-weight-message-metadata);
   margin: 0;
@@ -426,4 +426,14 @@ input.save {
   font-weight: var(--font-weight-input);
   min-width: 50%;
   padding: 0.25em 1em;
+}
+
+#compliance div p.comment {
+  font-size: var(--font-size-evidence)
+}
+
+#compliance section.evidence-history details summary {
+  font-size: var(--font-size-evidence);
+  color: var(--color-nhs-blue);
+  padding-bottom: 1em;
 }

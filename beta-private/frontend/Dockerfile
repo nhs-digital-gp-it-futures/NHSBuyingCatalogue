@@ -1,4 +1,4 @@
-FROM index.docker.io/node:8 AS base
+FROM index.docker.io/node:10 AS base
 WORKDIR /home/node/app
 
 FROM base AS dependencies
@@ -16,13 +16,13 @@ FROM pre-build AS test
 RUN npm test
 
 FROM pre-build AS build
-#RUN npm run build
+RUN npm run build
 
-FROM index.docker.io/node:8-alpine AS release
+FROM index.docker.io/node:10-alpine AS release
 COPY --from=dependencies /home/node/app/package.json .
 COPY --from=dependencies /home/node/app/lib ./lib
 RUN npm install --production
 COPY --from=build /home/node/app/src ./src
+RUN adduser -D app
+USER app
 CMD ["npm", "start"]
-
-

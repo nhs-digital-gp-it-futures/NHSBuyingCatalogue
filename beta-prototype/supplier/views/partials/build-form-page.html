@@ -1,0 +1,9 @@
+
+<h2>Build — {{section-title}}</h2>
+{{#item-name-plural}}<p>Do you want to add {{.}} to your solution page?</p>{{/item-name-plural}}
+
+{{#if section-clarification}}
+    <p class="clarification">{{section-clarification}}</p>
+{{/if}}
+
+{{> @partial-block}}

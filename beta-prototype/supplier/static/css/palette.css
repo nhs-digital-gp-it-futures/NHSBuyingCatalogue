@@ -3,6 +3,7 @@
   --color-nhs-dark-blue: #003087;
   --color-nhs-blue: #005eb8;
   --color-nhs-light-blue: #41b6e6;
+  --color-nhs-pale-blue: rgba(0, 94, 184, 0.1);
 
   --color-nhs-dark-green: #006747;
 
@@ -22,6 +23,7 @@
 
 /* Abstract applied colour palette */
 :root {
+
   --color-bg: var(--color-nhs-white);
   --color-fg: var(--color-nhs-black);
 
@@ -65,7 +67,7 @@
   --color-standout-bg: var(--color-nhs-pale-grey);
   --color-standout-fg: var(--color-nhs-black);
 
-  --color-message-bg: var(--color-nhs-pale-grey);
+  --color-message-bg: var(--color-nhs-pale-blue);
   --color-message-fg: var(--color-nhs-black);
 
   --color-message-nhsd-bg: var(--color-nhs-mid-pink);
