@@ -2478,10 +2478,6 @@
           "description" : "Primary ODS role code for company\r\nSuppliers have a primary role of \"RO92\"",
           "type" : "string"
         },
-        "status" : {
-          "description" : "Operational status of company\r\nTypically:  \"Active\", \"Inactive\"",
-          "type" : "string"
-        },
         "description" : {
           "description" : "Information about company",
           "type" : "string"
