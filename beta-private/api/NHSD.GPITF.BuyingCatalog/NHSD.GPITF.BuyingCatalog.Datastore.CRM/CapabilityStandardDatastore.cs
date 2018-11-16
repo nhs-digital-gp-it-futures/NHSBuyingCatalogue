@@ -22,7 +22,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        //throw new NotImplementedException();
         var request = GetAllRequest($"{ResourceBase}");
         var retval = GetResponse<PaginatedList<CapabilityStandard>>(request);
 

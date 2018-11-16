@@ -1,0 +1,30 @@
+﻿using FluentAssertions;
+using Microsoft.Extensions.Logging;
+using Moq;
+using NHSD.GPITF.BuyingCatalog.Logic;
+using NUnit.Framework;
+using System.Linq;
+
+namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
+{
+  [TestFixture]
+  public sealed class CapabilityStandardDatastore_Tests : DatastoreBase_Tests<CapabilityStandardDatastore>
+  {
+    [Test]
+    public void Constructor_Completes()
+    {
+      Assert.DoesNotThrow(() => new CapabilityStandardDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy));
+    }
+
+    [Test]
+    public void GetAll_ReturnsData()
+    {
+      var datastore = new CapabilityStandardDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<CapabilityStandardDatastore>>().Object, _policy);
+
+      var datas = datastore.GetAll();
+
+      datas.Should().NotBeEmpty();
+      datas.ToList().ForEach(data => Verifier.Verify(data));
+    }
+  }
+}
