@@ -9,7 +9,7 @@ using System.Linq;
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
 {
   [TestFixture]
-  public sealed class CapabilitiesImplementedDatastore_Tests : ClaimsDatastoreBase_Tests<CapabilitiesImplementedDatastore>
+  public sealed class CapabilitiesImplementedDatastore_Tests : DatastoreBase_Tests<CapabilitiesImplementedDatastore>
   {
     [Test]
     public void Constructor_Completes()
@@ -20,7 +20,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void BySolution_ReturnsData()
     {
-      var allSolns = GetAllSolutions();
+      var allSolns = Retriever.GetAllSolutions(_policy);
       var ids = allSolns.Select(soln => soln.Id).Distinct();
       var datastore = new CapabilitiesImplementedDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
@@ -33,8 +33,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void CRUD_Succeeds()
     {
-      var soln = GetAllSolutions().First();
-      var cap = GetAllCapabilities().First();
+      var soln = Retriever.GetAllSolutions(_policy).First();
+      var cap = Retriever.GetAllCapabilities(_policy).First();
       var datastore = new CapabilitiesImplementedDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
       // create

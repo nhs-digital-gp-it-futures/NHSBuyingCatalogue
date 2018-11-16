@@ -1,14 +1,15 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
+using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
 {
-  public abstract class ClaimsDatastoreBase_Tests<T> : DatastoreBase_Tests<T>
+  internal static class Retriever
   {
-    protected IEnumerable<Solutions> GetAllSolutions()
+    public static IEnumerable<Solutions> GetAllSolutions(ISyncPolicyFactory _policy)
     {
       var frameworksDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
       var frameworks = frameworksDatastore.GetAll();
@@ -22,18 +23,19 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       return allSolns;
     }
 
-    protected IEnumerable<Capabilities> GetAllCapabilities()
+    public static IEnumerable<Capabilities> GetAllCapabilities(ISyncPolicyFactory _policy)
     {
       var datastore = new CapabilitiesDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<CapabilitiesDatastore>>().Object, _policy);
       var datas = datastore.GetAll();
       return datas;
     }
 
-    protected IEnumerable<Standards> GetAllStandards()
+    public static IEnumerable<Standards> GetAllStandards(ISyncPolicyFactory _policy)
     {
       var datastore = new StandardsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<StandardsDatastore>>().Object, _policy);
       var datas = datastore.GetAll();
       return datas;
     }
+
   }
 }
