@@ -40,7 +40,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var frameworks = frameworksDatastore.GetAll();
       var solnDatastore = new SolutionsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<SolutionsDatastore>>().Object, _policy);
       var allSolns = frameworks.ToList().SelectMany(fw => solnDatastore.ByFramework(fw.Id));
-      var allOrgIds = allSolns.Select(soln => soln.Id).Distinct();
+      var allOrgIds = allSolns.Select(soln => soln.OrganisationId).Distinct();
       var contactsDatastore = new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<ContactsDatastore>>().Object, _policy);
       var allContacts = allOrgIds.ToList().SelectMany(orgId => contactsDatastore.ByOrganisation(orgId));
       var datastore = new OrganisationsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
