@@ -82,7 +82,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     }
 
     [Test]
+    //[Ignore("Create broken")]
     public void CRUD_Succeeds()
+
     {
       var frameworksDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
       var frameworks = frameworksDatastore.GetAll();
@@ -94,9 +96,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var contactsDatastore = new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<ContactsDatastore>>().Object, _policy);
       var contactId = contactsDatastore.ByOrganisation(orgId).First().Id;
 
-      var newSoln = new Solutions
+      // create
+      var newEnt = new Solutions
       {
-        Id = string.Empty,
+        Id = Guid.NewGuid().ToString(),
         PreviousId = null,
         OrganisationId = orgId,
         Name = "My New Solution",
@@ -105,25 +108,31 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
         CreatedById = contactId,
         ModifiedById = contactId
       };
-      var createdSoln = datastore.Create(newSoln);
-      createdSoln.Should().BeEquivalentTo(newSoln, opt => opt.Excluding(soln => soln.Id));
+      Verifier.Verify(newEnt);
+      var createdEnt = datastore.Create(newEnt);
+      createdEnt.Should().BeEquivalentTo(newEnt, opt => opt.Excluding(soln => soln.Id));
+
       try
       {
-        var retrievedSoln = datastore.ById(createdSoln.Id);
-        retrievedSoln.Should().BeEquivalentTo(createdSoln);
+        // retrieve
+        var retrievedEnt = datastore.ById(createdEnt.Id);
+        retrievedEnt.Should().BeEquivalentTo(createdEnt);
 
-        createdSoln.Name = "My Other New Solution";
-        datastore.Update(createdSoln);
-        var updatedSoln = datastore.ById(createdSoln.Id);
-        updatedSoln.Should().BeEquivalentTo(createdSoln);
+        // update
+        createdEnt.Name = "My Other New Solution";
+        datastore.Update(createdEnt);
+        var updatedEnt = datastore.ById(createdEnt.Id);
+        updatedEnt.Should().BeEquivalentTo(createdEnt);
       }
       finally
       {
-        datastore.Delete(createdSoln);
+        // delete
+        datastore.Delete(createdEnt);
       }
 
-      var deletedSoln = datastore.ById(createdSoln.Id);
-      deletedSoln.Should().BeNull();
+      // delete
+      var deletedEnt = datastore.ById(createdEnt.Id);
+      deletedEnt.Should().BeNull();
     }
   }
 }
