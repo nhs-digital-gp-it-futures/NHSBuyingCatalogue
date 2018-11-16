@@ -21,7 +21,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void ByEmail_ReturnsData()
     {
-      var emails = GetAll().Select(ent => ent.EmailAddress1);
+      var emails = GetAllContacts().Select(ent => ent.EmailAddress1);
       var datastore = new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
       var datas = emails.ToList().Select(email => datastore.ByEmail(email));
@@ -33,7 +33,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void ById_ReturnsData()
     {
-      var ids = GetAll().Select(ent => ent.EmailAddress1);
+      var ids = GetAllContacts().Select(ent => ent.EmailAddress1);
       var datastore = new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
       var datas = ids.ToList().Select(id => datastore.ById(id));
@@ -45,13 +45,13 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void ByOrganisation_ReturnsData()
     {
-      var datas = GetAll();
+      var datas = GetAllContacts();
 
       datas.Should().NotBeEmpty();
       datas.ToList().ForEach(data => Verifier.Verify(data));
     }
 
-    private IEnumerable<Contacts> GetAll()
+    private IEnumerable<Contacts> GetAllContacts()
     {
       var frameworksDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
       var frameworks = frameworksDatastore.GetAll();
