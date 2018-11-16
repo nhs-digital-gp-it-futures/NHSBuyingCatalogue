@@ -63,8 +63,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
         createdEnt.FirstName = "Jon";
         createdEnt.LastName = "Dough";
         datastore.Update(createdEnt);
-        var updatedEnt = datastore.BySolution(soln.Id).Single(ent => ent.Id == createdEnt.Id);
-        updatedEnt.Should().BeEquivalentTo(createdEnt);
+        datastore.BySolution(soln.Id).Single(ent => ent.Id == createdEnt.Id)
+          .Should().BeEquivalentTo(createdEnt);
       }
       finally
       {
@@ -73,8 +73,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       }
 
       // delete
-      var allEnts = datastore.BySolution(soln.Id);
-      allEnts.Should().NotContain(ent => ent.Id == createdEnt.Id);
+      datastore.BySolution(soln.Id)
+        .Should().NotContain(ent => ent.Id == createdEnt.Id);
     }
   }
 }

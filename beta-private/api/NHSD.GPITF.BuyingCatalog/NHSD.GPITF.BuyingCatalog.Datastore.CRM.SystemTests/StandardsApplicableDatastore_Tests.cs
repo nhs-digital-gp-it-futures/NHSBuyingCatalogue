@@ -56,8 +56,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
         datastore.Update(createdEnt);
 
         // retrieve
-        var updatedEnt = datastore.ById(createdEnt.Id);
-        updatedEnt.Should().BeEquivalentTo(createdEnt);
+        datastore.ById(createdEnt.Id)
+          .Should().BeEquivalentTo(createdEnt);
       }
       finally
       {
@@ -66,8 +66,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       }
 
       // delete
-      var deletedEnt = datastore.ById(createdEnt.Id);
-      deletedEnt.Should().BeNull();
+      datastore.ById(createdEnt.Id)
+        .Should().BeNull();
     }
   }
 }

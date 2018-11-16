@@ -9,6 +9,20 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
 {
   internal static class Retriever
   {
+    public static IEnumerable<Contacts> GetAllContacts(ISyncPolicyFactory _policy)
+    {
+      var frameworksDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
+      var frameworks = frameworksDatastore.GetAll();
+      var solnDatastore = new SolutionsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<SolutionsDatastore>>().Object, _policy);
+      var allSolns = frameworks.ToList().SelectMany(fw => solnDatastore.ByFramework(fw.Id));
+      var allOrgIds = allSolns.Select(soln => soln.Id).Distinct();
+      var datastore = new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<ContactsDatastore>>().Object, _policy);
+
+      var datas = allOrgIds.ToList().SelectMany(orgId => datastore.ByOrganisation(orgId));
+
+      return datas;
+    }
+
     public static IEnumerable<Solutions> GetAllSolutions(ISyncPolicyFactory _policy)
     {
       var frameworksDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
