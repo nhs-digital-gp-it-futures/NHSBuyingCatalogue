@@ -57,9 +57,9 @@ namespace Gif.Service
                 .AddJsonOptions(opts =>
                 {
                     opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-/*                    opts.SerializerSettings.Converters.Add(new StringEnumConverter {
+                    opts.SerializerSettings.Converters.Add(new StringEnumConverter {
                         CamelCaseText = false
-                    });*/
+                    });
                 });
 
             services
