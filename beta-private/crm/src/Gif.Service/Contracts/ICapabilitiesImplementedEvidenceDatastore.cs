@@ -7,6 +7,7 @@ namespace Gif.Service.Contracts
     public interface ICapabilitiesImplementedEvidenceDatastore : IEvidenceDatastore<Evidence>
     {
         CapabilityImplemented ByEvidenceId(string id);
+        CapabilityImplemented ByReviewId(string id);
     }
 #pragma warning restore CS1591
 }

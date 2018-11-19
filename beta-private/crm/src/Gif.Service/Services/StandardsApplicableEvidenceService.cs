@@ -72,6 +72,26 @@ namespace Gif.Service.Services
 
             return new StandardApplicable(standardApplicable);
         }
+
+        public StandardApplicable ByReviewId(string id)
+        {
+            StandardApplicable standardApplicable = null;
+
+            var filterAttributes = new List<CrmFilterAttribute>
+            {
+                new CrmFilterAttribute("ReviewId") {FilterName = "cc_review", FilterValue = id},
+                new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
+            };
+
+            var evidenceJson = Repository.RetrieveMultiple(new Evidence().GetQueryString(null, filterAttributes), out Count);
+            var evidence = evidenceJson?.FirstOrDefault();
+
+            if (evidence != null)
+                standardApplicable = ByEvidenceId(new Evidence(evidence).Id.ToString());
+
+            return standardApplicable;
+
+        }
     }
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

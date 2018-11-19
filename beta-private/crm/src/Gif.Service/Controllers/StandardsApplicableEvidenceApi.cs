@@ -102,6 +102,37 @@ namespace Gif.Service.Controllers
         }
 
         /// <summary>
+        /// Get an existing Standard Applicable for a given Review Id
+        /// </summary>
+
+        /// <param name="id">Review Id</param>
+        /// <response code="200">Success</response>
+        /// <response code="404">Solution not found in CRM</response>
+        [HttpGet]
+        [Route("/api/StandardsApplicableReview/ById/{id}")]
+        [ValidateModelState]
+        [SwaggerOperation("StandardsApplicableReviewByIdGet")]
+        [SwaggerResponse(statusCode: 200, type: typeof(Solution), description: "Success")]
+        public virtual IActionResult StandardsApplicableReviewByIdGet([FromRoute][Required]string id)
+        {
+            try
+            {
+                var standardApplicable = new StandardsApplicableEvidenceService(new Repository()).ByReviewId(id);
+
+                if (standardApplicable.Id == Guid.Empty)
+                    return StatusCode(404);
+
+                return new ObjectResult(standardApplicable);
+
+            }
+            catch (Crm.CrmApiException ex)
+            {
+                return StatusCode((int)ex.HttpStatus, ex.Message);
+            }
+
+        }
+
+        /// <summary>
         /// Create a new evidence
         /// </summary>
 

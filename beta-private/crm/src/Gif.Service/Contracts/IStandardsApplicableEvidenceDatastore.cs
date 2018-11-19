@@ -6,6 +6,7 @@ namespace Gif.Service.Contracts
     public interface IStandardsApplicableEvidenceDatastore : IEvidenceDatastore<Evidence>
     {
         StandardApplicable ByEvidenceId(string id);
+        StandardApplicable ByReviewId(string id);
 
     }
 #pragma warning restore CS1591

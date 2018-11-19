@@ -102,6 +102,37 @@ namespace Gif.Service.Controllers
         }
 
         /// <summary>
+        /// Get an existing Capability Implemented for a given Review Id
+        /// </summary>
+
+        /// <param name="id">Review Id</param>
+        /// <response code="200">Success</response>
+        /// <response code="404">Solution not found in CRM</response>
+        [HttpGet]
+        [Route("/api/CapabilitiesImplementedReview/ById/{id}")]
+        [ValidateModelState]
+        [SwaggerOperation("CapabilitiesImplementedReviewByIdGet")]
+        [SwaggerResponse(statusCode: 200, type: typeof(Solution), description: "Success")]
+        public virtual IActionResult CapabilitiesImplementedReviewByIdGet([FromRoute][Required]string id)
+        {
+            try
+            {
+                var capabilityImplemented = new CapabilitiesImplementedEvidenceService(new Repository()).ByReviewId(id);
+
+                if (capabilityImplemented.Id == Guid.Empty)
+                    return StatusCode(404);
+
+                return new ObjectResult(capabilityImplemented);
+
+            }
+            catch (Crm.CrmApiException ex)
+            {
+                return StatusCode((int)ex.HttpStatus, ex.Message);
+            }
+
+        }
+
+        /// <summary>
         /// Create a new evidence
         /// </summary>
 
