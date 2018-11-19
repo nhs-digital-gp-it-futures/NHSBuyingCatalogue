@@ -61,9 +61,14 @@ namespace Gif.Service.Services
 
         public CapabilityImplemented ByEvidenceId(string id)
         {
+            var evidence = ById(id);
+
+            if (evidence == null)
+                return null;
+
             var filterAttributes = new List<CrmFilterAttribute>
             {
-                new CrmFilterAttribute("EvidenceId") {FilterName = "cc_evidenceid", FilterValue = id},
+                new CrmFilterAttribute("CapabilityImplementedId") {FilterName = "cc_capabilityimplementedid", FilterValue = evidence.ClaimId.ToString()},
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
@@ -79,15 +84,20 @@ namespace Gif.Service.Services
 
             var filterAttributes = new List<CrmFilterAttribute>
             {
-                new CrmFilterAttribute("ReviewId") {FilterName = "cc_review", FilterValue = id},
+                new CrmFilterAttribute("ReviewId") {FilterName = "cc_reviewid", FilterValue = id},
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var evidenceJson = Repository.RetrieveMultiple(new Evidence().GetQueryString(null, filterAttributes), out Count);
-            var evidence = evidenceJson?.FirstOrDefault();
+            var reviewJson = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterAttributes), out Count);
+            var review = reviewJson?.FirstOrDefault();
 
-            if (evidence != null)
-                capabilityImplemented = ByEvidenceId(new Evidence(evidence).Id.ToString());
+            if (review != null)
+            {
+                var reviewObj = new Review(review);
+
+                if (reviewObj.Evidence != null)
+                    capabilityImplemented = ByEvidenceId(new Review(review).Evidence.ToString());
+            }
 
             return capabilityImplemented;
         }
