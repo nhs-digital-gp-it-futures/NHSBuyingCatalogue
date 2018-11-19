@@ -22,7 +22,7 @@
   <fieldset id="capabilities-core">
     <legend>{{t 'Onboarding.Capabilities.Fieldsets.Core.Legend'}}</legend>
     <ul>
-      {{#capabilities}}
+      {{#capabilitiesByGroup.core}}
       <li>
         <label>
           <input type="checkbox" name="capabilities[{{id}}]"{{#selected}} checked{{/selected}}
@@ -30,11 +30,21 @@
           <span class="name">{{name}}</span>
         </label>
       </li>
-      {{/capabilities}}
+      {{/capabilitiesByGroup.core}}
     </ul>
   </fieldset>
   <fieldset id="capabilities-non-core">
-    <legend>{{t 'Onboarding.Capabilities.Fieldsets.Core.Legend'}}</legend>
+    <legend>{{t 'Onboarding.Capabilities.Fieldsets.NonCore.Legend'}}</legend>
+    <ul>
+      {{#capabilitiesByGroup.noncore}}
+      <li>
+        <label>
+          <input type="checkbox" name="capabilities[{{id}}]"{{#selected}} checked{{/selected}}>
+          <span class="name">{{name}}</span>
+        </label>
+      </li>
+      {{/capabilitiesByGroup.noncore}}
+    </ul>
   </fieldset>
 
   <input type="submit"

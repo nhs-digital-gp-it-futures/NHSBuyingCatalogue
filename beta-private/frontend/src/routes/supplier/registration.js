@@ -196,6 +196,11 @@ async function capabilitiesPageContext (req) {
     .orderBy(a => a.name.toLowerCase())
     .value()
 
+  context.capabilitiesByGroup = _.zipObject(
+    ['core', 'noncore'],
+    _.partition(context.capabilities, c => _.startsWith(c.id, 'CAP-C-'))
+  )
+
   return context
 }
 

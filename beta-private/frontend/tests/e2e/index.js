@@ -342,12 +342,22 @@ function navigateToSupplierOnboardingSolutionCapabilities (t) {
 }
 
 test('Capabilities page shows correct information accessibly', async t => {
+  const allCoreCapNames = Selector('#capabilities-core [type=checkbox][name^=capabilities] ~ .name')
+  const allNonCoreCapNames = Selector('#capabilities-non-core [type=checkbox][name^=capabilities] ~ .name')
+
   await navigateToSupplierOnboardingSolutionCapabilities(t)
 
-    .expect(Selector('[type=checkbox][name^=capabilities]').count).eql(37)
-    .expect(Selector('[type=checkbox][name^=capabilities] ~ .name').nth(0).innerText).eql('Appointments Management - Citizen')
-    .expect(Selector('[type=checkbox][name^=capabilities] ~ .name').nth(14).innerText).eql('e-Consultations (Patient/Service User to Professional)')
-    .expect(Selector('[type=checkbox][name^=capabilities] ~ .name').nth(36).innerText).eql('Workflow')
+    .expect(Selector('#capabilities-core [type=checkbox][name^=capabilities]').count).eql(6)
+    .expect(Selector('#capabilities-non-core [type=checkbox][name^=capabilities]').count).eql(31)
+
+    .expect(allCoreCapNames.nth(0).innerText).eql('Appointments Management - GP')
+    .expect(allCoreCapNames.nth(3).innerText).eql('Patient Information Maintenance')
+    .expect(allCoreCapNames.nth(5).innerText).eql('Recording Consultations')
+
+    .expect(allNonCoreCapNames.nth(0).innerText).eql('Appointments Management - Citizen')
+    .expect(allNonCoreCapNames.nth(13).innerText).eql('e-Consultations (Patient/Service User to Professional)')
+    .expect(allNonCoreCapNames.nth(30).innerText).eql('Workflow')
+
     .expect(Selector('[name=capabilities\\[CAP-C-004\\]]').checked).ok()
 
   await axeCheck(t)
@@ -365,7 +375,7 @@ test('Capabilities page validation is correct and accessible', async t => {
   await t
     .click(continueButton)
     .expect(Selector('#errors #error-capabilities').innerText).contains('Select at least one capability to continue')
-    .expect(Selector('[type=checkbox][name^=capabilities]:checked').exists).notOk('No capabilities should be selected after reload')
+    .expect(checkedCapabilities.exists).notOk('No capabilities should be selected after reload')
 
   await axeCheck(t)
 })
