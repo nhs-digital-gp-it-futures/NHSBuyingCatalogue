@@ -89,7 +89,7 @@ function navigateToSupplierOnboardingSolution (t) {
 test('Registration page shows correct information accessibly', async t => {
   await navigateToSupplierOnboardingSolution(t)
     .expect(solutionNameInput.value).eql('Really Kool Document Manager')
-    .expect(solutionDescriptionInput.value).eql('"Does Really Kool document management"')
+    .expect(solutionDescriptionInput.value).eql('Does Really Kool document management')
     .expect(solutionVersionInput.value).eql('1')
 
   await axeCheck(t)
@@ -344,10 +344,11 @@ function navigateToSupplierOnboardingSolutionCapabilities (t) {
 test('Capabilities page shows correct information accessibly', async t => {
   await navigateToSupplierOnboardingSolutionCapabilities(t)
 
-    .expect(Selector('[type=checkbox][name^=capabilities]').count).eql(18)
+    .expect(Selector('[type=checkbox][name^=capabilities]').count).eql(37)
     .expect(Selector('[type=checkbox][name^=capabilities] ~ .name').nth(0).innerText).eql('Appointments Management - Citizen')
-    .expect(Selector('[type=checkbox][name^=capabilities] ~ .name').nth(17).innerText).eql('Workflow')
-    .expect(Selector('[name=capabilities\\[CAP10\\]]').checked).ok()
+    .expect(Selector('[type=checkbox][name^=capabilities] ~ .name').nth(14).innerText).eql('e-Consultations (Patient/Service User to Professional)')
+    .expect(Selector('[type=checkbox][name^=capabilities] ~ .name').nth(36).innerText).eql('Workflow')
+    .expect(Selector('[name=capabilities\\[CAP-C-004\\]]').checked).ok()
 
   await axeCheck(t)
 })

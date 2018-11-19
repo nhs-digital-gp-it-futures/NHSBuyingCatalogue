@@ -193,7 +193,7 @@ async function capabilitiesPageContext (req) {
 
   context.capabilities = _(context.capabilities)
     .values()
-    .orderBy('name')
+    .orderBy(a => a.name.toLowerCase())
     .value()
 
   return context

@@ -16,7 +16,7 @@ import()
 {
   TABLENAME=$1
   CSVFILE=\'$2\'
-  IMPORT="$BCP $TABLENAME in $CSVFILE $CREDS -d BuyingCatalog -c -t ','"
+  IMPORT="$BCP $TABLENAME in $CSVFILE $CREDS -d BuyingCatalog -c"
   eval "$IMPORT"
 }
 
