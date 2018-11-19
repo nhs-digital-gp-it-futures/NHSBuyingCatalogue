@@ -59,6 +59,19 @@ namespace Gif.Service.Services
             return evidence;
         }
 
+        public CapabilityImplemented ByEvidenceId(string id)
+        {
+            var filterAttributes = new List<CrmFilterAttribute>
+            {
+                new CrmFilterAttribute("EvidenceId") {FilterName = "cc_evidenceid", FilterValue = id},
+                new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
+            };
+
+            var appJson = Repository.RetrieveMultiple(new CapabilityImplemented().GetQueryString(null, filterAttributes), out Count);
+            var capabilityImplemented = appJson?.FirstOrDefault();
+
+            return new CapabilityImplemented(capabilityImplemented);
+        }
     }
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
