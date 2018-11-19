@@ -55,10 +55,11 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       };
       Verifier.Verify(newEnt);
       var createdEnt = datastore.Create(newEnt);
-      createdEnt.Should().BeEquivalentTo(newEnt, opt => opt.Excluding(tc => tc.Id));
 
       try
       {
+        createdEnt.Should().BeEquivalentTo(newEnt, opt => opt.Excluding(tc => tc.Id));
+
         // update
         createdEnt.FirstName = "Jon";
         createdEnt.LastName = "Dough";

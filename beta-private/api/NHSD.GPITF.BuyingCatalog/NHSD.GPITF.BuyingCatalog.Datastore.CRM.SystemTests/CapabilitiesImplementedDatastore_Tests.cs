@@ -47,10 +47,11 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       };
       Verifier.Verify(newEnt);
       var createdEnt = datastore.Create(newEnt);
-      createdEnt.Should().BeEquivalentTo(newEnt, opt => opt.Excluding(ent => ent.Id));
 
       try
       {
+        createdEnt.Should().BeEquivalentTo(newEnt, opt => opt.Excluding(ent => ent.Id));
+
         // update
         createdEnt.Status = CapabilitiesImplementedStatus.Submitted;
         datastore.Update(createdEnt);

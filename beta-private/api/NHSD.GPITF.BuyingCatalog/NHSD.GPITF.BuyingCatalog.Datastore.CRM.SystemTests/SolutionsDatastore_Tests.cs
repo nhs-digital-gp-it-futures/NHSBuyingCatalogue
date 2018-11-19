@@ -82,7 +82,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     }
 
     [Test]
-    //[Ignore("Create broken")]
     public void CRUD_Succeeds()
 
     {
@@ -110,10 +109,11 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       };
       Verifier.Verify(newEnt);
       var createdEnt = datastore.Create(newEnt);
-      createdEnt.Should().BeEquivalentTo(newEnt, opt => opt.Excluding(soln => soln.Id));
 
       try
       {
+        createdEnt.Should().BeEquivalentTo(newEnt, opt => opt.Excluding(soln => soln.Id));
+
         // retrieve
         var retrievedEnt = datastore.ById(createdEnt.Id);
         retrievedEnt.Should().BeEquivalentTo(createdEnt);
