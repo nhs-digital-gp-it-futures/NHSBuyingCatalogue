@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
@@ -18,6 +19,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     protected readonly IRestClientFactory _crmFactory;
     protected readonly ILogger<DatastoreBase<T>> _logger;
     private readonly ISyncPolicy _policy;
+    private readonly JsonSerializerSettings _settings = new JsonSerializerSettings();
 
     public DatastoreBase(
       IRestClientFactory crmFactory,
@@ -27,6 +29,12 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       _crmFactory = crmFactory;
       _logger = logger;
       _policy = policy.Build(_logger);
+
+      _settings.Converters.Add(
+        new StringEnumConverter
+        {
+          CamelCaseText = false
+        });
     }
 
     protected TOther GetInternal<TOther>(Func<TOther> get)
@@ -58,7 +66,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       request.AddHeader("Content-Type", "application/json");
       request.AddHeader("Authorization", $"{_crmFactory.GetAccessToken()?.token_type} {_crmFactory.GetAccessToken()?.access_token}");
 
-      return request; 
+      return request;
     }
 
     protected RestRequest GetAllRequest(string path)
@@ -72,6 +80,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     protected RestRequest GetRequest(string path, object body)
     {
       var request = GetRequest(path);
+      var serialiser = JsonSerializer.Create(_settings);
+      request.JsonSerializer = new RestSharpJsonNetSerializer(serialiser);
       request.AddJsonBody(body);
 
       return request;
@@ -117,7 +127,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     protected TOther GetResponse<TOther>(RestRequest request)
     {
       var resp = GetRawResponse(request);
-      var retval = JsonConvert.DeserializeObject<TOther>(resp.Content);
+      var retval = JsonConvert.DeserializeObject<TOther>(resp.Content, _settings);
 
       return retval;
     }
