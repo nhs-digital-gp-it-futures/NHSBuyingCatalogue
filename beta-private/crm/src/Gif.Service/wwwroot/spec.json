@@ -408,6 +408,36 @@
         } ]
       }
     },
+    "/api/CapabilitiesImplementedEvidence/ById/{id}" : {
+      "get" : {
+        "tags" : [ "CapabilitiesImplementedEvidence" ],
+        "summary" : "Returns the capability implemented record by given evidence id",
+        "operationId" : "ApiCapabilitiesImplementedEvidenceByIdGet",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "CRM identifier of evidence id",
+          "required" : true,
+          "type" : "string"
+        }],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/CapabilitiesImplementedEvidence"
+            }
+          },
+          "404" : {
+            "description" : "Evidence not found"
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ]
+      }
+    },
     "/api/CapabilitiesImplementedEvidence" : {
       "post" : {
         "tags" : [ "CapabilitiesImplementedEvidence" ],
@@ -473,6 +503,36 @@
             "description" : "Success",
             "schema" : {
               "$ref" : "#/definitions/PaginatedList[IEnumerable[CapabilitiesImplementedReviews]]"
+            }
+          },
+          "404" : {
+            "description" : "Evidence not found"
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ]
+      }
+    },
+	"/api/CapabilitiesImplementedReview/ById/{id}" : {
+      "get" : {
+        "tags" : [ "CapabilitiesImplementedReview" ],
+        "summary" : "Get a Capabilities Implemented record by the given review id.",
+        "operationId" : "ApiCapabilitiesImplementedByReviewIdGet",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "CRM identifier of the review.",
+          "required" : true,
+          "type" : "string"
+        }],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/CapabilitiesImplementedReviews"
             }
           },
           "404" : {
@@ -1574,6 +1634,36 @@
         } ]
       }
     },
+	"/api/StandardsApplicableEvidence/ById/{id}" : {
+      "get" : {
+        "tags" : [ "StandardsApplicableEvidence" ],
+        "summary" : "Retrieve StandardApplicable record for a given evidence id.",
+        "operationId" : "ApiStandardsApplicableEvidenceByIdGet",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "CRM identifier of evidence",
+          "required" : true,
+          "type" : "string"
+        }],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/StandardsApplicable"
+            }
+          },
+          "404" : {
+            "description" : "Evidence not found in CRM"
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ]
+      }
+    },
     "/api/StandardsApplicableEvidence" : {
       "post" : {
         "tags" : [ "StandardsApplicableEvidence" ],
@@ -1643,6 +1733,36 @@
           },
           "404" : {
             "description" : "Evidence not found"
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ]
+      }
+    },
+	"/api/StandardsApplicableReview/ById/{id}" : {
+      "get" : {
+        "tags" : [ "StandardsApplicable" ],
+        "summary" : "Retrieve StandardApplicable record for a given review id.",
+        "operationId" : "ApiStandardsApplicableByReviewIdGet",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "CRM identifier of review",
+          "required" : true,
+          "type" : "string"
+        }],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/StandardsApplicable"
+            }
+          },
+          "404" : {
+            "description" : "Review not found in CRM"
           }
         },
         "security" : [ {
