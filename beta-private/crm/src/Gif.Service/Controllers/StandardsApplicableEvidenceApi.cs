@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -67,6 +68,37 @@ namespace Gif.Service.Controllers
                 PageSize = pageSize ?? Paging.DefaultPageSize,
                 PageIndex = pageIndex ?? Paging.DefaultIndex,
             });
+        }
+
+        /// <summary>
+        /// Get an existing Standard Applicable for a given Evidence Id
+        /// </summary>
+
+        /// <param name="id">Evidence Id</param>
+        /// <response code="200">Success</response>
+        /// <response code="404">Solution not found in CRM</response>
+        [HttpGet]
+        [Route("/api/StandardsApplicableEvidence/ById/{id}")]
+        [ValidateModelState]
+        [SwaggerOperation("ApiStandardsApplicableEvidenceByIdGet")]
+        [SwaggerResponse(statusCode: 200, type: typeof(Solution), description: "Success")]
+        public virtual IActionResult ApiStandardsApplicableEvidenceByIdGet([FromRoute][Required]string id)
+        {
+            try
+            {
+                var standardApplicable = new StandardsApplicableEvidenceService(new Repository()).ByEvidenceId(id);
+
+                if (standardApplicable.Id == Guid.Empty)
+                    return StatusCode(404);
+
+                return new ObjectResult(standardApplicable);
+
+            }
+            catch (Crm.CrmApiException ex)
+            {
+                return StatusCode((int)ex.HttpStatus, ex.Message);
+            }
+
         }
 
         /// <summary>

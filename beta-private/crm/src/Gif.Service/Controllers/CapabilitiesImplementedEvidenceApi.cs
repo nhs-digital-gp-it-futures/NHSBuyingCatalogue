@@ -9,6 +9,7 @@
  */
 
 using Gif.Service.Attributes;
+using Gif.Service.Const;
 using Gif.Service.Crm;
 using Gif.Service.Models;
 using Gif.Service.Services;
@@ -16,10 +17,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Gif.Service.Const;
 
 namespace Gif.Service.Controllers
 {
@@ -67,6 +68,37 @@ namespace Gif.Service.Controllers
                 PageSize = pageSize ?? Paging.DefaultPageSize,
                 PageIndex = pageIndex ?? Paging.DefaultIndex,
             });
+        }
+
+        /// <summary>
+        /// Get an existing Capability Implemented for a given Evidence Id
+        /// </summary>
+
+        /// <param name="id">Evidence Id</param>
+        /// <response code="200">Success</response>
+        /// <response code="404">Solution not found in CRM</response>
+        [HttpGet]
+        [Route("/api/CapabilitiesImplementedEvidence/ById/{id}")]
+        [ValidateModelState]
+        [SwaggerOperation("ApiCapabilitiesImplementedEvidenceByIdGet")]
+        [SwaggerResponse(statusCode: 200, type: typeof(Solution), description: "Success")]
+        public virtual IActionResult ApiCapabilitiesImplementedEvidenceByIdGet([FromRoute][Required]string id)
+        {
+            try
+            {
+                var capabilityImplemented = new CapabilitiesImplementedEvidenceService(new Repository()).ByEvidenceId(id);
+
+                if (capabilityImplemented.Id == Guid.Empty)
+                    return StatusCode(404);
+
+                return new ObjectResult(capabilityImplemented);
+
+            }
+            catch (Crm.CrmApiException ex)
+            {
+                return StatusCode((int)ex.HttpStatus, ex.Message);
+            }
+
         }
 
         /// <summary>
