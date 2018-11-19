@@ -1,0 +1,42 @@
+<li class="capability {{types}}">
+  <h4 class="name">{{name}}</h4>
+  <a class="toggle-reveal" href="#">﹀</a>
+  
+  <section class="reveal">
+    <p class="description">
+      {{description}}
+      {{#url}}
+        <a href="{{.}}" target="_blank" class="full-description-link">{{t 'Onboarding.Capabilities.Reveal.FullDescriptionLinkText'}}</a>
+      {{/url}}
+    </p>
+    <p>{{t 'Onboarding.Capabilities.Reveal.CompliancePreamble'}}</p>
+    
+    <div>
+    <section class="standards">
+      <ul>
+        {{#standards.capability}}
+        <li><a href="{{url}}" target="_blank">{{name}}</a></li>
+        {{/standards.capability}}
+      </ul>
+    </section>
+    </div>
+
+    <section class="selection">
+      <p>{{t 'Onboarding.Capabilities.Reveal.Selection.Preamble'}}</p>
+      <div>
+        <input
+          id="select-capability-{{id}}" 
+          type="checkbox"
+          name="capabilities[{{id}}]"
+          {{#selected}} checked{{/selected}}
+          data-id="{{id}}"
+          data-std-ids="{{standardIds}}">
+        <label for="select-capability-{{id}}" class="unchecked button">{{t 'Onboarding.Capabilities.Reveal.Selection.Select'}}</label>
+        <label for="select-capability-{{id}}" class="checked">
+          <span class="selected">{{t 'Onboarding.Capabilities.Reveal.Selection.Selected'}}</span>
+          <span class="remove">{{t 'Onboarding.Capabilities.Reveal.Selection.RemoveSelection'}}</span>
+        </label>
+      </div>
+    </section>
+  </section>
+</li>

@@ -1,0 +1,27 @@
+#capability-summary {
+  .standard-count,
+  .capability-count {
+    &.singular {
+      .singular { display: inherit; }
+      .plural { display: none; }
+    }
+
+    &.plural {
+      .singular { display: none; }
+      .plural { display: inherit; }
+    }
+  }
+
+  .capabilities,
+  .standards {
+    [data-id],
+    .associated {
+      display: none;
+
+      &.selected {
+        display: inherit;
+      }
+    }
+
+  }
+}

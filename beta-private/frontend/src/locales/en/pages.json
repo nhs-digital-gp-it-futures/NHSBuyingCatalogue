@@ -108,6 +108,36 @@
         "NonCore": {
           "Legend": "Non-Core $t(Capability_plural)"
         }
+      },
+      "Reveal": {
+        "FullDescriptionLinkText": "See $t(Capability) detail and Associated $t(Standard_plural) in Confluence",
+        "CompliancePreamble": "To meet this $t(Capability), you must comply with these Associated $t(Standard_plural).",
+        "Selection": {
+          "Preamble": "By selecting this $t(Capability), you are acknowledging the set of $t(Standard_plural) your $t(Solution) must meet to attain compliance.",
+          "Select": "Select",
+          "Selected": "✔︎ Selected",
+          "RemoveSelection": "Remove selection"
+        }
+      },
+      "Summary": {
+        "Counter": {
+          "Capability": {
+            "Singular": "$t(Capability) selected",
+            "Plural": "$t(Capability_plural) selected"
+          },
+          "Standard": {
+            "Singular": "$t(Standard) will be required",
+            "Plural": "$t(Standard_plural) will be required"
+          }
+        },
+        "Standards": {
+          "Overarching": {
+            "Heading": "Overarching $t(Standard_plural) — These are required for all $t(Solution_plural)"
+          },
+          "Associated": {
+            "Heading": "Associated $t(Standard_plural) — These are related to the $t(Capability_plural) selected."
+          }
+        }
       }
     }
   }
