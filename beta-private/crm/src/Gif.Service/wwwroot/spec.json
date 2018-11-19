@@ -516,7 +516,7 @@
     },
 	"/api/CapabilitiesImplementedReview/ById/{id}" : {
       "get" : {
-        "tags" : [ "CapabilitiesImplementedReview" ],
+        "tags" : [ "CapabilitiesImplementedReviews" ],
         "summary" : "Get a Capabilities Implemented record by the given review id.",
         "operationId" : "ApiCapabilitiesImplementedByReviewIdGet",
         "consumes" : [ ],
@@ -1742,7 +1742,7 @@
     },
 	"/api/StandardsApplicableReview/ById/{id}" : {
       "get" : {
-        "tags" : [ "StandardsApplicable" ],
+        "tags" : [ "StandardsApplicableReviews" ],
         "summary" : "Retrieve StandardApplicable record for a given review id.",
         "operationId" : "ApiStandardsApplicableByReviewIdGet",
         "consumes" : [ ],
