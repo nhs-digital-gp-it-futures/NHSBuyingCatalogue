@@ -94,6 +94,13 @@ authentication(app).then(() => {
 
   // generic error handler
   app.use((err, req, res, next) => {
+    console.error(err.stack)
+
+    // don't allow the stack through to the template in production
+    if (process.env.NODE_ENV === 'production') {
+      delete err.stack
+    }
+
     res.status(500)
     res.render('error', { error: err })
   })
