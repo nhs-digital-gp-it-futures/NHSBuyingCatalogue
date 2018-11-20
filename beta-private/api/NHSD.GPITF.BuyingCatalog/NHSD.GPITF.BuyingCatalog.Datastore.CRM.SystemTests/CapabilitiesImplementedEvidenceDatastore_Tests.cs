@@ -19,7 +19,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     }
 
     [Test]
-    public void Crud_Succeeds()
+    public void CRUD_Succeeds()
     {
       var soln = Retriever.GetAllSolutions(_policy).First();
       var contact = Retriever.GetAllContacts(_policy).First(cont => cont.OrganisationId == soln.OrganisationId);
