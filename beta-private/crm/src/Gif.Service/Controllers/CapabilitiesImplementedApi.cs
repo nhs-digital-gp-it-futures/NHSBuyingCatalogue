@@ -38,7 +38,7 @@ namespace Gif.Service.Controllers
         /// <response code="200">Success</response>
         /// <response code="404">Claim not found in CRM</response>
         [HttpGet]
-        [Route("/api/CapabilitiesImplemented/{id}")]
+        [Route("/api/CapabilitiesImplemented/ById/{id}")]
         [ValidateModelState]
         [SwaggerOperation("ApiCapabilitiesImplementedByIdGet")]
         [SwaggerResponse(statusCode: 200, type: typeof(CapabilityImplemented), description: "Success")]
