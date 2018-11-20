@@ -58,7 +58,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
 
       try
       {
-        createdEnt.Should().BeEquivalentTo(newEnt, opt => opt.Excluding(tc => tc.Id));
+        createdEnt.Should().BeEquivalentTo(newEnt);
 
         // update
         createdEnt.FirstName = "Jon";

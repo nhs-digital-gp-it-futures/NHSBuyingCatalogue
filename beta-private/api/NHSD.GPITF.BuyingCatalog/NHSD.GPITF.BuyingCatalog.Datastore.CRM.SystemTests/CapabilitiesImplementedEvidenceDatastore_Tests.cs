@@ -47,7 +47,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       };
       Verifier.Verify(newEvidence);
       var createdEvidence = datastore.Create(newEvidence);
-      createdEvidence.Should().BeEquivalentTo(newEvidence, opt => opt.Excluding(ev => ev.Id));
+      createdEvidence.Should().BeEquivalentTo(newEvidence);
 
       try
       {

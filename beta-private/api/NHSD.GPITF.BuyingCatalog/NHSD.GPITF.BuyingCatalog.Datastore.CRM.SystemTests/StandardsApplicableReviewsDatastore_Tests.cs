@@ -60,7 +60,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       };
       Verifier.Verify(newReview);
       var createdReview = datastore.Create(newReview);
-      createdReview.Should().BeEquivalentTo(newReview, opt => opt.Excluding(rev => rev.Id));
+      createdReview.Should().BeEquivalentTo(newReview);
 
       try
       {

@@ -50,7 +50,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
 
       try
       {
-        createdEnt.Should().BeEquivalentTo(newEnt, opt => opt.Excluding(ent => ent.Id));
+        createdEnt.Should().BeEquivalentTo(newEnt);
 
         // update
         createdEnt.Status = StandardsApplicableStatus.Submitted;

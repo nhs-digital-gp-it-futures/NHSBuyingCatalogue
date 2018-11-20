@@ -112,7 +112,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
 
       try
       {
-        createdEnt.Should().BeEquivalentTo(newEnt, opt => opt.Excluding(soln => soln.Id));
+        createdEnt.Should().BeEquivalentTo(newEnt);
 
         // retrieve
         var retrievedEnt = datastore.ById(createdEnt.Id);
