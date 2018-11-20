@@ -20,10 +20,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     {
       var datastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
-      var datas = datastore.GetAll();
+      var datas = datastore.GetAll().ToList();
 
       datas.Should().NotBeEmpty();
-      datas.ToList().ForEach(fw => Verifier.Verify(fw));
+      datas.ForEach(fw => Verifier.Verify(fw));
     }
 
     [Test]

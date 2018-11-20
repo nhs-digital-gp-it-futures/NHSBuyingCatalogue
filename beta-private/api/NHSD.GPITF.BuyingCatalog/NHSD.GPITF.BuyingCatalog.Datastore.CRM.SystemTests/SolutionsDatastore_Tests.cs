@@ -21,14 +21,14 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void ByFramework_ReturnsData()
     {
-      var otherDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
-      var others = otherDatastore.GetAll();
+      var frameworksDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
+      var frameworks = frameworksDatastore.GetAll().ToList();
       var datastore = new SolutionsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
-      var datas = others.ToList().SelectMany(other => datastore.ByFramework(other.Id));
+      var datas = frameworks.SelectMany(other => datastore.ByFramework(other.Id)).ToList();
 
       datas.Should().NotBeEmpty();
-      datas.ToList().ForEach(data => Verifier.Verify(data));
+      datas.ForEach(data => Verifier.Verify(data));
     }
 
     [Test]
@@ -44,10 +44,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void ById_KnownId_ReturnsData()
     {
-      var otherDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
-      var others = otherDatastore.GetAll();
+      var frameworksDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
+      var frameworks = frameworksDatastore.GetAll().ToList();
       var datastore = new SolutionsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
-      var allData = others.ToList().SelectMany(other => datastore.ByFramework(other.Id));
+      var allData = frameworks.SelectMany(other => datastore.ByFramework(other.Id));
 
       var allDataById = allData.Select(data => datastore.ById(data.Id));
 
@@ -67,18 +67,18 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void ByOrganisation_KnownId_ReturnsData()
     {
-      var otherDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
-      var others = otherDatastore.GetAll();
+      var frameworksDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
+      var frameworks = frameworksDatastore.GetAll().ToList();
       var datastore = new SolutionsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
-      var orgIds = others.ToList()
+      var orgIds = frameworks
         .SelectMany(other => datastore.ByFramework(other.Id))
         .Select(soln => soln.OrganisationId)
         .Distinct();
 
-      var allDataByOrg = orgIds.SelectMany(orgId => datastore.ByOrganisation(orgId));
+      var allDataByOrg = orgIds.SelectMany(orgId => datastore.ByOrganisation(orgId)).ToList();
 
       allDataByOrg.Should().NotBeEmpty();
-      allDataByOrg.ToList().ForEach(soln => Verifier.Verify(soln));
+      allDataByOrg.ForEach(soln => Verifier.Verify(soln));
     }
 
     [Test]
@@ -86,9 +86,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
 
     {
       var frameworksDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
-      var frameworks = frameworksDatastore.GetAll();
+      var frameworks = frameworksDatastore.GetAll().ToList();
       var datastore = new SolutionsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
-      var orgId = frameworks.ToList()
+      var orgId = frameworks
         .SelectMany(other => datastore.ByFramework(other.Id))
         .Select(soln => soln.OrganisationId)
         .First();

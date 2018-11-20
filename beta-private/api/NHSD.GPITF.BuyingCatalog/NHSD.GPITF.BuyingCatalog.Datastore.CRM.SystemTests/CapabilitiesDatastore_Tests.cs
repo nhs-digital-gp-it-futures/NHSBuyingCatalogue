@@ -22,10 +22,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     {
       var datastore = new CapabilitiesDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
-      var datas = datastore.GetAll();
+      var datas = datastore.GetAll().ToList();
 
       datas.Should().NotBeEmpty();
-      datas.ToList().ForEach(data => Verifier.Verify(data));
+      datas.ForEach(data => Verifier.Verify(data));
     }
 
     [Test]
@@ -44,7 +44,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datastore = new CapabilitiesDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
       var allData = datastore.GetAll().ToList();
 
-      var allDataById = allData.Select(data => datastore.ById(data.Id));
+      var allDataById = allData.Select(data => datastore.ById(data.Id)).ToList();
 
       allDataById.Should().BeEquivalentTo(allData);
     }
@@ -54,9 +54,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     {
       var datastore = new CapabilitiesDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
       var allData = datastore.GetAll();
-      var allDataIds = allData.Select(data => data.Id);
+      var allDataIds = allData.Select(data => data.Id).ToList();
 
-      var allDataByIds = datastore.ByIds(allDataIds);
+      var allDataByIds = datastore.ByIds(allDataIds).ToList();
 
       allDataByIds.Should().BeEquivalentTo(allData);
     }
@@ -64,27 +64,27 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void ByFramework_KnownIds_ReturnsData()
     {
-      var otherDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
-      var others = otherDatastore.GetAll();
+      var frameworksDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
+      var frameworks = frameworksDatastore.GetAll().ToList();
       var datastore = new CapabilitiesDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
-      var datas = others.ToList().SelectMany(other => datastore.ByFramework(other.Id));
+      var datas = frameworks.SelectMany(other => datastore.ByFramework(other.Id)).ToList();
 
       datas.Should().NotBeEmpty();
-      datas.ToList().ForEach(data => Verifier.Verify(data));
+      datas.ForEach(data => Verifier.Verify(data));
     }
 
     [Test]
     public void ByStandard_KnownIds_ReturnsData()
     {
-      var otherDatastore = new StandardsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<StandardsDatastore>>().Object, _policy);
-      var others = otherDatastore.GetAll();
+      var stdsDatastore = new StandardsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<StandardsDatastore>>().Object, _policy);
+      var stds = stdsDatastore.GetAll().ToList();
       var datastore = new CapabilitiesDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
-      var datas = others.ToList().SelectMany(other => datastore.ByStandard(other.Id, true));
+      var datas = stds.SelectMany(other => datastore.ByStandard(other.Id, true)).ToList();
 
       datas.Should().NotBeEmpty();
-      datas.ToList().ForEach(data => Verifier.Verify(data));
+      datas.ForEach(data => Verifier.Verify(data));
     }
   }
 }

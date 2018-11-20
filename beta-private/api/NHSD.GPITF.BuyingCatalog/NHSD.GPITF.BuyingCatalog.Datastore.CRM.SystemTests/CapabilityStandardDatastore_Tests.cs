@@ -21,10 +21,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     {
       var datastore = new CapabilityStandardDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<CapabilityStandardDatastore>>().Object, _policy);
 
-      var datas = datastore.GetAll();
+      var datas = datastore.GetAll().ToList();
 
       datas.Should().NotBeEmpty();
-      datas.ToList().ForEach(data => Verifier.Verify(data));
+      datas.ForEach(data => Verifier.Verify(data));
     }
   }
 }

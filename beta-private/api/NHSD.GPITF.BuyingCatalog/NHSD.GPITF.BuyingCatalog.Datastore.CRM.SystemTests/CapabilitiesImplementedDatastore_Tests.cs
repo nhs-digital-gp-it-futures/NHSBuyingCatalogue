@@ -21,13 +21,13 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     public void BySolution_ReturnsData()
     {
       var allSolns = Retriever.GetAllSolutions(_policy);
-      var ids = allSolns.Select(soln => soln.Id).Distinct();
+      var ids = allSolns.Select(soln => soln.Id).Distinct().ToList();
       var datastore = new CapabilitiesImplementedDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
-      var datas = ids.ToList().SelectMany(id => datastore.BySolution(id));
+      var datas = ids.SelectMany(id => datastore.BySolution(id)).ToList();
 
       datas.Should().NotBeEmpty();
-      datas.ToList().ForEach(data => Verifier.Verify(data));
+      datas.ForEach(data => Verifier.Verify(data));
     }
 
     [Test]
