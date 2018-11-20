@@ -9,7 +9,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
 {
   internal static class Retriever
   {
-    public static IEnumerable<Contacts> GetAllContacts(ISyncPolicyFactory _policy)
+    public static List<Contacts> GetAllContacts(ISyncPolicyFactory _policy)
     {
       var frameworksDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
       var frameworks = frameworksDatastore.GetAll().ToList();
@@ -22,7 +22,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       return datas;
     }
 
-    public static IEnumerable<Solutions> GetAllSolutions(ISyncPolicyFactory _policy)
+    public static List<Solutions> GetAllSolutions(ISyncPolicyFactory _policy)
     {
       var frameworksDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
       var frameworks = frameworksDatastore.GetAll().ToList();
@@ -32,7 +32,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       return allSolns;
     }
 
-    public static IEnumerable<Capabilities> GetAllCapabilities(ISyncPolicyFactory _policy)
+    public static List<Capabilities> GetAllCapabilities(ISyncPolicyFactory _policy)
     {
       var datastore = new CapabilitiesDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<CapabilitiesDatastore>>().Object, _policy);
       var datas = datastore.GetAll().ToList();
@@ -40,7 +40,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       return datas;
     }
 
-    public static IEnumerable<Standards> GetAllStandards(ISyncPolicyFactory _policy)
+    public static List<Standards> GetAllStandards(ISyncPolicyFactory _policy)
     {
       var datastore = new StandardsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<StandardsDatastore>>().Object, _policy);
       var datas = datastore.GetAll().ToList();
