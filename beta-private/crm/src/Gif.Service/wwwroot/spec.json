@@ -204,7 +204,7 @@
         } ]
       }
     },
-    "/api/CapabilitiesImplemented/{id}" : {
+    "/api/CapabilitiesImplemented/ById/{id}" : {
       "get" : {
         "tags" : [ "CapabilitiesImplemented" ],
         "summary" : "Retrieve claim, given the claim’s CRM identifier",
@@ -1430,7 +1430,7 @@
         } ]
       }
     },
-    "/api/StandardsApplicable/{id}" : {
+    "/api/StandardsApplicable/ById/{id}" : {
       "get" : {
         "tags" : [ "StandardsApplicable" ],
         "summary" : "Retrieve claim, given the claim’s CRM identifier",
