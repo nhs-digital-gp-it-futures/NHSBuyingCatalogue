@@ -12,13 +12,12 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     public static IEnumerable<Contacts> GetAllContacts(ISyncPolicyFactory _policy)
     {
       var frameworksDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
-      var frameworks = frameworksDatastore.GetAll();
+      var frameworks = frameworksDatastore.GetAll().ToList();
       var solnDatastore = new SolutionsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<SolutionsDatastore>>().Object, _policy);
-      var allSolns = frameworks.ToList().SelectMany(fw => solnDatastore.ByFramework(fw.Id));
-      var allOrgIds = allSolns.Select(soln => soln.Id).Distinct();
+      var allSolns = frameworks.SelectMany(fw => solnDatastore.ByFramework(fw.Id)).ToList();
+      var allOrgIds = allSolns.Select(soln => soln.OrganisationId).Distinct().ToList();
       var datastore = new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<ContactsDatastore>>().Object, _policy);
-
-      var datas = allOrgIds.ToList().SelectMany(orgId => datastore.ByOrganisation(orgId));
+      var datas = allOrgIds.SelectMany(orgId => datastore.ByOrganisation(orgId)).ToList();
 
       return datas;
     }
@@ -26,13 +25,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     public static IEnumerable<Solutions> GetAllSolutions(ISyncPolicyFactory _policy)
     {
       var frameworksDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
-      var frameworks = frameworksDatastore.GetAll();
+      var frameworks = frameworksDatastore.GetAll().ToList();
       var solnDatastore = new SolutionsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<SolutionsDatastore>>().Object, _policy);
-      var allSolns = frameworks.ToList().SelectMany(fw => solnDatastore.ByFramework(fw.Id));
-      var allOrgIds = allSolns.Select(soln => soln.Id).Distinct();
-      var datastore = new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<ContactsDatastore>>().Object, _policy);
-
-      var datas = allOrgIds.ToList().SelectMany(orgId => datastore.ByOrganisation(orgId));
+      var allSolns = frameworks.SelectMany(fw => solnDatastore.ByFramework(fw.Id)).ToList();
 
       return allSolns;
     }
@@ -40,14 +35,16 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     public static IEnumerable<Capabilities> GetAllCapabilities(ISyncPolicyFactory _policy)
     {
       var datastore = new CapabilitiesDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<CapabilitiesDatastore>>().Object, _policy);
-      var datas = datastore.GetAll();
+      var datas = datastore.GetAll().ToList();
+
       return datas;
     }
 
     public static IEnumerable<Standards> GetAllStandards(ISyncPolicyFactory _policy)
     {
       var datastore = new StandardsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<StandardsDatastore>>().Object, _policy);
-      var datas = datastore.GetAll();
+      var datas = datastore.GetAll().ToList();
+
       return datas;
     }
 
