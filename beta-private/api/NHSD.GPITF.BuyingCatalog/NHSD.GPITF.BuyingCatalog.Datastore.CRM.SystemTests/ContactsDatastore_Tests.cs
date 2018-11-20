@@ -29,7 +29,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void ById_ReturnsData()
     {
-      var ids = Retriever.GetAllContacts(_policy).Select(ent => ent.EmailAddress1).ToList();
+      var ids = Retriever.GetAllContacts(_policy).Select(ent => ent.Id).ToList();
       var datastore = new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
       var datas = ids.Select(id => datastore.ById(id)).ToList();
