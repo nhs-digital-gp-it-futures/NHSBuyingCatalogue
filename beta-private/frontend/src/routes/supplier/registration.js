@@ -197,8 +197,8 @@ async function capabilitiesPageContext (req) {
     .map(c => ({
       ...c,
       standardIds: _(c.standards)
-        .reject(c => context.standards[c.standardId].isOverarching)
-        .map('standardId')
+        .reject(c => context.standards[c.id].isOverarching)
+        .map('id')
         .value()
     }))
     .value()
@@ -263,7 +263,7 @@ async function capabilitiesPagePost (req, res) {
     res.render('supplier/registration/2-capabilities', context)
   } else {
     // redirect based on action chosen
-    const redirectUrl = (req.body.action && req.body.action.save)
+    const redirectUrl = (req.body.action && req.body.action.exit)
       ? '../'
       : './'
 

@@ -11,6 +11,8 @@ const solutionOnboardingStatusMap = {
 
 const EMPTY_UUID = '00000000-0000-0000-0000-000000000000'
 
+const isOverarchingStandard = std => _.startsWith(std.standardId || std.id, 'STD-O-')
+
 // set up the data layer caches
 const cacheManager = require('cache-manager')
 const cacheStoreParams = process.env.CACHE_HOST
@@ -165,15 +167,24 @@ class DataProvider {
         standard
       } = await this.capabilityMappingsApi.apiPorcelainCapabilityMappingsGet()
 
+      const standards = _.keyBy(standard, 'id')
+
       return {
         capabilities: _(capabilityMapping)
-          .map(({ capability, optionalStandard }) => ({
-            ...capability,
-            standards: optionalStandard
-          }))
+          .map(({ capability, optionalStandard }) => {
+            const capStds = _.map(optionalStandard, ({ standardId }) => standards[standardId])
+            return {
+              ...capability,
+              standards: capStds,
+              standardsByGroup: _.zipObject(
+                ['overarching', 'associated'],
+                _.partition(capStds, isOverarchingStandard)
+              )
+            }
+          })
           .keyBy('id')
           .value(),
-        standards: _.keyBy(standard, 'id')
+        standards
       }
     })
   }

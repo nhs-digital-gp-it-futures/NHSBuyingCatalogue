@@ -1,6 +1,5 @@
 <li class="capability {{types}}">
   <h4 class="name">{{name}}</h4>
-  <a class="toggle-reveal" href="#">﹀</a>
   
   <section class="reveal">
     <p class="description">
@@ -14,16 +13,15 @@
     <div>
     <section class="standards">
       <ul>
-        {{#standards.capability}}
+        {{#standardsByGroup.associated}}
         <li><a href="{{url}}" target="_blank">{{name}}</a></li>
-        {{/standards.capability}}
+        {{/standardsByGroup.associated}}
       </ul>
     </section>
     </div>
 
     <section class="selection">
-      <p>{{t 'Onboarding.Capabilities.Reveal.Selection.Preamble'}}</p>
-      <div>
+      <div class="controls">
         <input
           id="select-capability-{{id}}" 
           type="checkbox"
@@ -37,6 +35,7 @@
           <span class="remove">{{t 'Onboarding.Capabilities.Reveal.Selection.RemoveSelection'}}</span>
         </label>
       </div>
+      <p class="preamble">{{t 'Onboarding.Capabilities.Reveal.Selection.Preamble'}}</p>
     </section>
   </section>
 </li>
