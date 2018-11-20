@@ -88,59 +88,67 @@
 /* global $, $$ */
 'use strict'
 
-function updateCounter (elCounterSection, count) {
-  count = +count
-  $('.counter', elCounterSection).innerText = count
-  elCounterSection.classList.toggle('singular', count === 1)
-  elCounterSection.classList.toggle('plural', count !== 1)
-}
-
-function updateSummary () {
-  const selectedCapabilities = $$('[type=checkbox][name^=capabilities][data-id]:checked')
-
-  // update the capability count and plurality
-  updateCounter($('#capability-summary .capability-count'), selectedCapabilities.length)
-
-  // set selected class on all selected capabilities in summary
-  const elCapabilityList = $('#capability-summary .capabilities')
-  const selectedCapabilityIds = selectedCapabilities.map(el => el.dataset.id)
-  $$('[data-id]', elCapabilityList).forEach(el => {
-    el.classList.toggle('selected', selectedCapabilityIds.includes(el.dataset.id))
-  })
-
-  // generate the list of associated standards for all selected capabilities
-  const assocStdIds = selectedCapabilities.map(el => el.dataset.stdIds)
-    .filter(_ => _)
-    .map(stdIds => stdIds.split(','))
-    .reduce((acc, val) => acc.concat(val), [])
-
-  // hide all the associated standards and their section
-  const elStandardsSection = $('#capability-summary .standards')
-  const baseStdCount = +elStandardsSection.dataset.baseStdCount
-  let assocStdCount = 0
-  const stdIdToAssocStdEl = {}
-
-  $$('.associated, .associated [data-id]', elStandardsSection).forEach(el => {
-    el.classList.remove('selected')
-    if (el.dataset.id) {
-      stdIdToAssocStdEl[el.dataset.id] = el
-    }
-  })
-
-  // show only the standards associated with the selected capabilities
-  assocStdIds.forEach(stdId => {
-    stdIdToAssocStdEl[stdId].classList.add('selected')
-    assocStdCount++
-  })
-
-  // update the standards required count, taking the overarching standards into account
-  if (assocStdCount) {
-    $('.associated', elStandardsSection).classList.add('selected')
-  }
-  updateCounter($('#capability-summary .standard-count'), baseStdCount + assocStdCount)
-}
-
 document.addEventListener('DOMContentLoaded', function () {
+  // utility functions in place of inline arrow lambdas
+  function nonEmptyItems (item) { return !!item }
+  function idFromDataset (el) { return el.dataset.id }
+  function standardsIdsFromDataset (el) { return el.dataset.stdIds }
+  function toggleSelected (el, force) { el.classList.toggle('selected', force) }
+  function splitOnCommas (str) { return str.split(',') }
+  function concatAll (acc, val) { return acc.concat(val) }
+
+  function updateCounter (elCounterSection, count) {
+    count = +count
+    $('.counter', elCounterSection).innerText = count
+    elCounterSection.classList.toggle('singular', count === 1)
+    elCounterSection.classList.toggle('plural', count !== 1)
+  }
+
+  function updateSummary () {
+    const selectedCapabilities = $$('[type=checkbox][name^=capabilities][data-id]:checked')
+
+    // update the capability count and plurality
+    updateCounter($('#capability-summary .capability-count'), selectedCapabilities.length)
+
+    // set selected class on all selected capabilities in summary
+    const elCapabilityList = $('#capability-summary .capabilities')
+    const selectedCapabilityIds = selectedCapabilities.map(idFromDataset)
+    $$('[data-id]', elCapabilityList).forEach(function (el) {
+      toggleSelected(el, selectedCapabilityIds.includes(idFromDataset(el)))
+    })
+
+    // generate the list of associated standards for all selected capabilities
+    const assocStdIds = selectedCapabilities.map(standardsIdsFromDataset)
+      .filter(nonEmptyItems)
+      .map(splitOnCommas)
+      .reduce(concatAll, [])
+
+    // hide all the associated standards and their section
+    const elStandardsSection = $('#capability-summary .standards')
+    const baseStdCount = +elStandardsSection.dataset.baseStdCount
+    let assocStdCount = 0
+    const stdIdToAssocStdEl = {}
+
+    $$('.associated, .associated [data-id]', elStandardsSection).forEach(function (el) {
+      el.classList.remove('selected')
+      if (el.dataset.id) {
+        stdIdToAssocStdEl[el.dataset.id] = el
+      }
+    })
+
+    // show only the standards associated with the selected capabilities
+    assocStdIds.forEach(function (stdId) {
+      stdIdToAssocStdEl[stdId].classList.add('selected')
+      assocStdCount++
+    })
+
+    // update the standards required count, taking the overarching standards into account
+    if (assocStdCount) {
+      $('.associated', elStandardsSection).classList.add('selected')
+    }
+    updateCounter($('#capability-summary .standard-count'), baseStdCount + assocStdCount)
+  }
+
   $('#content form').addEventListener('change', updateSummary)
   updateSummary()
 })
