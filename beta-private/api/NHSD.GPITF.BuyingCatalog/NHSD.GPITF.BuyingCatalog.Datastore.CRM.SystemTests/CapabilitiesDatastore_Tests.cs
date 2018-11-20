@@ -68,7 +68,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var frameworks = frameworksDatastore.GetAll().ToList();
       var datastore = new CapabilitiesDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
-      var datas = frameworks.SelectMany(other => datastore.ByFramework(other.Id)).ToList();
+      var datas = frameworks.SelectMany(fw => datastore.ByFramework(fw.Id)).ToList();
 
       datas.Should().NotBeEmpty();
       datas.ForEach(data => Verifier.Verify(data));
@@ -81,7 +81,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var stds = stdsDatastore.GetAll().ToList();
       var datastore = new CapabilitiesDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
-      var datas = stds.SelectMany(other => datastore.ByStandard(other.Id, true)).ToList();
+      var datas = stds.SelectMany(std => datastore.ByStandard(std.Id, true)).ToList();
 
       datas.Should().NotBeEmpty();
       datas.ForEach(data => Verifier.Verify(data));

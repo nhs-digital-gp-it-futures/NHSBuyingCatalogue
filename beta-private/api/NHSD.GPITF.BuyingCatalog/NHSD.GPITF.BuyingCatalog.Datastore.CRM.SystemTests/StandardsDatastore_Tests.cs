@@ -77,11 +77,11 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void ByCapability_KnownIds_ReturnsData()
     {
-      var otherDatastore = new CapabilitiesDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<CapabilitiesDatastore>>().Object, _policy);
-      var others = otherDatastore.GetAll().ToList();
+      var capsDatastore = new CapabilitiesDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<CapabilitiesDatastore>>().Object, _policy);
+      var caps = capsDatastore.GetAll().ToList();
       var datastore = new StandardsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
-      var datas = others.SelectMany(other => datastore.ByCapability(other.Id, true)).ToList();
+      var datas = caps.SelectMany(cap => datastore.ByCapability(cap.Id, true)).ToList();
 
       datas.Should().NotBeEmpty();
       datas.ForEach(data => Verifier.Verify(data));
