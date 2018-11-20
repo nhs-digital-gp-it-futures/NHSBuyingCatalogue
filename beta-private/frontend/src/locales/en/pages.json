@@ -86,6 +86,10 @@
       }
     },
     "Capabilities": {
+      "Breadcrumb": "Register $t(Solution) (2 of 4)",
+      "Backlink": {
+        "Title": "$t(Solution) details"
+      },
       "Title": "Which $t(Capability_plural) does your $t(Solution) provide?*",
       "Subtitle": "Select all that apply to build the requirements for the next two stages.",
       "Preamble": [

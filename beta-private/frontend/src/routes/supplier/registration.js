@@ -262,7 +262,12 @@ async function capabilitiesPagePost (req, res) {
   if (context.errors) {
     res.render('supplier/registration/2-capabilities', context)
   } else {
-    res.redirect('../')
+    // redirect based on action chosen
+    const redirectUrl = (req.body.action && req.body.action.save)
+      ? '../'
+      : './'
+
+    res.redirect(redirectUrl)
   }
 }
 
