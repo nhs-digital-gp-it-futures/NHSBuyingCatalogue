@@ -27,12 +27,16 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
           }
         }
 
+        if (prop.PropertyType != typeof(string))
+        {
+          continue;
+        }
+
         var required = prop.GetCustomAttribute<RequiredAttribute>();
         if (required != null && !required.AllowEmptyStrings)
         {
           var value = prop.GetValue(obj) as string;
-          if (value != null &&
-            string.IsNullOrWhiteSpace(value))
+          if (string.IsNullOrWhiteSpace(value))
           {
             throw new InvalidOperationException($"Value is null or whitespace:  {prop.ReflectedType}.{prop.Name}");
           }
