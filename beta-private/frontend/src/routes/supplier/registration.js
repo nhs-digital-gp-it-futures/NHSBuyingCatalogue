@@ -220,7 +220,7 @@ async function capabilitiesPageGet (req, res) {
   const context = await capabilitiesPageContext(req)
 
   context.capabilities.forEach(cap => {
-    cap.selected = _.some(req.solution.capabilities, { capabilityId: cap.id })
+    cap.selected = _.get(_.find(req.solution.capabilities, { capabilityId: cap.id }), 'id')
   })
 
   res.render('supplier/registration/2-capabilities', context)
@@ -229,8 +229,11 @@ async function capabilitiesPageGet (req, res) {
 async function capabilitiesPagePost (req, res) {
   const context = await capabilitiesPageContext(req)
 
+  // the "selected" property holds the current ID for each claimed capability,
+  // or a newly generated ID for an added capability
   context.capabilities.forEach(cap => {
-    cap.selected = _.has(req.body.capabilities, cap.id)
+    cap.selected = _.has(req.body.capabilities, cap.id) &&
+      (req.body.capabilities[cap.id] || require('node-uuid-generator').generate())
   })
 
   const valres = validationResult(req)
@@ -243,7 +246,7 @@ async function capabilitiesPagePost (req, res) {
     req.solution.capabilities = _(context.capabilities)
       .filter('selected')
       .map(cap => ({
-        id: require('node-uuid-generator').generate(),
+        id: cap.selected,
         capabilityId: cap.id,
         status: '0',
         solutionId: req.solution.id

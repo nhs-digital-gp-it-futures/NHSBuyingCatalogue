@@ -26,7 +26,8 @@
           id="select-capability-{{id}}" 
           type="checkbox"
           name="capabilities[{{id}}]"
-          {{#selected}} checked{{/selected}}
+          {{#selected}} checked value="{{.}}"{{/selected}}
+          value=""
           data-id="{{id}}"
           data-std-ids="{{standardIds}}">
         <label for="select-capability-{{id}}" class="unchecked button">{{t 'Onboarding.Capabilities.Reveal.Selection.Select'}}</label>
