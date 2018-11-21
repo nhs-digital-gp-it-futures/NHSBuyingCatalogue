@@ -24,7 +24,7 @@ namespace Gif.Service.Models
 
         [DataMember]
         [CrmFieldName("emailaddress1")]
-        public string Email { get; set; }
+        public string EmailAddress1 { get; set; }
 
         [DataMember]
         [CrmFieldName("_parentcustomerid_value")]
