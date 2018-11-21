@@ -15,7 +15,7 @@ services:
     networks:
       - beta_network
 
-    crm:
+  crm:
     image: gpitf/catalogue-crm:private-beta
     build: ./crm
     ports:
