@@ -17,11 +17,11 @@ namespace Gif.Service.Models
 
         [DataMember]
         [CrmFieldName("cc_startdateandtime")]
-        public DateTime StartDateTime { get; set; }
+        public DateTime? StartDateTime { get; set; }
 
         [DataMember]
         [CrmFieldName("cc_enddateandtime")]
-        public DateTime EndDateTime { get; set; }
+        public DateTime? EndDateTime { get; set; }
 
         [DataMember]
         [CrmFieldName("cc_isdeleted")]
