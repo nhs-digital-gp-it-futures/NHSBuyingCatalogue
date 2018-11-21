@@ -47,10 +47,11 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       };
       Verifier.Verify(newEvidence);
       var createdEvidence = datastore.Create(newEvidence);
-      createdEvidence.Should().BeEquivalentTo(newEvidence);
 
       try
       {
+        createdEvidence.Should().BeEquivalentTo(newEvidence);
+
         // retrieve ById
         datastore.ById(createdEvidence.Id)
           .Should().NotBeNull()
