@@ -30,6 +30,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datas = allSolns.SelectMany(soln => datastore.BySolution(soln.Id)).ToList();
 
       datas.Should().NotBeEmpty();
+      datas.ForEach(data => data.Should().NotBeNull());
       datas.ForEach(data => Verifier.Verify(data));
     }
 

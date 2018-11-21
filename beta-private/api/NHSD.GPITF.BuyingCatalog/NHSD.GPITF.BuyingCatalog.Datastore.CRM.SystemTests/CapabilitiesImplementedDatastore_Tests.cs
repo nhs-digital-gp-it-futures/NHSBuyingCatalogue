@@ -27,6 +27,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datas = ids.SelectMany(id => datastore.BySolution(id)).ToList();
 
       datas.Should().NotBeEmpty();
+      datas.ForEach(data => data.Should().NotBeNull());
       datas.ForEach(data => Verifier.Verify(data));
     }
 

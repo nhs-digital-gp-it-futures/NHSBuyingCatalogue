@@ -25,6 +25,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datas = datastore.GetAll().ToList();
 
       datas.Should().NotBeEmpty();
+      datas.ForEach(data => data.Should().NotBeNull());
       datas.ForEach(data => Verifier.Verify(data));
     }
 
@@ -71,6 +72,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datas = frameworks.SelectMany(fw => datastore.ByFramework(fw.Id)).ToList();
 
       datas.Should().NotBeEmpty();
+      datas.ForEach(data => data.Should().NotBeNull());
       datas.ForEach(data => Verifier.Verify(data));
     }
 
@@ -84,6 +86,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datas = caps.SelectMany(cap => datastore.ByCapability(cap.Id, true)).ToList();
 
       datas.Should().NotBeEmpty();
+      datas.ForEach(data => data.Should().NotBeNull());
       datas.ForEach(data => Verifier.Verify(data));
     }
   }

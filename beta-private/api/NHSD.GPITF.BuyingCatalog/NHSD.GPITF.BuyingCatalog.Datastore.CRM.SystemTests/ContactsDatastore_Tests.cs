@@ -17,12 +17,13 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void ByEmail_ReturnsData()
     {
-      var emails = Retriever.GetAllContacts(_policy).Select(ent => ent.EmailAddress1);
+      var emails = Retriever.GetAllContacts(_policy).Select(ent => ent.EmailAddress1).ToList();
       var datastore = new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
       var datas = emails.Select(email => datastore.ByEmail(email)).ToList();
 
       datas.Should().NotBeEmpty();
+      datas.ForEach(data => data.Should().NotBeNull());
       datas.ForEach(data => Verifier.Verify(data));
     }
 
@@ -35,6 +36,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datas = ids.Select(id => datastore.ById(id)).ToList();
 
       datas.Should().NotBeEmpty();
+      datas.ForEach(data => data.Should().NotBeNull());
       datas.ForEach(data => Verifier.Verify(data));
     }
 
@@ -44,6 +46,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datas = Retriever.GetAllContacts(_policy);
 
       datas.Should().NotBeEmpty();
+      datas.ForEach(data => data.Should().NotBeNull());
       datas.ForEach(data => Verifier.Verify(data));
     }
   }
