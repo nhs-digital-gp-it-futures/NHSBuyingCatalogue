@@ -141,6 +141,22 @@ class DataProvider {
       }
     })
 
+    // because the API server doesn't do this for me, implement cascading
+    // delete of evidence/reviews for any capabilities and standards that
+    // have been removed
+    solnEx.claimedCapabilityEvidence = _.filter(solnEx.claimedCapabilityEvidence,
+      ev => _.some(solnEx.claimedCapability, { id: ev.claimId })
+    )
+    solnEx.claimedCapabilityReview = _.filter(solnEx.claimedCapabilityReview,
+      rev => _.some(solnEx.claimedCapabilityEvidence, { id: rev.evidenceId })
+    )
+    solnEx.claimedStandardEvidence = _.filter(solnEx.claimedStandardEvidence,
+      ev => _.some(solnEx.claimedStandard, { id: ev.claimId })
+    )
+    solnEx.claimedStandardReview = _.filter(solnEx.claimedStandardReview,
+      rev => _.some(solnEx.claimedStandardEvidence, { id: rev.evidenceId })
+    )
+
     await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
     return this.solutionForRegistration(solution.id)
   }

@@ -140,9 +140,31 @@ describe('updateSolutionForRegistration', () => {
   beforeEach(() => {
     subject.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet.mockReturnValue({
       solution: {},
-      claimedCapability: [],
-      claimedStandard: [],
-      technicalContact: []
+      claimedCapability: [
+        { id: 'testCId1', capabilityId: 'CAP1' },
+        { id: 'testCId2', capabilityId: 'CAP2' }
+      ],
+      claimedStandard: [
+        { id: 'testSId1', standardId: 'STD1' },
+        { id: 'testSId2', standardId: 'STD2' }
+      ],
+      technicalContact: [],
+      claimedCapabilityEvidence: [
+        { id: 'cce1', claimId: 'testCId1' },
+        { id: 'cce2', claimId: 'testCId2' }
+      ],
+      claimedCapabilityReview: [
+        { id: 'ccr1', evidenceId: 'cce1' },
+        { id: 'ccr2', evidenceId: 'cce2' }
+      ],
+      claimedStandardEvidence: [
+        { id: 'cse1', claimId: 'testSId1' },
+        { id: 'cse2', claimId: 'testSId2' }
+      ],
+      claimedStandardReview: [
+        { id: 'csr1', evidenceId: 'cse1' },
+        { id: 'csr2', evidenceId: 'cse2' }
+      ]
     })
   })
 
@@ -151,10 +173,10 @@ describe('updateSolutionForRegistration', () => {
       id: 'testid',
       name: 'testname',
       capabilities: [
-        { claimedCapabilityId: 'testCCId' }
+        { id: 'testCCId', capabilityId: 'C1' }
       ],
       standards: [
-        { claimedStandardId: 'testCSId' }
+        { id: 'testCSId', standardId: 'S1' }
       ],
       contacts: [
         { id: '1234', contactId: 'testCId1', contactType: 'Lead Contact' },
@@ -172,10 +194,10 @@ describe('updateSolutionForRegistration', () => {
           name: 'testname'
         },
         claimedCapability: [
-          { claimedCapabilityId: 'testCCId' }
+          { id: 'testCCId', capabilityId: 'C1' }
         ],
         claimedStandard: [
-          { claimedStandardId: 'testCSId' }
+          { id: 'testCSId', standardId: 'S1' }
         ],
         technicalContact: [
           { id: '1234', contactId: 'testCId1', contactType: 'Lead Contact' },
@@ -212,6 +234,58 @@ describe('updateSolutionForRegistration', () => {
         ]
       }
     })
+  })
+
+  it('should cascade delete evidence and reviews for removed capabilities and standards', async () => {
+    const input = {
+      id: 'testid',
+      name: 'testname',
+      capabilities: [
+        { id: 'newcap', capabilityId: 'CAP6' },
+        { id: 'testCId1', capabilityId: 'CAP1' }
+      ],
+      standards: [
+        { id: 'testSId2', standardId: 'STD2' },
+        { id: 'newstd', standardId: 'STD1' }
+      ]
+    }
+
+    await subject.updateSolutionForRegistration(input)
+    expect(subject.solutionsExApi.apiPorcelainSolutionsExUpdatePut.mock.calls.length).toBe(1)
+
+    const result = subject.solutionsExApi.apiPorcelainSolutionsExUpdatePut.mock.calls[0][0]
+    expect(result).toMatchObject({
+      solnEx: {
+        solution: {
+          id: 'testid',
+          name: 'testname'
+        },
+        claimedCapability: [
+          { id: 'newcap', capabilityId: 'CAP6' },
+          { id: 'testCId1', capabilityId: 'CAP1' }
+        ],
+        claimedStandard: [
+          { id: 'testSId2', standardId: 'STD2' },
+          { id: 'newstd', standardId: 'STD1' }
+        ],
+        claimedCapabilityEvidence: [
+          { id: 'cce1', claimId: 'testCId1' }
+        ],
+        claimedCapabilityReview: [
+          { id: 'ccr1', evidenceId: 'cce1' }
+        ],
+        claimedStandardEvidence: [
+          { id: 'cse2', claimId: 'testSId2' }
+        ],
+        claimedStandardReview: [
+          { id: 'csr2', evidenceId: 'cse2' }
+        ]
+      }
+    })
+    expect(result.solnEx.claimedCapabilityEvidence).toHaveLength(1)
+    expect(result.solnEx.claimedCapabilityReview).toHaveLength(1)
+    expect(result.solnEx.claimedStandardEvidence).toHaveLength(1)
+    expect(result.solnEx.claimedStandardReview).toHaveLength(1)
   })
 })
 
