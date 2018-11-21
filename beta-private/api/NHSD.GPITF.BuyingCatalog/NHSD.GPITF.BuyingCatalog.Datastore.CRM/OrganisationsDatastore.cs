@@ -15,7 +15,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
     }
 
-    private string ResourceBase { get; } = "/Solutions";
+    private string ResourceBase { get; } = "/Organisations";
 
     public Organisations ByContact(string contactId)
     {
