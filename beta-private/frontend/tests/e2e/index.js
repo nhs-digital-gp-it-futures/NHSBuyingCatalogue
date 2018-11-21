@@ -383,3 +383,72 @@ test('Capabilities page validation is correct and accessible', async t => {
 
   await axeCheck(t)
 })
+
+test('Capabilities can be changed, summary updates and data save correctly', async t => {
+  const capabilityCount = Selector('#capability-summary .capability-count').innerText
+  const standardCount = Selector('#capability-summary .standard-count').innerText
+  const selSelectedCapabilities = Selector('#capability-summary .capabilities [data-id].selected')
+  const selSelectedStandards = Selector('#capability-summary .standards [data-id].selected')
+
+  await navigateToSupplierOnboardingSolutionCapabilities(t)
+
+    .click('#capability-selector .capability[data-cap-id="CAP-C-004"].selected')
+    .click('[type=checkbox][data-id="CAP-C-004"]')
+
+    .expect(capabilityCount).eql('0 Capabilities selected')
+    .expect(standardCount).eql('11 Standards will be required')
+    .expect(Selector('#capability-summary .standards .associated').visible).notOk()
+
+    .click('#capability-selector .capability[data-cap-id="CAP-C-001"]:not(.selected)')
+    .click('[type=checkbox][data-id="CAP-C-001"]')
+
+    .click('#capability-selector .capability[data-cap-id="CAP-N-037"]:not(.selected)')
+    .click('[type=checkbox][data-id="CAP-N-037"]')
+
+    .click('#capability-selector .capability[data-cap-id="CAP-N-020"]:not(.selected)')
+    .click('[type=checkbox][data-id="CAP-N-020"]')
+
+    .expect(capabilityCount).eql('3 Capabilities selected')
+    .expect(standardCount).eql('14 Standards will be required')
+    .expect(Selector('#capability-summary .standards .associated').visible).ok()
+
+    .expect(selSelectedCapabilities.nth(0).textContent).eql('Appointments Management - GP')
+    .expect(selSelectedCapabilities.nth(1).textContent).eql('Unified Care Record')
+    .expect(selSelectedCapabilities.nth(2).textContent).eql('Workflow')
+
+    .expect(selSelectedStandards.nth(0).textContent).eql('Appointments Management - GP - Standard')
+    .expect(selSelectedStandards.nth(1).textContent).eql('General Practice Appointments Data Reporting')
+    .expect(selSelectedStandards.nth(2).textContent).eql('Workflow - Standard')
+    .expect(selSelectedStandards.nth(4).textContent).eql('Clinical Safety')
+    .expect(selSelectedStandards.nth(13).textContent).eql('Service Management')
+
+    .click(globalSaveButton)
+
+    .expect(Selector('#errors').exists).notOk()
+    .expect(capabilityCount).eql('3 Capabilities selected')
+    .expect(standardCount).eql('14 Standards will be required')
+
+    .click('#capability-selector .capability[data-cap-id="CAP-C-001"].selected')
+    .click('[type=checkbox][data-id="CAP-C-001"]')
+
+    .click('#capability-selector .capability[data-cap-id="CAP-N-037"].selected')
+    .click('[type=checkbox][data-id="CAP-N-037"]')
+
+    .click('#capability-selector .capability[data-cap-id="CAP-N-020"].selected')
+    .click('[type=checkbox][data-id="CAP-N-020"]')
+
+    .expect(capabilityCount).eql('0 Capabilities selected')
+    .expect(standardCount).eql('11 Standards will be required')
+    .expect(Selector('#capability-summary .standards .associated').visible).notOk()
+
+    .click('#capability-selector .capability[data-cap-id="CAP-C-004"]:not(.selected)')
+    .click('[type=checkbox][data-id="CAP-C-004"]')
+
+    .expect(capabilityCount).eql('1 Capability selected')
+    .expect(standardCount).eql('13 Standards will be required')
+    .expect(Selector('#capability-summary .standards .associated').visible).ok()
+
+    .click(continueButton)
+
+    .expect(Selector('#errors').exists).notOk()
+})
