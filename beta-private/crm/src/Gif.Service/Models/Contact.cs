@@ -30,7 +30,7 @@ namespace Gif.Service.Models
         [CrmFieldName("_parentcustomerid_value")]
         [CrmFieldNameDataBind("ParentCustomerId@odata.bind")]
         [CrmFieldEntityDataBind("accounts")]
-        public Guid? Organisation { get; set; }
+        public Guid? OrganisationId { get; set; }
 
         public Contact() { }
 
