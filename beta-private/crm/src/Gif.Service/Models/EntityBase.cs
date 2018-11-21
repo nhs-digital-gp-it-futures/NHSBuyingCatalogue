@@ -194,6 +194,16 @@ namespace Gif.Service.Models
                     continue;
                 }
 
+                if (p.PropertyType.FullName.ToLower().Contains("system.string"))
+                {
+                    dataString = ReplaceNullString(dataString, p.Name);
+                }
+
+                if (p.PropertyType.FullName.ToLower().Contains("system.datetime"))
+                {
+                    dataString = ReplaceNullDate(dataString, p.Name);
+                }
+
                 dataString = dataString.Replace("\"" + p.Name + "\"", "\"" + targetField + "\"");
 
                 if (p.GetCustomAttribute<CrmIdFieldAttribute>() != null && excludeId)
