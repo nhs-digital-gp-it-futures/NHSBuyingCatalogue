@@ -24,7 +24,7 @@
       <legend>{{t 'Onboarding.Capabilities.Fieldsets.Core.Legend'}}</legend>
       <ul class="capabilities">
         {{#capabilitiesByGroup.core}}
-          {{> selectable-capability}}
+          {{> selectable-capability isFirst=@first firstId="capabilities"}}
         {{/capabilitiesByGroup.core}}
       </ul>
     </fieldset>

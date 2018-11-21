@@ -342,13 +342,13 @@ function navigateToSupplierOnboardingSolutionCapabilities (t) {
 }
 
 test('Capabilities page shows correct information accessibly', async t => {
-  const allCoreCapNames = Selector('#capabilities-core [type=checkbox][name^=capabilities] ~ .name')
-  const allNonCoreCapNames = Selector('#capabilities-non-core [type=checkbox][name^=capabilities] ~ .name')
+  const allCoreCapNames = Selector('#capabilities-core .capability .name')
+  const allNonCoreCapNames = Selector('#capabilities-non-core .capability .name')
 
   await navigateToSupplierOnboardingSolutionCapabilities(t)
 
-    .expect(Selector('#capabilities-core [type=checkbox][name^=capabilities]').count).eql(6)
-    .expect(Selector('#capabilities-non-core [type=checkbox][name^=capabilities]').count).eql(31)
+    .expect(Selector('#capabilities-core .capability').count).eql(6)
+    .expect(Selector('#capabilities-non-core .capability').count).eql(31)
 
     .expect(allCoreCapNames.nth(0).innerText).eql('Appointments Management - GP')
     .expect(allCoreCapNames.nth(3).innerText).eql('Patient Information Maintenance')
@@ -358,7 +358,7 @@ test('Capabilities page shows correct information accessibly', async t => {
     .expect(allNonCoreCapNames.nth(13).innerText).eql('e-Consultations (Patient/Service User to Professional)')
     .expect(allNonCoreCapNames.nth(30).innerText).eql('Workflow')
 
-    .expect(Selector('[name=capabilities\\[CAP-C-004\\]]').checked).ok()
+    .expect(Selector('#capability-selector .capability[data-cap-id="CAP-C-004"].selected')).ok()
 
   await axeCheck(t)
 })
@@ -366,16 +366,20 @@ test('Capabilities page shows correct information accessibly', async t => {
 test('Capabilities page validation is correct and accessible', async t => {
   await navigateToSupplierOnboardingSolutionCapabilities(t)
 
-  const checkedCapabilities = Selector('[type=checkbox][name^=capabilities]:checked')
-  const checkedCapabilitiesCount = await checkedCapabilities.count
-  for (let i = 0; i < checkedCapabilitiesCount; i++) {
-    await t.click(checkedCapabilities.nth(i))
+  const selectedCapabilities = Selector('#capability-selector .capability.selected')
+  const selectedCapabilitiesCount = await selectedCapabilities.count
+  for (let i = 0; i < selectedCapabilitiesCount; i++) {
+    await t
+      .click(selectedCapabilities.nth(i))
+      .click(selectedCapabilities.nth(i).find('input:checked'))
   }
 
   await t
+    .expect(Selector('#capability-selector .capability.revealed').exists).notOk()
+
     .click(continueButton)
     .expect(Selector('#errors #error-capabilities').innerText).contains('Select at least one capability to continue')
-    .expect(checkedCapabilities.exists).notOk('No capabilities should be selected after reload')
+    .expect(selectedCapabilities.exists).notOk('No capabilities should be selected after reload')
 
   await axeCheck(t)
 })
