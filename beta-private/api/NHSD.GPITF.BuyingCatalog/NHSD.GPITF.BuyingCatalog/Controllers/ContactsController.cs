@@ -9,6 +9,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
+using System.Web;
 using ZNetCS.AspNetCore.Authentication.Basic;
 
 namespace NHSD.GPITF.BuyingCatalog.Controllers
@@ -69,7 +70,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Contact not found")]
     public IActionResult ByEmail([FromRoute][Required]string email)
     {
-      var contact = _logic.ByEmail(email);
+      var convertedEmail = HttpUtility.UrlDecode(email);
+      var contact = _logic.ByEmail(convertedEmail);
       return contact != null ? (IActionResult)new OkObjectResult(contact) : new NotFoundResult();
     }
 
