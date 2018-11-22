@@ -20,6 +20,7 @@ namespace Gif.Service.Models
         private const char colon = ':';
         private const char openParenthesis = '(';
         private const char closeParenthesis = ')';
+        private const char openBracket = '{';
         private const char closeBracket = '}';
         private const char forwardSlash = '/';
         private const char comma = ',';
@@ -218,7 +219,7 @@ namespace Gif.Service.Models
         {
             dataString = RemoveDoubleCharacters(dataString, $"{comma}");
             dataString = dataString.Replace($"{comma}{closeBracket}", $"{closeBracket}");
-            //dataString = dataString.Replace("\"\",", string.Empty);
+            dataString = dataString.Replace($"{openBracket}{doubleQuote}{doubleQuote}{comma}", $"{openBracket}");
             dataString = dataString.Replace(",\"\"", string.Empty);
             return dataString;
         }
