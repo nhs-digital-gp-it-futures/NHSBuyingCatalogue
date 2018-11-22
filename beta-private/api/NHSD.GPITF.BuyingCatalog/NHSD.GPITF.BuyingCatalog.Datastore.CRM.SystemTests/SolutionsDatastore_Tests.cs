@@ -111,7 +111,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
 
       try
       {
-        createdEnt.Should().BeEquivalentTo(newEnt);
+        createdEnt.Should().BeEquivalentTo(newEnt,
+          opts => opts
+            .Excluding(ent => ent.CreatedOn)
+            .Excluding(ent => ent.ModifiedOn));
 
         // retrieve
         var retrievedEnt = datastore.ById(createdEnt.Id);
@@ -124,7 +127,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
         createdEnt.Name = "My Other New Solution";
         datastore.Update(createdEnt);
         var updatedEnt = datastore.ById(createdEnt.Id);
-        updatedEnt.Should().BeEquivalentTo(createdEnt);
+        updatedEnt.Should().BeEquivalentTo(createdEnt,
+          opts => opts
+            .Excluding(ent => ent.CreatedOn)
+            .Excluding(ent => ent.ModifiedOn));
       }
       finally
       {
