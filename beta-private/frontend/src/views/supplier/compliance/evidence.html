@@ -1,0 +1,10 @@
+{{> errors}}
+
+<header class="page-main-heading">
+  <h1>{{ claim.standard.name }}</h1>
+  <h2>{{t 'CompliancePages.Evidence.Subtitle'}}</h2>
+</header>
+
+{{#each (tt 'CompliancePages.Evidence.Preamble')}}
+<p class="preamble">{{{.}}}</p>
+{{/each}}

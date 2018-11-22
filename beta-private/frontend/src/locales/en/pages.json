@@ -145,7 +145,7 @@
       }
     }
   },
-  "Compliance": {
+  "CompliancePages": {
     "Dashboard": {
       "Title": "$t(Standard_plural) Dashboard",
       "Subtitle": "Your $t(Solution) must comply with all of the $t(Standard_plural) below in order to be available for purchasing from the $t(Catalogue.Title). You may submit the evidence for one $t(Standard) at a time. Click on each $t(Standard) to see and submit requirements for that $t(Standard).",
@@ -162,6 +162,16 @@
           "Title": "Help - What are $t(Overarching Standards)?",
           "Text": "$t(Overarching Standards) contain requirements that apply to all $t(Solution_plural). They relate to the $t(Solution) as a whole."
         }
+      }
+    },
+    "Evidence": {
+      "Subtitle": "Detailed instructions are included in the $t(Traceability Matrix) from the $t(Assessment team) below. Download the file. Complete the requirements in the file and upload it. ‘$t(CompliancePages.Evidence.Buttons.Submit)’ to send it to $t(NHSD.Name) for evaluation.",
+      "Preamble": [
+        "If this $t(Solution) is published, Buyers can request the final version of the evidence you submit in the $t(Traceability Matrix).",
+        "For Clarifications and other queries, see: <a href='#'>Contact Us</a>."
+      ],
+      "Buttons": {
+        "Submit": "Submit for $t(Compliance)"
       }
     }
   }

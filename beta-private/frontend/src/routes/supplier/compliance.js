@@ -20,8 +20,8 @@ router
   .get(solutionComplianceDashboard)
 
 router
-  .route('/:solution_id/:claim_id/')
-  .get(solutionComplianceStandardPageGet)
+  .route('/:solution_id/evidence/:claim_id/')
+  .get(solutionComplianceEvidencePageGet)
 
 function commonComplianceContext (req) {
   return {
@@ -48,19 +48,32 @@ async function solutionComplianceDashboard (req, res) {
   context.solution.standards = _(context.solution.standards)
     .map(std => ({
       ...context.standards[std.standardId],
-      ...std
+      ...std,
+      continueUrl: `evidence/${std.id}/`
     }))
     .value()
 
   res.render('supplier/compliance/index', context)
 }
 
-async function solutionComplianceStandardPageGet (req, res) {
+async function evidencePageContext (req) {
   const context = {
-    ...commonComplianceContext(req)
+    ...commonComplianceContext(req),
+    ...await dataProvider.capabilityMappings()
   }
 
-  res.render('supplier/compliance/standard', context)
+  context.claim = _.find(context.solution.standards, { id: req.params.claim_id })
+  context.claim.standard = context.standards[context.claim.standardId]
+
+  return context
+}
+
+async function solutionComplianceEvidencePageGet (req, res) {
+  const context = {
+    ...await evidencePageContext(req)
+  }
+
+  res.render('supplier/compliance/evidence', context)
 }
 
 module.exports = router
