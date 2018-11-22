@@ -33,16 +33,24 @@ function commonComplianceContext (req) {
   }
 }
 
-function dashboardContext (req) {
+async function dashboardContext (req) {
   return {
-    ...commonComplianceContext(req)
+    ...commonComplianceContext(req),
+    ...await dataProvider.capabilityMappings()
   }
 }
 
 async function solutionComplianceDashboard (req, res) {
   const context = {
-    ...dashboardContext(req)
+    ...await dashboardContext(req)
   }
+
+  context.solution.standards = _(context.solution.standards)
+    .map(std => ({
+      ...context.standards[std.standardId],
+      ...std
+    }))
+    .value()
 
   res.render('supplier/compliance/index', context)
 }
