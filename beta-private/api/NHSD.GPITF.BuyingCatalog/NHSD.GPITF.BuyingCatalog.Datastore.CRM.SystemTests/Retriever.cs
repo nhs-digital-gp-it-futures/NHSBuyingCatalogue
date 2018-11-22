@@ -32,6 +32,15 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       return allSolns;
     }
 
+    public static List<Organisations> GetAllOrganisations(ISyncPolicyFactory _policy)
+    {
+      var allOrgIds = GetAllSolutions(_policy).Select(soln => soln.OrganisationId).Distinct().ToList();
+      var orgDatastore = new OrganisationsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<OrganisationsDatastore>>().Object, _policy);
+      var allOrgs = allOrgIds.Select(orgId => orgDatastore.ById(orgId)).ToList();
+
+      return allOrgs;
+    }
+
     public static List<Capabilities> GetAllCapabilities(ISyncPolicyFactory _policy)
     {
       var datastore = new CapabilitiesDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<CapabilitiesDatastore>>().Object, _policy);
