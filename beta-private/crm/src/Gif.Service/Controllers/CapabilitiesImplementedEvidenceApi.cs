@@ -118,13 +118,16 @@ namespace Gif.Service.Controllers
             try
             {
                 evidenceEntity = new CapabilitiesImplementedEvidenceService(new Repository()).Create(evidenceEntity);
+
+                if (evidenceEntity.Id == Guid.Empty)
+                    return StatusCode(404);
+
+                return new ObjectResult(evidenceEntity);
             }
             catch (Crm.CrmApiException ex)
             {
                 return StatusCode((int)ex.HttpStatus, ex.Message);
             }
-
-            return StatusCode(204);
         }
     }
 }
