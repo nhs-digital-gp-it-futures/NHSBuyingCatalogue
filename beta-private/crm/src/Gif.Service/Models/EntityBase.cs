@@ -218,7 +218,7 @@ namespace Gif.Service.Models
         {
             dataString = RemoveDoubleCharacters(dataString, $"{comma}");
             dataString = dataString.Replace($"{comma}{closeBracket}", $"{closeBracket}");
-            dataString = dataString.Replace("\"\",", string.Empty);
+            //dataString = dataString.Replace("\"\",", string.Empty);
             dataString = dataString.Replace(",\"\"", string.Empty);
             return dataString;
         }
