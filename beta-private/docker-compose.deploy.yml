@@ -17,7 +17,7 @@ services:
 
   crm:    
     build: 
-     context: ./beta-private/crm/src/Gif.Service
+     context: ./crm/src/Gif.Service
     image: gpitf/catalogue-crm:private-beta
     ports:
       - "5000:5000"
