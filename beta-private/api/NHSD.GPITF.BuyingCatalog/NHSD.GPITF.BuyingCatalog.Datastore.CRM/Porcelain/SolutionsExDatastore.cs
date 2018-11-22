@@ -10,6 +10,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
 {
   public sealed class SolutionsExDatastore : DatastoreBase<SolutionEx>, ISolutionsExDatastore
   {
+    private string ResourceBase { get; } = "/porcelain/SolutionsEx/Update";
+
     private readonly ISolutionsDatastore _solutionDatastore;
     private readonly ITechnicalContactsDatastore _technicalContactDatastore;
 
@@ -87,7 +89,13 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
 
     public void Update(SolutionEx solnEx)
     {
-      throw new NotImplementedException();
+      GetInternal(() =>
+      {
+        var request = GetPutRequest($"{ResourceBase}", solnEx);
+        var resp = GetRawResponse(request);
+
+        return 0;
+      });
     }
   }
 }
