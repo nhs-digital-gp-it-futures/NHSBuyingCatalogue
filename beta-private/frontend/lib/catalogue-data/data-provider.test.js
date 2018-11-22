@@ -236,6 +236,34 @@ describe('updateSolutionForRegistration', () => {
     })
   })
 
+  it('should preserve existing claimed standard with the same standard ID', async () => {
+    const input = {
+      id: 'testid',
+      name: 'testname',
+      standards: [
+        { id: 'testSId2', standardId: 'STD2' },
+        { id: 'newstd', standardId: 'STD1' }
+      ]
+    }
+
+    await subject.updateSolutionForRegistration(input)
+    expect(subject.solutionsExApi.apiPorcelainSolutionsExUpdatePut.mock.calls.length).toBe(1)
+
+    const result = subject.solutionsExApi.apiPorcelainSolutionsExUpdatePut.mock.calls[0][0]
+    expect(result).toMatchObject({
+      solnEx: {
+        solution: {
+          id: 'testid',
+          name: 'testname'
+        },
+        claimedStandard: [
+          { id: 'testSId2', standardId: 'STD2' },
+          { id: 'testSId1', standardId: 'STD1' }
+        ]
+      }
+    })
+  })
+
   it('should cascade delete evidence and reviews for removed capabilities and standards', async () => {
     const input = {
       id: 'testid',
@@ -246,7 +274,7 @@ describe('updateSolutionForRegistration', () => {
       ],
       standards: [
         { id: 'testSId2', standardId: 'STD2' },
-        { id: 'newstd', standardId: 'STD1' }
+        { id: 'newstd', standardId: 'STD3' }
       ]
     }
 
@@ -266,7 +294,7 @@ describe('updateSolutionForRegistration', () => {
         ],
         claimedStandard: [
           { id: 'testSId2', standardId: 'STD2' },
-          { id: 'newstd', standardId: 'STD1' }
+          { id: 'newstd', standardId: 'STD3' }
         ],
         claimedCapabilityEvidence: [
           { id: 'cce1', claimId: 'testCId1' }

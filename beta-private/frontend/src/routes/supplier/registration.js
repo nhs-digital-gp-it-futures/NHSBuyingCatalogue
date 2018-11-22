@@ -257,6 +257,16 @@ async function capabilitiesPagePost (req, res) {
       }))
       .value()
 
+    req.solution.standards = _(req.solution.capabilities)
+      .flatMap(({ capabilityId }) => _.find(context.capabilities, { id: capabilityId }).standards)
+      .uniqBy('id')
+      .map(std => ({
+        standardId: std.id,
+        status: '0',
+        solutionId: req.solution.id
+      }))
+      .value()
+
     try {
       await dataProvider.updateSolutionForRegistration(req.solution)
     } catch (err) {
