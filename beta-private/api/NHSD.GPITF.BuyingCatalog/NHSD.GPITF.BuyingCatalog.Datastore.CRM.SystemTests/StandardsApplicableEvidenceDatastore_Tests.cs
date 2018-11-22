@@ -21,8 +21,11 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void CRUD_Succeeds()
     {
-      var soln = Retriever.GetAllSolutions(_policy).First();
-      var contact = Retriever.GetAllContacts(_policy).First(cont => cont.OrganisationId == soln.OrganisationId);
+      var contact = Retriever.GetAllContacts(_policy).First();
+      var orgDatastore = new OrganisationsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<OrganisationsDatastore>>().Object, _policy);
+      var org = orgDatastore.ById(contact.OrganisationId);
+      var solnDatastore = new SolutionsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<SolutionsDatastore>>().Object, _policy);
+      var soln = solnDatastore.ByOrganisation(org.Id).First();
       var std = Retriever.GetAllStandards(_policy).First();
       var claimDatastore = new StandardsApplicableDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<StandardsApplicableDatastore>>().Object, _policy);
       var datastore = new StandardsApplicableEvidenceDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
@@ -36,20 +39,21 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       };
       Verifier.Verify(newClaim);
       var createdClaim = claimDatastore.Create(newClaim);
-
-      // create
-      var newEvidence = new StandardsApplicableEvidence
-      {
-        Id = Guid.NewGuid().ToString(),
-        ClaimId = createdClaim.Id,
-        CreatedById = contact.Id,
-        CreatedOn = DateTime.UtcNow
-      };
-      Verifier.Verify(newEvidence);
-      var createdEvidence = datastore.Create(newEvidence);
+      StandardsApplicableEvidence createdEvidence = null;
 
       try
       {
+        // create
+        var newEvidence = new StandardsApplicableEvidence
+        {
+          Id = Guid.NewGuid().ToString(),
+          ClaimId = createdClaim.Id,
+          CreatedById = contact.Id,
+          CreatedOn = DateTime.UtcNow
+        };
+        Verifier.Verify(newEvidence);
+        createdEvidence = datastore.Create(newEvidence);
+
         createdEvidence.Should().BeEquivalentTo(newEvidence);
 
         // retrieve ById
