@@ -83,7 +83,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
 
     [Test]
     public void CRUD_Succeeds()
-
     {
       var frameworksDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
       var frameworks = frameworksDatastore.GetAll().ToList();
@@ -116,7 +115,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
 
         // retrieve
         var retrievedEnt = datastore.ById(createdEnt.Id);
-        retrievedEnt.Should().BeEquivalentTo(createdEnt);
+        retrievedEnt.Should().BeEquivalentTo(createdEnt,
+          opts => opts
+            .Excluding(ent => ent.CreatedOn)
+            .Excluding(ent => ent.ModifiedOn));
 
         // update
         createdEnt.Name = "My Other New Solution";
