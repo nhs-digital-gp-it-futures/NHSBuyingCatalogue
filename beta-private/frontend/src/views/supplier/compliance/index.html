@@ -1,34 +1,34 @@
 {{> errors}}
 
 <header class="page-main-heading">
-  <h1>{{t 'Compliance.Dashboard.Title' }}</h1>
-  <h2>{{t 'Compliance.Dashboard.Subtitle'}}</h2>
+  <h1>{{t 'CompliancePages.Dashboard.Title' }}</h1>
+  <h2>{{t 'CompliancePages.Dashboard.Subtitle'}}</h2>
 </header>
 
-<h3>{{t 'Compliance.Dashboard.Associated.Heading'}}</h3>
+<h3>{{t 'CompliancePages.Dashboard.Associated.Heading'}}</h3>
 
-{{#> help-reveal title='Compliance.Dashboard.Associated.Help.Title'}}
-  {{t 'Compliance.Dashboard.Associated.Help.Text'}}
+{{#> help-reveal title='CompliancePages.Dashboard.Associated.Help.Title'}}
+  {{t 'CompliancePages.Dashboard.Associated.Help.Text'}}
 {{/help-reveal}}
 
 <ul>
   {{#solution.standards}}
   {{#unless isOverarching}}
-  <li>{{name}}</li>
+  <li><a href="{{continueUrl}}">{{name}}</a></li>
   {{/unless}}
   {{/solution.standards}}
 </ul>
 
-<h3>{{t 'Compliance.Dashboard.Overarching.Heading'}}</h3>
+<h3>{{t 'CompliancePages.Dashboard.Overarching.Heading'}}</h3>
 
-{{#> help-reveal title='Compliance.Dashboard.Overarching.Help.Title'}}
-  {{t 'Compliance.Dashboard.Overarching.Help.Text'}}
+{{#> help-reveal title='CompliancePages.Dashboard.Overarching.Help.Title'}}
+  {{t 'CompliancePages.Dashboard.Overarching.Help.Text'}}
 {{/help-reveal}}
 
 <ul>
   {{#solution.standards}}
   {{#if isOverarching}}
-  <li>{{name}}</li>
+  <li><a href="{{continueUrl}}">{{name}}</a></li>
   {{/if}}
   {{/solution.standards}}
 </ul>

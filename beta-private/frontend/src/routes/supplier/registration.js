@@ -62,6 +62,10 @@ function onboardingStatusPage (req, res) {
     registerNewSolutionUrl: 'register#content'
   }
 
+  if (req.solution) {
+    context.complianceUrl = `../../compliance/${req.solution.id}`
+  }
+
   res.render('supplier/registration/index', context)
 }
 

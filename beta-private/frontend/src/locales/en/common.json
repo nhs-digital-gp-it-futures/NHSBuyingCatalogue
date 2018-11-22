@@ -17,8 +17,11 @@
   "Overarching Standard": "Overarching $t(Standard)",
   "Overarching Standards": "Overarching $t(Standard_plural)",
   "Capabilities Assessment": "$t(Capability_plural) Assessment",
-  "Standards Compliance": "Standards Compliance",
+  "Compliance": "Compliance",
+  "Standards Compliance": "$t(Standard_plural) $t(Compliance)",
   "Standards and Capabilities": "$t(Standard_plural) and $t(Capability_plural)",
+  "Traceability Matrix": "Traceability Matrix",
+  "Assessment team": "Assessment team",
   "Buttons": {
     "Save and continue": "Save & continue",
     "Save": "Save",
