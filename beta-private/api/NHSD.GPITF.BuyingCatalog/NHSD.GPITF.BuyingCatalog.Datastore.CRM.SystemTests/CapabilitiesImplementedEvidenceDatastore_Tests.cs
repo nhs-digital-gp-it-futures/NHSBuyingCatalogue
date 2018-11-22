@@ -54,19 +54,25 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
         Verifier.Verify(newEvidence);
         createdEvidence = datastore.Create(newEvidence);
 
-        createdEvidence.Should().BeEquivalentTo(newEvidence);
+        createdEvidence.Should().BeEquivalentTo(newEvidence,
+          opts => opts
+            .Excluding(ent => ent.CreatedOn));
 
         // retrieve ById
         datastore.ById(createdEvidence.Id)
           .Should().NotBeNull()
           .And
-          .Should().BeEquivalentTo(createdEvidence);
+          .Should().BeEquivalentTo(createdEvidence,
+            opts => opts
+              .Excluding(ent => ent.CreatedOn));
 
         // retrieve ByClaim
         datastore.ByClaim(createdClaim.Id)
           .Should().ContainSingle()
           .And
-          .Should().BeEquivalentTo(createdEvidence);
+          .Should().BeEquivalentTo(createdEvidence,
+            opts => opts
+              .Excluding(ent => ent.CreatedOn));
       }
       finally
       {
