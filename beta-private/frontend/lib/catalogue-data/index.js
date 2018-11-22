@@ -211,6 +211,10 @@ class DataProvider {
       }
     })
   }
+
+  async solutionForCompliance (solutionId) {
+    return this.solutionForRegistration(solutionId)
+  }
 }
 
 // export a default, pre-configured instance of the data provider

@@ -144,5 +144,11 @@
         }
       }
     }
+  },
+  "Compliance": {
+    "Dashboard": {
+      "Title": "$t(Standard_plural) Dashboard",
+      "Subtitle": "Your $t(Solution) must comply with all of the $t(Standard_plural) below in order to be available for purchasing from the $t(Catalogue.Title). You may submit the evidence for one $t(Standard) at a time. Click on each $t(Standard) to see and submit requirements for that $t(Standard)."
+    }
   }
 }
