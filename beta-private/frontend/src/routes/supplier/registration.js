@@ -49,7 +49,9 @@ function commonOnboardingContext (req) {
   return {
     solution: req.solution,
     csrfToken: req.csrfToken(),
-    activeFormTitle: req.solution && _([req.solution.name, req.solution.version]).filter().join(', ')
+    activeForm: {
+      title: req.solution && _([req.solution.name, req.solution.version]).filter().join(', ')
+    }
   }
 }
 
@@ -65,9 +67,10 @@ function onboardingStatusPage (req, res) {
 
 function registrationPageContext (req) {
   const context = {
-    ...commonOnboardingContext(req),
-    activeFormId: 'registration-form'
+    ...commonOnboardingContext(req)
   }
+
+  context.activeForm.id = 'registration-form'
 
   if (!context.solution) {
     context.solution = { id: 'new' }
@@ -187,9 +190,10 @@ async function registrationPagePost (req, res) {
 async function capabilitiesPageContext (req) {
   const context = {
     ...commonOnboardingContext(req),
-    ...await dataProvider.capabilityMappings(),
-    activeFormId: 'capability-selector-form'
+    ...await dataProvider.capabilityMappings()
   }
+
+  context.activeForm.id = 'capability-selector-form'
 
   context.capabilities = _(context.capabilities)
     .values()
