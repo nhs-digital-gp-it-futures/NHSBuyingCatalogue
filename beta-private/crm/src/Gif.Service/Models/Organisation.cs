@@ -17,11 +17,19 @@ namespace Gif.Service.Models
 
         [CrmFieldName("name")]
         [DataMember]
-        public string AccountName { get; set; }
+        public string Name { get; set; }
 
         [CrmFieldName("cps_orgcode")]
         [DataMember]
-        public string OrganisationCode { get; set; }
+        public string OdsCode { get; set; }
+
+        [CrmFieldName("description")]
+        [DataMember]
+        public string Description { get; set; }
+
+        [CrmFieldName("cc_primaryroleid")]
+        [DataMember]
+        public string PrimaryRoleId { get; set; }
 
         public Organisation() { }
 

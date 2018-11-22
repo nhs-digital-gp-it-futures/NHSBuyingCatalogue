@@ -18,14 +18,16 @@ namespace Gif.Service.Services
         {
             var filterAttributes = new List<CrmFilterAttribute>
             {
-                new CrmFilterAttribute("ContactId") {FilterName = "_primarycontactid_value", FilterValue = contactId},
+                new CrmFilterAttribute("ContactId") {FilterName = "contactid", FilterValue = contactId},
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new Organisation().GetQueryString(null, filterAttributes), out Count);
-            var organisation = appJson?.FirstOrDefault();
+            var appJson = Repository.RetrieveMultiple(new Contact().GetQueryString(null, filterAttributes), out Count);
+            var contactJson = appJson?.FirstOrDefault();
 
-            return new Organisation(organisation);
+            var contact = new Contact(contactJson);
+
+            return ById(contact.OrganisationId.ToString());
         }
 
         public Organisation ById(string organisationId)
