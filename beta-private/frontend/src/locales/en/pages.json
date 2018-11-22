@@ -148,7 +148,21 @@
   "Compliance": {
     "Dashboard": {
       "Title": "$t(Standard_plural) Dashboard",
-      "Subtitle": "Your $t(Solution) must comply with all of the $t(Standard_plural) below in order to be available for purchasing from the $t(Catalogue.Title). You may submit the evidence for one $t(Standard) at a time. Click on each $t(Standard) to see and submit requirements for that $t(Standard)."
+      "Subtitle": "Your $t(Solution) must comply with all of the $t(Standard_plural) below in order to be available for purchasing from the $t(Catalogue.Title). You may submit the evidence for one $t(Standard) at a time. Click on each $t(Standard) to see and submit requirements for that $t(Standard).",
+      "Associated": {
+        "Heading": "$t(Associated Standards)",
+        "Help": {
+          "Title": "Help - What are $t(Associated Standards)?",
+          "Text": "$t(Associated Standards) relate to one or more of the $t(Capability_plural) selected. They include $t(Capability)-Specific $t(Standard_plural) and Context-Specific $t(Standard_plural)."
+        }
+      },
+      "Overarching": {
+        "Heading": "$t(Overarching Standards)",
+        "Help": {
+          "Title": "Help - What are $t(Overarching Standards)?",
+          "Text": "$t(Overarching Standards) contain requirements that apply to all $t(Solution_plural). They relate to the $t(Solution) as a whole."
+        }
+      }
     }
   }
 }
