@@ -170,6 +170,9 @@
         "If this $t(Solution) is published, Buyers can request the final version of the evidence you submit in the $t(Traceability Matrix).",
         "For Clarifications and other queries, see: <a href='#'>Contact Us</a>."
       ],
+      "Backlink": {
+        "Title": "$t(CompliancePages.Dashboard.Title)"
+      },
       "Buttons": {
         "Submit": "Submit for $t(Compliance)"
       }
