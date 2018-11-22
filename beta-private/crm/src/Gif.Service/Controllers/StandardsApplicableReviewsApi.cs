@@ -37,7 +37,7 @@ namespace Gif.Service.Controllers
         /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
         /// <param name="pageSize">number of items per page.  Defaults to 20</param>
         /// <response code="200">Success</response>
-        /// <response code="404">Evidence not found</response>
+        /// <response code="404">EvidenceEntity not found</response>
         [HttpGet]
         [Route("/api/StandardsApplicableReviews/ByEvidence/{evidenceId}")]
         [ValidateModelState]

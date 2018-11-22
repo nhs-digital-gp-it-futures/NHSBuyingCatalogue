@@ -2,6 +2,8 @@
 using Gif.Service.Attributes;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace Gif.Service.Models
@@ -51,6 +53,32 @@ namespace Gif.Service.Models
         public Review(JToken token) : base(token)
         {
         }
+
+        public static IEnumerable<Review> OrderLinkedReviews(IEnumerable<Review> reviews)
+        {
+            var enumReviews = reviews.ToList();
+            var review = enumReviews.FirstOrDefault(x => x.PreviousId == null);
+            int count = enumReviews.Count();
+
+            if (review != null)
+            {
+                var prevReview = review;
+                prevReview.Order = count;
+
+                while (count > 0)
+                {
+                    count--;
+                    prevReview = enumReviews.FirstOrDefault(x => prevReview != null && (x.PreviousId != null && x.PreviousId.Value == prevReview.Id));
+                    if (prevReview != null)
+                        prevReview.Order = count;
+                }
+            }
+
+            var orderedReviews = enumReviews.OrderBy(x => x.Order);
+            return orderedReviews;
+        }
+
+
     }
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

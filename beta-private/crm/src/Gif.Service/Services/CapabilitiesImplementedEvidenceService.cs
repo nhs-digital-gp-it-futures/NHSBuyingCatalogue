@@ -14,9 +14,9 @@ namespace Gif.Service.Services
         {
         }
 
-        public IEnumerable<Evidence> ByClaim(string claimId)
+        public IEnumerable<CapabilityEvidence> ByClaim(string claimId)
         {
-            var evidences = new List<Evidence>();
+            var evidences = new List<CapabilityEvidence>();
 
             var filterAttributes = new List<CrmFilterAttribute>
             {
@@ -24,21 +24,21 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new Evidence().GetQueryString(null, filterAttributes, true, true), out Count);
+            var appJson = Repository.RetrieveMultiple(new CapabilityEvidence().GetQueryString(null, filterAttributes, true, true), out Count);
 
             foreach (var evidence in appJson.Children())
             {
-                evidences.Add(new Evidence(evidence));
+                evidences.Add(new CapabilityEvidence(evidence));
             }
 
-            var enumEvidences = OrderLinkedEvidences(evidences);
+            var enumEvidences = CapabilityEvidence.OrderLinkedEvidences(evidences);
 
             Count = evidences.Count;
 
             return enumEvidences;
         }
 
-        public Evidence ById(string id)
+        public CapabilityEvidence ById(string id)
         {
             var filterAttributes = new List<CrmFilterAttribute>
             {
@@ -46,17 +46,17 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new Evidence().GetQueryString(null, filterAttributes), out Count);
+            var appJson = Repository.RetrieveMultiple(new CapabilityEvidence().GetQueryString(null, filterAttributes), out Count);
             var evidence = appJson?.FirstOrDefault();
 
-            return new Evidence(evidence);
+            return new CapabilityEvidence(evidence);
         }
 
-        public Evidence Create(Evidence evidence)
+        public CapabilityEvidence Create(CapabilityEvidence evidenceEntity)
         {
-            Repository.CreateEntity(evidence.EntityName, evidence.SerializeToODataPost());
+            Repository.CreateEntity(evidenceEntity.EntityName, evidenceEntity.SerializeToODataPost());
 
-            return evidence;
+            return evidenceEntity;
         }
 
         public CapabilityImplemented ByEvidenceId(string id)

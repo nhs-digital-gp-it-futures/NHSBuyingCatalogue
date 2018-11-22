@@ -8,7 +8,7 @@ namespace Gif.Service.Models
 {
     [CrmEntity("cc_evidences")]
     [DataContract]
-    public class Evidence : EntityBase
+    public class EvidenceBase : EntityBase
     {
 
         [DataMember]
@@ -18,19 +18,13 @@ namespace Gif.Service.Models
 
         [DataMember]
         [CrmFieldName("cc_name")]
-        public string Name { get; set; }
+        public string Evidence { get; set; }
 
         [DataMember]
         [CrmFieldName("_cc_capabilityimplemented_value")]
         [CrmFieldNameDataBind("cc_CapabilityImplemented@odata.bind")]
         [CrmFieldEntityDataBind("cc_capabilityimplementeds")]
-        public Guid? ClaimId { get; set; }
-
-        [DataMember]
-        [CrmFieldName("_cc_standardapplicable_value")]
-        [CrmFieldNameDataBind("cc_StandardApplicable@odata.bind")]
-        [CrmFieldEntityDataBind("cc_standardapplicables")]
-        public Guid? StandardApplicableId { get; set; }
+        public virtual Guid? ClaimId { get; set; }
 
         [DataMember]
         [CrmFieldName("_cc_createdbyid_value")]
@@ -46,11 +40,12 @@ namespace Gif.Service.Models
 
         public int Order { get; set; }
 
-        public Evidence() { }
+        public EvidenceBase() { }
 
-        public Evidence(JToken token) : base(token)
+        public EvidenceBase(JToken token) : base(token)
         {
         }
+
     }
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

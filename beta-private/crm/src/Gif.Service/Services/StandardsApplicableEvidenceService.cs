@@ -14,9 +14,9 @@ namespace Gif.Service.Services
         {
         }
 
-        public IEnumerable<Evidence> ByClaim(string standardApplicableId)
+        public IEnumerable<StandardEvidence> ByClaim(string standardApplicableId)
         {
-            var evidences = new List<Evidence>();
+            var evidences = new List<StandardEvidence>();
 
             var filterAttributes = new List<CrmFilterAttribute>
             {
@@ -24,21 +24,21 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new Evidence().GetQueryString(null, filterAttributes, true, true), out Count);
+            var appJson = Repository.RetrieveMultiple(new StandardEvidence().GetQueryString(null, filterAttributes, true, true), out Count);
 
             foreach (var evidence in appJson.Children())
             {
-                evidences.Add(new Evidence(evidence));
+                evidences.Add(new StandardEvidence(evidence));
             }
 
-            var enumEvidences = OrderLinkedEvidences(evidences);
+            var enumEvidences = StandardEvidence.OrderLinkedEvidences(evidences);
 
             Count = evidences.Count;
 
             return enumEvidences;
         }
 
-        public Evidence ById(string id)
+        public StandardEvidence ById(string id)
         {
             var filterAttributes = new List<CrmFilterAttribute>
             {
@@ -46,17 +46,17 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new Evidence().GetQueryString(null, filterAttributes), out Count);
+            var appJson = Repository.RetrieveMultiple(new StandardEvidence().GetQueryString(null, filterAttributes), out Count);
             var evidence = appJson?.FirstOrDefault();
 
-            return new Evidence(evidence);
+            return new StandardEvidence(evidence);
         }
 
-        public Evidence Create(Evidence evidence)
+        public StandardEvidence Create(StandardEvidence evidenceEntity)
         {
-            Repository.CreateEntity(evidence.EntityName, evidence.SerializeToODataPost());
+            Repository.CreateEntity(evidenceEntity.EntityName, evidenceEntity.SerializeToODataPost());
 
-            return evidence;
+            return evidenceEntity;
         }
 
         public StandardApplicable ByEvidenceId(string id)

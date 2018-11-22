@@ -3,7 +3,7 @@
 namespace Gif.Service.Contracts
 {
 #pragma warning disable CS1591
-    public interface IStandardsApplicableEvidenceDatastore : IEvidenceDatastore<Evidence>
+    public interface IStandardsApplicableEvidenceDatastore : IEvidenceDatastore<StandardEvidence>
     {
         StandardApplicable ByEvidenceId(string id);
 

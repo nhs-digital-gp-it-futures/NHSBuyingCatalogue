@@ -28,7 +28,7 @@ namespace Gif.Service.Models
         /// </summary>
         /// <value>1-based index of which page this page  Defaults to 1</value>
         [DataMember(Name = "pageIndex")]
-        public int? PageIndex { get;  set; }
+        public int? PageIndex { get; set; }
 
         /// <summary>
         /// Total number of pages based on NHSD.GPITF.BuyingCatalog.Models.PaginatedList&#x60;1.PageSize
@@ -49,7 +49,7 @@ namespace Gif.Service.Models
         /// </summary>
         /// <value>List of items</value>
         [DataMember(Name = "items")]
-        public List<Evidence> Items { get; set; }
+        public List<CapabilityEvidence> Items { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object

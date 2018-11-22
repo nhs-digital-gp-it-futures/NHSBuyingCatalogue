@@ -49,7 +49,7 @@ namespace Gif.Service.Models
         /// </summary>
         /// <value>List of items</value>
         [DataMember(Name = "items")]
-        public List<Evidence> Items { get; set; }
+        public List<StandardEvidence> Items { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object

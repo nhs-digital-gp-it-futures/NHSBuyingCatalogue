@@ -19,7 +19,7 @@ namespace Gif.Service.Services
 
             var filterAttributes = new List<CrmFilterAttribute>
             {
-                new CrmFilterAttribute("Evidence") {FilterName = "_cc_evidence_value", FilterValue = evidenceId},
+                new CrmFilterAttribute("EvidenceEntity") {FilterName = "_cc_evidence_value", FilterValue = evidenceId},
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
@@ -30,7 +30,7 @@ namespace Gif.Service.Services
                 reviews.Add(new Review(review));
             }
 
-            var enumReviews = OrderLinkedReviews(reviews);
+            var enumReviews = Review.OrderLinkedReviews(reviews);
 
             Count = reviews.Count;
 
