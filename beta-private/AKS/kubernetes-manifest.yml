@@ -21,7 +21,7 @@ spec:
       - name: regcred
       containers:
       - name: bc-private-beta-api
-        image: buyingcat01.azurecr.io/gpitf/catalogue-api:bc-prototype
+        image: buyingcat01.azurecr.io/gpitf/catalogue-api
         ports:
         - containerPort: 5100
         resources:
@@ -30,14 +30,26 @@ spec:
           limits:
             cpu: 500m
         env:
+        - name: ASPNETCORE_ENVIRONMENT 
+          value: "Development"
         - name: OIDC_ISSUER_URL
           value: "https://buying-catalogue-beta-prototype.eu.auth0.com"
+        - name: OIDC_USERINFO_URL
+          value: "https://buying-catalogue-beta-prototype.eu.auth0.com/userinfo"
+        - name: OIDC_AUDIENCE
+          value: "api.buying-catalogue-beta-prototype"
         - name: DATASTORE_CONNECTIONTYPE
           value: "SqlServer"
         - name: DATASTORE_CONNECTIONSTRING
-          value: "Server=tcp:bcpbtestdb01.database.windows.net,1433;Initial Catalog=buyingcatprivatebeta_test;Persist Security Info=False;User ID=bcadmin;Password=Ac1!w3fdsh3kl;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+          valueFrom:
+            secretKeyRef:
+              name: bcdbsecret
+              key: DATASTORE_CONNECTIONSTRING
         - name: LOG_CONNECTIONSTRING
-          value: "Server=tcp:bcpbtestdb01.database.windows.net,1433;Initial Catalog=buyingcatprivatebeta_test;Persist Security Info=False;User ID=bcadmin;Password=Ac1!w3fdsh3kl;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"      
+          valueFrom:
+            secretKeyRef:
+              name: bcdbsecret
+              key: LOG_CONNECTIONSTRING
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -62,7 +74,7 @@ spec:
       - name: regcred
       containers:
       - name: bc-private-beta-frontend
-        image: buyingcat01.azurecr.io/gpitf/catalogue-frontend:bc-prototype
+        image: buyingcat01.azurecr.io/gpitf/catalogue-frontend
         ports:
         - containerPort: 8000
         resources:
@@ -72,7 +84,7 @@ spec:
             cpu: 500m
         env:
         - name: BASE_URL
-          value: "http://51.140.48.244"
+          value: "http://buyingcatprivatebeta.uksouth.cloudapp.azure.com"
         - name: OIDC_ISSUER_URL
           value: "https://buying-catalogue-beta-prototype.eu.auth0.com"
         - name: OIDC_CLIENT_ID
@@ -108,8 +120,8 @@ spec:
       imagePullSecrets:
       - name: regcred
       containers:
-      - name: bc-pribate-beta-nginx
-        image: buyingcat01.azurecr.io/gpitf/catalogue-frontend-proxy:bc-prototype
+      - name: bc-private-beta-nginx
+        image: buyingcat01.azurecr.io/gpitf/catalogue-frontend-proxy
         ports:
         - containerPort: 80
         resources:
@@ -121,7 +133,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bc-pb-deployment-oidc-provider
+  name: bc-pb-deployment-crm
 spec:
   replicas: 1
   strategy:
@@ -131,24 +143,39 @@ spec:
   minReadySeconds: 5
   selector:
     matchLabels:
-      app: bc-pb-app-oidc-provider   
+      app: bc-pb-app-crm   
   template:
     metadata:
       labels:
-        app: bc-pb-app-oidc-provider
+        app: bc-pb-app-crm
     spec:
       imagePullSecrets:
       - name: regcred
       containers:
-      - name: bc-pribate-beta-oidc-provider
-        image: buyingcat01.azurecr.io/gpitf/catalogue-oidc-provider:bc-prototype
+      - name: bc-pribate-beta-crm
+        image: buyingcat01.azurecr.io/gpitf/catalogue-crm
         ports:
-        - containerPort: 9000
+        - containerPort: 5000
         resources:
           requests:
             cpu: 250m
           limits:
             cpu: 500m
+        env:
+        - name: CRM_APIURI
+          value: "https://gifservicedev.azurewebsites.net/api/"
+        - name: CRM_ACCESSTOKENURI
+          value: "https://gifservicedev.azurewebsites.net/connect/token"
+        - name: CRM_CLIENTID
+          valueFrom:
+            secretKeyRef:
+              name: bccrmsecret
+              key: CRM_CLIENTID
+        - name: CRM_CLIENTSECRET
+          valueFrom:
+            secretKeyRef:
+              name: bccrmsecret
+              key: CRM_CLIENTSECRET         
 ---
 apiVersion: v1
 kind: Service
@@ -180,14 +207,14 @@ spec:
   ports:
   - port: 80
   selector:
-    app: bc_pb-app-nginx
+    app: bc-pb-app-nginx
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: oidc
+  name: crm
 spec:
   ports:
-  - port: 9000
+  - port: 5000
   selector:
-    app: bc-pb-app-oidc-provider
+    app: bc-pb-app-crm
