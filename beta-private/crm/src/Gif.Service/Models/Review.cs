@@ -32,7 +32,7 @@ namespace Gif.Service.Models
         [CrmFieldName("_cc_evidence_value")]
         [CrmFieldNameDataBind("cc_Evidence@odata.bind")]
         [CrmFieldEntityDataBind("cc_evidences")]
-        public Guid? Evidence { get; set; }
+        public Guid? EvidenceId { get; set; }
 
         [DataMember]
         [CrmFieldName("_cc_createdbyid_value")]
