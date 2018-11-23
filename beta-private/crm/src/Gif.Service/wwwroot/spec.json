@@ -408,6 +408,35 @@
         } ]
       }
     },
+	"/api/CapabilitiesImplementedEvidence/ById/{id}" : {
+      "get" : {
+        "tags" : [ "ApiCapabilitiesImplementedEvidenceByIdGet" ],
+        "summary" : "Get a CapabilityImplemented record by evidence Id",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "evidenceId",
+          "in" : "path",
+          "description" : "CRM identifier of evidence",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/CapabilitiesImplementedEvidence"
+            }
+          },
+          "404" : {
+            "description" : "evidence not found"
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ]
+      }
+    },
     "/api/CapabilitiesImplementedEvidence" : {
       "post" : {
         "tags" : [ "CapabilitiesImplementedEvidence" ],
@@ -1596,6 +1625,35 @@
           },
           "404" : {
             "description" : "StandardsApplicable not found"
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ]
+      }
+    },
+	"/api/StandardsApplicableEvidence/ById/{Id}" : {
+      "get" : {
+        "tags" : [ "StandardsApplicableEvidence" ],
+        "summary" : "Get the standard applicable record by evidence.",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "CRM identifier of Evidence",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/StandardsApplicableEvidence"
+            }
+          },
+          "404" : {
+            "description" : "Evidence not found"
           }
         },
         "security" : [ {
