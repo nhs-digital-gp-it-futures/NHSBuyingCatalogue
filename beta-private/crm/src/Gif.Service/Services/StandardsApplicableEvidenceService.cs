@@ -20,7 +20,7 @@ namespace Gif.Service.Services
 
             var filterAttributes = new List<CrmFilterAttribute>
             {
-                new CrmFilterAttribute("StandardApplicableId") {FilterName = "_cc_standardapplicableid_value", FilterValue = standardApplicableId},
+                new CrmFilterAttribute("StandardApplicableId") {FilterName = "_cc_standardapplicable_value", FilterValue = standardApplicableId},
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
