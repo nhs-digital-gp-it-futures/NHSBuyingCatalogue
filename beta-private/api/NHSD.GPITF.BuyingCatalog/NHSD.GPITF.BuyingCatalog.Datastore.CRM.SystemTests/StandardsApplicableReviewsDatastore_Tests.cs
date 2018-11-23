@@ -73,7 +73,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
         // retrieve ById
         datastore.ById(createdReview.Id)
           .Should().NotBeNull()
-          .And
+          .And.Subject
           .Should().BeEquivalentTo(createdReview,
             opts => opts
               .Excluding(ent => ent.CreatedOn));
