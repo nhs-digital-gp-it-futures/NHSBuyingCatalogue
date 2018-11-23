@@ -4,6 +4,7 @@ using Gif.Service.Contracts;
 using Gif.Service.Crm;
 using Gif.Service.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Gif.Service.Services
 {
@@ -39,7 +40,16 @@ namespace Gif.Service.Services
 
         public Review ById(string id)
         {
-            throw new System.NotImplementedException();
+            var filterAttributes = new List<CrmFilterAttribute>
+            {
+                new CrmFilterAttribute("EvidenceId") {FilterName = "cc_reviewid", FilterValue = id},
+                new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
+            };
+
+            var appJson = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterAttributes), out Count);
+            var review = appJson?.FirstOrDefault();
+
+            return new Review(review);
         }
 
         public Review Create(Review review)

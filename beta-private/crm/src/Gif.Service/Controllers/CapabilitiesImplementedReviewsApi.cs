@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -29,6 +30,37 @@ namespace Gif.Service.Controllers
     [Authorize]
     public class CapabilitiesImplementedReviewsApiController : Controller
     {
+        /// <summary>
+        /// Get an existing Standard Applicable Review for a given Review Id
+        /// </summary>
+
+        /// <param name="id">Review Id</param>
+        /// <response code="200">Success</response>
+        /// <response code="404">Solution not found in CRM</response>
+        [HttpGet]
+        [Route("/api/StandardsApplicableReviews/ById/{id}")]
+        [ValidateModelState]
+        [SwaggerOperation("ApiStandardsApplicableReviewByIdGet")]
+        [SwaggerResponse(statusCode: 200, type: typeof(Solution), description: "Success")]
+        public virtual IActionResult ApiStandardsApplicableReviewByIdGet([FromRoute][Required]string id)
+        {
+            try
+            {
+                var review = new StandardsApplicableReviewsService(new Repository()).ById(id);
+
+                if (review.Id == Guid.Empty)
+                    return StatusCode(404);
+
+                return new ObjectResult(review);
+
+            }
+            catch (Crm.CrmApiException ex)
+            {
+                return StatusCode((int)ex.HttpStatus, ex.Message);
+            }
+
+        }
+
         /// <summary>
         /// Get all Reviews for a CapabilitiesImplemented  Each list is a distinct &#39;chain&#39; of Review ie original Review with all subsequent Review  The first item in each &#39;chain&#39; is the most current Review.  The last item in each &#39;chain&#39; is the original Review.
         /// </summary>
