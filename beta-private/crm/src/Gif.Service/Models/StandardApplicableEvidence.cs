@@ -5,10 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using Gif.Service.Const;
 
 namespace Gif.Service.Models
 {
-    public class StandardEvidence : EvidenceBase
+    public class StandardApplicableEvidence : EvidenceBase
     {
         [DataMember]
         [CrmFieldName("_cc_standardapplicable_value")]
@@ -16,16 +17,19 @@ namespace Gif.Service.Models
         [CrmFieldEntityDataBind("cc_standardapplicables")]
         public override Guid? ClaimId { get; set; }
 
-        public StandardEvidence()
+        [CrmEntityRelationAttribute(RelationshipNames.EvidenceStandardApplicables)]
+        public IList<StandardApplicable> StandardApplicables { get; set; }
+
+        public StandardApplicableEvidence()
         {
         }
-        public StandardEvidence(JToken token) : base(token)
+        public StandardApplicableEvidence(JToken token) : base(token)
         {
         }
 
-        public static IEnumerable<StandardEvidence> OrderLinkedEvidences(IEnumerable<StandardEvidence> evidences)
+        public static IEnumerable<StandardApplicableEvidence> OrderLinkedEvidences(IEnumerable<StandardApplicableEvidence> evidences)
         {
-            List<StandardEvidence> enumEvidences = evidences.ToList();
+            List<StandardApplicableEvidence> enumEvidences = evidences.ToList();
             var evidence = enumEvidences.FirstOrDefault(x => x.PreviousId == null);
             int count = enumEvidences.Count();
 

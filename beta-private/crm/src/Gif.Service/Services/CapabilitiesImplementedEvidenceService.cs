@@ -5,6 +5,7 @@ using Gif.Service.Crm;
 using Gif.Service.Models;
 using System.Collections.Generic;
 using System.Linq;
+using Gif.Service.Const;
 
 namespace Gif.Service.Services
 {
@@ -67,10 +68,13 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new CapabilityImplemented().GetQueryString(null, filterAttributes), out Count);
-            var capabilityImplemented = appJson?.FirstOrDefault();
+            var appJson = Repository.RetrieveMultiple(new CapabilityImplementedEvidence().GetQueryString(null, filterAttributes, true), out Count);
+            var capabilityImplemented = appJson?.Children().FirstOrDefault();
 
-            return new CapabilityImplemented(capabilityImplemented);
+            var capabilityImplementedRecord = capabilityImplemented?[RelationshipNames.EvidenceCapabilityImplemented];
+
+            return capabilityImplementedRecord != null ?
+                new CapabilityImplemented(capabilityImplementedRecord) : null;
         }
     }
 }

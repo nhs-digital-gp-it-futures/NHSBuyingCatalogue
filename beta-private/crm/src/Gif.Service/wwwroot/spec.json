@@ -410,7 +410,7 @@
     },
 	"/api/CapabilitiesImplementedEvidence/ById/{id}" : {
       "get" : {
-        "tags" : [ "ApiCapabilitiesImplementedEvidenceByIdGet" ],
+        "tags" : [ "CapabilitiesImplementedEvidence" ],
         "summary" : "Get a CapabilityImplemented record by evidence Id",
         "consumes" : [ ],
         "produces" : [ "application/json" ],
@@ -425,7 +425,7 @@
           "200" : {
             "description" : "Success",
             "schema" : {
-              "$ref" : "#/CapabilitiesImplementedEvidence"
+              "$ref" : "#/definitions/CapabilitiesImplementedEvidence"
             }
           },
           "404" : {

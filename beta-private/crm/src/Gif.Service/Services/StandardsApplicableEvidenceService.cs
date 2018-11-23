@@ -5,6 +5,7 @@ using Gif.Service.Crm;
 using Gif.Service.Models;
 using System.Collections.Generic;
 using System.Linq;
+using Gif.Service.Const;
 
 namespace Gif.Service.Services
 {
@@ -14,9 +15,9 @@ namespace Gif.Service.Services
         {
         }
 
-        public IEnumerable<StandardEvidence> ByClaim(string standardApplicableId)
+        public IEnumerable<StandardApplicableEvidence> ByClaim(string standardApplicableId)
         {
-            var evidences = new List<StandardEvidence>();
+            var evidences = new List<StandardApplicableEvidence>();
 
             var filterAttributes = new List<CrmFilterAttribute>
             {
@@ -24,21 +25,21 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new StandardEvidence().GetQueryString(null, filterAttributes, true, true), out Count);
+            var appJson = Repository.RetrieveMultiple(new StandardApplicableEvidence().GetQueryString(null, filterAttributes, true, true), out Count);
 
             foreach (var evidence in appJson.Children())
             {
-                evidences.Add(new StandardEvidence(evidence));
+                evidences.Add(new StandardApplicableEvidence(evidence));
             }
 
-            var enumEvidences = StandardEvidence.OrderLinkedEvidences(evidences);
+            var enumEvidences = StandardApplicableEvidence.OrderLinkedEvidences(evidences);
 
             Count = evidences.Count;
 
             return enumEvidences;
         }
 
-        public StandardEvidence ById(string id)
+        public StandardApplicableEvidence ById(string id)
         {
             var filterAttributes = new List<CrmFilterAttribute>
             {
@@ -46,13 +47,13 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new StandardEvidence().GetQueryString(null, filterAttributes), out Count);
+            var appJson = Repository.RetrieveMultiple(new StandardApplicableEvidence().GetQueryString(null, filterAttributes), out Count);
             var evidence = appJson?.FirstOrDefault();
 
-            return new StandardEvidence(evidence);
+            return new StandardApplicableEvidence(evidence);
         }
 
-        public StandardEvidence Create(StandardEvidence evidenceEntity)
+        public StandardApplicableEvidence Create(StandardApplicableEvidence evidenceEntity)
         {
             Repository.CreateEntity(evidenceEntity.EntityName, evidenceEntity.SerializeToODataPost());
 
@@ -67,10 +68,13 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new StandardApplicable().GetQueryString(null, filterAttributes), out Count);
-            var standardApplicable = appJson?.FirstOrDefault();
+            var appJson = Repository.RetrieveMultiple(new StandardApplicableEvidence().GetQueryString(null, filterAttributes, true), out Count);
+            var standardApplicable = appJson?.Children().FirstOrDefault();
 
-            return new StandardApplicable(standardApplicable);
+            var standardApplicableRecord = standardApplicable?[RelationshipNames.EvidenceStandardApplicables];
+
+            return standardApplicableRecord != null ?
+                new StandardApplicable(standardApplicableRecord) : null;
         }
     }
 }

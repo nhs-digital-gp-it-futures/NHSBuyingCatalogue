@@ -46,7 +46,7 @@ namespace Gif.Service.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(PaginatedListIEnumerableStandardsApplicableEvidence), description: "Success")]
         public virtual IActionResult ApiStandardsApplicableEvidenceByClaimByClaimIdGet([FromRoute][Required]string claimId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
         {
-            IEnumerable<StandardEvidence> evidences;
+            IEnumerable<StandardApplicableEvidence> evidences;
             int totalPages;
 
             try
@@ -112,8 +112,8 @@ namespace Gif.Service.Controllers
         [Route("/api/StandardsApplicableEvidence")]
         [ValidateModelState]
         [SwaggerOperation("ApiStandardsApplicableEvidencePost")]
-        [SwaggerResponse(statusCode: 200, type: typeof(StandardEvidence), description: "Success")]
-        public virtual IActionResult ApiStandardsApplicableEvidencePost([FromBody]StandardEvidence evidenceEntity)
+        [SwaggerResponse(statusCode: 200, type: typeof(StandardApplicableEvidence), description: "Success")]
+        public virtual IActionResult ApiStandardsApplicableEvidencePost([FromBody]StandardApplicableEvidence evidenceEntity)
         {
             try
             {
