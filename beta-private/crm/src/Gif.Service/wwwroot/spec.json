@@ -484,6 +484,35 @@
         } ]
       }
     },
+	"/api/CapabilitiesImplementedReviews/ById/{reviewId}" : {
+      "get" : {
+        "tags" : [ "CapabilitiesImplementedReviews" ],
+        "summary" : "Get the CapabilityImplemented record for a given review id.",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "reviewId",
+          "in" : "path",
+          "description" : "CRM identifier of Review record",
+          "required" : true,
+          "type" : "string"
+        }],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/CapabilitiesImplemented"
+            }
+          },
+          "404" : {
+            "description" : "Review not found"
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ]
+      }
+    },
     "/api/CapabilitiesImplementedReviews" : {
       "post" : {
         "tags" : [ "CapabilitiesImplementedReviews" ],
@@ -1643,6 +1672,36 @@
           },
           "404" : {
             "description" : "Evidence not found"
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ]
+      }
+    },
+	"/api/StandardsApplicableReviews/ById/{reviewId}" : {
+      "get" : {
+        "tags" : [ "StandardsApplicableReviews" ],
+        "summary" : "Retrieve StandardsApplicable record for a given review id.",
+        "operationId" : "ApiStandardsApplicableByReviewIdGet",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "reviewId",
+          "in" : "path",
+          "description" : "CRM identifier of review",
+          "required" : true,
+          "type" : "string"
+        }],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/StandardsApplicable"
+            }
+          },
+          "404" : {
+            "description" : "Review not found in CRM"
           }
         },
         "security" : [ {
