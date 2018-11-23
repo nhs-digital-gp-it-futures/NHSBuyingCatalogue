@@ -31,22 +31,22 @@ namespace Gif.Service.Controllers
     public class CapabilitiesImplementedReviewsApiController : Controller
     {
         /// <summary>
-        /// Get an existing Standard Applicable Review for a given Review Id
+        /// Get an existing Capabilities Implemented Review for a given Review Id
         /// </summary>
 
         /// <param name="id">Review Id</param>
         /// <response code="200">Success</response>
         /// <response code="404">Solution not found in CRM</response>
         [HttpGet]
-        [Route("/api/StandardsApplicableReviews/ById/{id}")]
+        [Route("/api/CapabilitiesImplementedReviews/ById/{id}")]
         [ValidateModelState]
-        [SwaggerOperation("ApiStandardsApplicableReviewByIdGet")]
+        [SwaggerOperation("ApiCapabilitiesImplementedReviewByIdGet")]
         [SwaggerResponse(statusCode: 200, type: typeof(Solution), description: "Success")]
-        public virtual IActionResult ApiStandardsApplicableReviewByIdGet([FromRoute][Required]string id)
+        public virtual IActionResult ApiCapabilitiesImplementedReviewByIdGet([FromRoute][Required]string id)
         {
             try
             {
-                var review = new StandardsApplicableReviewsService(new Repository()).ById(id);
+                var review = new CapabilitiesImplementedReviewsService(new Repository()).ById(id);
 
                 if (review.Id == Guid.Empty)
                     return StatusCode(404);
