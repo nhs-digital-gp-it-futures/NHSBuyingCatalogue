@@ -92,7 +92,7 @@ namespace Gif.Service.Controllers
                 return StatusCode((int)ex.HttpStatus, ex.Message);
             }
 
-            return StatusCode(204);
+            return new ObjectResult(review);
         }
     }
 }

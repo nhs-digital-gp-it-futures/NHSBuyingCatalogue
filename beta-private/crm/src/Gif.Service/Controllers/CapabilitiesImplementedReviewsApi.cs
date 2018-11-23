@@ -9,6 +9,7 @@
  */
 
 using Gif.Service.Attributes;
+using Gif.Service.Const;
 using Gif.Service.Crm;
 using Gif.Service.Models;
 using Gif.Service.Services;
@@ -19,7 +20,6 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Gif.Service.Const;
 
 namespace Gif.Service.Controllers
 {
@@ -52,7 +52,7 @@ namespace Gif.Service.Controllers
             {
                 var service = new CapabilitiesImplementedReviewsService(new Repository());
                 reviews = service.ByEvidence(evidenceId);
-                reviews = service.GetPagingValues(pageIndex, pageSize, reviews, out totalPages);    
+                reviews = service.GetPagingValues(pageIndex, pageSize, reviews, out totalPages);
             }
             catch (Crm.CrmApiException ex)
             {
@@ -92,7 +92,7 @@ namespace Gif.Service.Controllers
                 return StatusCode((int)ex.HttpStatus, ex.Message);
             }
 
-            return StatusCode(204);
+            return new ObjectResult(review);
         }
     }
 }
