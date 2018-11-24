@@ -8,34 +8,46 @@ using System.Linq;
 
 namespace Gif.Service.Services
 {
-    public class StandardsApplicableReviewsService : ServiceBase, ICapabilitiesImplementedReviewsDatastore
+    public class StandardsApplicableReviewsService : ServiceBase, IStandardsApplicableReviewsDatastore
     {
         public StandardsApplicableReviewsService(IRepository repository) : base(repository)
         {
         }
 
-        public IEnumerable<Review> ByEvidence(string evidenceId)
+        public IEnumerable<IEnumerable<Review>> ByEvidence(string evidenceId)
         {
-            var reviews = new List<Review>();
+            var reviewList = new List<Review>();
+            var reviewsListList = new List<List<Review>>();
 
-            var filterAttributes = new List<CrmFilterAttribute>
+            var filterReviewParent = new List<CrmFilterAttribute>
             {
                 new CrmFilterAttribute("EvidenceEntity") {FilterName = "_cc_evidence_value", FilterValue = evidenceId},
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterAttributes, true, true), out Count);
+            var jsonReviewParent = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterReviewParent, true, true), out Count);
 
-            foreach (var review in appJson.Children())
+            foreach (var reviewChild in jsonReviewParent.Children())
             {
-                reviews.Add(new Review(review));
+                var filterReviewChild = new List<CrmFilterAttribute>
+                {
+                    new CrmFilterAttribute("EvidenceEntity") {FilterName = "_cc_evidence_value", FilterValue = new Review(reviewChild).EvidenceId.ToString()},
+                    new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
+                };
+
+                var jsonReviewChild = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterReviewChild, true, true), out Count);
+                foreach (var reviewChildChild in jsonReviewChild.Children())
+                {
+                    reviewList.Add(new Review(reviewChildChild));
+                }
+
+                var enumReviewList = Review.OrderLinkedReviews(reviewList);
+                reviewsListList.Add(enumReviewList.ToList());
             }
 
-            var enumReviews = Review.OrderLinkedReviews(reviews);
+            Count = reviewsListList.Count;
 
-            Count = reviews.Count;
-
-            return enumReviews;
+            return reviewsListList;
         }
 
         public Review ById(string id)
@@ -63,6 +75,7 @@ namespace Gif.Service.Services
         {
             throw new System.NotImplementedException();
         }
+
     }
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

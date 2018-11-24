@@ -1,11 +1,11 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 using Gif.Service.Attributes;
+using Gif.Service.Const;
 using Gif.Service.Contracts;
 using Gif.Service.Crm;
 using Gif.Service.Models;
 using System.Collections.Generic;
 using System.Linq;
-using Gif.Service.Const;
 
 namespace Gif.Service.Services
 {
@@ -37,6 +37,11 @@ namespace Gif.Service.Services
             Count = evidences.Count;
 
             return enumEvidences;
+        }
+
+        IEnumerable<IEnumerable<CapabilityEvidence>> IEvidenceDatastore<CapabilityEvidence>.ByClaim(string claimId)
+        {
+            throw new System.NotImplementedException();
         }
 
         public CapabilityEvidence ById(string id)
@@ -76,6 +81,7 @@ namespace Gif.Service.Services
             return capabilityImplementedRecord != null ?
                 new CapabilityImplemented(capabilityImplementedRecord) : null;
         }
+
     }
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

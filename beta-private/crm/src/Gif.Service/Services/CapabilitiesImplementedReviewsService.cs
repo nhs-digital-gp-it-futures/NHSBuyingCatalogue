@@ -38,6 +38,11 @@ namespace Gif.Service.Services
             return enumReviews;
         }
 
+        IEnumerable<IEnumerable<Review>> IReviewsDatastore<Review>.ByEvidence(string evidenceId)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public Review ById(string id)
         {
             var filterAttributes = new List<CrmFilterAttribute>

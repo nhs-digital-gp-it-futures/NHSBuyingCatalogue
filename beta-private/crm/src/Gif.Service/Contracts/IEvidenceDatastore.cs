@@ -5,7 +5,7 @@ namespace Gif.Service.Contracts
 #pragma warning disable CS1591
     public interface IEvidenceDatastore<T>
     {
-        IEnumerable<T> ByClaim(string claimId);
+        IEnumerable<IEnumerable<T>> ByClaim(string claimId);
         T ById(string id);
         T Create(T evidence);
     }
