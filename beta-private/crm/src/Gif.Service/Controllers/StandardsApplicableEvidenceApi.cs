@@ -86,7 +86,7 @@ namespace Gif.Service.Controllers
         {
             try
             {
-                var standardApplicable = new StandardsApplicableEvidenceService(new Repository()).ByEvidenceId(id);
+                var standardApplicable = new StandardsApplicableEvidenceService(new Repository()).ById(id);
 
                 if (standardApplicable.Id == Guid.Empty)
                     return StatusCode(404);
