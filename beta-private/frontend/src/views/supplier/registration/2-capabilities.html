@@ -198,8 +198,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const elReveal = $('.reveal', elCapability)
         elCapability.style.marginBottom = '' + elReveal.offsetHeight + 'px'
 
-        elCapability.scrollIntoView()
-        window.onhashchange()
+        // IE doesn't support "smooth" so will be a bit janky
+        elCapability.scrollIntoView({ behavior: 'smooth' })
       }
     }, true)
   })

@@ -195,7 +195,8 @@ class DataProvider {
               standardsByGroup: _.zipObject(
                 ['overarching', 'associated'],
                 _.partition(capStds, isOverarchingStandard)
-              )
+              ),
+              types: _.kebabCase(capability.name)
             }
           })
           .keyBy('id')

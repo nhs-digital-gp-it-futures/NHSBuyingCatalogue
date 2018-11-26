@@ -70,8 +70,9 @@
       .capability {
         background-color: $color-capability-selector-capability-bg;
         background-repeat: no-repeat;
-        background-size: 20% 20%;
-        background-position: center;
+        background-size: 5rem 5rem;
+        background-position-x: center;
+        background-position-y: 5.5rem;
         box-shadow: 0 2px 2px 2px rgba(0, 0, 0, .25);
         cursor: pointer;
         display: block;
@@ -87,6 +88,73 @@
         transition-property: max-height, max-width, top;
         transition-duration: .1s;
         transition-timing-function: linear;
+
+        &.document-management { background-image: url('/img/capabilities/document-management.png'); }
+        &.document-management.selected { background-image: url('/img/capabilities/document-management-y.png'); }
+        &.prescribing { background-image: url('/img/capabilities/prescribing.png'); }
+        &.prescribing.selected { background-image: url('/img/capabilities/prescribing-y.png'); }
+        &.recording-consultations { background-image: url('/img/capabilities/recording-consultations.png'); }
+        &.recording-consultations.selected { background-image: url('/img/capabilities/recording-consultations-y.png'); }
+        &.patient-information-maintenance { background-image: url('/img/capabilities/patient-information-maintenance.png'); }
+        &.patient-information-maintenance.selected { background-image: url('/img/capabilities/patient-information-maintenance-y.png'); }
+        &.gp-resource-management { background-image: url('/img/capabilities/gp-resource-management.png'); }
+        &.gp-resource-management.selected { background-image: url('/img/capabilities/gp-resource-management-y.png'); }
+        &.appointments-management-gp { background-image: url('/img/capabilities/appointments-management-gp.png'); }
+        &.appointments-management-gp.selected { background-image: url('/img/capabilities/appointments-management-gp-y.png'); }
+        &.prescription-ordering-citizen { background-image: url('/img/capabilities/prescribing-ordering-citizen.png'); }
+        &.prescription-ordering-citizen.selected { background-image: url('/img/capabilities/prescribing-ordering-citizen-y.png'); }
+        &.appointments-management-citizen { background-image: url('/img/capabilities/appointments-management-citizen.png'); }
+        &.appointments-management-citizen.selected { background-image: url('/img/capabilities/appointments-management-citizen-y.png'); }
+        &.view-record-citizen { background-image: url('/img/capabilities/view-record-citizen.png'); }
+        &.view-record-citizen.selected { background-image: url('/img/capabilities/view-record-citizen-y.png'); }
+        &.communicate-with-practice-citizen { background-image: url('/img/capabilities/communicate-with-practice-citizen.png'); }
+        &.communicate-with-practice-citizen.selected { background-image: url('/img/capabilities/communicate-with-practice-citizen-y.png'); }
+        &.telehealth { background-image: url('/img/capabilities/telehealth.png'); }
+        &.telehealth.selected { background-image: url('/img/capabilities/telehealth-y.png'); }
+        &.clinical-decision-support { background-image: url('/img/capabilities/clinical-decision-support.png'); }
+        &.clinical-decision-support.selected { background-image: url('/img/capabilities/clinical-decision-support-y.png'); }
+        &.unstructured-data-extraction { background-image: url('/img/capabilities/unstructured-data-extraction.png'); }
+        &.unstructured-data-extraction.selected { background-image: url('/img/capabilities/unstructured-data-extraction-y.png'); }
+        &.scanning { background-image: url('/img/capabilities/scanning.png'); }
+        &.scanning.selected { background-image: url('/img/capabilities/scanning-y.png'); }
+        &.reporting { background-image: url('/img/capabilities/reporting.png'); }
+        &.reporting.selected { background-image: url('/img/capabilities/reporting-y.png'); }
+        &.workflow { background-image: url('/img/capabilities/workflow.png'); }
+        &.workflow.selected { background-image: url('/img/capabilities/workflow-y.png'); }
+        &.gp-extracts-verification { background-image: url('/img/capabilities/gp-extracts-verification.png'); }
+        &.gp-extracts-verification.selected { background-image: url('/img/capabilities/gp-extracts-verification-y.png'); }
+        &.communication-management { background-image: url('/img/capabilities/communication-management.png'); }
+        &.communication-management.selected { background-image: url('/img/capabilities/communication-management-y.png'); }
+        &.e-consultations-patient-service-user-to-professional { background-image: url('/img/capabilities/e-consultations-patient-service-user-to-professional.png'); }
+        &.e-consultations-patient-service-user-to-professional.selected { background-image: url('/img/capabilities/e-consultations-patient-service-user-to-professional-y.png'); }
+        &.e-consultations-professional-to-professional { background-image: url('/img/capabilities/e-consultations-professional-to-professional.png'); }
+        &.e-consultations-professional-to-professional.selected { background-image: url('/img/capabilities/e-consultations-professional-to-professional-y.png'); }
+        &.medicines-optimisation { background-image: url('/img/capabilities/medicines-optimisation.png'); }
+        &.medicines-optimisation.selected { background-image: url('/img/capabilities/medicines-optimisation-y.png'); }
+        &.cross-organisation-appointment-booking { background-image: url('/img/capabilities/cross-org-appointment-booking.png'); }
+        &.cross-organisation-appointment-booking.selected { background-image: url('/img/capabilities/cross-org-appointment-booking-y.png'); }
+        &.cross-organisation-workflow-tools { background-image: url('/img/capabilities/cross-org-workflow-tools.png'); }
+        &.cross-organisation-workflow-tools.selected { background-image: url('/img/capabilities/cross-org-workflow-tools-y.png'); }
+        &.cross-organisation-workforce-management { background-image: url('/img/capabilities/cross-org-workforce-management.png'); }
+        &.cross-organisation-workforce-management.selected { background-image: url('/img/capabilities/cross-org-workforce-management-y.png'); }
+        &.unified-care-record { background-image: url('/img/capabilities/fully-shared-care-record.png'); }
+        &.unified-care-record.selected { background-image: url('/img/capabilities/fully-shared-care-record-y.png'); }
+        &.shared-care-plans { background-image: url('/img/capabilities/shared-care-plan.png'); }
+        &.shared-care-plans.selected { background-image: url('/img/capabilities/shared-care-plan-y.png'); }
+        &.personal-health-budget { background-image: url('/img/capabilities/personal-health-budget.png'); }
+        &.personal-health-budget.selected { background-image: url('/img/capabilities/personal-health-budget-y.png'); }
+        &.personal-health-record { background-image: url('/img/capabilities/personal-health-record.png'); }
+        &.personal-health-record.selected { background-image: url('/img/capabilities/personal-health-record-y.png'); }
+        &.population-health-management { background-image: url('/img/capabilities/population-health-management.png'); }
+        &.population-health-management.selected { background-image: url('/img/capabilities/population-health-management-y.png'); }
+        &.domiciliary-care { background-image: url('/img/capabilities/domiciliary-care.png'); }
+        &.domiciliary-care.selected { background-image: url('/img/capabilities/domiciliary-care-y.png'); }
+        &.risk-stratification { background-image: url('/img/capabilities/risk-stratification.png'); }
+        &.risk-stratification.selected { background-image: url('/img/capabilities/risk-stratification-y.png'); }
+        &.caseload-management { background-image: url('/img/capabilities/caseload-management.png'); }
+        &.caseload-management.selected { background-image: url('/img/capabilities/caseload-management-y.png'); }
+        &.data-analytics-for-integrated-and-federated-care { background-image: url('/img/capabilities/data-analytics-for-integrated-and-federated-care.png'); }
+        &.data-analytics-for-integrated-and-federated-care.selected { background-image: url('/img/capabilities/data-analytics-for-integrated-and-federated-care-y.png'); }
 
         &:not(.revealed):hover {
           background-image: none;
