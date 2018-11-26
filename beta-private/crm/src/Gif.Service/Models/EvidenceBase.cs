@@ -11,6 +11,9 @@ namespace Gif.Service.Models
     public class EvidenceBase : EntityBase
     {
 
+        private string _evidence = string.Empty;
+
+
         [DataMember]
         [CrmIdField]
         [CrmFieldName("cc_evidenceid")]
@@ -18,7 +21,7 @@ namespace Gif.Service.Models
 
         [DataMember]
         [CrmFieldName("cc_name")]
-        public string Evidence { get; set; }
+        public string Evidence { get => _evidence ?? string.Empty; set => _evidence = value; }
 
         [DataMember]
         [CrmFieldName("_cc_capabilityimplemented_value")]
