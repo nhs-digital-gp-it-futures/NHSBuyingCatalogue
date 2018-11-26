@@ -49,7 +49,7 @@ namespace Gif.Service.Models
         /// </summary>
         /// <value>List of items</value>
         [DataMember(Name = "items")]
-        public List<CapabilityEvidence> Items { get; set; }
+        public IEnumerable<IEnumerable<CapabilityEvidence>> Items { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object

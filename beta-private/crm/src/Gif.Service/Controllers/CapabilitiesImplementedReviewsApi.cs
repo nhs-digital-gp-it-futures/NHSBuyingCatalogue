@@ -77,7 +77,7 @@ namespace Gif.Service.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(PaginatedListIEnumerableCapabilitiesImplementedReviews), description: "Success")]
         public virtual IActionResult ApiCapabilitiesImplementedReviewsByEvidenceByEvidenceIdGet([FromRoute][Required]string evidenceId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
         {
-            IEnumerable<Review> reviews;
+            IEnumerable<IEnumerable<Review>> reviews;
             int totalPages;
 
             try
@@ -90,7 +90,6 @@ namespace Gif.Service.Controllers
             {
                 return StatusCode((int)ex.HttpStatus, ex.Message);
             }
-
 
             return new ObjectResult(new PaginatedListIEnumerableCapabilitiesImplementedReviews()
             {

@@ -46,7 +46,7 @@ namespace Gif.Service.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(PaginatedListIEnumerableCapabilitiesImplementedEvidence), description: "Success")]
         public virtual IActionResult ApiCapabilitiesImplementedEvidenceByClaimByClaimIdGet([FromRoute][Required]string claimId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
         {
-            IEnumerable<CapabilityEvidence> evidences;
+            IEnumerable<IEnumerable<CapabilityEvidence>> evidences;
             int totalPages;
 
             try
