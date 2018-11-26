@@ -31,8 +31,6 @@ namespace Gif.Service.Services
             var jsonReviewParent = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterReviewParent, true, true), out Count);
 
             // iterate through all items that are at the end of the chain
-            //AddReviewChainToList(jsonReviewParent.Root, reviewList, reviewsListList);
-
             foreach (var reviewChild in jsonReviewParent.Children())
                 AddReviewChainToList(reviewChild, reviewList, reviewsListList);
 
@@ -41,34 +39,34 @@ namespace Gif.Service.Services
             return reviewsListList;
         }
 
-        private void AddReviewChainToList(JToken reviewChild, List<Review> reviewList, List<List<Review>> reviewsListList)
+        private void AddReviewChainToList(JToken review, List<Review> reviewList, List<List<Review>> reviewsListList)
         {
-            GetReviewsChain(reviewChild, reviewList);
+            GetReviewsChain(review, reviewList);
 
             var enumReviewList = Review.OrderLinkedReviews(reviewList);
             reviewsListList.Add(enumReviewList.ToList());
         }
 
-        private void GetReviewsChain(JToken reviewChild, List<Review> reviewList)
+        private void GetReviewsChain(JToken reviewChainEnd, List<Review> reviewList)
         {
             // store the end of the chain (with no previous id)
-            var review = new Review(reviewChild);
+            var review = new Review(reviewChainEnd);
             reviewList.Add(review);
             var id = review.Id.ToString();
 
             // get the chain of reviews linked by previous id
             while (true)
             {
-                var filterReviewChild = new List<CrmFilterAttribute>
+                var filterReview = new List<CrmFilterAttribute>
                 {
                     new CrmFilterAttribute("EvidenceEntity") {FilterName = "_cc_previousversion_value", FilterValue = id},
                     new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
                 };
 
-                var jsonReviewChild = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterReviewChild, true, true), out Count);
-                if (jsonReviewChild.HasValues)
+                var jsonReview = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterReview, true, true), out Count);
+                if (jsonReview.HasValues)
                 {
-                    review = new Review(jsonReviewChild.FirstOrDefault());
+                    review = new Review(jsonReview.FirstOrDefault());
                     reviewList.Add(review);
                     id = review.Id.ToString();
                 }
