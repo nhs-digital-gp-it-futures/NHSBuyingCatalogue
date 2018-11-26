@@ -86,7 +86,7 @@ namespace Gif.Service.Controllers
         {
             try
             {
-                var capabilityImplemented = new CapabilitiesImplementedEvidenceService(new Repository()).ByEvidenceId(id);
+                var capabilityImplemented = new CapabilitiesImplementedEvidenceService(new Repository()).ById(id);
 
                 if (capabilityImplemented.Id == Guid.Empty)
                     return StatusCode(404);
