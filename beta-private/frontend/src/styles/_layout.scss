@@ -61,6 +61,10 @@ a {
   padding-top: $header-total-height;
 }
 
+body {
+  overflow-x: hidden; // horizontal scrolling is never desirable
+}
+
 body > header {
   position: fixed;
   top: 0;

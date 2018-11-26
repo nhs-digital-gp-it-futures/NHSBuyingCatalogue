@@ -11,6 +11,30 @@ const solutionOnboardingStatusMap = {
 
 const EMPTY_UUID = '00000000-0000-0000-0000-000000000000'
 
+const isOverarchingStandard = std => _.startsWith(std.standardId || std.id, 'STD-O-')
+
+// set up the data layer caches
+const cacheManager = require('cache-manager')
+const cacheStoreParams = process.env.CACHE_HOST
+  ? { store: require('cache-manager-redis-store'), host: process.env.CACHE_HOST }
+  : { store: 'memory' }
+
+// cache for long-term storage of data that doesn't change regularly (e.g. capability map)
+const dataCache = cacheManager.caching({
+  ...cacheStoreParams,
+  prefix: 'bcbeta-data:',
+  ttl: 24 * 60 * 60
+})
+
+// cache for short-term storage of session data
+const CacheManagerStore = require('express-session-cache-manager').default
+const sessionStore = new CacheManagerStore(cacheManager.caching({
+  ...cacheStoreParams,
+  ttl: 60 * 60
+}), {
+  prefix: 'bcbeta-sess:'
+})
+
 class DataProvider {
   constructor (CatalogueApi) {
     this.CatalogueApi = CatalogueApi
@@ -117,6 +141,22 @@ class DataProvider {
       }
     })
 
+    // because the API server doesn't do this for me, implement cascading
+    // delete of evidence/reviews for any capabilities and standards that
+    // have been removed
+    solnEx.claimedCapabilityEvidence = _.filter(solnEx.claimedCapabilityEvidence,
+      ev => _.some(solnEx.claimedCapability, { id: ev.claimId })
+    )
+    solnEx.claimedCapabilityReview = _.filter(solnEx.claimedCapabilityReview,
+      rev => _.some(solnEx.claimedCapabilityEvidence, { id: rev.evidenceId })
+    )
+    solnEx.claimedStandardEvidence = _.filter(solnEx.claimedStandardEvidence,
+      ev => _.some(solnEx.claimedStandard, { id: ev.claimId })
+    )
+    solnEx.claimedStandardReview = _.filter(solnEx.claimedStandardReview,
+      rev => _.some(solnEx.claimedStandardEvidence, { id: rev.evidenceId })
+    )
+
     await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
     return this.solutionForRegistration(solution.id)
   }
@@ -137,21 +177,33 @@ class DataProvider {
   }
 
   async capabilityMappings () {
-    const {
-      capabilityMapping,
-      standard
-    } = await this.capabilityMappingsApi.apiPorcelainCapabilityMappingsGet()
+    return dataCache.wrap('capabilityMappings', async () => {
+      const {
+        capabilityMapping,
+        standard
+      } = await this.capabilityMappingsApi.apiPorcelainCapabilityMappingsGet()
 
-    return {
-      capabilities: _(capabilityMapping)
-        .map(({ capability, optionalStandard }) => ({
-          ...capability,
-          standards: optionalStandard
-        }))
-        .keyBy('id')
-        .value(),
-      standards: _.keyBy(standard, 'id')
-    }
+      const standards = _.keyBy(standard, 'id')
+
+      return {
+        capabilities: _(capabilityMapping)
+          .map(({ capability, optionalStandard }) => {
+            const capStds = _.map(optionalStandard, ({ standardId }) => standards[standardId])
+            return {
+              ...capability,
+              standards: capStds,
+              standardsByGroup: _.zipObject(
+                ['overarching', 'associated'],
+                _.partition(capStds, isOverarchingStandard)
+              ),
+              types: _.kebabCase(capability.name)
+            }
+          })
+          .keyBy('id')
+          .value(),
+        standards
+      }
+    })
   }
 }
 
@@ -170,6 +222,7 @@ class RealDataProvider extends DataProvider {
 }
 
 module.exports = {
+  sessionStore,
   dataProvider: new RealDataProvider(),
   DataProvider
 }
