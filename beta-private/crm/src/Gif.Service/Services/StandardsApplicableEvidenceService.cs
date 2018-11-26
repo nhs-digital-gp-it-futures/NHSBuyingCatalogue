@@ -4,6 +4,7 @@ using Gif.Service.Const;
 using Gif.Service.Contracts;
 using Gif.Service.Crm;
 using Gif.Service.Models;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,33 +16,64 @@ namespace Gif.Service.Services
         {
         }
 
-        public IEnumerable<StandardApplicableEvidence> ByClaim(string standardApplicableId)
+        public IEnumerable<IEnumerable<StandardApplicableEvidence>> ByClaim(string claimId)
         {
-            var evidences = new List<StandardApplicableEvidence>();
+            var evidenceList = new List<StandardApplicableEvidence>();
+            var evidenceListList = new List<List<StandardApplicableEvidence>>();
 
-            var filterAttributes = new List<CrmFilterAttribute>
+            // get all items at the end of the chain i.e. where the previous id is null
+            var filterEvidenceParent = new List<CrmFilterAttribute>
             {
-                new CrmFilterAttribute("StandardApplicableId") {FilterName = "_cc_standardapplicable_value", FilterValue = standardApplicableId},
+                new CrmFilterAttribute("ClaimId") {FilterName = "_cc_capabilityimplemented_value", FilterValue = claimId},
+                new CrmFilterAttribute("Previous") {FilterName = "_cc_previousversion_value", FilterValue = "null"},
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new StandardApplicableEvidence().GetQueryString(null, filterAttributes, true, true), out Count);
+            var jsonEvidenceParent = Repository.RetrieveMultiple(new StandardApplicableEvidence().GetQueryString(null, filterEvidenceParent, true, true), out Count);
 
-            foreach (var evidence in appJson.Children())
-            {
-                evidences.Add(new StandardApplicableEvidence(evidence));
-            }
+            // iterate through all items that are at the end of the chain
+            foreach (var evidenceChild in jsonEvidenceParent.Children())
+                AddEvidenceChainToList(evidenceChild, evidenceList, evidenceListList);
 
-            var enumEvidences = StandardApplicableEvidence.OrderLinkedEvidences(evidences);
+            Count = evidenceListList.Count;
 
-            Count = evidences.Count;
-
-            return enumEvidences;
+            return evidenceListList;
         }
 
-        IEnumerable<IEnumerable<StandardApplicableEvidence>> IEvidenceDatastore<StandardApplicableEvidence>.ByClaim(string claimId)
+        private void AddEvidenceChainToList(JToken evidence, List<StandardApplicableEvidence> evidenceList, List<List<StandardApplicableEvidence>> evidenceListList)
         {
-            throw new System.NotImplementedException();
+            GetEvidencesChain(evidence, evidenceList);
+
+            var enumEvidenceList = StandardApplicableEvidence.OrderLinkedEvidences(evidenceList);
+            evidenceListList.Add(enumEvidenceList.ToList());
+        }
+
+        private void GetEvidencesChain(JToken evidenceChainEnd, List<StandardApplicableEvidence> evidenceList)
+        {
+            // store the end of the chain (with no previous id)
+            var evidence = new StandardApplicableEvidence(evidenceChainEnd);
+            evidenceList.Add(evidence);
+            var id = evidence.Id.ToString();
+
+            // get the chain of evidences linked by previous id
+            while (true)
+            {
+                var filterEvidence = new List<CrmFilterAttribute>
+                {
+                    new CrmFilterAttribute("PreviousEvidence") {FilterName = "_cc_previousversion_value", FilterValue = id},
+                    new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
+                };
+
+                var jsonEvidence = Repository.RetrieveMultiple(new StandardApplicableEvidence().GetQueryString(null, filterEvidence, true, true), out Count);
+                if (jsonEvidence.HasValues)
+                {
+                    evidence = new StandardApplicableEvidence(jsonEvidence.FirstOrDefault());
+                    evidenceList.Add(evidence);
+                    id = evidence.Id.ToString();
+                }
+                else
+                    break;
+            }
         }
 
         public StandardApplicableEvidence ById(string id)
