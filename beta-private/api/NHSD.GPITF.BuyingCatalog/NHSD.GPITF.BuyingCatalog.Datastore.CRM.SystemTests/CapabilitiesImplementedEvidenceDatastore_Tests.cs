@@ -61,7 +61,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
         // retrieve ById
         datastore.ById(createdEvidence.Id)
           .Should().NotBeNull()
-          .And
+          .And.Subject
           .Should().BeEquivalentTo(createdEvidence,
             opts => opts
               .Excluding(ent => ent.CreatedOn));
