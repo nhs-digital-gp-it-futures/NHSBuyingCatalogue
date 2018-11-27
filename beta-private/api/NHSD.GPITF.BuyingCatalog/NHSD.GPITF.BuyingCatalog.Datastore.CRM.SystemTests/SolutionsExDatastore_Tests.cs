@@ -3,7 +3,9 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Logic;
+using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 using NUnit.Framework;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
@@ -61,28 +63,57 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void BySolution_ReturnsData()
     {
-      var allSolns = Retriever.GetAllSolutions(_policy);
-      var datastore = new SolutionsExDatastore(
-        DatastoreBaseSetup.CrmConnectionFactory,
-        _logger,
-        _policy,
-
-        _solutionDatastore,
-        _technicalContactDatastore,
-
-        _claimedCapabilityDatastore,
-        _claimedCapabilityEvidenceDatastore,
-        _claimedCapabilityReviewsDatastore,
-
-        _claimedStandardDatastore,
-        _claimedStandardEvidenceDatastore,
-        _claimedStandardReviewsDatastore);
-
-      var datas = allSolns.Select(soln => datastore.BySolution(soln.Id)).ToList();
+      var datas = GetAll();
 
       datas.Should().NotBeEmpty();
       datas.ForEach(data => data.Should().NotBeNull());
       datas.ForEach(data => Verifier.Verify(data));
+    }
+
+    [Test]
+    public void Update_NoChange_Succeeds()
+    {
+      var solnEx = GetAll().First();
+      var datastore = GetDatastore();
+
+      datastore.Update(solnEx);
+
+      var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+      retrievedSolnEx
+        .Should().NotBeNull()
+        .And.Subject
+        .Should().BeEquivalentTo(solnEx,
+          opts => opts
+            .Excluding(ent => ent.Solution.ModifiedOn)
+            .Excluding(ent => ent.Solution.ModifiedById));
+    }
+
+    private List<SolutionEx> GetAll()
+    {
+      var allSolns = Retriever.GetAllSolutions(_policy);
+      var datastore = GetDatastore();
+      var datas = allSolns.Select(soln => datastore.BySolution(soln.Id)).ToList();
+
+      return datas;
+    }
+
+    private SolutionsExDatastore GetDatastore()
+    {
+      return new SolutionsExDatastore(
+              DatastoreBaseSetup.CrmConnectionFactory,
+              _logger,
+              _policy,
+
+              _solutionDatastore,
+              _technicalContactDatastore,
+
+              _claimedCapabilityDatastore,
+              _claimedCapabilityEvidenceDatastore,
+              _claimedCapabilityReviewsDatastore,
+
+              _claimedStandardDatastore,
+              _claimedStandardEvidenceDatastore,
+              _claimedStandardReviewsDatastore);
     }
   }
 }
