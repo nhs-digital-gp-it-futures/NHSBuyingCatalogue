@@ -1,4 +1,5 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+using System;
 using Gif.Service.Attributes;
 using Gif.Service.Contracts;
 using Gif.Service.Crm;
@@ -63,7 +64,22 @@ namespace Gif.Service.Services
 
         public void Delete(CapabilityImplemented capabilityImplemented)
         {
+
+            var filterAttributes = new List<CrmFilterAttribute>
+            {
+                new CrmFilterAttribute("CapabilityImplemented") {FilterName = "_cc_capabilityimplemented_value", FilterValue = capabilityImplemented.Id.ToString()},
+            };
+
+            var capabilityEvidence = new CapabilityEvidence();
+
+            var jsonEvidenceParent = Repository.RetrieveMultiple(capabilityEvidence.GetQueryString(null, filterAttributes), out Count);
+
             Repository.Delete(capabilityImplemented.EntityName, capabilityImplemented.Id);
+
+            foreach (var evidence in jsonEvidenceParent)
+            {
+                Repository.Delete(capabilityEvidence.EntityName, new CapabilityEvidence(evidence).Id);
+            }
         }
 
         public void Update(CapabilityImplemented capabilityImplemented)

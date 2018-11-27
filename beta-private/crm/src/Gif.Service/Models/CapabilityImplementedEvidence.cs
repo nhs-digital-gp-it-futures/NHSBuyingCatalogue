@@ -11,12 +11,6 @@ namespace Gif.Service.Models
 {
     public class CapabilityImplementedEvidence : EvidenceBase
     {
-        [DataMember]
-        [CrmFieldName("_cc_standardapplicable_value")]
-        [CrmFieldNameDataBind("cc_StandardApplicable@odata.bind")]
-        [CrmFieldEntityDataBind("cc_standardapplicables")]
-        public override Guid? ClaimId { get; set; }
-
         [CrmEntityRelationAttribute(RelationshipNames.EvidenceCapabilityImplemented)]
         public IList<CapabilityImplemented> CapabilityImplemented { get; set; }
 
