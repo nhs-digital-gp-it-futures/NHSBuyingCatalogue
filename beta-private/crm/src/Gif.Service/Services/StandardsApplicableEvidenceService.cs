@@ -24,7 +24,7 @@ namespace Gif.Service.Services
             // get all items at the end of the chain i.e. where the previous id is null
             var filterEvidenceParent = new List<CrmFilterAttribute>
             {
-                new CrmFilterAttribute("ClaimId") {FilterName = "_cc_capabilityimplemented_value", FilterValue = claimId},
+                new CrmFilterAttribute("ClaimId") {FilterName = "_cc_standardapplicable_value", FilterValue = claimId},
                 new CrmFilterAttribute("Previous") {FilterName = "_cc_previousversion_value", FilterValue = "null"},
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
