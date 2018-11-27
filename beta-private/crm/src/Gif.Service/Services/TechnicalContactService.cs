@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Gif.Service.Attributes;
+﻿using Gif.Service.Attributes;
 using Gif.Service.Contracts;
 using Gif.Service.Crm;
 using Gif.Service.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Gif.Service.Services
 {
@@ -51,7 +49,7 @@ namespace Gif.Service.Services
 
         public void Delete(TechnicalContact techCont)
         {
-            Repository.UpdateField(techCont.EntityName, "statecode", techCont.Id, "1");
+            Repository.Delete(techCont.EntityName, techCont.Id);
         }
     }
 }

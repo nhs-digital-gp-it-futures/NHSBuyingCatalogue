@@ -59,8 +59,7 @@ namespace Gif.Service.Services
 
         public void Delete(StandardApplicable standardApplicable)
         {
-            // soft delete by making record inactive
-            Repository.UpdateField(standardApplicable.EntityName, "statecode", standardApplicable.Id, "1");
+            Repository.Delete(standardApplicable.EntityName, standardApplicable.Id);
         }
 
         public void Update(StandardApplicable standardApplicable)

@@ -63,8 +63,7 @@ namespace Gif.Service.Services
 
         public void Delete(CapabilityImplemented capabilityImplemented)
         {
-            // soft delete by making record inactive
-            Repository.UpdateField(capabilityImplemented.EntityName, "statecode", capabilityImplemented.Id, "1");
+            Repository.Delete(capabilityImplemented.EntityName, capabilityImplemented.Id);
         }
 
         public void Update(CapabilityImplemented capabilityImplemented)

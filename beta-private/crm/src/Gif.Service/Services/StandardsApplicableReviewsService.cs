@@ -98,7 +98,7 @@ namespace Gif.Service.Services
 
         public void Delete(Review review)
         {
-            throw new System.NotImplementedException();
+            Repository.Delete(review.EntityName, review.Id);
         }
 
     }
