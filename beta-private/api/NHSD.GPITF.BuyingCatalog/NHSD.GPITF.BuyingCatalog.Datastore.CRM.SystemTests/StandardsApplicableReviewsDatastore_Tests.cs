@@ -79,9 +79,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
               .Excluding(ent => ent.CreatedOn));
 
         // retrieve ByEvidence
-        datastore.ByEvidence(createdEvidence.Id)
-          .Should().ContainSingle()
-          .And
+        var retrievedReviews = datastore.ByEvidence(createdEvidence.Id)
+          .SelectMany(x => x).ToList();
+        retrievedReviews.Should().ContainSingle()
+          .And.Subject.Single()
           .Should().BeEquivalentTo(createdReview,
             opts => opts
               .Excluding(ent => ent.CreatedOn));
