@@ -88,6 +88,67 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
             .Excluding(ent => ent.Solution.ModifiedById));
     }
 
+    [Test]
+    public void Update_AddTechnicalContact_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+      solnEx.TechnicalContact.Add(Creator.GetTechnicalContact(solutionId: solnEx.Solution.Id));
+
+      try
+      {
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx
+          .Should().NotBeNull()
+          .And.Subject
+          .Should().BeEquivalentTo(solnEx,
+            opts => opts
+              .Excluding(ent => ent.Solution.ModifiedOn)
+              .Excluding(ent => ent.Solution.ModifiedById));
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+
+    [Test]
+    public void Update_RemoveTechnicalContact_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+      solnEx.TechnicalContact.Add(Creator.GetTechnicalContact(solutionId: solnEx.Solution.Id));
+
+      try
+      {
+        datastore.Update(solnEx);
+        solnEx.TechnicalContact.Clear();
+
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx
+          .Should().NotBeNull()
+          .And.Subject
+          .Should().BeEquivalentTo(solnEx,
+            opts => opts
+              .Excluding(ent => ent.Solution.ModifiedOn)
+              .Excluding(ent => ent.Solution.ModifiedById));
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+
     private List<SolutionEx> GetAll()
     {
       var allSolns = Retriever.GetAllSolutions(_policy);
