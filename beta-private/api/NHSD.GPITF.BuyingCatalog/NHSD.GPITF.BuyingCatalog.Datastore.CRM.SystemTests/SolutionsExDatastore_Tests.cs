@@ -90,27 +90,26 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
 
     #region TechnicalContact
     [Test]
-    public void Update_AddTechnicalContact_Succeeds()
+    public void Update_Add_TechnicalContact_Succeeds()
     {
       var allSolnEx = GetAll();
       var solnOrig = allSolnEx.First();
       var solnEx = allSolnEx.First();
       solnOrig.Should().BeEquivalentTo(solnEx);
       var datastore = GetDatastore();
-      solnEx.TechnicalContact.Add(Creator.GetTechnicalContact(solutionId: solnEx.Solution.Id));
 
       try
       {
+        solnEx.TechnicalContact.Clear();
+        var techCont = Creator.GetTechnicalContact(solutionId: solnEx.Solution.Id);
+        solnEx.TechnicalContact.Add(techCont);
         datastore.Update(solnEx);
 
         var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
-        retrievedSolnEx
-          .Should().NotBeNull()
-          .And.Subject
-          .Should().BeEquivalentTo(solnEx,
-            opts => opts
-              .Excluding(ent => ent.Solution.ModifiedOn)
-              .Excluding(ent => ent.Solution.ModifiedById));
+        retrievedSolnEx.TechnicalContact
+         .Should().ContainSingle()
+         .And
+         .Should().BeEquivalentTo(techCont);
       }
       finally
       {
@@ -119,7 +118,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     }
 
     [Test]
-    public void Update_RemoveTechnicalContact_Succeeds()
+    public void Update_Remove_TechnicalContact_Succeeds()
     {
       var allSolnEx = GetAll();
       var solnOrig = allSolnEx.First();
@@ -136,13 +135,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
         datastore.Update(solnEx);
 
         var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
-        retrievedSolnEx
-          .Should().NotBeNull()
-          .And.Subject
-          .Should().BeEquivalentTo(solnEx,
-            opts => opts
-              .Excluding(ent => ent.Solution.ModifiedOn)
-              .Excluding(ent => ent.Solution.ModifiedById));
+        retrievedSolnEx.TechnicalContact
+          .Should().BeEmpty();
       }
       finally
       {
@@ -153,7 +147,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
 
     #region ClaimedCapability
     [Test]
-    public void Update_AddClaimedCapability_Succeeds()
+    public void Update_Add_ClaimedCapability_Succeeds()
     {
       var allSolnEx = GetAll();
       var solnOrig = allSolnEx.First();
@@ -169,13 +163,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
         datastore.Update(solnEx);
 
         var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
-        retrievedSolnEx
-          .Should().NotBeNull()
-          .And.Subject
-          .Should().BeEquivalentTo(solnEx,
-            opts => opts
-              .Excluding(ent => ent.Solution.ModifiedOn)
-              .Excluding(ent => ent.Solution.ModifiedById));
+        retrievedSolnEx.ClaimedCapability
+          .Should().ContainSingle()
+          .And
+          .Should().BeEquivalentTo(claim);
       }
       finally
       {
@@ -184,7 +175,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     }
 
     [Test]
-    public void Update_RemoveClaimedCapability_Succeeds()
+    public void Update_Remove_ClaimedCapability_Succeeds()
     {
       var allSolnEx = GetAll();
       var solnOrig = allSolnEx.First();
@@ -203,13 +194,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
         datastore.Update(solnEx);
 
         var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
-        retrievedSolnEx
-          .Should().NotBeNull()
-          .And.Subject
-          .Should().BeEquivalentTo(solnEx,
-            opts => opts
-              .Excluding(ent => ent.Solution.ModifiedOn)
-              .Excluding(ent => ent.Solution.ModifiedById));
+        retrievedSolnEx.ClaimedCapability
+          .Should().BeEmpty();
       }
       finally
       {
@@ -220,7 +206,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
 
     #region ClaimedStandard
     [Test]
-    public void Update_AddClaimedStandard_Succeeds()
+    public void Update_Add_ClaimedStandard_Succeeds()
     {
       var allSolnEx = GetAll();
       var solnOrig = allSolnEx.First();
@@ -236,13 +222,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
         datastore.Update(solnEx);
 
         var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
-        retrievedSolnEx
-          .Should().NotBeNull()
-          .And.Subject
-          .Should().BeEquivalentTo(solnEx,
-            opts => opts
-              .Excluding(ent => ent.Solution.ModifiedOn)
-              .Excluding(ent => ent.Solution.ModifiedById));
+        retrievedSolnEx.ClaimedStandard
+          .Should().ContainSingle()
+          .And
+          .Should().BeEquivalentTo(claim);
       }
       finally
       {
@@ -251,7 +234,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     }
 
     [Test]
-    public void Update_RemoveClaimedStandard_Succeeds()
+    public void Update_Remove_ClaimedStandard_Succeeds()
     {
       var allSolnEx = GetAll();
       var solnOrig = allSolnEx.First();
@@ -270,13 +253,426 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
         datastore.Update(solnEx);
 
         var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
-        retrievedSolnEx
-          .Should().NotBeNull()
-          .And.Subject
-          .Should().BeEquivalentTo(solnEx,
+        retrievedSolnEx.ClaimedStandard
+          .Should().BeEmpty();
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+    #endregion
+
+    #region ClaimedCapabilityEvidence
+    [Test]
+    public void Update_Add_ClaimedCapabilityEvidence_NoChain_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+      var cap = Retriever.GetAllCapabilities(_policy).First();
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedCapability.Add(claim);
+
+      try
+      {
+        datastore.Update(solnEx);
+        var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
+        solnEx.ClaimedCapabilityEvidence.Add(evidence);
+
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx.ClaimedCapabilityEvidence
+          .Should().ContainSingle()
+          .And
+          .Should().BeEquivalentTo(evidence,
             opts => opts
-              .Excluding(ent => ent.Solution.ModifiedOn)
-              .Excluding(ent => ent.Solution.ModifiedById));
+              .Excluding(ent => ent.CreatedOn));
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+
+    [Test]
+    public void Update_Add_ClaimedCapabilityEvidence_Chain_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+      var cap = Retriever.GetAllCapabilities(_policy).First();
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedCapability.Add(claim);
+
+      try
+      {
+        datastore.Update(solnEx);
+        var evidencePrev = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
+        var evidence = Creator.GetCapabilitiesImplementedEvidence(prevId: evidencePrev.Id, claimId: claim.Id);
+        solnEx.ClaimedCapabilityEvidence.Add(evidence);
+        solnEx.ClaimedCapabilityEvidence.Add(evidencePrev);
+
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx.ClaimedCapabilityEvidence
+          .Should().HaveCount(2)
+          .And.Subject
+          .Should().BeEquivalentTo(new[] { evidence, evidencePrev },
+            opts => opts
+              .Excluding(ent => ent.CreatedOn));
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+
+    [Test]
+    public void Update_Add_ClaimedCapabilityEvidence_EndChain_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+      var cap = Retriever.GetAllCapabilities(_policy).First();
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedCapability.Add(claim);
+
+      try
+      {
+        var evidencePrev = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
+        solnEx.ClaimedCapabilityEvidence.Add(evidencePrev);
+        datastore.Update(solnEx);
+        var evidence = Creator.GetCapabilitiesImplementedEvidence(prevId: evidencePrev.Id, claimId: claim.Id);
+        solnEx.ClaimedCapabilityEvidence.Add(evidence);
+
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx.ClaimedCapabilityEvidence
+          .Should().HaveCount(2)
+          .And.Subject
+          .Should().BeEquivalentTo(new[] { evidence, evidencePrev },
+            opts => opts
+              .Excluding(ent => ent.CreatedOn));
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+
+    [Test]
+    public void Update_Remove_ClaimedCapabilityEvidence_NoChain_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+      var cap = Retriever.GetAllCapabilities(_policy).First();
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedCapability.Add(claim);
+
+      try
+      {
+        var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
+        solnEx.ClaimedCapabilityEvidence.Add(evidence);
+        datastore.Update(solnEx);
+        solnEx.ClaimedCapabilityEvidence.Clear();
+
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx.ClaimedCapabilityEvidence
+          .Should().BeEmpty();
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+
+    [Test]
+    public void Update_Remove_ClaimedCapabilityEvidence_Chain_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+      var cap = Retriever.GetAllCapabilities(_policy).First();
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedCapability.Add(claim);
+
+      try
+      {
+        var evidencePrev = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
+        var evidence = Creator.GetCapabilitiesImplementedEvidence(prevId: evidencePrev.Id, claimId: claim.Id);
+        solnEx.ClaimedCapabilityEvidence.Add(evidence);
+        solnEx.ClaimedCapabilityEvidence.Add(evidencePrev);
+        datastore.Update(solnEx);
+        solnEx.ClaimedCapabilityEvidence.Clear();
+
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx.ClaimedCapabilityEvidence
+          .Should().BeEmpty();
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+
+    [Test]
+    public void Update_Remove_ClaimedCapabilityEvidence_EndChain_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+      var cap = Retriever.GetAllCapabilities(_policy).First();
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedCapability.Add(claim);
+
+      try
+      {
+        var evidencePrev = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
+        var evidence = Creator.GetCapabilitiesImplementedEvidence(prevId: evidencePrev.Id, claimId: claim.Id);
+        solnEx.ClaimedCapabilityEvidence.Add(evidence);
+        solnEx.ClaimedCapabilityEvidence.Add(evidencePrev);
+        datastore.Update(solnEx);
+        solnEx.ClaimedCapabilityEvidence.Remove(evidence);
+
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx.ClaimedCapabilityEvidence
+          .Should().ContainSingle()
+          .And
+          .Should().BeEquivalentTo(evidence,
+            opts => opts
+              .Excluding(ent => ent.CreatedOn));
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+    #endregion
+
+    #region ClaimedStandardEvidence
+    [Test]
+    public void Update_Add_ClaimedStandardEvidence_NoChain_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+      var std = Retriever.GetAllStandards(_policy).First();
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedStandard.Add(claim);
+
+      try
+      {
+        datastore.Update(solnEx);
+        var evidence = Creator.GetStandardsApplicableEvidence(claimId: claim.Id);
+        solnEx.ClaimedStandardEvidence.Add(evidence);
+
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx.ClaimedStandardEvidence
+          .Should().ContainSingle()
+          .And
+          .Should().BeEquivalentTo(evidence,
+            opts => opts
+              .Excluding(ent => ent.CreatedOn));
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+
+    [Test]
+    public void Update_Add_ClaimedStandardEvidence_Chain_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+      var std = Retriever.GetAllStandards(_policy).First();
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedStandard.Add(claim);
+
+      try
+      {
+        datastore.Update(solnEx);
+        var evidencePrev = Creator.GetStandardsApplicableEvidence(claimId: claim.Id);
+        var evidence = Creator.GetStandardsApplicableEvidence(prevId: evidencePrev.Id, claimId: claim.Id);
+        solnEx.ClaimedStandardEvidence.Add(evidence);
+        solnEx.ClaimedStandardEvidence.Add(evidencePrev);
+
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx.ClaimedStandardEvidence
+          .Should().HaveCount(2)
+          .And.Subject
+          .Should().BeEquivalentTo(new[] { evidence, evidencePrev },
+            opts => opts
+              .Excluding(ent => ent.CreatedOn));
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+
+    [Test]
+    public void Update_Add_ClaimedStandardEvidence_EndChain_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+      var std = Retriever.GetAllStandards(_policy).First();
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedStandard.Add(claim);
+
+      try
+      {
+        var evidencePrev = Creator.GetStandardsApplicableEvidence(claimId: claim.Id);
+        solnEx.ClaimedStandardEvidence.Add(evidencePrev);
+        datastore.Update(solnEx);
+        var evidence = Creator.GetStandardsApplicableEvidence(prevId: evidencePrev.Id, claimId: claim.Id);
+        solnEx.ClaimedStandardEvidence.Add(evidence);
+
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx.ClaimedStandardEvidence
+          .Should().HaveCount(2)
+          .And.Subject
+          .Should().BeEquivalentTo(new[] { evidence, evidencePrev },
+            opts => opts
+              .Excluding(ent => ent.CreatedOn));
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+
+    [Test]
+    public void Update_Remove_ClaimedStandardEvidence_NoChain_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+      var std = Retriever.GetAllStandards(_policy).First();
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedStandard.Add(claim);
+
+      try
+      {
+        var evidence = Creator.GetStandardsApplicableEvidence(claimId: claim.Id);
+        solnEx.ClaimedStandardEvidence.Add(evidence);
+        datastore.Update(solnEx);
+        solnEx.ClaimedStandardEvidence.Clear();
+
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx.ClaimedStandardEvidence
+          .Should().BeEmpty();
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+
+    [Test]
+    public void Update_Remove_ClaimedStandardEvidence_Chain_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+      var std = Retriever.GetAllStandards(_policy).First();
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedStandard.Add(claim);
+
+      try
+      {
+        var evidencePrev = Creator.GetStandardsApplicableEvidence(claimId: claim.Id);
+        var evidence = Creator.GetStandardsApplicableEvidence(prevId: evidencePrev.Id, claimId: claim.Id);
+        solnEx.ClaimedStandardEvidence.Add(evidence);
+        solnEx.ClaimedStandardEvidence.Add(evidencePrev);
+        datastore.Update(solnEx);
+        solnEx.ClaimedStandardEvidence.Clear();
+
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx.ClaimedStandardEvidence
+          .Should().BeEmpty();
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+
+    [Test]
+    public void Update_Remove_ClaimedStandardEvidence_EndChain_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+      var std = Retriever.GetAllStandards(_policy).First();
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedStandard.Add(claim);
+
+      try
+      {
+        var evidencePrev = Creator.GetStandardsApplicableEvidence(claimId: claim.Id);
+        var evidence = Creator.GetStandardsApplicableEvidence(prevId: evidencePrev.Id, claimId: claim.Id);
+        solnEx.ClaimedStandardEvidence.Add(evidence);
+        solnEx.ClaimedStandardEvidence.Add(evidencePrev);
+        datastore.Update(solnEx);
+        solnEx.ClaimedStandardEvidence.Remove(evidence);
+
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx.ClaimedStandardEvidence
+          .Should().ContainSingle()
+          .And
+          .Should().BeEquivalentTo(evidencePrev,
+            opts => opts
+              .Excluding(ent => ent.CreatedOn));
       }
       finally
       {
