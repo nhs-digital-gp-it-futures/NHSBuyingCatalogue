@@ -1,0 +1,44 @@
+table.standards {
+  border-collapse: collapse;
+  color: $color-compliance-table-fg;
+  width: 100%;
+
+  tr {
+    border-bottom: 2px solid $color-compliance-table-border;
+    height: 3rem;
+
+    td {
+      &.name {
+        width: 50%;
+      }
+
+      &.status {
+        font-size: smaller;
+        width: 30%;
+      }
+
+      &.owner {
+        font-size: smaller;
+      }
+    }
+
+    &.approved,
+    &.submitted {
+      td {
+        &.status,
+        &.owner {
+          color: $color-compliance-table-good-fg;
+        }
+      }
+    }
+
+    &.rejected {
+      td {
+        &.status,
+        &.owner {
+          color: $color-compliance-table-bad-fg;
+        }
+      }
+    }
+  }
+}

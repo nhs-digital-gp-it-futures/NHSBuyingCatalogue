@@ -162,6 +162,9 @@
           "Title": "Help - What are $t(Overarching Standards)?",
           "Text": "$t(Overarching Standards) contain requirements that apply to all $t(Solution_plural). They relate to the $t(Solution) as a whole."
         }
+      },
+      "Standard": {
+        "With": "With {{name}}"
       }
     },
     "Evidence": {
