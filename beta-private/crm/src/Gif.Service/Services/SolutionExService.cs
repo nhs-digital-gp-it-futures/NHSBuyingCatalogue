@@ -58,7 +58,7 @@ namespace Gif.Service.Services
 
             batchData.Add(new BatchData { Id = solnEx.Solution.Id, Name = solnEx.Solution.EntityName, EntityData = solnEx.Solution.SerializeToODataPut("cc_solutionid") });
 
-            Repository.UpdateBatch(batchData);
+            Repository.CreateBatch(batchData);
         }
     }
 }
