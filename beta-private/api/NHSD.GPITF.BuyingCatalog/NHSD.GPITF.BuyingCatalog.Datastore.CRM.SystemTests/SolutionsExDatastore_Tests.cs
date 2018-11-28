@@ -88,6 +88,39 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
             .Excluding(ent => ent.Solution.ModifiedById));
     }
 
+    #region Solution
+    [Test]
+    public void Update_Solution_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+
+      try
+      {
+        solnEx.Solution.Name = "My Solution for Everything and Then Some";
+        solnEx.Solution.Version = "This is the most current version";
+        solnEx.Solution.Description = "Insert 'War and Peace' here";
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx
+          .Should().NotBeNull()
+          .And.Subject
+          .Should().BeEquivalentTo(solnEx,
+            opts => opts
+              .Excluding(ent => ent.Solution.ModifiedOn)
+              .Excluding(ent => ent.Solution.ModifiedById));
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+    #endregion
+
     #region TechnicalContact
     [Test]
     public void Update_Add_TechnicalContact_Succeeds()
