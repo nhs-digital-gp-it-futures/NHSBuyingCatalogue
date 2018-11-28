@@ -63,15 +63,28 @@
   <ItemGroup>
     <Compile Include="Business Logic\BusinessLogic.cs" />
     <Compile Include="Contracts\IBusinessLogic.cs" />
+    <Compile Include="Contracts\IRepository.cs" />
+    <Compile Include="Entities\Account.cs" />
+    <Compile Include="Entities\cc_capability.cs" />
+    <Compile Include="Entities\cc_capabilityimplemented.cs" />
+    <Compile Include="Entities\cc_capabilitystandard.cs" />
+    <Compile Include="Entities\cc_evidence.cs" />
+    <Compile Include="Entities\cc_framework.cs" />
+    <Compile Include="Entities\cc_review.cs" />
+    <Compile Include="Entities\cc_solution.cs" />
+    <Compile Include="Entities\cc_solutioncapability.cs" />
+    <Compile Include="Entities\cc_standard.cs" />
+    <Compile Include="Entities\cc_standardapplicable.cs" />
+    <Compile Include="Entities\cc_technicalcontact.cs" />
+    <Compile Include="Entities\Contact.cs" />
+    <Compile Include="Entities\CrmServiceContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\Repository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Entities\" />
-    <Folder Include="Repositories\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
