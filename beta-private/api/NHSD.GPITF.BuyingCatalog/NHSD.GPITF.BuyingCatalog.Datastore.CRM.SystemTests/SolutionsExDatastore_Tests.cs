@@ -149,6 +149,132 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       }
     }
 
+    [Test]
+    public void Update_AddClaimedCapability_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+      var claim = Retriever.GetAllCapabilities(_policy).First();
+      solnEx.ClaimedCapability.Add(Creator.GetCapabilitiesImplemented(claimId: claim.Id, solnId: solnEx.Solution.Id));
+
+      try
+      {
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx
+          .Should().NotBeNull()
+          .And.Subject
+          .Should().BeEquivalentTo(solnEx,
+            opts => opts
+              .Excluding(ent => ent.Solution.ModifiedOn)
+              .Excluding(ent => ent.Solution.ModifiedById));
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+
+    [Test]
+    public void Update_RemoveClaimedCapability_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+      var claim = Retriever.GetAllCapabilities(_policy).First();
+      solnEx.ClaimedCapability.Add(Creator.GetCapabilitiesImplemented(claimId: claim.Id, solnId: solnEx.Solution.Id));
+
+      try
+      {
+        datastore.Update(solnEx);
+        solnEx.ClaimedCapability.Clear();
+
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx
+          .Should().NotBeNull()
+          .And.Subject
+          .Should().BeEquivalentTo(solnEx,
+            opts => opts
+              .Excluding(ent => ent.Solution.ModifiedOn)
+              .Excluding(ent => ent.Solution.ModifiedById));
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+
+    [Test]
+    public void Update_AddStandardsApplicable_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+      var claim = Retriever.GetAllStandards(_policy).First();
+      solnEx.ClaimedStandard.Add(Creator.GetStandardsApplicable(claimId: claim.Id, solnId: solnEx.Solution.Id));
+
+      try
+      {
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx
+          .Should().NotBeNull()
+          .And.Subject
+          .Should().BeEquivalentTo(solnEx,
+            opts => opts
+              .Excluding(ent => ent.Solution.ModifiedOn)
+              .Excluding(ent => ent.Solution.ModifiedById));
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+
+    [Test]
+    public void Update_RemoveStandardsApplicable_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+      var claim = Retriever.GetAllStandards(_policy).First();
+      solnEx.ClaimedStandard.Add(Creator.GetStandardsApplicable(claimId: claim.Id, solnId: solnEx.Solution.Id));
+
+      try
+      {
+        datastore.Update(solnEx);
+        solnEx.ClaimedStandard.Clear();
+
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx
+          .Should().NotBeNull()
+          .And.Subject
+          .Should().BeEquivalentTo(solnEx,
+            opts => opts
+              .Excluding(ent => ent.Solution.ModifiedOn)
+              .Excluding(ent => ent.Solution.ModifiedById));
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+
     private List<SolutionEx> GetAll()
     {
       var allSolns = Retriever.GetAllSolutions(_policy);
