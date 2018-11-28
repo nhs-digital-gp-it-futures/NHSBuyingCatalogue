@@ -2,33 +2,45 @@
 
 <header class="page-main-heading">
   <h1>{{t 'CompliancePages.Dashboard.Title' }}</h1>
-  <h2>{{t 'CompliancePages.Dashboard.Subtitle'}}</h2>
+  <p>{{t 'CompliancePages.Dashboard.Subtitle'}}</p>
 </header>
 
-<h3>{{t 'CompliancePages.Dashboard.Associated.Heading'}}</h3>
+<h2>{{t 'CompliancePages.Dashboard.Associated.Heading'}}</h2>
 
 {{#> help-reveal title='CompliancePages.Dashboard.Associated.Help.Title'}}
   {{t 'CompliancePages.Dashboard.Associated.Help.Text'}}
 {{/help-reveal}}
 
-<ul>
-  {{#solution.standards}}
-  {{#unless isOverarching}}
-  <li><a href="{{continueUrl}}">{{name}}</a></li>
-  {{/unless}}
-  {{/solution.standards}}
-</ul>
+{{#*inline "standard-row"}}
+<tr class="standard {{statusClass}}">
+  <td class="name"><a href="{{continueUrl}}">{{name}}</a></td>
+  <td class="status">{{t statusTransKey when=statusChangeDate}}</td>
+  <td class="owner">{{t 'CompliancePages.Dashboard.Standard.With' name=ownerContact.displayName}}</td>
+</tr>
+{{/inline}}
 
-<h3>{{t 'CompliancePages.Dashboard.Overarching.Heading'}}</h3>
+<table class="standards">
+  <tbody>
+    {{#solution.standards}}
+    {{#unless isOverarching}}
+    {{> standard-row}}
+    {{/unless}}
+    {{/solution.standards}}
+  </tbody>
+</table>
+
+<h2>{{t 'CompliancePages.Dashboard.Overarching.Heading'}}</h2>
 
 {{#> help-reveal title='CompliancePages.Dashboard.Overarching.Help.Title'}}
   {{t 'CompliancePages.Dashboard.Overarching.Help.Text'}}
 {{/help-reveal}}
 
-<ul>
+<table class="standards">
+  <tbody>
   {{#solution.standards}}
   {{#if isOverarching}}
-  <li><a href="{{continueUrl}}">{{name}}</a></li>
+  {{> standard-row}}
   {{/if}}
   {{/solution.standards}}
-</ul>
+  </tbody>
+</table>

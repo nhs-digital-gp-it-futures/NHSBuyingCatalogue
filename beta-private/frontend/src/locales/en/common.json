@@ -32,6 +32,16 @@
     "Logout": "Log Out",
     "Greeting": "Hi, {{name}}"
   },
+  "Statuses": {
+    "Standard": {
+      "NotStarted": "Not started",
+      "Draft": "Draft",
+      "Submitted": "Submitted {{when}}",
+      "Remediation": "Feedback {{when}}",
+      "Approved": "Approved {{when}}",
+      "Rejected": "Rejected {{when}}"
+    }
+  },
   "Footer": {
     "Sections": [
       {

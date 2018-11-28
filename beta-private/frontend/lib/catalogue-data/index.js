@@ -9,6 +9,17 @@ const solutionOnboardingStatusMap = {
   5: { stageName: 'Solution Page', stageStep: '4 of 4', status: 'In progress' }
 }
 
+const solutionComplianceStatusMap = {
+  0: { statusClass: 'not-started', statusTransKey: 'Statuses.Standard.NotStarted' },
+  1: { statusClass: 'draft', statusTransKey: 'Statuses.Standard.Draft' },
+  2: { statusClass: 'submitted', statusTransKey: 'Statuses.Standard.Submitted' },
+  3: { statusClass: 'remediation', statusTransKey: 'Statuses.Standard.Remediation' },
+  4: { statusClass: 'approved', statusTransKey: 'Statuses.Standard.Approved' },
+  5: { statusClass: 'approved first', statusTransKey: 'Statuses.Standard.Approved' },
+  6: { statusClass: 'approved partial', statusTransKey: 'Statuses.Standard.Approved' },
+  7: { statusClass: 'rejected', statusTransKey: 'Statuses.Standard.Rejected' }
+}
+
 const EMPTY_UUID = '00000000-0000-0000-0000-000000000000'
 
 const isOverarchingStandard = std => _.startsWith(std.standardId || std.id, 'STD-O-')
@@ -213,7 +224,21 @@ class DataProvider {
   }
 
   async solutionForCompliance (solutionId) {
-    return this.solutionForRegistration(solutionId)
+    const solution = await this.solutionForRegistration(solutionId)
+
+    const leadContact = _.find(solution.contacts, { contactType: 'Lead Contact' })
+
+    // compute status and ownership information for each standard
+    solution.standards.forEach(std => {
+      _.assign(std, {
+        ...solutionComplianceStatusMap[std.status],
+        ownerContact: _.create(leadContact, {
+          displayName: `${leadContact.firstName} ${leadContact.lastName}`
+        })
+      })
+    })
+
+    return solution
   }
 }
 
