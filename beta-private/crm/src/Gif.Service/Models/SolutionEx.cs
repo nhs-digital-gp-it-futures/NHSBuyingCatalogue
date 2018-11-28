@@ -66,7 +66,7 @@ namespace Gif.Service.Models
         /// <value>A list of ClaimedStandardEvidence</value>
         [FromBody]
         [DataMember(Name = "claimedStandardEvidence")]
-        public List<CapabilityEvidence> ClaimedStandardEvidence { get; set; }
+        public List<StandardApplicableEvidence> ClaimedStandardEvidence { get; set; }
 
         /// <summary>
         /// A list of ClaimedStandardReview

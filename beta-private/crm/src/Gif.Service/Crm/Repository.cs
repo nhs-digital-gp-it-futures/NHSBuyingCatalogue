@@ -258,7 +258,7 @@ namespace Gif.Service.Crm
         public void CreateBatch(List<BatchData> batchData)
         {
             HttpResponseMessage response;
-            var method = new HttpMethod("POST");
+            var method = new HttpMethod("PATCH");
 
             using (var httpClient = getCrmConnection())
             {
