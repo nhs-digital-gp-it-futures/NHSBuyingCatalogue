@@ -130,12 +130,12 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var solnEx = allSolnEx.First();
       solnOrig.Should().BeEquivalentTo(solnEx);
       var datastore = GetDatastore();
+      solnEx.TechnicalContact.Clear();
+      var techCont = Creator.GetTechnicalContact(solutionId: solnEx.Solution.Id);
+      solnEx.TechnicalContact.Add(techCont);
 
       try
       {
-        solnEx.TechnicalContact.Clear();
-        var techCont = Creator.GetTechnicalContact(solutionId: solnEx.Solution.Id);
-        solnEx.TechnicalContact.Add(techCont);
         datastore.Update(solnEx);
 
         var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
@@ -158,6 +158,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var solnEx = allSolnEx.First();
       solnOrig.Should().BeEquivalentTo(solnEx);
       var datastore = GetDatastore();
+      solnEx.TechnicalContact.Clear();
       solnEx.TechnicalContact.Add(Creator.GetTechnicalContact(solutionId: solnEx.Solution.Id));
 
       try
@@ -189,6 +190,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datastore = GetDatastore();
       var cap = Retriever.GetAllCapabilities(_policy).First();
       var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedCapability.Clear();
+      solnEx.ClaimedCapabilityEvidence.Clear();
+      solnEx.ClaimedCapabilityReview.Clear();
       solnEx.ClaimedCapability.Add(claim);
 
       try
@@ -198,7 +202,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
         var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
         retrievedSolnEx.ClaimedCapability
           .Should().ContainSingle()
-          .And
+          .And.Subject
           .Should().BeEquivalentTo(claim);
       }
       finally
@@ -217,6 +221,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datastore = GetDatastore();
       var cap = Retriever.GetAllCapabilities(_policy).First();
       var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedCapability.Clear();
+      solnEx.ClaimedCapabilityEvidence.Clear();
+      solnEx.ClaimedCapabilityReview.Clear();
       solnEx.ClaimedCapability.Add(claim);
 
       try
@@ -248,6 +255,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datastore = GetDatastore();
       var std = Retriever.GetAllStandards(_policy).First();
       var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedStandard.Clear();
+      solnEx.ClaimedStandardEvidence.Clear();
+      solnEx.ClaimedStandardReview.Clear();
       solnEx.ClaimedStandard.Add(claim);
 
       try
@@ -276,6 +286,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datastore = GetDatastore();
       var std = Retriever.GetAllStandards(_policy).First();
       var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedStandard.Clear();
+      solnEx.ClaimedStandardEvidence.Clear();
+      solnEx.ClaimedStandardReview.Clear();
       solnEx.ClaimedStandard.Add(claim);
 
       try
@@ -307,12 +320,16 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datastore = GetDatastore();
       var cap = Retriever.GetAllCapabilities(_policy).First();
       var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedCapability.Clear();
+      solnEx.ClaimedCapabilityEvidence.Clear();
+      solnEx.ClaimedCapabilityReview.Clear();
       solnEx.ClaimedCapability.Add(claim);
 
       try
       {
         datastore.Update(solnEx);
         var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
+        solnEx.ClaimedCapabilityEvidence.Clear();
         solnEx.ClaimedCapabilityEvidence.Add(evidence);
 
         datastore.Update(solnEx);
@@ -341,6 +358,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datastore = GetDatastore();
       var cap = Retriever.GetAllCapabilities(_policy).First();
       var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedCapability.Clear();
+      solnEx.ClaimedCapabilityEvidence.Clear();
+      solnEx.ClaimedCapabilityReview.Clear();
       solnEx.ClaimedCapability.Add(claim);
 
       try
@@ -348,6 +368,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
         datastore.Update(solnEx);
         var evidencePrev = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
         var evidence = Creator.GetCapabilitiesImplementedEvidence(prevId: evidencePrev.Id, claimId: claim.Id);
+        solnEx.ClaimedCapabilityEvidence.Clear();
         solnEx.ClaimedCapabilityEvidence.Add(evidence);
         solnEx.ClaimedCapabilityEvidence.Add(evidencePrev);
 
@@ -377,6 +398,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datastore = GetDatastore();
       var cap = Retriever.GetAllCapabilities(_policy).First();
       var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedCapability.Clear();
+      solnEx.ClaimedCapabilityEvidence.Clear();
+      solnEx.ClaimedCapabilityReview.Clear();
       solnEx.ClaimedCapability.Add(claim);
 
       try
@@ -413,6 +437,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datastore = GetDatastore();
       var cap = Retriever.GetAllCapabilities(_policy).First();
       var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedCapability.Clear();
+      solnEx.ClaimedCapabilityEvidence.Clear();
+      solnEx.ClaimedCapabilityReview.Clear();
       solnEx.ClaimedCapability.Add(claim);
 
       try
@@ -444,6 +471,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datastore = GetDatastore();
       var cap = Retriever.GetAllCapabilities(_policy).First();
       var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedCapability.Clear();
+      solnEx.ClaimedCapabilityEvidence.Clear();
+      solnEx.ClaimedCapabilityReview.Clear();
       solnEx.ClaimedCapability.Add(claim);
 
       try
@@ -477,6 +507,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datastore = GetDatastore();
       var cap = Retriever.GetAllCapabilities(_policy).First();
       var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedCapability.Clear();
+      solnEx.ClaimedCapabilityEvidence.Clear();
+      solnEx.ClaimedCapabilityReview.Clear();
       solnEx.ClaimedCapability.Add(claim);
 
       try
@@ -494,7 +527,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
         retrievedSolnEx.ClaimedCapabilityEvidence
           .Should().ContainSingle()
           .And
-          .Should().BeEquivalentTo(evidence,
+          .Should().BeEquivalentTo(evidencePrev,
             opts => opts
               .Excluding(ent => ent.CreatedOn));
       }
@@ -516,6 +549,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datastore = GetDatastore();
       var std = Retriever.GetAllStandards(_policy).First();
       var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedStandard.Clear();
+      solnEx.ClaimedStandardEvidence.Clear();
+      solnEx.ClaimedStandardReview.Clear();
       solnEx.ClaimedStandard.Add(claim);
 
       try
@@ -550,6 +586,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datastore = GetDatastore();
       var std = Retriever.GetAllStandards(_policy).First();
       var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedStandard.Clear();
+      solnEx.ClaimedStandardEvidence.Clear();
+      solnEx.ClaimedStandardReview.Clear();
       solnEx.ClaimedStandard.Add(claim);
 
       try
@@ -586,6 +625,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datastore = GetDatastore();
       var std = Retriever.GetAllStandards(_policy).First();
       var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedStandard.Clear();
+      solnEx.ClaimedStandardEvidence.Clear();
+      solnEx.ClaimedStandardReview.Clear();
       solnEx.ClaimedStandard.Add(claim);
 
       try
@@ -622,6 +664,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datastore = GetDatastore();
       var std = Retriever.GetAllStandards(_policy).First();
       var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedStandard.Clear();
+      solnEx.ClaimedStandardEvidence.Clear();
+      solnEx.ClaimedStandardReview.Clear();
       solnEx.ClaimedStandard.Add(claim);
 
       try
@@ -653,6 +698,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datastore = GetDatastore();
       var std = Retriever.GetAllStandards(_policy).First();
       var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedStandard.Clear();
+      solnEx.ClaimedStandardEvidence.Clear();
+      solnEx.ClaimedStandardReview.Clear();
       solnEx.ClaimedStandard.Add(claim);
 
       try
@@ -686,6 +734,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datastore = GetDatastore();
       var std = Retriever.GetAllStandards(_policy).First();
       var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedStandard.Clear();
+      solnEx.ClaimedStandardEvidence.Clear();
+      solnEx.ClaimedStandardReview.Clear();
       solnEx.ClaimedStandard.Add(claim);
 
       try
@@ -704,6 +755,245 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
           .Should().ContainSingle()
           .And
           .Should().BeEquivalentTo(evidencePrev,
+            opts => opts
+              .Excluding(ent => ent.CreatedOn));
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+    #endregion
+
+    #region ClaimedCapabilityReview
+    [Test]
+    public void Update_Add_ClaimedCapabilityReview_NoChain_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+      var cap = Retriever.GetAllCapabilities(_policy).First();
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedCapability.Clear();
+      solnEx.ClaimedCapabilityEvidence.Clear();
+      solnEx.ClaimedCapabilityReview.Clear();
+      solnEx.ClaimedCapability.Add(claim);
+
+      try
+      {
+        var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
+        solnEx.ClaimedCapabilityEvidence.Add(evidence);
+        datastore.Update(solnEx);
+        var review = Creator.GetCapabilitiesImplementedReviews(evidenceId: evidence.Id);
+        solnEx.ClaimedCapabilityReview.Add(review);
+
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx.ClaimedCapabilityReview
+          .Should().ContainSingle()
+          .And
+          .Should().BeEquivalentTo(review,
+            opts => opts
+              .Excluding(ent => ent.CreatedOn));
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+
+    [Test]
+    public void Update_Add_ClaimedCapabilityReview_Chain_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+      var cap = Retriever.GetAllCapabilities(_policy).First();
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedCapability.Clear();
+      solnEx.ClaimedCapabilityEvidence.Clear();
+      solnEx.ClaimedCapabilityReview.Clear();
+      solnEx.ClaimedCapability.Add(claim);
+
+      try
+      {
+        var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
+        solnEx.ClaimedCapabilityEvidence.Add(evidence);
+        datastore.Update(solnEx);
+        var reviewPrev = Creator.GetCapabilitiesImplementedReviews(evidenceId: evidence.Id);
+        var review = Creator.GetCapabilitiesImplementedReviews(prevId: reviewPrev.Id, evidenceId: evidence.Id);
+        solnEx.ClaimedCapabilityReview.Add(reviewPrev);
+        solnEx.ClaimedCapabilityReview.Add(review);
+
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx.ClaimedCapabilityReview
+          .Should().HaveCount(2)
+          .And.Subject
+          .Should().BeEquivalentTo(new[] { review, reviewPrev },
+            opts => opts
+              .Excluding(ent => ent.CreatedOn));
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+
+    [Test]
+    public void Update_Add_ClaimedCapabilityReview_EndChain_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+      var cap = Retriever.GetAllCapabilities(_policy).First();
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedCapability.Clear();
+      solnEx.ClaimedCapabilityEvidence.Clear();
+      solnEx.ClaimedCapabilityReview.Clear();
+      solnEx.ClaimedCapability.Add(claim);
+
+      try
+      {
+        var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
+        var reviewPrev = Creator.GetCapabilitiesImplementedReviews(evidenceId: evidence.Id);
+        solnEx.ClaimedCapabilityEvidence.Add(evidence);
+        solnEx.ClaimedCapabilityReview.Add(reviewPrev);
+        datastore.Update(solnEx);
+        var review = Creator.GetCapabilitiesImplementedReviews(prevId: reviewPrev.Id, evidenceId: evidence.Id);
+        solnEx.ClaimedCapabilityReview.Add(review);
+
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx.ClaimedCapabilityReview
+          .Should().HaveCount(2)
+          .And.Subject
+          .Should().BeEquivalentTo(new[] { review, reviewPrev },
+            opts => opts
+              .Excluding(ent => ent.CreatedOn));
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+
+    [Test]
+    public void Update_Remove_ClaimedCapabilityReview_NoChain_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+      var cap = Retriever.GetAllCapabilities(_policy).First();
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedCapability.Clear();
+      solnEx.ClaimedCapabilityEvidence.Clear();
+      solnEx.ClaimedCapabilityReview.Clear();
+      solnEx.ClaimedCapability.Add(claim);
+
+      try
+      {
+        var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
+        var review = Creator.GetCapabilitiesImplementedReviews(evidenceId: evidence.Id);
+        solnEx.ClaimedCapabilityEvidence.Add(evidence);
+        solnEx.ClaimedCapabilityReview.Add(review);
+        datastore.Update(solnEx);
+        solnEx.ClaimedCapabilityReview.Clear();
+
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx.ClaimedCapabilityReview
+          .Should().BeEmpty();
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+
+    [Test]
+    public void Update_Remove_ClaimedCapabilityReview_Chain_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+      var cap = Retriever.GetAllCapabilities(_policy).First();
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedCapability.Clear();
+      solnEx.ClaimedCapabilityEvidence.Clear();
+      solnEx.ClaimedCapabilityReview.Clear();
+      solnEx.ClaimedCapability.Add(claim);
+
+      try
+      {
+        var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
+        var reviewPrev = Creator.GetCapabilitiesImplementedReviews(evidenceId: evidence.Id);
+        var review = Creator.GetCapabilitiesImplementedReviews(prevId: reviewPrev.Id, evidenceId: evidence.Id);
+        solnEx.ClaimedCapabilityEvidence.Add(evidence);
+        solnEx.ClaimedCapabilityReview.Add(reviewPrev);
+        solnEx.ClaimedCapabilityReview.Add(review);
+        datastore.Update(solnEx);
+        solnEx.ClaimedCapabilityReview.Clear();
+
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx.ClaimedCapabilityReview
+          .Should().BeEmpty();
+      }
+      finally
+      {
+        datastore.Update(solnOrig);
+      }
+    }
+
+    [Test]
+    public void Update_Remove_ClaimedCapabilityReview_EndChain_Succeeds()
+    {
+      var allSolnEx = GetAll();
+      var solnOrig = allSolnEx.First();
+      var solnEx = allSolnEx.First();
+      solnOrig.Should().BeEquivalentTo(solnEx);
+      var datastore = GetDatastore();
+      var cap = Retriever.GetAllCapabilities(_policy).First();
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: solnEx.Solution.Id);
+      solnEx.ClaimedCapability.Clear();
+      solnEx.ClaimedCapabilityEvidence.Clear();
+      solnEx.ClaimedCapabilityReview.Clear();
+      solnEx.ClaimedCapability.Add(claim);
+
+      try
+      {
+        var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
+        var reviewPrev = Creator.GetCapabilitiesImplementedReviews(evidenceId: evidence.Id);
+        var review = Creator.GetCapabilitiesImplementedReviews(prevId: reviewPrev.Id, evidenceId: evidence.Id);
+        solnEx.ClaimedCapabilityEvidence.Add(evidence);
+        solnEx.ClaimedCapabilityReview.Add(reviewPrev);
+        solnEx.ClaimedCapabilityReview.Add(review);
+        datastore.Update(solnEx);
+        solnEx.ClaimedCapabilityReview.Remove(review);
+
+        datastore.Update(solnEx);
+
+        var retrievedSolnEx = datastore.BySolution(solnEx.Solution.Id);
+        retrievedSolnEx.ClaimedCapabilityReview
+          .Should().ContainSingle()
+          .And
+          .Should().BeEquivalentTo(reviewPrev,
             opts => opts
               .Excluding(ent => ent.CreatedOn));
       }
