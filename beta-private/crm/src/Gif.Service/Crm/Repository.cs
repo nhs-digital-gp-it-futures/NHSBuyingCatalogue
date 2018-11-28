@@ -255,10 +255,10 @@ namespace Gif.Service.Crm
                 throw new CrmApiException(response.ReasonPhrase, response.StatusCode);
         }
 
-        public void UpdateBatch(List<BatchData> batchData)
+        public void CreateBatch(List<BatchData> batchData)
         {
             HttpResponseMessage response;
-            var method = new HttpMethod("PATCH");
+            var method = new HttpMethod("POST");
 
             using (var httpClient = getCrmConnection())
             {
