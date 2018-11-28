@@ -11,7 +11,6 @@ namespace Gif.Plugins.Contracts
         string GetOptionsetText(string entityName, string attributeName, int optionSetValue);
         OptionMetadata[] GetOptionSetList();
         void Update(Entity entity);
-
         void Upsert(Entity entity);
         Entity Create(Entity entity);
         void SvcCreate(Entity entity);

@@ -62,7 +62,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business Logic\BusinessLogic.cs" />
+    <Compile Include="Business Logic\CascadeDeleteLogic.cs" />
     <Compile Include="Contracts\IBusinessLogic.cs" />
+    <Compile Include="Contracts\ICascadeDeleteLogic.cs" />
     <Compile Include="Contracts\IRepository.cs" />
     <Compile Include="Entities\Account.cs" />
     <Compile Include="Entities\cc_capability.cs" />
@@ -79,7 +81,9 @@
     <Compile Include="Entities\Contact.cs" />
     <Compile Include="Entities\CrmServiceContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Contracts\ISolutionRepository.cs" />
     <Compile Include="Repositories\Repository.cs" />
+    <Compile Include="Repositories\SolutionRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />
