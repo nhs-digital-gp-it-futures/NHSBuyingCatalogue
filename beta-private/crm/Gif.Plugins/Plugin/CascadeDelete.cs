@@ -32,12 +32,9 @@
             if (context.PrimaryEntityName != EntityName)
                 throw new InvalidPluginExecutionException($"This plugin runs only on a {EntityName} entity.");
 
-            var targetEntity = (EntityReference)context.InputParameters["Target"];
+            var targetEntity = (context.PreEntityImages != null) && context.PreEntityImages.Contains("PreImage") ? context.PreEntityImages["PreImage"] : null;
             if (targetEntity == null)
-            {
-                tracingService?.Trace($"{PluginName} finished. (Target entity is null)");
                 return;
-            }
 
             tracingService?.Trace($"Target id : {targetEntity.Id}");
 

@@ -5,7 +5,7 @@ namespace Gif.Plugins.Contracts
 {
     public interface ICascadeDeleteLogic
     {
-        void OnSolutionDelete(EntityReference target);
+        void OnSolutionDelete(Entity target);
     }
 }
 #pragma warning restore CS1591

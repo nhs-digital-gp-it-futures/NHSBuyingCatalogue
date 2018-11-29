@@ -1,6 +1,7 @@
 ﻿#pragma warning disable CS1591 
 using Gif.Plugins.Contracts;
 using Microsoft.Xrm.Sdk;
+using System.Linq;
 
 namespace Gif.Plugins.Business_Logic
 {
@@ -19,11 +20,14 @@ namespace Gif.Plugins.Business_Logic
             PluginName = pluginName;
         }
 
-        public void OnSolutionDelete(EntityReference target)
+        public void OnSolutionDelete(Entity target)
         {
+            Trace($"Solution: {target.Id}");
             Trace("Get technical contacts");
             var technicalContacts = SolutionRepository.GetTechnicalContactsBySolution(target.Id);
-            foreach (var technicalContact in technicalContacts)
+            var ccTechnicalcontacts = technicalContacts.ToList();
+            Trace($"technicalContacts count: {ccTechnicalcontacts.Count}");
+            foreach (var technicalContact in ccTechnicalcontacts)
             {
                 Trace("Delete technical contact");
                 SolutionRepository.Delete(technicalContact);
@@ -31,15 +35,21 @@ namespace Gif.Plugins.Business_Logic
 
             Trace("Get capabilities implemented");
             var capabilitiesImplemented = SolutionRepository.GetCapabilitiesImplementedBySolution(target.Id);
-            foreach (var capabilityImplemented in capabilitiesImplemented)
+            var ccCapabilitiesImplemented = capabilitiesImplemented.ToList();
+            Trace($"capabilitiesImplemented count: {ccCapabilitiesImplemented.Count}");
+            foreach (var capabilityImplemented in ccCapabilitiesImplemented)
             {
                 Trace("Get evidences");
                 var evidences = SolutionRepository.GetEvidencesByCapabilityImplemented(capabilityImplemented.Id);
-                foreach (var evidence in evidences)
+                var ccEvidences = evidences.ToList();
+                Trace($"evidences count: {ccEvidences.Count}");
+                foreach (var evidence in ccEvidences)
                 {
                     Trace("Get reviews");
                     var reviews = SolutionRepository.GetReviewsByEvidence(evidence.Id);
-                    foreach (var review in reviews)
+                    var ccReviews = reviews.ToList();
+                    Trace($"reviews count: {ccReviews.Count}");
+                    foreach (var review in ccReviews)
                     {
                         Trace("Delete review");
                         SolutionRepository.Delete(review);
@@ -55,15 +65,21 @@ namespace Gif.Plugins.Business_Logic
 
             Trace("Get standards applicable");
             var standardsApplicable = SolutionRepository.GetStandardsApplicableBySolution(target.Id);
-            foreach (var standardApplicable in standardsApplicable)
+            var ccStandardsApplicable = standardsApplicable.ToList();
+            Trace($"standardsApplicable count: {ccStandardsApplicable.Count}");
+            foreach (var standardApplicable in ccStandardsApplicable)
             {
                 Trace("Get evidences");
                 var evidences = SolutionRepository.GetEvidencesByStandardApplicable(standardApplicable.Id);
-                foreach (var evidence in evidences)
+                var ccEvidences = evidences.ToList();
+                Trace($"evidences count: {ccEvidences.Count}");
+                foreach (var evidence in ccEvidences)
                 {
                     Trace("Get reviews");
                     var reviews = SolutionRepository.GetReviewsByEvidence(evidence.Id);
-                    foreach (var review in reviews)
+                    var ccReviews = reviews.ToList();
+                    Trace($"reviews count: {ccReviews.Count}");
+                    foreach (var review in ccReviews)
                     {
                         Trace("Delete review");
                         SolutionRepository.Delete(review);
