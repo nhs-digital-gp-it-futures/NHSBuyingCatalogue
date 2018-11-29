@@ -27,7 +27,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         MustBeValidId();
         MustBeValidOrganisationId();
         MustBeSameOrganisation();
-        MustBeFromSameOrganisation();
+        MustBeFromSameOrganisationOrAdmin();
         MustBeValidStatusTransition();
         MustBeCurrentVersion();
         PreviousVersionMustBeFromSameOrganisation();
@@ -36,7 +36,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       RuleSet(nameof(ISolutionsLogic.Create), () =>
       {
         MustBeValidOrganisationId();
-        MustBeFromSameOrganisation();
+        MustBeFromSameOrganisationOrAdmin();
         PreviousVersionMustBeFromSameOrganisation();
         MustBePending();
       });
@@ -96,7 +96,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Cannot transfer solutions between organisations");
     }
 
-    public void MustBeFromSameOrganisation()
+    public void MustBeFromSameOrganisationOrAdmin()
     {
       RuleFor(x => x)
         .Must(x =>
@@ -104,6 +104,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
           var orgId = _context.OrganisationId();
           return x.OrganisationId == orgId;
         })
+        .When(x => !_context.HasRole(Roles.Admin))
         .WithMessage("Must be from same organisation");
     }
 

@@ -289,26 +289,45 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
       var soln = Creator.GetSolution(orgId: orgId);
 
-      validator.MustBeFromSameOrganisation();
+      validator.MustBeFromSameOrganisationOrAdmin();
       var valres = validator.Validate(soln);
 
       valres.Errors.Should().BeEmpty();
     }
 
     [Test]
-    public void MustBeFromSameOrganisation_Different_ReturnsError()
+    public void MustBeFromSameOrganisation_Different_ReturnsError(
+      [Values(
+        Roles.Buyer,
+        Roles.Supplier)]
+          string role)
     {
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
       var soln = Creator.GetSolution();
 
-      validator.MustBeFromSameOrganisation();
+      validator.MustBeFromSameOrganisationOrAdmin();
       var valres = validator.Validate(soln);
 
       valres.Errors.Should()
         .ContainSingle(x => x.ErrorMessage == "Must be from same organisation")
         .And
         .HaveCount(1);
+    }
+
+    [Test]
+    public void MustBeFromSameOrganisation_Admin_Succeeds()
+    {
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: Roles.Admin));
+      var orgId = Guid.NewGuid().ToString();
+      var soln = Creator.GetSolution(orgId: orgId);
+      var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object);
+      _solutionDatastore.Setup(x => x.ById(soln.Id)).Returns(Creator.GetSolution());
+
+      validator.MustBeFromSameOrganisationOrAdmin();
+      var valres = validator.Validate(soln);
+
+      valres.Errors.Should().BeEmpty();
     }
 
     [Test]
