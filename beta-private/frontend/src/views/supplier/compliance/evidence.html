@@ -9,4 +9,44 @@
 <p class="preamble">{{{.}}}</p>
 {{/each}}
 
+{{#if latestFile}}
+  <div class="latest-message">
+    {{#latestMessage}}    
+      <div>
+        {{message}}
+      </div>
+      <div>
+        <p>{{author}}, {{date}}</p>
+      </div>
+    {{/latestMessage}}
+    {{#latestFile}}
+    <div>
+      Download the latest file here: <a href="{{downloadURL}}">{{name}}</a>
+    </div>
+    {{/latestFile}}
+  </div>
+
+  <div>
+    {{#errors}}
+      Error: {{.}}
+    {{/errors}}
+  </div>
+
+  <div>Upload File and reply *</div>
+  {{#>form encoding="multipart/form-data"}}
+    <fieldset>
+      <input type="file" name="matrix-file">
+      <button type="submit">Upload</button>
+    </fieldset>
+  {{/form}}
+
+{{else}}
+  <div>
+    <p>Please wait for the Standards Compliance To provide you with a Tracability Matrix.</p>
+    <p>We will email the lead contact when this stage is ready.</p>
+  </div>
+
+{{/if}}
+
+
 <a class="back-link" href="../../">{{t 'CompliancePages.Evidence.Backlink.Title'}}</a>
