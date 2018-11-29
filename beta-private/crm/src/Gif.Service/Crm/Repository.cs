@@ -6,11 +6,13 @@ using Newtonsoft.Json.Linq;
 using Samc4.CipherUtil;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
+using Gif.Service.Enums;
 
 namespace Gif.Service.Crm
 {
@@ -258,66 +260,84 @@ namespace Gif.Service.Crm
         public void CreateBatch(List<BatchData> batchData)
         {
             HttpResponseMessage response;
-            var method = new HttpMethod("PATCH");
 
             using (var httpClient = getCrmConnection())
             {
                 // batch setup
                 var batchId = Guid.NewGuid();
-                var changeSetId = Guid.NewGuid();
+                var deleteChangeId = Guid.NewGuid();
+                var patchChangeId = Guid.NewGuid();
                 var batchUrl = new Uri($"{httpClient.BaseAddress.AbsoluteUri}$batch");
 
                 var batchRequest = new HttpRequestMessage(HttpMethod.Post, batchUrl);
-
                 var batchContent = new MultipartContent("mixed", "batch_" + batchId);
 
                 // changeset setup
-                var changeSet = new MultipartContent("mixed", "changeset_" + changeSetId);
+                var deleteChange = new MultipartContent("mixed", "changeset_" + deleteChangeId);
+                var patchChange = new MultipartContent("mixed", "changeset_" + patchChangeId);
 
-                // patch calls
-                int count = 1;
-                foreach (var batch in batchData)
-                {
-                    var content = new StringContent(batch.EntityData, Encoding.UTF8, "application/json");
-                    var requestUri = new Uri($"{httpClient.BaseAddress.AbsoluteUri}{batch.Name}({batch.Id})");
-                    content.Headers.Remove("Content-Type");
-                    content.Headers.Add("Content-Type", "application/json;type=entry");
-                    content.Headers.Add("Content-Transfer-Encoding", "binary");
-                    content.Headers.Add("Content-Id", count.ToString());
+                //Add deletes first in their own changeset to avoid issues with upserts in following changesets
+                AddChangeSet(batchData.Where(x => x.Type == BatchTypeEnum.Delete).ToList(), httpClient, ref deleteChange);
+                AddChangeSet(batchData.Where(x => x.Type != BatchTypeEnum.Delete).ToList(), httpClient, ref patchChange);
 
-                    var request = new HttpRequestMessage(method, requestUri)
-                    {
-                        Content = content
-                    };
+                //Add headers add changeset level
+                AddHeadersToChangeSets(ref deleteChange);
+                AddHeadersToChangeSets(ref patchChange);
 
-                    // Add this content to the changeset
-                    changeSet.Add(new HttpMessageContent(request));
-
-                    count++;
-                }
-
-                using (var enumChangeSet = changeSet.GetEnumerator())
-                {
-                    while (enumChangeSet.MoveNext())
-                    {
-                        var currentChangeSet = enumChangeSet.Current;
-                        currentChangeSet.Headers.ContentType = new MediaTypeHeaderValue("application/http");
-                        currentChangeSet.Headers.Add("Content-Transfer-Encoding", "binary");
-                    }
-                }
-
-                // Add the changeset to the batch content
-                batchContent.Add(changeSet);
+                // Add the changesets to the batch content
+                batchContent.Add(deleteChange);
+                batchContent.Add(patchChange);
 
                 // send batch
                 batchRequest.Content = batchContent;
                 response = httpClient.SendAsync(batchRequest).Result;
 
-                if (response.StatusCode != HttpStatusCode.NoContent)
+                if (response.StatusCode != HttpStatusCode.OK)
                     throw new CrmApiException(response.ReasonPhrase, response.StatusCode);
             }
 
         }
+
+
+        private void AddChangeSet(IList<BatchData> batchData, HttpClient httpClient, ref MultipartContent changeSet)
+        {
+            var count = 1;
+
+            foreach (var batch in batchData)
+            {
+                var content = new StringContent(batch.EntityData, Encoding.UTF8, "application/json");
+                var requestUri = new Uri($"{httpClient.BaseAddress.AbsoluteUri}{batch.Name}({batch.Id})");
+                content.Headers.Remove("Content-Type");
+                content.Headers.Add("Content-Type", "application/json;type=entry");
+                content.Headers.Add("Content-Transfer-Encoding", "binary");
+                content.Headers.Add("Content-Id", count.ToString());
+
+                var method = batch.Type == BatchTypeEnum.Delete ?
+                    new HttpMethod("DELETE") : new HttpMethod("PATCH");
+
+                var request = new HttpRequestMessage(method, requestUri)
+                {
+                    Content = content
+                };
+
+                // Add this content to the changeset
+                changeSet.Add(new HttpMessageContent(request));
+                count++;
+            }
+        }
+        public void AddHeadersToChangeSets(ref MultipartContent content)
+        {
+            using (var enumChangeSet = content.GetEnumerator())
+            {
+                while (enumChangeSet.MoveNext())
+                {
+                    var currentChangeSet = enumChangeSet.Current;
+                    currentChangeSet.Headers.ContentType = new MediaTypeHeaderValue("application/http");
+                    currentChangeSet.Headers.Add("Content-Transfer-Encoding", "binary");
+                }
+            }
+        }
+
         #endregion
 
     }

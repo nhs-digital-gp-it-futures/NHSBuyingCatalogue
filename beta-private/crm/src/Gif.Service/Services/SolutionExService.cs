@@ -3,6 +3,7 @@ using Gif.Service.Contracts;
 using Gif.Service.Crm;
 using Gif.Service.Models;
 using System.Collections.Generic;
+using Gif.Service.Enums;
 
 namespace Gif.Service.Services
 {
@@ -19,9 +20,22 @@ namespace Gif.Service.Services
 
         public void Update(SolutionEx solnEx)
         {
-            List<BatchData> batchData = new List<BatchData>();
-
-            batchData.Add(new BatchData { Id = solnEx.Solution.Id, Name = solnEx.Solution.EntityName, EntityData = solnEx.Solution.SerializeToODataPut("cc_solutionid") });
+            var batchData = new List<BatchData>
+            {
+                new BatchData
+                {
+                    Id = solnEx.Solution.Id,
+                    Name = solnEx.Solution.EntityName,
+                    Type = BatchTypeEnum.Delete,
+                    EntityData = "{}"
+                },
+                new BatchData
+                {
+                    Id = solnEx.Solution.Id,
+                    Name = solnEx.Solution.EntityName,
+                    EntityData = solnEx.Solution.SerializeToODataPut("cc_solutionid")
+                }
+            };
 
             foreach (var technicalContact in solnEx.TechnicalContact)
             {
