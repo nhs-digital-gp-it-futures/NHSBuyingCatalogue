@@ -19,7 +19,7 @@ namespace Gif.Plugins.Business_Logic
             PluginName = pluginName;
         }
 
-        public void OnSolutionDelete(Entity target)
+        public void OnSolutionDelete(EntityReference target)
         {
             Trace("Get technical contacts");
             var technicalContacts = SolutionRepository.GetTechnicalContactsBySolution(target.Id);
