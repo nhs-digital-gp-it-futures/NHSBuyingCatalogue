@@ -2,7 +2,7 @@
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 {
-  internal sealed class DummyValidatorBase : ValidatorBase<object>
+  public sealed class DummyValidatorBase : ValidatorBase<object>
   {
     public DummyValidatorBase(IHttpContextAccessor context) :
       base(context)

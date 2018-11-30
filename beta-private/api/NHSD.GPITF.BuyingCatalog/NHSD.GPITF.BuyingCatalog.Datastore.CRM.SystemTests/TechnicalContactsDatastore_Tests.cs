@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 using NHSD.GPITF.BuyingCatalog.Logic;
+using NHSD.GPITF.BuyingCatalog.Tests;
 using NUnit.Framework;
 using System.Linq;
 

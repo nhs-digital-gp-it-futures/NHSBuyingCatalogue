@@ -4,7 +4,7 @@ using NHSD.GPITF.BuyingCatalog.Models;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 {
-  internal sealed class DummyClaimsValidatorBase : ClaimsValidatorBase<ClaimsBase>
+  public sealed class DummyClaimsValidatorBase : ClaimsValidatorBase<ClaimsBase>
   {
     public DummyClaimsValidatorBase(
       IHttpContextAccessor context,

@@ -4,7 +4,7 @@ using NHSD.GPITF.BuyingCatalog.Models;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 {
-  internal sealed class DummyReviewsValidatorBase : ReviewsValidatorBase<DummyReviewsBase>
+  public sealed class DummyReviewsValidatorBase : ReviewsValidatorBase<DummyReviewsBase>
   {
     public DummyReviewsValidatorBase(
       IReviewsDatastore<ReviewsBase> reviewsDatastore,

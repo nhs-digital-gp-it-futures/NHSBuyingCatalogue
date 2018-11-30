@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using NHSD.GPITF.BuyingCatalog.Logic;
 using NHSD.GPITF.BuyingCatalog.Models;
+using NHSD.GPITF.BuyingCatalog.Tests;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;

@@ -2,7 +2,7 @@
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 {
-  internal sealed class DummyReviewsBase : ReviewsBase
+  public sealed class DummyClaimsBase : ClaimsBase
   {
   }
 }

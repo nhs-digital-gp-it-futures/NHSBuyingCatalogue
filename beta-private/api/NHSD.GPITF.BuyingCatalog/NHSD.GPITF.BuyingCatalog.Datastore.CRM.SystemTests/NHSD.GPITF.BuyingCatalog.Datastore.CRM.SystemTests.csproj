@@ -41,6 +41,7 @@
   <ItemGroup>
     <ProjectReference Include="..\NHSD.GPITF.BuyingCatalog.Datastore.CRM\NHSD.GPITF.BuyingCatalog.Datastore.CRM.csproj" />
     <ProjectReference Include="..\NHSD.GPITF.BuyingCatalog.Logic\NHSD.GPITF.BuyingCatalog.Logic.csproj" />
+    <ProjectReference Include="..\NHSD.GPITF.BuyingCatalog.Tests\NHSD.GPITF.BuyingCatalog.Tests.csproj" />
     <ProjectReference Include="..\NHSD.GPITF.BuyingCatalog\NHSD.GPITF.BuyingCatalog.csproj" />
   </ItemGroup>
 
