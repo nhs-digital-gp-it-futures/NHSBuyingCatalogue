@@ -170,14 +170,28 @@
     "Evidence": {
       "Subtitle": "Detailed instructions are included in the $t(Traceability Matrix) from the $t(Assessment team) below. Download the file. Complete the requirements in the file and upload it. ‘$t(CompliancePages.Evidence.Buttons.Submit)’ to send it to $t(NHSD.Name) for evaluation.",
       "Preamble": [
-        "If this $t(Solution) is published, Buyers can request the final version of the evidence you submit in the $t(Traceability Matrix).",
-        "For Clarifications and other queries, see: <a href='#'>Contact Us</a>."
+        "For support, see <a href='#'>guidance</a> for this stage. If this $t(Solution) is published, buyers can request the final version of the evidence you submit in the $t(Traceability Matrix).",
+        "For Clarifications and other queries, <a href='#'>email us</a>."
       ],
+      "QuickLinks": {
+        "Heading": "Quick Links — $t(Standard) & Related $t(Capability_plural)"
+      },
+      "CurrentFile": {
+        "Heading": "Download current file",
+        "Missing": [
+          "Please wait for the $t(Standards Compliance) team to provide you with a $t(Traceability Matrix).",
+          "We will email the lead contact when this stage is ready."
+        ]
+      },
+      "Reply": {
+        "Heading": "Upload file and reply*"
+      },
       "Backlink": {
         "Title": "$t(CompliancePages.Dashboard.Title)"
       },
       "Buttons": {
-        "Submit": "Submit for $t(Compliance)"
+        "Submit": "Submit for $t(Compliance)",
+        "Upload": "Upload"
       }
     }
   }

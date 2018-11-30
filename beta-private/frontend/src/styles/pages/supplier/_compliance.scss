@@ -42,3 +42,29 @@ table.standards {
     }
   }
 }
+
+details.quick-links {
+  color: $color-nhs-blue;
+
+  ul {
+    list-style-type: disc;
+
+    li {
+      margin: .25em 0 .25em 2em;
+    }
+  }
+}
+
+section p.callout,
+fieldset.callout {
+  background-color: $color-callout-bg;
+  border: 0;
+  color: $color-callout-fg;
+  margin-top: 0;
+  padding: 1.5em;
+  width: 80%;
+}
+
+section > h3 {
+  margin-bottom: .5em;
+}

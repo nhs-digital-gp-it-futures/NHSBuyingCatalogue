@@ -56,6 +56,10 @@ class DataProvider {
     this.capabilityMappingsApi = new CatalogueApi.CapabilityMappingsApi()
   }
 
+  async contactById (contactId) {
+    return this.contactsApi.apiContactsByIdByIdGet(contactId)
+  }
+
   async contactByEmail (email) {
     const contact = await this.contactsApi.apiContactsByEmailByEmailGet(email)
     if (!contact) throw new Error(`No contact found`)
@@ -130,7 +134,8 @@ class DataProvider {
       contacts: _.orderBy(solutionEx.technicalContact, c => {
         // Lead Contact sorts above all others, then alphabetic by type
         return c.contactType === 'Lead Contact' ? '' : c.contactType
-      })
+      }),
+      _raw: solutionEx
     }
   }
 
