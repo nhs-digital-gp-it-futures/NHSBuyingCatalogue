@@ -39,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NHSD.GPITF.BuyingCatalog.Logic\NHSD.GPITF.BuyingCatalog.Logic.csproj" />
     <ProjectReference Include="..\NHSD.GPITF.BuyingCatalog.Search\NHSD.GPITF.BuyingCatalog.Search.csproj" />
     <ProjectReference Include="..\NHSD.GPITF.BuyingCatalog\NHSD.GPITF.BuyingCatalog.csproj" />
   </ItemGroup>

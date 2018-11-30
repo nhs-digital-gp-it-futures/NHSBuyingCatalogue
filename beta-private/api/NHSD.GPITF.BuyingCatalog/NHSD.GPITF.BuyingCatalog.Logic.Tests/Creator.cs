@@ -30,13 +30,15 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       string primaryRoleId = PrimaryRole.GovernmentDepartment,
       string odsCode = "NHS Digital ODS Code")
     {
-      return new Organisations
+      var retval = new Organisations
       {
         Id = id,
         Name = id,
         PrimaryRoleId = primaryRoleId,
         OdsCode = odsCode
       };
+      Verifier.Verify(retval);
+      return retval;
     }
 
     public static Solutions GetSolution(
@@ -49,7 +51,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       string modifiedById = null,
       DateTime? modifiedOn = null)
     {
-      return new Solutions
+      var retval = new Solutions
       {
         Id = id ?? Guid.NewGuid().ToString(),
         PreviousId = previousId,
@@ -60,6 +62,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         ModifiedById = modifiedById ?? Guid.NewGuid().ToString(),
         ModifiedOn = modifiedOn ?? DateTime.Now
       };
+      Verifier.Verify(retval);
+      return retval;
     }
 
     public static TechnicalContacts GetTechnicalContact(
@@ -69,50 +73,66 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       string emailAddress = "jon.dough@tpp.com"
       )
     {
-      return new TechnicalContacts
+      var retval = new TechnicalContacts
       {
         Id = id ?? Guid.NewGuid().ToString(),
         SolutionId = solutionId ?? Guid.NewGuid().ToString(),
         ContactType = contactType,
         EmailAddress = emailAddress
       };
+      Verifier.Verify(retval);
+      return retval;
     }
 
     public static ClaimsBase GetClaimsBase(
       string id = null,
       string solnId = null)
     {
-      return new DummyClaimsBase
+      var retval = new DummyClaimsBase
       {
         Id = id ?? Guid.NewGuid().ToString(),
         SolutionId = solnId ?? Guid.NewGuid().ToString()
       };
+      Verifier.Verify(retval);
+      return retval;
     }
 
     public static DummyEvidenceBase GetEvidenceBase(
       string id = null,
       string prevId = null,
-      string claimId = null)
+      string claimId = null,
+      string createdById = null,
+      DateTime? createdOn = null)
     {
-      return new DummyEvidenceBase
+      var retval = new DummyEvidenceBase
       {
         Id = id ?? Guid.NewGuid().ToString(),
         PreviousId = prevId,
-        ClaimId = claimId ?? Guid.NewGuid().ToString()
+        ClaimId = claimId ?? Guid.NewGuid().ToString(),
+        CreatedById = createdById ?? Guid.NewGuid().ToString(),
+        CreatedOn = createdOn ?? DateTime.Now
       };
+      Verifier.Verify(retval);
+      return retval;
     }
 
     public static DummyReviewsBase GetReviewsBase(
       string id = null,
       string prevId = null,
-      string evidenceId = null)
+      string evidenceId = null,
+      string createdById = null,
+      DateTime? createdOn = null)
     {
-      return new DummyReviewsBase
+      var retval = new DummyReviewsBase
       {
         Id = id ?? Guid.NewGuid().ToString(),
         PreviousId = prevId,
-        EvidenceId = evidenceId ?? Guid.NewGuid().ToString()
+        EvidenceId = evidenceId ?? Guid.NewGuid().ToString(),
+        CreatedById = createdById ?? Guid.NewGuid().ToString(),
+        CreatedOn = createdOn ?? DateTime.Now
       };
+      Verifier.Verify(retval);
+      return retval;
     }
 
     public static Contacts GetContact(
@@ -120,12 +140,14 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       string orgId = null,
       string emailAddress1 = null)
     {
-      return new Contacts
+      var retval = new Contacts
       {
         Id = id ?? Guid.NewGuid().ToString(),
         OrganisationId = orgId ?? Guid.NewGuid().ToString(),
         EmailAddress1 = emailAddress1 ?? "jon.dough@tpp.com"
       };
+      Verifier.Verify(retval);
+      return retval;
     }
 
     public static CapabilitiesImplemented GetCapabilitiesImplemented(
@@ -134,13 +156,15 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       string claimId = null,
       CapabilitiesImplementedStatus status = CapabilitiesImplementedStatus.Draft)
     {
-      return new CapabilitiesImplemented
+      var retval = new CapabilitiesImplemented
       {
         Id = id ?? Guid.NewGuid().ToString(),
         SolutionId = solnId ?? Guid.NewGuid().ToString(),
         CapabilityId = claimId ?? Guid.NewGuid().ToString(),
         Status = status
       };
+      Verifier.Verify(retval);
+      return retval;
     }
 
     public static StandardsApplicable GetStandardsApplicable(
@@ -149,65 +173,91 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       string claimId = null,
       StandardsApplicableStatus status = StandardsApplicableStatus.Draft)
     {
-      return new StandardsApplicable
+      var retval = new StandardsApplicable
       {
         Id = id ?? Guid.NewGuid().ToString(),
         SolutionId = solnId ?? Guid.NewGuid().ToString(),
         StandardId = claimId ?? Guid.NewGuid().ToString(),
         Status = status
       };
+      Verifier.Verify(retval);
+      return retval;
     }
 
     public static CapabilitiesImplementedEvidence GetCapabilitiesImplementedEvidence(
       string id = null,
       string prevId = null,
-      string claimId = null)
+      string claimId = null,
+      string createdById = null,
+      DateTime? createdOn = null)
     {
-      return new CapabilitiesImplementedEvidence
+      var retval = new CapabilitiesImplementedEvidence
       {
         Id = id ?? Guid.NewGuid().ToString(),
         PreviousId = prevId,
-        ClaimId = claimId ?? Guid.NewGuid().ToString()
+        ClaimId = claimId ?? Guid.NewGuid().ToString(),
+        CreatedById = createdById ?? Guid.NewGuid().ToString(),
+        CreatedOn = createdOn ?? DateTime.UtcNow
       };
+      Verifier.Verify(retval);
+      return retval;
     }
 
     public static StandardsApplicableEvidence GetStandardsApplicableEvidence(
       string id = null,
       string prevId = null,
-      string claimId = null)
+      string claimId = null,
+      string createdById = null,
+      DateTime? createdOn = null)
     {
-      return new StandardsApplicableEvidence
+      var retval = new StandardsApplicableEvidence
       {
         Id = id ?? Guid.NewGuid().ToString(),
         PreviousId = prevId,
-        ClaimId = claimId ?? Guid.NewGuid().ToString()
+        ClaimId = claimId ?? Guid.NewGuid().ToString(),
+        CreatedById = createdById ?? Guid.NewGuid().ToString(),
+        CreatedOn = createdOn ?? DateTime.UtcNow
       };
+      Verifier.Verify(retval);
+      return retval;
     }
 
     public static CapabilitiesImplementedReviews GetCapabilitiesImplementedReviews(
       string id = null,
       string prevId = null,
-      string evidenceId = null)
+      string evidenceId = null,
+      string createdById = null,
+      DateTime? createdOn = null)
     {
-      return new CapabilitiesImplementedReviews
+      var retval = new CapabilitiesImplementedReviews
       {
         Id = id ?? Guid.NewGuid().ToString(),
         PreviousId = prevId,
-        EvidenceId = evidenceId ?? Guid.NewGuid().ToString()
+        EvidenceId = evidenceId ?? Guid.NewGuid().ToString(),
+        CreatedById = createdById ?? Guid.NewGuid().ToString(),
+        CreatedOn = createdOn ?? DateTime.UtcNow
       };
+      Verifier.Verify(retval);
+      return retval;
     }
 
     public static StandardsApplicableReviews GetStandardsApplicableReviews(
       string id = null,
       string prevId = null,
-      string evidenceId = null)
+      string evidenceId = null,
+      string createdById = null,
+      DateTime? createdOn = null)
     {
-      return new StandardsApplicableReviews
+      var retval = new StandardsApplicableReviews
       {
         Id = id ?? Guid.NewGuid().ToString(),
         PreviousId = prevId,
-        EvidenceId = evidenceId ?? Guid.NewGuid().ToString()
+        EvidenceId = evidenceId ?? Guid.NewGuid().ToString(),
+        CreatedById = createdById ?? Guid.NewGuid().ToString(),
+        CreatedOn = createdOn ?? DateTime.UtcNow
       };
+      Verifier.Verify(retval);
+      return retval;
     }
 
     public static SolutionEx GetSolutionEx(
@@ -272,6 +322,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         TechnicalContact = techCont
       };
 
+      Verifier.Verify(solnEx);
       return solnEx;
     }
   }
