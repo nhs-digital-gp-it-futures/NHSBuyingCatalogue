@@ -663,6 +663,161 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     }
     #endregion
 
+    #region ClaimedStandardReview
+    [Test]
+    public void Update_ClaimedStandardReview_Add_NoChain_Succeeds()
+    {
+      var std = Retriever.GetAllStandards(_policy).First();
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id);
+      ClearClaimedStandard();
+      _solnEx.ClaimedStandard.Add(claim);
+
+      var evidence = Creator.GetStandardsApplicableEvidence(claimId: claim.Id, createdById: GetContact().Id);
+      _solnEx.ClaimedStandardEvidence.Add(evidence);
+      _datastore.Update(_solnEx);
+      var review = Creator.GetStandardsApplicableReviews(evidenceId: evidence.Id);
+      _solnEx.ClaimedStandardReview.Add(review);
+
+      _datastore.Update(_solnEx);
+
+      var retrievedSolnEx = _datastore.BySolution(_solnEx.Solution.Id);
+      retrievedSolnEx.ClaimedStandardReview
+        .Should().ContainSingle()
+        .And
+        .Should().BeEquivalentTo(review,
+          opts => opts
+            .Excluding(ent => ent.CreatedOn));
+    }
+
+    [Test]
+    public void Update_ClaimedStandardReview_Add_Chain_Succeeds()
+    {
+      var std = Retriever.GetAllStandards(_policy).First();
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id);
+      ClearClaimedStandard();
+      _solnEx.ClaimedStandard.Add(claim);
+
+      var evidence = Creator.GetStandardsApplicableEvidence(claimId: claim.Id, createdById: GetContact().Id);
+      _solnEx.ClaimedStandardEvidence.Add(evidence);
+      _datastore.Update(_solnEx);
+      var reviewPrev = Creator.GetStandardsApplicableReviews(evidenceId: evidence.Id);
+      var review = Creator.GetStandardsApplicableReviews(prevId: reviewPrev.Id, evidenceId: evidence.Id);
+      _solnEx.ClaimedStandardReview.Add(reviewPrev);
+      _solnEx.ClaimedStandardReview.Add(review);
+
+      _datastore.Update(_solnEx);
+
+      var retrievedSolnEx = _datastore.BySolution(_solnEx.Solution.Id);
+      retrievedSolnEx.ClaimedStandardReview
+        .Should().HaveCount(2)
+        .And.Subject
+        .Should().BeEquivalentTo(new[] { review, reviewPrev },
+          opts => opts
+            .Excluding(ent => ent.CreatedOn));
+    }
+
+    [Test]
+    public void Update_ClaimedStandardReview_Add_EndChain_Succeeds()
+    {
+      var std = Retriever.GetAllStandards(_policy).First();
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id);
+      ClearClaimedStandard();
+      _solnEx.ClaimedStandard.Add(claim);
+
+      var evidence = Creator.GetStandardsApplicableEvidence(claimId: claim.Id, createdById: GetContact().Id);
+      var reviewPrev = Creator.GetStandardsApplicableReviews(evidenceId: evidence.Id);
+      _solnEx.ClaimedStandardEvidence.Add(evidence);
+      _solnEx.ClaimedStandardReview.Add(reviewPrev);
+      _datastore.Update(_solnEx);
+      var review = Creator.GetStandardsApplicableReviews(prevId: reviewPrev.Id, evidenceId: evidence.Id);
+      _solnEx.ClaimedStandardReview.Add(review);
+
+      _datastore.Update(_solnEx);
+
+      var retrievedSolnEx = _datastore.BySolution(_solnEx.Solution.Id);
+      retrievedSolnEx.ClaimedStandardReview
+        .Should().HaveCount(2)
+        .And.Subject
+        .Should().BeEquivalentTo(new[] { review, reviewPrev },
+          opts => opts
+            .Excluding(ent => ent.CreatedOn));
+    }
+
+    [Test]
+    public void Update_ClaimedStandardReview_Remove_NoChain_Succeeds()
+    {
+      var std = Retriever.GetAllStandards(_policy).First();
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id);
+      ClearClaimedStandard();
+      _solnEx.ClaimedStandard.Add(claim);
+
+      var evidence = Creator.GetStandardsApplicableEvidence(claimId: claim.Id, createdById: GetContact().Id);
+      var review = Creator.GetStandardsApplicableReviews(evidenceId: evidence.Id);
+      _solnEx.ClaimedStandardEvidence.Add(evidence);
+      _solnEx.ClaimedStandardReview.Add(review);
+      _datastore.Update(_solnEx);
+      _solnEx.ClaimedStandardReview.Clear();
+
+      _datastore.Update(_solnEx);
+
+      var retrievedSolnEx = _datastore.BySolution(_solnEx.Solution.Id);
+      retrievedSolnEx.ClaimedStandardReview
+        .Should().BeEmpty();
+    }
+
+    [Test]
+    public void Update_ClaimedStandardReview_Remove_Chain_Succeeds()
+    {
+      var std = Retriever.GetAllStandards(_policy).First();
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id);
+      ClearClaimedStandard();
+      _solnEx.ClaimedStandard.Add(claim);
+
+      var evidence = Creator.GetStandardsApplicableEvidence(claimId: claim.Id, createdById: GetContact().Id);
+      var reviewPrev = Creator.GetStandardsApplicableReviews(evidenceId: evidence.Id);
+      var review = Creator.GetStandardsApplicableReviews(prevId: reviewPrev.Id, evidenceId: evidence.Id);
+      _solnEx.ClaimedStandardEvidence.Add(evidence);
+      _solnEx.ClaimedStandardReview.Add(reviewPrev);
+      _solnEx.ClaimedStandardReview.Add(review);
+      _datastore.Update(_solnEx);
+      _solnEx.ClaimedStandardReview.Clear();
+
+      _datastore.Update(_solnEx);
+
+      var retrievedSolnEx = _datastore.BySolution(_solnEx.Solution.Id);
+      retrievedSolnEx.ClaimedStandardReview
+        .Should().BeEmpty();
+    }
+
+    [Test]
+    public void Update_ClaimedStandardReview_Remove_EndChain_Succeeds()
+    {
+      var std = Retriever.GetAllStandards(_policy).First();
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id);
+      ClearClaimedStandard();
+      _solnEx.ClaimedStandard.Add(claim);
+
+      var evidence = Creator.GetStandardsApplicableEvidence(claimId: claim.Id, createdById: GetContact().Id);
+      var reviewPrev = Creator.GetStandardsApplicableReviews(evidenceId: evidence.Id);
+      var review = Creator.GetStandardsApplicableReviews(prevId: reviewPrev.Id, evidenceId: evidence.Id);
+      _solnEx.ClaimedStandardEvidence.Add(evidence);
+      _solnEx.ClaimedStandardReview.Add(reviewPrev);
+      _solnEx.ClaimedStandardReview.Add(review);
+      _datastore.Update(_solnEx);
+      _solnEx.ClaimedStandardReview.Remove(review);
+
+      _datastore.Update(_solnEx);
+
+      var retrievedSolnEx = _datastore.BySolution(_solnEx.Solution.Id);
+      retrievedSolnEx.ClaimedStandardReview
+        .Should().ContainSingle()
+        .And
+        .Should().BeEquivalentTo(reviewPrev,
+          opts => opts
+            .Excluding(ent => ent.CreatedOn));
+    }
+    #endregion
+
     private void ClearClaimedCapability()
     {
       _solnEx.ClaimedCapability.Clear();
