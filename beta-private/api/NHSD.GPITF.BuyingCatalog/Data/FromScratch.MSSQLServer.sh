@@ -16,24 +16,24 @@ import()
 {
   TABLENAME=$1
   CSVFILE=\'$2\'
-  IMPORT="$BCP $TABLENAME in $CSVFILE $CREDS -d BuyingCatalog -c -t ','"
+  IMPORT="$BCP $TABLENAME in $CSVFILE $CREDS -d BuyingCatalog -c"
   eval "$IMPORT"
 }
 
-import Organisations 'Organisations.csv'
-import Contacts 'Contacts.csv'
-import Solutions 'Solutions.csv'
-import TechnicalContacts 'TechnicalContacts.csv'
-import Capabilities 'Capabilities.csv'
-import Frameworks 'Frameworks.csv'
-import Standards 'Standards.csv'
-import CapabilitiesImplemented 'CapabilitiesImplemented.csv'
-import StandardsApplicable 'StandardsApplicable.csv'
-import CapabilityFramework 'CapabilityFramework.csv'
-import FrameworkSolution 'FrameworkSolution.csv'
-import FrameworkStandard 'FrameworkStandard.csv'
-import CapabilityStandard 'CapabilityStandard.csv'
-import CapabilitiesImplementedEvidence 'CapabilitiesImplementedEvidence.csv'
-import CapabilitiesImplementedReviews 'CapabilitiesImplementedReviews.csv'
-import StandardsApplicableEvidence 'StandardsApplicableEvidence.csv'
-import StandardsApplicableReviews 'StandardsApplicableReviews.csv'
+import Organisations 'Organisations.tsv'
+import Contacts 'Contacts.tsv'
+import Solutions 'Solutions.tsv'
+import TechnicalContacts 'TechnicalContacts.tsv'
+import Capabilities 'Capabilities.tsv'
+import Frameworks 'Frameworks.tsv'
+import Standards 'Standards.tsv'
+import CapabilitiesImplemented 'CapabilitiesImplemented.tsv'
+import StandardsApplicable 'StandardsApplicable.tsv'
+import CapabilityFramework 'CapabilityFramework.tsv'
+import FrameworkSolution 'FrameworkSolution.tsv'
+import FrameworkStandard 'FrameworkStandard.tsv'
+import CapabilityStandard 'CapabilityStandard.tsv'
+import CapabilitiesImplementedEvidence 'CapabilitiesImplementedEvidence.tsv'
+import CapabilitiesImplementedReviews 'CapabilitiesImplementedReviews.tsv'
+import StandardsApplicableEvidence 'StandardsApplicableEvidence.tsv'
+import StandardsApplicableReviews 'StandardsApplicableReviews.tsv'

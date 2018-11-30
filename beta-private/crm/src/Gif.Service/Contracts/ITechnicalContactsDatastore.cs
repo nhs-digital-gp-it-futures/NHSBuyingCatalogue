@@ -7,6 +7,7 @@ namespace Gif.Service.Contracts
     public interface ITechnicalContactsDatastore
     {
         IEnumerable<TechnicalContact> BySolution(string solutionId);
+        TechnicalContact ById(string id);
         TechnicalContact Create(TechnicalContact techCont);
         void Update(TechnicalContact techCont);
         void Delete(TechnicalContact techCont);

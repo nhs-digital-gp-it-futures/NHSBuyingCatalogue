@@ -1,10 +1,10 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 using Gif.Service.Attributes;
+using Gif.Service.Const;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Gif.Service.Const;
 
 namespace Gif.Service.Models
 {
@@ -32,18 +32,6 @@ namespace Gif.Service.Models
         [CrmFieldEntityDataBind("cc_standards")]
         public Guid? StandardId { get; set; }
 
-        /*
-        /// <summary>
-        /// Unique identifier of Capability entity
-        /// </summary>
-        public string CapabilityId { get; set; }
-
-        /// <summary>
-        /// Unique identifier of Standard entity
-        /// </summary>
-        public string StandardId { get; set; }
-        */
-
         /// <summary>
         /// True if the Standard does not have to be supported in order to support the Capability
         /// </summary>
@@ -53,7 +41,7 @@ namespace Gif.Service.Models
 
 
         [CrmEntityRelationAttribute(RelationshipNames.CapabilityStandardStandard)]
-        public IList<Standard> StandardRelationship {get; set; }
+        public IList<Standard> StandardRelationship { get; set; }
 
 
         [CrmEntityRelationAttribute(RelationshipNames.CapabilityStandardCapability)]

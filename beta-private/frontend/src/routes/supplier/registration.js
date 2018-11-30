@@ -48,7 +48,10 @@ router
 function commonOnboardingContext (req) {
   return {
     solution: req.solution,
-    csrfToken: req.csrfToken()
+    csrfToken: req.csrfToken(),
+    activeForm: {
+      title: req.solution && _([req.solution.name, req.solution.version]).filter().join(', ')
+    }
   }
 }
 
@@ -64,16 +67,12 @@ function onboardingStatusPage (req, res) {
 
 function registrationPageContext (req) {
   const context = {
-    ...commonOnboardingContext(req),
-    activeFormId: 'registration-form'
+    ...commonOnboardingContext(req)
   }
 
-  if (context.solution) {
-    context.activeFormTitle = _.join(
-      _.filter([context.solution.name, context.solution.version]),
-      ', '
-    )
-  } else {
+  context.activeForm.id = 'registration-form'
+
+  if (!context.solution) {
     context.solution = { id: 'new' }
   }
 
@@ -194,10 +193,29 @@ async function capabilitiesPageContext (req) {
     ...await dataProvider.capabilityMappings()
   }
 
+  context.activeForm.id = 'capability-selector-form'
+
   context.capabilities = _(context.capabilities)
     .values()
-    .orderBy('name')
+    .orderBy(a => a.name.toLowerCase())
+    .map(c => ({
+      ...c,
+      standardIds: _(c.standards)
+        .reject(c => context.standards[c.id].isOverarching)
+        .map('id')
+        .value()
+    }))
     .value()
+
+  context.capabilitiesByGroup = _.zipObject(
+    ['core', 'noncore'],
+    _.partition(context.capabilities, c => _.startsWith(c.id, 'CAP-C-'))
+  )
+
+  context.standardsByGroup = _.zipObject(
+    ['overarching', 'associated'],
+    _.partition(context.standards, s => _.startsWith(s.id, 'STD-O-'))
+  )
 
   return context
 }
@@ -206,7 +224,7 @@ async function capabilitiesPageGet (req, res) {
   const context = await capabilitiesPageContext(req)
 
   context.capabilities.forEach(cap => {
-    cap.selected = _.some(req.solution.capabilities, { capabilityId: cap.id })
+    cap.selected = _.get(_.find(req.solution.capabilities, { capabilityId: cap.id }), 'id')
   })
 
   res.render('supplier/registration/2-capabilities', context)
@@ -215,8 +233,11 @@ async function capabilitiesPageGet (req, res) {
 async function capabilitiesPagePost (req, res) {
   const context = await capabilitiesPageContext(req)
 
+  // the "selected" property holds the current ID for each claimed capability,
+  // or a newly generated ID for an added capability
   context.capabilities.forEach(cap => {
-    cap.selected = _.has(req.body.capabilities, cap.id)
+    cap.selected = _.has(req.body.capabilities, cap.id) &&
+      (req.body.capabilities[cap.id] || require('node-uuid-generator').generate())
   })
 
   const valres = validationResult(req)
@@ -229,8 +250,18 @@ async function capabilitiesPagePost (req, res) {
     req.solution.capabilities = _(context.capabilities)
       .filter('selected')
       .map(cap => ({
-        id: require('node-uuid-generator').generate(),
+        id: cap.selected,
         capabilityId: cap.id,
+        status: '0',
+        solutionId: req.solution.id
+      }))
+      .value()
+
+    req.solution.standards = _(req.solution.capabilities)
+      .flatMap(({ capabilityId }) => _.find(context.capabilities, { id: capabilityId }).standards)
+      .uniqBy('id')
+      .map(std => ({
+        standardId: std.id,
         status: '0',
         solutionId: req.solution.id
       }))
@@ -248,7 +279,12 @@ async function capabilitiesPagePost (req, res) {
   if (context.errors) {
     res.render('supplier/registration/2-capabilities', context)
   } else {
-    res.redirect('../')
+    // redirect based on action chosen
+    const redirectUrl = (req.body.action && req.body.action.exit)
+      ? '../'
+      : './'
+
+    res.redirect(redirectUrl)
   }
 }
 

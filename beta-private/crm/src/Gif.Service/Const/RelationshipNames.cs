@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Gif.Service.Const
+﻿namespace Gif.Service.Const
 {
     public class RelationshipNames
     {

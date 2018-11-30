@@ -10,7 +10,7 @@
     #endregion
 
     /// <summary>
-    ///     cascade delete all associated child records when a Solution record is deleted.
+    ///     cascade delete all associated child records when a standard applicable record is deleted.
     /// </summary>
     public class CascadeDelete : IPlugin
     {
@@ -66,7 +66,7 @@
         /// <summary>
         ///     The name of the entity the plugin is designed to run on
         /// </summary>
-        private const string EntityName = "cc_solution";
+        private const string EntityName = "cc_standardapplicable";
 
         /// <summary>
         ///     The plugin full name.

@@ -64,7 +64,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Importer
     {
       foreach (var type in GetImportTypes())
       {
-        var dataFileName = Path.ChangeExtension(type.Name, ".csv");
+        var dataFileName = Path.ChangeExtension(type.Name, ".tsv");
         yield return dataFileName;
       }
     }
@@ -116,11 +116,12 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Importer
 
     private void Load<T>(IDbConnection conn, IDbTransaction trans)
     {
-      var dataFileName = Path.ChangeExtension(typeof(T).Name, ".csv");
+      var dataFileName = Path.ChangeExtension(typeof(T).Name, ".tsv");
       var tr = File.OpenText(Path.Combine(_dataDirectory, dataFileName));
       var config = new Configuration
       {
-        HasHeaderRecord = false
+        HasHeaderRecord = false,
+        Delimiter = "\t"
       };
       foreach (var classMap in GetClassMapTypes())
       {
