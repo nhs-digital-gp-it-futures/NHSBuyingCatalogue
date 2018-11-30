@@ -2,11 +2,9 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain;
-using NHSD.GPITF.BuyingCatalog.Logic;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 using NUnit.Framework;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
@@ -88,6 +86,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
         .And.Subject
         .Should().BeEquivalentTo(_solnEx,
           opts => opts
+            .Excluding(ent => ent.Solution.CreatedOn)
             .Excluding(ent => ent.Solution.ModifiedOn)
             .Excluding(ent => ent.Solution.ModifiedById));
     }
@@ -198,7 +197,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var retrievedSolnEx = _datastore.BySolution(_solnEx.Solution.Id);
       retrievedSolnEx.ClaimedStandard
         .Should().ContainSingle()
-        .And
+        .And.Subject.Single()
         .Should().BeEquivalentTo(claim);
     }
 
@@ -231,7 +230,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       _solnEx.ClaimedCapability.Add(claim);
 
       _datastore.Update(_solnEx);
-      var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
+      var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id, createdById: GetContact().Id);
       _solnEx.ClaimedCapabilityEvidence.Clear();
       _solnEx.ClaimedCapabilityEvidence.Add(evidence);
 
@@ -240,7 +239,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var retrievedSolnEx = _datastore.BySolution(_solnEx.Solution.Id);
       retrievedSolnEx.ClaimedCapabilityEvidence
         .Should().ContainSingle()
-        .And
+        .And.Subject.Single()
         .Should().BeEquivalentTo(evidence,
           opts => opts
             .Excluding(ent => ent.CreatedOn));
@@ -255,8 +254,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       _solnEx.ClaimedCapability.Add(claim);
 
       _datastore.Update(_solnEx);
-      var evidencePrev = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
-      var evidence = Creator.GetCapabilitiesImplementedEvidence(prevId: evidencePrev.Id, claimId: claim.Id);
+      var evidencePrev = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id, createdById: GetContact().Id);
+      var evidence = Creator.GetCapabilitiesImplementedEvidence(prevId: evidencePrev.Id, claimId: claim.Id, createdById: GetContact().Id);
       _solnEx.ClaimedCapabilityEvidence.Clear();
       _solnEx.ClaimedCapabilityEvidence.Add(evidence);
       _solnEx.ClaimedCapabilityEvidence.Add(evidencePrev);
@@ -280,10 +279,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       ClearClaimedCapability();
       _solnEx.ClaimedCapability.Add(claim);
 
-      var evidencePrev = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
+      var evidencePrev = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id, createdById: GetContact().Id);
       _solnEx.ClaimedCapabilityEvidence.Add(evidencePrev);
       _datastore.Update(_solnEx);
-      var evidence = Creator.GetCapabilitiesImplementedEvidence(prevId: evidencePrev.Id, claimId: claim.Id);
+      var evidence = Creator.GetCapabilitiesImplementedEvidence(prevId: evidencePrev.Id, claimId: claim.Id, createdById: GetContact().Id);
       _solnEx.ClaimedCapabilityEvidence.Add(evidence);
 
       _datastore.Update(_solnEx);
@@ -305,7 +304,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       ClearClaimedCapability();
       _solnEx.ClaimedCapability.Add(claim);
 
-      var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
+      var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id, createdById: GetContact().Id);
       _solnEx.ClaimedCapabilityEvidence.Add(evidence);
       _datastore.Update(_solnEx);
       _solnEx.ClaimedCapabilityEvidence.Clear();
@@ -325,8 +324,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       ClearClaimedCapability();
       _solnEx.ClaimedCapability.Add(claim);
 
-      var evidencePrev = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
-      var evidence = Creator.GetCapabilitiesImplementedEvidence(prevId: evidencePrev.Id, claimId: claim.Id);
+      var evidencePrev = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id, createdById: GetContact().Id);
+      var evidence = Creator.GetCapabilitiesImplementedEvidence(prevId: evidencePrev.Id, claimId: claim.Id, createdById: GetContact().Id);
       _solnEx.ClaimedCapabilityEvidence.Add(evidence);
       _solnEx.ClaimedCapabilityEvidence.Add(evidencePrev);
       _datastore.Update(_solnEx);
@@ -347,8 +346,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       ClearClaimedCapability();
       _solnEx.ClaimedCapability.Add(claim);
 
-      var evidencePrev = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
-      var evidence = Creator.GetCapabilitiesImplementedEvidence(prevId: evidencePrev.Id, claimId: claim.Id);
+      var evidencePrev = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id, createdById: GetContact().Id);
+      var evidence = Creator.GetCapabilitiesImplementedEvidence(prevId: evidencePrev.Id, claimId: claim.Id, createdById: GetContact().Id);
       _solnEx.ClaimedCapabilityEvidence.Add(evidence);
       _solnEx.ClaimedCapabilityEvidence.Add(evidencePrev);
       _datastore.Update(_solnEx);
@@ -359,7 +358,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var retrievedSolnEx = _datastore.BySolution(_solnEx.Solution.Id);
       retrievedSolnEx.ClaimedCapabilityEvidence
         .Should().ContainSingle()
-        .And
+        .And.Subject.Single()
         .Should().BeEquivalentTo(evidencePrev,
           opts => opts
             .Excluding(ent => ent.CreatedOn));
@@ -376,7 +375,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       _solnEx.ClaimedStandard.Add(claim);
 
       _datastore.Update(_solnEx);
-      var evidence = Creator.GetStandardsApplicableEvidence(claimId: claim.Id);
+      var evidence = Creator.GetStandardsApplicableEvidence(claimId: claim.Id, createdById: GetContact().Id);
       _solnEx.ClaimedStandardEvidence.Add(evidence);
 
       _datastore.Update(_solnEx);
@@ -384,7 +383,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var retrievedSolnEx = _datastore.BySolution(_solnEx.Solution.Id);
       retrievedSolnEx.ClaimedStandardEvidence
         .Should().ContainSingle()
-        .And
+        .And.Subject.Single()
         .Should().BeEquivalentTo(evidence,
           opts => opts
             .Excluding(ent => ent.CreatedOn));
@@ -399,8 +398,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       _solnEx.ClaimedStandard.Add(claim);
 
       _datastore.Update(_solnEx);
-      var evidencePrev = Creator.GetStandardsApplicableEvidence(claimId: claim.Id);
-      var evidence = Creator.GetStandardsApplicableEvidence(prevId: evidencePrev.Id, claimId: claim.Id);
+      var evidencePrev = Creator.GetStandardsApplicableEvidence(claimId: claim.Id, createdById: GetContact().Id);
+      var evidence = Creator.GetStandardsApplicableEvidence(prevId: evidencePrev.Id, claimId: claim.Id, createdById: GetContact().Id);
       _solnEx.ClaimedStandardEvidence.Add(evidence);
       _solnEx.ClaimedStandardEvidence.Add(evidencePrev);
 
@@ -423,10 +422,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       ClearClaimedStandard();
       _solnEx.ClaimedStandard.Add(claim);
 
-      var evidencePrev = Creator.GetStandardsApplicableEvidence(claimId: claim.Id);
+      var evidencePrev = Creator.GetStandardsApplicableEvidence(claimId: claim.Id, createdById: GetContact().Id);
       _solnEx.ClaimedStandardEvidence.Add(evidencePrev);
       _datastore.Update(_solnEx);
-      var evidence = Creator.GetStandardsApplicableEvidence(prevId: evidencePrev.Id, claimId: claim.Id);
+      var evidence = Creator.GetStandardsApplicableEvidence(prevId: evidencePrev.Id, claimId: claim.Id, createdById: GetContact().Id);
       _solnEx.ClaimedStandardEvidence.Add(evidence);
 
       _datastore.Update(_solnEx);
@@ -448,7 +447,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       ClearClaimedStandard();
       _solnEx.ClaimedStandard.Add(claim);
 
-      var evidence = Creator.GetStandardsApplicableEvidence(claimId: claim.Id);
+      var evidence = Creator.GetStandardsApplicableEvidence(claimId: claim.Id, createdById: GetContact().Id);
       _solnEx.ClaimedStandardEvidence.Add(evidence);
       _datastore.Update(_solnEx);
       _solnEx.ClaimedStandardEvidence.Clear();
@@ -468,8 +467,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       ClearClaimedStandard();
       _solnEx.ClaimedStandard.Add(claim);
 
-      var evidencePrev = Creator.GetStandardsApplicableEvidence(claimId: claim.Id);
-      var evidence = Creator.GetStandardsApplicableEvidence(prevId: evidencePrev.Id, claimId: claim.Id);
+      var evidencePrev = Creator.GetStandardsApplicableEvidence(claimId: claim.Id, createdById: GetContact().Id);
+      var evidence = Creator.GetStandardsApplicableEvidence(prevId: evidencePrev.Id, claimId: claim.Id, createdById: GetContact().Id);
       _solnEx.ClaimedStandardEvidence.Add(evidence);
       _solnEx.ClaimedStandardEvidence.Add(evidencePrev);
       _datastore.Update(_solnEx);
@@ -490,8 +489,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       ClearClaimedStandard();
       _solnEx.ClaimedStandard.Add(claim);
 
-      var evidencePrev = Creator.GetStandardsApplicableEvidence(claimId: claim.Id);
-      var evidence = Creator.GetStandardsApplicableEvidence(prevId: evidencePrev.Id, claimId: claim.Id);
+      var evidencePrev = Creator.GetStandardsApplicableEvidence(claimId: claim.Id, createdById: GetContact().Id);
+      var evidence = Creator.GetStandardsApplicableEvidence(prevId: evidencePrev.Id, claimId: claim.Id, createdById: GetContact().Id);
       _solnEx.ClaimedStandardEvidence.Add(evidence);
       _solnEx.ClaimedStandardEvidence.Add(evidencePrev);
       _datastore.Update(_solnEx);
@@ -502,7 +501,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var retrievedSolnEx = _datastore.BySolution(_solnEx.Solution.Id);
       retrievedSolnEx.ClaimedStandardEvidence
         .Should().ContainSingle()
-        .And
+        .And.Subject.Single()
         .Should().BeEquivalentTo(evidencePrev,
           opts => opts
             .Excluding(ent => ent.CreatedOn));
@@ -518,7 +517,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       ClearClaimedCapability();
       _solnEx.ClaimedCapability.Add(claim);
 
-      var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
+      var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id, createdById: GetContact().Id);
       _solnEx.ClaimedCapabilityEvidence.Add(evidence);
       _datastore.Update(_solnEx);
       var review = Creator.GetCapabilitiesImplementedReviews(evidenceId: evidence.Id);
@@ -543,7 +542,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       ClearClaimedCapability();
       _solnEx.ClaimedCapability.Add(claim);
 
-      var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
+      var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id, createdById: GetContact().Id);
       _solnEx.ClaimedCapabilityEvidence.Add(evidence);
       _datastore.Update(_solnEx);
       var reviewPrev = Creator.GetCapabilitiesImplementedReviews(evidenceId: evidence.Id);
@@ -570,7 +569,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       ClearClaimedCapability();
       _solnEx.ClaimedCapability.Add(claim);
 
-      var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
+      var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id, createdById: GetContact().Id);
       var reviewPrev = Creator.GetCapabilitiesImplementedReviews(evidenceId: evidence.Id);
       _solnEx.ClaimedCapabilityEvidence.Add(evidence);
       _solnEx.ClaimedCapabilityReview.Add(reviewPrev);
@@ -597,7 +596,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       ClearClaimedCapability();
       _solnEx.ClaimedCapability.Add(claim);
 
-      var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
+      var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id, createdById: GetContact().Id);
       var review = Creator.GetCapabilitiesImplementedReviews(evidenceId: evidence.Id);
       _solnEx.ClaimedCapabilityEvidence.Add(evidence);
       _solnEx.ClaimedCapabilityReview.Add(review);
@@ -619,7 +618,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       ClearClaimedCapability();
       _solnEx.ClaimedCapability.Add(claim);
 
-      var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
+      var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id, createdById: GetContact().Id);
       var reviewPrev = Creator.GetCapabilitiesImplementedReviews(evidenceId: evidence.Id);
       var review = Creator.GetCapabilitiesImplementedReviews(prevId: reviewPrev.Id, evidenceId: evidence.Id);
       _solnEx.ClaimedCapabilityEvidence.Add(evidence);
@@ -643,7 +642,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       ClearClaimedCapability();
       _solnEx.ClaimedCapability.Add(claim);
 
-      var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
+      var evidence = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id, createdById: GetContact().Id);
       var reviewPrev = Creator.GetCapabilitiesImplementedReviews(evidenceId: evidence.Id);
       var review = Creator.GetCapabilitiesImplementedReviews(prevId: reviewPrev.Id, evidenceId: evidence.Id);
       _solnEx.ClaimedCapabilityEvidence.Add(evidence);
@@ -676,6 +675,11 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       _solnEx.ClaimedStandard.Clear();
       _solnEx.ClaimedStandardEvidence.Clear();
       _solnEx.ClaimedStandardReview.Clear();
+    }
+
+    private Contacts GetContact()
+    {
+      return Retriever.GetAllContacts(_policy).First();
     }
   }
 }
