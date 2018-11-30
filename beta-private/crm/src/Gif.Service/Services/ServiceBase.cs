@@ -4,6 +4,7 @@ using Gif.Service.Crm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gif.Service.Contracts;
 
 namespace Gif.Service.Services
 {
@@ -36,6 +37,30 @@ namespace Gif.Service.Services
                 totalPages = 1;
 
             return items.Skip(skipPage * skipValue).Take((int)pageSize);
+        }
+
+        protected static List<T> GetInsertionTree<T>(List<T> allNodes) where T : IHasPreviousId
+        {
+            var roots = GetRoots(allNodes);
+            var tree = new List<T>(roots);
+
+            var next = GetChildren(roots, allNodes);
+            while (next.Any())
+            {
+                tree.AddRange(next);
+                next = GetChildren(next, allNodes);
+            }
+
+            return tree;
+        }
+        private static List<T> GetRoots<T>(List<T> allNodes) where T : IHasPreviousId
+        {
+            return allNodes.Where(x => x.PreviousId == null).ToList();
+        }
+
+        private static List<T> GetChildren<T>(List<T> parents, List<T> allNodes) where T : IHasPreviousId
+        {
+            return parents.SelectMany(parent => allNodes.Where(x => x.PreviousId == parent.Id)).ToList();
         }
 
     }

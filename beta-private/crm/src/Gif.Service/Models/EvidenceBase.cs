@@ -3,12 +3,13 @@ using Gif.Service.Attributes;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Runtime.Serialization;
+using Gif.Service.Contracts;
 
 namespace Gif.Service.Models
 {
     [CrmEntity("cc_evidences")]
     [DataContract]
-    public class EvidenceBase : EntityBase
+    public class EvidenceBase : EntityBase, IHasPreviousId
     {
 
         private string _evidence = string.Empty;

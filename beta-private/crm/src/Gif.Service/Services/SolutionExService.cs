@@ -37,6 +37,12 @@ namespace Gif.Service.Services
                 }
             };
 
+            //Sort Evidence/Reviews in order by previous Id
+            solnEx.ClaimedCapabilityEvidence = GetInsertionTree(solnEx.ClaimedCapabilityEvidence);
+            solnEx.ClaimedCapabilityReview = GetInsertionTree(solnEx.ClaimedCapabilityReview);
+            solnEx.ClaimedStandardEvidence = GetInsertionTree(solnEx.ClaimedStandardEvidence);
+            solnEx.ClaimedStandardReview = GetInsertionTree(solnEx.ClaimedStandardReview);
+
             foreach (var technicalContact in solnEx.TechnicalContact)
             {
                 batchData.Add(new BatchData { Id = technicalContact.Id, Name = technicalContact.EntityName, EntityData = technicalContact.SerializeToODataPut("cc_technicalcontactid") });
@@ -75,5 +81,7 @@ namespace Gif.Service.Services
             Repository.CreateBatch(batchData);
         }
     }
+
+
 }
 #pragma warning restore 1591

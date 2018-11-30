@@ -119,15 +119,14 @@ namespace Gif.Service.Crm
 
             var jretrieveJObject = JObject.Parse(retrieveResponse.Content.ReadAsStringAsync().Result);
 
-            if (jretrieveJObject != null)
+            if (jretrieveJObject == null)
+                return jretrieveToken;
+
+            jretrieveToken = jretrieveJObject["value"];
+
+            if (jretrieveJObject["@odata.count"] != null)
             {
-                jretrieveToken = jretrieveJObject["value"];
-
-                if (jretrieveJObject["@odata.count"] != null)
-                {
-                    count = int.Parse(jretrieveJObject["@odata.count"].ToString());
-                }
-
+                count = int.Parse(jretrieveJObject["@odata.count"].ToString());
             }
 
             return jretrieveToken;
@@ -198,7 +197,7 @@ namespace Gif.Service.Crm
 
             using (var httpClient = getCrmConnection())
             {
-                updateResponse = /*update ? Patch(address, content) :*/ httpClient.PostAsync(address, content).Result;
+                updateResponse = httpClient.PostAsync(address, content).Result;
                 targetUri = httpClient.BaseAddress.AbsoluteUri;
             }
 
@@ -212,7 +211,7 @@ namespace Gif.Service.Crm
                 throw new FormatException("Response Entity ID header is empty");
             }
 
-            string idString = new List<string>(headerVals)[0].Replace(targetUri + entityName, "");
+            var idString = new List<string>(headerVals)[0].Replace(targetUri + entityName, "");
 
             return Guid.Parse(idString);
         }

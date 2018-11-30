@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
+using Gif.Service.Contracts;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 namespace Gif.Service.Models

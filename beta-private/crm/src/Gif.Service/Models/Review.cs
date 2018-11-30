@@ -5,12 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using Gif.Service.Contracts;
 
 namespace Gif.Service.Models
 {
     [CrmEntity("cc_reviews")]
     [DataContract]
-    public class Review : EntityBase
+    public class Review : EntityBase, IHasPreviousId
     {
 
         [DataMember]
