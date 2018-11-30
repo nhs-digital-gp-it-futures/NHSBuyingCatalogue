@@ -50,6 +50,10 @@ a {
   .button {
     background-color: $color-button-reversed-bg;
     color: $color-button-reversed-fg;
+
+    &[disabled] {
+      color: $color-button-reversed-disabled-fg;
+    }
   }
 }
 
@@ -59,6 +63,10 @@ a {
 
   // account for fixed header with JS support @see src/static/js/app.js
   padding-top: $header-total-height;
+}
+
+body {
+  overflow-x: hidden; // horizontal scrolling is never desirable
 }
 
 body > header {

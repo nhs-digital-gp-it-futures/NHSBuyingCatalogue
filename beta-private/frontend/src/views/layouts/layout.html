@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>{{meta.title}}{{#meta.title}} - {{/meta.title}}{{t 'Catalogue.Fullname'}}</title>
     <link rel="stylesheet" href="/styles.css">
-    <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=default,es7"></script>
     <script type="text/javascript" src="/js/vendor/modernizr-custom.js"></script>
     <script type="text/javascript" src="/js/vendor/details-element-polyfill.js"></script>
     <script type="text/javascript" src="/js/app.js"></script>
@@ -24,17 +24,25 @@
         </div>
       </div>
       <div class="bottom">
-        {{#if activeFormId}}
+        {{#if activeForm}}
         <nav class="active-form" aria-label="Save controls">
           <input type="submit"
-            form="{{activeFormId}}"
+            {{#if activeForm.id}}
+            form="{{activeForm.id}}"
+            {{else}}
+            disabled
+            {{/if}}
             class="button"
             name="action[save]"
             value="{{t 'Buttons.Save'}}">
-          {{#activeFormTitle}}<span class="title">{{.}}</span>{{/activeFormTitle}}
+          {{#activeForm.title}}<span class="title">{{.}}</span>{{/activeForm.title}}
           <a href="/about#content">Support</a>
           <input type="submit"
-            form="{{activeFormId}}"
+            {{#if activeForm.id}}
+            form="{{activeForm.id}}"
+            {{else}}
+            disabled
+            {{/if}}
             class="button"
             name="action[exit]"
             value="{{t 'Buttons.Save and exit'}}">

@@ -209,7 +209,13 @@ namespace Gif.Service.Controllers
         {
             try
             {
-                new SolutionsService(new Repository()).Delete(solution);
+                var svc = new SolutionsService(new Repository());
+                var solutionGet = svc.ById(solution.Id.ToString());
+
+                if (solutionGet.Id == Guid.Empty)
+                    return StatusCode(404);
+
+                svc.Delete(solution);
             }
             catch (Crm.CrmApiException ex)
             {

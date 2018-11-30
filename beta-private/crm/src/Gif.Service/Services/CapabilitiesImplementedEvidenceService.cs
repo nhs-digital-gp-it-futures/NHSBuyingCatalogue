@@ -99,21 +99,46 @@ namespace Gif.Service.Services
 
         public CapabilityImplemented ByEvidenceId(string id)
         {
+            var evidence = ById(id);
+
+            if (evidence == null)
+                return null;
+
             var filterAttributes = new List<CrmFilterAttribute>
             {
-                new CrmFilterAttribute("EvidenceId") {FilterName = "cc_evidenceid", FilterValue = id},
+                new CrmFilterAttribute("CapabilityImplementedId") {FilterName = "cc_capabilityimplementedid", FilterValue = evidence.ClaimId.ToString()},
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new CapabilityImplementedEvidence().GetQueryString(null, filterAttributes, true), out Count);
-            var capabilityImplemented = appJson?.Children().FirstOrDefault();
+            var appJson = Repository.RetrieveMultiple(new CapabilityImplemented().GetQueryString(null, filterAttributes), out Count);
+            var capabilityImplemented = appJson?.FirstOrDefault();
 
-            var capabilityImplementedRecord = capabilityImplemented?[RelationshipNames.EvidenceCapabilityImplemented];
-
-            return capabilityImplementedRecord != null ?
-                new CapabilityImplemented(capabilityImplementedRecord) : null;
+            return new CapabilityImplemented(capabilityImplemented);
         }
 
+        public CapabilityImplemented ByReviewId(string id)
+        {
+            CapabilityImplemented capabilityImplemented = null;
+
+            var filterAttributes = new List<CrmFilterAttribute>
+            {
+                new CrmFilterAttribute("ReviewId") {FilterName = "cc_reviewid", FilterValue = id},
+                new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
+            };
+
+            var reviewJson = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterAttributes), out Count);
+            var review = reviewJson?.FirstOrDefault();
+
+            if (review != null)
+            {
+                var reviewObj = new Review(review);
+
+                if (reviewObj.Evidence != null)
+                    capabilityImplemented = ByEvidenceId(new Review(review).Evidence.ToString());
+            }
+
+            return capabilityImplemented;
+        }
     }
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

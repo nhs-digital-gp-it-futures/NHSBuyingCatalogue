@@ -62,8 +62,6 @@ namespace Gif.Service.Services
 
             if (standard?[RelationshipNames.StandardFramework] != null)
             {
-                var standardsByFramework = standard[RelationshipNames.StandardFramework].Children();
-
                 foreach (var retrievedStandard in standard[RelationshipNames.StandardFramework].Children())
                 {
                     standards.Add(new Standard(retrievedStandard));

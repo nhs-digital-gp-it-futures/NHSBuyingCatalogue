@@ -16,15 +16,8 @@ const sessionConfig = {
   secret: process.env.SESSION_SECRET ||
             Math.floor(Math.random() * Number.MAX_SAFE_INTEGER).toString(36),
   resave: false,
-  saveUninitialized: false
-}
-
-if (process.env.CACHE_HOST) {
-  const CacheSessionStore = require('connect-redis')(session)
-  sessionConfig.store = new CacheSessionStore({
-    host: process.env.CACHE_HOST,
-    logErrors: true
-  })
+  saveUninitialized: false,
+  store: require('catalogue-data').sessionStore
 }
 
 app.use(session(sessionConfig))
@@ -94,6 +87,13 @@ authentication(app).then(() => {
 
   // generic error handler
   app.use((err, req, res, next) => {
+    console.error(err.stack)
+
+    // don't allow the stack through to the template in production
+    if (process.env.NODE_ENV === 'production') {
+      delete err.stack
+    }
+
     res.status(500)
     res.render('error', { error: err })
   })

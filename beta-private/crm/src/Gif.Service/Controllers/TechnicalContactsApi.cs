@@ -84,7 +84,13 @@ namespace Gif.Service.Controllers
         {
             try
             {
-                new TechnicalContactService(new Repository()).Delete(techCont);
+                var svc = new TechnicalContactService(new Repository());
+                var techContGet = svc.ById(techCont.Id.ToString());
+
+                if (techContGet.Id == Guid.Empty)
+                    return StatusCode(404);
+
+                svc.Delete(techCont);
             }
             catch (Crm.CrmApiException ex)
             {

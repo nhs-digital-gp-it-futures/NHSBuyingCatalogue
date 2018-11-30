@@ -1,20 +1,20 @@
 .read Preimport.SQLite.sql
 .mode csv
-.import Organisations.csv Organisations
-.import Contacts.csv Contacts
-.import Solutions.csv Solutions
-.import TechnicalContacts.csv TechnicalContacts
-.import Capabilities.csv Capabilities
-.import Frameworks.csv Frameworks
-.import Standards.csv Standards
-.import CapabilitiesImplemented.csv CapabilitiesImplemented
-.import StandardsApplicable.csv StandardsApplicable
-.import CapabilityFramework.csv CapabilityFramework
-.import FrameworkSolution.csv FrameworkSolution
-.import FrameworkStandard.csv FrameworkStandard
-.import CapabilityStandard.csv CapabilityStandard
-.import CapabilitiesImplementedEvidence.csv CapabilitiesImplementedEvidence
-.import CapabilitiesImplementedReviews.csv CapabilitiesImplementedReviews
-.import StandardsApplicableEvidence.csv StandardsApplicableEvidence
-.import StandardsApplicableReviews.csv StandardsApplicableReviews
+.import Organisations.tsv Organisations
+.import Contacts.tsv Contacts
+.import Solutions.tsv Solutions
+.import TechnicalContacts.tsv TechnicalContacts
+.import Capabilities.tsv Capabilities
+.import Frameworks.tsv Frameworks
+.import Standards.tsv Standards
+.import CapabilitiesImplemented.tsv CapabilitiesImplemented
+.import StandardsApplicable.tsv StandardsApplicable
+.import CapabilityFramework.tsv CapabilityFramework
+.import FrameworkSolution.tsv FrameworkSolution
+.import FrameworkStandard.tsv FrameworkStandard
+.import CapabilityStandard.tsv CapabilityStandard
+.import CapabilitiesImplementedEvidence.tsv CapabilitiesImplementedEvidence
+.import CapabilitiesImplementedReviews.tsv CapabilitiesImplementedReviews
+.import StandardsApplicableEvidence.tsv StandardsApplicableEvidence
+.import StandardsApplicableReviews.tsv StandardsApplicableReviews
 .read Postimport.SQLite.sql

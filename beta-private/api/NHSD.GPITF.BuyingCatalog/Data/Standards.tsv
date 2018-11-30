@@ -1,0 +1,36 @@
+﻿STD-O-001		1	Business Continuity and Disaster Recovery	Suppliers that provide systems will need to ensure that there are robust business continuity plans in place in the event of disaster recovery. 	
+STD-O-002		1	Clinical Safety	This standard ensures that Suppliers and buyers of GP IT Systems are carrying out effective clinical risk management relating to Patient safety. 	
+STD-O-003		1	Commercial	This standard underpins all commercial activity relating to the Catalogue and impacts the proposed framework as well. It defines the commercial relationship of relevant parties and sets out standards of behaviour and principles of access to data and services charges 	
+STD-O-004		1	Data Migration	Supports the safe and effective migration of data moving between GP IT Systems when a Practice moves from one Clinical System Supplier to another for part or all of their system. 	
+STD-O-005		1	Data Standards	Details data standards e.g. ISNs with which a supplier must be compliant when developing and implementing their systems, examples are fields lengths and formats. Supports consistency of reference data within systems by defining data such as clinical terminology, organisational codes and drug database sets.	
+STD-O-006		1	GP Systems Training	Defines what training collateral and activities are expected of suppliers delivering capabilities into health and social care. 	
+STD-O-007		1	Hosting & Infrastructure	Supports best practices for infrastructure and hosting of systems. For example, ensuring that systems are cost effective, secure and energy efficient. 	
+STD-O-008		1	Information Governance	Supports confidentiality, availability (to authorised users when required), and accuracy of data processed by systems. 	
+STD-O-009		1	Non-Functional Questions	Enable assurance to understand how the supplier solution has implemented its non-functional requirements and how these requirements will fulfil the contractual SLAs. 	
+STD-O-010		1	Testing	Enable assurance to understand how the supplier solution testing is executed in conjunction with processes and procedures consistently followed. 	
+STD-O-011		1	Service Management	Support the service delivery of GPIT systems aligned to practice needs based on industry best practices, delivering end to end service management against services levels, ensuring quality, value and performance is delivered. 	
+STD-X-012		0	Interoperability Standard	This standard defines a wide ranging set of APIs and messaging standards to enable distinct systems and services to work together in an efficient, effective and consistent manner. 	
+STD-X-013		0	Common Reporting	Supports the local, regional and national reporting requirements of a General Practice. Report templates can be defined with search criteria and data can be interrogated at different levels. 	
+STD-X-014		0	Citizen Access	Supports Citizens to access their services safely and securely. Also supports Citizens in viewing and updating Patient information online. 	
+STD-X-015		0	Management Information (MI) Reporting	Enables the monthly collection of aggregated counts of data which cover a number of Capabilities. 	
+STD-C-016		0	Appointments Management - GP - Standard		
+STD-C-017		0	General Practice Appointments Data Reporting		
+STD-C-018		0	GP Referral Management - Standard		
+STD-C-019		0	GP Resource Management - Standard		
+STD-C-020		0	Patient Information Maintenance - Standard		
+STD-C-021		0	Primary Care Clinical Terminology Usage Report		
+STD-C-022		0	Prescribing - Standard		
+STD-C-023		0	Recording Consultations - Standard		
+STD-C-024		0	eMED3 (Fit Notes)		
+STD-C-025		0	Prescription Ordering - Citizen - Standard		
+STD-C-026		0	Appointments Management - Citizen - Standard		
+STD-C-027		0	View Record - Citizen - Standard		
+STD-C-028		0	Communicate with Practice - Citizen - Standard		
+STD-C-029		0	Clinical Decision Support - Standard		
+STD-C-030		0	Communication Management - Standard		
+STD-C-031		0	Digital Diagnostics - Standard		
+STD-C-032		0	Document Management - Standard		
+STD-C-033		0	GP Extracts Verification - Standard		
+STD-C-034		0	Reporting - Standard		
+STD-C-035		0	Unstructured Data Extraction - Standard		
+STD-C-036		0	Workflow - Standard		

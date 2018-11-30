@@ -10,6 +10,8 @@ function authentication (app) {
   app.get('/oidc/authenticate', passport.authenticate('oidc'))
   app.get('/oidc/callback', passport.authenticate('oidc', { successRedirect: '/#account', failureRedirect: '/' }))
 
+  Issuer.defaultHttpOptions = { timeout: 10000, retries: 3 }
+
   const makeIssuer = process.env.OIDC_ISSUER_URL
     ? Issuer.discover(process.env.OIDC_ISSUER_URL)
     : Promise.resolve(

@@ -35,7 +35,7 @@ namespace Gif.Service.Models
 
         [DataMember]
         [CrmFieldName("statuscode")]
-        public SolutionStatusEnum Status { get; set; }
+        public SolutionStatusEnum? Status { get; set; }
 
         [DataMember]
         [CrmFieldName("_cc_previous_version_value")]

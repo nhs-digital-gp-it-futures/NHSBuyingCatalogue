@@ -26,6 +26,7 @@ $color-footer-bottom-fg: $color-nhs-white;
 $color-footer-link-fg: $color-nhs-white;
 
 $color-input-border: $color-nhs-blue;
+$color-input-outline: $color-nhs-warm-yellow;
 $color-input-invalid-border: $color-nhs-red;
 $color-input-invalid-message-fg: $color-nhs-red;
 
@@ -65,3 +66,15 @@ $color-button-reversed-bg: $color-nhs-white;
 $color-button-reversed-hover-bg: $color-nhs-white;
 $color-button-reversed-fg: $color-nhs-blue;
 $color-button-reversed-hover-fg: $color-nhs-blue;
+$color-button-reversed-disabled-fg: #aeb7bd;
+
+$color-capability-selector-bg: $color-nhs-light-grey;
+$color-capability-selector-group-fg: $color-nhs-blue;
+$color-capability-selector-capability-bg: $color-bg;
+$color-capability-selector-capability-outline: $color-input-outline;
+$color-capability-selector-capability-name-fg: $color-nhs-blue;
+$color-capability-selector-capability-selected-bg: $color-nhs-blue;
+$color-capability-selector-capability-selected-fg: $color-nhs-white;
+$color-capability-selector-capability-selected-name-fg: $color-nhs-white;
+$color-capability-selector-reveal-bg: $color-bg;
+$color-capability-selector-reveal-fg: $color-fg;
