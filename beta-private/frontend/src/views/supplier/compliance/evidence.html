@@ -2,51 +2,64 @@
 
 <header class="page-main-heading">
   <h1>{{ claim.standard.name }}</h1>
-  <h2>{{t 'CompliancePages.Evidence.Subtitle'}}</h2>
+  <p>{{t 'CompliancePages.Evidence.Subtitle'}}</p>
 </header>
 
 {{#each (tt 'CompliancePages.Evidence.Preamble')}}
 <p class="preamble">{{{.}}}</p>
 {{/each}}
 
-{{#if latestFile}}
-  <div class="latest-message">
-    {{#latestMessage}}    
-      <div>
-        {{message}}
-      </div>
-      <div>
-        <p>{{author}}, {{date}}</p>
-      </div>
-    {{/latestMessage}}
-    {{#latestFile}}
-    <div>
-      Download the latest file here: <a href="{{downloadURL}}">{{name}}</a>
+<details class="quick-links">
+  <summary>{{t 'CompliancePages.Evidence.QuickLinks.Heading'}}</summary>
+  <ul>
+    <li><a href="{{claim.standard.url}}" target="_blank">{{claim.standard.name}}</a></li>
+    {{#claim.capabilities}}
+    <li><a href="{{url}}" target="_blank">{{name}}</a></li>
+    {{/claim.capabilities}}
+  </ul>
+</details>
+
+{{#if claim.submissionHistory}}
+  <section class="history">
+    {{#claim.submissionHistory}}
+    <div class="message">
+      <p class="text">{{message}}</p>
+      <p class="meta">
+        <span class="from">
+        {{#with (lookup ../claim.historyContacts createdById)}}
+          {{firstName}} {{lastName}}
+        {{/with}}
+        </span>
+        <span class="when">{{createdOn}}</span>
+      </p>
     </div>
-    {{/latestFile}}
-  </div>
-
-  <div>
-    {{#errors}}
-      Error: {{.}}
-    {{/errors}}
-  </div>
-
-  <div>Upload File and reply *</div>
-  {{#>form encoding="multipart/form-data"}}
-    <fieldset>
-      <input type="file" name="matrix-file">
-      <button type="submit">Upload</button>
-    </fieldset>
-  {{/form}}
-
-{{else}}
-  <div>
-    <p>Please wait for the Standards Compliance To provide you with a Tracability Matrix.</p>
-    <p>We will email the lead contact when this stage is ready.</p>
-  </div>
-
+    {{/claim.submissionHistory}}
+  </section>
 {{/if}}
 
+{{#if latestFile}}
+  <section class="current-file">
+    <h3>{{t 'CompliancePages.Evidence.CurrentFile.Heading'}}</h3>
+    <p class="callout">
+      <a href="{{latestFile.downloadURL}}">{{latestFile.name}}</a>
+    </p>
+  </section>
+
+  <section class="upload-and-reply">
+    <h3>{{t 'CompliancePages.Evidence.Reply.Heading'}}</h3>
+    {{#>form encoding="multipart/form-data"}}
+      <fieldset class="callout">
+        <input type="file" name="matrix-file">
+        <button type="submit">{{t 'CompliancePages.Evidence.Buttons.Upload'}}</button>
+      </fieldset>
+    {{/form}}
+  </section>
+{{else}}
+  <div>
+    {{#each (tt 'CompliancePages.Evidence.CurrentFile.Missing')}}
+    <p>{{{.}}}</p>
+    {{/each}}
+  </div>
+{{/if}}
 
 <a class="back-link" href="../../">{{t 'CompliancePages.Evidence.Backlink.Title'}}</a>

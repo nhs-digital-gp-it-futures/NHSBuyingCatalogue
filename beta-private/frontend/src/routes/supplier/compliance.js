@@ -77,11 +77,36 @@ async function solutionComplianceDashboard (req, res) {
 async function evidencePageContext (req) {
   const context = {
     ...commonComplianceContext(req),
-    ...await dataProvider.capabilityMappings(),
+    ...await dataProvider.capabilityMappings()
   }
 
   context.claim = _.find(context.solution.standards, { id: req.params.claim_id })
   context.claim.standard = context.standards[context.claim.standardId]
+
+  context.claim.capabilities = _.filter(context.capabilities,
+    cap => _.some(context.solution.capabilities, { capabilityId: cap.id }) &&
+           _.some(cap.standards, { id: context.claim.standardId })
+  )
+
+  // compute the message history from the relevant evidence and reviews
+  context.claim.submissionHistory = _(context.solution._raw.claimedStandardEvidence)
+    .filter({ claimId: context.claim.id })
+    .flatMap(ev => [ev, ..._.filter(context.solution._raw.claimedStandardReview, { evidenceId: ev.id })])
+    .map(({ createdOn, createdById, message, evidence }) => ({
+      createdOn,
+      createdById,
+      message: message || evidence
+    }))
+    .orderBy('createdOn', 'asc')
+    .value()
+
+  // load the contacts associated with the message history
+  context.claim.historyContacts = _.keyBy(await Promise.all(
+    _(context.claim.submissionHistory)
+      .uniqBy('createdById')
+      .map('createdById')
+      .map(id => dataProvider.contactById(id))
+  ), 'id')
 
   context.errors = req.body.errors || []
 
