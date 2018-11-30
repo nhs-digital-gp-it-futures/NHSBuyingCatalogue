@@ -2,7 +2,6 @@
 using NHSD.GPITF.BuyingCatalog.Logic;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -39,14 +38,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datastore = new CapabilitiesImplementedDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
       // create
-      var newEnt = new CapabilitiesImplemented
-      {
-        Id = Guid.NewGuid().ToString(),
-        SolutionId = soln.Id,
-        CapabilityId = cap.Id,
-        Status = CapabilitiesImplementedStatus.Draft
-      };
-      Verifier.Verify(newEnt);
+      var newEnt = Creator.GetCapabilitiesImplemented(solnId:soln.Id, claimId:cap.Id);
       var createdEnt = datastore.Create(newEnt);
 
       try

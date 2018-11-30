@@ -1,10 +1,8 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NHSD.GPITF.BuyingCatalog.Logic;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NUnit.Framework;
-using System;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
@@ -31,39 +29,17 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var evidenceDatastore = new CapabilitiesImplementedEvidenceDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<CapabilitiesImplementedEvidenceDatastore>>().Object, _policy);
       var datastore = new CapabilitiesImplementedReviewsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
-      var newClaim = new CapabilitiesImplemented
-      {
-        Id = Guid.NewGuid().ToString(),
-        SolutionId = soln.Id,
-        CapabilityId = cap.Id,
-        Status = CapabilitiesImplementedStatus.Draft
-      };
-      Verifier.Verify(newClaim);
+      var newClaim = Creator.GetCapabilitiesImplemented(solnId: soln.Id, claimId: cap.Id);
       var createdClaim = claimDatastore.Create(newClaim);
       CapabilitiesImplementedReviews createdReview = null;
 
       try
       {
-        var newEvidence = new CapabilitiesImplementedEvidence
-        {
-          Id = Guid.NewGuid().ToString(),
-          ClaimId = createdClaim.Id,
-          CreatedById = contact.Id,
-          CreatedOn = DateTime.UtcNow
-        };
-        Verifier.Verify(newEvidence);
+        var newEvidence = Creator.GetCapabilitiesImplementedEvidence(claimId: createdClaim.Id, createdById: contact.Id);
         var createdEvidence = evidenceDatastore.Create(newEvidence);
 
         // create
-        var newReview = new CapabilitiesImplementedReviews
-        {
-          Id = Guid.NewGuid().ToString(),
-          PreviousId = null,
-          EvidenceId = createdEvidence.Id,
-          CreatedById = contact.Id,
-          CreatedOn = DateTime.UtcNow
-        };
-        Verifier.Verify(newReview);
+        var newReview = Creator.GetCapabilitiesImplementedReviews(evidenceId: createdEvidence.Id, createdById: contact.Id);
         createdReview = datastore.Create(newReview);
 
         createdReview.Should().BeEquivalentTo(newReview,
