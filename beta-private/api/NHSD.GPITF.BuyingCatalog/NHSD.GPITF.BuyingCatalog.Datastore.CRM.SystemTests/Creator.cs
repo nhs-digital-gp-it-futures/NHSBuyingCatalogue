@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using NHSD.GPITF.BuyingCatalog.Logic;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 using System;
@@ -30,13 +31,15 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       string primaryRoleId = PrimaryRole.GovernmentDepartment,
       string odsCode = "NHS Digital ODS Code")
     {
-      return new Organisations
+      var retval = new Organisations
       {
         Id = id,
         Name = id,
         PrimaryRoleId = primaryRoleId,
         OdsCode = odsCode
       };
+      Verifier.Verify(retval);
+      return retval;
     }
 
     public static Solutions GetSolution(
@@ -49,7 +52,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       string modifiedById = null,
       DateTime? modifiedOn = null)
     {
-      return new Solutions
+      var retval = new Solutions
       {
         Id = id ?? Guid.NewGuid().ToString(),
         PreviousId = previousId,
@@ -60,6 +63,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
         ModifiedById = modifiedById ?? Guid.NewGuid().ToString(),
         ModifiedOn = modifiedOn ?? DateTime.Now
       };
+      Verifier.Verify(retval);
+      return retval;
     }
 
     public static TechnicalContacts GetTechnicalContact(
@@ -69,13 +74,15 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       string emailAddress = "jon.dough@tpp.com"
       )
     {
-      return new TechnicalContacts
+      var retval = new TechnicalContacts
       {
         Id = id ?? Guid.NewGuid().ToString(),
         SolutionId = solutionId ?? Guid.NewGuid().ToString(),
         ContactType = contactType,
         EmailAddress = emailAddress
       };
+      Verifier.Verify(retval);
+      return retval;
     }
 
     public static Contacts GetContact(
@@ -83,12 +90,14 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       string orgId = null,
       string emailAddress1 = null)
     {
-      return new Contacts
+      var retval = new Contacts
       {
         Id = id ?? Guid.NewGuid().ToString(),
         OrganisationId = orgId ?? Guid.NewGuid().ToString(),
         EmailAddress1 = emailAddress1 ?? "jon.dough@tpp.com"
       };
+      Verifier.Verify(retval);
+      return retval;
     }
 
     public static CapabilitiesImplemented GetCapabilitiesImplemented(
@@ -97,13 +106,15 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       string claimId = null,
       CapabilitiesImplementedStatus status = CapabilitiesImplementedStatus.Draft)
     {
-      return new CapabilitiesImplemented
+      var retval = new CapabilitiesImplemented
       {
         Id = id ?? Guid.NewGuid().ToString(),
         SolutionId = solnId ?? Guid.NewGuid().ToString(),
         CapabilityId = claimId ?? Guid.NewGuid().ToString(),
         Status = status
       };
+      Verifier.Verify(retval);
+      return retval;
     }
 
     public static StandardsApplicable GetStandardsApplicable(
@@ -112,13 +123,15 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       string claimId = null,
       StandardsApplicableStatus status = StandardsApplicableStatus.Draft)
     {
-      return new StandardsApplicable
+      var retval = new StandardsApplicable
       {
         Id = id ?? Guid.NewGuid().ToString(),
         SolutionId = solnId ?? Guid.NewGuid().ToString(),
         StandardId = claimId ?? Guid.NewGuid().ToString(),
         Status = status
       };
+      Verifier.Verify(retval);
+      return retval;
     }
 
     public static CapabilitiesImplementedEvidence GetCapabilitiesImplementedEvidence(
@@ -126,12 +139,14 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       string prevId = null,
       string claimId = null)
     {
-      return new CapabilitiesImplementedEvidence
+      var retval = new CapabilitiesImplementedEvidence
       {
         Id = id ?? Guid.NewGuid().ToString(),
         PreviousId = prevId,
         ClaimId = claimId ?? Guid.NewGuid().ToString()
       };
+      Verifier.Verify(retval);
+      return retval;
     }
 
     public static StandardsApplicableEvidence GetStandardsApplicableEvidence(
@@ -139,12 +154,14 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       string prevId = null,
       string claimId = null)
     {
-      return new StandardsApplicableEvidence
+      var retval = new StandardsApplicableEvidence
       {
         Id = id ?? Guid.NewGuid().ToString(),
         PreviousId = prevId,
         ClaimId = claimId ?? Guid.NewGuid().ToString()
       };
+      Verifier.Verify(retval);
+      return retval;
     }
 
     public static CapabilitiesImplementedReviews GetCapabilitiesImplementedReviews(
@@ -152,12 +169,14 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       string prevId = null,
       string evidenceId = null)
     {
-      return new CapabilitiesImplementedReviews
+      var retval = new CapabilitiesImplementedReviews
       {
         Id = id ?? Guid.NewGuid().ToString(),
         PreviousId = prevId,
         EvidenceId = evidenceId ?? Guid.NewGuid().ToString()
       };
+      Verifier.Verify(retval);
+      return retval;
     }
 
     public static StandardsApplicableReviews GetStandardsApplicableReviews(
@@ -165,12 +184,14 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       string prevId = null,
       string evidenceId = null)
     {
-      return new StandardsApplicableReviews
+      var retval = new StandardsApplicableReviews
       {
         Id = id ?? Guid.NewGuid().ToString(),
         PreviousId = prevId,
         EvidenceId = evidenceId ?? Guid.NewGuid().ToString()
       };
+      Verifier.Verify(retval);
+      return retval;
     }
 
     public static SolutionEx GetSolutionEx(
@@ -235,6 +256,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
         TechnicalContact = techCont
       };
 
+      Verifier.Verify(solnEx);
       return solnEx;
     }
   }

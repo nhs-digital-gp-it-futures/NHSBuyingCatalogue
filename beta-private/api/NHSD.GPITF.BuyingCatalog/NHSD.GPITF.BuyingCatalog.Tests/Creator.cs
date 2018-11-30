@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
 using Microsoft.Extensions.Primitives;
 using NHSD.GPITF.BuyingCatalog.Authentications;
+using NHSD.GPITF.BuyingCatalog.Logic;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System;
 using System.Collections.Generic;
@@ -51,26 +52,34 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
     // TODO   stole from NHSD.GPITF.BuyingCatalog.Logic.Tests\Creator.cs
     public static Contacts GetContact(
       string id = null,
-      string orgId = null)
+      string orgId = null,
+      string emailAddress1 = null)
     {
-      return new Contacts
+      var retval = new Contacts
       {
         Id = id ?? Guid.NewGuid().ToString(),
-        OrganisationId = orgId ?? Guid.NewGuid().ToString()
+        OrganisationId = orgId ?? Guid.NewGuid().ToString(),
+        EmailAddress1 = emailAddress1 ?? "jon.dough@tpp.com"
       };
+      Verifier.Verify(retval);
+      return retval;
     }
 
     // TODO   stole from NHSD.GPITF.BuyingCatalog.Logic.Tests\Creator.cs
     public static Organisations GetOrganisation(
       string id = "NHS Digital",
-      string primaryRoleId = PrimaryRole.GovernmentDepartment)
+      string primaryRoleId = PrimaryRole.GovernmentDepartment,
+      string odsCode = "NHS Digital ODS Code")
     {
-      return new Organisations
+      var retval = new Organisations
       {
         Id = id,
         Name = id,
-        PrimaryRoleId = primaryRoleId
+        PrimaryRoleId = primaryRoleId,
+        OdsCode = odsCode
       };
+      Verifier.Verify(retval);
+      return retval;
     }
   }
 }
