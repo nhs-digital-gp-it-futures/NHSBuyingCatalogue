@@ -129,7 +129,13 @@ class DataProvider {
     // reformat the input back into a SolutionEx
     _.merge(solnEx.solution, _.omit(solution, ['capabilities', 'standards', 'contacts']))
     solnEx.claimedCapability = solution.capabilities
-    solnEx.claimedStandard = solution.standards
+
+    // for standards with the same ID, preserve the existing claimed standard
+    solnEx.claimedStandard = _.map(solution.standards, std => (
+      _.find(solnEx.claimedStandard, { standardId: std.standardId }) ||
+      { id: require('node-uuid-generator').generate(), ...std }
+    ))
+
     solnEx.technicalContact = solution.contacts
 
     // contacts can only be for this solution

@@ -50,6 +50,10 @@ a {
   .button {
     background-color: $color-button-reversed-bg;
     color: $color-button-reversed-fg;
+
+    &[disabled] {
+      color: $color-button-reversed-disabled-fg;
+    }
   }
 }
 
