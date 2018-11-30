@@ -137,13 +137,17 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     public static CapabilitiesImplementedEvidence GetCapabilitiesImplementedEvidence(
       string id = null,
       string prevId = null,
-      string claimId = null)
+      string claimId = null,
+      string createdById = null,
+      DateTime? createdOn = null)
     {
       var retval = new CapabilitiesImplementedEvidence
       {
         Id = id ?? Guid.NewGuid().ToString(),
         PreviousId = prevId,
-        ClaimId = claimId ?? Guid.NewGuid().ToString()
+        ClaimId = claimId ?? Guid.NewGuid().ToString(),
+        CreatedById = createdById ?? Guid.NewGuid().ToString(),
+        CreatedOn = createdOn ?? DateTime.UtcNow
       };
       Verifier.Verify(retval);
       return retval;
@@ -152,13 +156,17 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     public static StandardsApplicableEvidence GetStandardsApplicableEvidence(
       string id = null,
       string prevId = null,
-      string claimId = null)
+      string claimId = null,
+      string createdById = null,
+      DateTime? createdOn = null)
     {
       var retval = new StandardsApplicableEvidence
       {
         Id = id ?? Guid.NewGuid().ToString(),
         PreviousId = prevId,
-        ClaimId = claimId ?? Guid.NewGuid().ToString()
+        ClaimId = claimId ?? Guid.NewGuid().ToString(),
+        CreatedById = createdById ?? Guid.NewGuid().ToString(),
+        CreatedOn = createdOn ?? DateTime.UtcNow
       };
       Verifier.Verify(retval);
       return retval;
@@ -167,13 +175,17 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     public static CapabilitiesImplementedReviews GetCapabilitiesImplementedReviews(
       string id = null,
       string prevId = null,
-      string evidenceId = null)
+      string evidenceId = null,
+      string createdById = null,
+      DateTime? createdOn = null)
     {
       var retval = new CapabilitiesImplementedReviews
       {
         Id = id ?? Guid.NewGuid().ToString(),
         PreviousId = prevId,
-        EvidenceId = evidenceId ?? Guid.NewGuid().ToString()
+        EvidenceId = evidenceId ?? Guid.NewGuid().ToString(),
+        CreatedById = createdById ?? Guid.NewGuid().ToString(),
+        CreatedOn = createdOn ?? DateTime.UtcNow
       };
       Verifier.Verify(retval);
       return retval;
@@ -182,13 +194,17 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     public static StandardsApplicableReviews GetStandardsApplicableReviews(
       string id = null,
       string prevId = null,
-      string evidenceId = null)
+      string evidenceId = null,
+      string createdById = null,
+      DateTime? createdOn = null)
     {
       var retval = new StandardsApplicableReviews
       {
         Id = id ?? Guid.NewGuid().ToString(),
         PreviousId = prevId,
-        EvidenceId = evidenceId ?? Guid.NewGuid().ToString()
+        EvidenceId = evidenceId ?? Guid.NewGuid().ToString(),
+        CreatedById = createdById ?? Guid.NewGuid().ToString(),
+        CreatedOn = createdOn ?? DateTime.UtcNow
       };
       Verifier.Verify(retval);
       return retval;
