@@ -1,6 +1,5 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 using Gif.Service.Attributes;
-using Gif.Service.Const;
 using Gif.Service.Contracts;
 using Gif.Service.Crm;
 using Gif.Service.Models;
@@ -133,8 +132,8 @@ namespace Gif.Service.Services
             {
                 var reviewObj = new Review(review);
 
-                if (reviewObj.Evidence != null)
-                    capabilityImplemented = ByEvidenceId(new Review(review).Evidence.ToString());
+                if (reviewObj.EvidenceId != null)
+                    capabilityImplemented = ByEvidenceId(new Review(review).EvidenceId.ToString());
             }
 
             return capabilityImplemented;
