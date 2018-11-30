@@ -16,10 +16,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var solnDatastore = new SolutionsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<SolutionsDatastore>>().Object, _policy);
       var allSolns = frameworks.SelectMany(fw => solnDatastore.ByFramework(fw.Id)).ToList();
       var allOrgIds = allSolns.Select(soln => soln.OrganisationId).Distinct().ToList();
-      var datastore = new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<ContactsDatastore>>().Object, _policy);
-      var datas = allOrgIds.SelectMany(orgId => datastore.ByOrganisation(orgId)).ToList();
+      var contactsDatastore = new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<ContactsDatastore>>().Object, _policy);
+      var allConts = allOrgIds.SelectMany(orgId => contactsDatastore.ByOrganisation(orgId)).ToList();
 
-      return datas;
+      return allConts;
     }
 
     public static List<Solutions> GetAllSolutions(ISyncPolicyFactory _policy)
@@ -43,19 +43,18 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
 
     public static List<Capabilities> GetAllCapabilities(ISyncPolicyFactory _policy)
     {
-      var datastore = new CapabilitiesDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<CapabilitiesDatastore>>().Object, _policy);
-      var datas = datastore.GetAll().ToList();
+      var capsDatastore = new CapabilitiesDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<CapabilitiesDatastore>>().Object, _policy);
+      var allCaps = capsDatastore.GetAll().ToList();
 
-      return datas;
+      return allCaps;
     }
 
     public static List<Standards> GetAllStandards(ISyncPolicyFactory _policy)
     {
-      var datastore = new StandardsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<StandardsDatastore>>().Object, _policy);
-      var datas = datastore.GetAll().ToList();
+      var stdsDatastore = new StandardsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<StandardsDatastore>>().Object, _policy);
+      var allStds = stdsDatastore.GetAll().ToList();
 
-      return datas;
+      return allStds;
     }
-
   }
 }
