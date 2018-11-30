@@ -286,7 +286,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void MustBeFromSameOrganisation_Same_Succeeds()
+    public void MustBeFromSameOrganisationOrAdmin_Same_Succeeds()
     {
       var orgId = Guid.NewGuid().ToString();
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(orgId: orgId, role: Roles.Supplier));
@@ -300,7 +300,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void MustBeFromSameOrganisation_Different_ReturnsError(
+    public void MustBeFromSameOrganisationOrAdmin_Different_ReturnsError(
       [Values(
         Roles.Buyer,
         Roles.Supplier)]
@@ -320,7 +320,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void MustBeFromSameOrganisation_Admin_Succeeds()
+    public void MustBeFromSameOrganisationOrAdmin_Admin_Succeeds()
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: Roles.Admin));
       var orgId = Guid.NewGuid().ToString();
