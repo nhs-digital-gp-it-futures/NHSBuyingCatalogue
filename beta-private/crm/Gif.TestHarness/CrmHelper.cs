@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.Configuration;
@@ -20,7 +19,6 @@ namespace Gif.TestHarness
             var proxy = connection.OrganizationServiceProxy;
 
             proxy.Timeout = new TimeSpan(0, 0, 2, 0);
-            proxy.ServiceConfiguration.CurrentServiceEndpoint.Behaviors.Add(new ProxyTypesBehavior());
 
             return proxy;
         }
