@@ -4,7 +4,6 @@ using Moq;
 using NHSD.GPITF.BuyingCatalog.Logic;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NUnit.Framework;
-using System;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
@@ -30,28 +29,14 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var claimDatastore = new StandardsApplicableDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<StandardsApplicableDatastore>>().Object, _policy);
       var datastore = new StandardsApplicableEvidenceDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
-      var newClaim = new StandardsApplicable
-      {
-        Id = Guid.NewGuid().ToString(),
-        SolutionId = soln.Id,
-        StandardId = std.Id,
-        Status = StandardsApplicableStatus.Draft
-      };
-      Verifier.Verify(newClaim);
+      var newClaim = Creator.GetStandardsApplicable(solnId: soln.Id, claimId:std.Id);
       var createdClaim = claimDatastore.Create(newClaim);
       StandardsApplicableEvidence createdEvidence = null;
 
       try
       {
         // create
-        var newEvidence = new StandardsApplicableEvidence
-        {
-          Id = Guid.NewGuid().ToString(),
-          ClaimId = createdClaim.Id,
-          CreatedById = contact.Id,
-          CreatedOn = DateTime.UtcNow
-        };
-        Verifier.Verify(newEvidence);
+        var newEvidence = Creator.GetStandardsApplicableEvidence(claimId:createdClaim.Id, createdById: contact.Id);
         createdEvidence = datastore.Create(newEvidence);
 
         createdEvidence.Should().BeEquivalentTo(newEvidence,

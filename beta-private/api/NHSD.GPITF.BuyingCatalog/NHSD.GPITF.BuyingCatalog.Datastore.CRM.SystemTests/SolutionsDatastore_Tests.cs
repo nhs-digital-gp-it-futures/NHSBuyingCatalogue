@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 using NHSD.GPITF.BuyingCatalog.Logic;
-using NHSD.GPITF.BuyingCatalog.Models;
 using NUnit.Framework;
 using System;
 using System.Linq;
@@ -95,18 +94,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var contactId = contactsDatastore.ByOrganisation(orgId).First().Id;
 
       // create
-      var newEnt = new Solutions
-      {
-        Id = Guid.NewGuid().ToString(),
-        PreviousId = null,
-        OrganisationId = orgId,
-        Name = "My New Solution",
-        CreatedOn = DateTime.UtcNow,
-        ModifiedOn = DateTime.UtcNow,
-        CreatedById = contactId,
-        ModifiedById = contactId
-      };
-      Verifier.Verify(newEnt);
+      var newEnt = Creator.GetSolution(orgId: orgId, createdById: contactId, modifiedById: contactId);
+      newEnt.Name = "My New Solution";
       var createdEnt = datastore.Create(newEnt);
 
       try

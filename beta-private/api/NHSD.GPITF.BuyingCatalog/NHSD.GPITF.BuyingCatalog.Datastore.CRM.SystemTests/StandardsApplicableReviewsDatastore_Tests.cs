@@ -1,10 +1,8 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NHSD.GPITF.BuyingCatalog.Logic;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NUnit.Framework;
-using System;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
@@ -31,39 +29,17 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var evidenceDatastore = new StandardsApplicableEvidenceDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<StandardsApplicableEvidenceDatastore>>().Object, _policy);
       var datastore = new StandardsApplicableReviewsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
-      var newClaim = new StandardsApplicable
-      {
-        Id = Guid.NewGuid().ToString(),
-        SolutionId = soln.Id,
-        StandardId = std.Id,
-        Status = StandardsApplicableStatus.Draft
-      };
-      Verifier.Verify(newClaim);
+      var newClaim = Creator.GetStandardsApplicable(solnId: soln.Id, claimId:std.Id);
       var createdClaim = claimDatastore.Create(newClaim);
       StandardsApplicableReviews createdReview = null;
 
       try
       {
-        var newEvidence = new StandardsApplicableEvidence
-        {
-          Id = Guid.NewGuid().ToString(),
-          ClaimId = createdClaim.Id,
-          CreatedById = contact.Id,
-          CreatedOn = DateTime.UtcNow
-        };
-        Verifier.Verify(newEvidence);
+        var newEvidence = Creator.GetStandardsApplicableEvidence(claimId:createdClaim.Id, createdById: contact.Id);
         var createdEvidence = evidenceDatastore.Create(newEvidence);
 
         // create
-        var newReview = new StandardsApplicableReviews
-        {
-          Id = Guid.NewGuid().ToString(),
-          PreviousId = null,
-          EvidenceId = createdEvidence.Id,
-          CreatedById = contact.Id,
-          CreatedOn = DateTime.UtcNow
-        };
-        Verifier.Verify(newReview);
+        var newReview = Creator.GetStandardsApplicableReviews(evidenceId:createdEvidence.Id, createdById: contact.Id);
         createdReview = datastore.Create(newReview);
 
         createdReview.Should().BeEquivalentTo(newReview,

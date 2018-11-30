@@ -2,9 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 using NHSD.GPITF.BuyingCatalog.Logic;
-using NHSD.GPITF.BuyingCatalog.Models;
 using NUnit.Framework;
-using System;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
@@ -44,17 +42,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datastore = new TechnicalContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
       // create
-      var newEnt = new TechnicalContacts
-      {
-        Id = Guid.NewGuid().ToString(),
-        SolutionId = soln.Id,
-        ContactType = "Lead Contact",
-        FirstName = "Steve",
-        LastName = "Gray",
-        EmailAddress = "steve.gray@nhs.net.uk",
-        PhoneNumber = "1234567890"
-      };
-      Verifier.Verify(newEnt);
+      var newEnt = Creator.GetTechnicalContact(solutionId: soln.Id, contactType: "Lead Contact", emailAddress: "steve.gray@nhs.net.uk");
+      newEnt.FirstName = "Steve";
+      newEnt.LastName = "Gray";
+      newEnt.PhoneNumber = "1234567890";
       var createdEnt = datastore.Create(newEnt);
 
       try

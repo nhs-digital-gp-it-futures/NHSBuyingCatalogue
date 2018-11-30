@@ -2,7 +2,6 @@
 using NHSD.GPITF.BuyingCatalog.Logic;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -39,14 +38,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var datastore = new StandardsApplicableDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
       // create
-      var newEnt = new StandardsApplicable
-      {
-        Id = Guid.NewGuid().ToString(),
-        SolutionId = soln.Id,
-        StandardId = std.Id,
-        Status = StandardsApplicableStatus.Draft
-      };
-      Verifier.Verify(newEnt);
+      var newEnt = Creator.GetStandardsApplicable(solnId:soln.Id, claimId:std.Id);
       var createdEnt = datastore.Create(newEnt);
 
       try
