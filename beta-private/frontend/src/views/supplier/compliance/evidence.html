@@ -1,4 +1,18 @@
+<div id="compliance" class="evidence page">
+
 {{> errors}}
+
+{{#if hasFeedback}}
+<p class="has-feedback">
+  {{{t 'CompliancePages.Evidence.History.HasFeedback' id=feedbackId}}}
+</p>
+{{else}}
+  {{#if isSubmitted}}
+  <p class="has-feedback">
+    {{{t 'CompliancePages.Evidence.History.IsSubmitted' id=feedbackId}}}
+  </p>
+  {{/if}}
+{{/if}}
 
 <header class="page-main-heading">
   <h1>{{ claim.standard.name }}</h1>
@@ -20,17 +34,31 @@
 </details>
 
 {{#if claim.submissionHistory}}
-  <section class="history">
+  <section class="history collapsed">
+    <h3>{{t 'CompliancePages.Evidence.History.Heading'}}</h3>
+
+    {{#if collapseHistory}}
+    <a href="#" class="expand-history">{{t 'CompliancePages.Evidence.History.Show'}}</a>
+    <a href="#" class="collapse-history">{{t 'CompliancePages.Evidence.History.Hide'}}</a>
+    {{/if}}
+
     {{#claim.submissionHistory}}
-    <div class="message">
+    <div id="{{id}}" class="message{{#isFeedback}} feedback{{/isFeedback}}">
       <p class="text">{{message}}</p>
       <p class="meta">
+        <span class="when">{{createdOn}}</span>
         <span class="from">
         {{#with (lookup ../claim.historyContacts createdById)}}
           {{firstName}} {{lastName}}
         {{/with}}
         </span>
-        <span class="when">{{createdOn}}</span>
+        <span class="what">
+          {{#if isFeedback}}
+            {{t 'CompliancePages.Evidence.History.FeedbackSent'}}
+          {{else}}
+            {{t 'CompliancePages.Evidence.History.FileSent'}}
+          {{/if}}
+        </span>
       </p>
     </div>
     {{/claim.submissionHistory}}
@@ -38,6 +66,7 @@
 {{/if}}
 
 {{#if latestFile}}
+  {{#if allowSubmission}}
   <section class="current-file">
     <h3>{{t 'CompliancePages.Evidence.CurrentFile.Heading'}}</h3>
     <p class="callout">
@@ -47,19 +76,48 @@
 
   <section class="upload-and-reply">
     <h3>{{t 'CompliancePages.Evidence.Reply.Heading'}}</h3>
-    {{#>form encoding="multipart/form-data"}}
+    {{#>form encoding="multipart/form-data" form_id=activeForm.id}}
       <fieldset class="callout">
         <input type="file" name="matrix-file">
-        <button type="submit">{{t 'CompliancePages.Evidence.Buttons.Upload'}}</button>
       </fieldset>
+
+      <button
+        id="submit-for-compliance"
+        type="submit"
+        name="action"
+        value="submit"
+        class="primary">{{t 'CompliancePages.Evidence.Buttons.Submit'}}</button>
     {{/form}}
   </section>
+  {{else}}
+  <section>
+    <button id="submit-for-compliance" type="submit" class="primary" disabled>{{t 'CompliancePages.Evidence.Buttons.Submit'}}</button>
+  </section>
+  {{/if}}
 {{else}}
-  <div>
-    {{#each (tt 'CompliancePages.Evidence.CurrentFile.Missing')}}
-    <p>{{{.}}}</p>
-    {{/each}}
+  <div class="history">
+    <div class="message feedback">
+      {{#each (tt 'CompliancePages.Evidence.CurrentFile.Missing')}}
+      <p>{{{.}}}</p>
+      {{/each}}
+    </div>
   </div>
 {{/if}}
 
 <a class="back-link" href="../../">{{t 'CompliancePages.Evidence.Backlink.Title'}}</a>
+
+</div>
+
+<script type="text/javascript">
+/* global $$ */
+document.addEventListener('DOMContentLoaded', function () {
+  $$('#compliance .history .expand-history, #compliance .history .collapse-history').forEach(
+    function (el) {
+      el.addEventListener('click', function (ev) {
+        ev.preventDefault()
+        el.closest('.history').classList.toggle('collapsed')
+      })
+    }
+  )
+})
+</script>

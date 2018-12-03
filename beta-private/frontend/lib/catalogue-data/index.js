@@ -231,6 +231,9 @@ class DataProvider {
   async solutionForCompliance (solutionId) {
     const solution = await this.solutionForRegistration(solutionId)
 
+    solution.evidence = solution._raw.claimedStandardEvidence
+    solution.reviews = solution._raw.claimedStandardReview
+
     const leadContact = _.find(solution.contacts, { contactType: 'Lead Contact' })
 
     // compute status and ownership information for each standard
@@ -244,6 +247,19 @@ class DataProvider {
     })
 
     return solution
+  }
+
+  async updateSolutionForCompliance (solution) {
+    const solnEx = await this.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet(solution.id)
+
+    solnEx.claimedStandard = _.map(solution.standards,
+      std => _.pick(std, ['id', 'status', 'solutionId', 'standardId'])
+    )
+    solnEx.claimedStandardEvidence = solution.evidence
+    solnEx.claimedStandardReview = solution.reviews
+
+    await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
+    return this.solutionForCompliance(solution.id)
   }
 }
 
