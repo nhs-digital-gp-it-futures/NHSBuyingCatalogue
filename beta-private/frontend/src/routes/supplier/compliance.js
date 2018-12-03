@@ -74,6 +74,21 @@ async function solutionComplianceDashboard (req, res) {
   res.render('supplier/compliance/index', context)
 }
 
+function formatTimestampForDisplay (ts) {
+  const timestamp = new Date(ts)
+  return timestamp.toLocaleDateString('en-gb', {
+    timeZone: 'Europe/London',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  }) + ' ' + timestamp.toLocaleTimeString('en-gb', {
+    timeZone: 'Europe/London',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: false
+  })
+}
+
 async function evidencePageContext (req) {
   const context = {
     ...commonComplianceContext(req),
@@ -92,13 +107,25 @@ async function evidencePageContext (req) {
   context.claim.submissionHistory = _(context.solution._raw.claimedStandardEvidence)
     .filter({ claimId: context.claim.id })
     .flatMap(ev => [ev, ..._.filter(context.solution._raw.claimedStandardReview, { evidenceId: ev.id })])
-    .map(({ createdOn, createdById, message, evidence }) => ({
+    .map(({ id, createdOn, createdById, message, evidence }) => ({
+      id,
       createdOn,
       createdById,
-      message: message || evidence
+      message: message || evidence,
+      isFeedback: !!message
     }))
     .orderBy('createdOn', 'asc')
-    .value()
+    .each(msg => {
+      msg.createdOn = formatTimestampForDisplay(msg.createdOn)
+    })
+
+  // set flags based on who sent the last message
+  if (context.claim.submissionHistory.length) {
+    const latestEntry = _.last(context.claim.submissionHistory)
+    context.collapseHistory = context.claim.submissionHistory.length > 1
+    context.hasFeedback = latestEntry.isFeedback
+    context.feedbackId = context.hasFeedback && latestEntry.id
+  }
 
   // load the contacts associated with the message history
   context.claim.historyContacts = _.keyBy(await Promise.all(
@@ -127,14 +154,19 @@ async function solutionComplianceEvidencePageGet (req, res) {
 
   let latestFile
 
-  if(context.files) {
+  if (context.files) {
     latestFile = findLatestFile(context.files.items)
   }
 
-  if(latestFile) {
+  if (latestFile) {
     latestFile.downloadURL = path.join(req.baseUrl, req.path, latestFile.name)
 
-    context.latestFile = latestFile  
+    context.latestFile = latestFile
+
+    // only allow a submission if a file exists and;
+    // a) there are no submissions in the history, or
+    // b) the latest submission is feedback
+    context.allowSubmission = !context.claim.submissionHistory.length || context.hasFeedback
   }
 
   res.render('supplier/compliance/evidence', context)

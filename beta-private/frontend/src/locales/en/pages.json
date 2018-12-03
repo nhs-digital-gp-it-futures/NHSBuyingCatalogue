@@ -186,6 +186,14 @@
       "Reply": {
         "Heading": "Upload file and reply*"
       },
+      "History": {
+        "Heading": "Submission History",
+        "Hide": "Hide history",
+        "Show": "Show history",
+        "HasFeedback": "Status: Feedback available. See response <a href='#{{id}}'>below</a>.",
+        "FeedbackSent": "Feedback sent",
+        "FileSent": "File sent"
+      },
       "Backlink": {
         "Title": "$t(CompliancePages.Dashboard.Title)"
       },
