@@ -32,22 +32,22 @@ namespace Gif.Service.Services
 
             // iterate through all items that are at the end of the chain
             foreach (var reviewChild in jsonReviewParent.Children())
-                AddReviewChainToList(reviewChild, reviewList, reviewsListList);
+                AddReviewChainToList(reviewChild, reviewList, reviewsListList, evidenceId);
 
             Count = reviewsListList.Count;
 
             return reviewsListList;
         }
 
-        private void AddReviewChainToList(JToken review, List<Review> reviewList, List<List<Review>> reviewsListList)
+        private void AddReviewChainToList(JToken review, List<Review> reviewList, List<List<Review>> reviewsListList, string evidenceId)
         {
-            GetReviewsChain(review, reviewList);
+            GetReviewsChain(review, reviewList, evidenceId);
 
             var enumReviewList = Review.OrderLinkedReviews(reviewList);
             reviewsListList.Add(enumReviewList.ToList());
         }
 
-        private void GetReviewsChain(JToken reviewChainEnd, List<Review> reviewList)
+        private void GetReviewsChain(JToken reviewChainEnd, List<Review> reviewList, string evidenceId)
         {
             // store the end of the chain (with no previous id)
             var review = new Review(reviewChainEnd);
@@ -59,6 +59,7 @@ namespace Gif.Service.Services
             {
                 var filterReview = new List<CrmFilterAttribute>
                 {
+                    new CrmFilterAttribute("EvidenceEntity") {FilterName = "_cc_evidence_value", FilterValue = evidenceId},
                     new CrmFilterAttribute("EvidenceEntity") {FilterName = "_cc_previousversion_value", FilterValue = id},
                     new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
                 };
