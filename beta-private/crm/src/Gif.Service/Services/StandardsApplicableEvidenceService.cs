@@ -33,22 +33,22 @@ namespace Gif.Service.Services
 
             // iterate through all items that are at the end of the chain
             foreach (var evidenceChild in jsonEvidenceParent.Children())
-                AddEvidenceChainToList(evidenceChild, evidenceList, evidenceListList);
+                AddEvidenceChainToList(evidenceChild, evidenceList, evidenceListList, claimId);
 
             Count = evidenceListList.Count;
 
             return evidenceListList;
         }
 
-        private void AddEvidenceChainToList(JToken evidence, List<StandardApplicableEvidence> evidenceList, List<List<StandardApplicableEvidence>> evidenceListList)
+        private void AddEvidenceChainToList(JToken evidence, List<StandardApplicableEvidence> evidenceList, List<List<StandardApplicableEvidence>> evidenceListList, string claimId)
         {
-            GetEvidencesChain(evidence, evidenceList);
+            GetEvidencesChain(evidence, evidenceList, claimId);
 
             var enumEvidenceList = StandardApplicableEvidence.OrderLinkedEvidences(evidenceList);
             evidenceListList.Add(enumEvidenceList.ToList());
         }
 
-        private void GetEvidencesChain(JToken evidenceChainEnd, List<StandardApplicableEvidence> evidenceList)
+        private void GetEvidencesChain(JToken evidenceChainEnd, List<StandardApplicableEvidence> evidenceList, string claimId)
         {
             // store the end of the chain (with no previous id)
             var evidence = new StandardApplicableEvidence(evidenceChainEnd);
@@ -60,6 +60,7 @@ namespace Gif.Service.Services
             {
                 var filterEvidence = new List<CrmFilterAttribute>
                 {
+                    new CrmFilterAttribute("ClaimId") {FilterName = "_cc_standardapplicable_value", FilterValue = claimId},
                     new CrmFilterAttribute("PreviousEvidence") {FilterName = "_cc_previousversion_value", FilterValue = id},
                     new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
                 };
