@@ -142,18 +142,20 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
               uploadFile = docClaimFolder.Files.Add(fileInfo);
 
               // Start upload by uploading the first slice
-              using (var strm = new MemoryStream(buffer))
+              // NOTE:  small files will be contained in the lastBuffer, so use this to upload in one call
+              using (var strm = new MemoryStream(last ? lastBuffer : buffer))
               {
                 // Call the start upload method on the first slice
                 bytesUploaded = uploadFile.StartUpload(uploadId, strm);
+
                 _context.ExecuteQuery();
 
                 // fileoffset is the pointer where the next slice will be added
                 fileoffset = bytesUploaded.Value;
               }
 
-              // we can only start the upload once
-              first = false;
+              // NOTE:  small files have already been uploaded from lastBuffer, so reset it
+              lastBuffer = new byte[0];
             }
           }
 
@@ -172,6 +174,14 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
               // return the url for the uploaded file
               return absUri.AbsoluteUri;
             }
+          }
+
+          if (first)
+          {
+            // we can only start the upload once
+            first = false;
+
+            continue;
           }
 
           using (var strm = new MemoryStream(buffer))
