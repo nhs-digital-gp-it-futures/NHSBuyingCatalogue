@@ -3,7 +3,6 @@ using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
-using System;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
@@ -23,9 +22,12 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
     private readonly IStandardsApplicableEvidenceDatastore _claimedStandardEvidenceDatastore;
     private readonly IStandardsApplicableReviewsDatastore _claimedStandardReviewsDatastore;
 
+    private readonly ILinkManagerDatastore _linkManagerDatastore;
+    private readonly IFrameworksDatastore _frameworksDatastore;
+
     public SolutionsExDatastore(
-      IRestClientFactory crmConnectionFactory, 
-      ILogger<SolutionsExDatastore> logger, 
+      IRestClientFactory crmConnectionFactory,
+      ILogger<SolutionsExDatastore> logger,
       ISyncPolicyFactory policy,
 
       ISolutionsDatastore solutionDatastore,
@@ -37,7 +39,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
 
       IStandardsApplicableDatastore claimedStandardDatastore,
       IStandardsApplicableEvidenceDatastore claimedStandardEvidenceDatastore,
-      IStandardsApplicableReviewsDatastore claimedStandardReviewsDatastore
+      IStandardsApplicableReviewsDatastore claimedStandardReviewsDatastore,
+
+      ILinkManagerDatastore linkManagerDatastore,
+      IFrameworksDatastore frameworksDatastore
       ) :
       base(crmConnectionFactory, logger, policy)
     {
@@ -51,6 +56,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
       _claimedStandardDatastore = claimedStandardDatastore;
       _claimedStandardEvidenceDatastore = claimedStandardEvidenceDatastore;
       _claimedStandardReviewsDatastore = claimedStandardReviewsDatastore;
+
+      _linkManagerDatastore = linkManagerDatastore;
+      _frameworksDatastore = frameworksDatastore;
     }
 
     public SolutionEx BySolution(string solutionId)
@@ -91,8 +99,16 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
     {
       GetInternal(() =>
       {
-        var request = GetPutRequest($"{ResourceBase}", solnEx);
-        var resp = GetRawResponse(request);
+        var fw = _frameworksDatastore.BySolution(solnEx.Solution.Id).ToList().Single();
+        try
+        {
+          var request = GetPutRequest($"{ResourceBase}", solnEx);
+          var resp = GetRawResponse(request);
+        }
+        finally
+        {
+          _linkManagerDatastore.FrameworkSolutionCreate(fw.Id, solnEx.Solution.Id);
+        }
 
         return 0;
       });
