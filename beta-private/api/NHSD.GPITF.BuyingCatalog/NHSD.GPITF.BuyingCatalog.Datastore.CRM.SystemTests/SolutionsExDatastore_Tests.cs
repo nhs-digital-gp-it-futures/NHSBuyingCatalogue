@@ -541,7 +541,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var retrievedSolnEx = _datastore.BySolution(_solnEx.Solution.Id);
       retrievedSolnEx.ClaimedCapabilityReview
         .Should().ContainSingle()
-        .And
+        .And.Subject.Single()
         .Should().BeEquivalentTo(review,
           opts => opts
             .Excluding(ent => ent.CreatedOn));
@@ -674,7 +674,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var retrievedSolnEx = _datastore.BySolution(_solnEx.Solution.Id);
       retrievedSolnEx.ClaimedCapabilityReview
         .Should().ContainSingle()
-        .And
+        .And.Subject.Single()
         .Should().BeEquivalentTo(reviewPrev,
           opts => opts
             .Excluding(ent => ent.CreatedOn));
@@ -702,7 +702,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var retrievedSolnEx = _datastore.BySolution(_solnEx.Solution.Id);
       retrievedSolnEx.ClaimedStandardReview
         .Should().ContainSingle()
-        .And
+        .And.Subject.Single()
         .Should().BeEquivalentTo(review,
           opts => opts
             .Excluding(ent => ent.CreatedOn));
