@@ -164,7 +164,14 @@
         }
       },
       "Standard": {
-        "With": "With {{name}}"
+        "With": "With {{name}}",
+        "Submitted": {
+          "Heading": "$t(Standard) $t(Compliance) Evidence submitted.",
+          "Narrative": [
+            "Your evidence for {{name}} has been submitted to $t(NHSD.Name). You can expect to receive a reply within 5 working days.",
+            "While your submission is being reviewed, you are free to keep working on gathering and submitting evidence for the remaining $t(Standard_plural)."
+          ]
+        }
       }
     },
     "Evidence": {

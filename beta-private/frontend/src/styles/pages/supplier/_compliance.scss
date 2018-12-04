@@ -57,13 +57,33 @@
   }
 
   section p.callout,
-  fieldset.callout {
+  fieldset.callout,
+  .standard-submitted {
     background-color: $color-callout-bg;
     border: 0;
     color: $color-callout-fg;
     margin-top: 0;
     padding: 1.5em;
     width: 80%;
+  }
+
+  .standard-submitted {
+    border: 2px solid $color-nhs-blue;
+    margin-top: 2em;
+
+    h3 {
+      margin-top: 0;
+
+      &::after {
+        color: $color-nhs-green;
+        content: '✔︎';
+        padding-left: 1em;
+      }
+    }
+
+    p {
+      margin-bottom: 0;
+    }
   }
 
   section > h3 {

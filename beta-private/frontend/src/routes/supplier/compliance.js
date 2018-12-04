@@ -71,6 +71,13 @@ async function solutionComplianceDashboard (req, res) {
     }))
     .value()
 
+  if ('submitted' in req.query) {
+    const submittedStandard = context.standards[req.query.submitted]
+    if (submittedStandard) {
+      context.submittedStandard = submittedStandard.name
+    }
+  }
+
   res.render('supplier/compliance/index', context)
 }
 

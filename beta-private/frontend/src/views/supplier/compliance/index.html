@@ -2,6 +2,15 @@
 
 {{> errors}}
 
+{{#if submittedStandard}}
+<div class="standard-submitted">
+  <h3>{{t 'CompliancePages.Dashboard.Standard.Submitted.Heading'}}</h3>
+  {{#each (tt 'CompliancePages.Dashboard.Standard.Submitted.Narrative' name=submittedStandard)}}
+  <p>{{.}}</p>
+  {{/each}}
+</div>
+{{/if}}
+
 <header class="page-main-heading">
   <h1>{{t 'CompliancePages.Dashboard.Title' }}</h1>
   <p>{{t 'CompliancePages.Dashboard.Subtitle'}}</p>
