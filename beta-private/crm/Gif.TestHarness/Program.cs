@@ -13,7 +13,7 @@ namespace Gif.TestHarness
 
             var sol = svc.Retrieve("cc_standardapplicable", Guid.Parse("460779EE-DBF3-E811-A96D-0022480130E2"), new ColumnSet(true));
             var logic = new CascadeDeleteLogic(new SolutionRepository(svc), "");
-            logic.OnSolutionDelete(sol);
+            logic.OnStandardApplicableDelete(sol.ToEntityReference());
         }
     }
 }

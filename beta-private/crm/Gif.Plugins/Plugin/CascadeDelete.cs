@@ -29,14 +29,11 @@
 
             tracingService?.Trace($"{PluginName} started.");
 
-            if (context.PrimaryEntityName != EntityName)
-                throw new InvalidPluginExecutionException($"This plugin runs only on a {EntityName} entity.");
-
-            var targetEntity = (context.PreEntityImages != null) && context.PreEntityImages.Contains("PreImage") ? context.PreEntityImages["PreImage"] : null;
-            if (targetEntity == null)
+            var target = (EntityReference)context.InputParameters["Target"];
+            if (target == null)
                 return;
 
-            tracingService?.Trace($"Target id : {targetEntity.Id}");
+            tracingService?.Trace($"Target id : {target.Id}");
 
             var repository = new SolutionRepository(service);
             var logic = new CascadeDeleteLogic(repository, PluginName);
@@ -45,7 +42,20 @@
             {
                 if (context.MessageName.Equals("Delete"))
                 {
-                    logic.OnSolutionDelete(targetEntity);
+                    tracingService?.Trace($"Message Name: {context.MessageName}");
+                    tracingService?.Trace($"Primary Entity Name: {context.PrimaryEntityName.Trim().ToLower()}");
+                    switch (context.PrimaryEntityName.Trim().ToLower())
+                    {
+                        case "cc_solution":
+                            logic.OnSolutionDelete(target);
+                            break;
+                        case "cc_standardapplicable":
+                            logic.OnStandardApplicableDelete(target);
+                            break;
+                        case "cc_capabilityimplemented":
+                            logic.OnCapabilityImplementedDelete(target);
+                            break;
+                    }
                 }
             }
             catch (Exception exception)
@@ -62,11 +72,6 @@
         #endregion
 
         #region Fields
-
-        /// <summary>
-        ///     The name of the entity the plugin is designed to run on
-        /// </summary>
-        private const string EntityName = "cc_standardapplicable";
 
         /// <summary>
         ///     The plugin full name.
