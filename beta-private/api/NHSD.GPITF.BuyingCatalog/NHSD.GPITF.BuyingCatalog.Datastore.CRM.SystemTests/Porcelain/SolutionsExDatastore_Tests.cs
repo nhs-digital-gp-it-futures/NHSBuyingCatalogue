@@ -88,7 +88,31 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
           opts => opts
             .Excluding(ent => ent.Solution.CreatedOn)
             .Excluding(ent => ent.Solution.ModifiedOn)
-            .Excluding(ent => ent.Solution.ModifiedById));
+            .Excluding(ent => ent.Solution.ModifiedById)
+
+            // exclude properties with a timestamp
+            .Excluding(ent => ent.ClaimedCapabilityEvidence)
+            .Excluding(ent => ent.ClaimedCapabilityReview)
+            .Excluding(ent => ent.ClaimedStandardEvidence)
+            .Excluding(ent => ent.ClaimedStandardReview));
+
+      // explicitly handle properties with a timestamp
+      retrievedSolnEx.ClaimedCapabilityEvidence
+        .Should().BeEquivalentTo(_solnEx.ClaimedCapabilityEvidence,
+          opts => opts
+            .Excluding(ent => ent.CreatedOn));
+      retrievedSolnEx.ClaimedCapabilityReview
+        .Should().BeEquivalentTo(_solnEx.ClaimedCapabilityReview,
+          opts => opts
+            .Excluding(ent => ent.CreatedOn));
+      retrievedSolnEx.ClaimedStandardEvidence
+        .Should().BeEquivalentTo(_solnEx.ClaimedStandardEvidence,
+          opts => opts
+            .Excluding(ent => ent.CreatedOn));
+      retrievedSolnEx.ClaimedStandardReview
+        .Should().BeEquivalentTo(_solnEx.ClaimedStandardReview,
+          opts => opts
+            .Excluding(ent => ent.CreatedOn));
     }
 
     #region Solution
@@ -108,7 +132,31 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
           opts => opts
             .Excluding(ent => ent.Solution.CreatedOn)
             .Excluding(ent => ent.Solution.ModifiedOn)
-            .Excluding(ent => ent.Solution.ModifiedById));
+            .Excluding(ent => ent.Solution.ModifiedById)
+
+            // exclude properties with a timestamp
+            .Excluding(ent => ent.ClaimedCapabilityEvidence)
+            .Excluding(ent => ent.ClaimedCapabilityReview)
+            .Excluding(ent => ent.ClaimedStandardEvidence)
+            .Excluding(ent => ent.ClaimedStandardReview));
+
+      // explicitly handle properties with a timestamp
+      retrievedSolnEx.ClaimedCapabilityEvidence
+        .Should().BeEquivalentTo(_solnEx.ClaimedCapabilityEvidence,
+          opts => opts
+            .Excluding(ent => ent.CreatedOn));
+      retrievedSolnEx.ClaimedCapabilityReview
+        .Should().BeEquivalentTo(_solnEx.ClaimedCapabilityReview,
+          opts => opts
+            .Excluding(ent => ent.CreatedOn));
+      retrievedSolnEx.ClaimedStandardEvidence
+        .Should().BeEquivalentTo(_solnEx.ClaimedStandardEvidence,
+          opts => opts
+            .Excluding(ent => ent.CreatedOn));
+      retrievedSolnEx.ClaimedStandardReview
+        .Should().BeEquivalentTo(_solnEx.ClaimedStandardReview,
+          opts => opts
+            .Excluding(ent => ent.CreatedOn));
     }
     #endregion
 
