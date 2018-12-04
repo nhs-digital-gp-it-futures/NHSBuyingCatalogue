@@ -835,7 +835,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
       var retrievedSolnEx = _datastore.BySolution(_solnEx.Solution.Id);
       retrievedSolnEx.ClaimedStandardReview
         .Should().ContainSingle()
-        .And
+        .And.Subject.Single()
         .Should().BeEquivalentTo(reviewPrev,
           opts => opts
             .Excluding(ent => ent.CreatedOn));
