@@ -42,9 +42,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
       _claimedStandardEvidenceDatastore = new StandardsApplicableEvidenceDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<StandardsApplicableEvidenceDatastore>>().Object, _policy);
       _claimedStandardReviewsDatastore = new StandardsApplicableReviewsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<StandardsApplicableReviewsDatastore>>().Object, _policy);
 
-      var linkMgr = new LinkManagerDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<LinkManagerDatastore>>().Object, _policy);
-      var frameworksDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
-
       _datastore = new SolutionsExDatastore(
         DatastoreBaseSetup.CrmConnectionFactory,
         _logger,
@@ -59,10 +56,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
 
         _claimedStandardDatastore,
         _claimedStandardEvidenceDatastore,
-        _claimedStandardReviewsDatastore,
-
-        linkMgr,
-       frameworksDatastore);
+        _claimedStandardReviewsDatastore);
 
       var soln = Retriever.GetAllSolutions(_policy).First();
       _solnOrig = _datastore.BySolution(soln.Id);
