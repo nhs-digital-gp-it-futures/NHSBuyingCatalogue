@@ -173,9 +173,9 @@ async function solutionComplianceEvidencePageGet (req, res) {
     context.latestFile = latestFile
 
     // only allow a submission if a file exists and;
-    // a) there are no submissions in the history, or
-    // b) the latest submission is feedback
-    context.allowSubmission = !context.claim.submissionHistory.length || context.hasFeedback
+    // a) evidence has not already been submitted, or
+    // b) the latest submission is feedback from NHS Digital
+    context.allowSubmission = !context.isSubmitted || context.hasFeedback
     if (context.allowSubmission) {
       context.activeForm.id = 'compliance-evidence-upload'
     }
@@ -185,14 +185,14 @@ async function solutionComplianceEvidencePageGet (req, res) {
 }
 
 async function solutionComplianceEvidencePagePost (req, res) {
-  const action = req.body.action
+  const action = req.body.action || {}
 
-  let redirectUrl = action === 'save'
+  let redirectUrl = action.save
     ? './'
     : '../../'
 
   if (!req.files.length) {
-    if (action === 'submit') {
+    if (action.submit) {
       req.body.errors = { items: [{ msg: 'No file to upload.' }] }
     } else {
       res.redirect(redirectUrl)
@@ -208,7 +208,7 @@ async function solutionComplianceEvidencePagePost (req, res) {
       // and if the user requested submission to NHS Digital (* -> submitted)
       const claim = _.find(req.solution.standards, { id: req.params.claim_id })
 
-      if (action === 'submit') {
+      if (action.submit) {
         claim.status = '2' /* submitted */
         redirectUrl += `?submitted=${claim.standardId}`
       } else {
@@ -222,7 +222,7 @@ async function solutionComplianceEvidencePagePost (req, res) {
         claimId: req.params.claim_id,
         createdOn: new Date(),
         createdById: req.user.contact.id,
-        evidence: ''
+        evidence: req.body.message
       })
 
       await dataProvider.updateSolutionForCompliance(req.solution)

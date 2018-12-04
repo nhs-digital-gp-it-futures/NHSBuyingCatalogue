@@ -191,7 +191,12 @@
         ]
       },
       "Reply": {
-        "Heading": "Upload file and reply*"
+        "Heading": "Upload file and reply*",
+        "Remove": "remove",
+        "Message": {
+          "Label": "Message (optional)",
+          "Help": "Include a message with your file. For example, you can use this field to describe changes between submission versions."
+        }
       },
       "History": {
         "Heading": "Submission History",

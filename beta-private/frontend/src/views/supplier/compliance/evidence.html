@@ -78,13 +78,22 @@
     <h3>{{t 'CompliancePages.Evidence.Reply.Heading'}}</h3>
     {{#>form encoding="multipart/form-data" form_id=activeForm.id}}
       <fieldset class="callout">
-        <input type="file" name="matrix-file">
+        <div class="file-input">
+          <input type="file" name="matrix-file">
+          <a href="#" class="remove">{{t 'CompliancePages.Evidence.Reply.Remove'}}</a>
+        </div>
+
+        <div class="evidence-message">
+          <h4 class="label">{{t 'CompliancePages.Evidence.Reply.Message.Label'}}</h4>
+          <p class="help">{{t 'CompliancePages.Evidence.Reply.Message.Help'}}</p>
+          <textarea name="message"></textarea>
+        </div>
       </fieldset>
 
       <button
         id="submit-for-compliance"
         type="submit"
-        name="action"
+        name="action[submit]"
         value="submit"
         class="primary">{{t 'CompliancePages.Evidence.Buttons.Submit'}}</button>
     {{/form}}
@@ -109,7 +118,7 @@
 </div>
 
 <script type="text/javascript">
-/* global $$ */
+/* global $, $$ */
 document.addEventListener('DOMContentLoaded', function () {
   $$('#compliance .history .expand-history, #compliance .history .collapse-history').forEach(
     function (el) {
@@ -119,5 +128,24 @@ document.addEventListener('DOMContentLoaded', function () {
       })
     }
   )
+
+  const replyForm = $('#compliance .upload-and-reply form')
+  const replyFileInput = $('input[type=file]', replyForm)
+
+  function updateForFileInputState () {
+    const fileInputFilled = !!replyFileInput.value
+    replyForm.classList.toggle('has-file', fileInputFilled)
+    $('#submit-for-compliance').disabled = !fileInputFilled
+  }
+
+  replyForm.addEventListener('change', updateForFileInputState)
+  $('.remove', replyForm).addEventListener('click', function (ev) {
+    ev.preventDefault()
+
+    replyFileInput.value = ''
+    updateForFileInputState()
+  })
+
+  updateForFileInputState()
 })
 </script>

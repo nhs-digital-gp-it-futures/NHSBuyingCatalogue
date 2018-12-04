@@ -154,6 +154,38 @@
     }
   }
 
+  .upload-and-reply form {
+    .remove,
+    .evidence-message {
+      display: none;
+    }
+
+    .file-input {
+      display: flex;
+
+      input[type=file] {
+        flex-grow: 1;
+      }
+    }
+    &.has-file {
+      .remove {
+        display: inline;
+      }
+
+      .evidence-message {
+        display: block;
+
+        .label {
+          margin-bottom: .5em;
+        }
+
+        .help {
+          margin: .5em 0;
+        }
+      }
+    }
+  }
+
   #submit-for-compliance {
     margin-top: 1em;
 
