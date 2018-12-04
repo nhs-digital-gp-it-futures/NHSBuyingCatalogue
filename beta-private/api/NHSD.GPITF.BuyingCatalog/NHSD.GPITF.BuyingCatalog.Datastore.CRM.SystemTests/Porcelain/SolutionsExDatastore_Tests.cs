@@ -8,7 +8,7 @@ using NHSD.GPITF.BuyingCatalog.Tests;
 using NUnit.Framework;
 using System.Linq;
 
-namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
+namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
 {
   [TestFixture]
   public sealed class SolutionsExDatastore_Tests : DatastoreBase_Tests<SolutionsExDatastore>
