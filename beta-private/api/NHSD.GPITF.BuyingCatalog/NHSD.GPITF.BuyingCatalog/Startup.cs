@@ -260,6 +260,12 @@ namespace NHSD.GPITF.BuyingCatalog
       Console.WriteLine($"    SHAREPOINT_ORGANISATIONSRELATIVEURL : {Environment.GetEnvironmentVariable("SHAREPOINT_ORGANISATIONSRELATIVEURL")}");
       Console.WriteLine($"    SHAREPOINT_LOGIN : {Environment.GetEnvironmentVariable("SHAREPOINT_LOGIN")}");
       Console.WriteLine($"    SHAREPOINT_PASSWORD : {Environment.GetEnvironmentVariable("SHAREPOINT_PASSWORD")}");
+
+      Console.WriteLine($"  CRM:");
+      Console.WriteLine($"    CRM_APIURI : {Environment.GetEnvironmentVariable("CRM_APIURI")}");
+      Console.WriteLine($"    CRM_ACCESSTOKENURI : {Environment.GetEnvironmentVariable("CRM_ACCESSTOKENURI")}");
+      Console.WriteLine($"    CRM_CLIENTID : {Environment.GetEnvironmentVariable("CRM_CLIENTID")}");
+      Console.WriteLine($"    CRM_CLIENTSECRET : {Environment.GetEnvironmentVariable("CRM_CLIENTSECRET")}");
     }
   }
 }
