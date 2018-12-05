@@ -1,3 +1,34 @@
+#onboarding.dashboard.page {
+  .onboarding-stages {
+    counter-reset: stage;
+    margin-left: 2em;
+
+    li {
+      position: relative;
+
+      &::before {
+        content: counter(stage);
+        counter-increment: stage 1;
+        display: inline-block;
+        left: -2em;
+        position: absolute;
+      }
+
+      .action {
+        font-weight: bold;
+      }
+
+      .narrative {
+        font-size: smaller;
+
+        .name {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
+
 #add-contact {
   margin-bottom: 1em;
 }

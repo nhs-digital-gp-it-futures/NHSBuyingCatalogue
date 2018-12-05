@@ -1,8 +1,45 @@
 {
   "Onboarding": {
-    "Title": "Onboarding a $t(Solution)",
+    "Title": "Adding a $t(Solution)",
+    "Subtitle": {
+      "New": "Start with Stage 1 to register your $t(Solution) and build the requirements for the next two stages.",
+      "Existing": "Continue adding your $t(Solution) below."
+    },
+    "StartingCallout": {
+      "Title": "Before you start",
+      "Text": "We recommend you read the <a href='#supplier-guide'>Supplier Guide</a>. It contains helpful detail and guidance to make your journey as swift and easy as possible."
+    },
     "Status": {
       "Title": "$t(Solution) Onboarding Status"
+    },
+    "Stages": [
+      {
+        "Name": "$t(Solution) Registration",
+        "Title": "Provide basic details and select $t(Capability_plural)",
+        "Narrative": "Provide $t(Solution) name, description, version and contact details. Select the $t(Capability_plural) that describe what your $t(Solution) does to build the requirements for the next two stages."
+      },
+      {
+        "Name": "$t(Capabilities Assessment)",
+        "Title": "Provide evidence for your $t(Solution_possessive) $t(Capability_plural)",
+        "Narrative": "Provide evidence that shows how your $t(Solution) meets each of its $t(Capability_plural). Your $t(Solution) will be assessed to ensure it meets the $t(Capability_plural) asserted."
+      },
+      {
+        "Name": "$t(Standards Compliance)",
+        "Title": "Provide evidence for your $t(Solution_possessive) $t(Standard_plural)",
+        "Narrative": "Provide evidence that shows how your $t(Solution) meets each $t(Standard_possessive) requirements. Your $t(Solution) will be evaluated for compliance with each $t(Standard)."
+      },
+      {
+        "Name": "$t(Solution) Detail",
+        "Title": "Build your $t(Solution) page",
+        "Narrative": "Provide information to help buyers evaluate your $t(Solution). This information will be moderated. It not affect either $t(Assessment) (Stage 2) or $t(Compliance) (Stage 3)."
+      }
+    ],
+    "Help": {
+      "Title": "Help - Where can I find guidance on $t(Onboarding.Title)?",
+      "Text": [
+        "Follow the links below for guidance on each stage of <a href='#'>$t(Onboarding.Title)</a>.",
+        "<ul><li><a href='#'>Stage 1 - $t(Onboarding.Stages.0.Name)</a><li><a href='#'>Stage 2 - $t(Onboarding.Stages.1.Name)</a><li><a href='#'>Stage 1 - $t(Onboarding.Stages.0.Name)</a><li><a href='#'>$t(Solution) page (what buyers will see)</a></ul>"
+      ]
     },
     "Details": {
       "Breadcrumb": "Register $t(Solution) (1 of 4)",

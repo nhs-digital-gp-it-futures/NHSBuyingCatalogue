@@ -1,17 +1,45 @@
-<h1>{{t 'Onboarding.Title'}}</h1>
+<div id="onboarding" class="dashboard page">
 
-{{#solution}}
-<p>
-  Currently onboarding
-  <b>{{name}}{{#version}} version {{.}}{{/version}}</b>.
-  <a href="{{../continueOnboardingUrl}}">Continue</a>
-  {{#if ../complianceUrl}}<br><a href="{{../complianceUrl}}">Standards Compliance (testing)</a>{{/if}}
-</p>
-{{/solution}}
+<header class="page-main-heading">
+  <h1>{{t 'Onboarding.Title' }}</h1>
+  {{#if solution}}
+  <p>{{t 'Onboarding.Subtitle.Existing'}}</p>
+  {{else}}
+  <p>{{t 'Onboarding.Subtitle.New'}}</p>
+  {{/if}}
+</header>
 
-{{^solution}}
-<p>
-  Register a new solution.
-  <a href="{{registerNewSolutionUrl}}">Get Started</a>
-</p>
-{{/solution}}
+{{#unless solution}}
+<div class="callout">
+  <h2>{{t 'Onboarding.StartingCallout.Title'}}</h2>
+  <p>{{{t 'Onboarding.StartingCallout.Text'}}}</p>
+</div>
+{{/unless}}
+
+<ol class="onboarding-stages">
+  {{#each (tt 'Onboarding.Stages')}}
+  <li>
+    <h3 class="title">{{Title}}</h3>
+    {{#with (lookup ../stages @index)}}
+      {{#url}}
+      <p class="action">Status: Unknown. <a href="{{.}}">View</a></p>
+      {{/url}}
+    {{/with}}
+    <p class="narrative">
+      <span class="name">{{Name}}.</span>
+      {{Narrative}}
+    </p>
+  </li>
+  {{/each}}
+</ol>
+
+<div id="supplier-guide">
+  {{#> help-reveal
+    title='Onboarding.Help.Title'}}
+    {{#each (tt 'Onboarding.Help.Text')}}
+      <p>{{{.}}}</p>
+    {{/each}}
+  {{/help-reveal}}
+</div>
+
+</div>

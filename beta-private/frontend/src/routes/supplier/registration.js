@@ -58,12 +58,19 @@ function commonOnboardingContext (req) {
 function onboardingStatusPage (req, res) {
   const context = {
     ...commonOnboardingContext(req),
-    continueOnboardingUrl: 'register#content',
-    registerNewSolutionUrl: 'register#content'
+    stages: [
+      {
+        url: 'register#content'
+      },
+      {},
+      {},
+      {}
+    ]
   }
 
   if (req.solution) {
-    context.complianceUrl = `../../compliance/${req.solution.id}`
+    context.stages[1].url = `../../capabilities/${req.solution.id}`
+    context.stages[2].url = `../../compliance/${req.solution.id}`
   }
 
   res.render('supplier/registration/index', context)
