@@ -18,6 +18,16 @@ a[target="_blank"]:after {
   margin: 0 3px 0 5px;
 }
 
+// style all body links that are not buttons to NHS Digital Design Guidelines
+#content a:not(.button) {
+  color: $color-link-fg;
+  text-decoration: underline;
+
+  &:hover {
+    background-color: $color-link-hover-bg;
+  }
+}
+
 @import 'components/help-reveal';
 
 @import 'pages/supplier/registration';
