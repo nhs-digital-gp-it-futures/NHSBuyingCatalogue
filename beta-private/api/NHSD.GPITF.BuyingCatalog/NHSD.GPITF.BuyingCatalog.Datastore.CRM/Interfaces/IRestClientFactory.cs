@@ -4,6 +4,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces
 {
   public interface IRestClientFactory
   {
-    IRestClient Get();
+    IRestClient GetRestClient();
+    AccessToken GetAccessToken();
   }
 }

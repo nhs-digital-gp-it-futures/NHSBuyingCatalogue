@@ -2,7 +2,6 @@
 using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using System;
 using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
@@ -17,29 +16,61 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
     }
 
+    private string ResourceBase { get; } = "/Frameworks";
+
     public IEnumerable<Frameworks> ByCapability(string capabilityId)
     {
-      throw new NotImplementedException();
+      return GetInternal(() =>
+      {
+        var request = GetAllRequest($"{ResourceBase}/ByCapability/{capabilityId}");
+        var retval = GetResponse<PaginatedList<Frameworks>>(request);
+
+        return retval.Items;
+      });
     }
 
     public Frameworks ById(string id)
     {
-      throw new NotImplementedException();
+      return GetInternal(() =>
+      {
+        var request = GetRequest($"{ResourceBase}/ById/{id}");
+        var retval = GetResponse<Frameworks>(request);
+
+        return retval;
+      });
     }
 
     public IEnumerable<Frameworks> BySolution(string solutionId)
     {
-      throw new NotImplementedException();
+      return GetInternal(() =>
+      {
+        var request = GetAllRequest($"{ResourceBase}/BySolution/{solutionId}");
+        var retval = GetResponse<PaginatedList<Frameworks>>(request);
+
+        return retval.Items;
+      });
     }
 
     public IEnumerable<Frameworks> ByStandard(string standardId)
     {
-      throw new NotImplementedException();
+      return GetInternal(() =>
+      {
+        var request = GetAllRequest($"{ResourceBase}/ByStandard/{standardId}");
+        var retval = GetResponse<PaginatedList<Frameworks>>(request);
+
+        return retval.Items;
+      });
     }
 
     public IEnumerable<Frameworks> GetAll()
     {
-      throw new NotImplementedException();
+      return GetInternal(() =>
+      {
+        var request = GetAllRequest($"{ResourceBase}");
+        var retval = GetResponse<PaginatedList<Frameworks>>(request);
+
+        return retval.Items;
+      });
     }
   }
 }

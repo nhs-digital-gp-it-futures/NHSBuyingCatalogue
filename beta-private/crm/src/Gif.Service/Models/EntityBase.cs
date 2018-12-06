@@ -20,6 +20,7 @@ namespace Gif.Service.Models
         private const char colon = ':';
         private const char openParenthesis = '(';
         private const char closeParenthesis = ')';
+        private const char openBracket = '{';
         private const char closeBracket = '}';
         private const char forwardSlash = '/';
         private const char comma = ',';
@@ -135,11 +136,6 @@ namespace Gif.Service.Models
                         dataString = ReplaceNullDate(dataString, p.Name);
                     }
 
-                    if (p.Name.ToLower() == "status")
-                    {
-                        dataString = ReplaceNullString(dataString, p.Name);
-                    }
-
                     dataString = dataString.Replace("\"" + p.Name + "\"", "\"" + targetField + "\"");
                 }
             }
@@ -155,10 +151,8 @@ namespace Gif.Service.Models
             var endGuid = dataString.IndexOf(doubleQuote, startGuid + 1, StringComparison.Ordinal);
             var entityVal = dataString.Substring(startGuid, endGuid - startGuid);
 
-            var replace1 = $"{doubleQuote}{name}{jsonSeparator}{entityVal}{doubleQuote}{comma}";
-            dataString = dataString.Replace(replace1, string.Empty);
-            var replace2 = $"{doubleQuote}{name}{jsonSeparator}{entityVal}{doubleQuote}";
-            dataString = dataString.Replace(replace2, string.Empty);
+            var replace = $"{name}{jsonSeparator}{entityVal}";
+            dataString = dataString.Replace(replace, string.Empty);
 
             return dataString;
         }
@@ -211,11 +205,6 @@ namespace Gif.Service.Models
                     dataString = ReplaceNullDate(dataString, p.Name);
                 }
 
-                if (p.Name.ToLower() == "status")
-                {
-                    dataString = ReplaceNullString(dataString, p.Name);
-                }
-
                 dataString = dataString.Replace("\"" + p.Name + "\"", "\"" + targetField + "\"");
 
                 if (p.GetCustomAttribute<CrmIdFieldAttribute>() != null && excludeId)
@@ -230,6 +219,7 @@ namespace Gif.Service.Models
         {
             dataString = RemoveDoubleCharacters(dataString, $"{comma}");
             dataString = dataString.Replace($"{comma}{closeBracket}", $"{closeBracket}");
+            dataString = dataString.Replace($"{openBracket}{doubleQuote}{doubleQuote}{comma}", $"{openBracket}");
             dataString = dataString.Replace(",\"\"", string.Empty);
             return dataString;
         }

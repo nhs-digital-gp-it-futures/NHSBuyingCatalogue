@@ -5,6 +5,7 @@ using NHSD.GPITF.BuyingCatalog.Models;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Hosting;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
@@ -12,15 +13,18 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   {
     private readonly ISolutionsDatastore _solutionDatastore;
     private readonly IOrganisationsDatastore _organisationDatastore;
+    private readonly IHostingEnvironment _env;
 
     public SolutionsValidator(
       IHttpContextAccessor context,
       ISolutionsDatastore solutionDatastore,
-      IOrganisationsDatastore organisationDatastore) :
+      IOrganisationsDatastore organisationDatastore,
+      IHostingEnvironment env) :
       base(context)
     {
       _solutionDatastore = solutionDatastore;
       _organisationDatastore = organisationDatastore;
+      _env = env;
 
       RuleSet(nameof(ISolutionsLogic.Update), () =>
       {
@@ -39,6 +43,16 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         MustBeFromSameOrganisationOrAdmin();
         PreviousVersionMustBeFromSameOrganisation();
         MustBePending();
+      });
+
+      RuleSet(nameof(ISolutionsLogic.Delete), () =>
+      {
+        MustBeDevelopment();
+        MustBeAdminOrSupplier();
+        MustBeValidId();
+        MustBeValidOrganisationId();
+        MustBeCurrentVersion();
+        PreviousVersionMustBeFromSameOrganisation();
       });
     }
 
@@ -142,6 +156,16 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
           return x.Status == SolutionStatus.Draft;
         })
         .WithMessage("Status must be Draft");
+    }
+
+    public void MustBeDevelopment()
+    {
+      RuleFor(x => x)
+        .Must(x =>
+        {
+          return _env.IsDevelopment();
+        })
+        .WithMessage("Only available in Development environment");
     }
 
     private static IEnumerable<(SolutionStatus OldStatus, SolutionStatus NewStatus, bool HasValidRole)> ValidStatusTransitions(IHttpContextAccessor context)

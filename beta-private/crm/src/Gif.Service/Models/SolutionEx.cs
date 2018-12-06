@@ -42,7 +42,7 @@ namespace Gif.Service.Models
         /// <value>A list of ClaimedCapabilityEvidence</value>
         [FromBody]
         [DataMember(Name = "claimedCapabilityEvidence")]
-        public List<Evidence> ClaimedCapabilityEvidence { get; set; }
+        public List<CapabilityEvidence> ClaimedCapabilityEvidence { get; set; }
 
         /// <summary>
         /// A list of ClaimedCapabilityReview
@@ -66,7 +66,7 @@ namespace Gif.Service.Models
         /// <value>A list of ClaimedStandardEvidence</value>
         [FromBody]
         [DataMember(Name = "claimedStandardEvidence")]
-        public List<Evidence> ClaimedStandardEvidence { get; set; }
+        public List<StandardApplicableEvidence> ClaimedStandardEvidence { get; set; }
 
         /// <summary>
         /// A list of ClaimedStandardReview
@@ -84,7 +84,6 @@ namespace Gif.Service.Models
         [FromBody]
         [DataMember(Name = "technicalContact")]
         public List<TechnicalContact> TechnicalContact { get; set; }
-
     }
 }
 #pragma warning restore 1591

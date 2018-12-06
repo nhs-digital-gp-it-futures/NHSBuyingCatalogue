@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using System;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -92,7 +91,6 @@ with recursive Links(CurrentId, Id, PreviousId, EvidenceId, CreatedById, Created
         using (var trans = _dbConnection.Value.BeginTransaction())
         {
           review.Id = UpdateId(review.Id);
-          review.CreatedOn = DateTime.UtcNow;
           _dbConnection.Value.Insert(review, trans);
           trans.Commit();
 

@@ -1,13 +1,12 @@
 ﻿using FluentValidation;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using System;
 using System.Collections.Generic;
 using System.IO;
 
 namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 {
-  public class EvidenceBlobStoreLogic : IClaimsInfoProvider, IEvidenceBlobStoreLogic
+  public abstract class EvidenceBlobStoreLogic : IClaimsInfoProvider, IEvidenceBlobStoreLogic
   {
     protected const string CapabilityFolderName = "Capability Evidence";
     protected const string StandardsFolderName = "Standards Evidence";
@@ -84,15 +83,9 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       _evidenceBlobStoreDatastore.PrepareForSolution(this, solutionId);
     }
 
-    public virtual string GetFolderName()
-    {
-      throw new NotImplementedException();
-    }
+    public abstract string GetFolderName();
 
-    public virtual string GetFolderClaimName(ClaimsBase claim)
-    {
-      throw new NotImplementedException();
-    }
+    public abstract string GetFolderClaimName(ClaimsBase claim);
 
     public ClaimsBase GetClaimById(string claimId)
     {
@@ -109,12 +102,6 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       return StandardsFolderName;
     }
 
-    protected virtual IClaimsDatastore<ClaimsBase> ClaimsDatastore
-    {
-      get
-      {
-        throw new NotImplementedException();
-      }
-    }
+    protected abstract IClaimsDatastore<ClaimsBase> ClaimsDatastore { get; }
   }
 }

@@ -31,7 +31,7 @@ namespace Gif.Service.Controllers
     public class StandardsApplicableEvidenceApiController : Controller
     {
         /// <summary>
-        /// Get all Evidence for the given Claim  Each list is a distinct &#39;chain&#39; of Evidence ie original Evidence with all subsequent Evidence  The first item in each &#39;chain&#39; is the most current Evidence.  The last item in each &#39;chain&#39; is the original Evidence.
+        /// Get all EvidenceEntity for the given Claim  Each list is a distinct &#39;chain&#39; of EvidenceEntity ie original EvidenceEntity with all subsequent EvidenceEntity  The first item in each &#39;chain&#39; is the most current EvidenceEntity.  The last item in each &#39;chain&#39; is the original EvidenceEntity.
         /// </summary>
 
         /// <param name="claimId">CRM identifier of Claim</param>
@@ -46,7 +46,7 @@ namespace Gif.Service.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(PaginatedListIEnumerableStandardsApplicableEvidence), description: "Success")]
         public virtual IActionResult ApiStandardsApplicableEvidenceByClaimByClaimIdGet([FromRoute][Required]string claimId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
         {
-            IEnumerable<Evidence> evidences;
+            IEnumerable<IEnumerable<StandardApplicableEvidence>> evidences;
             int totalPages;
 
             try
@@ -71,10 +71,10 @@ namespace Gif.Service.Controllers
         }
 
         /// <summary>
-        /// Get an existing Standard Applicable for a given Evidence Id
+        /// Get an existing Standard Applicable for a given EvidenceEntity Id
         /// </summary>
 
-        /// <param name="id">Evidence Id</param>
+        /// <param name="id">EvidenceEntity Id</param>
         /// <response code="200">Success</response>
         /// <response code="404">Solution not found in CRM</response>
         [HttpGet]
@@ -86,7 +86,7 @@ namespace Gif.Service.Controllers
         {
             try
             {
-                var standardApplicable = new StandardsApplicableEvidenceService(new Repository()).ByEvidenceId(id);
+                var standardApplicable = new StandardsApplicableEvidenceService(new Repository()).ById(id);
 
                 if (standardApplicable.Id == Guid.Empty)
                     return StatusCode(404);
@@ -102,60 +102,33 @@ namespace Gif.Service.Controllers
         }
 
         /// <summary>
-        /// Get an existing Standard Applicable for a given Review Id
+        /// Create a new evidenceEntity
         /// </summary>
 
-        /// <param name="id">Review Id</param>
-        /// <response code="200">Success</response>
-        /// <response code="404">Solution not found in CRM</response>
-        [HttpGet]
-        [Route("/api/StandardsApplicableReview/ById/{id}")]
-        [ValidateModelState]
-        [SwaggerOperation("StandardsApplicableReviewByIdGet")]
-        [SwaggerResponse(statusCode: 200, type: typeof(Solution), description: "Success")]
-        public virtual IActionResult StandardsApplicableReviewByIdGet([FromRoute][Required]string id)
-        {
-            try
-            {
-                var standardApplicable = new StandardsApplicableEvidenceService(new Repository()).ByReviewId(id);
-
-                if (standardApplicable.Id == Guid.Empty)
-                    return StatusCode(404);
-
-                return new ObjectResult(standardApplicable);
-
-            }
-            catch (Crm.CrmApiException ex)
-            {
-                return StatusCode((int)ex.HttpStatus, ex.Message);
-            }
-
-        }
-
-        /// <summary>
-        /// Create a new evidence
-        /// </summary>
-
-        /// <param name="evidence">new evidence information</param>
+        /// <param name="evidenceEntity">new evidenceEntity information</param>
         /// <response code="200">Success</response>
         /// <response code="404">Claim not found</response>
         [HttpPost]
         [Route("/api/StandardsApplicableEvidence")]
         [ValidateModelState]
         [SwaggerOperation("ApiStandardsApplicableEvidencePost")]
-        [SwaggerResponse(statusCode: 200, type: typeof(Evidence), description: "Success")]
-        public virtual IActionResult ApiStandardsApplicableEvidencePost([FromBody]Evidence evidence)
+        [SwaggerResponse(statusCode: 200, type: typeof(StandardApplicableEvidence), description: "Success")]
+        public virtual IActionResult ApiStandardsApplicableEvidencePost([FromBody]StandardApplicableEvidence evidenceEntity)
         {
             try
             {
-                evidence = new StandardsApplicableEvidenceService(new Repository()).Create(evidence);
+                evidenceEntity = new StandardsApplicableEvidenceService(new Repository()).Create(evidenceEntity);
+
+                if (evidenceEntity.Id == Guid.Empty)
+                    return StatusCode(404);
+
+                return new ObjectResult(evidenceEntity);
             }
             catch (Crm.CrmApiException ex)
             {
                 return StatusCode((int)ex.HttpStatus, ex.Message);
             }
 
-            return StatusCode(204);
         }
     }
 }

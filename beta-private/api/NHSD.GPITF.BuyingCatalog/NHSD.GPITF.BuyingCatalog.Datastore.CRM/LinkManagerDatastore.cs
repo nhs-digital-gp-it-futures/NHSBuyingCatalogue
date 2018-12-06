@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
-using System;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
@@ -15,24 +14,17 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
     }
 
-    public void CapabilityFrameworkCreate(string frameworkId, string capabilityId)
-    {
-      throw new NotImplementedException();
-    }
-
-    public void CapabilityStandardCreate(string capabilityId, string standardId, bool isOptional)
-    {
-      throw new NotImplementedException();
-    }
+    private string ResourceBase { get; } = "/LinkManager";
 
     public void FrameworkSolutionCreate(string frameworkId, string solutionId)
     {
-      throw new NotImplementedException();
-    }
+      GetInternal(() =>
+      {
+        var request = GetPostRequest($"{ResourceBase}/FrameworkSolution/Create/{frameworkId}/{solutionId}", null);
+        var resp = GetRawResponse(request);
 
-    public void FrameworkStandardCreate(string frameworkId, string standardId)
-    {
-      throw new NotImplementedException();
+        return 0;
+      });
     }
   }
 }

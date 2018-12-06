@@ -2,7 +2,6 @@
 using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using System;
 using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
@@ -17,24 +16,51 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
     }
 
+    private string ResourceBase { get; } = "/TechnicalContacts";
+
     public IEnumerable<TechnicalContacts> BySolution(string solutionId)
     {
-      throw new NotImplementedException();
+      return GetInternal(() =>
+      {
+        var request = GetAllRequest($"{ResourceBase}/BySolution/{solutionId}");
+        var retval = GetResponse<PaginatedList<TechnicalContacts>>(request);
+
+        return retval.Items;
+      });
     }
 
     public TechnicalContacts Create(TechnicalContacts techCont)
     {
-      throw new NotImplementedException();
+      return GetInternal(() =>
+      {
+        techCont.Id = UpdateId(techCont.Id);
+        var request = GetPostRequest($"{ResourceBase}", techCont);
+        var retval = GetResponse<TechnicalContacts>(request);
+
+        return retval;
+      });
     }
 
     public void Delete(TechnicalContacts techCont)
     {
-      throw new NotImplementedException();
+      GetInternal(() =>
+      {
+        var request = GetDeleteRequest($"{ResourceBase}", techCont);
+        var resp = GetRawResponse(request);
+
+        return 0;
+      });
     }
 
     public void Update(TechnicalContacts techCont)
     {
-      throw new NotImplementedException();
+      GetInternal(() =>
+      {
+        var request = GetPutRequest($"{ResourceBase}", techCont);
+        var resp = GetRawResponse(request);
+
+        return 0;
+      });
     }
   }
 }

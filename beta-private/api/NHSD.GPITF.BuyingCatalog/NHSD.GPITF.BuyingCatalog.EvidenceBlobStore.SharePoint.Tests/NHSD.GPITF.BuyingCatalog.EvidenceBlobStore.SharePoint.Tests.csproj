@@ -37,6 +37,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint\NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.csproj" />
+    <ProjectReference Include="..\NHSD.GPITF.BuyingCatalog.Logic.Tests\NHSD.GPITF.BuyingCatalog.Logic.Tests.csproj" />
     <ProjectReference Include="..\NHSD.GPITF.BuyingCatalog\NHSD.GPITF.BuyingCatalog.csproj" />
   </ItemGroup>
 

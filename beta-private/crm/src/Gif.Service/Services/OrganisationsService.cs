@@ -1,5 +1,4 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-using System;
 using Gif.Service.Attributes;
 using Gif.Service.Contracts;
 using Gif.Service.Crm;
@@ -17,11 +16,18 @@ namespace Gif.Service.Services
 
         public Organisation ByContact(string contactId)
         {
-            var contactService = new ContactsService(Repository);
-            var contact = contactService.ById(contactId);
+            var filterAttributes = new List<CrmFilterAttribute>
+            {
+                new CrmFilterAttribute("ContactId") {FilterName = "contactid", FilterValue = contactId},
+                new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
+            };
 
-            return contact?.Organisation == Guid.Empty ? null :
-                ById(contact?.Organisation.ToString());
+            var appJson = Repository.RetrieveMultiple(new Contact().GetQueryString(null, filterAttributes), out Count);
+            var contactJson = appJson?.FirstOrDefault();
+
+            var contact = new Contact(contactJson);
+
+            return ById(contact.OrganisationId.ToString());
         }
 
         public Organisation ById(string organisationId)

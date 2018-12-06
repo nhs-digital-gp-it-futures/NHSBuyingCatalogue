@@ -1,10 +1,10 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 using Gif.Service.Const;
 using Gif.Service.Crm;
-using Gif.Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gif.Service.Contracts;
 
 namespace Gif.Service.Services
 {
@@ -39,53 +39,30 @@ namespace Gif.Service.Services
             return items.Skip(skipPage * skipValue).Take((int)pageSize);
         }
 
-        protected IEnumerable<Review> OrderLinkedReviews(IEnumerable<Review> reviews)
+        protected static List<T> GetInsertionTree<T>(List<T> allNodes) where T : IHasPreviousId
         {
-            var enumReviews = reviews.ToList();
-            var review = enumReviews.FirstOrDefault(x => x.PreviousId == null);
-            int count = enumReviews.Count();
+            var roots = GetRoots(allNodes);
+            var tree = new List<T>(roots);
 
-            if (review != null)
+            var next = GetChildren(roots, allNodes);
+            while (next.Any())
             {
-                var prevReview = review;
-                prevReview.Order = count;
-
-                while (count > 0)
-                {
-                    count--;
-                    prevReview = enumReviews.FirstOrDefault(x => prevReview != null && (x.PreviousId != null && x.PreviousId.Value == prevReview.Id));
-                    if (prevReview != null)
-                        prevReview.Order = count;
-                }
+                tree.AddRange(next);
+                next = GetChildren(next, allNodes);
             }
 
-            var orderedReviews = enumReviews.OrderBy(x => x.Order);
-            return orderedReviews;
+            return tree;
         }
-
-        protected IEnumerable<Evidence> OrderLinkedEvidences(IEnumerable<Evidence> evidences)
+        private static List<T> GetRoots<T>(List<T> allNodes) where T : IHasPreviousId
         {
-            var enumEvidences = evidences.ToList();
-            var evidence = enumEvidences.FirstOrDefault(x => x.PreviousId == null);
-            int count = enumEvidences.Count();
-
-            if (evidence != null)
-            {
-                var prevEvidence = evidence;
-                prevEvidence.Order = count;
-
-                while (count > 0)
-                {
-                    count--;
-                    prevEvidence = enumEvidences.FirstOrDefault(x => prevEvidence != null && (x.PreviousId != null && x.PreviousId.Value == prevEvidence.Id));
-                    if (prevEvidence != null)
-                        prevEvidence.Order = count;
-                }
-            }
-
-            var orderedEvidences = enumEvidences.OrderBy(x => x.Order);
-            return orderedEvidences;
+            return allNodes.Where(x => x.PreviousId == null).ToList();
         }
+
+        private static List<T> GetChildren<T>(List<T> parents, List<T> allNodes) where T : IHasPreviousId
+        {
+            return parents.SelectMany(parent => allNodes.Where(x => x.PreviousId == parent.Id)).ToList();
+        }
+
     }
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

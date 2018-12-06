@@ -31,7 +31,7 @@ namespace Gif.Service.Controllers
     public class CapabilitiesImplementedEvidenceApiController : Controller
     {
         /// <summary>
-        /// Get all Evidence for the given Claim  Each list is a distinct &#39;chain&#39; of Evidence ie original Evidence with all subsequent Evidence  The first item in each &#39;chain&#39; is the most current Evidence.  The last item in each &#39;chain&#39; is the original Evidence.
+        /// Get all EvidenceEntity for the given Claim  Each list is a distinct &#39;chain&#39; of EvidenceEntity ie original EvidenceEntity with all subsequent EvidenceEntity  The first item in each &#39;chain&#39; is the most current EvidenceEntity.  The last item in each &#39;chain&#39; is the original EvidenceEntity.
         /// </summary>
 
         /// <param name="claimId">CRM identifier of Claim</param>
@@ -46,7 +46,7 @@ namespace Gif.Service.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(PaginatedListIEnumerableCapabilitiesImplementedEvidence), description: "Success")]
         public virtual IActionResult ApiCapabilitiesImplementedEvidenceByClaimByClaimIdGet([FromRoute][Required]string claimId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
         {
-            IEnumerable<Evidence> evidences;
+            IEnumerable<IEnumerable<CapabilityEvidence>> evidences;
             int totalPages;
 
             try
@@ -71,10 +71,10 @@ namespace Gif.Service.Controllers
         }
 
         /// <summary>
-        /// Get an existing Capability Implemented for a given Evidence Id
+        /// Get an existing Capability Implemented for a given EvidenceEntity Id
         /// </summary>
 
-        /// <param name="id">Evidence Id</param>
+        /// <param name="id">EvidenceEntity Id</param>
         /// <response code="200">Success</response>
         /// <response code="404">Solution not found in CRM</response>
         [HttpGet]
@@ -86,7 +86,7 @@ namespace Gif.Service.Controllers
         {
             try
             {
-                var capabilityImplemented = new CapabilitiesImplementedEvidenceService(new Repository()).ByEvidenceId(id);
+                var capabilityImplemented = new CapabilitiesImplementedEvidenceService(new Repository()).ById(id);
 
                 if (capabilityImplemented.Id == Guid.Empty)
                     return StatusCode(404);
@@ -102,60 +102,32 @@ namespace Gif.Service.Controllers
         }
 
         /// <summary>
-        /// Get an existing Capability Implemented for a given Review Id
+        /// Create a new evidenceEntity
         /// </summary>
 
-        /// <param name="id">Review Id</param>
-        /// <response code="200">Success</response>
-        /// <response code="404">Solution not found in CRM</response>
-        [HttpGet]
-        [Route("/api/CapabilitiesImplementedReview/ById/{id}")]
-        [ValidateModelState]
-        [SwaggerOperation("CapabilitiesImplementedReviewByIdGet")]
-        [SwaggerResponse(statusCode: 200, type: typeof(Solution), description: "Success")]
-        public virtual IActionResult CapabilitiesImplementedReviewByIdGet([FromRoute][Required]string id)
-        {
-            try
-            {
-                var capabilityImplemented = new CapabilitiesImplementedEvidenceService(new Repository()).ByReviewId(id);
-
-                if (capabilityImplemented.Id == Guid.Empty)
-                    return StatusCode(404);
-
-                return new ObjectResult(capabilityImplemented);
-
-            }
-            catch (Crm.CrmApiException ex)
-            {
-                return StatusCode((int)ex.HttpStatus, ex.Message);
-            }
-
-        }
-
-        /// <summary>
-        /// Create a new evidence
-        /// </summary>
-
-        /// <param name="evidence">new evidence information</param>
+        /// <param name="evidenceEntity">new evidenceEntity information</param>
         /// <response code="200">Success</response>
         /// <response code="404">Claim not found</response>
         [HttpPost]
         [Route("/api/CapabilitiesImplementedEvidence")]
         [ValidateModelState]
         [SwaggerOperation("ApiCapabilitiesImplementedEvidencePost")]
-        [SwaggerResponse(statusCode: 204, type: typeof(Evidence), description: "Success")]
-        public virtual IActionResult ApiCapabilitiesImplementedEvidencePost([FromBody]Evidence evidence)
+        [SwaggerResponse(statusCode: 204, type: typeof(CapabilityEvidence), description: "Success")]
+        public virtual IActionResult ApiCapabilitiesImplementedEvidencePost([FromBody]CapabilityEvidence evidenceEntity)
         {
             try
             {
-                evidence = new CapabilitiesImplementedEvidenceService(new Repository()).Create(evidence);
+                evidenceEntity = new CapabilitiesImplementedEvidenceService(new Repository()).Create(evidenceEntity);
+
+                if (evidenceEntity.Id == Guid.Empty)
+                    return StatusCode(404);
+
+                return new ObjectResult(evidenceEntity);
             }
             catch (Crm.CrmApiException ex)
             {
                 return StatusCode((int)ex.HttpStatus, ex.Message);
             }
-
-            return StatusCode(204);
         }
     }
 }
