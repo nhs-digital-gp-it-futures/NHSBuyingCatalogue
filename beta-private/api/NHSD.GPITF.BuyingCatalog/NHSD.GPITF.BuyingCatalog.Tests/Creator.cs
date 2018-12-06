@@ -234,12 +234,14 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
 
     public static ClaimsBase GetClaimsBase(
       string id = null,
-      string solnId = null)
+      string solnId = null,
+      string ownerId = null)
     {
       var retval = new DummyClaimsBase
       {
         Id = id ?? Guid.NewGuid().ToString(),
-        SolutionId = solnId ?? Guid.NewGuid().ToString()
+        SolutionId = solnId ?? Guid.NewGuid().ToString(),
+        OwnerId = ownerId ?? Guid.NewGuid().ToString()
       };
       Verifier.Verify(retval);
       return retval;
@@ -249,6 +251,7 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       string id = null,
       string solnId = null,
       string claimId = null,
+      string ownerId = null,
       CapabilitiesImplementedStatus status = CapabilitiesImplementedStatus.Draft)
     {
       var retval = new CapabilitiesImplemented
@@ -256,6 +259,7 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
         Id = id ?? Guid.NewGuid().ToString(),
         SolutionId = solnId ?? Guid.NewGuid().ToString(),
         CapabilityId = claimId ?? Guid.NewGuid().ToString(),
+        OwnerId = ownerId ?? Guid.NewGuid().ToString(),
         Status = status
       };
       Verifier.Verify(retval);
@@ -266,6 +270,7 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       string id = null,
       string solnId = null,
       string claimId = null,
+      string ownerId = null,
       StandardsApplicableStatus status = StandardsApplicableStatus.Draft)
     {
       var retval = new StandardsApplicable
@@ -273,6 +278,7 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
         Id = id ?? Guid.NewGuid().ToString(),
         SolutionId = solnId ?? Guid.NewGuid().ToString(),
         StandardId = claimId ?? Guid.NewGuid().ToString(),
+        OwnerId = ownerId ?? Guid.NewGuid().ToString(),
         Status = status
       };
       Verifier.Verify(retval);
