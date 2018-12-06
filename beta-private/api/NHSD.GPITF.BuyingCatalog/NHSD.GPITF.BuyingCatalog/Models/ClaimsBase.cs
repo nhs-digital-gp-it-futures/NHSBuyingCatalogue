@@ -18,6 +18,12 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     /// </summary>
     [Required]
     public string SolutionId { get; set; }
+
+    /// <summary>
+    /// Unique identifier of supplier Contact who is responsible for this claim
+    /// </summary>
+    [Required]
+    public string OwnerId { get; set; }
   }
 #pragma warning restore CS1591
 }

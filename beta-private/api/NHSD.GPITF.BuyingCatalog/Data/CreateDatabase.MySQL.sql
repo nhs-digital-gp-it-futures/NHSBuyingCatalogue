@@ -154,8 +154,10 @@ CREATE TABLE CapabilitiesImplemented
   SolutionId CHAR(38) NOT NULL,
   CapabilityId CHAR(38) NOT NULL,
   Status INTEGER DEFAULT 0,
+  OwnerId CHAR(38) NOT NULL,
   FOREIGN KEY (SolutionId) REFERENCES Solutions(Id) ON DELETE CASCADE,
   FOREIGN KEY (CapabilityId) REFERENCES Capabilities(Id) ON DELETE CASCADE,
+  FOREIGN KEY (OwnerId) REFERENCES Contacts(Id) ON DELETE CASCADE,
   PRIMARY KEY (Id)
 );
 
@@ -166,8 +168,10 @@ CREATE TABLE StandardsApplicable
   SolutionId CHAR(38) NOT NULL,
   StandardId CHAR(38) NOT NULL,
   Status INTEGER DEFAULT 0,
+  OwnerId CHAR(38) NOT NULL,
   FOREIGN KEY (SolutionId) REFERENCES Solutions(Id) ON DELETE CASCADE,
   FOREIGN KEY (StandardId) REFERENCES Standards(Id) ON DELETE CASCADE,
+  FOREIGN KEY (OwnerId) REFERENCES Contacts(Id) ON DELETE CASCADE,
   PRIMARY KEY (Id)
 );
 
