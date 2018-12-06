@@ -1,4 +1,5 @@
-﻿CAP-C-001		Appointments Management - GP	Supports the administration, scheduling, resourcing and reporting of appointments. 	
+﻿Id	PreviousId	Name	Description	URL
+CAP-C-001		Appointments Management - GP	Supports the administration, scheduling, resourcing and reporting of appointments. 	
 CAP-C-002		GP Referral Management	Supports recording, reviewing, sending, and reporting of Patient Referrals. Enables Referral information to be included in the Patient Record. 	
 CAP-C-003		GP Resource Management	Supports the management and reporting of Practice information, resources, Staff Members and related organisations. Also enables management of Staff Member availability and inactivity. 	
 CAP-C-004		Patient Information Maintenance	Supports the registration of Patients and the maintenance of all Patient personal information. Supports the organisation and presentation of a comprehensive Patient Record. Also supports the management of related persons and configuring access to Citizen Services. 	

@@ -1,4 +1,5 @@
-﻿STD-O-001		1	Business Continuity and Disaster Recovery	Suppliers that provide systems will need to ensure that there are robust business continuity plans in place in the event of disaster recovery. 	
+﻿Id	PreviousId	IsOverarching	Name	Description	URL
+STD-O-001		1	Business Continuity and Disaster Recovery	Suppliers that provide systems will need to ensure that there are robust business continuity plans in place in the event of disaster recovery. 	
 STD-O-002		1	Clinical Safety	This standard ensures that Suppliers and buyers of GP IT Systems are carrying out effective clinical risk management relating to Patient safety. 	
 STD-O-003		1	Commercial	This standard underpins all commercial activity relating to the Catalogue and impacts the proposed framework as well. It defines the commercial relationship of relevant parties and sets out standards of behaviour and principles of access to data and services charges 	
 STD-O-004		1	Data Migration	Supports the safe and effective migration of data moving between GP IT Systems when a Practice moves from one Clinical System Supplier to another for part or all of their system. 	

@@ -31,7 +31,7 @@ DROP TABLE IF EXISTS Log;
 
 -- create data tables
 
--- Organisations.csv
+-- Organisations.tsv
 CREATE TABLE Organisations
 (
   Id CHAR(38) NOT NULL UNIQUE,
@@ -43,7 +43,7 @@ CREATE TABLE Organisations
   PRIMARY KEY (Id)
 );
 
--- Contacts.csv
+-- Contacts.tsv
 CREATE TABLE Contacts
 (
   Id CHAR(38) NOT NULL UNIQUE,
@@ -56,7 +56,7 @@ CREATE TABLE Contacts
   PRIMARY KEY (Id)
 );
 
--- Solutions.csv
+-- Solutions.tsv
 CREATE TABLE Solutions
 (
   Id CHAR(38) NOT NULL UNIQUE,
@@ -78,7 +78,7 @@ CREATE TABLE Solutions
   PRIMARY KEY (Id)
 );
 
--- TechnicalContacts.csv
+-- TechnicalContacts.tsv
 CREATE TABLE TechnicalContacts
 (
   Id CHAR(38) NOT NULL UNIQUE,
@@ -92,7 +92,7 @@ CREATE TABLE TechnicalContacts
   PRIMARY KEY (Id)
 );
 
--- Capabilities.csv
+-- Capabilities.tsv
 CREATE TABLE Capabilities
 (
   Id CHAR(38) NOT NULL UNIQUE,
@@ -104,7 +104,7 @@ CREATE TABLE Capabilities
   FOREIGN KEY (PreviousId) REFERENCES Capabilities(Id)
 );
 
--- Frameworks.csv
+-- Frameworks.tsv
 CREATE TABLE Frameworks
 (
   Id CHAR(38) NOT NULL UNIQUE,
@@ -115,7 +115,7 @@ CREATE TABLE Frameworks
   FOREIGN KEY (PreviousId) REFERENCES Frameworks(Id)
 );
 
--- Standards.csv
+-- Standards.tsv
 CREATE TABLE Standards
 (
   Id CHAR(38) NOT NULL UNIQUE,
@@ -147,7 +147,7 @@ CREATE TABLE Log
 
 -- create relationship tables
 
--- CapabilitiesImplemented.csv
+-- CapabilitiesImplemented.tsv
 CREATE TABLE CapabilitiesImplemented
 (
   Id CHAR(38) NOT NULL UNIQUE,
@@ -159,7 +159,7 @@ CREATE TABLE CapabilitiesImplemented
   PRIMARY KEY (Id)
 );
 
--- StandardsApplicable.csv
+-- StandardsApplicable.tsv
 CREATE TABLE StandardsApplicable
 (
   Id CHAR(38) NOT NULL UNIQUE,
@@ -171,7 +171,7 @@ CREATE TABLE StandardsApplicable
   PRIMARY KEY (Id)
 );
 
--- CapabilityFramework.csv
+-- CapabilityFramework.tsv
 CREATE TABLE CapabilityFramework
 (
   CapabilityId CHAR(38) NOT NULL,
@@ -181,7 +181,7 @@ CREATE TABLE CapabilityFramework
   PRIMARY KEY (CapabilityId, FrameworkId)
 );
 
--- FrameworkSolution.csv
+-- FrameworkSolution.tsv
 CREATE TABLE FrameworkSolution
 (
   FrameworkId CHAR(38) NOT NULL,
@@ -191,7 +191,7 @@ CREATE TABLE FrameworkSolution
   PRIMARY KEY (FrameworkId, SolutionId)
 );
 
--- FrameworkStandard.csv
+-- FrameworkStandard.tsv
 CREATE TABLE FrameworkStandard
 (
   FrameworkId CHAR(38) NOT NULL,
@@ -201,7 +201,7 @@ CREATE TABLE FrameworkStandard
   PRIMARY KEY (FrameworkId, StandardId)
 );
 
--- CapabilityStandard.csv
+-- CapabilityStandard.tsv
 CREATE TABLE CapabilityStandard
 (
   CapabilityId CHAR(38) NOT NULL,
@@ -212,7 +212,7 @@ CREATE TABLE CapabilityStandard
   PRIMARY KEY (CapabilityId, StandardId)
 );
 
--- CapabilitiesImplementedEvidence.csv
+-- CapabilitiesImplementedEvidence.tsv
 CREATE TABLE CapabilitiesImplementedEvidence
 (
   Id CHAR(38) NOT NULL UNIQUE,
@@ -227,7 +227,7 @@ CREATE TABLE CapabilitiesImplementedEvidence
   PRIMARY KEY (Id)
 );
 
--- CapabilitiesImplementedReviews.csv
+-- CapabilitiesImplementedReviews.tsv
 CREATE TABLE CapabilitiesImplementedReviews
 (
   Id CHAR(38) NOT NULL UNIQUE,
@@ -242,7 +242,7 @@ CREATE TABLE CapabilitiesImplementedReviews
   PRIMARY KEY (Id)
 );
 
--- StandardsApplicableEvidence.csv
+-- StandardsApplicableEvidence.tsv
 CREATE TABLE StandardsApplicableEvidence
 (
   Id CHAR(38) NOT NULL UNIQUE,
@@ -257,7 +257,7 @@ CREATE TABLE StandardsApplicableEvidence
   PRIMARY KEY (Id)
 );
 
--- StandardsApplicableReviews.csv
+-- StandardsApplicableReviews.tsv
 CREATE TABLE StandardsApplicableReviews
 (
   Id CHAR(38) NOT NULL UNIQUE,
