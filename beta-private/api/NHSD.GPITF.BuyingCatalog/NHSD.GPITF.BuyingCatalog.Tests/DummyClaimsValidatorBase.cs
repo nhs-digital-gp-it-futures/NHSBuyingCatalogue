@@ -10,8 +10,9 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
     public DummyClaimsValidatorBase(
       IHttpContextAccessor context,
       IClaimsDatastore<ClaimsBase> claimDatastore,
+      IContactsDatastore contactsDatastore,
       ISolutionsDatastore solutionsDatastore) :
-      base(context, claimDatastore, solutionsDatastore)
+      base(context, claimDatastore, contactsDatastore, solutionsDatastore)
     {
     }
 

@@ -12,8 +12,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     public CapabilitiesImplementedValidator(
       IHttpContextAccessor context,
       ICapabilitiesImplementedDatastore claimDatastore,
+      IContactsDatastore contactsDatastore,
       ISolutionsDatastore solutionsDatastore) :
-      base(context, claimDatastore, solutionsDatastore)
+      base(context, claimDatastore, contactsDatastore, solutionsDatastore)
     {
     }
 
