@@ -1,8 +1,8 @@
 ﻿using Gif.Service.Attributes;
+using Gif.Service.Enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Runtime.Serialization;
-using Gif.Service.Enums;
 
 namespace Gif.Service.Models
 {
@@ -26,6 +26,12 @@ namespace Gif.Service.Models
         [CrmFieldNameDataBind("cc_Capability@odata.bind")]  // this needs to be Schema name (not logical name)
         [CrmFieldEntityDataBind("cc_capabilities")]
         public Guid? CapabilityId { get; set; }
+
+        [DataMember]
+        [CrmFieldName("_cc_ownerid_value")]
+        [CrmFieldNameDataBind("cc_OwnerId@odata.bind")]
+        [CrmFieldEntityDataBind("contacts")]
+        public Guid? OwnerId { get; set; }
 
         [DataMember]
         [CrmFieldName("statuscode")]

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using Gif.Service.Attributes;
+﻿using Gif.Service.Attributes;
 using Gif.Service.Const;
-using Gif.Service.Enums;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Gif.Service.Models
 {
@@ -31,6 +27,10 @@ namespace Gif.Service.Models
         [DataMember]
         [CrmFieldName("cc_url")]
         public string Url { get; set; }
+
+        [DataMember]
+        [CrmFieldName("cc_type")]
+        public string Type { get; set; }
 
         [CrmEntityRelationAttribute(RelationshipNames.CapabilityFramework)]
         public IList<Framework> Frameworks { get; set; }
