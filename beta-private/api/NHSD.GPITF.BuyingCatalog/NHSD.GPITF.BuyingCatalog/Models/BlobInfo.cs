@@ -16,6 +16,11 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     public bool IsFolder { get; set; }
 
     /// <summary>
+    /// size of file in bytes (zero for a folder)
+    /// </summary>
+    public long Length { get; set; }
+
+    /// <summary>
     /// Externally accessible URL
     /// </summary>
     public string Url { get; set; }

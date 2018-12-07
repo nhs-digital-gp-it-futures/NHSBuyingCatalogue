@@ -244,6 +244,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
           {
             Name = x.Name,
             IsFolder = true,
+            Length = 0,
             Url = new Uri(new Uri(_context.Url), x.ServerRelativeUrl).AbsoluteUri,
             TimeLastModified = x.TimeLastModified
           });
@@ -254,6 +255,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
           {
             Name = x.Name,
             IsFolder = false,
+            Length = x.Length,
             Url = new Uri(new Uri(_context.Url), x.ServerRelativeUrl).AbsoluteUri,
             TimeLastModified = x.TimeLastModified
           });
