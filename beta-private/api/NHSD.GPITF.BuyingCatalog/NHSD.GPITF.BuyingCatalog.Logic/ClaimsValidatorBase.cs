@@ -28,7 +28,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         MustBeValidSolutionId();
         MustBeSameOrganisation();
         MustBePending();
-        ContactMustBeSameOrganisation();
+        MustBeValidOwnerId();
+        OwnerMustBeSameOrganisation();
       });
 
       RuleSet(nameof(IClaimsLogic<T>.Update), () =>
@@ -38,7 +39,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         MustBeSameSolution();
         MustBeSameOrganisation();
         MustBeValidStatusTransition();
-        ContactMustBeSameOrganisation();
+        MustBeValidOwnerId();
+        OwnerMustBeSameOrganisation();
       });
 
       RuleSet(nameof(IClaimsLogic<T>.Delete), () =>
@@ -93,7 +95,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .WithMessage("Cannot transfer claim between solutions");
     }
 
-    public void ContactMustBeSameOrganisation()
+    public void OwnerMustBeSameOrganisation()
     {
       RuleFor(x => x)
         .Must(x =>
@@ -103,6 +105,14 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
           return claimContact?.OrganisationId == orgId;
         })
         .WithMessage("Contact must be from organisation");
+    }
+
+    public void MustBeValidOwnerId()
+    {
+      RuleFor(x => x.OwnerId)
+        .NotNull()
+        .Must(solnId => Guid.TryParse(solnId, out _))
+        .WithMessage("Invalid OwnerId");
     }
   }
 }

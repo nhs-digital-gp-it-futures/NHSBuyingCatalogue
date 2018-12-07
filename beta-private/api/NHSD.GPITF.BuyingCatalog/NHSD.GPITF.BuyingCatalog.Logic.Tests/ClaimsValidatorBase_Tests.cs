@@ -211,7 +211,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var claim = Creator.GetClaimsBase(ownerId: contact.Id);
       _contactsDatastore.Setup(x => x.ById(contact.Id)).Returns(contact);
 
-      validator.ContactMustBeSameOrganisation();
+      validator.OwnerMustBeSameOrganisation();
       var valres = validator.Validate(claim);
 
       valres.Errors.Should().BeEmpty();
@@ -227,11 +227,56 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var claim = Creator.GetClaimsBase();
       _contactsDatastore.Setup(x => x.ById(contact.Id)).Returns(contact);
 
-      validator.ContactMustBeSameOrganisation();
+      validator.OwnerMustBeSameOrganisation();
       var valres = validator.Validate(claim);
 
       valres.Errors.Should()
         .ContainSingle(x => x.ErrorMessage == "Contact must be from organisation")
+        .And
+        .HaveCount(1);
+    }
+
+    [Test]
+    public void MustBeValidOwnerId_Valid_Succeeds()
+    {
+      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var claim = Creator.GetClaimsBase();
+
+      validator.MustBeValidOwnerId();
+      var valres = validator.Validate(claim);
+
+      valres.Errors.Should().BeEmpty();
+    }
+
+    [Test]
+    public void MustBeValidOwnerId_Null_ReturnsError()
+    {
+      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var claim = Creator.GetClaimsBase();
+      claim.OwnerId = null;
+
+      validator.MustBeValidOwnerId();
+      var valres = validator.Validate(claim);
+
+      valres.Errors.Should()
+        .ContainSingle(x => x.ErrorMessage == "Invalid OwnerId")
+        .And
+        .ContainSingle(x => x.ErrorMessage == "'Owner Id' must not be empty.")
+        .And
+        .HaveCount(2);
+    }
+
+    [Test]
+    public void MustBeValidOwnerId_NotGuid_ReturnsError()
+    {
+      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var claim = Creator.GetClaimsBase(ownerId: "some other Id");
+
+      validator.MustBeValidOwnerId();
+      var valres = validator.Validate(claim);
+
+      valres.Errors.Should()
+        .ContainSingle(x => x.ErrorMessage == "Invalid OwnerId")
         .And
         .HaveCount(1);
     }
