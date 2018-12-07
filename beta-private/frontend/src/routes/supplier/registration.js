@@ -69,9 +69,56 @@ function onboardingStatusPage (req, res) {
   }
 
   if (req.solution) {
+    const status = +req.solution.status
+
+    context.stages[1].status = 'Not started'
+    context.stages[1].link = 'Start'
     context.stages[1].url = `../../capabilities/${req.solution.id}`
+
+    context.stages[2].status = 'Not started'
+    context.stages[2].link = 'Start'
     context.stages[2].url = `../../compliance/${req.solution.id}`
+
+    if (req.solution._raw.claimedCapabilityEvidence.length) {
+      context.stages[1].status = 'In progress'
+      context.stages[1].link = 'Edit'
+    }
+
+    if (req.solution._raw.claimedStandardEvidence.length) {
+      context.stages[2].status = 'In progress'
+      context.stages[2].link = 'Edit'
+    }
+
+    if (status === 0) { // draft
+      context.stages[0].status = 'In progress'
+      context.stages[0].link = 'Edit'
+    }
+
+    if (status === 1) { // registered
+      context.stages[0].status = 'Complete'
+      context.stages[0].class = 'complete'
+      context.stages[0].link = 'Edit'
+
+      if ('registered' in req.query) {
+        context.registrationComplete = true
+      }
+    }
+
+    if (status === 2) { // capability assessment
+      context.stages[0].status = 'Complete'
+      context.stages[0].class = 'complete'
+      context.stages[0].link = 'View'
+
+      context.stages[1].status = 'Awaiting outcome'
+      context.stages[1].link = 'View'
+    }
+  } else {
+    context.stages[0].status = 'Not started'
+    context.stages[0].link = 'Start'
   }
+
+  // solution page will be unavailable for the time being
+  context.stages[3].class = 'unavailable'
 
   res.render('supplier/registration/index', context)
 }

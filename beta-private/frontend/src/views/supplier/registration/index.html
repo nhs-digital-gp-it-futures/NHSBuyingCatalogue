@@ -18,18 +18,18 @@
 
 <ol class="onboarding-stages">
   {{#each (tt 'Onboarding.Stages')}}
+  {{#with (lookup ../stages @index)}}
   <li>
-    <h3 class="title">{{Title}}</h3>
-    {{#with (lookup ../stages @index)}}
-      {{#url}}
-      <p class="action">Status: Unknown. <a href="{{.}}">View</a></p>
-      {{/url}}
-    {{/with}}
+    <h3 class="title">{{../Title}}</h3>
+    {{#if url}}
+    <p class="action">Status: {{status}}. <a href="{{url}}">{{link}}</a></p>
+    {{/if}}
     <p class="narrative">
-      <span class="name">{{Name}}.</span>
-      {{Narrative}}
+      <span class="name">{{../Name}}.</span>
+      {{../Narrative}}
     </p>
   </li>
+  {{/with}}
   {{/each}}
 </ol>
 
