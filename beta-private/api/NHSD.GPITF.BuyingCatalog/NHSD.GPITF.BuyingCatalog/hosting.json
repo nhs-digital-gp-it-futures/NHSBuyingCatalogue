@@ -8,5 +8,7 @@
     "Authority": "http://oidc-provider:9000",
     "UserInfo": "http://oidc-provider:9000/me",
     "Audience": "catalogue-private-beta-ci"
-  }
+  },
+
+  "UseCRM": false
 }

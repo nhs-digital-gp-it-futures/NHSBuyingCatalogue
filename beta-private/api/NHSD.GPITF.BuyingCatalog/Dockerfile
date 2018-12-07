@@ -28,7 +28,7 @@ WORKDIR /src/NHSD.GPITF.BuyingCatalog
 RUN dotnet build -c Release -o /app
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.Datastore.Database
-RUN dotnet build -c Release
+RUN dotnet build -c Release -o /app
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.Datastore.Database.Tests
 RUN dotnet build -c Release
@@ -48,14 +48,14 @@ WORKDIR /src/NHSD.GPITF.BuyingCatalog.Logic
 RUN dotnet build -c Release -o /app
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.Logic.Tests
-RUN dotnet build -c Release -o /app
+RUN dotnet build -c Release
 RUN dotnet test -c Release
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.Meta
 RUN dotnet build -c Release -o /app
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.Tests
-RUN dotnet build -c Release -o /app
+RUN dotnet build -c Release
 RUN dotnet test -c Release
 
 WORKDIR /src/Microsoft.SharePoint.Client.NetCore
@@ -65,14 +65,14 @@ WORKDIR /src/NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 RUN dotnet build -c Release -o /app
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.Tests
-RUN dotnet build -c Release -o /app
+RUN dotnet build -c Release
 RUN dotnet test -c Release
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.Search
 RUN dotnet build -c Release -o /app
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.Search.Tests
-RUN dotnet build -c Release -o /app
+RUN dotnet build -c Release
 RUN dotnet test -c Release
 
 FROM build AS publish

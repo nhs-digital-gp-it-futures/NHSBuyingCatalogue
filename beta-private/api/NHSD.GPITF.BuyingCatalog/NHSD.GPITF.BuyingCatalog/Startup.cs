@@ -184,6 +184,18 @@ namespace NHSD.GPITF.BuyingCatalog
       var exeAssyPath = exeAssy.Location;
       var exeAssyDir = Path.GetDirectoryName(exeAssyPath);
       var assyPaths = Directory.EnumerateFiles(exeAssyDir, "NHSD.*.dll");
+
+      var useCRM = bool.Parse(Environment.GetEnvironmentVariable("USE_CRM") ?? Configuration["UseCRM"] ?? false.ToString());
+      if (useCRM)
+      {
+        // IUserInfoResponseDatastore will resolve to UserInfoResponseMemoryDatastore
+        assyPaths = assyPaths.Where(x => !x.Contains("Database"));
+      }
+      else
+      {
+        assyPaths = assyPaths.Where(x => !x.Contains("CRM"));
+      }
+
       var assys = assyPaths.Select(filePath => Assembly.LoadFile(filePath)).ToList();
       assys.Add(exeAssy);
       builder
@@ -292,6 +304,9 @@ namespace NHSD.GPITF.BuyingCatalog
       Console.WriteLine($"    CRM_ACCESSTOKENURI : {Environment.GetEnvironmentVariable("CRM_ACCESSTOKENURI")}");
       Console.WriteLine($"    CRM_CLIENTID : {Environment.GetEnvironmentVariable("CRM_CLIENTID")}");
       Console.WriteLine($"    CRM_CLIENTSECRET : {Environment.GetEnvironmentVariable("CRM_CLIENTSECRET")}");
+
+      Console.WriteLine($"  USE_CRM:");
+      Console.WriteLine($"    USE_CRM : {Environment.GetEnvironmentVariable("USE_CRM")}");
     }
   }
 }
