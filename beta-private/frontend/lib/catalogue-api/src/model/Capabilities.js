@@ -54,6 +54,7 @@
 
 
 
+
   };
 
   /**
@@ -82,6 +83,9 @@
       if (data.hasOwnProperty('url')) {
         obj['url'] = ApiClient.convertToType(data['url'], 'String');
       }
+      if (data.hasOwnProperty('type')) {
+        obj['type'] = ApiClient.convertToType(data['type'], 'String');
+      }
     }
     return obj;
   }
@@ -97,12 +101,12 @@
    */
   exports.prototype['previousId'] = undefined;
   /**
-   * Name of Capability, as displayed to a user
+   * Name of Capability/Standard, as displayed to a user
    * @member {String} name
    */
   exports.prototype['name'] = undefined;
   /**
-   * Description of Capability, as displayed to a user
+   * Description of Capability/Standard, as displayed to a user
    * @member {String} description
    */
   exports.prototype['description'] = undefined;
@@ -111,6 +115,11 @@
    * @member {String} url
    */
   exports.prototype['url'] = undefined;
+  /**
+   * Category of Capability/Standard
+   * @member {String} type
+   */
+  exports.prototype['type'] = undefined;
 
 
 

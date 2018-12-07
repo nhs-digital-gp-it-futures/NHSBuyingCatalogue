@@ -92,6 +92,18 @@
       //expect(instance).to.be();
     });
 
+    it('should have the property hasRequestedLiveDemo (base name: "hasRequestedLiveDemo")', function() {
+      // uncomment below and update the code to test the property hasRequestedLiveDemo
+      //var instance = new CatalogueApi.CapabilitiesImplementedEvidence();
+      //expect(instance).to.be();
+    });
+
+    it('should have the property blobId (base name: "blobId")', function() {
+      // uncomment below and update the code to test the property blobId
+      //var instance = new CatalogueApi.CapabilitiesImplementedEvidence();
+      //expect(instance).to.be();
+    });
+
   });
 
 }));

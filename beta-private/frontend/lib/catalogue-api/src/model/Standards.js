@@ -49,6 +49,7 @@
   var exports = function(id) {
     var _this = this;
 
+
     _this['id'] = id;
 
 
@@ -68,14 +69,14 @@
     if (data) {
       obj = obj || new exports();
 
+      if (data.hasOwnProperty('isOverarching')) {
+        obj['isOverarching'] = ApiClient.convertToType(data['isOverarching'], 'Boolean');
+      }
       if (data.hasOwnProperty('id')) {
         obj['id'] = ApiClient.convertToType(data['id'], 'String');
       }
       if (data.hasOwnProperty('previousId')) {
         obj['previousId'] = ApiClient.convertToType(data['previousId'], 'String');
-      }
-      if (data.hasOwnProperty('isOverarching')) {
-        obj['isOverarching'] = ApiClient.convertToType(data['isOverarching'], 'Boolean');
       }
       if (data.hasOwnProperty('name')) {
         obj['name'] = ApiClient.convertToType(data['name'], 'String');
@@ -86,10 +87,18 @@
       if (data.hasOwnProperty('url')) {
         obj['url'] = ApiClient.convertToType(data['url'], 'String');
       }
+      if (data.hasOwnProperty('type')) {
+        obj['type'] = ApiClient.convertToType(data['type'], 'String');
+      }
     }
     return obj;
   }
 
+  /**
+   * True if this standard applies to all solutions
+   * @member {Boolean} isOverarching
+   */
+  exports.prototype['isOverarching'] = undefined;
   /**
    * Unique identifier of entity
    * @member {String} id
@@ -101,17 +110,12 @@
    */
   exports.prototype['previousId'] = undefined;
   /**
-   * True if this standard applies to all solutions
-   * @member {Boolean} isOverarching
-   */
-  exports.prototype['isOverarching'] = undefined;
-  /**
-   * Name of Standard, as displayed to a user
+   * Name of Capability/Standard, as displayed to a user
    * @member {String} name
    */
   exports.prototype['name'] = undefined;
   /**
-   * Description of Standard, as displayed to a user
+   * Description of Capability/Standard, as displayed to a user
    * @member {String} description
    */
   exports.prototype['description'] = undefined;
@@ -120,6 +124,11 @@
    * @member {String} url
    */
   exports.prototype['url'] = undefined;
+  /**
+   * Category of Capability/Standard
+   * @member {String} type
+   */
+  exports.prototype['type'] = undefined;
 
 
 

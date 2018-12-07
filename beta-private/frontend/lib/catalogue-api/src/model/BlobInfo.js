@@ -51,6 +51,8 @@
 
 
 
+
+
   };
 
   /**
@@ -70,11 +72,17 @@
       if (data.hasOwnProperty('isFolder')) {
         obj['isFolder'] = ApiClient.convertToType(data['isFolder'], 'Boolean');
       }
+      if (data.hasOwnProperty('length')) {
+        obj['length'] = ApiClient.convertToType(data['length'], 'Number');
+      }
       if (data.hasOwnProperty('url')) {
         obj['url'] = ApiClient.convertToType(data['url'], 'String');
       }
       if (data.hasOwnProperty('timeLastModified')) {
         obj['timeLastModified'] = ApiClient.convertToType(data['timeLastModified'], 'Date');
+      }
+      if (data.hasOwnProperty('blobId')) {
+        obj['blobId'] = ApiClient.convertToType(data['blobId'], 'String');
       }
     }
     return obj;
@@ -91,6 +99,11 @@
    */
   exports.prototype['isFolder'] = undefined;
   /**
+   * size of file in bytes (zero for a folder)
+   * @member {Number} length
+   */
+  exports.prototype['length'] = undefined;
+  /**
    * Externally accessible URL
    * @member {String} url
    */
@@ -100,6 +113,11 @@
    * @member {Date} timeLastModified
    */
   exports.prototype['timeLastModified'] = undefined;
+  /**
+   * unique identifier of binary file in blob storage system  (null for a folder)  NOTE:  this may not be a GUID eg it may be a URL  NOTE:  this is a GUID for SharePoint
+   * @member {String} blobId
+   */
+  exports.prototype['blobId'] = undefined;
 
 
 
