@@ -2,6 +2,7 @@
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
@@ -18,6 +19,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using ZNetCS.AspNetCore.Authentication.Basic;
 using ZNetCS.AspNetCore.Authentication.Basic.Events;
@@ -207,6 +209,27 @@ namespace NHSD.GPITF.BuyingCatalog
       {
         app.UseDeveloperExceptionPage();
       }
+
+      app.UseExceptionHandler(options =>
+        {
+          options.Run(async context =>
+          {
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            context.Response.ContentType = "text/html";
+            var ex = context.Features.Get<IExceptionHandlerFeature>();
+            if (ex != null)
+            {
+              var logger = ServiceProvider.GetService<ILogger<Startup>>();
+              var err = $"Error: {ex.Error.Message}{Environment.NewLine}{ex.Error.StackTrace }";
+              logger.LogError(err);
+              if (CurrentEnvironment.IsDevelopment())
+              {
+                await context.Response.WriteAsync(err).ConfigureAwait(false);
+              }
+            }
+          });
+        }
+      );
 
       app.UseAuthentication();
 
