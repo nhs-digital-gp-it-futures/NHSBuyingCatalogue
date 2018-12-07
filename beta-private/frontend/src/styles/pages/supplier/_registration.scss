@@ -68,6 +68,11 @@
       }
     }
   }
+
+  .callout {
+    @extend %callout-with-border;
+    margin-top: 2em;
+  }
 }
 
 #add-contact {

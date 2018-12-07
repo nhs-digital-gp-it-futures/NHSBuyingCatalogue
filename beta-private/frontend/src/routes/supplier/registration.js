@@ -291,6 +291,11 @@ async function capabilitiesPageGet (req, res) {
 async function capabilitiesPagePost (req, res) {
   const context = await capabilitiesPageContext(req)
 
+  // redirect based on action chosen
+  let redirectUrl = (req.body.action && req.body.action.save)
+    ? './'
+    : '../'
+
   // the "selected" property holds the current ID for each claimed capability,
   // or a newly generated ID for an added capability
   context.capabilities.forEach(cap => {
@@ -326,6 +331,13 @@ async function capabilitiesPagePost (req, res) {
       }))
       .value()
 
+    if (req.body.action && req.body.action.continue) {
+      if (+req.solution.status === 0) {
+        req.solution.status = '1'
+        redirectUrl += '?registered'
+      }
+    }
+
     try {
       await dataProvider.updateSolutionForRegistration(req.solution)
     } catch (err) {
@@ -338,11 +350,6 @@ async function capabilitiesPagePost (req, res) {
   if (context.errors) {
     res.render('supplier/registration/2-capabilities', context)
   } else {
-    // redirect based on action chosen
-    const redirectUrl = (req.body.action && req.body.action.exit)
-      ? '../'
-      : './'
-
     res.redirect(redirectUrl)
   }
 }

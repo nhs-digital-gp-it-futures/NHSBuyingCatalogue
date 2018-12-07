@@ -14,6 +14,7 @@
   "Standard": "Standard",
   "Standard_plural": "Standards",
   "Standard_possessive": "Standard's",
+  "Standard_plural_possessive": "Standards'",
   "Associated Standard": "Associated $t(Standard)",
   "Associated Standards": "Associated $t(Standard_plural)",
   "Overarching Standard": "Overarching $t(Standard)",

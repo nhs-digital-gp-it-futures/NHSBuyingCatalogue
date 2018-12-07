@@ -59,12 +59,7 @@
   section p.callout,
   fieldset.callout,
   .standard-submitted {
-    background-color: $color-callout-bg;
-    border: 0;
-    color: $color-callout-fg;
-    margin-top: 0;
-    padding: 1.5em;
-    width: 80%;
+    @extend %callout;
   }
 
   .standard-submitted {
