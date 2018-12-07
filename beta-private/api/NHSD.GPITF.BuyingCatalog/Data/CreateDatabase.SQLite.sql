@@ -94,6 +94,7 @@ CREATE TABLE Capabilities
   Name TEXT NOT NULL,
   Description TEXT,
   URL TEXT,
+  Type TEXT,
   PRIMARY KEY (Id),
   FOREIGN KEY (PreviousId) REFERENCES Capabilities(Id)
 );
@@ -118,6 +119,7 @@ CREATE TABLE Standards
   Name TEXT NOT NULL,
   Description TEXT,
   URL TEXT,
+  Type TEXT,
   PRIMARY KEY (Id),
   FOREIGN KEY (PreviousId) REFERENCES Standards(Id)
 );
