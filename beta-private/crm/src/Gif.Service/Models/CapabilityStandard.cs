@@ -24,13 +24,13 @@ namespace Gif.Service.Models
         [CrmFieldName("_cc_capability_value")]
         [CrmFieldNameDataBind("cc_Capability@odata.bind")]
         [CrmFieldEntityDataBind("cc_capabilities")]
-        public Guid? Capability { get; set; }
+        public Guid? CapabilityId { get; set; }
 
         [DataMember]
         [CrmFieldName("_cc_standard_value")]
         [CrmFieldNameDataBind("cc_Standard@odata.bind")]
         [CrmFieldEntityDataBind("cc_standards")]
-        public Guid? Standard { get; set; }
+        public Guid? StandardId { get; set; }
 
         /// <summary>
         /// True if the Standard does not have to be supported in order to support the Capability

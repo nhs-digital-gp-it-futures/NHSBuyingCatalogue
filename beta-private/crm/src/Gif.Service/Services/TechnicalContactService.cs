@@ -63,7 +63,7 @@ namespace Gif.Service.Services
 
         public void Delete(TechnicalContact techCont)
         {
-            Repository.UpdateField(techCont.EntityName, "statecode", techCont.Id, "1");
+            Repository.Delete(techCont.EntityName, techCont.Id);
         }
 
     }

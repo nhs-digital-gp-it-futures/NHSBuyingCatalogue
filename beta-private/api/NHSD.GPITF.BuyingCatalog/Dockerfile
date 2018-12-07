@@ -10,8 +10,10 @@ COPY NHSD.GPITF.BuyingCatalog.Datastore.Database/NHSD.GPITF.BuyingCatalog.Datast
 COPY NHSD.GPITF.BuyingCatalog.Datastore.Database.Tests/NHSD.GPITF.BuyingCatalog.Datastore.Database.Tests.csproj NHSD.GPITF.BuyingCatalog.Datastore.Database.Tests/
 COPY NHSD.GPITF.BuyingCatalog.Datastore.Database.Importer/NHSD.GPITF.BuyingCatalog.Datastore.Database.Importer.csproj NHSD.GPITF.BuyingCatalog.Datastore.Database.Importer/
 COPY NHSD.GPITF.BuyingCatalog.Datastore.CRM/NHSD.GPITF.BuyingCatalog.Datastore.CRM.csproj NHSD.GPITF.BuyingCatalog.Datastore.CRM/
+COPY NHSD.GPITF.BuyingCatalog.Datastore.CRM.Tests/NHSD.GPITF.BuyingCatalog.Datastore.CRM.Tests.csproj NHSD.GPITF.BuyingCatalog.Datastore.CRM.Tests/
 COPY NHSD.GPITF.BuyingCatalog.Logic/NHSD.GPITF.BuyingCatalog.Logic.csproj NHSD.GPITF.BuyingCatalog.Logic/
 COPY NHSD.GPITF.BuyingCatalog.Logic.Tests/NHSD.GPITF.BuyingCatalog.Logic.Tests.csproj NHSD.GPITF.BuyingCatalog.Logic.Tests/
+COPY NHSD.GPITF.BuyingCatalog.Meta/NHSD.GPITF.BuyingCatalog.Meta.csproj NHSD.GPITF.BuyingCatalog.Meta/
 COPY NHSD.GPITF.BuyingCatalog.Tests/NHSD.GPITF.BuyingCatalog.Tests.csproj NHSD.GPITF.BuyingCatalog.Tests/
 COPY Microsoft.SharePoint.Client.NetCore/Microsoft.SharePoint.Client.NetCore.csproj Microsoft.SharePoint.Client.NetCore/
 COPY NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint/NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.csproj NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint/
@@ -29,24 +31,31 @@ WORKDIR /src/NHSD.GPITF.BuyingCatalog.Datastore.Database
 RUN dotnet build -c Release -o /app
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.Datastore.Database.Tests
-RUN dotnet build -c Release -o /app
+RUN dotnet build -c Release
 RUN dotnet test -c Release
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.Datastore.Database.Importer
-RUN dotnet build -c Release -o /app
+RUN dotnet build -c Release
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.Datastore.CRM
+RUN dotnet build -c Release -o /app
+
+WORKDIR /src/NHSD.GPITF.BuyingCatalog.Datastore.CRM.Tests
 RUN dotnet build -c Release
+RUN dotnet test -c Release
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.Logic
 RUN dotnet build -c Release -o /app
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.Logic.Tests
-RUN dotnet build -c Release -o /app
+RUN dotnet build -c Release
 RUN dotnet test -c Release
 
-WORKDIR /src/NHSD.GPITF.BuyingCatalog.Tests
+WORKDIR /src/NHSD.GPITF.BuyingCatalog.Meta
 RUN dotnet build -c Release -o /app
+
+WORKDIR /src/NHSD.GPITF.BuyingCatalog.Tests
+RUN dotnet build -c Release
 RUN dotnet test -c Release
 
 WORKDIR /src/Microsoft.SharePoint.Client.NetCore
@@ -56,14 +65,14 @@ WORKDIR /src/NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 RUN dotnet build -c Release -o /app
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.Tests
-RUN dotnet build -c Release -o /app
+RUN dotnet build -c Release
 RUN dotnet test -c Release
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.Search
 RUN dotnet build -c Release -o /app
 
 WORKDIR /src/NHSD.GPITF.BuyingCatalog.Search.Tests
-RUN dotnet build -c Release -o /app
+RUN dotnet build -c Release
 RUN dotnet test -c Release
 
 FROM build AS publish

@@ -10,6 +10,7 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
 using Gif.Service.Attributes;
 using Gif.Service.Crm;
 using Gif.Service.Services;
@@ -40,7 +41,14 @@ namespace Gif.Service.Controllers
         {
             try
             {
-                new LinkManagerService(new Repository()).FrameworkSolutionCreate(frameworkId, solutionId);               
+                Guid frameworkIdParsed, solutionIdParsed;
+                Guid.TryParse(frameworkId, out frameworkIdParsed);
+                Guid.TryParse(solutionId, out solutionIdParsed);
+
+                if (solutionIdParsed == Guid.Empty || frameworkIdParsed == Guid.Empty)
+                    throw new CrmApiException("Cannot parse strings into Guids", HttpStatusCode.BadRequest);
+
+                new LinkManagerService(new Repository()).FrameworkSolutionAssociate(frameworkIdParsed, solutionIdParsed);               
             }
             catch (Crm.CrmApiException ex)
             {

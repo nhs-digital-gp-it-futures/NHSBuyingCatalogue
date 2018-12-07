@@ -9,6 +9,7 @@
  */
 
 using Gif.Service.Attributes;
+using Gif.Service.Const;
 using Gif.Service.Crm;
 using Gif.Service.Models;
 using Gif.Service.Services;
@@ -16,10 +17,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Gif.Service.Const;
 
 namespace Gif.Service.Controllers
 {
@@ -30,6 +31,37 @@ namespace Gif.Service.Controllers
     public class CapabilitiesImplementedReviewsApiController : Controller
     {
         /// <summary>
+        /// Get an existing Capabilities Implemented Review for a given Review Id
+        /// </summary>
+
+        /// <param name="id">Review Id</param>
+        /// <response code="200">Success</response>
+        /// <response code="404">Solution not found in CRM</response>
+        [HttpGet]
+        [Route("/api/CapabilitiesImplementedReviews/ById/{id}")]
+        [ValidateModelState]
+        [SwaggerOperation("ApiCapabilitiesImplementedReviewByIdGet")]
+        [SwaggerResponse(statusCode: 200, type: typeof(Solution), description: "Success")]
+        public virtual IActionResult ApiCapabilitiesImplementedReviewByIdGet([FromRoute][Required]string id)
+        {
+            try
+            {
+                var review = new CapabilitiesImplementedReviewsService(new Repository()).ById(id);
+
+                if (review.Id == Guid.Empty)
+                    return StatusCode(404);
+
+                return new ObjectResult(review);
+
+            }
+            catch (Crm.CrmApiException ex)
+            {
+                return StatusCode((int)ex.HttpStatus, ex.Message);
+            }
+
+        }
+
+        /// <summary>
         /// Get all Reviews for a CapabilitiesImplemented  Each list is a distinct &#39;chain&#39; of Review ie original Review with all subsequent Review  The first item in each &#39;chain&#39; is the most current Review.  The last item in each &#39;chain&#39; is the original Review.
         /// </summary>
 
@@ -37,7 +69,7 @@ namespace Gif.Service.Controllers
         /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
         /// <param name="pageSize">number of items per page.  Defaults to 20</param>
         /// <response code="200">Success</response>
-        /// <response code="404">Evidence not found</response>
+        /// <response code="404">EvidenceEntity not found</response>
         [HttpGet]
         [Route("/api/CapabilitiesImplementedReviews/ByEvidence/{evidenceId}")]
         [ValidateModelState]
@@ -45,20 +77,19 @@ namespace Gif.Service.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(PaginatedListIEnumerableCapabilitiesImplementedReviews), description: "Success")]
         public virtual IActionResult ApiCapabilitiesImplementedReviewsByEvidenceByEvidenceIdGet([FromRoute][Required]string evidenceId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
         {
-            IEnumerable<Review> reviews;
+            IEnumerable<IEnumerable<Review>> reviews;
             int totalPages;
 
             try
             {
                 var service = new CapabilitiesImplementedReviewsService(new Repository());
                 reviews = service.ByEvidence(evidenceId);
-                reviews = service.GetPagingValues(pageIndex, pageSize, reviews, out totalPages);    
+                reviews = service.GetPagingValues(pageIndex, pageSize, reviews, out totalPages);
             }
             catch (Crm.CrmApiException ex)
             {
                 return StatusCode((int)ex.HttpStatus, ex.Message);
             }
-
 
             return new ObjectResult(new PaginatedListIEnumerableCapabilitiesImplementedReviews()
             {
@@ -92,7 +123,7 @@ namespace Gif.Service.Controllers
                 return StatusCode((int)ex.HttpStatus, ex.Message);
             }
 
-            return StatusCode(204);
+            return new ObjectResult(review);
         }
     }
 }

@@ -4,10 +4,9 @@
 namespace Gif.Service.Contracts
 {
 #pragma warning disable CS1591
-    public interface ICapabilitiesImplementedEvidenceDatastore : IEvidenceDatastore<Evidence>
+    public interface ICapabilitiesImplementedEvidenceDatastore : IEvidenceDatastore<CapabilityEvidence>
     {
         CapabilityImplemented ByEvidenceId(string id);
-        CapabilityImplemented ByReviewId(string id);
     }
 #pragma warning restore CS1591
 }

@@ -9,15 +9,18 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   public abstract class ClaimsValidatorBase<T> : ValidatorBase<T>, IClaimsValidator<T> where T : ClaimsBase
   {
     protected readonly IClaimsDatastore<T> _claimDatastore;
+    protected readonly IContactsDatastore _contactsDatastore;
     protected readonly ISolutionsDatastore _solutionsDatastore;
 
     public ClaimsValidatorBase(
       IHttpContextAccessor context,
       IClaimsDatastore<T> claimDatastore,
+      IContactsDatastore contactsDatastore,
       ISolutionsDatastore solutionsDatastore) :
       base(context)
     {
       _claimDatastore = claimDatastore;
+      _contactsDatastore = contactsDatastore;
       _solutionsDatastore = solutionsDatastore;
 
       RuleSet(nameof(IClaimsLogic<T>.Create), () =>
@@ -25,6 +28,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         MustBeValidSolutionId();
         MustBeSameOrganisation();
         MustBePending();
+        MustBeValidOwnerId();
+        OwnerMustBeSameOrganisation();
       });
 
       RuleSet(nameof(IClaimsLogic<T>.Update), () =>
@@ -34,6 +39,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         MustBeSameSolution();
         MustBeSameOrganisation();
         MustBeValidStatusTransition();
+        MustBeValidOwnerId();
+        OwnerMustBeSameOrganisation();
       });
 
       RuleSet(nameof(IClaimsLogic<T>.Delete), () =>
@@ -86,6 +93,26 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
           return x.SolutionId == claim?.SolutionId;
         })
         .WithMessage("Cannot transfer claim between solutions");
+    }
+
+    public void OwnerMustBeSameOrganisation()
+    {
+      RuleFor(x => x)
+        .Must(x =>
+        {
+          var orgId = _context.OrganisationId();
+          var claimContact = _contactsDatastore.ById(x.OwnerId);
+          return claimContact?.OrganisationId == orgId;
+        })
+        .WithMessage("Contact must be from organisation");
+    }
+
+    public void MustBeValidOwnerId()
+    {
+      RuleFor(x => x.OwnerId)
+        .NotNull()
+        .Must(solnId => Guid.TryParse(solnId, out _))
+        .WithMessage("Invalid OwnerId");
     }
   }
 }

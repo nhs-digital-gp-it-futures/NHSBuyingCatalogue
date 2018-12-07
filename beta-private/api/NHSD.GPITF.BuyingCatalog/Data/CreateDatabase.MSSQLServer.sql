@@ -51,7 +51,7 @@ DROP TABLE IF EXISTS Log;
 -- NOTE:  maximum text field lengths is 425 characters because 
 --        max index size (on relationship tables) is 1700 bytes (425 = 1700/4)
 
--- Organisations.csv
+-- Organisations.tsv
 CREATE TABLE Organisations
 (
   Id NVARCHAR(36) NOT NULL UNIQUE,
@@ -63,7 +63,7 @@ CREATE TABLE Organisations
   PRIMARY KEY (Id)
 );
 
--- Contacts.csv
+-- Contacts.tsv
 CREATE TABLE Contacts
 (
   Id NVARCHAR(36) NOT NULL UNIQUE,
@@ -76,7 +76,7 @@ CREATE TABLE Contacts
   PRIMARY KEY (Id)
 );
 
--- Solutions.csv
+-- Solutions.tsv
 CREATE TABLE Solutions
 (
   Id NVARCHAR(36) NOT NULL UNIQUE,
@@ -98,7 +98,7 @@ CREATE TABLE Solutions
   PRIMARY KEY (Id)
 );
 
--- TechnicalContacts.csv
+-- TechnicalContacts.tsv
 CREATE TABLE TechnicalContacts
 (
   Id NVARCHAR(36) NOT NULL UNIQUE,
@@ -112,7 +112,7 @@ CREATE TABLE TechnicalContacts
   PRIMARY KEY (Id)
 );
 
--- Capabilities.csv
+-- Capabilities.tsv
 CREATE TABLE Capabilities
 (
   Id NVARCHAR(36) NOT NULL UNIQUE,
@@ -124,7 +124,7 @@ CREATE TABLE Capabilities
   FOREIGN KEY (PreviousId) REFERENCES Capabilities(Id)
 );
 
--- Frameworks.csv
+-- Frameworks.tsv
 CREATE TABLE Frameworks
 (
   Id NVARCHAR(36) NOT NULL UNIQUE,
@@ -135,7 +135,7 @@ CREATE TABLE Frameworks
   FOREIGN KEY (PreviousId) REFERENCES Frameworks(Id)
 );
 
--- Standards.csv
+-- Standards.tsv
 CREATE TABLE Standards
 (
   Id NVARCHAR(36) NOT NULL UNIQUE,
@@ -167,31 +167,35 @@ CREATE TABLE Log
 
 -- create relationship tables
 
--- CapabilitiesImplemented.csv
+-- CapabilitiesImplemented.tsv
 CREATE TABLE CapabilitiesImplemented
 (
   Id NVARCHAR(36) NOT NULL UNIQUE,
   SolutionId NVARCHAR(36) NOT NULL,
   CapabilityId NVARCHAR(36) NOT NULL,
   Status INTEGER DEFAULT 0,
+  OwnerId NVARCHAR(36) NOT NULL,
   FOREIGN KEY (SolutionId) REFERENCES Solutions(Id) ON DELETE CASCADE,
   FOREIGN KEY (CapabilityId) REFERENCES Capabilities(Id) ON DELETE CASCADE,
+  FOREIGN KEY (OwnerId) REFERENCES Contacts(Id) ON DELETE NO ACTION,
   PRIMARY KEY (Id)
 );
 
--- StandardsApplicable.csv
+-- StandardsApplicable.tsv
 CREATE TABLE StandardsApplicable
 (
   Id NVARCHAR(36) NOT NULL UNIQUE,
   SolutionId NVARCHAR(36) NOT NULL,
   StandardId NVARCHAR(36) NOT NULL,
   Status INTEGER DEFAULT 0,
+  OwnerId NVARCHAR(36) NOT NULL,
   FOREIGN KEY (SolutionId) REFERENCES Solutions(Id) ON DELETE CASCADE,
   FOREIGN KEY (StandardId) REFERENCES Standards(Id) ON DELETE CASCADE,
+  FOREIGN KEY (OwnerId) REFERENCES Contacts(Id) ON DELETE NO ACTION,
   PRIMARY KEY (Id)
 );
 
--- CapabilityFramework.csv
+-- CapabilityFramework.tsv
 CREATE TABLE CapabilityFramework
 (
   CapabilityId NVARCHAR(36) NOT NULL,
@@ -201,7 +205,7 @@ CREATE TABLE CapabilityFramework
   PRIMARY KEY (CapabilityId, FrameworkId)
 );
 
--- FrameworkSolution.csv
+-- FrameworkSolution.tsv
 CREATE TABLE FrameworkSolution
 (
   FrameworkId NVARCHAR(36) NOT NULL,
@@ -211,7 +215,7 @@ CREATE TABLE FrameworkSolution
   PRIMARY KEY (FrameworkId, SolutionId)
 );
 
--- FrameworkStandard.csv
+-- FrameworkStandard.tsv
 CREATE TABLE FrameworkStandard
 (
   FrameworkId NVARCHAR(36) NOT NULL,
@@ -221,7 +225,7 @@ CREATE TABLE FrameworkStandard
   PRIMARY KEY (FrameworkId, StandardId)
 );
 
--- CapabilityStandard.csv
+-- CapabilityStandard.tsv
 CREATE TABLE CapabilityStandard
 (
   CapabilityId NVARCHAR(36) NOT NULL,
@@ -232,7 +236,7 @@ CREATE TABLE CapabilityStandard
   PRIMARY KEY (CapabilityId, StandardId)
 );
 
--- CapabilitiesImplementedEvidence.csv
+-- CapabilitiesImplementedEvidence.tsv
 CREATE TABLE CapabilitiesImplementedEvidence
 (
   Id NVARCHAR(36) NOT NULL UNIQUE,
@@ -247,7 +251,7 @@ CREATE TABLE CapabilitiesImplementedEvidence
   PRIMARY KEY (Id)
 );
 
--- CapabilitiesImplementedReviews.csv
+-- CapabilitiesImplementedReviews.tsv
 CREATE TABLE CapabilitiesImplementedReviews
 (
   Id NVARCHAR(36) NOT NULL UNIQUE,
@@ -262,7 +266,7 @@ CREATE TABLE CapabilitiesImplementedReviews
   PRIMARY KEY (Id)
 );
 
--- StandardsApplicableEvidence.csv
+-- StandardsApplicableEvidence.tsv
 CREATE TABLE StandardsApplicableEvidence
 (
   Id NVARCHAR(36) NOT NULL UNIQUE,
@@ -277,7 +281,7 @@ CREATE TABLE StandardsApplicableEvidence
   PRIMARY KEY (Id)
 );
 
--- StandardsApplicableReviews.csv
+-- StandardsApplicableReviews.tsv
 CREATE TABLE StandardsApplicableReviews
 (
   Id NVARCHAR(36) NOT NULL UNIQUE,

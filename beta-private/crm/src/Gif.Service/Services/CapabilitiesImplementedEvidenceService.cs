@@ -3,6 +3,7 @@ using Gif.Service.Attributes;
 using Gif.Service.Contracts;
 using Gif.Service.Crm;
 using Gif.Service.Models;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,31 +15,67 @@ namespace Gif.Service.Services
         {
         }
 
-        public IEnumerable<Evidence> ByClaim(string claimId)
+        public IEnumerable<IEnumerable<CapabilityEvidence>> ByClaim(string claimId)
         {
-            var evidences = new List<Evidence>();
+            var evidenceList = new List<CapabilityEvidence>();
+            var evidenceListList = new List<List<CapabilityEvidence>>();
 
-            var filterAttributes = new List<CrmFilterAttribute>
+            // get all items at the end of the chain i.e. where the previous id is null
+            var filterEvidenceParent = new List<CrmFilterAttribute>
             {
                 new CrmFilterAttribute("ClaimId") {FilterName = "_cc_capabilityimplemented_value", FilterValue = claimId},
+                new CrmFilterAttribute("Previous") {FilterName = "_cc_previousversion_value", FilterValue = "null"},
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new Evidence().GetQueryString(null, filterAttributes, true, true), out Count);
+            var jsonEvidenceParent = Repository.RetrieveMultiple(new CapabilityEvidence().GetQueryString(null, filterEvidenceParent, true, true), out Count);
 
-            foreach (var evidence in appJson.Children())
-            {
-                evidences.Add(new Evidence(evidence));
-            }
+            // iterate through all items that are at the end of the chain
+            foreach (var evidenceChild in jsonEvidenceParent.Children())
+                AddEvidenceChainToList(evidenceChild, evidenceList, evidenceListList);
 
-            var enumEvidences = OrderLinkedEvidences(evidences);
+            Count = evidenceListList.Count;
 
-            Count = evidences.Count;
-
-            return enumEvidences;
+            return evidenceListList;
         }
 
-        public Evidence ById(string id)
+        private void AddEvidenceChainToList(JToken evidence, List<CapabilityEvidence> evidenceList, List<List<CapabilityEvidence>> evidenceListList)
+        {
+            GetEvidencesChain(evidence, evidenceList);
+
+            var enumEvidenceList = CapabilityEvidence.OrderLinkedEvidences(evidenceList);
+            evidenceListList.Add(enumEvidenceList.ToList());
+        }
+
+        private void GetEvidencesChain(JToken evidenceChainEnd, List<CapabilityEvidence> evidenceList)
+        {
+            // store the end of the chain (with no previous id)
+            var evidence = new CapabilityEvidence(evidenceChainEnd);
+            evidenceList.Add(evidence);
+            var id = evidence.Id.ToString();
+
+            // get the chain of evidences linked by previous id
+            while (true)
+            {
+                var filterEvidence = new List<CrmFilterAttribute>
+                {
+                    new CrmFilterAttribute("PreviousEvidence") {FilterName = "_cc_previousversion_value", FilterValue = id},
+                    new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
+                };
+
+                var jsonEvidence = Repository.RetrieveMultiple(new CapabilityEvidence().GetQueryString(null, filterEvidence, true, true), out Count);
+                if (jsonEvidence.HasValues)
+                {
+                    evidence = new CapabilityEvidence(jsonEvidence.FirstOrDefault());
+                    evidenceList.Add(evidence);
+                    id = evidence.Id.ToString();
+                }
+                else
+                    break;
+            }
+        }
+
+        public CapabilityEvidence ById(string id)
         {
             var filterAttributes = new List<CrmFilterAttribute>
             {
@@ -46,17 +83,17 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new Evidence().GetQueryString(null, filterAttributes), out Count);
+            var appJson = Repository.RetrieveMultiple(new CapabilityEvidence().GetQueryString(null, filterAttributes), out Count);
             var evidence = appJson?.FirstOrDefault();
 
-            return new Evidence(evidence);
+            return new CapabilityEvidence(evidence);
         }
 
-        public Evidence Create(Evidence evidence)
+        public CapabilityEvidence Create(CapabilityEvidence evidenceEntity)
         {
-            Repository.CreateEntity(evidence.EntityName, evidence.SerializeToODataPost());
+            Repository.CreateEntity(evidenceEntity.EntityName, evidenceEntity.SerializeToODataPost());
 
-            return evidence;
+            return evidenceEntity;
         }
 
         public CapabilityImplemented ByEvidenceId(string id)
@@ -95,8 +132,8 @@ namespace Gif.Service.Services
             {
                 var reviewObj = new Review(review);
 
-                if (reviewObj.Evidence != null)
-                    capabilityImplemented = ByEvidenceId(new Review(review).Evidence.ToString());
+                if (reviewObj.EvidenceId != null)
+                    capabilityImplemented = ByEvidenceId(new Review(review).EvidenceId.ToString());
             }
 
             return capabilityImplemented;

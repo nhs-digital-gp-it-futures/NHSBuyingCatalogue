@@ -1,9 +1,11 @@
-﻿namespace Gif.Service.Contracts
+﻿using System;
+
+namespace Gif.Service.Contracts
 {
 #pragma warning disable CS1591
     public interface ILinkManagerDatastore
     {
-        void FrameworkSolutionCreate(string frameworkId, string solutionId);
+        void FrameworkSolutionAssociate(Guid frameworkId, Guid solutionId);
     }
 #pragma warning restore CS1591
 }

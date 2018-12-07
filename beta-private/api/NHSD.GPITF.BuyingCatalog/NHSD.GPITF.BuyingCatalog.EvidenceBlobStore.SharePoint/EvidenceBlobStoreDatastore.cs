@@ -5,6 +5,7 @@ using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Security;
@@ -48,6 +49,15 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       SharePoint_OrganisationsRelativeUrl = Environment.GetEnvironmentVariable("SHAREPOINT_ORGANISATIONSRELATIVEURL") ?? config["SharePoint:OrganisationsRelativeUrl"];
       SharePoint_Login = Environment.GetEnvironmentVariable("SHAREPOINT_LOGIN") ?? config["SharePoint:Login"];
       SharePoint_Password = Environment.GetEnvironmentVariable("SHAREPOINT_PASSWORD") ?? config["SharePoint:Password"];
+
+      if (string.IsNullOrWhiteSpace(SharePoint_BaseUrl) ||
+        string.IsNullOrWhiteSpace(SharePoint_OrganisationsRelativeUrl) ||
+        string.IsNullOrWhiteSpace(SharePoint_Login) ||
+        string.IsNullOrWhiteSpace(SharePoint_Password)
+        )
+      {
+        throw new ConfigurationErrorsException("Missing SharePoint configuration - check UserSecrets or environment variables");
+      }
 
       var securePassword = new SecureString();
       foreach (char item in SharePoint_Password)

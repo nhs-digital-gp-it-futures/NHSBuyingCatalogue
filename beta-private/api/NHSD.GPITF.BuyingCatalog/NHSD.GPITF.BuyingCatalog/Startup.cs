@@ -2,6 +2,7 @@
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
@@ -18,6 +19,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using ZNetCS.AspNetCore.Authentication.Basic;
 using ZNetCS.AspNetCore.Authentication.Basic.Events;
@@ -42,11 +44,8 @@ namespace NHSD.GPITF.BuyingCatalog
           .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
           .AddJsonFile("hosting.json", optional: true, reloadOnChange: true)
           .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-          .AddEnvironmentVariables();
-      if (CurrentEnvironment.IsDevelopment())
-      {
-        builder.AddUserSecrets<Program>();
-      }
+          .AddEnvironmentVariables()
+          .AddUserSecrets<Program>();
 
       DumpEnvironment();
 
@@ -185,6 +184,18 @@ namespace NHSD.GPITF.BuyingCatalog
       var exeAssyPath = exeAssy.Location;
       var exeAssyDir = Path.GetDirectoryName(exeAssyPath);
       var assyPaths = Directory.EnumerateFiles(exeAssyDir, "NHSD.*.dll");
+
+      var useCRM = bool.Parse(Environment.GetEnvironmentVariable("USE_CRM") ?? Configuration["UseCRM"] ?? false.ToString());
+      if (useCRM)
+      {
+        // IUserInfoResponseDatastore will resolve to UserInfoResponseMemoryDatastore
+        assyPaths = assyPaths.Where(x => !x.Contains("Database"));
+      }
+      else
+      {
+        assyPaths = assyPaths.Where(x => !x.Contains("CRM"));
+      }
+
       var assys = assyPaths.Select(filePath => Assembly.LoadFile(filePath)).ToList();
       assys.Add(exeAssy);
       builder
@@ -210,6 +221,27 @@ namespace NHSD.GPITF.BuyingCatalog
       {
         app.UseDeveloperExceptionPage();
       }
+
+      app.UseExceptionHandler(options =>
+        {
+          options.Run(async context =>
+          {
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            context.Response.ContentType = "text/html";
+            var ex = context.Features.Get<IExceptionHandlerFeature>();
+            if (ex != null)
+            {
+              var logger = ServiceProvider.GetService<ILogger<Startup>>();
+              var err = $"Error: {ex.Error.Message}{Environment.NewLine}{ex.Error.StackTrace }";
+              logger.LogError(err);
+              if (CurrentEnvironment.IsDevelopment())
+              {
+                await context.Response.WriteAsync(err).ConfigureAwait(false);
+              }
+            }
+          });
+        }
+      );
 
       app.UseAuthentication();
 
@@ -243,23 +275,38 @@ namespace NHSD.GPITF.BuyingCatalog
     private static void DumpEnvironment()
     {
       Console.WriteLine("Environment:");
+      Console.WriteLine($"  CRM:");
+      Console.WriteLine($"    CRM_APIURI          : {Environment.GetEnvironmentVariable("CRM_APIURI")}");
+      Console.WriteLine($"    CRM_ACCESSTOKENURI  : {Environment.GetEnvironmentVariable("CRM_ACCESSTOKENURI")}");
+      Console.WriteLine($"    CRM_CLIENTID        : {Environment.GetEnvironmentVariable("CRM_CLIENTID")}");
+      Console.WriteLine($"    CRM_CLIENTSECRET    : {Environment.GetEnvironmentVariable("CRM_CLIENTSECRET")}");
+
       Console.WriteLine($"  DATASTORE:");
-      Console.WriteLine($"    DATASTORE_CONNECTIONTYPE : {Environment.GetEnvironmentVariable("DATASTORE_CONNECTIONTYPE")}");
-      Console.WriteLine($"    DATASTORE_CONNECTIONSTRING : {Environment.GetEnvironmentVariable("DATASTORE_CONNECTIONSTRING")}");
+      Console.WriteLine($"    DATASTORE_CONNECTIONTYPE    : {Environment.GetEnvironmentVariable("DATASTORE_CONNECTIONTYPE")}");
+      Console.WriteLine($"    DATASTORE_CONNECTIONSTRING  : {Environment.GetEnvironmentVariable("DATASTORE_CONNECTIONSTRING")}");
 
       Console.WriteLine($"  LOG:");
       Console.WriteLine($"    LOG_CONNECTIONSTRING : {Environment.GetEnvironmentVariable("LOG_CONNECTIONSTRING")}");
 
       Console.WriteLine($"  OIDC:");
       Console.WriteLine($"    OIDC_USERINFO_URL : {Environment.GetEnvironmentVariable("OIDC_USERINFO_URL")}");
-      Console.WriteLine($"    OIDC_ISSUER_URL : {Environment.GetEnvironmentVariable("OIDC_ISSUER_URL")}");
-      Console.WriteLine($"    OIDC_AUDIENCE : {Environment.GetEnvironmentVariable("OIDC_AUDIENCE")}");
+      Console.WriteLine($"    OIDC_ISSUER_URL   : {Environment.GetEnvironmentVariable("OIDC_ISSUER_URL")}");
+      Console.WriteLine($"    OIDC_AUDIENCE     : {Environment.GetEnvironmentVariable("OIDC_AUDIENCE")}");
 
       Console.WriteLine($"  SHAREPOINT:");
-      Console.WriteLine($"    SHAREPOINT_BASEURL : {Environment.GetEnvironmentVariable("SHAREPOINT_BASEURL")}");
+      Console.WriteLine($"    SHAREPOINT_BASEURL                  : {Environment.GetEnvironmentVariable("SHAREPOINT_BASEURL")}");
       Console.WriteLine($"    SHAREPOINT_ORGANISATIONSRELATIVEURL : {Environment.GetEnvironmentVariable("SHAREPOINT_ORGANISATIONSRELATIVEURL")}");
-      Console.WriteLine($"    SHAREPOINT_LOGIN : {Environment.GetEnvironmentVariable("SHAREPOINT_LOGIN")}");
-      Console.WriteLine($"    SHAREPOINT_PASSWORD : {Environment.GetEnvironmentVariable("SHAREPOINT_PASSWORD")}");
+      Console.WriteLine($"    SHAREPOINT_LOGIN                    : {Environment.GetEnvironmentVariable("SHAREPOINT_LOGIN")}");
+      Console.WriteLine($"    SHAREPOINT_PASSWORD                 : {Environment.GetEnvironmentVariable("SHAREPOINT_PASSWORD")}");
+
+      Console.WriteLine($"  CRM:");
+      Console.WriteLine($"    CRM_APIURI : {Environment.GetEnvironmentVariable("CRM_APIURI")}");
+      Console.WriteLine($"    CRM_ACCESSTOKENURI : {Environment.GetEnvironmentVariable("CRM_ACCESSTOKENURI")}");
+      Console.WriteLine($"    CRM_CLIENTID : {Environment.GetEnvironmentVariable("CRM_CLIENTID")}");
+      Console.WriteLine($"    CRM_CLIENTSECRET : {Environment.GetEnvironmentVariable("CRM_CLIENTSECRET")}");
+
+      Console.WriteLine($"  USE_CRM:");
+      Console.WriteLine($"    USE_CRM : {Environment.GetEnvironmentVariable("USE_CRM")}");
     }
   }
 }

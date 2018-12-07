@@ -120,7 +120,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Importer
       var tr = File.OpenText(Path.Combine(_dataDirectory, dataFileName));
       var config = new Configuration
       {
-        HasHeaderRecord = false,
+        HasHeaderRecord = true,
         Delimiter = "\t"
       };
       foreach (var classMap in GetClassMapTypes())

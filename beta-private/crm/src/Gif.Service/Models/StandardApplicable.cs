@@ -1,4 +1,5 @@
 ﻿using Gif.Service.Attributes;
+using Gif.Service.Enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Runtime.Serialization;
@@ -40,13 +41,17 @@ namespace Gif.Service.Models
         [CrmFieldName("_cc_solution_value")]
         [CrmFieldNameDataBind("cc_Solution@odata.bind")]
         [CrmFieldEntityDataBind("cc_solutions")]
-        public Guid? Solution { get; set; }
+        public Guid? SolutionId { get; set; }
 
         [DataMember]
         [CrmFieldName("_cc_standard_value")]
         [CrmFieldNameDataBind("cc_Standard@odata.bind")]
         [CrmFieldEntityDataBind("cc_standards")]
-        public Guid? Standard { get; set; }
+        public Guid? StandardId { get; set; }
+
+        [DataMember]
+        [CrmFieldName("statuscode")]
+        public StandardApplicableStatusEnum Status { get; set; }
 
         public StandardApplicable() { }
 

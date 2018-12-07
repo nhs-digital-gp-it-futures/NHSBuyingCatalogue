@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
+using System;
 using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
@@ -38,6 +39,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
       var email = Context.Email();
       review.CreatedById = _contacts.ByEmail(email).Id;
+      review.CreatedOn = DateTime.UtcNow;
       return _datastore.Create(review);
     }
   }

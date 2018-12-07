@@ -2,6 +2,7 @@
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
@@ -22,17 +23,17 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     public IEnumerable<Frameworks> ByCapability(string capabilityId)
     {
-      return _datastore.ByCapability(capabilityId);
+      return _filter.Filter(_datastore.ByCapability(capabilityId));
     }
 
     public IEnumerable<Frameworks> ByStandard(string standardId)
     {
-      return _datastore.ByStandard(standardId);
+      return _filter.Filter(_datastore.ByStandard(standardId));
     }
 
     public Frameworks ById(string id)
     {
-      return _datastore.ById(id);
+      return _filter.Filter(new[] { _datastore.ById(id) }).SingleOrDefault();
     }
 
     public IEnumerable<Frameworks> BySolution(string solutionId)
@@ -42,7 +43,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     public IEnumerable<Frameworks> GetAll()
     {
-      return _datastore.GetAll();
+      return _filter.Filter(_datastore.GetAll());
     }
   }
 }

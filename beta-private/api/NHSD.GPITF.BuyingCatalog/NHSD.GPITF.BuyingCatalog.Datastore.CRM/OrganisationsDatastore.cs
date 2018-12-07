@@ -2,7 +2,6 @@
 using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using System;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
@@ -16,14 +15,28 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
     }
 
+    private string ResourceBase { get; } = "/Organisations";
+
     public Organisations ByContact(string contactId)
     {
-      throw new NotImplementedException();
+      return GetInternal(() =>
+      {
+        var request = GetRequest($"{ResourceBase}/ByContact/{contactId}");
+        var retval = GetResponse<Organisations>(request);
+
+        return retval;
+      });
     }
 
-    public Organisations ById(string organisationId)
+    public Organisations ById(string id)
     {
-      throw new NotImplementedException();
+      return GetInternal(() =>
+      {
+        var request = GetRequest($"{ResourceBase}/ById/{id}");
+        var retval = GetResponse<Organisations>(request);
+
+        return retval;
+      });
     }
   }
 }

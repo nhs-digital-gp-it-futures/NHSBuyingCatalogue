@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Moq;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
+using NHSD.GPITF.BuyingCatalog.Tests;
 using NUnit.Framework;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
@@ -12,6 +13,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
   {
     private Mock<IHttpContextAccessor> _context;
     private Mock<ICapabilitiesImplementedDatastore> _claimDatastore;
+    private Mock<IContactsDatastore> _contactsDatastore;
     private Mock<ISolutionsDatastore> _solutionsDatastore;
 
     [SetUp]
@@ -19,20 +21,21 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       _context = new Mock<IHttpContextAccessor>();
       _claimDatastore = new Mock<ICapabilitiesImplementedDatastore>();
+      _contactsDatastore = new Mock<IContactsDatastore>();
       _solutionsDatastore = new Mock<ISolutionsDatastore>();
     }
 
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object));
+      Assert.DoesNotThrow(() => new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object));
     }
 
     [TestCase(Roles.Supplier)]
     public void MustBePending_Draft_Succeeds(string role)
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
-      var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
+      var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetCapabilitiesImplemented(status: CapabilitiesImplementedStatus.Draft);
 
       validator.MustBePending();
@@ -46,7 +49,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void MustBePending_Draft_ReturnsError(string role)
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
-      var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
+      var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetCapabilitiesImplemented(status: CapabilitiesImplementedStatus.Draft);
 
       validator.MustBePending();
@@ -75,7 +78,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         CapabilitiesImplementedStatus status)
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
-      var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
+      var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetCapabilitiesImplemented(status: status);
 
       validator.MustBePending();
@@ -96,7 +99,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void MustBeValidStatusTransition_Valid_Succeeds(CapabilitiesImplementedStatus oldStatus, CapabilitiesImplementedStatus newStatus, string role)
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
-      var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
+      var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var oldClaim = Creator.GetCapabilitiesImplemented(status: oldStatus);
       var newClaim = Creator.GetCapabilitiesImplemented(status: newStatus);
       _claimDatastore.Setup(x => x.ById(newClaim.Id)).Returns(oldClaim);
@@ -151,7 +154,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void MustBeValidStatusTransition_Invalid_ReturnsError(CapabilitiesImplementedStatus oldStatus, CapabilitiesImplementedStatus newStatus, string role)
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
-      var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
+      var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var oldClaim = Creator.GetCapabilitiesImplemented(status: oldStatus);
       var newClaim = Creator.GetCapabilitiesImplemented(status: newStatus);
       _claimDatastore.Setup(x => x.ById(newClaim.Id)).Returns(oldClaim);
@@ -185,7 +188,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
           string role)
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
-      var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _solutionsDatastore.Object);
+      var validator = new CapabilitiesImplementedValidator(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var oldClaim = Creator.GetCapabilitiesImplemented(status: oldStatus);
       var newClaim = Creator.GetCapabilitiesImplemented(status: newStatus);
       _claimDatastore.Setup(x => x.ById(newClaim.Id)).Returns(oldClaim);

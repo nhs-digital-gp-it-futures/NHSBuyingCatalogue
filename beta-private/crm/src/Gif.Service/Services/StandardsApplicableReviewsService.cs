@@ -3,43 +3,91 @@ using Gif.Service.Attributes;
 using Gif.Service.Contracts;
 using Gif.Service.Crm;
 using Gif.Service.Models;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Gif.Service.Services
 {
-    public class StandardsApplicableReviewsService : ServiceBase, ICapabilitiesImplementedReviewsDatastore
+    public class StandardsApplicableReviewsService : ServiceBase, IStandardsApplicableReviewsDatastore
     {
         public StandardsApplicableReviewsService(IRepository repository) : base(repository)
         {
         }
 
-        public IEnumerable<Review> ByEvidence(string evidenceId)
+        public IEnumerable<IEnumerable<Review>> ByEvidence(string evidenceId)
         {
-            var reviews = new List<Review>();
+            var reviewList = new List<Review>();
+            var reviewsListList = new List<List<Review>>();
 
-            var filterAttributes = new List<CrmFilterAttribute>
+            // get all items at the end of the chain i.e. where the previous id is null
+            var filterReviewParent = new List<CrmFilterAttribute>
             {
-                new CrmFilterAttribute("Evidence") {FilterName = "_cc_evidence_value", FilterValue = evidenceId},
+                new CrmFilterAttribute("EvidenceEntity") {FilterName = "_cc_evidence_value", FilterValue = evidenceId},
+                new CrmFilterAttribute("Previous") {FilterName = "_cc_previousversion_value", FilterValue = "null"},
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterAttributes, true, true), out Count);
+            var jsonReviewParent = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterReviewParent, true, true), out Count);
 
-            foreach (var review in appJson.Children())
+            // iterate through all items that are at the end of the chain
+            foreach (var reviewChild in jsonReviewParent.Children())
+                AddReviewChainToList(reviewChild, reviewList, reviewsListList, evidenceId);
+
+            Count = reviewsListList.Count;
+
+            return reviewsListList;
+        }
+
+        private void AddReviewChainToList(JToken review, List<Review> reviewList, List<List<Review>> reviewsListList, string evidenceId)
+        {
+            GetReviewsChain(review, reviewList, evidenceId);
+
+            var enumReviewList = Review.OrderLinkedReviews(reviewList);
+            reviewsListList.Add(enumReviewList.ToList());
+        }
+
+        private void GetReviewsChain(JToken reviewChainEnd, List<Review> reviewList, string evidenceId)
+        {
+            // store the end of the chain (with no previous id)
+            var review = new Review(reviewChainEnd);
+            reviewList.Add(review);
+            var id = review.Id.ToString();
+
+            // get the chain of reviews linked by previous id
+            while (true)
             {
-                reviews.Add(new Review(review));
+                var filterReview = new List<CrmFilterAttribute>
+                {
+                    new CrmFilterAttribute("EvidenceEntity") {FilterName = "_cc_evidence_value", FilterValue = evidenceId},
+                    new CrmFilterAttribute("EvidenceEntity") {FilterName = "_cc_previousversion_value", FilterValue = id},
+                    new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
+                };
+
+                var jsonReview = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterReview, true, true), out Count);
+                if (jsonReview.HasValues)
+                {
+                    review = new Review(jsonReview.FirstOrDefault());
+                    reviewList.Add(review);
+                    id = review.Id.ToString();
+                }
+                else
+                    break;
             }
-
-            var enumReviews = OrderLinkedReviews(reviews);
-
-            Count = reviews.Count;
-
-            return enumReviews;
         }
 
         public Review ById(string id)
         {
-            throw new System.NotImplementedException();
+            var filterAttributes = new List<CrmFilterAttribute>
+            {
+                new CrmFilterAttribute("EvidenceId") {FilterName = "cc_reviewid", FilterValue = id},
+                new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
+            };
+
+            var appJson = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterAttributes), out Count);
+            var review = appJson?.FirstOrDefault();
+
+            return new Review(review);
         }
 
         public Review Create(Review review)
@@ -51,8 +99,9 @@ namespace Gif.Service.Services
 
         public void Delete(Review review)
         {
-            throw new System.NotImplementedException();
+            Repository.Delete(review.EntityName, review.Id);
         }
+
     }
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

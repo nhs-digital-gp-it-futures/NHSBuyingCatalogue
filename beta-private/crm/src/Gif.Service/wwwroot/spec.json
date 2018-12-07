@@ -408,20 +408,19 @@
         } ]
       }
     },
-    "/api/CapabilitiesImplementedEvidence/ById/{id}" : {
+	"/api/CapabilitiesImplementedEvidence/ById/{id}" : {
       "get" : {
         "tags" : [ "CapabilitiesImplementedEvidence" ],
-        "summary" : "Returns the capability implemented record by given evidence id",
-        "operationId" : "ApiCapabilitiesImplementedEvidenceByIdGet",
+        "summary" : "Get a CapabilityImplemented record by evidence Id",
         "consumes" : [ ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
-          "name" : "id",
+          "name" : "evidenceId",
           "in" : "path",
-          "description" : "CRM identifier of evidence id",
+          "description" : "CRM identifier of evidence",
           "required" : true,
           "type" : "string"
-        }],
+        } ],
         "responses" : {
           "200" : {
             "description" : "Success",
@@ -430,7 +429,7 @@
             }
           },
           "404" : {
-            "description" : "Evidence not found"
+            "description" : "evidence not found"
           }
         },
         "security" : [ {
@@ -514,17 +513,16 @@
         } ]
       }
     },
-	"/api/CapabilitiesImplementedReview/ById/{id}" : {
+	"/api/CapabilitiesImplementedReviews/ById/{reviewId}" : {
       "get" : {
         "tags" : [ "CapabilitiesImplementedReviews" ],
-        "summary" : "Get a Capabilities Implemented record by the given review id.",
-        "operationId" : "ApiCapabilitiesImplementedByReviewIdGet",
+        "summary" : "Get the CapabilityImplemented record for a given review id.",
         "consumes" : [ ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
-          "name" : "id",
+          "name" : "reviewId",
           "in" : "path",
-          "description" : "CRM identifier of the review.",
+          "description" : "CRM identifier of Review record",
           "required" : true,
           "type" : "string"
         }],
@@ -532,11 +530,11 @@
           "200" : {
             "description" : "Success",
             "schema" : {
-              "$ref" : "#/definitions/CapabilitiesImplementedReviews"
+              "$ref" : "#/definitions/CapabilitiesImplemented"
             }
           },
           "404" : {
-            "description" : "Evidence not found"
+            "description" : "Review not found"
           }
         },
         "security" : [ {
@@ -1634,29 +1632,28 @@
         } ]
       }
     },
-	"/api/StandardsApplicableEvidence/ById/{id}" : {
+	"/api/StandardsApplicableEvidence/ById/{Id}" : {
       "get" : {
         "tags" : [ "StandardsApplicableEvidence" ],
-        "summary" : "Retrieve StandardApplicable record for a given evidence id.",
-        "operationId" : "ApiStandardsApplicableEvidenceByIdGet",
+        "summary" : "Get the standard applicable record by evidence.",
         "consumes" : [ ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "CRM identifier of evidence",
+          "description" : "CRM identifier of Evidence",
           "required" : true,
           "type" : "string"
-        }],
+        } ],
         "responses" : {
           "200" : {
             "description" : "Success",
             "schema" : {
-              "$ref" : "#/definitions/StandardsApplicable"
+              "$ref" : "#/definitions/StandardsApplicableEvidence"
             }
           },
           "404" : {
-            "description" : "Evidence not found in CRM"
+            "description" : "Evidence not found"
           }
         },
         "security" : [ {
@@ -1740,15 +1737,15 @@
         } ]
       }
     },
-	"/api/StandardsApplicableReview/ById/{id}" : {
+	"/api/StandardsApplicableReviews/ById/{reviewId}" : {
       "get" : {
         "tags" : [ "StandardsApplicableReviews" ],
-        "summary" : "Retrieve StandardApplicable record for a given review id.",
+        "summary" : "Retrieve StandardsApplicable record for a given review id.",
         "operationId" : "ApiStandardsApplicableByReviewIdGet",
         "consumes" : [ ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
-          "name" : "id",
+          "name" : "reviewId",
           "in" : "path",
           "description" : "CRM identifier of review",
           "required" : true,
@@ -2596,6 +2593,10 @@
         },
         "primaryRoleId" : {
           "description" : "Primary ODS role code for company\r\nSuppliers have a primary role of \"RO92\"",
+          "type" : "string"
+        },
+        "status" : {
+          "description" : "Operational status of company\r\nTypically:  \"Active\", \"Inactive\"",
           "type" : "string"
         },
         "description" : {

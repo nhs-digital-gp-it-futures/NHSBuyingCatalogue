@@ -1,5 +1,6 @@
 .read Preimport.SQLite.sql
 .mode csv
+.separator "\t"
 .import Organisations.tsv Organisations
 .import Contacts.tsv Contacts
 .import Solutions.tsv Solutions

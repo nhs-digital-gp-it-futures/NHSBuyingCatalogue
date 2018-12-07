@@ -16,16 +16,9 @@ namespace Gif.Service.Services
         {
         }
 
-        public void FrameworkSolutionCreate(string frameworkId, string solutionId)
+        public void FrameworkSolutionAssociate(Guid frameworkId, Guid solutionId)
         {
-            Guid frameworkIdParsed, solutionIdParsed;
-            Guid.TryParse(frameworkId , out frameworkIdParsed);
-            Guid.TryParse(solutionId, out solutionIdParsed);
-
-            if (solutionIdParsed == Guid.Empty || frameworkIdParsed == Guid.Empty)
-                throw new CrmApiException("Cannot parse strings into Guids", HttpStatusCode.BadRequest);
-
-            Repository.Associate(frameworkIdParsed, "cc_frameworks", solutionIdParsed, "cc_solutions", RelationshipNames.SolutionFramework);
+            Repository.Associate(frameworkId, "cc_frameworks", solutionId, "cc_solutions", RelationshipNames.SolutionFramework);
         }
     }
 }
