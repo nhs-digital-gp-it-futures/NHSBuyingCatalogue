@@ -263,7 +263,8 @@ async function capabilitiesPagePost (req, res) {
       .map(std => ({
         standardId: std.id,
         status: '0',
-        solutionId: req.solution.id
+        solutionId: req.solution.id,
+        ownerId: null
       }))
       .value()
 
