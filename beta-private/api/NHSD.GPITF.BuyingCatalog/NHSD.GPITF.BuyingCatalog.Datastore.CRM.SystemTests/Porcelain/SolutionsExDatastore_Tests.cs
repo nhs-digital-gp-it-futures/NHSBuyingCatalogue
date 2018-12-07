@@ -192,8 +192,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedCapability_Add_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var cap = Retriever.GetAllCapabilities(_policy).First();
-      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedCapability();
       _solnEx.ClaimedCapability.Add(claim);
 
@@ -209,8 +210,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedCapability_Remove_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var cap = Retriever.GetAllCapabilities(_policy).First();
-      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedCapability();
       _solnEx.ClaimedCapability.Add(claim);
 
@@ -229,8 +231,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedStandard_Add_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var std = Retriever.GetAllStandards(_policy).First();
-      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedStandard();
       _solnEx.ClaimedStandard.Add(claim);
 
@@ -246,8 +249,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedStandard_Remove_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var std = Retriever.GetAllStandards(_policy).First();
-      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedStandard();
       _solnEx.ClaimedStandard.Add(claim);
 
@@ -266,8 +270,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedCapabilityEvidence_Add_NoChain_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var cap = Retriever.GetAllCapabilities(_policy).First();
-      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedCapability();
       _solnEx.ClaimedCapability.Add(claim);
 
@@ -291,8 +296,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedCapabilityEvidence_Add_Chain_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var cap = Retriever.GetAllCapabilities(_policy).First();
-      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedCapability();
       _solnEx.ClaimedCapability.Add(claim);
 
@@ -318,8 +324,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedCapabilityEvidence_Add_EndChain_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var cap = Retriever.GetAllCapabilities(_policy).First();
-      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedCapability();
       _solnEx.ClaimedCapability.Add(claim);
 
@@ -344,8 +351,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedCapabilityEvidence_Remove_NoChain_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var cap = Retriever.GetAllCapabilities(_policy).First();
-      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedCapability();
       _solnEx.ClaimedCapability.Add(claim);
 
@@ -365,8 +373,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedCapabilityEvidence_Remove_Chain_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var cap = Retriever.GetAllCapabilities(_policy).First();
-      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedCapability();
       _solnEx.ClaimedCapability.Add(claim);
 
@@ -388,8 +397,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedCapabilityEvidence_Remove_EndChain_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var cap = Retriever.GetAllCapabilities(_policy).First();
-      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedCapability();
       _solnEx.ClaimedCapability.Add(claim);
 
@@ -417,8 +427,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedStandardEvidence_Add_NoChain_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var std = Retriever.GetAllStandards(_policy).First();
-      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedStandard();
       _solnEx.ClaimedStandard.Add(claim);
 
@@ -441,8 +452,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedStandardEvidence_Add_Chain_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var std = Retriever.GetAllStandards(_policy).First();
-      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedStandard();
       _solnEx.ClaimedStandard.Add(claim);
 
@@ -467,8 +479,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedStandardEvidence_Add_EndChain_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var std = Retriever.GetAllStandards(_policy).First();
-      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedStandard();
       _solnEx.ClaimedStandard.Add(claim);
 
@@ -493,8 +506,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedStandardEvidence_Remove_NoChain_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var std = Retriever.GetAllStandards(_policy).First();
-      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedStandard();
       _solnEx.ClaimedStandard.Add(claim);
 
@@ -514,8 +528,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedStandardEvidence_Remove_Chain_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var std = Retriever.GetAllStandards(_policy).First();
-      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedStandard();
       _solnEx.ClaimedStandard.Add(claim);
 
@@ -537,8 +552,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedStandardEvidence_Remove_EndChain_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var std = Retriever.GetAllStandards(_policy).First();
-      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedStandard();
       _solnEx.ClaimedStandard.Add(claim);
 
@@ -566,8 +582,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedCapabilityReview_Add_NoChain_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var cap = Retriever.GetAllCapabilities(_policy).First();
-      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedCapability();
       _solnEx.ClaimedCapability.Add(claim);
 
@@ -592,8 +609,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedCapabilityReview_Add_Chain_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var cap = Retriever.GetAllCapabilities(_policy).First();
-      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedCapability();
       _solnEx.ClaimedCapability.Add(claim);
 
@@ -620,8 +638,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedCapabilityReview_Add_EndChain_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var cap = Retriever.GetAllCapabilities(_policy).First();
-      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedCapability();
       _solnEx.ClaimedCapability.Add(claim);
 
@@ -648,8 +667,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedCapabilityReview_Remove_NoChain_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var cap = Retriever.GetAllCapabilities(_policy).First();
-      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedCapability();
       _solnEx.ClaimedCapability.Add(claim);
 
@@ -671,8 +691,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedCapabilityReview_Remove_Chain_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var cap = Retriever.GetAllCapabilities(_policy).First();
-      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedCapability();
       _solnEx.ClaimedCapability.Add(claim);
 
@@ -696,8 +717,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedCapabilityReview_Remove_EndChain_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var cap = Retriever.GetAllCapabilities(_policy).First();
-      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetCapabilitiesImplemented(claimId: cap.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedCapability();
       _solnEx.ClaimedCapability.Add(claim);
 
@@ -727,8 +749,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedStandardReview_Add_NoChain_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var std = Retriever.GetAllStandards(_policy).First();
-      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedStandard();
       _solnEx.ClaimedStandard.Add(claim);
 
@@ -753,8 +776,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedStandardReview_Add_Chain_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var std = Retriever.GetAllStandards(_policy).First();
-      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedStandard();
       _solnEx.ClaimedStandard.Add(claim);
 
@@ -781,8 +805,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedStandardReview_Add_EndChain_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var std = Retriever.GetAllStandards(_policy).First();
-      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedStandard();
       _solnEx.ClaimedStandard.Add(claim);
 
@@ -809,8 +834,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedStandardReview_Remove_NoChain_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var std = Retriever.GetAllStandards(_policy).First();
-      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedStandard();
       _solnEx.ClaimedStandard.Add(claim);
 
@@ -832,8 +858,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedStandardReview_Remove_Chain_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var std = Retriever.GetAllStandards(_policy).First();
-      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedStandard();
       _solnEx.ClaimedStandard.Add(claim);
 
@@ -857,8 +884,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [Test]
     public void Update_ClaimedStandardReview_Remove_EndChain_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var std = Retriever.GetAllStandards(_policy).First();
-      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id);
+      var claim = Creator.GetStandardsApplicable(claimId: std.Id, solnId: _solnEx.Solution.Id, ownerId: contact.Id);
       ClearClaimedStandard();
       _solnEx.ClaimedStandard.Add(claim);
 

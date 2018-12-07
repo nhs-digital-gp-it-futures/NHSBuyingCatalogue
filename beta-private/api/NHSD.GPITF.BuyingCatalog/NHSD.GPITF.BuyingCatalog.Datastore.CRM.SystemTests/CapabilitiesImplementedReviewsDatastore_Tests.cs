@@ -30,7 +30,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var evidenceDatastore = new CapabilitiesImplementedEvidenceDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<CapabilitiesImplementedEvidenceDatastore>>().Object, _policy);
       var datastore = new CapabilitiesImplementedReviewsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
-      var newClaim = Creator.GetCapabilitiesImplemented(solnId: soln.Id, claimId: cap.Id);
+      var newClaim = Creator.GetCapabilitiesImplemented(solnId: soln.Id, claimId: cap.Id, ownerId: contact.Id);
       var createdClaim = claimDatastore.Create(newClaim);
       CapabilitiesImplementedReviews createdReview = null;
 

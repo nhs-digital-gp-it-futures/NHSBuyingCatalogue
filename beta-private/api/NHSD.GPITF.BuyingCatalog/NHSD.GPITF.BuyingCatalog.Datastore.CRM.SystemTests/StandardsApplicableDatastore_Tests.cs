@@ -34,12 +34,13 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void CRUD_Succeeds()
     {
+      var contact = Retriever.GetAllContacts(_policy).First();
       var soln = Retriever.GetAllSolutions(_policy).First();
       var std = Retriever.GetAllStandards(_policy).First();
       var datastore = new StandardsApplicableDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
 
       // create
-      var newEnt = Creator.GetStandardsApplicable(solnId:soln.Id, claimId:std.Id);
+      var newEnt = Creator.GetStandardsApplicable(solnId:soln.Id, claimId:std.Id, ownerId: contact.Id);
       var createdEnt = datastore.Create(newEnt);
 
       try
