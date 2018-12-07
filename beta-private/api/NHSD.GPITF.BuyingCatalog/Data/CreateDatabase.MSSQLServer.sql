@@ -117,9 +117,10 @@ CREATE TABLE Capabilities
 (
   Id NVARCHAR(36) NOT NULL UNIQUE,
   PreviousId NVARCHAR(36),
-  Name TEXT NOT NULL,
+  Name NVARCHAR(MAX) NOT NULL,
   Description NVARCHAR(MAX),
   URL NVARCHAR(MAX),
+  Type NVARCHAR(MAX),
   PRIMARY KEY (Id),
   FOREIGN KEY (PreviousId) REFERENCES Capabilities(Id)
 );
@@ -144,6 +145,7 @@ CREATE TABLE Standards
   Name NVARCHAR(MAX) NOT NULL,
   Description NVARCHAR(MAX),
   URL NVARCHAR(MAX),
+  Type NVARCHAR(MAX),
   PRIMARY KEY (Id),
   FOREIGN KEY (PreviousId) REFERENCES Standards(Id)
 );

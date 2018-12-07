@@ -1,4 +1,5 @@
 using Dapper.Contrib.Extensions;
+using NHSD.GPITF.BuyingCatalog.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 namespace NHSD.GPITF.BuyingCatalog.Models
@@ -13,33 +14,7 @@ namespace NHSD.GPITF.BuyingCatalog.Models
   /// Generally, only interested in current ‘capability’
   /// </summary>
   [Table(nameof(Capabilities))]
-  public sealed class Capabilities
+  public sealed class Capabilities : Quality, IHasPreviousId
   {
-    /// <summary>
-    /// Unique identifier of entity
-    /// </summary>
-    [Required]
-    [ExplicitKey]
-    public string Id { get; set; }
-
-    /// <summary>
-    /// Unique identifier of previous version of entity
-    /// </summary>
-    public string PreviousId { get; set; }
-
-    /// <summary>
-    /// Name of Capability, as displayed to a user
-    /// </summary>
-    public string Name { get; set; }
-
-    /// <summary>
-    /// Description of Capability, as displayed to a user
-    /// </summary>
-    public string Description { get; set; }
-
-    /// <summary>
-    /// URL with further information
-    /// </summary>
-    public string URL { get; set; }
   }
 }
