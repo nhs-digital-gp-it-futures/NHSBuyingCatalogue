@@ -46,6 +46,12 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     /// Serialised evidence data
     /// </summary>
     public string Evidence { get; set; } = string.Empty;
+
+    /// <summary>
+    /// true if supplier has requested to do a 'live demo'
+    /// instead of submitting a file
+    /// </summary>
+    public bool HasRequestedLiveDemo { get; set; }
   }
 #pragma warning restore CS1591
 }
