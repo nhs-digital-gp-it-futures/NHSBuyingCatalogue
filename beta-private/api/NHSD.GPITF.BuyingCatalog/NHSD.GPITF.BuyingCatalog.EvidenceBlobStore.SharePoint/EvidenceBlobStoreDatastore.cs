@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.SharePoint.Client.NetCore;
 using Microsoft.SharePoint.Client.NetCore.Runtime;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
@@ -181,8 +182,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
               uploadFile = uploadFile.FinishUpload(uploadId, fileoffset, strm);
               _context.ExecuteQuery();
 
-              // return the url for the uploaded file
-              return absUri.AbsoluteUri;
+              return uploadFile.UniqueId.ToString();
             }
           }
 
@@ -270,10 +270,17 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       return retVal;
     }
 
-    public Stream GetFileStream(IClaimsInfoProvider claimsInfoProvider, string claimId, string extUrl)
+    public FileStreamResult GetFileStream(IClaimsInfoProvider claimsInfoProvider, string claimId, string uniqueId)
     {
-      var serverRelURL = new Uri(extUrl).AbsolutePath;
-      return Microsoft.SharePoint.Client.NetCore.File.OpenBinaryDirect(_context, serverRelURL)?.Stream;
+      var file = _context.Web.GetFileById(Guid.Parse(uniqueId));
+      _context.Load(file);
+      _context.ExecuteQuery();
+
+      return
+        new FileStreamResult(Microsoft.SharePoint.Client.NetCore.File.OpenBinaryDirect(_context, file.ServerRelativeUrl)?.Stream, GetContentType(file.Name))
+        {
+          FileDownloadName = Path.GetFileName(file.Name)
+        };
     }
 
     public void PrepareForSolution(IClaimsInfoProvider claimsInfoProvider, string solutionId)
@@ -342,6 +349,35 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
       baseFolder.AddSubFolder(subFolder);
       _context.ExecuteQuery();
+    }
+
+    private static string GetContentType(string path)
+    {
+      var types = GetMimeTypes();
+      var ext = Path.GetExtension(path).ToLowerInvariant();
+
+      return types.ContainsKey(ext) ? types[ext] : "application/octet-stream";
+    }
+
+    private static Dictionary<string, string> GetMimeTypes()
+    {
+      return new Dictionary<string, string>
+      {
+          {".txt", "text/plain"},
+          {".pdf", "application/pdf"},
+          {".doc", "application/vnd.ms-word"},
+          {".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
+          {".xls", "application/vnd.ms-excel"},
+          {".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
+          {".ppt", "application/vnd.ms-powerpoint" },
+          {".pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation" },
+          {".png", "image/png"},
+          {".jpg", "image/jpeg"},
+          {".jpeg", "image/jpeg"},
+          {".gif", "image/gif"},
+          {".csv", "text/csv"},
+          {".mp4", "video/mp4"}
+      };
     }
   }
 }
