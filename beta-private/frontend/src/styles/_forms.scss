@@ -142,10 +142,13 @@ button,
 [type='submit'],
 .button {
   background-color: $color-button-bg;
-  border-radius: 3px;
+  border: 0;
+  border-bottom: 1px solid $color-nhs-black;
   color: $color-button-fg;
+  cursor: pointer;
+  font-size: .9rem;
   min-width: 5em;
-  padding: .25em 1em;
+  padding: .4em 1em .3em;
   transition: background-color .25s;
 
   &:hover {
@@ -156,6 +159,9 @@ button,
   &[disabled],
   &.disabled {
     background-color: $color-button-disabled-bg;
+    border: 1px solid $color-button-disabled-fg;
     color: $color-button-disabled-fg;
+    cursor: default;
+    transition: none;
   }
 }
