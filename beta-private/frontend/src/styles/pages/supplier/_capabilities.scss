@@ -169,7 +169,11 @@
         }
 
         .description {
+          line-height: 1.45;
+          max-height: 7.25rem;
           opacity: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
 
           .full-description-link {
             display: none;
@@ -177,6 +181,12 @@
         }
 
         &:hover .description {
+          // From https://stackoverflow.com/a/52454350 for Webkit compatible browsers
+          // to support block-level text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 6;
+          -webkit-box-orient: vertical;
+
           opacity: 1;
           transition: opacity .2s ease-in;
         }
@@ -226,7 +236,9 @@
             .description {
               margin-bottom: 2em;
               margin-top: 0;
+              max-height: none;
               opacity: 1;
+              text-overflow: all;
             }
 
             & > *:not(.description) {
