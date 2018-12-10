@@ -66,10 +66,14 @@ a {
 }
 
 body {
+  margin: 0 auto;
+  max-width: 1020px;
   overflow-x: hidden; // horizontal scrolling is never desirable
+  position: relative;
 }
 
 body > header {
+  max-width: 1020px;
   position: fixed;
   top: 0;
   width: 100%;
