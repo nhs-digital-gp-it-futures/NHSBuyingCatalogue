@@ -49,15 +49,16 @@
 
   {{#> control invalid=errors.controls.[solution.version]}}
     <label for="solution.version">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Label'}}</label>
+    <p class="info"></p>
+    <input id="solution.version" type="text" name="solution[version]" value="{{solution.version}}" class="narrow"
+      autocomplete="off" maxlength="10"
+      {{#if errors.controls.[solution.version]}}aria-invalid="true" aria-errormessage="error-solution.version"{{/if}}>
     {{#> help-reveal
       title='Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Help.Title'}}
       {{#each (tt 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Help.Text')}}
         <p>{{.}}</p>
       {{/each}}
     {{/help-reveal}}
-    <input id="solution.version" type="text" name="solution[version]" value="{{solution.version}}" class="narrow"
-      autocomplete="off" maxlength="10"
-      {{#if errors.controls.[solution.version]}}aria-invalid="true" aria-errormessage="error-solution.version"{{/if}}>
   {{/control}}
   {{/collapsible-fieldset}}
 

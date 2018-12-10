@@ -129,34 +129,6 @@ fieldset {
         }
       }
     }
-
-    details.help-reveal {
-      margin: .25em 0;
-      width: 40em;
-
-      & > summary {
-        background-color: $color-help-reveal-summary-bg;
-        color: $color-help-reveal-summary-fg;
-
-        .title {
-          text-decoration: underline;
-        }
-      }
-
-      & > .contents {
-        background-color: $color-help-reveal-contents-bg;
-        border-left: 4px solid $color-help-reveal-contents-border;
-        color: $color-help-reveal-contents-fg;
-        margin: .3em 0;
-        padding: .1em 0;
-
-        p {
-          font-size: smaller;
-          margin: .5em 0;
-          padding-left: 1em;
-        }
-      }
-    }
   }
 }
 
