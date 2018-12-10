@@ -21,6 +21,10 @@ namespace Gif.Service.Models
         [CrmFieldName("cc_hasrequestedlivedemo")]
         public bool HasRequestedLiveDemo { get; set; }
 
+        [DataMember]
+        [CrmFieldName("cc_blobid")]
+        public string BlobId { get; set; }
+
         [CrmEntityRelationAttribute(RelationshipNames.EvidenceStandardApplicables)]
         public IList<StandardApplicable> StandardApplicables { get; set; }
 
