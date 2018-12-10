@@ -246,7 +246,8 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
             IsFolder = true,
             Length = 0,
             Url = new Uri(new Uri(_context.Url), x.ServerRelativeUrl).AbsoluteUri,
-            TimeLastModified = x.TimeLastModified
+            TimeLastModified = x.TimeLastModified,
+            BlobId = x.UniqueId.ToString()
           });
       var claimFileInfos = claimFolder
         .Files
@@ -257,7 +258,8 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
             IsFolder = false,
             Length = x.Length,
             Url = new Uri(new Uri(_context.Url), x.ServerRelativeUrl).AbsoluteUri,
-            TimeLastModified = x.TimeLastModified
+            TimeLastModified = x.TimeLastModified,
+            BlobId = x.UniqueId.ToString()
           });
       var retVal = new List<BlobInfo>();
 

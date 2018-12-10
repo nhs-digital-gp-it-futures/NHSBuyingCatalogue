@@ -52,6 +52,13 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     /// instead of submitting a file
     /// </summary>
     public bool HasRequestedLiveDemo { get; set; }
+
+    /// <summary>
+    /// unique identifier of binary file in blob storage system
+    /// NOTE:  this may not be a GUID eg it may be a URL
+    /// NOTE:  this is a GUID for SharePoint
+    /// </summary>
+    public string BlobId { get; set; }
   }
 #pragma warning restore CS1591
 }
