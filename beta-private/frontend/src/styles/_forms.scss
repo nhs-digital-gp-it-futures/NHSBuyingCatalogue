@@ -1,6 +1,11 @@
 $width-input-border: 2px;
 $radius-input-border: 0;
 
+// apply global focus ring style. body ancestor is to prevent IE11 focusing the entire page.
+body *:focus {
+  outline: 3px solid $color-nhs-warm-yellow;
+}
+
 input[type='text'],
 input[type='email'],
 input[type='tel'],
