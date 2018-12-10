@@ -55,6 +55,7 @@
       },
       "Title": "Enter $t(Solution) details and key contacts.",
       "Subtitle": "Provide basic information and key contacts for your $t(Solution) below.",
+      "Preamble": "This information will be shared with $t(NHSD.Name) to identify your $t(Solution) and enable communication. You can edit this information until you submit evidence for $t(Capability Assessment) in stage 2.",
       "Fieldsets": {
         "NameDescVersion": {
           "Legend": "Enter $t(Solution) name, description, version *",
