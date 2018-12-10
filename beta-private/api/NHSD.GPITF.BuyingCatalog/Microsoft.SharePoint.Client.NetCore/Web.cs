@@ -2936,15 +2936,15 @@ namespace Microsoft.SharePoint.Client.NetCore
     //    return new List(context, new ObjectPathMethod(context, base.Path, "DefaultDocumentLibrary", null));
     //}
 
-    //[Remote]
-    //public File GetFileById(Guid uniqueId)
-    //{
-    //    ClientRuntimeContext context = base.Context;
-    //    return new File(context, new ObjectPathMethod(context, base.Path, "GetFileById", new object[]
-    //    {
-    //        uniqueId
-    //    }));
-    //}
+    [Remote]
+    public File GetFileById(Guid uniqueId)
+    {
+      ClientRuntimeContext context = base.Context;
+      return new File(context, new ObjectPathMethod(context, base.Path, "GetFileById", new object[]
+      {
+            uniqueId
+      }));
+    }
 
     //[Remote]
     //public Folder GetFolderById(Guid uniqueId)
