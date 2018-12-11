@@ -1,14 +1,9 @@
 /* global fixture, test */
 
-const { Selector, Role } = require('testcafe')
-const axeCheck = require('axe-testcafe')
+import { Selector } from 'testcafe'
+import axeCheck from 'axe-testcafe'
 
-const supplierRole = Role('http://localhost:3000/oidc/authenticate', async t => {
-  await t
-    .typeText('[name=email]', 'drkool@kool.com')
-    .typeText('[name=password]', 'kool')
-    .click('[name=submit]')
-})
+import { asSupplier } from './roles'
 
 const homeLink = Selector('body > header a[aria-label=Home]')
 const addNewSolutionButton = Selector('#add-new-solution')
@@ -55,20 +50,17 @@ test('a11y: logged out homepage', async t => {
 })
 
 test('Login as supplier', async t => {
-  await t
-    .useRole(supplierRole)
+  await asSupplier(t)
     .expect(Selector('#account .user').innerText).contains('Hi, Dr')
 })
 
 test('a11y: supplier homepage', async t => {
-  await t
-    .useRole(supplierRole)
+  await asSupplier(t)
   await axeCheck(t)
 })
 
 test('Clicking logo returns to supplier homepage', async t => {
-  await t
-    .useRole(supplierRole)
+  await asSupplier(t)
     .click('body > header a[href^="/about"]')
     .click(homeLink)
 
@@ -76,15 +68,13 @@ test('Clicking logo returns to supplier homepage', async t => {
 })
 
 test('Solutions that are currently onboarding are listed', async t => {
-  await t
-    .useRole(supplierRole)
+  await asSupplier(t)
     .expect(firstOnboardingSolutionName.textContent).eql('Really Kool Document Manager | 1')
     .expect(firstOnboardingSolutionStatus.textContent).eql('Draft')
 })
 
 function navigateToSupplierOnboardingSolution (t) {
-  return t
-    .useRole(supplierRole)
+  return asSupplier(t)
     .click(homeLink)
     .click(firstOnboardingSolutionName)
     .click(continueRegistrationButton)
@@ -282,8 +272,7 @@ test('Blanking all optional contact fields removes the contact', async t => {
 })
 
 test('Creating a new solution leads to an empty form via a customised status page', async t => {
-  await t
-    .useRole(supplierRole)
+  await asSupplier(t)
     .click(homeLink)
     .click(addNewSolutionButton)
 
@@ -303,8 +292,7 @@ test('Creating a new solution leads to an empty form via a customised status pag
 })
 
 test('Solution cannot have the same name and version as another existing solution', async t => {
-  await t
-    .useRole(supplierRole)
+  await asSupplier(t)
     .click(homeLink)
     .click(addNewSolutionButton)
     .click(continueRegistrationButton)
@@ -333,8 +321,7 @@ test('Solution cannot have the same name and version as another existing solutio
 })
 
 test('Newly created solution appears in the correct place on the supplier dashboard', async t => {
-  await t
-    .useRole(supplierRole)
+  await asSupplier(t)
     .click(homeLink)
 
     .expect(lastOnboardingSolutionName.textContent).eql('Really Kool Kore System | 1')
