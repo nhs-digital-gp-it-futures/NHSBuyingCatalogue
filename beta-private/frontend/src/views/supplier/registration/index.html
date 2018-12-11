@@ -29,7 +29,7 @@
   {{#each (tt 'Onboarding.Stages')}}
   {{#with (lookup ../stages @index)}}
   <li{{#class}} class="{{.}}"{{/class}}>
-    <h3 class="title">{{../Title}}</h3>
+    <h2 class="title">{{../Title}}</h2>
     {{#if url}}
     <p class="action">Status: {{status}}. <a href="{{url}}">{{link}}</a></p>
     {{/if}}
