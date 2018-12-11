@@ -1,4 +1,5 @@
-﻿using NHSD.GPITF.BuyingCatalog.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
 using System.IO;
 
@@ -9,7 +10,7 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
   {
     void PrepareForSolution(string solutionId);
     string AddEvidenceForClaim(string claimId, Stream file, string filename, string subFolder = null);
-    Stream GetFileStream(string claimId, string extUrl);
+    FileStreamResult GetFileStream(string claimId, string uniqueId);
     IEnumerable<BlobInfo> EnumerateFolder(string claimId, string subFolder = null);
   }
 #pragma warning restore CS1591

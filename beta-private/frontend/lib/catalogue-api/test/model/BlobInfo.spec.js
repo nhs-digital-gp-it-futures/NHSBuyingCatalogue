@@ -68,6 +68,12 @@
       //expect(instance).to.be();
     });
 
+    it('should have the property length (base name: "length")', function() {
+      // uncomment below and update the code to test the property length
+      //var instance = new CatalogueApi.BlobInfo();
+      //expect(instance).to.be();
+    });
+
     it('should have the property url (base name: "url")', function() {
       // uncomment below and update the code to test the property url
       //var instance = new CatalogueApi.BlobInfo();
@@ -76,6 +82,12 @@
 
     it('should have the property timeLastModified (base name: "timeLastModified")', function() {
       // uncomment below and update the code to test the property timeLastModified
+      //var instance = new CatalogueApi.BlobInfo();
+      //expect(instance).to.be();
+    });
+
+    it('should have the property blobId (base name: "blobId")', function() {
+      // uncomment below and update the code to test the property blobId
       //var instance = new CatalogueApi.BlobInfo();
       //expect(instance).to.be();
     });

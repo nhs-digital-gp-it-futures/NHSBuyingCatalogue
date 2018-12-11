@@ -34,17 +34,17 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
       }
     }
 
-    protected FileResult DownloadInternal(string claimId, string extUrl)
+    protected FileResult DownloadInternal(string claimId, string uniqueId)
     {
       try
       {
-        var stream = _logic.GetFileStream(claimId, extUrl);
+        var result = _logic.GetFileStream(claimId, uniqueId);
         var memory = new MemoryStream();
 
-        stream.CopyTo(memory);
+        result.FileStream.CopyTo(memory);
         memory.Position = 0;
 
-        var retval = File(memory, GetContentType(extUrl), Path.GetFileName(extUrl));
+        var retval = File(memory, result.ContentType, result.FileDownloadName);
 
         return retval;
       }
@@ -74,35 +74,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
       {
         return new NotFoundObjectResult(ex);
       }
-    }
-
-    protected static string GetContentType(string path)
-    {
-      var types = GetMimeTypes();
-      var ext = Path.GetExtension(path).ToLowerInvariant();
-
-      return types.ContainsKey(ext) ? types[ext] : "application/octet-stream";
-    }
-
-    protected static Dictionary<string, string> GetMimeTypes()
-    {
-      return new Dictionary<string, string>
-      {
-          {".txt", "text/plain"},
-          {".pdf", "application/pdf"},
-          {".doc", "application/vnd.ms-word"},
-          {".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
-          {".xls", "application/vnd.ms-excel"},
-          {".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
-          {".ppt", "application/vnd.ms-powerpoint" },
-          {".pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation" },
-          {".png", "image/png"},
-          {".jpg", "image/jpeg"},
-          {".jpeg", "image/jpeg"},
-          {".gif", "image/gif"},
-          {".csv", "text/csv"},
-          {".mp4", "video/mp4"}
-      };
     }
   }
 #pragma warning restore CS1591

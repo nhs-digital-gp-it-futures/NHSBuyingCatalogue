@@ -8,13 +8,24 @@
   },
   "Solution": "Solution",
   "Solution_plural": "Solutions",
+  "Solution_possessive": "Solution's",
   "Capability": "Capability",
   "Capability_plural": "Capabilities",
   "Standard": "Standard",
   "Standard_plural": "Standards",
-  "Capabilities Assessment": "$t(Capability_plural) Assessment",
-  "Standards Compliance": "Standards Compliance",
+  "Standard_possessive": "Standard's",
+  "Standard_plural_possessive": "Standards'",
+  "Associated Standard": "Associated $t(Standard)",
+  "Associated Standards": "Associated $t(Standard_plural)",
+  "Overarching Standard": "Overarching $t(Standard)",
+  "Overarching Standards": "Overarching $t(Standard_plural)",
+  "Assessment": "Assessment",
+  "Compliance": "Compliance",
+  "Capabilities Assessment": "$t(Capability_plural) $t(Assessment)",
+  "Standards Compliance": "$t(Standard_plural) $t(Compliance)",
   "Standards and Capabilities": "$t(Standard_plural) and $t(Capability_plural)",
+  "Traceability Matrix": "Traceability Matrix",
+  "Assessment team": "$t(Assessment) team",
   "Buttons": {
     "Save and continue": "Save & continue",
     "Save": "Save",
@@ -24,6 +35,16 @@
     "Login": "Log In",
     "Logout": "Log Out",
     "Greeting": "Hi, {{name}}"
+  },
+  "Statuses": {
+    "Standard": {
+      "NotStarted": "Not started",
+      "Draft": "Draft",
+      "Submitted": "Submitted {{when}}",
+      "Remediation": "Feedback {{when}}",
+      "Approved": "Approved {{when}}",
+      "Rejected": "Rejected {{when}}"
+    }
   },
   "Footer": {
     "Sections": [

@@ -58,9 +58,67 @@ function commonOnboardingContext (req) {
 function onboardingStatusPage (req, res) {
   const context = {
     ...commonOnboardingContext(req),
-    continueOnboardingUrl: 'register#content',
-    registerNewSolutionUrl: 'register#content'
+    stages: [
+      {
+        url: 'register#content'
+      },
+      {},
+      {},
+      {}
+    ]
   }
+
+  if (req.solution) {
+    const status = +req.solution.status
+
+    context.stages[1].status = 'Not started'
+    context.stages[1].link = 'Start'
+    context.stages[1].url = `../../capabilities/${req.solution.id}`
+
+    context.stages[2].status = 'Not started'
+    context.stages[2].link = 'Start'
+    context.stages[2].url = `../../compliance/${req.solution.id}`
+
+    if (req.solution._raw.claimedCapabilityEvidence.length) {
+      context.stages[1].status = 'In progress'
+      context.stages[1].link = 'Edit'
+    }
+
+    if (req.solution._raw.claimedStandardEvidence.length) {
+      context.stages[2].status = 'In progress'
+      context.stages[2].link = 'Edit'
+    }
+
+    if (status === 0) { // draft
+      context.stages[0].status = 'In progress'
+      context.stages[0].link = 'Edit'
+    }
+
+    if (status === 1) { // registered
+      context.stages[0].status = 'Complete'
+      context.stages[0].class = 'complete'
+      context.stages[0].link = 'Edit'
+
+      if ('registered' in req.query) {
+        context.registrationComplete = true
+      }
+    }
+
+    if (status === 2) { // capability assessment
+      context.stages[0].status = 'Complete'
+      context.stages[0].class = 'complete'
+      context.stages[0].link = 'View'
+
+      context.stages[1].status = 'Awaiting outcome'
+      context.stages[1].link = 'View'
+    }
+  } else {
+    context.stages[0].status = 'Not started'
+    context.stages[0].link = 'Start'
+  }
+
+  // solution page will be unavailable for the time being
+  context.stages[3].class = 'unavailable'
 
   res.render('supplier/registration/index', context)
 }
@@ -233,6 +291,11 @@ async function capabilitiesPageGet (req, res) {
 async function capabilitiesPagePost (req, res) {
   const context = await capabilitiesPageContext(req)
 
+  // redirect based on action chosen
+  let redirectUrl = (req.body.action && req.body.action.save)
+    ? './'
+    : '../'
+
   // the "selected" property holds the current ID for each claimed capability,
   // or a newly generated ID for an added capability
   context.capabilities.forEach(cap => {
@@ -263,9 +326,17 @@ async function capabilitiesPagePost (req, res) {
       .map(std => ({
         standardId: std.id,
         status: '0',
-        solutionId: req.solution.id
+        solutionId: req.solution.id,
+        ownerId: null
       }))
       .value()
+
+    if (req.body.action && req.body.action.continue) {
+      if (+req.solution.status === 0) {
+        req.solution.status = '1'
+        redirectUrl += '?registered'
+      }
+    }
 
     try {
       await dataProvider.updateSolutionForRegistration(req.solution)
@@ -279,11 +350,6 @@ async function capabilitiesPagePost (req, res) {
   if (context.errors) {
     res.render('supplier/registration/2-capabilities', context)
   } else {
-    // redirect based on action chosen
-    const redirectUrl = (req.body.action && req.body.action.exit)
-      ? '../'
-      : './'
-
     res.redirect(redirectUrl)
   }
 }

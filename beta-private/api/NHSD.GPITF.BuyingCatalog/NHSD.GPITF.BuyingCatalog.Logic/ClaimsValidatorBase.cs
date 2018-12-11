@@ -111,7 +111,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     {
       RuleFor(x => x.OwnerId)
         .NotNull()
-        .Must(solnId => Guid.TryParse(solnId, out _))
+        .Must(id => Guid.TryParse(id, out _))
+        .When(x => x.OwnerId != null)
         .WithMessage("Invalid OwnerId");
     }
   }

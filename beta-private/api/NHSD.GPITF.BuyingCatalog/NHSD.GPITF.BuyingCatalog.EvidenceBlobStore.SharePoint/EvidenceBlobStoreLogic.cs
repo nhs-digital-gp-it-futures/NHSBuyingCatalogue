@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
@@ -50,7 +51,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       return _evidenceBlobStoreDatastore.AddEvidenceForClaim(this, claimId, file, filename, subFolder);
     }
 
-    public Stream GetFileStream(string claimId, string extUrl)
+    public FileStreamResult GetFileStream(string claimId, string uniqueId)
     {
       _claimValidator.ValidateAndThrow(claimId, ruleSet: nameof(IEvidenceBlobStoreLogic.GetFileStream));
 
@@ -60,7 +61,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         throw new KeyNotFoundException($"Could not find claim: {claimId}");
       }
 
-      return _evidenceBlobStoreDatastore.GetFileStream(this, claimId, extUrl);
+      return _evidenceBlobStoreDatastore.GetFileStream(this, claimId, uniqueId);
     }
 
     public IEnumerable<BlobInfo> EnumerateFolder(string claimId, string subFolder = null)

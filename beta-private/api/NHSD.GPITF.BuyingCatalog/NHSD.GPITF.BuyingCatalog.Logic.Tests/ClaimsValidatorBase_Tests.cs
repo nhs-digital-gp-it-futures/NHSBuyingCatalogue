@@ -249,7 +249,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void MustBeValidOwnerId_Null_ReturnsError()
+    public void MustBeValidOwnerId_Null_Succeeds()
     {
       var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase();
@@ -258,12 +258,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       validator.MustBeValidOwnerId();
       var valres = validator.Validate(claim);
 
-      valres.Errors.Should()
-        .ContainSingle(x => x.ErrorMessage == "Invalid OwnerId")
-        .And
-        .ContainSingle(x => x.ErrorMessage == "'Owner Id' must not be empty.")
-        .And
-        .HaveCount(2);
+      valres.Errors.Should().BeEmpty();
     }
 
     [Test]
@@ -271,6 +266,21 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase(ownerId: "some other Id");
+
+      validator.MustBeValidOwnerId();
+      var valres = validator.Validate(claim);
+
+      valres.Errors.Should()
+        .ContainSingle(x => x.ErrorMessage == "Invalid OwnerId")
+        .And
+        .HaveCount(1);
+    }
+
+    [Test]
+    public void MustBeValidOwnerId_Empty_ReturnsError()
+    {
+      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var claim = Creator.GetClaimsBase(ownerId: string.Empty);
 
       validator.MustBeValidOwnerId();
       var valres = validator.Validate(claim);

@@ -80,6 +80,16 @@
         done();
       });
     });
+    describe('apiSolutionsDelete', function() {
+      it('should call apiSolutionsDelete successfully', function(done) {
+        //uncomment below and update the code to test apiSolutionsDelete
+        //instance.apiSolutionsDelete(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
+      });
+    });
     describe('apiSolutionsPost', function() {
       it('should call apiSolutionsPost successfully', function(done) {
         //uncomment below and update the code to test apiSolutionsPost

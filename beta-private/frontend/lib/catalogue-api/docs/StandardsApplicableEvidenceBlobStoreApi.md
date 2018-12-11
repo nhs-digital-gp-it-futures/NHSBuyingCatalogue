@@ -4,7 +4,7 @@ All URIs are relative to *https://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**apiStandardsApplicableEvidenceBlobStoreAddEvidenceForClaimPost**](StandardsApplicableEvidenceBlobStoreApi.md#apiStandardsApplicableEvidenceBlobStoreAddEvidenceForClaimPost) | **POST** /api/StandardsApplicableEvidenceBlobStore/AddEvidenceForClaim | Upload a file to support a claim
+[**apiStandardsApplicableEvidenceBlobStoreAddEvidenceForClaimPost**](StandardsApplicableEvidenceBlobStoreApi.md#apiStandardsApplicableEvidenceBlobStoreAddEvidenceForClaimPost) | **POST** /api/StandardsApplicableEvidenceBlobStore/AddEvidenceForClaim | Upload a file to support a claim  If the file already exists on the server, then a new version is created
 [**apiStandardsApplicableEvidenceBlobStoreDownloadByClaimIdPost**](StandardsApplicableEvidenceBlobStoreApi.md#apiStandardsApplicableEvidenceBlobStoreDownloadByClaimIdPost) | **POST** /api/StandardsApplicableEvidenceBlobStore/Download/{claimId} | Download a file which is supporting a claim
 [**apiStandardsApplicableEvidenceBlobStoreEnumerateFolderByClaimIdGet**](StandardsApplicableEvidenceBlobStoreApi.md#apiStandardsApplicableEvidenceBlobStoreEnumerateFolderByClaimIdGet) | **GET** /api/StandardsApplicableEvidenceBlobStore/EnumerateFolder/{claimId} | List all files and sub-folders for a claim including folder for claim
 
@@ -13,7 +13,7 @@ Method | HTTP request | Description
 # **apiStandardsApplicableEvidenceBlobStoreAddEvidenceForClaimPost**
 > &#39;String&#39; apiStandardsApplicableEvidenceBlobStoreAddEvidenceForClaimPost(claimId, file, filename, opts)
 
-Upload a file to support a claim
+Upload a file to support a claim  If the file already exists on the server, then a new version is created
 
 Server side folder structure is something like:  --Organisation  ----Solution  ------Capability Evidence  --------Appointment Management - Citizen  --------Appointment Management - GP  --------Clinical Decision Support  --------[all other claimed capabilities]  ----------Images  ----------PDF  ----------Videos  ----------RTM  ----------Misc                where subFolder is an optional folder under a claimed capability ie Images, PDF, et al
 
@@ -97,7 +97,7 @@ var apiInstance = new CatalogueApi.StandardsApplicableEvidenceBlobStoreApi();
 var claimId = "claimId_example"; // String | unique identifier of solution claim
 
 var opts = { 
-  'extUrl': "extUrl_example" // String | externally accessible URL of file
+  'uniqueId': "uniqueId_example" // String | unique identifier of file
 };
 apiInstance.apiStandardsApplicableEvidenceBlobStoreDownloadByClaimIdPost(claimId, opts).then(function(data) {
   console.log('API called successfully. Returned data: ' + data);
@@ -112,7 +112,7 @@ apiInstance.apiStandardsApplicableEvidenceBlobStoreDownloadByClaimIdPost(claimId
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **claimId** | **String**| unique identifier of solution claim | 
- **extUrl** | **String**| externally accessible URL of file | [optional] 
+ **uniqueId** | **String**| unique identifier of file | [optional] 
 
 ### Return type
 

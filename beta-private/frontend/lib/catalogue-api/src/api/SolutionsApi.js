@@ -50,7 +50,7 @@
 
     /**
      * Get existing solution/s on which were onboarded onto a framework,  given the CRM identifier of the framework
-     * @param {String} frameworkId CRM identifier of organisation to find
+     * @param {String} frameworkId CRM identifier of framework
      * @param {Object} opts Optional parameters
      * @param {Number} opts.pageIndex 1-based index of page to return.  Defaults to 1
      * @param {Number} opts.pageSize number of items per page.  Defaults to 20
@@ -94,7 +94,7 @@
 
     /**
      * Get existing solution/s on which were onboarded onto a framework,  given the CRM identifier of the framework
-     * @param {String} frameworkId CRM identifier of organisation to find
+     * @param {String} frameworkId CRM identifier of framework
      * @param {Object} opts Optional parameters
      * @param {Number} opts.pageIndex 1-based index of page to return.  Defaults to 1
      * @param {Number} opts.pageSize number of items per page.  Defaults to 20
@@ -220,6 +220,54 @@
 
 
     /**
+     * Delete an existing solution  DEVELOPMENT MODE ONLY
+     * @param {Object} opts Optional parameters
+     * @param {module:model/Solutions} opts.solution solution
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing HTTP response
+     */
+    this.apiSolutionsDeleteWithHttpInfo = function(opts) {
+      opts = opts || {};
+      var postBody = opts['solution'];
+
+
+      var pathParams = {
+      };
+      var queryParams = {
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
+
+      var authNames = ['basic', 'oauth2'];
+      var contentTypes = ['application/json-patch+json', 'application/json', 'text/json', 'application/_*+json'];
+      var accepts = [];
+      var returnType = null;
+
+      return this.apiClient.callApi(
+        '/api/Solutions', 'DELETE',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType
+      );
+    }
+
+    /**
+     * Delete an existing solution  DEVELOPMENT MODE ONLY
+     * @param {Object} opts Optional parameters
+     * @param {module:model/Solutions} opts.solution solution
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}
+     */
+    this.apiSolutionsDelete = function(opts) {
+      return this.apiSolutionsDeleteWithHttpInfo(opts)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
+
+    /**
      * Create a new solution for an organisation
      * @param {Object} opts Optional parameters
      * @param {module:model/Solutions} opts.solution new solution information
@@ -270,7 +318,7 @@
     /**
      * Update an existing solution with new information
      * @param {Object} opts Optional parameters
-     * @param {module:model/Solutions} opts.solution contact with updated information
+     * @param {module:model/Solutions} opts.solution solution with updated information
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing HTTP response
      */
     this.apiSolutionsPutWithHttpInfo = function(opts) {
@@ -304,7 +352,7 @@
     /**
      * Update an existing solution with new information
      * @param {Object} opts Optional parameters
-     * @param {module:model/Solutions} opts.solution contact with updated information
+     * @param {module:model/Solutions} opts.solution solution with updated information
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}
      */
     this.apiSolutionsPut = function(opts) {

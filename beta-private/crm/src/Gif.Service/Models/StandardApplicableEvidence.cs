@@ -1,11 +1,11 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 using Gif.Service.Attributes;
+using Gif.Service.Const;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using Gif.Service.Const;
 
 namespace Gif.Service.Models
 {
@@ -16,6 +16,14 @@ namespace Gif.Service.Models
         [CrmFieldNameDataBind("cc_StandardApplicable@odata.bind")]
         [CrmFieldEntityDataBind("cc_standardapplicables")]
         public override Guid? ClaimId { get; set; }
+
+        [DataMember]
+        [CrmFieldName("cc_hasrequestedlivedemo")]
+        public bool HasRequestedLiveDemo { get; set; }
+
+        [DataMember]
+        [CrmFieldName("cc_blobid")]
+        public string BlobId { get; set; }
 
         [CrmEntityRelationAttribute(RelationshipNames.EvidenceStandardApplicables)]
         public IList<StandardApplicable> StandardApplicables { get; set; }

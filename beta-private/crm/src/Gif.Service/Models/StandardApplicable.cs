@@ -50,6 +50,12 @@ namespace Gif.Service.Models
         public Guid? StandardId { get; set; }
 
         [DataMember]
+        [CrmFieldName("_cc_ownerid_value")]
+        [CrmFieldNameDataBind("cc_OwnerId@odata.bind")]
+        [CrmFieldEntityDataBind("contacts")]
+        public Guid? OwnerId { get; set; }
+
+        [DataMember]
         [CrmFieldName("statuscode")]
         public StandardApplicableStatusEnum Status { get; set; }
 

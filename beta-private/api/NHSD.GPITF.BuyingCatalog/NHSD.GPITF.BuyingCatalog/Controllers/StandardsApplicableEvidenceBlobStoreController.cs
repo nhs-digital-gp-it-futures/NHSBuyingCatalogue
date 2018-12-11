@@ -59,7 +59,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     ///
     /// where subFolder is an optional folder under a claimed capability ie Images, PDF, et al
     /// </remarks>
-    /// <returns>externally accessible URL of file</returns>
+    /// <returns>unique identifier of file</returns>
     [HttpPost]
     [Route("AddEvidenceForClaim")]
     [SwaggerOperationFilter(typeof(EvidenceForClaimFileUploadOperation))]
@@ -76,17 +76,17 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// Download a file which is supporting a claim
     /// </summary>
     /// <param name="claimId">unique identifier of solution claim</param>
-    /// <param name="extUrl">externally accessible URL of file</param>
-    /// <returns>FileResult with suggested file downlaod name based on extUrl</returns>
+    /// <param name="uniqueId">unique identifier of file</param>
+    /// <returns>FileResult with suggested file download name based on extUrl</returns>
     [HttpPost]
     [Route("Download/{claimId}")]
     [Produces(typeof(FileResult))]
     [ValidateModelState]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(FileResult), description: "Success")]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Claim not found in CRM")]
-    public FileResult Download([FromRoute][Required]string claimId, [FromQuery]string extUrl)
+    public FileResult Download([FromRoute][Required]string claimId, [FromQuery]string uniqueId)
     {
-      return DownloadInternal(claimId, extUrl);
+      return DownloadInternal(claimId, uniqueId);
     }
 
     /// <summary>

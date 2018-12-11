@@ -283,7 +283,7 @@ test('Creating a new solution leads to an empty form via a customised status pag
     .click(homeLink)
     .click(addNewSolutionButton)
 
-    .expect(continueRegistrationButton.textContent).eql('Get Started')
+    .expect(continueRegistrationButton.textContent).eql('Start')
 
     .click(continueRegistrationButton)
     .click(leadContactFieldset)
@@ -445,7 +445,7 @@ test('Capabilities can be changed, summary updates and data save correctly', asy
     .click('[type=checkbox][data-id="CAP-C-004"]')
 
     .expect(capabilityCount).eql('1 Capability selected')
-    .expect(standardCount).eql('13 Standards will be required')
+    .expect(standardCount).eql('14 Standards will be required')
     .expect(Selector('#capability-summary .standards .associated').visible).ok()
 
     .click(continueButton)
