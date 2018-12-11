@@ -111,8 +111,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
           ((RulesetValidatorSelector)vc.Selector).RuleSets.Contains(nameof(ISolutionsLogic.Update)))), Times.Once());
     }
 
-    [TestCase(SolutionStatus.CapabilitiesAssessment)]
-    public void Update_CallsPrepareForSolution_WhenCapabilitiesAssessment(SolutionStatus status)
+    [TestCase(SolutionStatus.Registered)]
+    public void Update_CallsPrepareForSolution_WhenRegistered(SolutionStatus status)
     {
       var logic = new SolutionsLogic(_datastore.Object, _contacts.Object, _context.Object, _validator.Object, _filter.Object, _evidenceBlobStoreLogic.Object);
       var soln = Creator.GetSolution(status: status);
@@ -129,12 +129,12 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
     [TestCase(SolutionStatus.Failed)]
     [TestCase(SolutionStatus.Draft)]
-    [TestCase(SolutionStatus.Registered)]
+    [TestCase(SolutionStatus.CapabilitiesAssessment)]
     [TestCase(SolutionStatus.StandardsCompliance)]
     [TestCase(SolutionStatus.FinalApproval)]
     [TestCase(SolutionStatus.SolutionPage)]
     [TestCase(SolutionStatus.Approved)]
-    public void Update_DoesNotCallPrepareForSolution_WhenNotCapabilitiesAssessment(SolutionStatus status)
+    public void Update_DoesNotCallPrepareForSolution_WhenNotRegistered(SolutionStatus status)
     {
       var logic = new SolutionsLogic(_datastore.Object, _contacts.Object, _context.Object, _validator.Object, _filter.Object, _evidenceBlobStoreLogic.Object);
       var soln = Creator.GetSolution(status: status);
