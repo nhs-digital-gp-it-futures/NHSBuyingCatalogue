@@ -90,6 +90,12 @@ body > header {
     > nav {
       flex: auto;
     }
+
+    .auth {
+      .user {
+        padding-right: 1em;
+      }
+    }
   }
 
   .bottom {
