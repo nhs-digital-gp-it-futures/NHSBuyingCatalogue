@@ -44,19 +44,14 @@ const newContactPhoneInput = Selector('input#solution\\.contacts\\[1\\]\\.phoneN
 
 fixture('Getting started')
   .page('http://localhost:3000')
+  .afterEach(axeCheck)
 
 test('a11y: logged out homepage', async t => {
-  await axeCheck(t)
 })
 
 test('Login as supplier', async t => {
   await asSupplier(t)
     .expect(Selector('#account .user').innerText).contains('Hi, Dr')
-})
-
-test('a11y: supplier homepage', async t => {
-  await asSupplier(t)
-  await axeCheck(t)
 })
 
 test('Clicking logo returns to supplier homepage', async t => {
@@ -85,8 +80,6 @@ test('Registration page shows correct information accessibly', async t => {
     .expect(solutionNameInput.value).eql('Really Kool Document Manager')
     .expect(solutionDescriptionInput.value).eql('Does Really Kool document management')
     .expect(solutionVersionInput.value).eql('1')
-
-  await axeCheck(t)
 })
 
 test('Registration page validation is correct and accessible', async t => {
@@ -99,8 +92,6 @@ test('Registration page validation is correct and accessible', async t => {
     .expect(Selector('#errors #error-solution\\.description').innerText).contains('Summary description is missing')
     .expect(solutionNameInput.parent('.control.invalid').child('.action').textContent).contains('Please enter a Solution name')
     .expect(solutionDescriptionInput.parent('.control.invalid').child('.action').textContent).contains('Please enter a Summary description')
-
-  await axeCheck(t)
 })
 
 test('Solution name shows in top bar and updates correctly when saved', async t => {
@@ -350,8 +341,6 @@ test('Capabilities page shows correct information accessibly', async t => {
     .expect(allNonCoreCapNames.nth(30).innerText).eql('Workflow')
 
     .expect(Selector('#capability-selector .capability[data-cap-id="CAP-C-004"].selected')).ok()
-
-  await axeCheck(t)
 })
 
 test('Capabilities page validation is correct and accessible', async t => {
@@ -371,8 +360,6 @@ test('Capabilities page validation is correct and accessible', async t => {
     .click(continueButton)
     .expect(Selector('#errors #error-capabilities').innerText).contains('Select at least one capability to continue')
     .expect(selectedCapabilities.exists).notOk('No capabilities should be selected after reload')
-
-  await axeCheck(t)
 })
 
 test('Capabilities can be changed, summary updates and data save correctly', async t => {
@@ -444,15 +431,15 @@ test('Capabilities can be changed, summary updates and data save correctly', asy
     .expect(Selector('#errors').exists).notOk()
 })
 
-test('Registering the solution changes the status and shows a confirmation message', async t => {
+test('Registering the solution shows a confirmation message', async t => {
   await navigateToSupplierOnboardingSolutionCapabilities(t)
     .click(continueButton)
     .expect(Selector('#onboarding.dashboard.page .callout .title').textContent).eql('Solution registration complete.')
     .expect(Selector('.onboarding-stages :first-child.complete').exists).ok()
+})
 
-  await axeCheck(t)
-
-  await t
+test('Registered solution shows status change on dashboard', async t => {
+  await asSupplier(t)
     .click(homeLink)
     .expect(firstOnboardingSolutionStatus.textContent).eql('Registered')
 })
