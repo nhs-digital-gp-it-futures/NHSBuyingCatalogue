@@ -15,6 +15,9 @@ const addNewSolutionButton = Selector('#add-new-solution')
 const firstOnboardingSolutionName = Selector(
   '#solutions-onboarding table > tbody > tr:first-child > td:first-child'
 )
+const firstOnboardingSolutionStatus = Selector(
+  '#solutions-onboarding table > tbody > tr:first-child > td:nth-child(4)'
+)
 const lastOnboardingSolutionName = Selector(
   '#solutions-onboarding table > tbody > tr:last-child > td:first-child'
 )
@@ -76,6 +79,7 @@ test('Solutions that are currently onboarding are listed', async t => {
   await t
     .useRole(supplierRole)
     .expect(firstOnboardingSolutionName.textContent).eql('Really Kool Document Manager | 1')
+    .expect(firstOnboardingSolutionStatus.textContent).eql('Draft')
 })
 
 function navigateToSupplierOnboardingSolution (t) {
@@ -448,7 +452,20 @@ test('Capabilities can be changed, summary updates and data save correctly', asy
     .expect(standardCount).eql('14 Standards will be required')
     .expect(Selector('#capability-summary .standards .associated').visible).ok()
 
-    .click(continueButton)
+    .click(globalSaveAndExitButton)
 
     .expect(Selector('#errors').exists).notOk()
+})
+
+test('Registering the solution changes the status and shows a confirmation message', async t => {
+  await navigateToSupplierOnboardingSolutionCapabilities(t)
+    .click(continueButton)
+    .expect(Selector('#onboarding.dashboard.page .callout .title').textContent).eql('Solution registration complete.')
+    .expect(Selector('.onboarding-stages :first-child.complete').exists).ok()
+
+  await axeCheck(t)
+
+  await t
+    .click(homeLink)
+    .expect(firstOnboardingSolutionStatus.textContent).eql('Registered')
 })
