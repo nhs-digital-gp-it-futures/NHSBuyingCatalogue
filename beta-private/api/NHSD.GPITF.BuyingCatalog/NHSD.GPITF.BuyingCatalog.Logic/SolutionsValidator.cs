@@ -172,6 +172,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     {
       yield return (SolutionStatus.Draft, SolutionStatus.Draft, context.HasRole(Roles.Supplier));
       yield return (SolutionStatus.Draft, SolutionStatus.Registered, context.HasRole(Roles.Supplier));
+      yield return (SolutionStatus.Registered, SolutionStatus.Registered, context.HasRole(Roles.Supplier));
       yield return (SolutionStatus.Registered, SolutionStatus.CapabilitiesAssessment, context.HasRole(Roles.Supplier));
       yield return (SolutionStatus.CapabilitiesAssessment, SolutionStatus.Failed, context.HasRole(Roles.Admin));
       yield return (SolutionStatus.CapabilitiesAssessment, SolutionStatus.StandardsCompliance, context.HasRole(Roles.Admin));
