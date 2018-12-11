@@ -67,7 +67,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       solution.ModifiedOn = DateTime.UtcNow;
 
       // create SharePoint folder structure
-      if (solution.Status == SolutionStatus.CapabilitiesAssessment)
+      if (solution.Status == SolutionStatus.Registered)
       {
         _evidenceBlobStoreLogic.PrepareForSolution(solution.Id);
       }
