@@ -4,25 +4,7 @@ import { Selector } from 'testcafe'
 import axeCheck from 'axe-testcafe'
 
 import { asSupplier } from './roles'
-import { page, supplierDashboardPage, onboardingDashboardPage } from './pages'
-
-const solutionNameInput = Selector('#content [name="solution\\[name\\]"]')
-const solutionDescriptionInput = Selector('#content [name="solution\\[description\\]"]')
-const solutionVersionInput = Selector('#content [name="solution\\[version\\]"]')
-
-const leadContactFieldset = Selector('.contact[data-contact-index="0"] > fieldset > legend')
-const leadContactFirstNameInput = Selector('input#solution\\.contacts\\[0\\]\\.firstName')
-const leadContactLastNameInput = Selector('input#solution\\.contacts\\[0\\]\\.lastName')
-const leadContactEmailInput = Selector('input#solution\\.contacts\\[0\\]\\.emailAddress')
-const leadContactPhoneInput = Selector('input#solution\\.contacts\\[0\\]\\.phoneNumber')
-
-const addNewContactButton = Selector('#add-contact-button')
-const newContactFieldset = Selector('.contact[data-contact-index="1"] > fieldset > legend')
-const newContactContactTypeInput = Selector('input#solution\\.contacts\\[1\\]\\.contactType')
-const newContactFirstNameInput = Selector('input#solution\\.contacts\\[1\\]\\.firstName')
-const newContactLastNameInput = Selector('input#solution\\.contacts\\[1\\]\\.lastName')
-const newContactEmailInput = Selector('input#solution\\.contacts\\[1\\]\\.emailAddress')
-const newContactPhoneInput = Selector('input#solution\\.contacts\\[1\\]\\.phoneNumber')
+import { page, supplierDashboardPage, onboardingDashboardPage, registrationPage } from './pages'
 
 fixture('Getting started')
   .page(page.baseUrl)
@@ -59,21 +41,21 @@ function navigateToSupplierOnboardingSolution (t) {
 
 test('Registration page shows correct information accessibly', async t => {
   await navigateToSupplierOnboardingSolution(t)
-    .expect(solutionNameInput.value).eql('Really Kool Document Manager')
-    .expect(solutionDescriptionInput.value).eql('Does Really Kool document management')
-    .expect(solutionVersionInput.value).eql('1')
+    .expect(registrationPage.solutionNameInput.value).eql('Really Kool Document Manager')
+    .expect(registrationPage.solutionDescriptionInput.value).eql('Does Really Kool document management')
+    .expect(registrationPage.solutionVersionInput.value).eql('1')
 })
 
 test('Registration page validation is correct and accessible', async t => {
   await navigateToSupplierOnboardingSolution(t)
-    .selectText(solutionNameInput).pressKey('backspace')
-    .selectText(solutionDescriptionInput).pressKey('backspace')
+    .selectText(registrationPage.solutionNameInput).pressKey('backspace')
+    .selectText(registrationPage.solutionDescriptionInput).pressKey('backspace')
     .click(page.continueButton)
 
     .expect(Selector('#errors #error-solution\\.name').innerText).contains('Solution name is missing')
     .expect(Selector('#errors #error-solution\\.description').innerText).contains('Summary description is missing')
-    .expect(solutionNameInput.parent('.control.invalid').child('.action').textContent).contains('Please enter a Solution name')
-    .expect(solutionDescriptionInput.parent('.control.invalid').child('.action').textContent).contains('Please enter a Summary description')
+    .expect(registrationPage.solutionNameInput.parent('.control.invalid').child('.action').textContent).contains('Please enter a Solution name')
+    .expect(registrationPage.solutionDescriptionInput.parent('.control.invalid').child('.action').textContent).contains('Please enter a Summary description')
 })
 
 test('Solution name shows in top bar and updates correctly when saved', async t => {
@@ -81,16 +63,19 @@ test('Solution name shows in top bar and updates correctly when saved', async t 
     .expect(page.globalSolutionName.textContent).eql('Really Kool Document Manager, 1')
 
   await t
-    .selectText(solutionNameInput).typeText(solutionNameInput, 'Really Really Kool Document Manager')
-    .selectText(solutionVersionInput).pressKey('backspace')
+    .selectText(registrationPage.solutionNameInput)
+    .typeText(registrationPage.solutionNameInput, 'Really Really Kool Document Manager')
+    .selectText(registrationPage.solutionVersionInput).pressKey('backspace')
     .click(page.globalSaveButton)
-    .expect(solutionNameInput.value).eql('Really Really Kool Document Manager')
-    .expect(solutionVersionInput.value).eql('')
+    .expect(registrationPage.solutionNameInput.value).eql('Really Really Kool Document Manager')
+    .expect(registrationPage.solutionVersionInput.value).eql('')
     .expect(page.globalSolutionName.textContent).eql('Really Really Kool Document Manager')
 
   await t
-    .selectText(solutionNameInput).typeText(solutionNameInput, 'Really Kool Document Manager')
-    .selectText(solutionVersionInput).typeText(solutionVersionInput, '1')
+    .selectText(registrationPage.solutionNameInput)
+    .typeText(registrationPage.solutionNameInput, 'Really Kool Document Manager')
+    .selectText(registrationPage.solutionVersionInput)
+    .typeText(registrationPage.solutionVersionInput, '1')
     .click(page.globalSaveAndExitButton)
     .click(onboardingDashboardPage.continueRegistrationButton)
     .expect(page.globalSolutionName.textContent).eql('Really Kool Document Manager, 1')
@@ -98,8 +83,8 @@ test('Solution name shows in top bar and updates correctly when saved', async t 
 
 test('Global save buttons trigger validation and does not update top bar', async t => {
   await navigateToSupplierOnboardingSolution(t)
-    .selectText(solutionNameInput).pressKey('backspace')
-    .selectText(solutionDescriptionInput).pressKey('backspace')
+    .selectText(registrationPage.solutionNameInput).pressKey('backspace')
+    .selectText(registrationPage.solutionDescriptionInput).pressKey('backspace')
     .click(page.globalSaveButton)
 
     .expect(Selector('#errors #error-solution\\.name').innerText).contains('Solution name is missing')
@@ -113,56 +98,64 @@ test('Global save buttons trigger validation and does not update top bar', async
 
 test('Lead contact details can be changed and saved', async t => {
   await navigateToSupplierOnboardingSolution(t)
-    .click(leadContactFieldset)
+    .click(registrationPage.leadContactFieldset)
 
-    .expect(leadContactFirstNameInput.value).eql('Helpma')
-    .expect(leadContactLastNameInput.value).eql('Boab')
-    .expect(leadContactEmailInput.value).eql('helpma.boab@example.com')
-    .expect(leadContactPhoneInput.value).eql('N/A')
+    .expect(registrationPage.leadContactFirstNameInput.value).eql('Helpma')
+    .expect(registrationPage.leadContactLastNameInput.value).eql('Boab')
+    .expect(registrationPage.leadContactEmailInput.value).eql('helpma.boab@example.com')
+    .expect(registrationPage.leadContactPhoneInput.value).eql('N/A')
 
   await t
-    .selectText(leadContactFirstNameInput).typeText(leadContactFirstNameInput, 'Automated')
-    .selectText(leadContactLastNameInput).typeText(leadContactLastNameInput, 'Testing')
-    .selectText(leadContactEmailInput).typeText(leadContactEmailInput, 'autotest@example.com')
-    .selectText(leadContactPhoneInput).typeText(leadContactPhoneInput, '123 456 78910')
+    .selectText(registrationPage.leadContactFirstNameInput)
+    .typeText(registrationPage.leadContactFirstNameInput, 'Automated')
+    .selectText(registrationPage.leadContactLastNameInput)
+    .typeText(registrationPage.leadContactLastNameInput, 'Testing')
+    .selectText(registrationPage.leadContactEmailInput)
+    .typeText(registrationPage.leadContactEmailInput, 'autotest@example.com')
+    .selectText(registrationPage.leadContactPhoneInput)
+    .typeText(registrationPage.leadContactPhoneInput, '123 456 78910')
     .click(page.globalSaveAndExitButton)
 
   await navigateToSupplierOnboardingSolution(t)
-    .click(leadContactFieldset)
+    .click(registrationPage.leadContactFieldset)
 
-    .expect(leadContactFirstNameInput.value).eql('Automated')
-    .expect(leadContactLastNameInput.value).eql('Testing')
-    .expect(leadContactEmailInput.value).eql('autotest@example.com')
-    .expect(leadContactPhoneInput.value).eql('123 456 78910')
+    .expect(registrationPage.leadContactFirstNameInput.value).eql('Automated')
+    .expect(registrationPage.leadContactLastNameInput.value).eql('Testing')
+    .expect(registrationPage.leadContactEmailInput.value).eql('autotest@example.com')
+    .expect(registrationPage.leadContactPhoneInput.value).eql('123 456 78910')
 
   await t
-    .selectText(leadContactFirstNameInput).typeText(leadContactFirstNameInput, 'Helpma')
-    .selectText(leadContactLastNameInput).typeText(leadContactLastNameInput, 'Boab')
-    .selectText(leadContactEmailInput).typeText(leadContactEmailInput, 'helpma.boab@example.com')
-    .selectText(leadContactPhoneInput).typeText(leadContactPhoneInput, 'N/A')
+    .selectText(registrationPage.leadContactFirstNameInput)
+    .typeText(registrationPage.leadContactFirstNameInput, 'Helpma')
+    .selectText(registrationPage.leadContactLastNameInput)
+    .typeText(registrationPage.leadContactLastNameInput, 'Boab')
+    .selectText(registrationPage.leadContactEmailInput)
+    .typeText(registrationPage.leadContactEmailInput, 'helpma.boab@example.com')
+    .selectText(registrationPage.leadContactPhoneInput)
+    .typeText(registrationPage.leadContactPhoneInput, 'N/A')
     .click(page.globalSaveAndExitButton)
 
   await navigateToSupplierOnboardingSolution(t)
-    .click(leadContactFieldset)
+    .click(registrationPage.leadContactFieldset)
 
-    .expect(leadContactFirstNameInput.value).eql('Helpma')
-    .expect(leadContactLastNameInput.value).eql('Boab')
-    .expect(leadContactEmailInput.value).eql('helpma.boab@example.com')
-    .expect(leadContactPhoneInput.value).eql('N/A')
+    .expect(registrationPage.leadContactFirstNameInput.value).eql('Helpma')
+    .expect(registrationPage.leadContactLastNameInput.value).eql('Boab')
+    .expect(registrationPage.leadContactEmailInput.value).eql('helpma.boab@example.com')
+    .expect(registrationPage.leadContactPhoneInput.value).eql('N/A')
 })
 
 test('Blanking any and all Lead Contact fields triggers validation', async t => {
   await navigateToSupplierOnboardingSolution(t)
-    .click(leadContactFieldset)
-    .selectText(leadContactFirstNameInput).pressKey('backspace')
+    .click(registrationPage.leadContactFieldset)
+    .selectText(registrationPage.leadContactFirstNameInput).pressKey('backspace')
     .click(page.globalSaveButton)
 
     .expect(Selector('#errors #error-solution\\.contacts\\[0\\]\\.firstName').textContent).contains('Contact first name is missing')
 
   await t
-    .selectText(leadContactLastNameInput).pressKey('backspace')
-    .selectText(leadContactEmailInput).pressKey('backspace')
-    .selectText(leadContactPhoneInput).pressKey('backspace')
+    .selectText(registrationPage.leadContactLastNameInput).pressKey('backspace')
+    .selectText(registrationPage.leadContactEmailInput).pressKey('backspace')
+    .selectText(registrationPage.leadContactPhoneInput).pressKey('backspace')
     .click(page.globalSaveButton)
 
     .expect(Selector('#errors #error-solution\\.contacts\\[0\\]\\.firstName').textContent).contains('Contact first name is missing')
@@ -173,11 +166,11 @@ test('Blanking any and all Lead Contact fields triggers validation', async t => 
 
 test('Creating a new contact requires all fields to be filled', async t => {
   await navigateToSupplierOnboardingSolution(t)
-    .expect(newContactFieldset.exists).notOk()
+    .expect(registrationPage.newContactFieldset.exists).notOk()
 
   await t
-    .click(addNewContactButton)
-    .typeText(newContactContactTypeInput, 'Clinical Safety Unicorn')
+    .click(registrationPage.addNewContactButton)
+    .typeText(registrationPage.newContactContactTypeInput, 'Clinical Safety Unicorn')
     .click(page.globalSaveButton)
 
     .expect(Selector('#errors #error-solution\\.contacts\\[1\\]\\.firstName').textContent).contains('Contact first name is missing')
@@ -186,44 +179,46 @@ test('Creating a new contact requires all fields to be filled', async t => {
     .expect(Selector('#errors #error-solution\\.contacts\\[1\\]\\.phoneNumber').textContent).contains('Contact phone number is missing')
 
   await t
-    .typeText(newContactFirstNameInput, 'Zyra')
-    .typeText(newContactLastNameInput, 'Smith Fotheringham-Shaw')
-    .typeText(newContactEmailInput, 'safety.unicorn@example.com')
-    .typeText(newContactPhoneInput, '555 123 4567')
+    .typeText(registrationPage.newContactFirstNameInput, 'Zyra')
+    .typeText(registrationPage.newContactLastNameInput, 'Smith Fotheringham-Shaw')
+    .typeText(registrationPage.newContactEmailInput, 'safety.unicorn@example.com')
+    .typeText(registrationPage.newContactPhoneInput, '555 123 4567')
     .click(page.globalSaveButton)
 
   await navigateToSupplierOnboardingSolution(t)
-    .click(newContactFieldset)
+    .click(registrationPage.newContactFieldset)
 
-    .expect(newContactContactTypeInput.value).eql('Clinical Safety Unicorn')
-    .expect(newContactFirstNameInput.value).eql('Zyra')
-    .expect(newContactLastNameInput.value).eql('Smith Fotheringham-Shaw')
-    .expect(newContactEmailInput.value).eql('safety.unicorn@example.com')
-    .expect(newContactPhoneInput.value).eql('555 123 4567')
+    .expect(registrationPage.newContactContactTypeInput.value).eql('Clinical Safety Unicorn')
+    .expect(registrationPage.newContactFirstNameInput.value).eql('Zyra')
+    .expect(registrationPage.newContactLastNameInput.value).eql('Smith Fotheringham-Shaw')
+    .expect(registrationPage.newContactEmailInput.value).eql('safety.unicorn@example.com')
+    .expect(registrationPage.newContactPhoneInput.value).eql('555 123 4567')
 })
 
 test('New contact details can be changed and saved', async t => {
   await navigateToSupplierOnboardingSolution(t)
-    .click(newContactFieldset)
-    .selectText(newContactContactTypeInput).typeText(newContactContactTypeInput, 'Chief Safety Unicorn')
-    .selectText(newContactEmailInput).typeText(newContactEmailInput, 'chief.safety.unicorn@example.com')
+    .click(registrationPage.newContactFieldset)
+    .selectText(registrationPage.newContactContactTypeInput)
+    .typeText(registrationPage.newContactContactTypeInput, 'Chief Safety Unicorn')
+    .selectText(registrationPage.newContactEmailInput)
+    .typeText(registrationPage.newContactEmailInput, 'chief.safety.unicorn@example.com')
     .click(page.globalSaveAndExitButton)
 
   await navigateToSupplierOnboardingSolution(t)
-    .click(newContactFieldset)
+    .click(registrationPage.newContactFieldset)
 
-    .expect(newContactContactTypeInput.value).eql('Chief Safety Unicorn')
-    .expect(newContactFirstNameInput.value).eql('Zyra')
-    .expect(newContactLastNameInput.value).eql('Smith Fotheringham-Shaw')
-    .expect(newContactEmailInput.value).eql('chief.safety.unicorn@example.com')
-    .expect(newContactPhoneInput.value).eql('555 123 4567')
+    .expect(registrationPage.newContactContactTypeInput.value).eql('Chief Safety Unicorn')
+    .expect(registrationPage.newContactFirstNameInput.value).eql('Zyra')
+    .expect(registrationPage.newContactLastNameInput.value).eql('Smith Fotheringham-Shaw')
+    .expect(registrationPage.newContactEmailInput.value).eql('chief.safety.unicorn@example.com')
+    .expect(registrationPage.newContactPhoneInput.value).eql('555 123 4567')
 })
 
 test('Blanking some optional contact fields triggers validation', async t => {
   await navigateToSupplierOnboardingSolution(t)
-    .click(newContactFieldset)
-    .selectText(newContactContactTypeInput).pressKey('backspace')
-    .selectText(newContactEmailInput).pressKey('backspace')
+    .click(registrationPage.newContactFieldset)
+    .selectText(registrationPage.newContactContactTypeInput).pressKey('backspace')
+    .selectText(registrationPage.newContactEmailInput).pressKey('backspace')
     .click(page.globalSaveButton)
 
     .expect(Selector('#errors #error-solution\\.contacts\\[1\\]\\.contactType').textContent).contains('Contact type is missing')
@@ -232,16 +227,16 @@ test('Blanking some optional contact fields triggers validation', async t => {
 
 test('Blanking all optional contact fields removes the contact', async t => {
   await navigateToSupplierOnboardingSolution(t)
-    .click(newContactFieldset)
-    .selectText(newContactContactTypeInput).pressKey('backspace')
-    .selectText(newContactFirstNameInput).pressKey('backspace')
-    .selectText(newContactLastNameInput).pressKey('backspace')
-    .selectText(newContactEmailInput).pressKey('backspace')
-    .selectText(newContactPhoneInput).pressKey('backspace')
+    .click(registrationPage.newContactFieldset)
+    .selectText(registrationPage.newContactContactTypeInput).pressKey('backspace')
+    .selectText(registrationPage.newContactFirstNameInput).pressKey('backspace')
+    .selectText(registrationPage.newContactLastNameInput).pressKey('backspace')
+    .selectText(registrationPage.newContactEmailInput).pressKey('backspace')
+    .selectText(registrationPage.newContactPhoneInput).pressKey('backspace')
     .click(page.globalSaveButton)
 
     .expect(Selector('#errors').exists).notOk()
-    .expect(newContactFieldset.exists).notOk()
+    .expect(registrationPage.newContactFieldset.exists).notOk()
 })
 
 test('Creating a new solution leads to an empty form via a customised status page', async t => {
@@ -252,16 +247,16 @@ test('Creating a new solution leads to an empty form via a customised status pag
     .expect(onboardingDashboardPage.continueRegistrationButton.textContent).eql('Start')
 
     .click(onboardingDashboardPage.continueRegistrationButton)
-    .click(leadContactFieldset)
+    .click(registrationPage.leadContactFieldset)
 
     .expect(page.globalSolutionName.exists).notOk()
-    .expect(solutionNameInput.value).eql('')
-    .expect(solutionDescriptionInput.value).eql('')
-    .expect(solutionVersionInput.value).eql('')
-    .expect(leadContactFirstNameInput.value).eql('')
-    .expect(leadContactLastNameInput.value).eql('')
-    .expect(leadContactEmailInput.value).eql('')
-    .expect(leadContactPhoneInput.value).eql('')
+    .expect(registrationPage.solutionNameInput.value).eql('')
+    .expect(registrationPage.solutionDescriptionInput.value).eql('')
+    .expect(registrationPage.solutionVersionInput.value).eql('')
+    .expect(registrationPage.leadContactFirstNameInput.value).eql('')
+    .expect(registrationPage.leadContactLastNameInput.value).eql('')
+    .expect(registrationPage.leadContactEmailInput.value).eql('')
+    .expect(registrationPage.leadContactPhoneInput.value).eql('')
 })
 
 test('Solution cannot have the same name and version as another existing solution', async t => {
@@ -270,22 +265,22 @@ test('Solution cannot have the same name and version as another existing solutio
     .click(supplierDashboardPage.addNewSolutionButton)
     .click(onboardingDashboardPage.continueRegistrationButton)
 
-    .typeText(solutionNameInput, 'Really Kool Document Manager')
-    .typeText(solutionDescriptionInput, 'This is the koolest kore system')
-    .typeText(solutionVersionInput, '1')
+    .typeText(registrationPage.solutionNameInput, 'Really Kool Document Manager')
+    .typeText(registrationPage.solutionDescriptionInput, 'This is the koolest kore system')
+    .typeText(registrationPage.solutionVersionInput, '1')
 
-    .click(leadContactFieldset)
-    .typeText(leadContactFirstNameInput, 'Automated')
-    .typeText(leadContactLastNameInput, 'Testing')
-    .typeText(leadContactEmailInput, 'autotest@example.com')
-    .typeText(leadContactPhoneInput, '123 456 78910')
+    .click(registrationPage.leadContactFieldset)
+    .typeText(registrationPage.leadContactFirstNameInput, 'Automated')
+    .typeText(registrationPage.leadContactLastNameInput, 'Testing')
+    .typeText(registrationPage.leadContactEmailInput, 'autotest@example.com')
+    .typeText(registrationPage.leadContactPhoneInput, '123 456 78910')
 
     .click(page.globalSaveButton)
 
     .expect(Selector('#errors #error-solution\\.name').textContent).contains('Solution name and version already exists')
 
-    .selectText(solutionNameInput)
-    .typeText(solutionNameInput, 'Really Kool Kore System')
+    .selectText(registrationPage.solutionNameInput)
+    .typeText(registrationPage.solutionNameInput, 'Really Kool Kore System')
 
     .click(page.globalSaveButton)
 

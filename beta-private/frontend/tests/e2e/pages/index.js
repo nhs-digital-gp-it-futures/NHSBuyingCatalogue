@@ -40,6 +40,31 @@ class OnboardingDashboardPage extends Page {
   }
 }
 
+class RegistrationPage extends Page {
+  constructor () {
+    super()
+
+    this.solutionNameInput = Selector('#content [name="solution\\[name\\]"]')
+    this.solutionDescriptionInput = Selector('#content [name="solution\\[description\\]"]')
+    this.solutionVersionInput = Selector('#content [name="solution\\[version\\]"]')
+
+    this.leadContactFieldset = Selector('.contact[data-contact-index="0"] > fieldset > legend')
+    this.leadContactFirstNameInput = Selector('input#solution\\.contacts\\[0\\]\\.firstName')
+    this.leadContactLastNameInput = Selector('input#solution\\.contacts\\[0\\]\\.lastName')
+    this.leadContactEmailInput = Selector('input#solution\\.contacts\\[0\\]\\.emailAddress')
+    this.leadContactPhoneInput = Selector('input#solution\\.contacts\\[0\\]\\.phoneNumber')
+
+    this.addNewContactButton = Selector('#add-contact-button')
+    this.newContactFieldset = Selector('.contact[data-contact-index="1"] > fieldset > legend')
+    this.newContactContactTypeInput = Selector('input#solution\\.contacts\\[1\\]\\.contactType')
+    this.newContactFirstNameInput = Selector('input#solution\\.contacts\\[1\\]\\.firstName')
+    this.newContactLastNameInput = Selector('input#solution\\.contacts\\[1\\]\\.lastName')
+    this.newContactEmailInput = Selector('input#solution\\.contacts\\[1\\]\\.emailAddress')
+    this.newContactPhoneInput = Selector('input#solution\\.contacts\\[1\\]\\.phoneNumber')
+  }
+}
+
 export const page = new Page()
 export const supplierDashboardPage = new SupplierDashboardPage()
 export const onboardingDashboardPage = new OnboardingDashboardPage()
+export const registrationPage = new RegistrationPage()
