@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const router = require('express').Router({ strict: true, mergeParams: true })
 const { dataProvider } = require('catalogue-data')
 
@@ -23,6 +24,9 @@ router.get('/', strictRouting, async (req, res) => {
       ...soln,
       url: `solutions/${soln.id}/#content`
     }))
+
+    context.solutions.onboarding = _.orderBy(context.solutions.onboarding, 'displayName')
+    context.solutions.live = _.orderBy(context.solutions.live, 'displayName')
   } catch (err) {
     context.errors.push(err)
   }
@@ -31,5 +35,6 @@ router.get('/', strictRouting, async (req, res) => {
 })
 
 router.use('/solutions/', require('./registration'))
+router.use('/compliance/', require('./compliance'))
 
 module.exports = router

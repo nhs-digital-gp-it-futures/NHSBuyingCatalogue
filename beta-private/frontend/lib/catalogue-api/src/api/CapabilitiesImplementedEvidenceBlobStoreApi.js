@@ -49,7 +49,7 @@
 
 
     /**
-     * Upload a file to support a claim
+     * Upload a file to support a claim  If the file already exists on the server, then a new version is created
      * Server side folder structure is something like:  --Organisation  ----Solution  ------Capability Evidence  --------Appointment Management - Citizen  --------Appointment Management - GP  --------Clinical Decision Support  --------[all other claimed capabilities]  ----------Images  ----------PDF  ----------Videos  ----------RTM  ----------Misc                where subFolder is an optional folder under a claimed capability ie Images, PDF, et al
      * @param {String} claimId Unique identifier of claim
      * @param {File} file Client file path
@@ -106,7 +106,7 @@
     }
 
     /**
-     * Upload a file to support a claim
+     * Upload a file to support a claim  If the file already exists on the server, then a new version is created
      * Server side folder structure is something like:  --Organisation  ----Solution  ------Capability Evidence  --------Appointment Management - Citizen  --------Appointment Management - GP  --------Clinical Decision Support  --------[all other claimed capabilities]  ----------Images  ----------PDF  ----------Videos  ----------RTM  ----------Misc                where subFolder is an optional folder under a claimed capability ie Images, PDF, et al
      * @param {String} claimId Unique identifier of claim
      * @param {File} file Client file path
@@ -127,7 +127,7 @@
      * Download a file which is supporting a claim
      * @param {String} claimId unique identifier of solution claim
      * @param {Object} opts Optional parameters
-     * @param {String} opts.extUrl externally accessible URL of file
+     * @param {String} opts.uniqueId unique identifier of file
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/FileResult} and HTTP response
      */
     this.apiCapabilitiesImplementedEvidenceBlobStoreDownloadByClaimIdPostWithHttpInfo = function(claimId, opts) {
@@ -144,7 +144,7 @@
         'claimId': claimId
       };
       var queryParams = {
-        'extUrl': opts['extUrl'],
+        'uniqueId': opts['uniqueId'],
       };
       var collectionQueryParams = {
       };
@@ -169,7 +169,7 @@
      * Download a file which is supporting a claim
      * @param {String} claimId unique identifier of solution claim
      * @param {Object} opts Optional parameters
-     * @param {String} opts.extUrl externally accessible URL of file
+     * @param {String} opts.uniqueId unique identifier of file
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/FileResult}
      */
     this.apiCapabilitiesImplementedEvidenceBlobStoreDownloadByClaimIdPost = function(claimId, opts) {

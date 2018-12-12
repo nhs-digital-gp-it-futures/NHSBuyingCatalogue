@@ -9,6 +9,17 @@ const solutionOnboardingStatusMap = {
   5: { stageName: 'Solution Page', stageStep: '4 of 4', status: 'In progress' }
 }
 
+const solutionComplianceStatusMap = {
+  0: { statusClass: 'not-started', statusTransKey: 'Statuses.Standard.NotStarted' },
+  1: { statusClass: 'draft', statusTransKey: 'Statuses.Standard.Draft' },
+  2: { statusClass: 'submitted', statusTransKey: 'Statuses.Standard.Submitted' },
+  3: { statusClass: 'remediation', statusTransKey: 'Statuses.Standard.Remediation' },
+  4: { statusClass: 'approved', statusTransKey: 'Statuses.Standard.Approved' },
+  5: { statusClass: 'approved first', statusTransKey: 'Statuses.Standard.Approved' },
+  6: { statusClass: 'approved partial', statusTransKey: 'Statuses.Standard.Approved' },
+  7: { statusClass: 'rejected', statusTransKey: 'Statuses.Standard.Rejected' }
+}
+
 const EMPTY_UUID = '00000000-0000-0000-0000-000000000000'
 
 const isOverarchingStandard = std => _.startsWith(std.standardId || std.id, 'STD-O-')
@@ -43,6 +54,10 @@ class DataProvider {
     this.solutionsApi = new CatalogueApi.SolutionsApi()
     this.solutionsExApi = new CatalogueApi.SolutionsExApi()
     this.capabilityMappingsApi = new CatalogueApi.CapabilityMappingsApi()
+  }
+
+  async contactById (contactId) {
+    return this.contactsApi.apiContactsByIdByIdGet(contactId)
   }
 
   async contactByEmail (email) {
@@ -119,7 +134,8 @@ class DataProvider {
       contacts: _.orderBy(solutionEx.technicalContact, c => {
         // Lead Contact sorts above all others, then alphabetic by type
         return c.contactType === 'Lead Contact' ? '' : c.contactType
-      })
+      }),
+      _raw: solutionEx
     }
   }
 
@@ -210,6 +226,40 @@ class DataProvider {
         standards
       }
     })
+  }
+
+  async solutionForCompliance (solutionId) {
+    const solution = await this.solutionForRegistration(solutionId)
+
+    solution.evidence = solution._raw.claimedStandardEvidence
+    solution.reviews = solution._raw.claimedStandardReview
+
+    const leadContact = _.find(solution.contacts, { contactType: 'Lead Contact' })
+
+    // compute status and ownership information for each standard
+    solution.standards.forEach(std => {
+      _.assign(std, {
+        ...solutionComplianceStatusMap[std.status],
+        ownerContact: _.create(leadContact, {
+          displayName: `${leadContact.firstName} ${leadContact.lastName}`
+        })
+      })
+    })
+
+    return solution
+  }
+
+  async updateSolutionForCompliance (solution) {
+    const solnEx = await this.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet(solution.id)
+
+    solnEx.claimedStandard = _.map(solution.standards,
+      std => _.pick(std, ['id', 'status', 'solutionId', 'standardId'])
+    )
+    solnEx.claimedStandardEvidence = solution.evidence
+    solnEx.claimedStandardReview = solution.reviews
+
+    await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
+    return this.solutionForCompliance(solution.id)
   }
 }
 

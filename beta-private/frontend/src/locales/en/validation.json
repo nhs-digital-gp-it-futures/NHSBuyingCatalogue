@@ -11,7 +11,8 @@
       "Description": {
         "Missing": "Summary description is missing",
         "MissingAction": "Please enter a Summary description",
-        "TooLong": "Summary description exceeds maximum length of 300 characters"
+        "TooLong": "Summary description exceeds maximum length of 300 characters",
+        "TooLongAction": "Please shorten. Summary description maximum length is 300 characters"
       },
       "Version": {
         "TooLong": "$t(Solution) version exceeds maximum length of 10 characters"

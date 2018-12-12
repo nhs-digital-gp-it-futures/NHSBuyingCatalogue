@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **status** | **String** | Current status of this ClaimedCapability | [optional] 
 **id** | **String** | Unique identifier of entity | 
 **solutionId** | **String** | Unique identifier of solution | 
+**ownerId** | **String** | Unique identifier of supplier Contact who is responsible for this claim | [optional] 
 
 
 <a name="StatusEnum"></a>

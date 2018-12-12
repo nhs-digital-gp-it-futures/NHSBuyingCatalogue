@@ -55,6 +55,7 @@
 
     _this['id'] = id;
     _this['solutionId'] = solutionId;
+
   };
 
   /**
@@ -80,6 +81,9 @@
       if (data.hasOwnProperty('solutionId')) {
         obj['solutionId'] = ApiClient.convertToType(data['solutionId'], 'String');
       }
+      if (data.hasOwnProperty('ownerId')) {
+        obj['ownerId'] = ApiClient.convertToType(data['ownerId'], 'String');
+      }
     }
     return obj;
   }
@@ -104,6 +108,11 @@
    * @member {String} solutionId
    */
   exports.prototype['solutionId'] = undefined;
+  /**
+   * Unique identifier of supplier Contact who is responsible for this claim
+   * @member {String} ownerId
+   */
+  exports.prototype['ownerId'] = undefined;
 
 
   /**
