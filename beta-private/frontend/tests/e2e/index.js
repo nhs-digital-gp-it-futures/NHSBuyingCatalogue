@@ -4,19 +4,7 @@ import { Selector } from 'testcafe'
 import axeCheck from 'axe-testcafe'
 
 import { asSupplier } from './roles'
-import { page } from './pages'
-
-const addNewSolutionButton = Selector('#add-new-solution')
-const firstOnboardingSolutionName = Selector(
-  '#solutions-onboarding table > tbody > tr:first-child > td:first-child'
-)
-const firstOnboardingSolutionStatus = Selector(
-  '#solutions-onboarding table > tbody > tr:first-child > td:nth-child(4)'
-)
-const lastOnboardingSolutionName = Selector(
-  '#solutions-onboarding table > tbody > tr:last-child > td:first-child'
-)
-const continueRegistrationButton = Selector('#content a[href^=register]')
+import { page, supplierDashboardPage, onboardingDashboardPage } from './pages'
 
 const solutionNameInput = Selector('#content [name="solution\\[name\\]"]')
 const solutionDescriptionInput = Selector('#content [name="solution\\[description\\]"]')
@@ -58,15 +46,15 @@ test('Clicking logo returns to supplier homepage', async t => {
 
 test('Solutions that are currently onboarding are listed', async t => {
   await asSupplier(t)
-    .expect(firstOnboardingSolutionName.textContent).eql('Really Kool Document Manager | 1')
-    .expect(firstOnboardingSolutionStatus.textContent).eql('Draft')
+    .expect(supplierDashboardPage.firstOnboardingSolutionName.textContent).eql('Really Kool Document Manager | 1')
+    .expect(supplierDashboardPage.firstOnboardingSolutionStatus.textContent).eql('Draft')
 })
 
 function navigateToSupplierOnboardingSolution (t) {
   return asSupplier(t)
     .click(page.homeLink)
-    .click(firstOnboardingSolutionName)
-    .click(continueRegistrationButton)
+    .click(supplierDashboardPage.firstOnboardingSolutionName)
+    .click(onboardingDashboardPage.continueRegistrationButton)
 }
 
 test('Registration page shows correct information accessibly', async t => {
@@ -104,7 +92,7 @@ test('Solution name shows in top bar and updates correctly when saved', async t 
     .selectText(solutionNameInput).typeText(solutionNameInput, 'Really Kool Document Manager')
     .selectText(solutionVersionInput).typeText(solutionVersionInput, '1')
     .click(page.globalSaveAndExitButton)
-    .click(continueRegistrationButton)
+    .click(onboardingDashboardPage.continueRegistrationButton)
     .expect(page.globalSolutionName.textContent).eql('Really Kool Document Manager, 1')
 })
 
@@ -259,11 +247,11 @@ test('Blanking all optional contact fields removes the contact', async t => {
 test('Creating a new solution leads to an empty form via a customised status page', async t => {
   await asSupplier(t)
     .click(page.homeLink)
-    .click(addNewSolutionButton)
+    .click(supplierDashboardPage.addNewSolutionButton)
 
-    .expect(continueRegistrationButton.textContent).eql('Start')
+    .expect(onboardingDashboardPage.continueRegistrationButton.textContent).eql('Start')
 
-    .click(continueRegistrationButton)
+    .click(onboardingDashboardPage.continueRegistrationButton)
     .click(leadContactFieldset)
 
     .expect(page.globalSolutionName.exists).notOk()
@@ -279,8 +267,8 @@ test('Creating a new solution leads to an empty form via a customised status pag
 test('Solution cannot have the same name and version as another existing solution', async t => {
   await asSupplier(t)
     .click(page.homeLink)
-    .click(addNewSolutionButton)
-    .click(continueRegistrationButton)
+    .click(supplierDashboardPage.addNewSolutionButton)
+    .click(onboardingDashboardPage.continueRegistrationButton)
 
     .typeText(solutionNameInput, 'Really Kool Document Manager')
     .typeText(solutionDescriptionInput, 'This is the koolest kore system')
@@ -309,7 +297,7 @@ test('Newly created solution appears in the correct place on the supplier dashbo
   await asSupplier(t)
     .click(page.homeLink)
 
-    .expect(lastOnboardingSolutionName.textContent).eql('Really Kool Kore System | 1')
+    .expect(supplierDashboardPage.lastOnboardingSolutionName.textContent).eql('Really Kool Kore System | 1')
 })
 
 function navigateToSupplierOnboardingSolutionCapabilities (t) {
@@ -435,5 +423,5 @@ test('Registering the solution shows a confirmation message', async t => {
 test('Registered solution shows status change on dashboard', async t => {
   await asSupplier(t)
     .click(page.homeLink)
-    .expect(firstOnboardingSolutionStatus.textContent).eql('Registered')
+    .expect(supplierDashboardPage.firstOnboardingSolutionStatus.textContent).eql('Registered')
 })

@@ -15,4 +15,31 @@ class Page {
   }
 }
 
+class SupplierDashboardPage extends Page {
+  constructor () {
+    super()
+
+    this.addNewSolutionButton = Selector('#add-new-solution')
+    this.firstOnboardingSolutionName = Selector(
+      '#solutions-onboarding table > tbody > tr:first-child > td:first-child'
+    )
+    this.firstOnboardingSolutionStatus = Selector(
+      '#solutions-onboarding table > tbody > tr:first-child > td:nth-child(4)'
+    )
+    this.lastOnboardingSolutionName = Selector(
+      '#solutions-onboarding table > tbody > tr:last-child > td:first-child'
+    )
+  }
+}
+
+class OnboardingDashboardPage extends Page {
+  constructor () {
+    super()
+
+    this.continueRegistrationButton = Selector('#content a[href^=register]')
+  }
+}
+
 export const page = new Page()
+export const supplierDashboardPage = new SupplierDashboardPage()
+export const onboardingDashboardPage = new OnboardingDashboardPage()
