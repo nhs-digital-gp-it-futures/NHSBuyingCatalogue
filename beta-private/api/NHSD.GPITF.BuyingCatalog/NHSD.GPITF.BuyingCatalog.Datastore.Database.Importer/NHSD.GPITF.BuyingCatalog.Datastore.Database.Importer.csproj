@@ -25,7 +25,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="..\NHSD.GPITF.BuyingCatalog\hosting.json" Link="hosting.json" />
+    <None Include="..\NHSD.GPITF.BuyingCatalog\hosting.json" Link="hosting.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
