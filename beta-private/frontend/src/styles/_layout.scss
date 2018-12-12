@@ -65,12 +65,6 @@ a {
 
   // account for fixed header with JS support @see src/static/js/app.js
   padding-top: $header-total-height;
-
-  .page-main-heading {
-    p {
-      font-weight: bold;
-    }
-  }
 }
 
 body {
@@ -95,6 +89,12 @@ body > header {
 
     > nav {
       flex: auto;
+    }
+
+    .auth {
+      .user {
+        padding-right: 1em;
+      }
     }
   }
 
