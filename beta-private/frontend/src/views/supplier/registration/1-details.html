@@ -287,7 +287,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const elNewContact = $('fieldset.collapsible', elInsertedTemplate)
     elNewContact.classList.remove('collapsed')
-    collapseAllFieldsetsExcept(elNewContact)
+    // HACK: see app.js
+    window.collapseAllFieldsetsExcept(elNewContact)
     window.location.hash = $('input[type=text]', elNewContact).id
   })
 })

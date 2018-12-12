@@ -68,6 +68,10 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
+  // HACK: improperly moved code broke the script at the original position, expose the
+  //       missing function
+  window.collapseAllFieldsetsExcept = collapseAllFieldsetsExcept
+
   collapseAllFieldsetsExcept($("fieldset.collapsible:first-of-type"));
 
   function handleCollapsibleFieldset(ev) {
