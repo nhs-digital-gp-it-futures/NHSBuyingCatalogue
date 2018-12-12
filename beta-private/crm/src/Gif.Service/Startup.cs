@@ -25,132 +25,131 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Gif.Service
 {
+  /// <summary>
+  /// Startup
+  /// </summary>
+  public class Startup
+  {
+    private readonly IHostingEnvironment _hostingEnv;
+
+    private IConfiguration Configuration { get; }
+
     /// <summary>
-    /// Startup
+    /// Constructor
     /// </summary>
-    public class Startup
+    /// <param name="env"></param>
+    /// <param name="configuration"></param>
+    public Startup(IHostingEnvironment env, IConfiguration configuration)
     {
-        private readonly IHostingEnvironment _hostingEnv;
-
-        private IConfiguration Configuration { get; }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="env"></param>
-        /// <param name="configuration"></param>
-        public Startup(IHostingEnvironment env, IConfiguration configuration)
-        {
-            _hostingEnv = env;
-            Configuration = configuration;
-        }
-
-        /// <summary>
-        /// This method gets called by the runtime. Use this method to add services to the container.
-        /// </summary>
-        /// <param name="services"></param>
-        public void ConfigureServices(IServiceCollection services)
-        {
-            // Add framework services.
-            services
-                .AddMvc()
-                .AddJsonOptions(opts =>
-                {
-                    opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                    opts.SerializerSettings.Converters.Add(new StringEnumConverter {
-                        CamelCaseText = false
-                    });
-                });
-
-            services
-                .AddSwaggerGen(c =>
-                {
-                    c.SwaggerDoc("v1.0", new Info
-                    {
-                        Version = "v1.0",
-                        Title = "Buying Catalog API",
-                        Description = "Buying Catalog API (ASP.NET Core 2.0)",
-                        Contact = new Contact()
-                        {
-                           Name = "Swagger Codegen Contributors",
-                           Url = "https://github.com/swagger-api/swagger-codegen",
-                           Email = ""
-                        },
-                        TermsOfService = ""
-                    });
-                    c.CustomSchemaIds(type => type.FriendlyId(true));
-                    c.DescribeAllEnumsAsStrings();
-                    c.IncludeXmlComments($"{AppContext.BaseDirectory}{Path.DirectorySeparatorChar}{_hostingEnv.ApplicationName}.xml");
-                    // Sets the basePath property in the Swagger document generated
-                    c.DocumentFilter<BasePathFilter>("/sie");
-
-                    // Include DataAnnotation attributes on Controller Action parameters as Swagger validation rules (e.g required, pattern, ..)
-                    // Use [ValidateModelState] on Actions to actually validate it in C# as well!
-                    c.OperationFilter<GeneratePathParamsValidationFilter>();
-                });
-
-            services.AddIdentityServer()
-                // TODO : Depending on hosting this may need replacing with a cert (also probably better practice to handle instance restarts)
-                // https://stackoverflow.com/questions/41572900/addtemporarysigningcredential-vs-addsigningcredential-in-identityserver4
-                .AddDeveloperSigningCredential() 
-                .AddInMemoryApiResources(AuthConfig.GetApiResources())
-                .AddInMemoryClients(AuthConfig.GetClients());
-
-            services.AddMvcCore()
-                .AddAuthorization()
-                .AddJsonFormatters();
-
-            services.AddAuthentication("Bearer")
-                .AddIdentityServerAuthentication(options =>
-                {
-#if DEBUG
-                    options.Authority = "https://localhost:44365";
-#else
-                    options.Authority = "https://gifservicedev.azurewebsites.net";
-#endif
-                    options.RequireHttpsMetadata = false;
-
-                    options.ApiName = "GIFBuyingCatalogue";
-                });
-
-
-        }
-
-        /// <summary>
-        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        /// </summary>
-        /// <param name="app"></param>
-        /// <param name="env"></param>
-        /// <param name="loggerFactory"></param>
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
-        {
-            app.UseIdentityServer();
-            app.UseAuthentication();
-
-            app
-                .UseMvc()
-                .UseDefaultFiles()
-                .UseStaticFiles()
-                .UseSwagger()
-                .UseSwaggerUI(c =>
-                {
-                    //TODO: Either use the SwaggerGen generated Swagger contract (generated from C# classes)
-                    c.SwaggerEndpoint("/spec.json", "Buying Catalog API");
-
-                    //TODO: Or alternatively use the original Swagger contract that's included in the static files
-                    // c.SwaggerEndpoint("/swagger-original.json", "Buying Catalog API Original");
-                });
-
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                //TODO: Enable production exception handling (https://docs.microsoft.com/en-us/aspnet/core/fundamentals/error-handling)
-                // app.UseExceptionHandler("/Home/Error");
-            }
-        }
+      _hostingEnv = env;
+      Configuration = configuration;
     }
+
+    /// <summary>
+    /// This method gets called by the runtime. Use this method to add services to the container.
+    /// </summary>
+    /// <param name="services"></param>
+    public void ConfigureServices(IServiceCollection services)
+    {
+      // Add framework services.
+      services
+        .AddMvc()
+        .AddJsonOptions(opts =>
+        {
+          opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+          opts.SerializerSettings.Converters.Add(new StringEnumConverter
+          {
+            CamelCaseText = false
+          });
+        });
+
+      if (_hostingEnv.IsDevelopment())
+      {
+        services
+          .AddSwaggerGen(c =>
+          {
+            c.SwaggerDoc("v1.0", new Info
+            {
+              Version = "v1.0",
+              Title = "Buying Catalog API",
+              Description = "Buying Catalog API (ASP.NET Core 2.0)",
+              Contact = new Contact()
+              {
+                Name = "Swagger Codegen Contributors",
+                Url = "https://github.com/swagger-api/swagger-codegen",
+                Email = ""
+              },
+              TermsOfService = ""
+            });
+            c.CustomSchemaIds(type => type.FriendlyId(true));
+            c.DescribeAllEnumsAsStrings();
+            c.IncludeXmlComments($"{AppContext.BaseDirectory}{Path.DirectorySeparatorChar}{_hostingEnv.ApplicationName}.xml");
+            // Sets the basePath property in the Swagger document generated
+            c.DocumentFilter<BasePathFilter>("/sie");
+
+            // Include DataAnnotation attributes on Controller Action parameters as Swagger validation rules (e.g required, pattern, ..)
+            // Use [ValidateModelState] on Actions to actually validate it in C# as well!
+            c.OperationFilter<GeneratePathParamsValidationFilter>();
+          });
+      }
+
+      services.AddIdentityServer()
+        // TODO : Depending on hosting this may need replacing with a cert (also probably better practice to handle instance restarts)
+        // https://stackoverflow.com/questions/41572900/addtemporarysigningcredential-vs-addsigningcredential-in-identityserver4
+        .AddDeveloperSigningCredential()
+        .AddInMemoryApiResources(AuthConfig.GetApiResources())
+        .AddInMemoryClients(AuthConfig.GetClients());
+
+      services.AddMvcCore()
+        .AddAuthorization()
+        .AddJsonFormatters();
+
+      services.AddAuthentication("Bearer")
+        .AddIdentityServerAuthentication(options =>
+        {
+          options.Authority = Environment.GetEnvironmentVariable("GIF_AUTHORITY_URI") ?? Configuration["GIF:Authority_Uri"] ?? "http://localhost:5001";
+          options.RequireHttpsMetadata = false;
+
+          options.ApiName = "GIFBuyingCatalogue";
+        });
+    }
+
+    /// <summary>
+    /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+    /// </summary>
+    /// <param name="app"></param>
+    /// <param name="env"></param>
+    /// <param name="loggerFactory"></param>
+    public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+    {
+      app.UseIdentityServer();
+      app.UseAuthentication();
+
+      app
+        .UseMvc()
+        .UseDefaultFiles()
+        .UseStaticFiles();
+
+
+      if (env.IsDevelopment())
+      {
+        app
+        .UseSwagger()
+        .UseSwaggerUI(c =>
+        {
+          //TODO: Either use the SwaggerGen generated Swagger contract (generated from C# classes)
+          c.SwaggerEndpoint("/spec.json", "Buying Catalog API");
+
+          //TODO: Or alternatively use the original Swagger contract that's included in the static files
+          // c.SwaggerEndpoint("/swagger-original.json", "Buying Catalog API Original");
+        })
+        .UseDeveloperExceptionPage();
+      }
+      else
+      {
+        //TODO: Enable production exception handling (https://docs.microsoft.com/en-us/aspnet/core/fundamentals/error-handling)
+        // app.UseExceptionHandler("/Home/Error");
+      }
+    }
+  }
 }
