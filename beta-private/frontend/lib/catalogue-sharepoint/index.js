@@ -1,14 +1,53 @@
 const fetch = require('node-fetch')
 const fs = require('fs')
 const path = require('path')
+const os = require('os')
 
-const INTERMEDIATE_STORAGE = 'temp_storage/'
+const INTERMEDIATE_STORAGE = process.env.UPLOAD_TEMP_FILE_STORE || os.tmpdir()
 
 class SharePointProvider {
   constructor (CatalogueApi, intermediateStoragePath) {
     this.CatalogueApi = CatalogueApi
     this.stdBlobStoreApi = new CatalogueApi.StandardsApplicableEvidenceBlobStoreApi()
+    this.capBlobStoreApi = new CatalogueApi.CapabilitiesImplementedEvidenceBlobStoreApi()
     this.intermediateStoragePath = intermediateStoragePath || INTERMEDIATE_STORAGE
+  }
+
+  async getCapEvidence (claimID, subFolder, pageIndex = 1) {
+    const options = {
+      pageIndex: pageIndex,
+      subFolder
+    }
+
+    return this.capBlobStoreApi.apiCapabilitiesImplementedEvidenceBlobStoreEnumerateFolderByClaimIdGet(
+      claimID,
+      options
+    )
+  }
+
+  async getCapEvidenceFolders (claimID, subFolder) {
+    const enumeratedBlobs = await this.getCapEvidence(claimID, subFolder)
+    const filteredBlobs = enumeratedBlobs.items.filter((blob) => blob.isFolder)
+    return {
+      ...enumeratedBlobs,
+      items: filteredBlobs,
+      pageSize: filteredBlobs.length
+    }
+  }
+
+  async getCapEvidenceFiles (claimID, subFolder, pageIndex) {
+    const enumeratedBlobs = await this.getCapEvidence(claimID, subFolder, pageIndex)
+    const filteredBlobs = enumeratedBlobs.items.filter((blob) => !blob.isFolder)
+    return {
+      ...enumeratedBlobs,
+      items: filteredBlobs,
+      pageSize: filteredBlobs.length
+    }
+  }
+
+  async uploadCapEvidence (claimID, buffer, filename, subFolder) {
+    const uploadMethod = this.capBlobStoreApi.apiCapabilitiesImplementedEvidenceBlobStoreAddEvidenceForClaimPost.bind(this.capBlobStoreApi)
+    return this.uploadEvidence(uploadMethod, claimID, buffer, filename, subFolder)
   }
 
   async getStdEvidence (claimID, subFolder, pageIndex = 1) {
@@ -53,17 +92,17 @@ class SharePointProvider {
       subFolder: subFolder
     }
     try {
-      await this.saveBuffer(buffer, filename)
-      const readStream = this.createFileReadStream(filename)
+      await this.saveBuffer(buffer, filename, claimID)
+      const readStream = this.createFileReadStream(filename, claimID)
       const uploadRes = await method(claimID, readStream, filename, options)
-      await this.deleteFile(filename)
+      await this.deleteFile(filename, claimID)
       return uploadRes
-    } catch(err) {
+    } catch (err) {
       throw err
     }
   }
-  async saveBuffer (buffer, filename) {
-    const storagePath = this.createStoragePath(filename)
+  async saveBuffer (buffer, filename, claimID) {
+    const storagePath = this.createFileStoragePath(filename, claimID)
     return new Promise((resolve, reject) => {
       this.writeFile(storagePath, buffer, (err) => {
         if (err) reject(err)
@@ -72,30 +111,49 @@ class SharePointProvider {
     })
   }
 
-  createFileReadStream (filename) {
-    const storagePath = this.createStoragePath(filename)
+  createFileReadStream (filename, claimID) {
+    const storagePath = this.createFileStoragePath(filename, claimID)
     return this.createReadStream(storagePath)
   }
 
-  async deleteFile (filename) {
-    const storagePath = this.createStoragePath(filename)
+  async deleteFile (filename, claimID) {
+    const claimFolderPath = this.createClaimFolderPath(claimID)
+    const storagePath = this.createFileStoragePath(filename, claimID)
+
+    // Unlink the file, then unlink the folder
     return new Promise((resolve, reject) => {
-      return this.unlinkFile(storagePath, (err) => {
-        if (err) reject(err)
-        resolve()
+      return this.unlinkFile(storagePath, (fileErr) => {
+        if (fileErr) return reject(fileErr)
+        return resolve()
       })
-    })
+    }).then(new Promise((resolve, reject) => {
+      this.removeFolder(claimFolderPath, (dirErr) => {
+        if (dirErr) return reject(dirErr)
+        return resolve()
+      })
+    }))
   }
 
-  createStoragePath (filename, root) {
+  createFileStoragePath (filename, claimID, root) {
+    const folderPath = root || this.intermediateStoragePath || INTERMEDIATE_STORAGE
+    const claimFolderPath = this.createClaimFolderPath(claimID, folderPath)
+    return path.join(claimFolderPath, filename)
+  }
+
+  createClaimFolderPath (claimID, root) {
     const folderPath = root || this.intermediateStoragePath || INTERMEDIATE_STORAGE
     if (!this.folderExists(folderPath)) {
       this.createFolder(folderPath)
     }
-    return path.join(folderPath, filename)
+
+    const claimFolderPath = path.join(folderPath, claimID)
+    if (!this.folderExists(claimFolderPath)) {
+      this.createFolder(claimFolderPath)
+    }
+    return claimFolderPath
   }
 
-    /**
+  /**
    * Download Standard Evidence
    *
    * This method is not using Swagger generated code to interact with the Backend web API.
@@ -108,19 +166,44 @@ class SharePointProvider {
    * It would be great if we could work out exactly what spells we need to cast so that
    * we could download files in a consistent manner.
    */
-  async downloadStdEvidence (claimID, fileURL) {
+  async downloadStdEvidence (claimID, blobId) {
     const urlRoot = `${this.CatalogueApi.ApiClient.instance.basePath}/api/StandardsApplicableEvidenceBlobStore/Download`
-    const fetchUrl = `${urlRoot}/${claimID}?extUrl=${fileURL}`
+    const fetchUrl = `${urlRoot}/${claimID}?uniqueId=${blobId}`
     const options = {
-      method:'post',
+      method: 'post',
       headers: {
-          accept: 'application/json',
-          authorization: `Bearer ${this.getBearerToken()}`
-        }
+        accept: 'application/json',
+        authorization: `Bearer ${this.getBearerToken()}`
+      }
     }
     return this.fetchFile(fetchUrl, options)
   }
 
+  /**
+   * Download Capability Evidence
+   *
+   * This method is not using Swagger generated code to interact with the Backend web API.
+   * Unfortunately this is a result of our inability to get Swashbuckle annotations to
+   * produce a swagger.json schema that lets us download files effectively.
+   *
+   * For now, the implementation will use node-fetch to manually issue a post request to
+   * the API, and pipe the response back to the client.
+   *
+   * It would be great if we could work out exactly what spells we need to cast so that
+   * we could download files in a consistent manner.
+   */
+  async downloadCapEvidence (claimID, blobId) {
+    const urlRoot = `${this.CatalogueApi.ApiClient.instance.basePath}/api/CapabilitiesImplementedEvidenceBlobStore/Download`
+    const fetchUrl = `${urlRoot}/${claimID}?uniqueId=${blobId}`
+    const options = {
+      method: 'post',
+      headers: {
+        accept: 'application/json',
+        authorization: `Bearer ${this.getBearerToken()}`
+      }
+    }
+    return this.fetchFile(fetchUrl, options)
+  }
   /**
    * Get Bearer Token
    *
@@ -134,18 +217,18 @@ class SharePointProvider {
    * not be needed at all.
    *
    */
-  getBearerToken() {
+  getBearerToken () {
     try { return this.CatalogueApi.ApiClient.instance.authentications.oauth2.accessToken }
     catch (err) { return '' }
   }
 
-  folderExists(fp) { return fs.existsSync(fp) }
-  createFolder(fp) { fs.mkdirSync(fp) }
-  unlinkFile(fp, cb) { fs.unlink(fp, cb) }
-  writeFile(fp, bf, cb) { fs.writeFile(fp, bf, cb) }
-  createReadStream(fp) { return fs.createReadStream(fp) }
-  async fetchFile(url, options) { return fetch(url, options) }
-
+  folderExists (fp) { return fs.existsSync(fp) }
+  createFolder (fp) { fs.mkdirSync(fp) }
+  removeFolder (fp) { fs.rmdirSync(fp) }
+  unlinkFile (fp, cb) { fs.unlink(fp, cb) }
+  writeFile (fp, bf, cb) { fs.writeFile(fp, bf, cb) }
+  createReadStream (fp) { return fs.createReadStream(fp) }
+  async fetchFile (url, options) { return fetch(url, options) }
 }
 
 // export a default, pre-configured instance of the data provider

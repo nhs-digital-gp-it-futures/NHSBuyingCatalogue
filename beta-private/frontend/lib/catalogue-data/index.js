@@ -9,6 +9,17 @@ const solutionOnboardingStatusMap = {
   5: { stageName: 'Solution Page', stageStep: '4 of 4', status: 'In progress' }
 }
 
+const solutionComplianceStatusMap = {
+  0: { statusClass: 'not-started', statusTransKey: 'Statuses.Standard.NotStarted' },
+  1: { statusClass: 'draft', statusTransKey: 'Statuses.Standard.Draft' },
+  2: { statusClass: 'submitted', statusTransKey: 'Statuses.Standard.Submitted' },
+  3: { statusClass: 'remediation', statusTransKey: 'Statuses.Standard.Remediation' },
+  4: { statusClass: 'approved', statusTransKey: 'Statuses.Standard.Approved' },
+  5: { statusClass: 'approved first', statusTransKey: 'Statuses.Standard.Approved' },
+  6: { statusClass: 'approved partial', statusTransKey: 'Statuses.Standard.Approved' },
+  7: { statusClass: 'rejected', statusTransKey: 'Statuses.Standard.Rejected' }
+}
+
 const EMPTY_UUID = '00000000-0000-0000-0000-000000000000'
 
 const isOverarchingStandard = std => _.startsWith(std.standardId || std.id, 'STD-O-')
@@ -43,6 +54,11 @@ class DataProvider {
     this.solutionsApi = new CatalogueApi.SolutionsApi()
     this.solutionsExApi = new CatalogueApi.SolutionsExApi()
     this.capabilityMappingsApi = new CatalogueApi.CapabilityMappingsApi()
+    this.capabilityEvidenceAPI = new CatalogueApi.CapabilitiesImplementedEvidenceApi()
+  }
+
+  async contactById (contactId) {
+    return this.contactsApi.apiContactsByIdByIdGet(contactId)
   }
 
   async contactByEmail (email) {
@@ -110,7 +126,6 @@ class DataProvider {
 
   async solutionForRegistration (solutionId) {
     const solutionEx = await this.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet(solutionId)
-
     // reformat the returned value for ease-of-use
     return {
       ...solutionEx.solution,
@@ -119,7 +134,8 @@ class DataProvider {
       contacts: _.orderBy(solutionEx.technicalContact, c => {
         // Lead Contact sorts above all others, then alphabetic by type
         return c.contactType === 'Lead Contact' ? '' : c.contactType
-      })
+      }),
+      _raw: solutionEx
     }
   }
 
@@ -210,6 +226,102 @@ class DataProvider {
         standards
       }
     })
+  }
+
+  async solutionForAssessment (solutionId) {
+    const solutionEx = await this.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet(solutionId)
+    const { capabilities } = await this.capabilityMappings()
+
+    const solution = {
+      ...solutionEx.solution,
+      capabilities: solutionEx.claimedCapability,
+      evidence: solutionEx.claimedCapabilityEvidence,
+      reviews: solutionEx.claimedCapabilityReview,
+      standards: solutionEx.claimedStandard,
+      contacts: _.orderBy(solutionEx.technicalContact, c => {
+        return c.contactType === 'Lead Contact' ? '' : c.contactType
+      })
+    }
+
+    const capEvidence = _.map(solutionEx.claimedCapabilityEvidence, (evidence) => {
+      const id = evidence.id
+      return {
+        ...evidence,
+        messages: solutionEx.claimedCapabilityReview.filter((rev) => rev.evidenceId === id)
+      }
+    })
+
+    solution.capabilities = _.map(solution.capabilities, (cap) => {
+      return {
+        ...capabilities[cap.capabilityId],
+        claimID: cap.id,
+        evidence: capEvidence.filter((evidence) => evidence.claimId === cap.id)
+      }
+    })
+
+    return solution
+  }
+
+  async solutionForCompliance (solutionId) {
+    const solution = await this.solutionForRegistration(solutionId)
+
+    solution.evidence = solution._raw.claimedStandardEvidence
+    solution.reviews = solution._raw.claimedStandardReview
+
+    const leadContact = _.find(solution.contacts, { contactType: 'Lead Contact' })
+
+    // compute status and ownership information for each standard
+    solution.standards.forEach(std => {
+      _.assign(std, {
+        ...solutionComplianceStatusMap[std.status],
+        ownerContact: _.create(leadContact, {
+          displayName: `${leadContact.firstName} ${leadContact.lastName}`
+        })
+      })
+    })
+    return solution
+  }
+
+  async updateSolutionForCompliance (solution) {
+    const solnEx = await this.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet(solution.id)
+
+    solnEx.claimedStandard = _.map(solution.standards,
+      std => _.pick(std, ['id', 'status', 'solutionId', 'standardId'])
+    )
+    solnEx.claimedStandardEvidence = solution.evidence
+    solnEx.claimedStandardReview = solution.reviews
+
+    await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
+    return this.solutionForCompliance(solution.id)
+  }
+
+  async updateSolutionCapabilityEvidence (solutionID, evidence) {
+    const solnEx = await this.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet(solutionID)
+    solnEx.claimedCapabilityEvidence = solnEx.claimedCapabilityEvidence.concat(evidence)
+    await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
+    return this.solutionForAssessment(solutionID)
+  }
+
+  async submitSolutionForCapabilityAssessment (solutionID) {
+    const CAP_ASS_STATUS = this.getCapabilityAssessmentStatusCode() // ✨🧙 magic 🧙✨
+
+    const solnEx = await this.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet(solutionID)
+    solnEx.solution.status = CAP_ASS_STATUS
+    await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
+    return this.solutionForAssessment(solutionID)
+  }
+
+  // As there is no API Endpoint for transitioning a solution from one status to another, other than
+  // setting the status of a solution to a different magical number, this method exists so that the
+  // status of a solution can be set to the same number whenever a solution is needed to be in
+  // Capability Assessment Status
+  // I.E. Get the code that says: 'Solution has capability evidence and has been submitted for Assessment'
+  getCapabilityAssessmentStatusCode () {
+    return '2' // ✨🧙 magic 🧙✨
+  }
+
+  getRegisteredStatusCode () {
+    return '1' // ✨🧙 magic 🧙✨
   }
 }
 

@@ -57,6 +57,8 @@
     _this['createdById'] = createdById;
 
 
+
+
   };
 
   /**
@@ -87,6 +89,12 @@
       }
       if (data.hasOwnProperty('evidence')) {
         obj['evidence'] = ApiClient.convertToType(data['evidence'], 'String');
+      }
+      if (data.hasOwnProperty('hasRequestedLiveDemo')) {
+        obj['hasRequestedLiveDemo'] = ApiClient.convertToType(data['hasRequestedLiveDemo'], 'Boolean');
+      }
+      if (data.hasOwnProperty('blobId')) {
+        obj['blobId'] = ApiClient.convertToType(data['blobId'], 'String');
       }
     }
     return obj;
@@ -122,6 +130,16 @@
    * @member {String} evidence
    */
   exports.prototype['evidence'] = undefined;
+  /**
+   * true if supplier has requested to do a 'live demo'  instead of submitting a file
+   * @member {Boolean} hasRequestedLiveDemo
+   */
+  exports.prototype['hasRequestedLiveDemo'] = undefined;
+  /**
+   * unique identifier of binary file in blob storage system  NOTE:  this may not be a GUID eg it may be a URL  NOTE:  this is a GUID for SharePoint
+   * @member {String} blobId
+   */
+  exports.prototype['blobId'] = undefined;
 
 
 

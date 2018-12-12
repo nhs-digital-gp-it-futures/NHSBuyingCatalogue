@@ -20,7 +20,7 @@ beforeAll(() => {
   })
 })
 
-describe('createStoragePath', () => {
+describe('createClaimFolderPath', () => {
   beforeEach(() => {
     subject.folderExists = jest.fn()
     subject.createFolder = jest.fn()
@@ -29,7 +29,7 @@ describe('createStoragePath', () => {
   it('Should not try and create a directory if it already exists', () => {
     subject.folderExists.mockReturnValue(true)
 
-    subject.createStoragePath('name_of_the_file')
+    subject.createClaimFolderPath('name_of_the_file')
 
     expect(subject.folderExists).toBeCalled()
     expect(subject.createFolder.mock.calls.length).toBe(0)
@@ -38,7 +38,7 @@ describe('createStoragePath', () => {
   it('Should attempt to create a direectory if it doest already exist', () => {
     subject.folderExists.mockReturnValue(false)
 
-    subject.createStoragePath('name_of_the_file')
+    subject.createClaimFolderPath('name_of_the_file')
 
     expect(subject.folderExists).toBeCalled()
     expect(subject.createFolder).toBeCalled()
@@ -48,7 +48,7 @@ describe('createStoragePath', () => {
     subject.folderExists.mockReturnValue(false)
     const fp = subject.intermediateStoragePath
 
-    subject.createStoragePath('name_of_the_file')
+    subject.createClaimFolderPath('name_of_the_file')
 
     expect(subject.folderExists).toBeCalledWith(fp)
     expect(subject.createFolder).toBeCalledWith(fp)
@@ -62,7 +62,7 @@ describe('createStoragePath', () => {
 
     let hasThrown
     try{
-      subject.createStoragePath('name_of_the_file')
+      subject.createClaimFolderPath('name_of_the_file')
     }
     catch(err) {
       hasThrown = true
@@ -72,20 +72,21 @@ describe('createStoragePath', () => {
   })
 
   it('should return a path if no root is provided', () => {
+  
     const root = 'foo'
     subject.intermediateStoragePath = root
     const fn = 'test_file'
 
-    const fp = subject.createStoragePath(fn)
+    const fp = subject.createClaimFolderPath(fn)
 
     expect(fp).toBe(`${root}/${fn}`)
   })
-  
+
   it('should return a path if with the root if provided', () => {
     const root = 'foo'
     const fn = 'test_file'
 
-    const fp = subject.createStoragePath(fn, root)
+    const fp = subject.createClaimFolderPath(fn, root)
 
     expect(fp).toBe(`${root}/${fn}`)
   })
@@ -93,72 +94,81 @@ describe('createStoragePath', () => {
 
 describe('deleteFile', () => {
   const fn = 'test_file.txt'
+  const claim = '1234'
 
   beforeEach(() => {
     subject.createStoragePath = jest.fn()
     subject.unlinkFile = jest.fn()
+    subject.createFileStoragePath = jest.fn()
+    subject.createClaimFolderPath = jest.fn()
 
-    subject.createStoragePath.mockImplementation(() => {
-      return fn
+    subject.createFileStoragePath.mockImplementation(() => {
+      return claim + '/' + fn
+    })
+    subject.createClaimFolderPath.mockImplementation(() => {
+      return claim
     })
   })
 
-  it('Should should try and create the storage path with filename.', () => {
-    subject.deleteFile(fn)
+  it('should try and create the storage paths with filename and claim.', () => {
+    subject.deleteFile(fn, claim)
 
-    expect(subject.createStoragePath).toBeCalledWith(fn)
+    expect(subject.createClaimFolderPath).toBeCalledWith(claim)
+    expect(subject.createFileStoragePath).toBeCalledWith(fn, claim)
   })
 
   it('should try and unlink the a file at the specified storage path', () => {
-    subject.deleteFile(fn)
-
-    expect(subject.unlinkFile).toBeCalledWith(fn, expect.any(Function))
+    subject.deleteFile(fn, claim)
+    const expectedPath = claim + '/' + fn
+    expect(subject.unlinkFile).toBeCalledWith(expectedPath, expect.any(Function))
   })
 
   it('Should return a promise that resolves if file successfully unlinks', async () => {
     subject.unlinkFile.mockImplementation((fp, cb) => {
       cb(/*No Errors*/)
     })
-    await expect(subject.deleteFile(fn)).resolves.toBe(undefined)
+    await expect(subject.deleteFile(fn, claim)).resolves.toBe(undefined)
   })
 
   it('Should return a promise that rejects if file failes to unlinks', async () => {
     subject.unlinkFile.mockImplementation((fp, cb) => {
       cb('test_error_message')
     })
-    await expect(subject.deleteFile(fn)).rejects.toBe('test_error_message')
+    await expect(subject.deleteFile(fn, claim)).rejects.toBe('test_error_message')
   })
 })
 
 describe('createFileReadStream', () => {
   const fn = 'file'
+  const claim = '1234'
+  const claimFilePath = claim + '/' + fn
 
   beforeEach(() => {
     subject.createReadStream = jest.fn()
-    subject.createStoragePath = jest.fn()
+    subject.createFileStoragePath = jest.fn()
 
-    subject.createStoragePath.mockImplementation(() => {
-      return fn
+    subject.createFileStoragePath.mockImplementation(() => {
+      return claimFilePath
     })
   })
 
   it('Should try and create storage path', () => {
-    subject.createFileReadStream(fn)
-    expect(subject.createStoragePath).toBeCalledWith(fn)
+    subject.createFileReadStream(fn, claim)
+    expect(subject.createFileStoragePath).toBeCalledWith(fn, claim)
   })
 
   it('Should try and create a fileReadStream', () => {
-    subject.createFileReadStream(fn)
-    expect(subject.createStoragePath).toBeCalledWith(fn)
+    subject.createFileReadStream(fn, claim)
+    expect(subject.createReadStream).toBeCalledWith(claimFilePath)
   })
 
   it('Should throw if creation of storage path throws', () => {
-    subject.createStoragePath.mockImplementation(() => {
+    subject.createFileStoragePath.mockImplementation(() => {
       throw new Error()
     })
     let throws
     try {
-      subject.createFileReadStream(fn)
+      subject.createFileReadStream(fn, claim)
     }
     catch(err) {
       throws = true
@@ -167,7 +177,7 @@ describe('createFileReadStream', () => {
   })
 
   it('Should throw if creation of file read stream throws', () => {
-    subject.createReadStream.mockImplementation(() => {
+    subject.createFileStoragePath.mockImplementation(() => {
       throw new Error()
     })
     let throws
@@ -183,25 +193,27 @@ describe('createFileReadStream', () => {
 
 describe('saveBuffer', () => {
   const fn = 'test_file.txt'
+  const claim = '1234'
+  const claimFilePath = claim + '/' + fn
   const buffer = Buffer.from('test string', 'utf-8')
 
   beforeEach(() => {
     subject.createStoragePath = jest.fn()
     subject.writeFile = jest.fn()
 
-    subject.createStoragePath.mockImplementation(() => {
-      return fn
+    subject.createFileStoragePath.mockImplementation(() => {
+      return claimFilePath
     })
   })
 
   it('Should try and create storage path before writing to it.', () => {
-    subject.saveBuffer(buffer, fn)
-    expect(subject.createStoragePath).toBeCalledWith(fn)
+    subject.saveBuffer(buffer, fn, claim)
+    expect(subject.createFileStoragePath).toBeCalledWith(fn, claim)
   })
 
   it('should try and write a file providing storage path, buffer, and a callback', () => {
-    subject.saveBuffer(buffer, fn)
-    expect(subject.writeFile).toBeCalledWith(fn, buffer, expect.any(Function))
+    subject.saveBuffer(buffer, fn, claim)
+    expect(subject.writeFile).toBeCalledWith(claimFilePath, buffer, expect.any(Function))
   })
 
   it('Should return a resolvable promise if file writing is successful', async () => {
@@ -209,7 +221,7 @@ describe('saveBuffer', () => {
       cb(/*No Error*/)
     })
 
-    await expect(subject.saveBuffer(fn, buffer)).resolves.toBe(undefined)
+    await expect(subject.saveBuffer(buffer, fn, claim)).resolves.toBe(undefined)
   })
 
   it('Should return a rejecting promise if file writing is successful', async () => {
@@ -217,7 +229,7 @@ describe('saveBuffer', () => {
       cb('test_error_message')
     })
 
-    await expect(subject.saveBuffer(fn, buffer)).rejects.toBe('test_error_message')
+    await expect(subject.saveBuffer(buffer, fn, claim)).rejects.toBe('test_error_message')
   })
 })
 
@@ -237,12 +249,12 @@ describe('uploadEvidence', () => {
 
   it('Should save buffer to file forwarding it on', async () => {
     await subject.uploadEvidence(mm, cm, bf, fn, sb)
-    expect(subject.saveBuffer).toBeCalledWith(bf, fn)
+    expect(subject.saveBuffer).toBeCalledWith(bf, fn, cm)
   })
 
   it('Should create a file read stream', async () => {
     await subject.uploadEvidence(mm, cm, bf, fn, sb)
-    expect(subject.createFileReadStream).toBeCalledWith(fn)
+    expect(subject.createFileReadStream).toBeCalledWith(fn, cm)
   })
 
   it('Should call the proided method with params needed for posting file data', async () => {
@@ -261,7 +273,7 @@ describe('uploadEvidence', () => {
 
   it('should call the file delete method after it has uploaded a response', async () => {
     await subject.uploadEvidence(mm, cm, bf, fn, sb)
-    expect(subject.deleteFile).toBeCalledWith(fn)
+    expect(subject.deleteFile).toBeCalledWith(fn, cm)
   })
 
   it('should return a rejecting promise with error message if saving buffer fails', async () => {
@@ -340,5 +352,68 @@ describe('uploadStdEvidence', () => {
     })
 
     await expect(subject.uploadStdEvidence(cm, bf, fn, sb)).resolves.toBe(undefined)
+  })
+})
+
+describe('getCapEvidence', () => {
+  it('Should recieve evidence listings for a capability claim with evidence against it', async () => {
+    subject.capBlobStoreApi.getCapEvidence.mockReturnValue(
+      require('./sharepoint-cap.test-data.json')
+    )
+
+    const res = await subject.capBlobStoreApi.getCapEvidence()
+    expect(res.items).toHaveLength(6)
+  })
+
+  it('Evidence items should all have a name, an isFolderFlag, a URL, and a timestamp', async () => {
+    subject.capBlobStoreApi.getCapEvidence.mockReturnValue(
+      require('./sharepoint-cap.test-data.json')
+    )
+
+    const res = await subject.capBlobStoreApi.getCapEvidence()
+    expect(res.items.every((item) =>
+      item.name && item.isFolder && item.url && item.timeLastModified
+    ))
+  })
+})
+
+describe('uploadCapEvidence', () => {
+  const cm = 'claim'
+  const bf = Buffer.from('test buffer')
+  const fn = 'test_file.txt'
+  const sb = '/sub_folder/'
+
+  beforeEach(() => {
+    subject.capBlobStoreApi.apiCapabilitiesImplementedEvidenceBlobStoreAddEvidenceForClaimPost = jest.fn()
+    subject.uploadEvidence = jest.fn()
+  })
+
+  it('Should provide the capability upload method to the upload evidence method', async () => {
+    await subject.uploadCapEvidence(cm, bf, fn, sb)
+    expect(subject.uploadEvidence).toBeCalledWith(expect.any(Function), cm, bf, fn, sb)
+
+    // stringified for comparison
+    const firstParam = JSON.stringify(subject.uploadEvidence.mock.calls[0][0])
+    const expectedParam = JSON.stringify(
+      subject.capBlobStoreApi.apiCapabilitiesImplementedEvidenceBlobStoreAddEvidenceForClaimPost.bind(subject.capBlobStoreApi)
+    )
+    // First param
+    expect(firstParam).toEqual(expectedParam)
+  })
+
+  it('Should return a rejecting promise if invoked methods fail', async () => {
+    subject.uploadEvidence.mockImplementation(() => {
+      return Promise.reject('error')
+    })
+
+    await expect(subject.uploadCapEvidence(cm, bf, fn, sb)).rejects.toBe('error')
+  })
+
+  it('Should return a resolving promise if no internal invokations fail', async () => {
+    subject.uploadEvidence.mockImplementation(() => {
+      return Promise.resolve()
+    })
+
+    await expect(subject.uploadCapEvidence(cm, bf, fn, sb)).resolves.toBe(undefined)
   })
 })

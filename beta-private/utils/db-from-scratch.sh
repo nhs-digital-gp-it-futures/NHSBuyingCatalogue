@@ -20,7 +20,7 @@ docker run --rm -d -it \
 docker cp api/NHSD.GPITF.BuyingCatalog/Data/. setup_sql_server:/opt/data
 
 # 4. Run the from-scratch script in the running SQL Server container 
-docker exec -it setup_sql_server /bin/bash -c "cd opt/data; ./FromScratch.MSSQLServer.sh"
+docker exec -it setup_sql_server /bin/bash -c "sleep 5; cd opt/data; ./FromScratch.MSSQLServer.sh"
 
 # 5. Stop the setup container 
 docker stop setup_sql_server

@@ -28,12 +28,17 @@ module.exports = {
       this.apiPorcelainCapabilityMappingsGet = jest.fn()
     }
 
+    function MockCapabilitiesImplementedEvidenceApi () {
+      this.apiCapabilitiesImplementedEvidenceByClaimByClaimIdGet = jest.fn()
+    }
+
     return new DataProvider({
       ContactsApi: MockContactsApi,
       OrganisationsApi: MockOrganisationsApi,
       SolutionsApi: MockSolutionsApi,
       SolutionsExApi: MockSolutionsExApi,
-      CapabilityMappingsApi: MockCapabilityMappingsApi
+      CapabilityMappingsApi: MockCapabilityMappingsApi,
+      CapabilitiesImplementedEvidenceApi: MockCapabilitiesImplementedEvidenceApi
     })
   }
 }

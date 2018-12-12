@@ -80,6 +80,12 @@
       //expect(instance).to.be();
     });
 
+    it('should have the property ownerId (base name: "ownerId")', function() {
+      // uncomment below and update the code to test the property ownerId
+      //var instance = new CatalogueApi.CapabilitiesImplemented();
+      //expect(instance).to.be();
+    });
+
   });
 
 }));

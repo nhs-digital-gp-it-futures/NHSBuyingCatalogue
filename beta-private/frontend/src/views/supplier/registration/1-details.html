@@ -3,6 +3,7 @@
 <header class="page-main-heading">
   <h1>{{t 'Onboarding.Details.Title' }}</h1>
   <h2>{{t 'Onboarding.Details.Subtitle'}}</h2>
+  <p>{{t 'Onboarding.Details.Preamble'}}</p>
 </header>
 
 {{#> form form_id=activeForm.id}}
@@ -49,15 +50,16 @@
 
   {{#> control invalid=errors.controls.[solution.version]}}
     <label for="solution.version">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Label'}}</label>
+    <p class="info"></p>
+    <input id="solution.version" type="text" name="solution[version]" value="{{solution.version}}" class="narrow"
+      autocomplete="off" maxlength="10"
+      {{#if errors.controls.[solution.version]}}aria-invalid="true" aria-errormessage="error-solution.version"{{/if}}>
     {{#> help-reveal
       title='Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Help.Title'}}
       {{#each (tt 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Help.Text')}}
         <p>{{.}}</p>
       {{/each}}
     {{/help-reveal}}
-    <input id="solution.version" type="text" name="solution[version]" value="{{solution.version}}" class="narrow"
-      autocomplete="off" maxlength="10"
-      {{#if errors.controls.[solution.version]}}aria-invalid="true" aria-errormessage="error-solution.version"{{/if}}>
   {{/control}}
   {{/collapsible-fieldset}}
 
@@ -285,44 +287,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const elNewContact = $('fieldset.collapsible', elInsertedTemplate)
     elNewContact.classList.remove('collapsed')
-    collapseAllFieldsetsExcept(elNewContact)
+    // HACK: see app.js
+    window.collapseAllFieldsetsExcept(elNewContact)
     window.location.hash = $('input[type=text]', elNewContact).id
-  })
-
-  // collapse all but the first collapsible fieldsets by default, except ones that contain
-  // invalid fields
-  function collapseAllFieldsetsExcept (elCurrent) {
-    $$('fieldset.collapsible').forEach(function (el) {
-      if (el !== elCurrent && !el.classList.contains('invalid')) {
-        el.classList.add('collapsed')
-      }
-    })
-  }
-
-  collapseAllFieldsetsExcept($('fieldset.collapsible:first-of-type'))
-
-  function handleCollapsibleFieldset (ev) {
-    if (ev.target.tagName === 'LEGEND') {
-      const elFieldset = ev.target.parentNode
-      if (elFieldset.classList.contains('collapsible')) {
-        ev.preventDefault()
-
-        elFieldset.classList.toggle('collapsed')
-        if (!elFieldset.classList.contains('collapsed')) {
-          collapseAllFieldsetsExcept(elFieldset)
-        }
-
-        return true
-      }
-    }
-  }
-
-  // support both mouse and keyboard access
-  $('#content').addEventListener('click', handleCollapsibleFieldset)
-  $('#content').addEventListener('keypress', function (ev) {
-    if (ev.key === ' ' || ev.key === 'Enter') {
-      handleCollapsibleFieldset(ev)
-    }
   })
 })
 </script>
