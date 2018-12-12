@@ -15,24 +15,24 @@
 
     {{> errors}}
 
-    <h1>{{t 'Capability.Confirmation.Title'}}</h1>
-    <p class="information">{{t 'Capability.Confirmation.Information'}}</p>
+    <h1>{{t 'CapAssPages.Confirmation.Title'}}</h1>
+    <p class="information">{{t 'CapAssPages.Confirmation.Information'}}</p>
 
     <div class="help-box">
-        {{#>help-reveal title="Capability.Confirmation.Help.Title" }}
-            <p>{{t 'Capability.Confirmation.Help.Information'}}</p>
+        {{#>help-reveal title="CapAssPages.Confirmation.Help.Title" }}
+            <p>{{t 'CapAssPages.Confirmation.Help.Information'}}</p>
         {{/help-reveal}}
     </div>
 
     <div class="summary-box">
-        {{>header title="Capability.Confirmation.Registration.Title" href=editUrls.registration}}
-        <h3>{{t 'Capability.Confirmation.Registration.Subtitle.Solution'}}</h3>
+        {{>header title="CapAssPages.Confirmation.Registration.Title" href=editUrls.registration}}
+        <h3>{{t 'CapAssPages.Confirmation.Registration.Subtitle.Solution'}}</h3>
         {{#solution}}
             <p>{{name}}</p>
             <p>{{description}}</p>
             <p>{{version}}</p>
 
-            <h3>{{t 'Capability.Confirmation.Registration.Subtitle.Contacts'}}</h3>
+            <h3>{{t 'CapAssPages.Confirmation.Registration.Subtitle.Contacts'}}</h3>
             {{#contacts}}
                 <p>{{contactType}}</p>
                 <p>{{firstName}} {{lastName}}</p>
@@ -43,21 +43,21 @@
     </div>
 
     <div class="summary-box">
-        {{>header title="Capability.Confirmation.Capabilities.Title" href=editUrls.capabilities.selection}}
+        {{>header title="CapAssPages.Confirmation.Capabilities.Title" href=editUrls.capabilities.selection}}
 
-        <h3>{{t 'Capability.Confirmation.Capabilities.Subtitle.Capabilities'}}</h3>
+        <h3>{{t 'CapAssPages.Confirmation.Capabilities.Subtitle.Capabilities'}}</h3>
         <div class="capabilities">
             {{#solution.capabilities}}
                 <p><a href="{{url}}">{{name}}</a></p>
             {{/solution.capabilities}}
         </div>
-        {{#>help-reveal title="Capability.Confirmation.Capabilities.Subtitle.Standards"}}
-            <h3>{{t 'Capability.Confirmation.Capabilities.Subtitle.Associated'}}</h3>
+        {{#>help-reveal title="CapAssPages.Confirmation.Capabilities.Subtitle.Standards"}}
+            <h3>{{t 'CapAssPages.Confirmation.Capabilities.Subtitle.Associated'}}</h3>
             {{#solution.standardsByGroup.associated}}
                 <p><a href="">{{name}}</a></p>
             {{/solution.standardsByGroup.associated}}
 
-            <h3>{{t 'Capability.Confirmation.Capabilities.Subtitle.Overarching'}}</h3>
+            <h3>{{t 'CapAssPages.Confirmation.Capabilities.Subtitle.Overarching'}}</h3>
             {{#solution.standardsByGroup.overarching}}
                 <p><a href="">{{name}}</a></p>
             {{/solution.standardsByGroup.overarching}}
@@ -65,19 +65,19 @@
     </div>
 
     <div class="summary-box">
-        {{>header title="Capability.Confirmation.Evidence.Title" href=editUrls.capabilities.evidence}}
+        {{>header title="CapAssPages.Confirmation.Evidence.Title" href=editUrls.capabilities.evidence}}
 
         {{#solution.capabilities}}
         <div class="evidence">
             <h3>{{name}}</h3>
-            <p>{{t 'Capability.Confirmation.Evidence.Information'}}</p>
+            <p>{{t 'CapAssPages.Confirmation.Evidence.Information'}}</p>
             {{#if isLiveDemo}}
 
             {{else}}
                 <p><a href="{{latestFile.downloadUrl}}">{{latestFile.name}}</a></p>
                 <p>{{latestEvidence.evidence}}</p>
             {{/if}}
-            {{#if missingEvidence}}{{t 'Capability.Confirmation.Evidence.Error'}}{{/if}}
+            {{#if missingEvidence}}{{t 'CapAssPages.Confirmation.Evidence.Error'}}{{/if}}
         </div>
         {{/solution.capabilities}}
     </div>

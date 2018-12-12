@@ -261,7 +261,7 @@
       }
     }
   },
-  "Capability":{
+  "CapAssPages":{
     "Assessment":{
       "Title": "Provide Assessment evidence for your Solution.",
       "Instructions": "Provide primary evidence for each Capability below. Once you have completed the required fields, review your answers on the next page before submitting them to NHS Digital.",
