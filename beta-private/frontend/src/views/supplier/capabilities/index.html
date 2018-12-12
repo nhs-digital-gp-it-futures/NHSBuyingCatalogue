@@ -1,0 +1,116 @@
+<div id="capability-assessment-page">
+  {{> errors}}
+
+  <h1>{{t 'Capability.Assessment.Title'}}</h1>
+  <p>
+    {{t 'Capability.Assessment.Instructions'}}
+  </p>
+  <p>
+    {{t 'Capability.Assessment.Guidance'}}
+  </p>
+
+  {{#> form encoding="multipart/form-data" form_id=activeForm.id}}
+    {{#each solution.capabilities}}
+    {{#>collapsible-fieldset legend=name}}
+      <div class="instructions">
+        <p>
+          {{t 'Capability.Assessment.Evidence.Instructions'}}
+          <a href="{{url}}">{{ name }} capability</a>
+        </p>
+      </div>
+
+      <fieldset class="trigger" id="triggering-fieldset-{{claimID}}">
+        <h1>{{t 'Capability.Assessment.Evidence.Title'}}</h1>
+        <p>
+          {{t 'Capability.Assessment.Evidence.Options.Question'}}
+        </p>
+        <label class="radio-container">
+        <input
+          type="radio"
+          name="uploading-video-evidence[{{claimID}}]"
+          value="yes"
+          {{#if ../../notEditable}}disabled{{/if}}
+          {{#if isUploadingEvidence}}checked{{/if}}
+          aria-hidden="false"
+        /><span class="checkmark"><span class="inner-checkmark"></span></span>{{t 'Capability.Assessment.Evidence.Options.Positive'}}</label>
+
+        <label class="radio-container">
+        <input
+          type="radio"
+          name="uploading-video-evidence[{{claimID}}]"
+          value="no"
+          {{#if ../../notEditable}}disabled{{/if}}
+          {{#if isUploadingEvidence}}{{else}}checked{{/if}}
+          aria-hidden="false"
+        /><span class="checkmark"><span class="inner-checkmark"></span></span>{{t 'Capability.Assessment.Evidence.Options.Negative'}}</label>
+      </fieldset>
+
+      <div class="dependant" id="upload-fieldset-{{claimID}}">
+        <fieldset class="evidence-field">
+          <h1>{{t 'Capability.Assessment.Evidence.Video.Title'}}</h1>
+
+          {{#if latestFile}}
+          <input type="hidden" name="evidence-file[{{claimID}}]" value="true" {{#if ../../notEditable}}disabled{{/if}}/>
+          {{/if}}
+
+          <div>
+            <input type="file" name="evidence-file[{{claimID}}]" {{#if ../../notEditable}}disabled{{/if}}/>
+          </div>
+
+          {{#latestFile}}
+            <div class="latest-upload">
+              {{t 'Capability.Assessment.Evidence.Video.Previous'}} <a href="{{downloadURL}}">{{ name }}</a>
+            </div>
+          {{/latestFile}}
+
+          <div>
+            <p>
+              {{t 'Capability.Assessment.Evidence.Video.Additional'}}
+            </p>
+          <textarea name="evidence-description[{{claimID}}]"{{#if ../../notEditable}}disabled{{/if}}
+          >{{#if isUploadingEvidence}}{{latestEvidence.evidence}}{{/if}}</textarea>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="dependant" id="live-fieldset-{{claimID}}">
+        <fieldset class="evidence-field" {{#if ../../notEditable}}disabled{{/if}}>
+          <h2>{{t 'Capability.Assessment.Evidence.Notice.Title'}}</h2>
+          <p>{{t 'Capability.Assessment.Evidence.Notice.Additional'}}</p>
+        </fieldset>
+      </div>
+    {{/collapsible-fieldset}}
+  {{/each }}
+
+  <p>
+    {{t 'Capability.Assessment.Submission.Notice'}}
+  </p>
+  <button type="submit" name="action[continue]" value="{{t 'Buttons.Save and continue'}}" {{#if notEditable}}disabled{{/if}}>Save & Continue</button> {{/form}}
+</div>
+
+<script type="text/javascript">
+  /* global $, $$ */
+  "use strict";
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const triggeringFieldsets = $$('fieldset.trigger')
+
+    triggeringFieldsets.forEach((fieldset) => {
+      const id = fieldset.id.replace('triggering-fieldset-', '') // ID from: triggering-fieldset-{{id}}
+      const upload = $('#upload-fieldset-' + id)
+      const live = $('#live-fieldset-' + id)
+
+      fieldset.addEventListener('change', (evt) => {
+            const enabled = evt.target.value === 'yes'
+            upload.classList.toggle('hidden', !enabled)
+            live.classList.toggle('hidden', enabled)
+      })
+
+      const yesRadio = $('input[name="uploading-video-evidence['+ id +']"][value="yes"]')
+      const intitialState = yesRadio.checked
+      upload.classList.toggle('hidden', !intitialState)
+      live.classList.toggle('hidden', intitialState)
+    })
+});
+
+</script>

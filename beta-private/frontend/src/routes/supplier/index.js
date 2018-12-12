@@ -36,5 +36,6 @@ router.get('/', strictRouting, async (req, res) => {
 
 router.use('/solutions/', require('./registration'))
 router.use('/compliance/', require('./compliance'))
+router.use('/capabilities/', require('./capabilities'))
 
 module.exports = router
