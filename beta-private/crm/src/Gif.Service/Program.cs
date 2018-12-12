@@ -1,38 +1,27 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace Gif.Service
 {
-    /// <summary>
-    /// Program
-    /// </summary>
-    public class Program
+  public class Program
+  {
+    public static void Main(string[] args)
     {
-        /// <summary>
-        /// Main
-        /// </summary>
-        /// <param name="args"></param>
-        public static void Main(string[] args)
-        {
-            BuildWebHost(args).Run();
-        }
+      var configuration = new ConfigurationBuilder()
+        .AddJsonFile("hosting.json")
+        .AddEnvironmentVariables()
+        .Build();
 
-        /// <summary>
-        /// Build Web Host
-        /// </summary>
-        /// <param name="args"></param>
-        /// <returns>Webhost</returns>
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .Build();
+      var host = new WebHostBuilder()
+        .UseKestrel()
+        .UseContentRoot(Directory.GetCurrentDirectory())
+        .UseConfiguration(configuration)
+        .UseStartup<Startup>()
+        .Build();
 
-
+      host.Run();
     }
+  }
 }

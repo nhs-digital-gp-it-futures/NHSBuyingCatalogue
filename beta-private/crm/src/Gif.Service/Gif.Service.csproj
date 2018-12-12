@@ -7,8 +7,16 @@
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <AssemblyName>Gif.Service</AssemblyName>
     <PackageId>IO.Swagger</PackageId>
-	<NoWarn>NU1605</NoWarn>
-	<UserSecretsId>626ab5c7-7b51-49fe-acea-005970d864c3</UserSecretsId>
+    <NoWarn>NU1605;CS1591;NU1603;NU1701;CS1572;CS1573</NoWarn>
+    <UserSecretsId>626ab5c7-7b51-49fe-acea-005970d864c3</UserSecretsId>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningsAsErrors>NU1605</WarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Controllers\ContactApi.cs" />
@@ -23,6 +31,9 @@
     <Compile Remove="Models\StandardsApplicable.cs" />
     <Compile Remove="Models\StandardsApplicableEvidence.cs" />
     <Compile Remove="Models\TechnicalContacts.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="hosting.json" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="Models\GenCode.cs" />
@@ -45,6 +56,11 @@
     <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.1" />
     <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="hosting.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Samc4.CipherUtil">
