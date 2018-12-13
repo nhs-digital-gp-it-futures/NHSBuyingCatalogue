@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.SharePoint.Client.NetCore;
 using Microsoft.SharePoint.Client.NetCore.Runtime;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
+using Polly;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -24,6 +26,9 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     private readonly ICapabilitiesDatastore _capabilitiesDatastore;
     private readonly IStandardsDatastore _standardsDatastore;
 
+    private readonly ILogger<IEvidenceBlobStoreDatastore> _logger;
+    private readonly ISyncPolicy _policy;
+
     private readonly string SharePoint_BaseUrl;
     private readonly string SharePoint_OrganisationsRelativeUrl;
     private readonly string SharePoint_Login;
@@ -36,7 +41,9 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       ICapabilitiesImplementedDatastore capabilitiesImplementedDatastore,
       IStandardsApplicableDatastore standardsApplicableDatastore,
       ICapabilitiesDatastore capabilitiesDatastore,
-      IStandardsDatastore standardsDatastore
+      IStandardsDatastore standardsDatastore,
+      ILogger<IEvidenceBlobStoreDatastore> logger,
+      ISyncPolicyFactory policy
       )
     {
       _solutionsDatastore = solutionsDatastore;
@@ -45,6 +52,9 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       _standardsApplicableDatastore = standardsApplicableDatastore;
       _capabilitiesDatastore = capabilitiesDatastore;
       _standardsDatastore = standardsDatastore;
+
+      _logger = logger;
+      _policy = policy.Build(_logger);
 
       SharePoint_BaseUrl = Environment.GetEnvironmentVariable("SHAREPOINT_BASEURL") ?? config["SharePoint:BaseUrl"];
       SharePoint_OrganisationsRelativeUrl = Environment.GetEnvironmentVariable("SHAREPOINT_ORGANISATIONSRELATIVEURL") ?? config["SharePoint:OrganisationsRelativeUrl"];
@@ -76,7 +86,10 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
     public string AddEvidenceForClaim(IClaimsInfoProvider claimsInfoProvider, string claimId, Stream file, string fileName, string subFolder = null)
     {
-      return UploadFileSlicePerSlice(claimsInfoProvider, claimId, file, fileName, subFolder);
+      return GetInternal(() =>
+      {
+        return UploadFileSlicePerSlice(claimsInfoProvider, claimId, file, fileName, subFolder);
+      });
     }
 
     private string UploadFileSlicePerSlice(IClaimsInfoProvider claimsInfoProvider, string claimId, Stream file, string fileName, string subFolder, int fileChunkSizeInMB = 3)
@@ -211,105 +224,121 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
     public IEnumerable<BlobInfo> EnumerateFolder(IClaimsInfoProvider claimsInfoProvider, string claimId, string subFolder = null)
     {
-      var claim = claimsInfoProvider.GetClaimById(claimId);
-      var soln = _solutionsDatastore.ById(claim.SolutionId);
-      var org = _organisationsDatastore.ById(soln.OrganisationId);
-
-      var claimFolderUrl = $"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{claimsInfoProvider.GetFolderName()}/{claimsInfoProvider.GetFolderClaimName(claim)}/{subFolder ?? string.Empty}";
-      var claimFolder = _context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString(claimFolderUrl));
-
-      _context.Load(claimFolder);
-      _context.Load(claimFolder.Files);
-      _context.Load(claimFolder.Folders);
-      try
+      return GetInternal(() =>
       {
-        _context.ExecuteQuery();
-      }
-      catch (Exception ex)
-      {
-        throw new KeyNotFoundException($"Folder does not exist!: {_context.Url}/{claimFolderUrl}", ex);
-      }
+        var claim = claimsInfoProvider.GetClaimById(claimId);
+        var soln = _solutionsDatastore.ById(claim.SolutionId);
+        var org = _organisationsDatastore.ById(soln.OrganisationId);
 
-      var claimFolderInfo = new BlobInfo
-      {
-        Name = claimFolder.Name,
-        IsFolder = true,
-        Url = new Uri(new Uri(_context.Url), claimFolder.ServerRelativeUrl).AbsoluteUri,
-        TimeLastModified = claimFolder.TimeLastModified
-      };
-      var claimSubFolderInfos = claimFolder
-        .Folders
-        .Select(x =>
-          new BlobInfo
-          {
-            Name = x.Name,
-            IsFolder = true,
-            Length = 0,
-            Url = new Uri(new Uri(_context.Url), x.ServerRelativeUrl).AbsoluteUri,
-            TimeLastModified = x.TimeLastModified,
-            BlobId = x.UniqueId.ToString()
-          });
-      var claimFileInfos = claimFolder
-        .Files
-        .Select(x =>
-          new BlobInfo
-          {
-            Name = x.Name,
-            IsFolder = false,
-            Length = x.Length,
-            Url = new Uri(new Uri(_context.Url), x.ServerRelativeUrl).AbsoluteUri,
-            TimeLastModified = x.TimeLastModified,
-            BlobId = x.UniqueId.ToString()
-          });
-      var retVal = new List<BlobInfo>();
+        var claimFolderUrl = $"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{claimsInfoProvider.GetFolderName()}/{claimsInfoProvider.GetFolderClaimName(claim)}/{subFolder ?? string.Empty}";
+        var claimFolder = _context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString(claimFolderUrl));
 
-      retVal.Add(claimFolderInfo);
-      retVal.AddRange(claimSubFolderInfos);
-      retVal.AddRange(claimFileInfos);
+        _context.Load(claimFolder);
+        _context.Load(claimFolder.Files);
+        _context.Load(claimFolder.Folders);
+        try
+        {
+          _context.ExecuteQuery();
+        }
+        catch (Exception ex)
+        {
+          throw new KeyNotFoundException($"Folder does not exist!: {_context.Url}/{claimFolderUrl}", ex);
+        }
 
-      return retVal;
+        var claimFolderInfo = new BlobInfo
+        {
+          Name = claimFolder.Name,
+          IsFolder = true,
+          Url = new Uri(new Uri(_context.Url), claimFolder.ServerRelativeUrl).AbsoluteUri,
+          TimeLastModified = claimFolder.TimeLastModified
+        };
+        var claimSubFolderInfos = claimFolder
+          .Folders
+          .Select(x =>
+            new BlobInfo
+            {
+              Name = x.Name,
+              IsFolder = true,
+              Length = 0,
+              Url = new Uri(new Uri(_context.Url), x.ServerRelativeUrl).AbsoluteUri,
+              TimeLastModified = x.TimeLastModified,
+              BlobId = x.UniqueId.ToString()
+            });
+        var claimFileInfos = claimFolder
+          .Files
+          .Select(x =>
+            new BlobInfo
+            {
+              Name = x.Name,
+              IsFolder = false,
+              Length = x.Length,
+              Url = new Uri(new Uri(_context.Url), x.ServerRelativeUrl).AbsoluteUri,
+              TimeLastModified = x.TimeLastModified,
+              BlobId = x.UniqueId.ToString()
+            });
+        var retVal = new List<BlobInfo>();
+
+        retVal.Add(claimFolderInfo);
+        retVal.AddRange(claimSubFolderInfos);
+        retVal.AddRange(claimFileInfos);
+
+        return retVal;
+      });
     }
 
     public FileStreamResult GetFileStream(IClaimsInfoProvider claimsInfoProvider, string claimId, string uniqueId)
     {
-      var file = _context.Web.GetFileById(Guid.Parse(uniqueId));
-      _context.Load(file);
-      _context.ExecuteQuery();
+      return GetInternal(() =>
+      {
+        var file = _context.Web.GetFileById(Guid.Parse(uniqueId));
+        _context.Load(file);
+        _context.ExecuteQuery();
 
-      return
-        new FileStreamResult(Microsoft.SharePoint.Client.NetCore.File.OpenBinaryDirect(_context, file.ServerRelativeUrl)?.Stream, GetContentType(file.Name))
-        {
-          FileDownloadName = Path.GetFileName(file.Name)
-        };
+        return
+          new FileStreamResult(Microsoft.SharePoint.Client.NetCore.File.OpenBinaryDirect(_context, file.ServerRelativeUrl)?.Stream, GetContentType(file.Name))
+          {
+            FileDownloadName = Path.GetFileName(file.Name)
+          };
+      });
     }
 
     public void PrepareForSolution(IClaimsInfoProvider claimsInfoProvider, string solutionId)
     {
-      var soln = _solutionsDatastore.ById(solutionId);
-      if (soln == null)
+      GetInternal(() =>
       {
-        throw new KeyNotFoundException($"Could not find solution: {solutionId}");
-      }
-      var org = _organisationsDatastore.ById(soln.OrganisationId);
-      var claimedCapNames = _capabilitiesImplementedDatastore
-        .BySolution(solutionId)
-        .Select(x => _capabilitiesDatastore.ById(x.CapabilityId).Name);
-      var claimedNameStds = _standardsApplicableDatastore
-        .BySolution(solutionId)
-        .Select(x => _standardsDatastore.ById(x.StandardId).Name);
+        var soln = _solutionsDatastore.ById(solutionId);
+        if (soln == null)
+        {
+          throw new KeyNotFoundException($"Could not find solution: {solutionId}");
+        }
+        var org = _organisationsDatastore.ById(soln.OrganisationId);
+        var claimedCapNames = _capabilitiesImplementedDatastore
+          .BySolution(solutionId)
+          .Select(x => _capabilitiesDatastore.ById(x.CapabilityId).Name);
+        var claimedNameStds = _standardsApplicableDatastore
+          .BySolution(solutionId)
+          .Select(x => _standardsDatastore.ById(x.StandardId).Name);
 
-      CreateSubFolder(SharePoint_OrganisationsRelativeUrl, org.Name);
-      CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}", soln.Name);
-      CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}", claimsInfoProvider.GetCapabilityFolderName());
-      CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}", claimsInfoProvider.GetStandardsFolderName());
-      foreach (var folderName in claimedCapNames)
-      {
-        CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{claimsInfoProvider.GetCapabilityFolderName()}", folderName);
-      }
-      foreach (var folderName in claimedNameStds)
-      {
-        CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{claimsInfoProvider.GetStandardsFolderName()}", folderName);
-      }
+        CreateSubFolder(SharePoint_OrganisationsRelativeUrl, org.Name);
+        CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}", soln.Name);
+        CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}", claimsInfoProvider.GetCapabilityFolderName());
+        CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}", claimsInfoProvider.GetStandardsFolderName());
+        foreach (var folderName in claimedCapNames)
+        {
+          CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{claimsInfoProvider.GetCapabilityFolderName()}", folderName);
+        }
+        foreach (var folderName in claimedNameStds)
+        {
+          CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{claimsInfoProvider.GetStandardsFolderName()}", folderName);
+        }
+
+        return 0;
+      });
+    }
+
+    private TOther GetInternal<TOther>(Func<TOther> get)
+    {
+      return _policy.Execute(get);
     }
 
     // can only create sub-folder immediately under baseUrl
