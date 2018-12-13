@@ -1,16 +1,20 @@
-<h1>Supplier Home</h1>
-<p>You are logged in from supplier organisation <b>{{user.org.name}}</b></p>
 
-{{#if solutions.onboarding}}
+<div id="my-solutions-page">
+  <h1>My Solutions</h1>
+  <p>Welcome, {{user.name}}. Here you can add a new Solution and manage all your Solutions — both those in progress and published.</p>
+  <a id="add-new-solution" class="submit-button" href="{{addUrl}}">Add a new solution</a>
+</div>
+
 <section id="solutions-onboarding">
 <h2>Onboarding in Progress</h2>
+{{#if solutions.onboarding}}
 <table>
   <thead>
     <tr>
-      <th>Name | Version</th>
+      <th class="white-right-border">Name | Version</th>
       <th>Current Stage</th>
       <th>Stage no.</th>
-      <th>Status</th>
+      <th class="white-right-border">Status</th>
       <th>Notifications</th>
     </tr>
   </thead>
@@ -26,19 +30,20 @@
     {{/solutions.onboarding}}
   </tbody>
 </table>
-</section>
+{{else}} 
+ <p>You don’t have any Solutions in progress. <a href="{{addUrl}}">Add a new solution</a> to get started.</p>
 {{/if}}
-<a id="add-new-solution" href="{{addUrl}}">Add a new solution</a>
+</section>
 
-{{#if solutions.live}}
 <section id="solutions-live">
-<h2>Live in Marketplace</h2>
+<h2>Published</h2>
+{{#if solutions.live}}
 <table>
   <thead>
     <tr>
-      <th>Name | Version</th>
+      <th class="white-right-border">Name | Version</th>
       <th>Status</th>
-      <th>Contracts Signed</th>
+      <th class="white-right-border">Contracts Signed</th>
       <th>Notifications</th>
     </tr>
   </thead>
@@ -53,5 +58,7 @@
     {{/solutions.live}}
   </tbody>
 </table>
-</section>
+{{else}}
+  <p>You don’t have any published Solutions. Once you have completed all four stages of Adding a Solution, your published Solutions will show here.</p>
 {{/if}}
+</section>

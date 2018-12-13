@@ -94,3 +94,45 @@
     width: 1.1em;
   }
 }
+
+#my-solutions-page {
+  h1 {
+    color: $color-nhs-blue;
+  }
+  a.submit-button {
+    text-decoration: none;
+    color:white;
+  }
+}
+
+#solutions-onboarding,
+#solutions-live {
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    thead {
+      background: $color-nhs-blue;
+      color: white;
+      th {
+        text-align: left;
+        border-collapse: collapse;
+        padding: 0.5em 1em;
+        border:none;
+      }
+      th.white-right-border {
+        border-right: 2px solid white;
+      }
+    }
+    tr {
+      td {
+        text-align: left;
+        border-collapse: collapse;
+        padding: 1em;
+        border:none;
+      }
+    }
+    tr:nth-child(2n) {
+      background: $color-nhs-light-grey
+    }
+  }
+}

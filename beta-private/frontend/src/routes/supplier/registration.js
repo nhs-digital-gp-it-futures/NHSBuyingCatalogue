@@ -12,6 +12,7 @@ router.use(require('csurf')())
 
 // registering a new solution is the same basic flow as editing an existing one
 // except that there is no solution to load
+
 router
   .route('/new/')
   .get(onboardingStatusPage)
