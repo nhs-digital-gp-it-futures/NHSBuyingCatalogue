@@ -55,6 +55,7 @@
       },
       "Title": "Enter $t(Solution) details and key contacts.",
       "Subtitle": "Provide basic information and key contacts for your $t(Solution) below.",
+      "Preamble": "This information will be shared with $t(NHSD.Name) to identify your $t(Solution) and enable communication. You can edit this information until you submit evidence for $t(Capability Assessment) in stage 2.",
       "Fieldsets": {
         "NameDescVersion": {
           "Legend": "Enter $t(Solution) name, description, version *",
@@ -76,10 +77,10 @@
             "Version": {
               "Label": "Version (optional)",
               "Help": {
-                "Title": "Help - What does this mean?",
+                "Title": "Help - What is Version?",
                 "Text": [
-                  "$t(Solution) version is a numbering system used to distinguish between instances or releases of a particular $t(Solution). On the $t(Catalogue.Title), $t(Solution) version is intended to be used when new $t(Solution_plural) are released with significant feature developments. In other words, when the ‘major number’ has changed, in standard semantic versioning schemes.",
-                  "A version number might be used, for example, to describe a new release that has expanded functionality or different $t(Capability_plural) from the version previously onboarded to the $t(Catalogue.Title)."
+                  "$t(Solution) version is a numbering system used to distinguish between instances or releases of a particular $t(Solution). Here, $t(Solution) version is intended to be used when new $t(Solution_plural) are released with significant feature developments. In other words, when the ‘major number’ has changed, in standard semantic versioning schemes.",
+                  "For example, a new version number could describe a new release that has expanded functionality or different $t(Capability_plural) from a previous version."
                 ]
               }
             }

@@ -47,6 +47,10 @@
   details.quick-links {
     color: $color-nhs-blue;
 
+    > summary {
+      cursor: pointer;
+    }
+
     ul {
       list-style-type: disc;
 
