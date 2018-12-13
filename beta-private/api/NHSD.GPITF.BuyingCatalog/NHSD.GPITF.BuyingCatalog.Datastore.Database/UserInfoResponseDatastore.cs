@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using System;
+using System.Data;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
@@ -17,12 +18,14 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
     }
 
-    public void Add(string bearerToken, string jsonCachedResponse)
+    public void SafeAdd(string bearerToken, string jsonCachedResponse)
     {
       GetInternal(() =>
       {
         using (var trans = _dbConnection.Value.BeginTransaction())
         {
+          RemoveInternal(bearerToken, trans);
+
           var entity = new CachedUserInfoResponseJson
           {
             Id = Guid.NewGuid().ToString(),
@@ -42,14 +45,19 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
       {
         using (var trans = _dbConnection.Value.BeginTransaction())
         {
-          var entities = _dbConnection.Value
-            .GetAll<CachedUserInfoResponseJson>(trans)
-            .Where(x => x.BearerToken == bearerToken);
-          entities.ToList().ForEach(x => _dbConnection.Value.Delete(x, trans));
+          RemoveInternal(bearerToken, trans);
           trans.Commit();
           return 0;
         }
       });
+    }
+
+    private void RemoveInternal(string bearerToken, IDbTransaction trans)
+    {
+      var entities = _dbConnection.Value
+        .GetAll<CachedUserInfoResponseJson>(trans)
+        .Where(x => x.BearerToken == bearerToken);
+      entities.ToList().ForEach(x => _dbConnection.Value.Delete(x, trans));
     }
 
     public bool TryGetValue(string bearerToken, out string jsonCachedResponse)

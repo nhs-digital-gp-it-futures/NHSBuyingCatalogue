@@ -6,7 +6,7 @@
     // [bearerToken]-->[UserInfoResponse]
     bool TryGetValue(string bearerToken, out string jsonCachedResponse);
 
-    void Add(string bearerToken, string jsonCachedResponse);
+    void SafeAdd(string bearerToken, string jsonCachedResponse);
     void Remove(string bearerToken);
   }
 #pragma warning restore CS1591

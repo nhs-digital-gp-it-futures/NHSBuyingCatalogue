@@ -11,10 +11,11 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
     // [bearerToken]-->[UserInfoResponse]
     private readonly Dictionary<string, string> _cache = new Dictionary<string, string>();
 
-    public void Add(string bearerToken, string jsonCachedResponse)
+    public void SafeAdd(string bearerToken, string jsonCachedResponse)
     {
       lock (_cacheLock)
       {
+        _cache.Remove(bearerToken);
         _cache.Add(bearerToken, jsonCachedResponse);
       }
     }

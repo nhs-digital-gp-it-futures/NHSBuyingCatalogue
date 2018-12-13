@@ -63,8 +63,7 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
         {
           return;
         }
-        _cache.Remove(bearerToken);
-        _cache.Add(bearerToken, JsonConvert.SerializeObject(new CachedUserInfoResponse(response)));
+        _cache.SafeAdd(bearerToken, JsonConvert.SerializeObject(new CachedUserInfoResponse(response)));
       }
 
       if (response?.Claims == null)
