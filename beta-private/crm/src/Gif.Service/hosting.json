@@ -3,6 +3,6 @@
 
   "GIF":
   {
-    "Authority_Uri": "http://*:5001"
+    "Authority_Uri": "http://localhost:5001"
   }
 }
