@@ -69,7 +69,7 @@ test('Clicking logo returns to supplier homepage', async t => {
     .click('body > header a[href^="/about"]')
     .click(homeLink)
 
-    .expect(Selector('#content > h1').innerText).eql('Supplier Home')
+    .expect(Selector('#content > h1').innerText).eql('My Solutions')
 })
 
 test('Solutions that are currently onboarding are listed', async t => {
