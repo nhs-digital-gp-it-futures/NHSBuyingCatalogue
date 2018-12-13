@@ -13,7 +13,6 @@ function MockStdBlobStoreApi () {
 let subject
 
 beforeAll(() => {
-
   subject = new SharePointProvider({
     CapabilitiesImplementedEvidenceBlobStoreApi: MockCapBlobStoreApi,
     StandardsApplicableEvidenceBlobStoreApi: MockStdBlobStoreApi
@@ -183,8 +182,7 @@ describe('createFileReadStream', () => {
     let throws
     try {
       subject.createFileReadStream(fn)
-    }
-    catch(err) {
+    } catch (err) {
       throws = true
     }
     expect(throws).toBeTruthy()
