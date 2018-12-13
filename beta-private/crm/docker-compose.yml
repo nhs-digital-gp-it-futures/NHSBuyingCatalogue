@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  crm:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: gpitf/catalogue-crm:private-beta
+    ports:
+      - "5001:5001"
+    networks:
+      - beta_network
+
+networks:
+  beta_network:
+    driver: bridge

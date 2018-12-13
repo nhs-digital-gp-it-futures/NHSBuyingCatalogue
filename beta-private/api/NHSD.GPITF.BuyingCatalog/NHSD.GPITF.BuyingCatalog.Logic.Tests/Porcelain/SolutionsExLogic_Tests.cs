@@ -5,126 +5,77 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
+using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
+using NHSD.GPITF.BuyingCatalog.Logic.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Tests;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
-namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
+namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
 {
   [TestFixture]
-  public sealed class SolutionsLogic_Tests
+  public sealed class SolutionsExLogic_Tests
   {
-    private Mock<ISolutionsDatastore> _datastore;
+    private Mock<ISolutionsExDatastore> _datastore;
     private Mock<IContactsDatastore> _contacts;
     private Mock<IHttpContextAccessor> _context;
-    private Mock<ISolutionsValidator> _validator;
-    private Mock<ISolutionsFilter> _filter;
+    private Mock<ISolutionsExValidator> _validator;
+    private Mock<ISolutionsExFilter> _filter;
     private Mock<IEvidenceBlobStoreLogic> _evidenceBlobStoreLogic;
 
     [SetUp]
     public void SetUp()
     {
-      _datastore = new Mock<ISolutionsDatastore>();
+      _datastore = new Mock<ISolutionsExDatastore>();
       _contacts = new Mock<IContactsDatastore>();
       _context = new Mock<IHttpContextAccessor>();
-      _validator = new Mock<ISolutionsValidator>();
-      _filter = new Mock<ISolutionsFilter>();
+      _validator = new Mock<ISolutionsExValidator>();
+      _filter = new Mock<ISolutionsExFilter>();
       _evidenceBlobStoreLogic = new Mock<IEvidenceBlobStoreLogic>();
     }
 
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new SolutionsLogic(_datastore.Object, _contacts.Object, _context.Object, _validator.Object, _filter.Object, _evidenceBlobStoreLogic.Object));
-    }
-
-    [Test]
-    public void ByFramework_CallsFilter()
-    {
-      var logic = new SolutionsLogic(_datastore.Object, _contacts.Object, _context.Object, _validator.Object, _filter.Object, _evidenceBlobStoreLogic.Object);
-
-      logic.ByFramework("some Id");
-
-      _filter.Verify(x => x.Filter(It.IsAny<IEnumerable<Solutions>>()), Times.Once());
-    }
-
-    [Test]
-    public void ById_CallsFilter()
-    {
-      var logic = new SolutionsLogic(_datastore.Object, _contacts.Object, _context.Object, _validator.Object, _filter.Object, _evidenceBlobStoreLogic.Object);
-
-      logic.ById("some Id");
-
-      _filter.Verify(x => x.Filter(It.IsAny<IEnumerable<Solutions>>()), Times.Once());
-    }
-
-    [Test]
-    public void ByOrganisation_CallsFilter()
-    {
-      var logic = new SolutionsLogic(_datastore.Object, _contacts.Object, _context.Object, _validator.Object, _filter.Object, _evidenceBlobStoreLogic.Object);
-
-      logic.ByOrganisation("some Id");
-
-      _filter.Verify(x => x.Filter(It.IsAny<IEnumerable<Solutions>>()), Times.Once());
-    }
-
-    [Test]
-    public void Create_CallsValidator_WithRuleset()
-    {
-      var logic = new SolutionsLogic(_datastore.Object, _contacts.Object, _context.Object, _validator.Object, _filter.Object, _evidenceBlobStoreLogic.Object);
-      var soln = Creator.GetSolution();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
-      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(Creator.GetContact());
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Create(soln);
-
-      // obfuscated validation code because we use an extension method
-      _validator.Verify(x => x.Validate(It.Is<ValidationContext>(
-        vc =>
-          vc.InstanceToValidate == soln &&
-          vc.Selector is RulesetValidatorSelector &&
-          ((RulesetValidatorSelector)vc.Selector).RuleSets.Contains(nameof(ISolutionsLogic.Create)))), Times.Once());
+      Assert.DoesNotThrow(() => new SolutionsExLogic(_datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object));
     }
 
     [Test]
     public void Update_CallsValidator_WithRuleset()
     {
-      var logic = new SolutionsLogic(_datastore.Object, _contacts.Object, _context.Object, _validator.Object, _filter.Object, _evidenceBlobStoreLogic.Object);
-      var soln = Creator.GetSolution();
+      var logic = new SolutionsExLogic(_datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
+      var solnEx = Creator.GetSolutionEx();
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
       _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(Creator.GetContact());
 
       var valres = new ValidationResult();
       _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
 
-      logic.Update(soln);
+      logic.Update(solnEx);
 
       // obfuscated validation code because we use an extension method
       _validator.Verify(x => x.Validate(It.Is<ValidationContext>(
         vc =>
-          vc.InstanceToValidate == soln &&
+          vc.InstanceToValidate == solnEx &&
           vc.Selector is RulesetValidatorSelector &&
-          ((RulesetValidatorSelector)vc.Selector).RuleSets.Contains(nameof(ISolutionsLogic.Update)))), Times.Once());
+          ((RulesetValidatorSelector)vc.Selector).RuleSets.Contains(nameof(ISolutionsExLogic.Update)))), Times.Once());
     }
 
     [TestCase(SolutionStatus.Registered)]
     public void Update_CallsPrepareForSolution_WhenRegistered(SolutionStatus status)
     {
-      var logic = new SolutionsLogic(_datastore.Object, _contacts.Object, _context.Object, _validator.Object, _filter.Object, _evidenceBlobStoreLogic.Object);
+      var logic = new SolutionsExLogic(_datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
       var soln = Creator.GetSolution(status: status);
+      var solnEx = Creator.GetSolutionEx(soln: soln);
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
       _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(Creator.GetContact());
 
       var valres = new ValidationResult();
       _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
 
-      logic.Update(soln);
+      logic.Update(solnEx);
 
       _evidenceBlobStoreLogic.Verify(x => x.PrepareForSolution(soln.Id), Times.Once);
     }
@@ -138,15 +89,16 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [TestCase(SolutionStatus.Approved)]
     public void Update_DoesNotCallPrepareForSolution_WhenNotRegistered(SolutionStatus status)
     {
-      var logic = new SolutionsLogic(_datastore.Object, _contacts.Object, _context.Object, _validator.Object, _filter.Object, _evidenceBlobStoreLogic.Object);
+      var logic = new SolutionsExLogic(_datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
       var soln = Creator.GetSolution(status: status);
+      var solnEx = Creator.GetSolutionEx(soln: soln);
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
       _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(Creator.GetContact());
 
       var valres = new ValidationResult();
       _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
 
-      logic.Update(soln);
+      logic.Update(solnEx);
 
       _evidenceBlobStoreLogic.Verify(x => x.PrepareForSolution(soln.Id), Times.Never);
     }
@@ -154,8 +106,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void Update_Sets_SolutionModifiedById()
     {
-      var logic = new SolutionsLogic(_datastore.Object, _contacts.Object, _context.Object, _validator.Object, _filter.Object, _evidenceBlobStoreLogic.Object);
+      var logic = new SolutionsExLogic(_datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
       var soln = Creator.GetSolution();
+      var solnEx = Creator.GetSolutionEx(soln: soln);
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
       var contact = Creator.GetContact();
       _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(contact);
@@ -163,7 +116,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var valres = new ValidationResult();
       _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
 
-      logic.Update(soln);
+      logic.Update(solnEx);
 
       soln.ModifiedById.Should().Be(contact.Id);
     }
@@ -171,9 +124,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void Update_Sets_SolutionModifiedByOn()
     {
-      var logic = new SolutionsLogic(_datastore.Object, _contacts.Object, _context.Object, _validator.Object, _filter.Object, _evidenceBlobStoreLogic.Object);
+      var logic = new SolutionsExLogic(_datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
       var soln = Creator.GetSolution();
       soln.ModifiedOn = new DateTime(2006, 2, 20);
+      var solnEx = Creator.GetSolutionEx(soln: soln);
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
       var contact = Creator.GetContact();
       _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(contact);
@@ -181,7 +135,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var valres = new ValidationResult();
       _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
 
-      logic.Update(soln);
+      logic.Update(solnEx);
 
       soln.ModifiedOn.Should().BeCloseTo(DateTime.UtcNow);
     }

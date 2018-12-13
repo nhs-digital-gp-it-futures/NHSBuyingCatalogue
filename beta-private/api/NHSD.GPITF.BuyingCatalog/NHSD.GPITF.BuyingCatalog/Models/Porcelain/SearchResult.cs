@@ -16,6 +16,6 @@
     ///   positive => SolutionEx has more capabilities than required
     ///   negative => SolutionEx has less capabilities than required
     /// </summary>
-    public int Distance{ get; set; }
+    public int Distance { get; set; }
   }
 }

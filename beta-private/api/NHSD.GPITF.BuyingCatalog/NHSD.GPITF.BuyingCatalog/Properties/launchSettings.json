@@ -20,6 +20,7 @@
       "commandName": "Project",
       "launchUrl": "api/values",
       "environmentVariables": {
+        "USE_CRM": "false",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "http://localhost:54282/"

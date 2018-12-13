@@ -190,6 +190,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Importer
       Map(m => m.SolutionId).Index(1);
       Map(m => m.CapabilityId).Index(2);
       Map(m => m.Status).Index(3);
+      Map(m => m.OwnerId).TypeConverterOption.NullValues(string.Empty);
     }
   }
 
@@ -202,6 +203,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Importer
       Map(m => m.SolutionId).Index(1);
       Map(m => m.StandardId).Index(2);
       Map(m => m.Status).Index(3);
+      Map(m => m.OwnerId).TypeConverterOption.NullValues(string.Empty);
     }
   }
 

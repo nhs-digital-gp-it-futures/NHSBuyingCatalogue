@@ -63,12 +63,11 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
     [ValidateModelState]
     [AllowAnonymous]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<SearchResult>), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "No Solutions found with keyword")]
     public IActionResult ByKeyword([FromRoute][Required]string keyword, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
       var solutions = _logic.ByKeyword(keyword);
       var retval = PaginatedList<SearchResult>.Create(solutions, pageIndex, pageSize);
-      return solutions.Count() > 0 ? (IActionResult)new OkObjectResult(retval) : new NotFoundResult();
+      return new OkObjectResult(retval);
     }
   }
 }
