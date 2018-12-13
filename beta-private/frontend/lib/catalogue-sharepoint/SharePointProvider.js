@@ -38,6 +38,7 @@ class SharePointProvider {
   async getCapEvidenceFiles (claimID, subFolder, pageIndex) {
     const enumeratedBlobs = await this.getCapEvidence(claimID, subFolder, pageIndex)
     const filteredBlobs = enumeratedBlobs.items.filter((blob) => !blob.isFolder)
+    console.log('\n\n', process.env.NODE_ENV, '\n\n\n')
     return {
       ...enumeratedBlobs,
       items: filteredBlobs,

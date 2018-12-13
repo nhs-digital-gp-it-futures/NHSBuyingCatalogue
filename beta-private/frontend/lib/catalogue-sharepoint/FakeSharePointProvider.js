@@ -27,7 +27,7 @@ class FakeFileStoreAPI {
       length: await readStream.readableLength,
       url: `FakeSharePoint.${claimID}.${filename}`,
       timeLastModified: (new Date()).toISOString(),
-      blobId: null
+      blobId: `FakeSharePoint.${claimID}.${filename}`
     }
 
     this.folders[claimID].items.push(newItem)
@@ -73,6 +73,4 @@ class FakeSharePointProvider extends SharePointProvider {
   }
 }
 
-module.exports = {
-  FakeSharePointProvider
-}
+module.exports = FakeSharePointProvider
