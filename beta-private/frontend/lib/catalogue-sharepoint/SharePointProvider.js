@@ -47,7 +47,6 @@ class SharePointProvider {
 
   async uploadCapEvidence (claimID, buffer, filename, subFolder) {
     const uploadMethod = this.capBlobStoreApi.apiCapabilitiesImplementedEvidenceBlobStoreAddEvidenceForClaimPost.bind(this.capBlobStoreApi)
-    console.log('\n\n', 'UPLOADING FILES: IN uploadCapEvidence', '\n\n\n')
     return this.uploadEvidence(uploadMethod, claimID, buffer, filename, subFolder)
   }
 

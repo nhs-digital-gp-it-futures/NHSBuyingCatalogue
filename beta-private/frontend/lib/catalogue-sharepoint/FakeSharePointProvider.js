@@ -58,7 +58,6 @@ class FakeCapabilitiesImplementedEvidenceBlobStoreApi extends FakeFileStoreAPI {
   }
 
   async apiCapabilitiesImplementedEvidenceBlobStoreAddEvidenceForClaimPost (claimID, readStream, filename, options) {
-    console.log('\n\n', 'UPLOADING FILES: IN FAKE apiCapabilitiesImplementedEvidenceBlobStoreAddEvidenceForClaimPost', '\n\n\n')
     return this.addItemToClaim(claimID, readStream, filename, options)
   }
 }
