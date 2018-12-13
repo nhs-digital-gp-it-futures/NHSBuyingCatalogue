@@ -54,6 +54,7 @@ class DataProvider {
     this.solutionsApi = new CatalogueApi.SolutionsApi()
     this.solutionsExApi = new CatalogueApi.SolutionsExApi()
     this.capabilityMappingsApi = new CatalogueApi.CapabilityMappingsApi()
+    this.capabilityEvidenceAPI = new CatalogueApi.CapabilitiesImplementedEvidenceApi()
   }
 
   async contactById (contactId) {
@@ -125,7 +126,6 @@ class DataProvider {
 
   async solutionForRegistration (solutionId) {
     const solutionEx = await this.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet(solutionId)
-
     // reformat the returned value for ease-of-use
     return {
       ...solutionEx.solution,
@@ -228,6 +228,40 @@ class DataProvider {
     })
   }
 
+  async solutionForAssessment (solutionId) {
+    const solutionEx = await this.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet(solutionId)
+    const { capabilities } = await this.capabilityMappings()
+
+    const solution = {
+      ...solutionEx.solution,
+      capabilities: solutionEx.claimedCapability,
+      evidence: solutionEx.claimedCapabilityEvidence,
+      reviews: solutionEx.claimedCapabilityReview,
+      standards: solutionEx.claimedStandard,
+      contacts: _.orderBy(solutionEx.technicalContact, c => {
+        return c.contactType === 'Lead Contact' ? '' : c.contactType
+      })
+    }
+
+    const capEvidence = _.map(solutionEx.claimedCapabilityEvidence, (evidence) => {
+      const id = evidence.id
+      return {
+        ...evidence,
+        messages: solutionEx.claimedCapabilityReview.filter((rev) => rev.evidenceId === id)
+      }
+    })
+
+    solution.capabilities = _.map(solution.capabilities, (cap) => {
+      return {
+        ...capabilities[cap.capabilityId],
+        claimID: cap.id,
+        evidence: capEvidence.filter((evidence) => evidence.claimId === cap.id)
+      }
+    })
+
+    return solution
+  }
+
   async solutionForCompliance (solutionId) {
     const solution = await this.solutionForRegistration(solutionId)
 
@@ -245,7 +279,6 @@ class DataProvider {
         })
       })
     })
-
     return solution
   }
 
@@ -260,6 +293,35 @@ class DataProvider {
 
     await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
     return this.solutionForCompliance(solution.id)
+  }
+
+  async updateSolutionCapabilityEvidence (solutionID, evidence) {
+    const solnEx = await this.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet(solutionID)
+    solnEx.claimedCapabilityEvidence = solnEx.claimedCapabilityEvidence.concat(evidence)
+    await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
+    return this.solutionForAssessment(solutionID)
+  }
+
+  async submitSolutionForCapabilityAssessment (solutionID) {
+    const CAP_ASS_STATUS = this.getCapabilityAssessmentStatusCode() // ✨🧙 magic 🧙✨
+
+    const solnEx = await this.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet(solutionID)
+    solnEx.solution.status = CAP_ASS_STATUS
+    await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
+    return this.solutionForAssessment(solutionID)
+  }
+
+  // As there is no API Endpoint for transitioning a solution from one status to another, other than
+  // setting the status of a solution to a different magical number, this method exists so that the
+  // status of a solution can be set to the same number whenever a solution is needed to be in
+  // Capability Assessment Status
+  // I.E. Get the code that says: 'Solution has capability evidence and has been submitted for Assessment'
+  getCapabilityAssessmentStatusCode () {
+    return '2' // ✨🧙 magic 🧙✨
+  }
+
+  getRegisteredStatusCode () {
+    return '1' // ✨🧙 magic 🧙✨
   }
 }
 

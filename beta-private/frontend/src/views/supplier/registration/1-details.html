@@ -285,44 +285,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const elNewContact = $('fieldset.collapsible', elInsertedTemplate)
     elNewContact.classList.remove('collapsed')
-    collapseAllFieldsetsExcept(elNewContact)
+    // HACK: see app.js
+    window.collapseAllFieldsetsExcept(elNewContact)
     window.location.hash = $('input[type=text]', elNewContact).id
-  })
-
-  // collapse all but the first collapsible fieldsets by default, except ones that contain
-  // invalid fields
-  function collapseAllFieldsetsExcept (elCurrent) {
-    $$('fieldset.collapsible').forEach(function (el) {
-      if (el !== elCurrent && !el.classList.contains('invalid')) {
-        el.classList.add('collapsed')
-      }
-    })
-  }
-
-  collapseAllFieldsetsExcept($('fieldset.collapsible:first-of-type'))
-
-  function handleCollapsibleFieldset (ev) {
-    if (ev.target.tagName === 'LEGEND') {
-      const elFieldset = ev.target.parentNode
-      if (elFieldset.classList.contains('collapsible')) {
-        ev.preventDefault()
-
-        elFieldset.classList.toggle('collapsed')
-        if (!elFieldset.classList.contains('collapsed')) {
-          collapseAllFieldsetsExcept(elFieldset)
-        }
-
-        return true
-      }
-    }
-  }
-
-  // support both mouse and keyboard access
-  $('#content').addEventListener('click', handleCollapsibleFieldset)
-  $('#content').addEventListener('keypress', function (ev) {
-    if (ev.key === ' ' || ev.key === 'Enter') {
-      handleCollapsibleFieldset(ev)
-    }
   })
 })
 </script>

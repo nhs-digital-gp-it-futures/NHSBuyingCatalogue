@@ -1,0 +1,88 @@
+{{#* inline "header"}}
+<table>
+    <tr>
+        <td>
+            <h2>{{t title}}</h2>
+        </td>
+        <td>
+            <a href="{{href}}">Edit</a>
+        </td>
+    </tr>
+</table>
+{{/inline}}
+
+<div id="capability-submission-confirmation">
+
+    {{> errors}}
+
+    <h1>{{t 'CapAssPages.Confirmation.Title'}}</h1>
+    <p class="information">{{t 'CapAssPages.Confirmation.Information'}}</p>
+
+    <div class="help-box">
+        {{#>help-reveal title="CapAssPages.Confirmation.Help.Title" }}
+            <p>{{t 'CapAssPages.Confirmation.Help.Information'}}</p>
+        {{/help-reveal}}
+    </div>
+
+    <div class="summary-box">
+        {{>header title="CapAssPages.Confirmation.Registration.Title" href=editUrls.registration}}
+        <h3>{{t 'CapAssPages.Confirmation.Registration.Subtitle.Solution'}}</h3>
+        {{#solution}}
+            <p>{{name}}</p>
+            <p>{{description}}</p>
+            <p>{{version}}</p>
+
+            <h3>{{t 'CapAssPages.Confirmation.Registration.Subtitle.Contacts'}}</h3>
+            {{#contacts}}
+                <p>{{contactType}}</p>
+                <p>{{firstName}} {{lastName}}</p>
+                <p>{{emailAddress}}</p>
+                <p>{{number}}</p>
+            {{/contacts}}
+        {{/solution}}
+    </div>
+
+    <div class="summary-box">
+        {{>header title="CapAssPages.Confirmation.Capabilities.Title" href=editUrls.capabilities.selection}}
+
+        <h3>{{t 'CapAssPages.Confirmation.Capabilities.Subtitle.Capabilities'}}</h3>
+        <div class="capabilities">
+            {{#solution.capabilities}}
+                <p><a href="{{url}}">{{name}}</a></p>
+            {{/solution.capabilities}}
+        </div>
+        {{#>help-reveal title="CapAssPages.Confirmation.Capabilities.Subtitle.Standards"}}
+            <h3>{{t 'CapAssPages.Confirmation.Capabilities.Subtitle.Associated'}}</h3>
+            {{#solution.standardsByGroup.associated}}
+                <p><a href="">{{name}}</a></p>
+            {{/solution.standardsByGroup.associated}}
+
+            <h3>{{t 'CapAssPages.Confirmation.Capabilities.Subtitle.Overarching'}}</h3>
+            {{#solution.standardsByGroup.overarching}}
+                <p><a href="">{{name}}</a></p>
+            {{/solution.standardsByGroup.overarching}}
+        {{/help-reveal}}
+    </div>
+
+    <div class="summary-box">
+        {{>header title="CapAssPages.Confirmation.Evidence.Title" href=editUrls.capabilities.evidence}}
+
+        {{#solution.capabilities}}
+        <div class="evidence">
+            <h3>{{name}}</h3>
+            <p>{{t 'CapAssPages.Confirmation.Evidence.Information'}}</p>
+            {{#if isLiveDemo}}
+
+            {{else}}
+                <p><a href="{{latestFile.downloadUrl}}">{{latestFile.name}}</a></p>
+                <p>{{latestEvidence.evidence}}</p>
+            {{/if}}
+            {{#if missingEvidence}}{{t 'CapAssPages.Confirmation.Evidence.Error'}}{{/if}}
+        </div>
+        {{/solution.capabilities}}
+    </div>
+
+    {{#> form form_id=activeFormId}}
+        <button type="submit" name="action[continue]" value="{{t 'Buttons.Save and continue'}}" {{#if notEditable}}disabled{{/if}}>Submit to NHS Digital &#8250;</button>
+    {{/form}}
+</div>

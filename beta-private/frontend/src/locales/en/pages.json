@@ -259,5 +259,62 @@
         "Upload": "Upload"
       }
     }
+  },
+  "CapAssPages":{
+    "Assessment":{
+      "Title": "Provide Assessment evidence for your Solution.",
+      "Instructions": "Provide primary evidence for each Capability below. Once you have completed the required fields, review your answers on the next page before submitting them to NHS Digital.",
+      "Guidance": "For support, see guidance for this stage, and watch the example demonstration video. If this Solution is published, buyers can request the information you provide on this page. All Clarifications should be submitted in Bravo.",
+      "Evidence": {
+        "Instructions": "Choose to provide a video, or give a live witness demonstration, to show how your Solution meets this Capability. Find further instructions, along with all Epics and Acceptance Criteria in Confluence: Document Management Capability. ",
+        "Title":"Add primary evidence for this Capability.*",
+        "Options": {
+          "Question": "Do you want to provide a recorded video demonstration or schedule a live witness demonstration?",
+          "Positive": "Recorded video demonstration",
+          "Negative": "Request live witness demonstration"
+        },
+        "Video" : {
+          "Title": "1. Add video file and describe epics (required)*",
+          "Previous": "The last file you uploaded was:",
+          "Additional": "Indicate which epics are demonstrated in the video, including the time where each epic is demonstrated. For example, Epic 3 at 4:56."
+        },
+        "Notice": {
+          "Title": "NHS Digital will contact you",
+          "Additional": "NHS Digital will contact your Lead Contact to schedule the live witness demonstration."
+        }
+      },
+      "Submission": {
+        "Notice":"By Submitting this information to NHS Digital for Assessment, you are confirming you are able, to the best of your knowledge, to meet all Capability Assessment and Standards Compliance requirements and to display the Solution named on the NHS Catalogue."
+      }
+    },
+    "Confirmation": {
+      "Title":"Review and submit your responses to NHS Digital.",
+      "Information": "Review your answers and edit as needed. This is your last chance to make changes before submitting your Solution to NHS Digital for Assessment. ",
+      "Help":{
+        "Title": "Help - What happens next?",
+        "Information": "When you Submit this page, the information you have provided will be sent to NHS Digital, and the Assessment team will begin reviewing your responses for each Capability. Your Lead Contact will receive a notification linked to an Outcome letter once the assessment is complete."
+      },
+      "Registration": {
+        "Title": "Solution details and key contacts.",
+        "Subtitle": {
+          "Solution": "Solution Name, Description, Version",
+          "Contacts": "Contacts"
+        }
+      },
+      "Capabilities": {
+        "Title": "Which Capabilities does your Solution provide?",
+        "Subtitle": {
+          "Capabilities": "Capabilities",
+          "Standards": "Compliance with {{solution.standards.length}} Standards will be required.",
+          "Associated": "Associated Standards—Based on Capabilities selected.",
+          "Overarching": "Overarching Standards—Required for all Solutions."
+        }
+      },
+      "Evidence": {
+        "Title": "Provide Assessment evidence for your Solution.",
+        "Information": "Evidence: {{#if isLiveDemo}}Live Witness Demonstration{{else}}Recorded Video{{/if}}",
+        "Error": "Error: This Capability is missing evidence."
+      }
+    }
   }
 }

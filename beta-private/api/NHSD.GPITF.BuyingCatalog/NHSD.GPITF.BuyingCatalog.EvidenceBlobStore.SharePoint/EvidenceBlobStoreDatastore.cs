@@ -90,7 +90,6 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       var org = _organisationsDatastore.ById(soln.OrganisationId);
       var subFolderSeparator = !string.IsNullOrEmpty(subFolder) ? "/" : string.Empty;
       var claimFolder = $"{SharePoint_BaseUrl}/{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{claimsInfoProvider.GetFolderName()}/{claimsInfoProvider.GetFolderClaimName(claim)}";
-      var absUri = new Uri($"{claimFolder}/{subFolder ?? string.Empty}{subFolderSeparator}{fileName}");
       var claimFolderRelUrl = $"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{claimsInfoProvider.GetFolderName()}/{claimsInfoProvider.GetFolderClaimName(claim)}/{subFolder ?? string.Empty}{subFolderSeparator}";
 
       // create subFolder if not exists
@@ -180,6 +179,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
             {
               // End sliced upload by calling FinishUpload
               uploadFile = uploadFile.FinishUpload(uploadId, fileoffset, strm);
+              _context.Load(uploadFile);
               _context.ExecuteQuery();
 
               return uploadFile.UniqueId.ToString();

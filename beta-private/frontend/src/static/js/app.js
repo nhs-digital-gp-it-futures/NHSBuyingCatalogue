@@ -55,3 +55,46 @@ if (!Modernizr.formattribute) {
     })
   })
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+
+  // collapse all but the first collapsible fieldsets by default, except ones that contain
+  // invalid fields
+  function collapseAllFieldsetsExcept(elCurrent) {
+    $$("fieldset.collapsible").forEach(function(el) {
+      if (el !== elCurrent && !el.classList.contains("invalid")) {
+        el.classList.add("collapsed");
+      }
+    });
+  }
+
+  // HACK: improperly moved code broke the script at the original position, expose the
+  //       missing function
+  window.collapseAllFieldsetsExcept = collapseAllFieldsetsExcept
+
+  collapseAllFieldsetsExcept($("fieldset.collapsible:first-of-type"));
+
+  function handleCollapsibleFieldset(ev) {
+    if (ev.target.tagName === "LEGEND") {
+      const elFieldset = ev.target.parentNode;
+      if (elFieldset.classList.contains("collapsible")) {
+        ev.preventDefault();
+
+        elFieldset.classList.toggle("collapsed");
+        if (!elFieldset.classList.contains("collapsed")) {
+          collapseAllFieldsetsExcept(elFieldset);
+        }
+
+        return true;
+      }
+    }
+  }
+
+  // support both mouse and keyboard access
+  $("#content").addEventListener("click", handleCollapsibleFieldset);
+  $("#content").addEventListener("keypress", function(ev) {
+    if (ev.key === " " || ev.key === "Enter") {
+      handleCollapsibleFieldset(ev);
+    }
+  });
+});
