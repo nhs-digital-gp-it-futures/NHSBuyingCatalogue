@@ -13,6 +13,4 @@ class RealSharePointProvider extends SharePointProvider {
   }
 }
 
-module.exports = {
-  RealSharePointProvider: RealSharePointProvider
-}
+module.exports = RealSharePointProvider

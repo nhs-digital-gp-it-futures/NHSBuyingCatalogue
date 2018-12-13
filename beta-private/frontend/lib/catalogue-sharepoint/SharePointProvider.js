@@ -218,8 +218,11 @@ class SharePointProvider {
    *
    */
   getBearerToken () {
-    try { return this.CatalogueApi.ApiClient.instance.authentications.oauth2.accessToken }
-    catch (err) { return '' }
+    try {
+      return this.CatalogueApi.ApiClient.instance.authentications.oauth2.accessToken
+    } catch (err) {
+      return ''
+    }
   }
 
   folderExists (fp) { return fs.existsSync(fp) }
@@ -231,6 +234,4 @@ class SharePointProvider {
   async fetchFile (url, options) { return fetch(url, options) }
 }
 
-module.exports = {
-  SharePointProvider
-}
+module.exports = SharePointProvider

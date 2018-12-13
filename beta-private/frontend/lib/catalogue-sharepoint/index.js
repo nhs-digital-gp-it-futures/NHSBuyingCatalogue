@@ -1,7 +1,10 @@
 
+const FakeSharePointProvider = require('./FakeSharePointProvider')
+const RealSharePointProvider = require('./RealSharePointProvider')
+
 module.exports = {
   sharePointProvider: process.env.NODE_ENV === 'TEST'
-    ? new (require('./FakeSharePointProvider'))()
-    : new (require('./RealSharePointProvider'))(),
+    ? new FakeSharePointProvider()
+    : new RealSharePointProvider(),
   SharePointProvider: require('./SharePointProvider')
 }
