@@ -250,7 +250,7 @@ async function downloadEvidenceGet (req, res) {
 
   const selectedFile = _.find(context.files.items, ['name', fileName] )
 
-  downloadFile(claimID, selectedFile.url).then((fileResponse) => {
+  downloadFile(claimID, selectedFile.blobId).then((fileResponse) => {
     res.header('Content-Disposition', `attachment; filename="${fileName}"`);
     fileResponse.body.pipe(res)
   }).catch((err) => {
@@ -259,16 +259,15 @@ async function downloadEvidenceGet (req, res) {
   })
 }
 
-async function downloadFile (claimID, url) {
-  return sharePointProvider.downloadStdEvidence(claimID, url)
+async function downloadFile (claimID, blobId) {
+  return sharePointProvider.downloadStdEvidence(claimID, blobId)
 }
 
 async function fetchFiles (claimID) {
-  console.log('\n\nRequesting Evidence Listing:', claimID, '\n\n')
   return sharePointProvider.getStdEvidenceFiles(claimID)
 }
 
-function findLatestFile(files) {
+function findLatestFile (files) {
   return _.maxBy(files, (f) => f.timeLastModified)
 }
 
