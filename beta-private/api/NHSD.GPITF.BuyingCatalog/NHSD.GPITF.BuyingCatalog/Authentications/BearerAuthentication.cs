@@ -15,7 +15,7 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
 #pragma warning disable CS1591
   public sealed class BearerAuthentication : IBearerAuthentication
   {
-    private readonly IUserInfoResponseDatastore _cache;
+    private readonly IUserInfoResponseCache _cache;
     private readonly IConfiguration _config;
     private readonly IUserInfoResponseRetriever _userInfoClient;
     private readonly IContactsDatastore _contactsDatastore;
@@ -24,7 +24,7 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
     private static TimeSpan Expiry = TimeSpan.FromMinutes(60);
 
     public BearerAuthentication(
-      IUserInfoResponseDatastore cache,
+      IUserInfoResponseCache cache,
       IConfiguration config,
       IUserInfoResponseRetriever userInfoClient,
       IContactsDatastore contactsDatastore,

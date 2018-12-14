@@ -44,7 +44,6 @@ DROP TABLE IF EXISTS Capabilities;
 DROP TABLE IF EXISTS Frameworks;
 DROP TABLE IF EXISTS Standards;
 
-DROP TABLE IF EXISTS CachedUserInfoResponseJson;
 DROP TABLE IF EXISTS Log;
 
 -- create data tables
@@ -148,14 +147,6 @@ CREATE TABLE Standards
   Type NVARCHAR(MAX),
   PRIMARY KEY (Id),
   FOREIGN KEY (PreviousId) REFERENCES Standards(Id)
-);
-
-CREATE TABLE CachedUserInfoResponseJson
-(
-  Id NVARCHAR(36) NOT NULL UNIQUE,
-  BearerToken NVARCHAR(MAX) NOT NULL,
-  Data NVARCHAR(MAX),
-  PRIMARY KEY (Id)
 );
 
 CREATE TABLE Log 

@@ -10,5 +10,10 @@
     "Audience": "catalogue-private-beta-ci"
   },
 
-  "UseCRM": false
+  "UseCRM": false,
+
+  "Cache":
+  {
+    "Host" : "localhost"
+  }
 }

@@ -301,6 +301,9 @@ namespace NHSD.GPITF.BuyingCatalog
       Console.WriteLine($"    SHAREPOINT_ORGANISATIONSRELATIVEURL : {Environment.GetEnvironmentVariable("SHAREPOINT_ORGANISATIONSRELATIVEURL")}");
       Console.WriteLine($"    SHAREPOINT_LOGIN                    : {Environment.GetEnvironmentVariable("SHAREPOINT_LOGIN")}");
       Console.WriteLine($"    SHAREPOINT_PASSWORD                 : {Environment.GetEnvironmentVariable("SHAREPOINT_PASSWORD")}");
+
+      Console.WriteLine($"  CACHE:");
+      Console.WriteLine($"    CACHE_HOST : {Environment.GetEnvironmentVariable("CACHE_HOST")}");
     }
   }
 }
