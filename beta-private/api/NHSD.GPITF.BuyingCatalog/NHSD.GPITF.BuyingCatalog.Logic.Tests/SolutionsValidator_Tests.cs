@@ -123,6 +123,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [TestCase(SolutionStatus.Registered, SolutionStatus.CapabilitiesAssessment, Roles.Supplier)]
     [TestCase(SolutionStatus.CapabilitiesAssessment, SolutionStatus.Failed, Roles.Admin)]
     [TestCase(SolutionStatus.CapabilitiesAssessment, SolutionStatus.StandardsCompliance, Roles.Admin)]
+    [TestCase(SolutionStatus.StandardsCompliance, SolutionStatus.StandardsCompliance, Roles.Supplier)]
     [TestCase(SolutionStatus.StandardsCompliance, SolutionStatus.Failed, Roles.Admin)]
     [TestCase(SolutionStatus.StandardsCompliance, SolutionStatus.FinalApproval, Roles.Admin)]
     [TestCase(SolutionStatus.FinalApproval, SolutionStatus.SolutionPage, Roles.Admin)]
@@ -196,7 +197,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [TestCase(SolutionStatus.StandardsCompliance, SolutionStatus.Draft, Roles.Supplier)]
     [TestCase(SolutionStatus.StandardsCompliance, SolutionStatus.Registered, Roles.Supplier)]
     [TestCase(SolutionStatus.StandardsCompliance, SolutionStatus.CapabilitiesAssessment, Roles.Supplier)]
-    [TestCase(SolutionStatus.StandardsCompliance, SolutionStatus.StandardsCompliance, Roles.Supplier)]
     [TestCase(SolutionStatus.StandardsCompliance, SolutionStatus.SolutionPage, Roles.Supplier)]
     [TestCase(SolutionStatus.StandardsCompliance, SolutionStatus.Approved, Roles.Supplier)]
 
