@@ -38,12 +38,13 @@ router
   .post(solutionComplianceEvidencePagePost)
 
 router
+  .route('/:solution_id/evidence/:claim_id/confirmation')
+  .get(solutionComplianceEvidenceConfirmationGet)
+
+router
   .route('/:solution_id/evidence/:claim_id/:file_name')
   .get(downloadEvidenceGet)
 
-router
-  .route('/:solution_id/evidence/:claim_id/confirmation')
-  .get(solutionComplianceEvidenceConfirmationGet)
 
 router
   .route('/:solution_id/evidence/:claim_id/confirmation')
