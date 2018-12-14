@@ -25,7 +25,10 @@ services:
     build: ./api/NHSD.GPITF.BuyingCatalog
     networks:
       - beta_network
+    ports:
+      - "5100:5100"
     environment:
+      - ASPNETCORE_ENVIRONMENT
       - CACHE_HOST
       - OIDC_ISSUER_URL
       - OIDC_USERINFO_URL
@@ -36,6 +39,11 @@ services:
       - SHAREPOINT_ORGANISATIONSRELATIVEURL
       - SHAREPOINT_LOGIN
       - SHAREPOINT_PASSWORD
+      - CRM_APIURI
+      - CRM_ACCESSTOKENURI
+      - CRM_CLIENTID
+      - CRM_CLIENTSECRET
+      - USE_CRM
 
   nginx:
     build: ./nginx
