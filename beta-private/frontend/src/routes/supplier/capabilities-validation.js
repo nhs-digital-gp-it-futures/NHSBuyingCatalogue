@@ -35,7 +35,7 @@ module.exports = {
           const evidenceDescriptions = req.body['evidence-description']
           const allFilesHaveDescriptions = _.every(claimsWithFiles, (claim) => !_.isEmpty(evidenceDescriptions[claim]))
 
-          if(numberOfClaimsRequiringFiles !== numberOfClaimsWithFiles) {
+          if (numberOfClaimsRequiringFiles !== numberOfClaimsWithFiles) {
             return Promise.reject('Validation.Capability.Evidence.File.Missing')
           } else if (!allFilesHaveDescriptions) {
             return Promise.reject('Validation.Capability.Evidence.Description.Missing')
