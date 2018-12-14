@@ -41,6 +41,14 @@ router
   .route('/:solution_id/evidence/:claim_id/:file_name')
   .get(downloadEvidenceGet)
 
+router
+  .route('/:solution_id/evidence/:claim_id/confirmation')
+  .get(solutionComplianceEvidenceConfirmationGet)
+
+router
+  .route('/:solution_id/evidence/:claim_id/confirmation')
+  .post(solutionComplianceEvidenceConfirmationPost)
+
 function commonComplianceContext (req) {
   return {
     solution: req.solution,
@@ -209,11 +217,10 @@ async function solutionComplianceEvidencePagePost (req, res) {
       const claim = _.find(req.solution.standards, { id: req.params.claim_id })
 
       if (action.submit) {
-        claim.status = '2' /* submitted */
-        redirectUrl += `?submitted=${claim.standardId}`
-      } else {
-        claim.status = '1' /* draft */
+        redirectUrl = path.join(req.baseUrl, req.url, 'confirmation')
       }
+
+      claim.status = '1' /* draft */
 
       // always write an evidence record
       // TODO: link previousId when appropriate
@@ -231,6 +238,7 @@ async function solutionComplianceEvidencePagePost (req, res) {
       res.redirect(redirectUrl)
       return
     } catch (err) {
+      console.log(err)
       req.body.errors = { items: [{ msg: String(err) }] }
     }
   }
@@ -243,20 +251,52 @@ async function downloadEvidenceGet (req, res) {
   const context = {
     ...await evidencePageContext(req)
   }
-  req.body.errors = req.body.erros || []
+  req.body.errors = req.body.errors || []
 
   const claimID = req.params.claim_id
   const fileName = req.params.file_name
 
-  const selectedFile = _.find(context.files.items, ['name', fileName] )
+  const selectedFile = _.find(context.files.items, ['name', fileName])
 
   downloadFile(claimID, selectedFile.blobId).then((fileResponse) => {
-    res.header('Content-Disposition', `attachment; filename="${fileName}"`);
+    res.header('Content-Disposition', `attachment; filename="${fileName}"`)
     fileResponse.body.pipe(res)
   }).catch((err) => {
     req.body.errors.push(err)
     solutionComplianceEvidencePageGet(req, res)
   })
+}
+
+async function solutionComplianceEvidenceConfirmationGet (req, res) {
+  const context = {
+    ...await evidencePageContext(req)
+  }
+
+  const claim = _.find(req.solution.standards, { id: req.params.claim_id })
+
+  await dataProvider.updateSolutionForCompliance(req.solution)
+
+  res.render('supplier/compliance/confirmation', context)
+}
+
+async function solutionComplianceEvidenceConfirmationPost (req, res) {
+  const context = {
+    ...await evidencePageContext(req)
+  }
+  const action = req.body.action || {}
+
+  let redirectUrl = action.save
+    ? './'
+    : '../../'
+
+  const claim = _.find(req.solution.standards, { id: req.params.claim_id })
+
+  if (action.submit) {
+    claim.status = '2' /* submitted */
+    redirectUrl += `?submitted=${claim.standardId}`
+  }
+
+  res.render('supplier/compliance/confirmation', context)
 }
 
 async function downloadFile (claimID, blobId) {
