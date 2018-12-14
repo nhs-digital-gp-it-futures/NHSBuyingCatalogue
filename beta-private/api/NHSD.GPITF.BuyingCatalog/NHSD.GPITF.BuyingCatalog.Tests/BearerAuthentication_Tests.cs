@@ -22,7 +22,7 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
 
     private TokenValidatedContext _context;
     private Mock<IConfiguration> _config;
-    private Mock<IUserInfoResponseDatastore> _cache;
+    private Mock<IUserInfoResponseCache> _cache;
     private Mock<IUserInfoResponseRetriever> _rover;
     private Mock<IContactsDatastore> _contactsDatastore;
     private Mock<IOrganisationsDatastore> _organisationDatastore;
@@ -32,7 +32,7 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
     {
       _context = Creator.GetTokenValidatedContext(BearerToken);
       _config = new Mock<IConfiguration>();
-      _cache = new Mock<IUserInfoResponseDatastore>();
+      _cache = new Mock<IUserInfoResponseCache>();
       _rover = new Mock<IUserInfoResponseRetriever>();
       _contactsDatastore = new Mock<IContactsDatastore>();
       _organisationDatastore = new Mock<IOrganisationsDatastore>();

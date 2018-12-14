@@ -1,0 +1,69 @@
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using NHSD.GPITF.BuyingCatalog.Interfaces;
+using Polly;
+using StackExchange.Redis;
+using System;
+
+namespace NHSD.GPITF.BuyingCatalog.UserInfoResponseCache.Redis
+{
+  public sealed class UserInfoResponseCache : IUserInfoResponseCache
+  {
+    private static TimeSpan Expiry = TimeSpan.FromMinutes(60);
+
+    private readonly IConfiguration _config;
+    private readonly ILogger<UserInfoResponseCache> _logger;
+    private readonly ISyncPolicy _policy;
+    private readonly IDatabase _db;
+
+    public UserInfoResponseCache(
+      IConfiguration config,
+      ILogger<UserInfoResponseCache> logger,
+      ISyncPolicyFactory policy)
+    {
+      _config = config;
+      _logger = logger;
+      _policy = policy.Build(_logger);
+
+      var cacheHost =
+        Environment.GetEnvironmentVariable("CACHE_HOST") ??
+        _config["Cache:Host"] ??
+        "localhost";
+      var redis = ConnectionMultiplexer.Connect(cacheHost);
+      _db = redis.GetDatabase();
+    }
+
+    public void Remove(string bearerToken)
+    {
+      GetInternal(() =>
+      {
+        _db.KeyDelete(bearerToken);
+        return 0;
+      });
+    }
+
+    public void SafeAdd(string bearerToken, string jsonCachedResponse)
+    {
+      GetInternal(() =>
+      {
+        _db.StringSet(bearerToken, jsonCachedResponse, Expiry);
+        return 0;
+      });
+    }
+
+    public bool TryGetValue(string bearerToken, out string jsonCachedResponse)
+    {
+      var cacheVal = GetInternal(() =>
+      {
+        return _db.StringGet(bearerToken);
+      });
+      jsonCachedResponse = cacheVal;
+      return cacheVal.HasValue;
+    }
+
+    private TOther GetInternal<TOther>(Func<TOther> get)
+    {
+      return _policy.Execute(get);
+    }
+  }
+}
