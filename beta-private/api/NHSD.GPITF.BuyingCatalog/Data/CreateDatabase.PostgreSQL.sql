@@ -30,7 +30,6 @@ DROP TABLE IF EXISTS Capabilities;
 DROP TABLE IF EXISTS Frameworks;
 DROP TABLE IF EXISTS Standards;
 
-DROP TABLE IF EXISTS CachedUserInfoResponseJson;
 DROP TABLE IF EXISTS Log;
 
 -- create data tables
@@ -132,14 +131,6 @@ CREATE TABLE Standards
   "Type" TEXT,
   PRIMARY KEY ("Id"),
   FOREIGN KEY ("PreviousId") REFERENCES Standards("Id")
-);
-
-CREATE TABLE CachedUserInfoResponseJson
-(
-  "Id" CHAR(36) NOT NULL UNIQUE,
-  "BearerToken" TEXT NOT NULL,
-  "Data" TEXT,
-  PRIMARY KEY ("Id")
 );
 
 CREATE TABLE Log 
