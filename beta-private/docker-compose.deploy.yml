@@ -24,4 +24,5 @@ services:
     networks:
       - beta_network
     environment:
+      - ASPNETCORE_ENVIRONMENT
       - GIF_AUTHORITY_URI
