@@ -25,13 +25,13 @@
       <td>{{stageName}}</td>
       <td>{{stageStep}}</td>
       <td>{{status}}</td>
-      <td>{{>notification}}</td>
+      <td>{{>notification count=3}}</td>
     </tr>
     {{/solutions.onboarding}}
   </tbody>
 </table>
-{{else}} 
- <p>You don’t have any Solutions in progress. <a href="{{addUrl}}">Add a new solution</a> to get started.</p>
+{{else}}
+  <p>You don’t have any Solutions in progress. <a href="{{addUrl}}">Add a new solution</a> to get started.</p>
 {{/if}}
 </section>
 
