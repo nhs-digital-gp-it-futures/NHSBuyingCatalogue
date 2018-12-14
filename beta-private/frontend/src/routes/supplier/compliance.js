@@ -45,7 +45,6 @@ router
   .route('/:solution_id/evidence/:claim_id/:file_name')
   .get(downloadEvidenceGet)
 
-
 router
   .route('/:solution_id/evidence/:claim_id/confirmation')
   .post(solutionComplianceEvidenceConfirmationPost)
@@ -275,7 +274,18 @@ async function solutionComplianceEvidenceConfirmationGet (req, res) {
 
   const claim = _.find(req.solution.standards, { id: req.params.claim_id })
 
-  await dataProvider.updateSolutionForCompliance(req.solution)
+  let latestFile
+
+  if (context.files) {
+    latestFile = findLatestFile(context.files.items)
+  }
+
+  if (latestFile) {
+    latestFile.downloadURL = path.join(req.baseUrl, req.path.replace('confirmation', ''), latestFile.name)
+    context.latestFile = latestFile
+  }
+
+  context.latestSubmission = _.maxBy(claim.submissionHistory, (sub) => sub.createdOn)
 
   res.render('supplier/compliance/confirmation', context)
 }
@@ -295,6 +305,7 @@ async function solutionComplianceEvidenceConfirmationPost (req, res) {
   if (action.submit) {
     claim.status = '2' /* submitted */
     redirectUrl += `?submitted=${claim.standardId}`
+    await dataProvider.updateSolutionForCompliance(req.solution)
   }
 
   res.render('supplier/compliance/confirmation', context)
