@@ -274,6 +274,7 @@ async function solutionComplianceEvidenceConfirmationGet (req, res) {
 
   const claim = _.find(req.solution.standards, { id: req.params.claim_id })
 
+  context.standard = claim.standard
   let latestFile
 
   if (context.files) {

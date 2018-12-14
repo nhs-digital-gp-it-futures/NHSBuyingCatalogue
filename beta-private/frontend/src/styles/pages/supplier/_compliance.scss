@@ -193,3 +193,21 @@
     }
   }
 }
+
+
+#compliance-confirmation {
+  section {
+    border: 2px solid $color-nhs-mid-grey;
+    padding: 1em;
+    background: $color-nhs-light-grey;
+    margin: 1em;
+
+    table {
+      width: 100%;
+    }
+
+    p, a {
+      margin-bottom: 2em;
+    }
+  }
+}

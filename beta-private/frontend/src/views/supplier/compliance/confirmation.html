@@ -6,7 +6,7 @@
     {{/help-reveal}}
 
     <section>
-        {{>section-header title="Solution Name" href="#"}}
+        {{>section-header title="{{standard.name}}" href="#"}}
         <h2>File</h2>
         {{#if latestFile}}
             <a href="{{latestFile.downloadURL}}">{{latestFile.name}}</a>
@@ -23,6 +23,6 @@
     </section>
 
     {{#>form form_id=activeForm.id}}
-        <button id="submit-for-compliance" type="submit" class="primary" disabled>Save and review ></button>        
+        <button id="submit-for-compliance" type="submit" class="primary" disabled>Submit to NHS Digital ></button>        
     {{/form}}
 </div>
