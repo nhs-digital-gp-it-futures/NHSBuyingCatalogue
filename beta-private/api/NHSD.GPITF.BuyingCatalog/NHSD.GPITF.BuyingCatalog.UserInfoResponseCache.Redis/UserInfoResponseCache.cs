@@ -9,7 +9,11 @@ namespace NHSD.GPITF.BuyingCatalog.UserInfoResponseCache.Redis
 {
   public sealed class UserInfoResponseCache : IUserInfoResponseCache
   {
-    private static TimeSpan Expiry = TimeSpan.FromMinutes(60);
+    // Actual expiry of token from Auth0 is 1 hour.
+    // Expiry/removal from cache is managed by caller.
+    // This expiry is provided so that cache does not fill up with expired tokens
+    // which have not been removed by the caller.
+    private static TimeSpan Expiry = TimeSpan.FromHours(2);
 
     private readonly IConfiguration _config;
     private readonly ILogger<UserInfoResponseCache> _logger;
