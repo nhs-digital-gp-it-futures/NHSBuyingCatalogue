@@ -15,16 +15,13 @@ services:
     networks:
       - beta_network
 
-  crm:    
+  crm:
     build: 
      context: ./crm
     image: gpitf/catalogue-crm:private-beta
     ports:
-      - "5000:5000"
+      - "5001:5001"
     networks:
       - beta_network
     environment:
-      - CRM_APIURI
-      - CRM_ACCESSTOKENURI
-      - CRM_CLIENTID
-      - CRM_CLIENTSECRET
+      - GIF_AUTHORITY_URI
