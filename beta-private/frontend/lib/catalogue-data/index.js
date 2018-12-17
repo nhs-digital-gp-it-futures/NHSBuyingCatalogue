@@ -1,12 +1,13 @@
 const _ = require('lodash')
 
 const solutionOnboardingStatusMap = {
-  0: { stageName: 'Registration', stageStep: '1 of 4', status: 'Draft' },
-  1: { stageName: 'Registration', stageStep: '1 of 4', status: 'Registered' },
-  2: { stageName: 'Assessment', stageStep: '2 of 4', status: 'Submitted' },
-  3: { stageName: 'Compliance', stageStep: '3 of 4', status: 'In progress' },
-  4: { stageName: 'Final Approval', stageStep: '3 of 4', status: 'In progress' },
-  5: { stageName: 'Solution Page', stageStep: '4 of 4', status: 'In progress' }
+  '-1': { stageName: 'Failure', status: 'Failed' },
+  '0': { stageName: 'Registration', stageStep: '1 of 4', status: 'Draft' },
+  '1': { stageName: 'Registration', stageStep: '1 of 4', status: 'Registered' },
+  '2': { stageName: 'Assessment', stageStep: '2 of 4', status: 'Submitted' },
+  '3': { stageName: 'Compliance', stageStep: '3 of 4', status: 'In progress' },
+  '4': { stageName: 'Final Approval', stageStep: '3 of 4', status: 'In progress' },
+  '5': { stageName: 'Solution Page', stageStep: '4 of 4', status: 'In progress' }
 }
 
 const solutionComplianceStatusMap = {
@@ -76,8 +77,7 @@ class DataProvider {
 
   async solutionsForSupplierDashboard (supplierOrgId, solutionMapper = x => x) {
     const isLive = (soln) => +soln.status === 6 /* Solutions.StatusEnum.Approved */
-    const isOnboarding = (soln) => +soln.status !== 6 /* Solutions.StatusEnum.Approved */ &&
-      +soln.status !== -1 /* Solutions.StatusEnum.Failed */
+    const isOnboarding = (soln) => +soln.status !== 6 /* Solutions.StatusEnum.Approved */
 
     const forDashboard = (soln) => ({
       raw: soln,
@@ -86,10 +86,13 @@ class DataProvider {
       notifications: []
     })
 
-    const forOnboarding = (soln) => ({
-      ...soln,
-      ...solutionOnboardingStatusMap[+soln.raw.status]
-    })
+    const forOnboarding = (soln) => {
+      soln = {
+        ...soln,
+        ...solutionOnboardingStatusMap[+soln.raw.status]
+      }
+      return soln
+    }
 
     const forLive = (soln) => ({
       ...soln,
@@ -97,13 +100,25 @@ class DataProvider {
       contractCount: 0
     })
 
+    const failureReasons = async (soln) => {
+      const solution = await this.solutionForCompliance(soln.id)
+      if (+soln.raw.status !== -1) return { ...soln }
+      else if (solution.standards.some((std) => +std.status === -1)) {
+        return { ...soln, stageStep: 'Compliance Outcome' }
+      } else {
+        console.log('ASSESSMENT FAILURE')
+        return { ...soln, stageStep: 'Assessment Outcome' }
+      }
+    }
+
     const paginatedSolutions = await this.solutionsApi.apiSolutionsByOrganisationByOrganisationIdGet(
       supplierOrgId,
       { pageSize: 9999 }
     )
-
+    const onboardingSolutions = await Promise.all(paginatedSolutions.items.filter(isOnboarding).map(forDashboard).map(forOnboarding).map(failureReasons))
+    console.log(onboardingSolutions)
     return {
-      onboarding: paginatedSolutions.items.filter(isOnboarding).map(forDashboard).map(forOnboarding).map(solutionMapper),
+      onboarding: onboardingSolutions.map(solutionMapper),
       live: paginatedSolutions.items.filter(isLive).map(forDashboard).map(forLive).map(solutionMapper)
     }
   }
