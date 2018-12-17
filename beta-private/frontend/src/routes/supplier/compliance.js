@@ -210,7 +210,7 @@ async function solutionComplianceEvidencePagePost (req, res) {
     const fileToUpload = req.files[0]
 
     try {
-      await uploadFile(req.params.claim_id, fileToUpload.buffer, fileToUpload.originalname)
+      const blobId = await uploadFile(req.params.claim_id, fileToUpload.buffer, fileToUpload.originalname)
 
       // update the status of the claim based on the file uploading successfully (not started -> draft)
       // and if the user requested submission to NHS Digital (* -> submitted)
@@ -229,7 +229,8 @@ async function solutionComplianceEvidencePagePost (req, res) {
         claimId: req.params.claim_id,
         createdOn: new Date(),
         createdById: req.user.contact.id,
-        evidence: req.body.message
+        evidence: req.body.message,
+        blobId // ID of the file that was just uploaded, this relates a message to a file.
       })
 
       await dataProvider.updateSolutionForCompliance(req.solution)
@@ -238,7 +239,6 @@ async function solutionComplianceEvidencePagePost (req, res) {
       res.redirect(redirectUrl)
       return
     } catch (err) {
-      console.log(err)
       req.body.errors = { items: [{ msg: String(err) }] }
     }
   }
@@ -269,8 +269,13 @@ async function downloadEvidenceGet (req, res) {
 
 async function solutionComplianceEvidenceConfirmationGet (req, res) {
   const context = {
-    ...await evidencePageContext(req)
+    ...await evidencePageContext(req),
+    activeForm: {
+      title: req.solution && _([req.solution.name, req.solution.version]).filter().join(', ')
+    }
   }
+
+  context.activeForm.id = 'compliance-submission-confirmation'
 
   const claim = _.find(req.solution.standards, { id: req.params.claim_id })
 
@@ -292,9 +297,6 @@ async function solutionComplianceEvidenceConfirmationGet (req, res) {
 }
 
 async function solutionComplianceEvidenceConfirmationPost (req, res) {
-  const context = {
-    ...await evidencePageContext(req)
-  }
   const action = req.body.action || {}
 
   let redirectUrl = action.save
@@ -309,7 +311,7 @@ async function solutionComplianceEvidenceConfirmationPost (req, res) {
     await dataProvider.updateSolutionForCompliance(req.solution)
   }
 
-  res.render('supplier/compliance/confirmation', context)
+  res.redirect(redirectUrl)
 }
 
 async function downloadFile (claimID, blobId) {
