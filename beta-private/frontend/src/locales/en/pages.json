@@ -259,6 +259,25 @@
         "Submit": "Submit for $t(Compliance)",
         "Upload": "Upload"
       }
+    },
+    "Confirmation": {
+      "Heading": "Review and submit before you send to NHS Digital.",
+      "Information": "Review and edit as needed. This is your last chance to make changes before submitting this Standard to NHS Digital for review. ",
+      "Help": {
+        "Title": "Help - What happens next?",
+        "Information": "When you Submit this page, the information you have provided will be sent to NHS Digital, and the Compliance team will begin reviewing your responses in the Traceability Matrix file you’ve provided. Your Lead Contact and designated Standard Owner (if there is one) will receive a notification linked to the outcome once the review is complete.  "
+      },
+      "Evidence":{
+        "File": {
+          "Heading": "File",
+          "NotFound": "A File was not found, please refresh the page or try and re-upload."
+        },
+        "Message": {
+          "Heading": "Message (Optional)",
+          "NotFound": "No message was provided with this file."
+        }
+      },
+      "SubmitButton": "Submit to NHS Digital >"
     }
   },
   "CapAssPages":{

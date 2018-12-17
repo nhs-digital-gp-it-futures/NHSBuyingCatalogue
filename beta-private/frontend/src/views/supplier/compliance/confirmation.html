@@ -1,24 +1,24 @@
 <div id="compliance-confirmation">
-    <h1>Review and submit before you send to NHS Digital.</h1>
-    <p>Review and edit as needed. This is your last chance to make changes before submitting this Standard to NHS Digital for review. </p>
-    {{#>help-reveal title="Help - What happens next?"}}
-        <p>When you Submit this page, the information you have provided will be sent to NHS Digital, and the Compliance team will begin reviewing your responses in the Traceability Matrix file you’ve provided. Your Lead Contact and designated Standard Owner (if there is one) will receive a notification linked to the outcome once the review is complete.  </p>
+    <h1>{{t 'CompliancePages.Confirmation.Heading' }}</h1>
+    <p>{{t 'CompliancePages.Confirmation.Information' }}</p>
+    {{#>help-reveal title="CompliancePages.Confirmation.Help.Title"}}
+        <p>{{t 'CompliancePages.Confirmation.Help.Information'}}</p>
     {{/help-reveal}}
 
     <section>
         {{>section-header title="{{standard.name}}" href="#"}}
-        <h2>File</h2>
+        <h2>{{t 'CompliancePages.Confirmation.Evidence.File.Heading'}}</h2>
         {{#if latestFile}}
             <a href="{{latestFile.downloadURL}}">{{latestFile.name}}</a>
         {{else}}
-            <p>A File was not found, please refresh the page or try and re-upload.</p>
+            <p>{{t 'CompliancePages.Confirmation.Evidence.File.NotFound'}}</p>
         {{/if}}
-        <h2>Message (Optional)</h2>
+        <h2>{{t 'CompliancePages.Confirmation.Evidence.Message.Heading'}}</h2>
 
         {{#if latestSubmission.message}}
             <p>{{latestSubmission.message}}</p>
         {{else}}
-            <p>No message was provided with this file.</p>
+            <p>{{t 'CompliancePages.Confirmation.Evidence.Message.NotFound'}}</p>
         {{/if}}
     </section>
 
@@ -28,6 +28,6 @@
             type="submit"
             name="action[submit]"
             value="submit"
-            class="primary">Submit to NHS Digital ></button>
+            class="primary">{{t 'CompliancePages.Confirmation.SubmitButton'}}</button>
     {{/form}}
 </div>
