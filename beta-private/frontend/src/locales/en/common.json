@@ -38,6 +38,7 @@
   },
   "Statuses": {
     "Standard": {
+      "Failed": "Failed",
       "NotStarted": "Not started",
       "Draft": "Draft",
       "Submitted": "Submitted {{when}}",

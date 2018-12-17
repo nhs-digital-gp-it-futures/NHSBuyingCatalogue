@@ -33,6 +33,7 @@
         }
       }
 
+      &.failed,
       &.rejected {
         td {
           &.status,

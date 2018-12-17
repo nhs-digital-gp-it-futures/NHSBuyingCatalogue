@@ -11,14 +11,15 @@ const solutionOnboardingStatusMap = {
 }
 
 const solutionComplianceStatusMap = {
-  0: { statusClass: 'not-started', statusTransKey: 'Statuses.Standard.NotStarted' },
-  1: { statusClass: 'draft', statusTransKey: 'Statuses.Standard.Draft' },
-  2: { statusClass: 'submitted', statusTransKey: 'Statuses.Standard.Submitted' },
-  3: { statusClass: 'remediation', statusTransKey: 'Statuses.Standard.Remediation' },
-  4: { statusClass: 'approved', statusTransKey: 'Statuses.Standard.Approved' },
-  5: { statusClass: 'approved first', statusTransKey: 'Statuses.Standard.Approved' },
-  6: { statusClass: 'approved partial', statusTransKey: 'Statuses.Standard.Approved' },
-  7: { statusClass: 'rejected', statusTransKey: 'Statuses.Standard.Rejected' }
+  '-1': { statusClass: 'failed', statusTransKey: 'Statuses.Standard.Failed' },
+  '0': { statusClass: 'not-started', statusTransKey: 'Statuses.Standard.NotStarted' },
+  '1': { statusClass: 'draft', statusTransKey: 'Statuses.Standard.Draft' },
+  '2': { statusClass: 'submitted', statusTransKey: 'Statuses.Standard.Submitted' },
+  '3': { statusClass: 'remediation', statusTransKey: 'Statuses.Standard.Remediation' },
+  '4': { statusClass: 'approved', statusTransKey: 'Statuses.Standard.Approved' },
+  '5': { statusClass: 'approved first', statusTransKey: 'Statuses.Standard.Approved' },
+  '6': { statusClass: 'approved partial', statusTransKey: 'Statuses.Standard.Approved' },
+  '7': { statusClass: 'rejected', statusTransKey: 'Statuses.Standard.Rejected' }
 }
 
 const EMPTY_UUID = '00000000-0000-0000-0000-000000000000'
