@@ -1,21 +1,20 @@
 
 <div id="my-solutions-page">
-  <h1>My Solutions</h1>
-  <p>Welcome, {{user.contact.firstName}}. Here you can add a new Solution and manage all your Solutions — both those in progress and published.</p>
-  <a id="add-new-solution" class="submit-button" href="{{addUrl}}">Add a new solution</a>
+  <h1>{{t 'MySolutions.Title'}}</h1>
+  <p>{{t 'MySolutions.WelcomeMessage'}}</p>
+  <a id="add-new-solution" class="submit-button" href="{{addUrl}}">{{t 'MySolutions.AddSolutionButton'}}</a>
 </div>
 
 <section id="solutions-onboarding">
-<h2>Onboarding in Progress</h2>
+<h2>{{t 'MySolutions.Onboarding.Title'}}</h2>
 {{#if solutions.onboarding}}
 <table>
   <thead>
     <tr>
-      <th class="white-right-border">Name | Version</th>
-      <th>Current Stage</th>
-      <th>Stage no.</th>
-      <th class="white-right-border">Status</th>
-      <th>Notifications</th>
+      <th class="white-right-border">{{t 'MySolutions.Onboarding.Table.Headings.NameAndVersion'}}</th>
+      <th>{{t 'MySolutions.Onboarding.Table.Headings.CurrentStage'}}</th>
+      <th>{{t 'MySolutions.Onboarding.Table.Headings.StageNumber'}}</th>
+      <th class="white-right-border">{{t 'MySolutions.Onboarding.Table.Headings.Status'}}</th>
     </tr>
   </thead>
   <tbody>
@@ -25,26 +24,24 @@
       <td>{{stageName}}</td>
       <td>{{stageStep}}</td>
       <td>{{status}}</td>
-      <td>{{>notification count=3}}</td>
     </tr>
     {{/solutions.onboarding}}
   </tbody>
 </table>
 {{else}}
-  <p>You don’t have any Solutions in progress. <a href="{{addUrl}}">Add a new solution</a> to get started.</p>
+  <p>{{t 'MySolutions.Onboarding.NoneFound'}}</p>
 {{/if}}
 </section>
 
 <section id="solutions-live">
-<h2>Published</h2>
+<h2>{{t 'MySolutions.Published.Title'}}</h2>
 {{#if solutions.live}}
 <table>
   <thead>
     <tr>
-      <th class="white-right-border">Name | Version</th>
-      <th>Status</th>
-      <th class="white-right-border">Contracts Signed</th>
-      <th>Notifications</th>
+      <th class="white-right-border">{{t 'MySolutions.Published.Table.Headings.NameAndVersion'}}</th>
+      <th>{{t 'MySolutions.Published.Table.Headings.Status'}}</th>
+      <th class="white-right-border">{{t 'MySolutions.Published.Table.Headings.ContractsSigned'}}</th>
     </tr>
   </thead>
   <tbody>
@@ -53,12 +50,11 @@
       <td><a href="{{url}}">{{displayName}}</a></td>
       <td>{{status}}</td>
       <td>{{contractCount}}</td>
-      <td></td>
     </tr>
     {{/solutions.live}}
   </tbody>
 </table>
 {{else}}
-  <p>You don’t have any published Solutions. Once you have completed all four stages of Adding a Solution, your published Solutions will show here.</p>
+  <p>{{t 'MySolutions.Published.NoneFound'}}</p>
 {{/if}}
 </section>
