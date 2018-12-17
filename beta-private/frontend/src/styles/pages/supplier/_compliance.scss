@@ -202,8 +202,14 @@
     background: $color-nhs-light-grey;
     margin: 1em;
 
-    table {
+    div.section-header {
+      h2 {
+        margin: 0.1em;
+      }
       width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-content: center;
     }
 
     p, a {

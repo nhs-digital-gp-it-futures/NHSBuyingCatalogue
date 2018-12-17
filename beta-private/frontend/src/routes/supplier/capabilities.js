@@ -158,7 +158,6 @@ async function solutionCapabilityPagePost (req, res) {
     }
   })
 
-
   let errorUpdating = ''
   // Update solution evidence, communicate the error if there isn't any already.
   await updateSolutionCapabilityEvidence(req.solution.id, evidenceDescriptions).catch((err) => {

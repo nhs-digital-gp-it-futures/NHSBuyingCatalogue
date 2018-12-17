@@ -26,7 +26,7 @@
       {
         "Name": "$t(Standards Compliance)",
         "Title": "Provide evidence for your $t(Solution_possessive) $t(Standard_plural)",
-        "Narrative": "Provide evidence that shows how your $t(Solution) meets each $t(Standard_possessive) requirements. Your $t(Solution) will be evaluated for compliance with each $t(Standard)."
+        "Narrative": "Provide evidence that shows how your $t(Solution) meets each $t(Standard_possessive) requirements. Your $t(Solution) will be evaluated for $t(Compliance) with each $t(Standard)."
       },
       {
         "Name": "$t(Solution) Detail",
@@ -79,7 +79,7 @@
               "Help": {
                 "Title": "Help - What is Version?",
                 "Text": [
-                  "$t(Solution) version is a numbering system used to distinguish between instances or releases of a particular $t(Solution). Here, $t(Solution) version is intended to be used when new $t(Solution_plural) are released with significant feature developments. In other words, when the ‘major number’ has changed, in standard semantic versioning schemes.",
+                  "$t(Solution) version is a numbering system used to distinguish between instances or releases of a particular $t(Solution). Here, $t(Solution) version is intended to be used when new $t(Solution_plural) are released with significant feature developments. In other words, when the ‘major number’ has changed, in $t(Standard) semantic versioning schemes.",
                   "For example, a new version number could describe a new release that has expanded functionality or different $t(Capability_plural) from a previous version."
                 ]
               }
@@ -248,7 +248,7 @@
         "Hide": "Hide history",
         "Show": "Show history",
         "HasFeedback": "Status: Feedback available. See response <a href='#{{id}}'>below</a>.",
-        "IsSubmitted": "Status: Submitted. Awaiting Compliance Outcome",
+        "IsSubmitted": "Status: Submitted. Awaiting $t(Compliance) Outcome",
         "FeedbackSent": "Feedback sent",
         "FileSent": "File sent"
       },
@@ -261,11 +261,11 @@
       }
     },
     "Confirmation": {
-      "Heading": "Review and submit before you send to NHS Digital.",
-      "Information": "Review and edit as needed. This is your last chance to make changes before submitting this Standard to NHS Digital for review. ",
+      "Heading": "Review and submit before you send to $t(NHSD.Name).",
+      "Information": "Review and edit as needed. This is your last chance to make changes before submitting this $t(Standard) to $t(NHSD.Name) for review. ",
       "Help": {
         "Title": "Help - What happens next?",
-        "Information": "When you Submit this page, the information you have provided will be sent to NHS Digital, and the Compliance team will begin reviewing your responses in the Traceability Matrix file you’ve provided. Your Lead Contact and designated Standard Owner (if there is one) will receive a notification linked to the outcome once the review is complete.  "
+        "Information": "When you Submit this page, the information you have provided will be sent to $t(NHSD.Name), and the $t(Compliance) team will begin reviewing your responses in the Traceability Matrix file you’ve provided. Your Lead Contact and designated $t(Standard) Owner (if there is one) will receive a notification linked to the outcome once the review is complete.  "
       },
       "Evidence":{
         "File": {
@@ -277,16 +277,16 @@
           "NotFound": "No message was provided with this file."
         }
       },
-      "SubmitButton": "Submit to NHS Digital >"
+      "SubmitButton": "Submit to $t(NHSD.Name) >"
     }
   },
   "CapAssPages":{
     "Assessment":{
-      "Title": "Provide Assessment evidence for your Solution.",
-      "Instructions": "Provide primary evidence for each Capability below. Once you have completed the required fields, review your answers on the next page before submitting them to NHS Digital.",
-      "Guidance": "For support, see guidance for this stage, and watch the example demonstration video. If this Solution is published, buyers can request the information you provide on this page. All Clarifications should be submitted in Bravo.",
+      "Title": "Provide Assessment evidence for your $t(Solution).",
+      "Instructions": "Provide primary evidence for each Capability below. Once you have completed the required fields, review your answers on the next page before submitting them to $t(NHSD.Name).",
+      "Guidance": "For support, see guidance for this stage, and watch the example demonstration video. If this $t(Solution) is published, buyers can request the information you provide on this page. All Clarifications should be submitted in Bravo.",
       "Evidence": {
-        "Instructions": "Choose to provide a video, or give a live witness demonstration, to show how your Solution meets this Capability. Find further instructions, along with all Epics and Acceptance Criteria in Confluence: Document Management Capability. ",
+        "Instructions": "Choose to provide a video, or give a live witness demonstration, to show how your $t(Solution) meets this Capability. Find further instructions, along with all Epics and Acceptance Criteria in Confluence: Document Management Capability. ",
         "Title":"Add primary evidence for this Capability.*",
         "Options": {
           "Question": "Do you want to provide a recorded video demonstration or schedule a live witness demonstration?",
@@ -299,20 +299,20 @@
           "Additional": "Indicate which epics are demonstrated in the video, including the time where each epic is demonstrated. For example, Epic 3 at 4:56."
         },
         "Notice": {
-          "Title": "NHS Digital will contact you",
-          "Additional": "NHS Digital will contact your Lead Contact to schedule the live witness demonstration."
+          "Title": "$t(NHSD.Name) will contact you",
+          "Additional": "$t(NHSD.Name) will contact your Lead Contact to schedule the live witness demonstration."
         }
       },
       "Submission": {
-        "Notice":"By Submitting this information to NHS Digital for Assessment, you are confirming you are able, to the best of your knowledge, to meet all Capability Assessment and Standards Compliance requirements and to display the Solution named on the NHS Catalogue."
+        "Notice":"By Submitting this information to $t(NHSD.Name) for Assessment, you are confirming you are able, to the best of your knowledge, to meet all Capability Assessment and $t(Standard_plural) $t(Compliance) requirements and to display the $t(Solution) named on the NHS Catalogue."
       }
     },
     "Confirmation": {
-      "Title":"Review and submit your responses to NHS Digital.",
-      "Information": "Review your answers and edit as needed. This is your last chance to make changes before submitting your Solution to NHS Digital for Assessment. ",
+      "Title":"Review and submit your responses to $t(NHSD.Name).",
+      "Information": "Review your answers and edit as needed. This is your last chance to make changes before submitting your $t(Solution) to $t(NHSD.Name) for Assessment. ",
       "Help":{
         "Title": "Help - What happens next?",
-        "Information": "When you Submit this page, the information you have provided will be sent to NHS Digital, and the Assessment team will begin reviewing your responses for each Capability. Your Lead Contact will receive a notification linked to an Outcome letter once the assessment is complete."
+        "Information": "When you Submit this page, the information you have provided will be sent to $t(NHSD.Name), and the Assessment team will begin reviewing your responses for each Capability. Your Lead Contact will receive a notification linked to an Outcome letter once the assessment is complete."
       },
       "Registration": {
         "Title": "Solution details and key contacts.",
@@ -322,16 +322,16 @@
         }
       },
       "Capabilities": {
-        "Title": "Which Capabilities does your Solution provide?",
+        "Title": "Which Capabilities does your $t(Solution) provide?",
         "Subtitle": {
           "Capabilities": "Capabilities",
-          "Standards": "Compliance with {{solution.standards.length}} Standards will be required.",
+          "Standards": "Compliance with {{solution.standards.length}} $t(Standard_plural) will be required.",
           "Associated": "Associated Standards—Based on Capabilities selected.",
-          "Overarching": "Overarching Standards—Required for all Solutions."
+          "Overarching": "Overarching Standards—Required for all $t(Solution_plural)."
         }
       },
       "Evidence": {
-        "Title": "Provide Assessment evidence for your Solution.",
+        "Title": "Provide Assessment evidence for your $t(Solution).",
         "Information": "Evidence: {{#if isLiveDemo}}Live Witness Demonstration{{else}}Recorded Video{{/if}}",
         "Error": "Error: This Capability is missing evidence."
       }
