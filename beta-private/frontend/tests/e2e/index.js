@@ -4,7 +4,9 @@ const testfiles = [
   'supplier-homepage.js',
   'supplier-registration-details.js',
   'supplier-registration-add-new-solution.js',
-  'supplier-registration-capabilities.js'
+  'supplier-registration-capabilities.js',
+  'capability-assessment.js',
+  'capability-assessment-evidence.js'
 ].map(
   f => path.join(__dirname, f)
 )

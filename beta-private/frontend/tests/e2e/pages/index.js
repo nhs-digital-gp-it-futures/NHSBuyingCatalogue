@@ -29,6 +29,9 @@ class SupplierDashboardPage extends Page {
     this.lastOnboardingSolutionName = Selector(
       '#solutions-onboarding table > tbody > tr:last-child > td:first-child'
     )
+    this.lastOnboardingSolutionStatus = Selector(
+      '#solutions-onboarding table > tbody > tr:last-child > td:nth-child(4)'
+    )
   }
 }
 
@@ -37,6 +40,8 @@ class OnboardingDashboardPage extends Page {
     super()
 
     this.continueRegistrationButton = Selector('#content a[href^=register]')
+    this.capabilityAssessmentButton = Selector('#content a[href^="../../capabilities"]')
+    this.capabilityAssessmentStatus = Selector('.onboarding-stages > :nth-child(2) .action')
   }
 }
 
@@ -64,7 +69,14 @@ class RegistrationPage extends Page {
   }
 }
 
+class CapabilityEvidencePage extends Page {
+  constructor () {
+    super()
+  }
+}
+
 export const page = new Page()
 export const supplierDashboardPage = new SupplierDashboardPage()
 export const onboardingDashboardPage = new OnboardingDashboardPage()
 export const registrationPage = new RegistrationPage()
+export const capabilityEvidencePage = new CapabilityEvidencePage()
