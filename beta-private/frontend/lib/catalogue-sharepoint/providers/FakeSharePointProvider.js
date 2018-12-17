@@ -105,6 +105,7 @@ const FakeCatalogueAPI = {
 
 class FakeSharePointProvider extends SharePointProvider {
   constructor () {
+    console.info('Mock Sharepoint provider active')
     super(FakeCatalogueAPI)
   }
 
