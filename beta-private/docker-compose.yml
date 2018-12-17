@@ -16,6 +16,7 @@ services:
       - OIDC_CLIENT_ID
       - OIDC_CLIENT_SECRET
       - SESSION_SECRET
+      - SHAREPOINT_PROVIDER_ENV
     restart: always
     depends_on:
       - cache
