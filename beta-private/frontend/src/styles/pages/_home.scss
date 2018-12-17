@@ -1,0 +1,74 @@
+#home-page {
+    padding:0;
+    margin:0;
+    p {
+        width: 66%;
+    }
+    .welcome-banner {
+        margin: 0;
+        padding: 2em;
+        color: white;
+        background: $color-nhs-blue;
+        width: 100%;
+        .button {
+            background: white;
+            color: $color-nhs-blue;
+        }
+    }
+    .content {
+        padding: 1em;
+        background: $color-nhs-light-grey;
+        margin:0;
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+            align-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cards {
+            .card {
+                -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+                -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+                box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+                .upper {
+                    padding: 1em;
+                    background: $color-nhs-blue;
+                    color: white;
+                    display: flex;
+                    h3 {
+                        width: 50%;
+                    }
+                }
+                .lower {
+                    padding: 1em;
+                    background: white;
+                    color: $color-nhs-black;
+                }
+
+            }
+        }
+
+        .steps {
+            .step {
+                width: 25%;
+                padding:1em;
+                border-left: solid 1px $color-nhs-mid-grey;
+                .upper {
+                    .indicator{
+                        border: 2px solid $color-nhs-blue;
+                        background: white;
+                        padding: 0.5em 0.9em;
+                        border-radius: 100%;
+                    }
+                }
+                .lower {
+                    h3 {
+                        color: $color-nhs-blue
+                    }
+                }
+            }
+        }
+    }
+}
