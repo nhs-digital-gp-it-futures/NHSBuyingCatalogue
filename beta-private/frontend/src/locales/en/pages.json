@@ -283,7 +283,7 @@
   "CapAssPages":{
     "Assessment":{
       "Title": "Provide Assessment evidence for your $t(Solution).",
-      "Instructions": "Provide primary evidence for each Capability below. Once you have completed the required fields, review your answers on the next page before submitting them to $t(NHSD.Name).",
+      "Instructions": "Provide primary evidence for each $t(Capability) below. Once you have completed the required fields, review your answers on the next page before submitting them to $t(NHSD.Name).",
       "Guidance": "For support, see guidance for this stage, and watch the example demonstration video. If this $t(Solution) is published, buyers can request the information you provide on this page. All Clarifications should be submitted in Bravo.",
       "Evidence": {
         "Instructions": "Choose to provide a video, or give a live witness demonstration, to show how your $t(Solution) meets this Capability. Find further instructions, along with all Epics and Acceptance Criteria in Confluence: Document Management Capability. ",
@@ -304,7 +304,7 @@
         }
       },
       "Submission": {
-        "Notice":"By Submitting this information to $t(NHSD.Name) for Assessment, you are confirming you are able, to the best of your knowledge, to meet all Capability Assessment and $t(Standard_plural) $t(Compliance) requirements and to display the $t(Solution) named on the NHS Catalogue."
+        "Notice":"By Submitting this information to $t(NHSD.Name) for Assessment, you are confirming you are able, to the best of your knowledge, to meet all $t(Capability) Assessment and $t(Standard_plural) $t(Compliance) requirements and to display the $t(Solution) named on the NHS Catalogue."
       }
     },
     "Confirmation": {
@@ -322,18 +322,18 @@
         }
       },
       "Capabilities": {
-        "Title": "Which Capabilities does your $t(Solution) provide?",
+        "Title": "Which $t(Capability_plural) does your $t(Solution) provide?",
         "Subtitle": {
           "Capabilities": "Capabilities",
           "Standards": "Compliance with {{solution.standards.length}} $t(Standard_plural) will be required.",
-          "Associated": "Associated Standards—Based on Capabilities selected.",
+          "Associated": "Associated Standards—Based on $t(Capability_plural) selected.",
           "Overarching": "Overarching Standards—Required for all $t(Solution_plural)."
         }
       },
       "Evidence": {
         "Title": "Provide Assessment evidence for your $t(Solution).",
         "Information": "Evidence: {{#if isLiveDemo}}Live Witness Demonstration{{else}}Recorded Video{{/if}}",
-        "Error": "Error: This Capability is missing evidence."
+        "Error": "Error: This $t(Capability) is missing evidence."
       }
     }
   }

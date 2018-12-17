@@ -217,7 +217,7 @@ async function solutionComplianceEvidencePagePost (req, res) {
       const claim = _.find(req.solution.standards, { id: req.params.claim_id })
 
       if (action.submit) {
-        redirectUrl = path.join(req.baseUrl, req.url, 'confirmation')
+        redirectUrl = './confirmation'
       }
 
       claim.status = '1' /* draft */
