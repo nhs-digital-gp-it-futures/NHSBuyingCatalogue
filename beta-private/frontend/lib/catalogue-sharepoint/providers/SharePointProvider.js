@@ -2,6 +2,7 @@ const fetch = require('node-fetch')
 const fs = require('fs')
 const path = require('path')
 const os = require('os')
+const generateUUID = require('node-uuid-generator').generate
 
 const INTERMEDIATE_STORAGE = process.env.UPLOAD_TEMP_FILE_STORE || os.tmpdir()
 
@@ -92,16 +93,19 @@ class SharePointProvider {
       subFolder: subFolder
     }
     try {
-      await this.saveBuffer(buffer, filename, claimID)
-      const readStream = this.createFileReadStream(filename, claimID)
+      const fileUUID = `${filename}-${generateUUID()}`
+      await this.saveBuffer(buffer, fileUUID, claimID)
+      const readStream = this.createFileReadStream(fileUUID, claimID)
       const uploadRes = await method(claimID, readStream, filename, options)
-      await this.deleteFile(filename, claimID)
+      await this.deleteFile(fileUUID, claimID)
       return uploadRes
     } catch (err) {
+      console.log('\n\n\nERR', err)
       throw err
     }
   }
   async saveBuffer (buffer, filename, claimID) {
+    console.log('SAVING FILE', filename)
     const storagePath = this.createFileStoragePath(filename, claimID)
     return new Promise((resolve, reject) => {
       this.writeFile(storagePath, buffer, (err) => {
@@ -112,45 +116,28 @@ class SharePointProvider {
   }
 
   createFileReadStream (filename, claimID) {
+    console.log('CREATING READSTREAM', filename)
     const storagePath = this.createFileStoragePath(filename, claimID)
     return this.createReadStream(storagePath)
   }
 
   async deleteFile (filename, claimID) {
-    const claimFolderPath = this.createClaimFolderPath(claimID)
+    console.log('DELETING FILE', filename)
+
     const storagePath = this.createFileStoragePath(filename, claimID)
 
-    // Unlink the file, then unlink the folder
     return new Promise((resolve, reject) => {
       return this.unlinkFile(storagePath, (fileErr) => {
         if (fileErr) return reject(fileErr)
         return resolve()
       })
-    }).then(new Promise((resolve, reject) => {
-      this.removeFolder(claimFolderPath, (dirErr) => {
-        if (dirErr) return reject(dirErr)
-        return resolve()
-      })
-    }))
+    })
   }
 
   createFileStoragePath (filename, claimID, root) {
+    console.log('CREATING STORAGE PATH', filename)
     const folderPath = root || this.intermediateStoragePath || INTERMEDIATE_STORAGE
-    const claimFolderPath = this.createClaimFolderPath(claimID, folderPath)
-    return path.join(claimFolderPath, filename)
-  }
-
-  createClaimFolderPath (claimID, root) {
-    const folderPath = root || this.intermediateStoragePath || INTERMEDIATE_STORAGE
-    if (!this.folderExists(folderPath)) {
-      this.createFolder(folderPath)
-    }
-
-    const claimFolderPath = path.join(folderPath, claimID)
-    if (!this.folderExists(claimFolderPath)) {
-      this.createFolder(claimFolderPath)
-    }
-    return claimFolderPath
+    return path.join(folderPath, filename)
   }
 
   /**
