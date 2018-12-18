@@ -473,5 +473,69 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       valres.Errors.Should().BeEmpty();
     }
+
+    [TestCase(SolutionStatus.Failed)]
+    [TestCase(SolutionStatus.Registered)]
+    [TestCase(SolutionStatus.CapabilitiesAssessment)]
+    [TestCase(SolutionStatus.StandardsCompliance)]
+    [TestCase(SolutionStatus.FinalApproval)]
+    [TestCase(SolutionStatus.SolutionPage)]
+    [TestCase(SolutionStatus.Approved)]
+    public void MustBePendingToChangeName_NonDraft_ReturnsError(SolutionStatus status)
+    {
+      var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object, _env.Object);
+      var soln = Creator.GetSolution(status: status);
+      soln.Name = "New name";
+      var solnOld = Creator.GetSolution(status: status, id:soln.Id);
+      solnOld.Name = "Original name";
+      _solutionDatastore.Setup(x => x.ById(soln.Id)).Returns(solnOld);
+
+      validator.MustBePendingToChangeName();
+      var valres = validator.Validate(soln);
+
+      valres.Errors.Should()
+        .ContainSingle(x => x.ErrorMessage == "Can only change name in Draft")
+        .And
+        .HaveCount(1);
+    }
+
+    [TestCase(SolutionStatus.Draft)]
+    public void MustBePendingToChangeName_Draft_Succeeds(SolutionStatus status)
+    {
+      var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object, _env.Object);
+      var soln = Creator.GetSolution(status: status);
+      soln.Name = "New name";
+      var solnOld = Creator.GetSolution(status: status, id:soln.Id);
+      solnOld.Name = "Original name";
+      _solutionDatastore.Setup(x => x.ById(soln.Id)).Returns(solnOld);
+
+      validator.MustBePendingToChangeName();
+      var valres = validator.Validate(soln);
+
+      valres.Errors.Should().BeEmpty();
+    }
+
+    [TestCase(SolutionStatus.Failed)]
+    [TestCase(SolutionStatus.Draft)]
+    [TestCase(SolutionStatus.Registered)]
+    [TestCase(SolutionStatus.CapabilitiesAssessment)]
+    [TestCase(SolutionStatus.StandardsCompliance)]
+    [TestCase(SolutionStatus.FinalApproval)]
+    [TestCase(SolutionStatus.SolutionPage)]
+    [TestCase(SolutionStatus.Approved)]
+    public void MustBePendingToChangeName_SameName_Succeeds(SolutionStatus status)
+    {
+      var validator = new SolutionsValidator(_context.Object, _solutionDatastore.Object, _organisationDatastore.Object, _env.Object);
+      var soln = Creator.GetSolution(status: status);
+      soln.Name = "Original name";
+      var solnOld = Creator.GetSolution(status: status, id:soln.Id);
+      solnOld.Name = "Original name";
+      _solutionDatastore.Setup(x => x.ById(soln.Id)).Returns(solnOld);
+
+      validator.MustBePendingToChangeName();
+      var valres = validator.Validate(soln);
+
+      valres.Errors.Should().BeEmpty();
+    }
   }
 }
