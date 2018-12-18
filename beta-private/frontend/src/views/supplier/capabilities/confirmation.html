@@ -1,16 +1,3 @@
-{{#* inline "header"}}
-<table>
-    <tr>
-        <td>
-            <h2>{{t title}}</h2>
-        </td>
-        <td>
-            <a href="{{href}}">Edit</a>
-        </td>
-    </tr>
-</table>
-{{/inline}}
-
 <div id="capability-submission-confirmation">
 
     {{> errors}}
@@ -25,7 +12,7 @@
     </div>
 
     <div class="summary-box">
-        {{>header title="CapAssPages.Confirmation.Registration.Title" href=editUrls.registration}}
+        {{>section-header title="CapAssPages.Confirmation.Registration.Title" href=editUrls.registration}}
         <h3>{{t 'CapAssPages.Confirmation.Registration.Subtitle.Solution'}}</h3>
         {{#solution}}
             <p>{{name}}</p>
@@ -43,7 +30,7 @@
     </div>
 
     <div class="summary-box">
-        {{>header title="CapAssPages.Confirmation.Capabilities.Title" href=editUrls.capabilities.selection}}
+        {{>section-header title="CapAssPages.Confirmation.Capabilities.Title" href=editUrls.capabilities.selection}}
 
         <h3>{{t 'CapAssPages.Confirmation.Capabilities.Subtitle.Capabilities'}}</h3>
         <div class="capabilities">
@@ -65,7 +52,7 @@
     </div>
 
     <div class="summary-box">
-        {{>header title="CapAssPages.Confirmation.Evidence.Title" href=editUrls.capabilities.evidence}}
+        {{>section-header title="CapAssPages.Confirmation.Evidence.Title" href=editUrls.capabilities.evidence}}
 
         {{#solution.capabilities}}
         <div class="evidence">

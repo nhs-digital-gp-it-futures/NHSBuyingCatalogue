@@ -116,15 +116,11 @@
             color: $color-nhs-dark-grey;
         }
 
-        table, tr {
+        div.section-header {
             width: 100%;
-        }
-        td {
-            width:10%;
-            a {
-                font-size: 1.2em;
-                text-decoration: underline;
-            }
+            display: flex;
+            justify-content: space-between;
+            align-content: center;
         }
 
         details {

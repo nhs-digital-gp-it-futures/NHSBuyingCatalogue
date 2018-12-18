@@ -193,3 +193,27 @@
     }
   }
 }
+
+
+#compliance-confirmation {
+  section {
+    border: 2px solid $color-nhs-mid-grey;
+    padding: 1em;
+    background: $color-nhs-light-grey;
+    margin: 1em;
+
+    div.section-header {
+      h2 {
+        margin: 0.1em;
+      }
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-content: center;
+    }
+
+    p, a {
+      margin-bottom: 2em;
+    }
+  }
+}

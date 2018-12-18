@@ -1,0 +1,33 @@
+<div id="compliance-confirmation">
+    <h1>{{t 'CompliancePages.Confirmation.Heading' }}</h1>
+    <p>{{t 'CompliancePages.Confirmation.Information' }}</p>
+    {{#>help-reveal title="CompliancePages.Confirmation.Help.Title"}}
+        <p>{{t 'CompliancePages.Confirmation.Help.Information'}}</p>
+    {{/help-reveal}}
+
+    <section>
+        {{>section-header title="{{standard.name}}" href="./"}}
+        <h2>{{t 'CompliancePages.Confirmation.Evidence.File.Heading'}}</h2>
+        {{#if latestFile}}
+            <a href="{{latestFile.downloadURL}}">{{latestFile.name}}</a>
+        {{else}}
+            <p>{{t 'CompliancePages.Confirmation.Evidence.File.NotFound'}}</p>
+        {{/if}}
+        <h2>{{t 'CompliancePages.Confirmation.Evidence.Message.Heading'}}</h2>
+
+        {{#if latestSubmission.message}}
+            <p>{{latestSubmission.message}}</p>
+        {{else}}
+            <p>{{t 'CompliancePages.Confirmation.Evidence.Message.NotFound'}}</p>
+        {{/if}}
+    </section>
+
+    {{#>form form_id=activeForm.id}}
+        <button
+            id="compliance-submission-confirmation"
+            type="submit"
+            name="action[submit]"
+            value="submit"
+            class="primary">{{t 'CompliancePages.Confirmation.SubmitButton'}}</button>
+    {{/form}}
+</div>

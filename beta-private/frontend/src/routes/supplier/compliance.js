@@ -38,8 +38,16 @@ router
   .post(solutionComplianceEvidencePagePost)
 
 router
+  .route('/:solution_id/evidence/:claim_id/confirmation')
+  .get(solutionComplianceEvidenceConfirmationGet)
+
+router
   .route('/:solution_id/evidence/:claim_id/:file_name')
   .get(downloadEvidenceGet)
+
+router
+  .route('/:solution_id/evidence/:claim_id/confirmation')
+  .post(solutionComplianceEvidenceConfirmationPost)
 
 function commonComplianceContext (req) {
   return {
@@ -202,18 +210,17 @@ async function solutionComplianceEvidencePagePost (req, res) {
     const fileToUpload = req.files[0]
 
     try {
-      await uploadFile(req.params.claim_id, fileToUpload.buffer, fileToUpload.originalname)
+      const blobId = await uploadFile(req.params.claim_id, fileToUpload.buffer, fileToUpload.originalname)
 
       // update the status of the claim based on the file uploading successfully (not started -> draft)
       // and if the user requested submission to NHS Digital (* -> submitted)
       const claim = _.find(req.solution.standards, { id: req.params.claim_id })
 
       if (action.submit) {
-        claim.status = '2' /* submitted */
-        redirectUrl += `?submitted=${claim.standardId}`
-      } else {
-        claim.status = '1' /* draft */
+        redirectUrl = './confirmation'
       }
+
+      claim.status = '1' /* draft */
 
       // always write an evidence record
       // TODO: link previousId when appropriate
@@ -222,7 +229,8 @@ async function solutionComplianceEvidencePagePost (req, res) {
         claimId: req.params.claim_id,
         createdOn: new Date(),
         createdById: req.user.contact.id,
-        evidence: req.body.message
+        evidence: req.body.message,
+        blobId // ID of the file that was just uploaded, this relates a message to a file.
       })
 
       await dataProvider.updateSolutionForCompliance(req.solution)
@@ -243,20 +251,67 @@ async function downloadEvidenceGet (req, res) {
   const context = {
     ...await evidencePageContext(req)
   }
-  req.body.errors = req.body.erros || []
+  req.body.errors = req.body.errors || []
 
   const claimID = req.params.claim_id
   const fileName = req.params.file_name
 
-  const selectedFile = _.find(context.files.items, ['name', fileName] )
+  const selectedFile = _.find(context.files.items, ['name', fileName])
 
   downloadFile(claimID, selectedFile.blobId).then((fileResponse) => {
-    res.header('Content-Disposition', `attachment; filename="${fileName}"`);
+    res.header('Content-Disposition', `attachment; filename="${fileName}"`)
     fileResponse.body.pipe(res)
   }).catch((err) => {
     req.body.errors.push(err)
     solutionComplianceEvidencePageGet(req, res)
   })
+}
+
+async function solutionComplianceEvidenceConfirmationGet (req, res) {
+  const context = {
+    ...await evidencePageContext(req),
+    activeForm: {
+      title: req.solution && _([req.solution.name, req.solution.version]).filter().join(', ')
+    }
+  }
+
+  context.activeForm.id = 'compliance-submission-confirmation'
+
+  const claim = _.find(req.solution.standards, { id: req.params.claim_id })
+
+  context.standard = claim.standard
+  let latestFile
+
+  if (context.files) {
+    latestFile = findLatestFile(context.files.items)
+  }
+
+  if (latestFile) {
+    latestFile.downloadURL = path.join(req.baseUrl, req.path.replace('confirmation', ''), latestFile.name)
+    context.latestFile = latestFile
+  }
+
+  context.latestSubmission = _.maxBy(claim.submissionHistory, (sub) => sub.createdOn)
+
+  res.render('supplier/compliance/confirmation', context)
+}
+
+async function solutionComplianceEvidenceConfirmationPost (req, res) {
+  const action = req.body.action || {}
+
+  let redirectUrl = action.save
+    ? './'
+    : '../../'
+
+  const claim = _.find(req.solution.standards, { id: req.params.claim_id })
+
+  if (action.submit) {
+    claim.status = '2' /* submitted */
+    redirectUrl += `?submitted=${claim.standardId}`
+    await dataProvider.updateSolutionForCompliance(req.solution)
+  }
+
+  res.redirect(redirectUrl)
 }
 
 async function downloadFile (claimID, blobId) {
