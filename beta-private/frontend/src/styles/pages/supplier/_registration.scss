@@ -97,11 +97,11 @@
 
 #my-solutions-page {
   h1 {
-    color: black;
+    color: $color-nhs-black;
   }
   a.submit-button {
     text-decoration: none;
-    color:white;
+    color:$color-nhs-white;
   }
 }
 
@@ -116,15 +116,16 @@
     border-collapse: collapse;
     thead {
       background: $color-nhs-blue;
-      color: white;
+      color: $color-nhs-white;
       th {
         text-align: left;
         border-collapse: collapse;
         padding: 0.5em 1em;
         border:none;
       }
+
       th.white-right-border {
-        border-right: 2px solid white;
+        border-right: 2px solid $color-nhs-white;
       }
     }
     tr {
