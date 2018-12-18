@@ -2,8 +2,11 @@
   "NHSD": {
     "Name": "NHS Digital"
   },
+  "NHS": {
+    "Name": "NHS"
+  },
   "Catalogue": {
-    "Title": "Marketplace",
+    "Title": "Store",
     "Fullname": "$t(NHSD.Name) $t(Catalogue.Title)"
   },
   "Solution": "Solution",
@@ -26,6 +29,11 @@
   "Standards and Capabilities": "$t(Standard_plural) and $t(Capability_plural)",
   "Traceability Matrix": "Traceability Matrix",
   "Assessment team": "$t(Assessment) team",
+  "GPITFutures": {
+    "Name": "GP IT Futures",
+    "Framework": "Framework",
+    "Fullname": "$t(GPITFutures.Name) $t(GPITFutures.Framework)"
+  },
   "Buttons": {
     "Save and continue": "Save & continue",
     "Save": "Save",

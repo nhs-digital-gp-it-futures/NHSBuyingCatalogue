@@ -1,37 +1,37 @@
 {
   "HomePage": {
     "BannerSection": {
-      "Title": "Introducing the NHS Store",
+      "Title": "Introducing the $t(NHS.Name) $t(Catalogue.Title)",
       "Subtitle": "More choices, better patient outcomes",
-      "Information": "IT Suppliers may now apply to sell to the NHS from our store.",
+      "Information": "IT Suppliers may now apply to sell to the $t(NHS.Name) from our store.",
       "Button": {
         "Text":"Learn More",
-        "Href":""
+        "Href":"/about#content"
       }
     },
     "AboutSection" : {
       "Title": "About Us",
-      "Information": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "Information": "The $t(NHS.Name) $t(Catalogue.Title) is a procurement platform where clinical commissioners and other $t(NHS.Name) buyers can find, evaluate and purchase NHS-approved IT $t(Solution_plural). To be in the Store, all Solutions must pass an initial commercial assessment, and successfully demonstrate compliance with relevant $t(NHS.Name) $t(Standard_plural).",
       "Cards": [
         {
-          "title": "GP IT Futures Framework",
-          "href": "#Bravo",
+          "title": "$t(GPITFutures.Fullname)",
+          "href": "#AwaitingLinkToBravo",
           "image": "/img/home-page/bullseye.png",
           "info": "View terms and details in Bravo.",
           "icon": "&#8594;"
         },
         {
-          "title":"Capabilities & Standards",
-          "href":"#CapabilitiesAndStandards",
+          "title":"$t(Capability_plural) & $t(Standard_plural)",
+          "href":"#AwaitingLinkToConfluence",
           "image":"/img/home-page/checklist.png",
           "info":"View the model and new requirements.",
           "icon":"&#8594;"
         },
         {
-          "title":"My Solutions",
+          "title":"My $t(Solution_plural)",
           "href":"/oidc/authenticate",
           "image":"/img/home-page/padlock.png",
-          "info":"Suppliers can log in to add new Solutions and manage all Solutions.",
+          "info":"Suppliers can log in to add new $t(Solution_plural) and manage all $t(Solution_plural).",
           "icon":"&#8594;"
         }
       ]
@@ -42,19 +42,19 @@
       "Steps": [
         {
           "number":"1",
-          "info":"Provide basic details and select Capabilities"
+          "info":"Provide basic details and select $t(Capability_plural)"
         },
         {
           "number":"2",
-          "info":"Provide evidence for your Solution's Capabilities"
+          "info":"Provide evidence for your $t(Solution_possessive) $t(Capability_plural)"
         },
         {
           "number":"3",
-          "info":"Provide evidence for your Solution's Standards"
+          "info":"Provide evidence for your $t(Solution_possessive) $t(Standard_plural)"
         },
         {
           "number":"4",
-          "info":"Build your Solution Page (What Buyers will see)"
+          "info":"Build your $t(Solution) Page (What Buyers will see)"
         }
       ]
     }
