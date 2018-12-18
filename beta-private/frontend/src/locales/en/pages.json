@@ -1,4 +1,64 @@
 {
+  "HomePage": {
+    "BannerSection": {
+      "Title": "Introducing the NHS Store",
+      "Subtitle": "More choices, better patient outcomes",
+      "Information": "IT Suppliers may now apply to sell to the NHS from our store.",
+      "Button": {
+        "Text":"Learn More",
+        "Href":""
+      }
+    },
+    "AboutSection" : {
+      "Title": "About Us",
+      "Information": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "Cards": [
+        {
+          "title": "GP IT Futures Framework",
+          "href": "#Bravo",
+          "image": "/img/home-page/bullseye.png",
+          "info": "View terms and details in Bravo.",
+          "icon": "&#8594;"
+        },
+        {
+          "title":"Capabilities & Standards",
+          "href":"#CapStd",
+          "image":"/img/home-page/checklist.png",
+          "info":"View the model and new requirements.",
+          "icon":"&#8594;"
+        },
+        {
+          "title":"My Solutions",
+          "href":"#Solutions",
+          "image":"/img/home-page/padlock.png",
+          "info":"Suppliers can log in to add new Solutions and manage all Solutions.",
+          "icon":"&#8594;"
+        }
+      ]
+    },
+    "HowSection": {
+      "Title": "How It Works",
+      "Information": "",
+      "Steps": [
+        {
+          "number":"1",
+          "info":"Provide basic details and select Capabilities"
+        },
+        {
+          "number":"2",
+          "info":"Provide evidence for your Solution's Capabilities"
+        },
+        {
+          "number":"3",
+          "info":"Provide evidence for your Solution's Standards"
+        },
+        {
+          "number":"4",
+          "info":"Build your Solution Page (What Buyers will see)"
+        }
+      ]
+    }
+  },
   "Onboarding": {
     "Title": "Adding a $t(Solution)",
     "Subtitle": {
