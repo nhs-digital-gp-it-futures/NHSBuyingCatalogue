@@ -69,7 +69,8 @@ authentication(app).then(() => {
     } else if (req.user && req.user.org && req.user.org.isNHSDigital) {
       res.redirect('/assessment')
     } else {
-      res.render('index')
+      const context = { onHomePage: true }
+      res.render('index', context)
     }
   })
 

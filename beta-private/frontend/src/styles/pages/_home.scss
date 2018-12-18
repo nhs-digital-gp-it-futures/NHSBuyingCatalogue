@@ -1,4 +1,6 @@
+
 #home-page {
+
     padding:0;
     margin:0;
     p {
@@ -27,24 +29,61 @@
             flex-wrap: wrap;
         }
 
+
         .cards {
+            .card > a  {
+                text-decoration: none;
+            }
+
             .card {
+                cursor: pointer;
+                width: 30%;
+                min-width: 15em;
                 -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
                 -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
                 box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+                margin: 1em;
+
+                &:hover {
+                    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,1);
+                    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,1);
+                    box-shadow: 0px 0px 5px 0px rgba(0,0,0,1);
+                }
+
                 .upper {
                     padding: 1em;
                     background: $color-nhs-blue;
                     color: white;
                     display: flex;
-                    h3 {
+                    flex-wrap: wrap-reverse;
+                    justify-content: center;
+                    align-content: center;
+                    width: 100%;
+                    height: 70%;
+                    h3{
+                        height: 25%;
                         width: 50%;
+                    }
+                    img {
+                        width: 50%;
+                        min-width: 80px;
+                        object-fit: contain;
                     }
                 }
                 .lower {
-                    padding: 1em;
+                    width: 100%;
+                    height: 30%;
                     background: white;
+                    font-size: smaller;
                     color: $color-nhs-black;
+                    padding: 1em;
+                    div {
+                        height: 50%;
+                    }
+                    .icon {
+                        text-align: right;
+                        font-size: x-large;
+                    }
                 }
 
             }
@@ -55,6 +94,7 @@
                 width: 25%;
                 padding:1em;
                 border-left: solid 1px $color-nhs-mid-grey;
+                min-width: 15em;
                 .upper {
                     .indicator{
                         border: 2px solid $color-nhs-blue;
