@@ -34,10 +34,11 @@
   "Authentication": {
     "Login": "Log In",
     "Logout": "Log Out",
-    "Greeting": "Hi, {{name}}"
+    "Greeting": "Welcome, {{user.contact.firstName}}"
   },
   "Statuses": {
     "Standard": {
+      "Failed": "Failed",
       "NotStarted": "Not started",
       "Draft": "Draft",
       "Submitted": "Submitted {{when}}",
