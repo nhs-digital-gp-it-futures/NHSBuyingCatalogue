@@ -107,7 +107,6 @@ class DataProvider {
       else if (solution.standards.some((std) => +std.status === -1)) {
         return { ...soln, stageStep: 'Compliance Outcome' }
       } else {
-        console.log('ASSESSMENT FAILURE')
         return { ...soln, stageStep: 'Assessment Outcome' }
       }
     }
@@ -117,7 +116,6 @@ class DataProvider {
       { pageSize: 9999 }
     )
     const onboardingSolutions = await Promise.all(paginatedSolutions.items.filter(isOnboarding).map(forDashboard).map(forOnboarding).map(failureReasons))
-    console.log(onboardingSolutions)
     return {
       onboarding: onboardingSolutions.map(solutionMapper),
       live: paginatedSolutions.items.filter(isLive).map(forDashboard).map(forLive).map(solutionMapper)
