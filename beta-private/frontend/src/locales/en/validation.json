@@ -55,27 +55,27 @@
     "Capability": {
       "Evidence": {
         "File":{
-          "Missing": "A Capability indicated as requring evidence is missing a video",
-          "MissingAction": "Please ensure all capabilities requiring evidence have a video uploaded."
+          "Missing": "A $t(Capability) indicated as requiring evidence is missing a video",
+          "MissingAction": "Please ensure all $t(Capability_plural) requiring evidence have a video uploaded."
         },
         "Description": {
-          "Missing":"A Capability with an uploaded video is missing a description",
+          "Missing":"A $t(Capability) with an uploaded video is missing a description",
           "MissingAction":"Please ensure all uploaded videos have been sufficiently described."
         },
         "Submission": {
-          "Failed": "The Solution failed to be submitted for Capability Assessment.",
-          "FailedAction": "Please try and submit the Solution again."
+          "Failed": "The $t(Solution) failed to be submitted for $t(Capability Assessment).",
+          "FailedAction": "Please try and submit the $t(Solution) again."
         },
         "Update": {
-          "Failed": "The Solution evidence was not successfully updated",
+          "Failed": "The $t(Solution) evidence was not successfully updated",
           "FailedAction": "Please try and update the evidence again."
         },
         "Upload": {
-          "Failed": "The Solution evidence Files were not successfully uploaded.",
-          "FailedAction": "Please try and submit the Solution evidence files again."
+          "Failed": "The $t(Solution) evidence Files were not successfully uploaded.",
+          "FailedAction": "Please try and submit the $t(Solution) evidence files again."
         },
         "Retrieval": {
-          "Failed": "Evidence for the solution was not successfully retrieved.",
+          "Failed": "Evidence for the $t(Solution) was not successfully retrieved.",
           "FailedAction": "Please Refresh the page."
         }
       }

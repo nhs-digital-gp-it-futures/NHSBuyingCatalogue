@@ -21,7 +21,7 @@ module.exports = {
           })
 
           // filter all claims that don't require files, and don't have a file uploaded
-          const previousUploads = req.body['evidence-file']
+          const previousUploads = req.body['evidence-file'] || {}
           const claimsRequiringFiles = _.keys(_.omitBy(value, (val) => val !== 'yes'))
 
           const claimsWithFiles = _.filter(claimsRequiringFiles, (claim) => {

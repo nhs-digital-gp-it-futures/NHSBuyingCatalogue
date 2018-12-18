@@ -124,6 +124,8 @@ class FakeSharePointProvider extends SharePointProvider {
   async downloadStdEvidence (claimID, uniqueId) {
     return this.stdBlobStoreApi.apiStandardsApplicableEvidenceBlobStoreDownloadByClaimIdPost(claimID, { uniqueId })
   }
+
+  removeFolder () {}
 }
 
 module.exports = FakeSharePointProvider
