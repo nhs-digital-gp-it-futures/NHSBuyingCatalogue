@@ -23,7 +23,7 @@
           {{> user-authentication-nav }}
         </div>
       </div>
-      <div class="bottom">
+      <div class="bottom {{#if onHomePage}}white-control-bar{{/if}}">
         {{#if activeForm}}
         <nav class="active-form" aria-label="Save controls">
           <input type="submit"
@@ -55,7 +55,7 @@
         {{/if}}
       </div>
     </header>
-    <main id="content">
+    <main id="content" class="{{#if onHomePage}}no-padding{{/if}}">
       {{{body}}}
     </main>
     <footer aria-label="Site footer">

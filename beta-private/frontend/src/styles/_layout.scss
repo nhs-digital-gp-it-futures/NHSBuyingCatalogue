@@ -67,6 +67,10 @@ a {
   padding-top: $header-total-height;
 }
 
+#content.no-padding {
+  padding: $header-total-height 0 0 0;
+}
+
 body {
   margin: 0 auto;
   max-width: 1020px;
@@ -154,6 +158,14 @@ body > header {
       vertical-align: top;
     }
   }
+}
+
+body header div.white-control-bar {
+  background: $color-nhs-white;
+}
+
+body > header div.bottom.white-control-bar nav a {
+  color: $color-nhs-blue;
 }
 
 body > footer {
