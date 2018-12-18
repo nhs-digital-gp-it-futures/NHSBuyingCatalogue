@@ -1,8 +1,8 @@
 {
   "MySolutions": {
-    "Title": "My Solutions",
-    "WelcomeMessage": "Welcome, {{user.contact.firstName}}. Here you can add a new Solution and manage all your Solutions — both those in progress and published.",
-    "AddSolutionButton": "Add a new solution",
+    "Title": "My $t(Solution_plural)",
+    "WelcomeMessage": "$t(Authentication.Greeting). Here you can add a new $t(Solution) and manage all your $t(Solution_plural) — both those in progress and published.",
+    "AddSolutionButton": "Add a new $t(Solution)",
     "Onboarding": {
       "Title": "Onboarding in Progress",
       "Table": {
@@ -13,7 +13,7 @@
           "Status": "Status"
         }
       },
-      "NoneFound": "You don’t have any Solutions in progress. <a href='{{addUrl}}'>Add a new solution</a> to get started."
+      "NoneFound": "You don’t have any $t(Solution_plural) in progress. <a href='{{addUrl}}'>Add a new $t(Solution)</a> to get started."
     },
     "Published": {
       "Title":"Published",
@@ -24,7 +24,7 @@
           "ContractsSigned": "Contracts Signed"
         }
       },
-      "NoneFound": "You don’t have any published Solutions. Once you have completed all four stages of Adding a Solution, your published Solutions will show here."
+      "NoneFound": "You don’t have any published $t(Solution_plural). Once you have completed all four stages of Adding a $t(Solution), your published $t(Solution_plural) will show here."
     }
   },
   "Onboarding": {
