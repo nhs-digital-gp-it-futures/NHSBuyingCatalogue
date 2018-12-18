@@ -22,14 +22,14 @@
         },
         {
           "title":"Capabilities & Standards",
-          "href":"#CapStd",
+          "href":"#CapabilitiesAndStandards",
           "image":"/img/home-page/checklist.png",
           "info":"View the model and new requirements.",
           "icon":"&#8594;"
         },
         {
           "title":"My Solutions",
-          "href":"#Solutions",
+          "href":"/oidc/authenticate",
           "image":"/img/home-page/padlock.png",
           "info":"Suppliers can log in to add new Solutions and manage all Solutions.",
           "icon":"&#8594;"
