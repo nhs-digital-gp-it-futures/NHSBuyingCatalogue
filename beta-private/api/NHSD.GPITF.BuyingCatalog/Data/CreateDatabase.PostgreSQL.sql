@@ -135,7 +135,7 @@ CREATE TABLE Standards
 
 CREATE TABLE Log 
 (
-  "Timestamp" TEXT,
+  "Timestamp" TIMESTAMP,
   "Loglevel" TEXT,
   "Callsite" TEXT,
   "Message" TEXT
