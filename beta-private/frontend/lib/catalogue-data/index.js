@@ -102,8 +102,13 @@ class DataProvider {
     })
 
     const failureReasons = async (soln) => {
-      const solution = await this.solutionForCompliance(soln.id)
-      if (+soln.raw.status !== -1) return { ...soln }
+      let solution
+      try {
+        solution = await this.solutionForCompliance(soln.id)
+      } catch (err) {
+        return { ...soln }
+      }
+      if (+soln.raw.status !== -1 || _.isEmpty(solution)) return { ...soln }
       else if (solution.standards.some((std) => +std.status === -1)) {
         return { ...soln, stageStep: 'Compliance Outcome' }
       } else {
