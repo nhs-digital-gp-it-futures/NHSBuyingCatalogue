@@ -21,16 +21,29 @@ describe('solutionsForSupplierDashboard', () => {
     expect(subject.solutionsApi.apiSolutionsByOrganisationByOrganisationIdGet.mock.calls[0][0]).toBe(12345)
   })
 
-  it('returns empty arrays if there are no applicable solutions', async () => {
+  it('returns arrays with a Failed Solution if there is only a failed solution', async () => {
     mockResult({
       items: [
         { id: 'failed', status: '-1' }
       ]
     })
-    await expect(subject.solutionsForSupplierDashboard(12345)).resolves.toEqual({
-      onboarding: [],
-      live: []
-    })
+    const expectedWithOneFailedSolution = {
+      'live': [],
+      'onboarding': [
+        {
+          'displayName': 'undefined',
+          'id': 'failed',
+          'notifications': [],
+          'raw': {
+            'id': 'failed',
+            'status': '-1'
+          },
+          'stageName': 'Failure',
+          'status': 'Failed'
+        }
+      ]
+    }
+    await expect(subject.solutionsForSupplierDashboard(12345)).resolves.toEqual(expectedWithOneFailedSolution )
   })
 
   const testData = {
@@ -51,7 +64,7 @@ describe('solutionsForSupplierDashboard', () => {
     const result = await subject.solutionsForSupplierDashboard(12345)
 
     expect(result.onboarding.map(_ => _.id)).toEqual([
-      'draft', 'registered', 'assessment', 'compliance', 'approval', 'solution'
+      'failed', 'draft', 'registered', 'assessment', 'compliance', 'approval', 'solution'
     ])
     expect(result.live).toHaveLength(1)
     expect(result.live[0].id).toEqual('live')
@@ -83,7 +96,7 @@ describe('solutionsForSupplierDashboard', () => {
     const result = await subject.solutionsForSupplierDashboard(12345, testMapper)
 
     expect(result.onboarding.map(_ => _.copiedId)).toEqual([
-      'DRAFT', 'REGISTERED', 'ASSESSMENT', 'COMPLIANCE', 'APPROVAL', 'SOLUTION'
+      'FAILED', 'DRAFT', 'REGISTERED', 'ASSESSMENT', 'COMPLIANCE', 'APPROVAL', 'SOLUTION'
     ])
     expect(result.live).toHaveLength(1)
     expect(result.live[0].copiedId).toEqual('LIVE')
