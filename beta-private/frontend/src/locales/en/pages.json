@@ -27,6 +27,66 @@
       "NoneFound": "You don’t have any published $t(Solution_plural). Once you have completed all four stages of Adding a $t(Solution), your published $t(Solution_plural) will show here."
     }
   },
+  "HomePage": {
+    "BannerSection": {
+      "Title": "Introducing the $t(NHS.Name) $t(Catalogue.Title)",
+      "Subtitle": "More choices, better patient outcomes",
+      "Information": "IT Suppliers may now apply to sell to the $t(NHS.Name) from our store.",
+      "Button": {
+        "Text":"Learn More",
+        "Href":"/about#content"
+      }
+    },
+    "AboutSection" : {
+      "Title": "About Us",
+      "Information": "The $t(NHS.Name) $t(Catalogue.Title) is a procurement platform where clinical commissioners and other $t(NHS.Name) buyers can find, evaluate and purchase NHS-approved IT $t(Solution_plural). To be in the Store, all Solutions must pass an initial commercial assessment, and successfully demonstrate compliance with relevant $t(NHS.Name) $t(Standard_plural).",
+      "Cards": [
+        {
+          "title": "$t(GPITFutures.Fullname)",
+          "href": "#AwaitingLinkToBravo",
+          "image": "/img/home-page/bullseye.png",
+          "info": "View terms and details in Bravo.",
+          "icon": "&#8594;"
+        },
+        {
+          "title":"$t(Capability_plural) & $t(Standard_plural)",
+          "href":"#AwaitingLinkToConfluence",
+          "image":"/img/home-page/checklist.png",
+          "info":"View the model and new requirements.",
+          "icon":"&#8594;"
+        },
+        {
+          "title":"My $t(Solution_plural)",
+          "href":"/oidc/authenticate",
+          "image":"/img/home-page/padlock.png",
+          "info":"Suppliers can log in to add new $t(Solution_plural) and manage all $t(Solution_plural).",
+          "icon":"&#8594;"
+        }
+      ]
+    },
+    "HowSection": {
+      "Title": "How It Works",
+      "Information": "",
+      "Steps": [
+        {
+          "number":"1",
+          "info":"Provide basic details and select $t(Capability_plural)"
+        },
+        {
+          "number":"2",
+          "info":"Provide evidence for your $t(Solution_possessive) $t(Capability_plural)"
+        },
+        {
+          "number":"3",
+          "info":"Provide evidence for your $t(Solution_possessive) $t(Standard_plural)"
+        },
+        {
+          "number":"4",
+          "info":"Build your $t(Solution) Page (What Buyers will see)"
+        }
+      ]
+    }
+  },
   "Onboarding": {
     "Title": "Adding a $t(Solution)",
     "Subtitle": {
