@@ -33,9 +33,6 @@ router.param('solution_id', async (req, res, next, solutionId) => {
 router
   .route('/:solution_id/')
   .get(solutionCapabilityPageGet)
-
-router
-  .route('/:solution_id/')
   .post(capabilitiesPageValidation, solutionCapabilityPagePost)
 
 router
@@ -45,10 +42,10 @@ router
 router
   .route('/:solution_id/confirmation')
   .get(confirmationPageGet)
+  .post(confirmationPagePost)
 
 router
   .route('/:solution_id/confirmation')
-  .post(confirmationPagePost)
 
 function commonContext (req) {
   return {
@@ -63,7 +60,10 @@ function commonContext (req) {
 async function capabilityPageContext (req) {
   const context = {
     ...commonContext(req),
-    ...await dataProvider.capabilityMappings()
+    ...await dataProvider.capabilityMappings(),
+    errors: {
+      items: []
+    }
   }
 
   context.activeForm.id = 'capability-assessment-form'
@@ -71,7 +71,9 @@ async function capabilityPageContext (req) {
   context.solution.capabilities = await Promise.all(
     context.solution.capabilities.map(async (cap) => {
       const files = await fetchFiles(cap.claimID).catch((err) => {
-        context.errors = { items: [{ msg: 'Validation.Capability.Evidence.Retrieval.FailedAction', err: err }] }
+        context.errors.items.push(
+          { msg: 'Validation.Capability.Evidence.Retrieval.FailedAction', err: err }
+        )
       })
       let latestFile
 
@@ -94,6 +96,8 @@ async function capabilityPageContext (req) {
     })
   )
 
+  context.solution.capabilities = _.sortBy(context.solution.capabilities, 'name')
+
   return context
 }
 
@@ -114,7 +118,9 @@ async function solutionCapabilityPageGet (req, res) {
 
 async function solutionCapabilityPagePost (req, res) {
   const context = {
-    ...await capabilityPageContext(req)
+    errors: {
+      items: []
+    }
   }
 
   const valRes = validationResult(req)
@@ -143,7 +149,6 @@ async function solutionCapabilityPagePost (req, res) {
   // This is couter intuitive and has a tonne of flaws, the hope is eventually a redesign
   // of the API will result in the endpoint only requiring us to Post the Evidence message
   // and not make up an ID, Date, CreatedById, previousId etc.
-
   const uploadingVideoEvidence = req.body['uploading-video-evidence']
 
   const evidenceDescriptions = _.map(uploadingVideoEvidence, (isUploading, claimID) => {
@@ -158,29 +163,30 @@ async function solutionCapabilityPagePost (req, res) {
     }
   })
 
-  let errorUpdating = ''
+  let systemError
+
   // Update solution evidence, communicate the error if there isn't any already.
   await updateSolutionCapabilityEvidence(req.solution.id, evidenceDescriptions).catch((err) => {
-    context.errors = context.errors || {
-      items: [{ msg: 'Validation.Capability.Evidence.Update.FailedAction' }]
-    }
-    errorUpdating = err
+    context.errors.items.push({ msg: 'Validation.Capability.Evidence.Update.FailedAction' })
+    systemError = err
   })
 
-  let errorUploading = ''
   // upload files to SharePoint, communicate the error if there isn't any already.
   if (req.files) {
     const files = parseFiles(req.files)
     await uploadFiles(files).catch((err) => {
-      context.errors = context.errors || {
-        items: [{ msg: 'Validation.Capability.Evidence.Upload.FailedAction' }]
-      }
-      errorUploading = err
+      context.errors.items.push({ msg: 'Validation.Capability.Evidence.Upload.FailedAction' })
+      systemError = err
     })
   }
 
-  if ((errorUploading || errorUpdating) && req.body.action.continue) {
-    res.render('supplier/capabilities/index', context)
+  // only show validation errors if the user elected to continue, not just save
+  if (systemError || (context.errors.items.length && req.body.action.continue)) {
+    // regenerate the full context (preserving errors)
+    req.solution = await dataProvider.solutionForAssessment(req.params.solution_id)
+    const fullContext = await capabilityPageContext(req)
+    fullContext.errors = context.errors
+    res.render('supplier/capabilities/index', fullContext)
   } else if (req.body.action.continue) {
     res.redirect(path.join(req.baseUrl, req.url, 'confirmation'))
   } else if (req.body.action.exit) {

@@ -6,6 +6,7 @@
     padding-left: 2em;
 
     li {
+      margin-bottom: 3em;
       position: relative;
 
       &::before {
@@ -17,10 +18,10 @@
         display: inline-block;
         height: 1.9em;
         left: -3em;
-        padding-top: .3em;
+        padding-top: .35em;
         position: absolute;
         text-align: center;
-        top: -.3em;
+        top: -.1em;
         width: 1.9em;
       }
 
@@ -32,12 +33,18 @@
         height: calc(100% - 1.5em);
         left: -3em;
         position: absolute;
-        top: 1.6em;
+        top: 1.8em;
         width: 1em;
+      }
+
+      .title {
+        color: $color-nhs-blue;
+        margin: 0;
       }
 
       .action {
         font-weight: bold;
+        margin: .5em 0;
       }
 
       .narrative {

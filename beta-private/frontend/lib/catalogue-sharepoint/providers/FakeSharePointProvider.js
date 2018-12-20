@@ -105,6 +105,7 @@ const FakeCatalogueAPI = {
 
 class FakeSharePointProvider extends SharePointProvider {
   constructor () {
+    console.info('Mock Sharepoint provider active')
     super(FakeCatalogueAPI)
   }
 
@@ -123,6 +124,8 @@ class FakeSharePointProvider extends SharePointProvider {
   async downloadStdEvidence (claimID, uniqueId) {
     return this.stdBlobStoreApi.apiStandardsApplicableEvidenceBlobStoreDownloadByClaimIdPost(claimID, { uniqueId })
   }
+
+  removeFolder () {}
 }
 
 module.exports = FakeSharePointProvider

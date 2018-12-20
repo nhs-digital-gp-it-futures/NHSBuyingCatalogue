@@ -1,14 +1,5 @@
 <div id="onboarding" class="dashboard page">
 
-{{#if registrationComplete}}
-<div class="callout">
-  <h2 class="title">{{t 'Onboarding.RegistrationCompleteCallout.Title'}}</h2>
-  {{#each (tt 'Onboarding.RegistrationCompleteCallout.Text')}}
-  <p>{{{.}}}</p>
-  {{/each}}
-</div>
-{{/if}}
-
 <header class="page-main-heading">
   <h1>{{t 'Onboarding.Title' }}</h1>
   {{#if solution}}
@@ -17,6 +8,15 @@
   <p>{{t 'Onboarding.Subtitle.New'}}</p>
   {{/if}}
 </header>
+
+{{#if registrationComplete}}
+<div class="callout">
+  <h2 class="title">{{t 'Onboarding.RegistrationCompleteCallout.Title'}}</h2>
+  {{#each (tt 'Onboarding.RegistrationCompleteCallout.Text')}}
+  <p>{{{.}}}</p>
+  {{/each}}
+</div>
+{{/if}}
 
 {{#unless solution}}
 <div class="callout">
@@ -29,7 +29,7 @@
   {{#each (tt 'Onboarding.Stages')}}
   {{#with (lookup ../stages @index)}}
   <li{{#class}} class="{{.}}"{{/class}}>
-    <h3 class="title">{{../Title}}</h3>
+    <h2 class="title">{{../Title}}</h2>
     {{#if url}}
     <p class="action">Status: {{status}}. <a href="{{url}}">{{link}}</a></p>
     {{/if}}
