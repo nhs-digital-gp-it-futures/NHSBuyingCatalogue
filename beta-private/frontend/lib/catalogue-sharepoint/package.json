@@ -11,6 +11,7 @@
   "dependencies": {
     "catalogue-api": "../catalogue-api",
     "node-fetch": "^2.3.0",
+    "node-uuid-generator": "^1.0.0",
     "stream": "0.0.2"
   },
   "devDependencies": {
