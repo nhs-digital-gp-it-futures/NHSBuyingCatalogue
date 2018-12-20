@@ -2,7 +2,8 @@ const fetch = require('node-fetch')
 const fs = require('fs')
 const path = require('path')
 const os = require('os')
-const generateUUID = require('node-uuid-generator').generate
+const stream = require('stream')
+// const generateUUID = require('node-uuid-generator').generate
 
 const INTERMEDIATE_STORAGE = process.env.UPLOAD_TEMP_FILE_STORE || os.tmpdir()
 
@@ -93,11 +94,13 @@ class SharePointProvider {
       subFolder: subFolder
     }
     try {
-      const fileUUID = `${filename}-${generateUUID()}`
-      await this.saveBuffer(buffer, fileUUID, claimID)
-      const readStream = this.createFileReadStream(fileUUID, claimID)
-      const uploadRes = await method(claimID, readStream, filename, options)
-      await this.deleteFile(fileUUID, claimID)
+      // const fileUUID = `${filename}-${generateUUID()}`
+      // await this.saveBuffer(buffer, fileUUID, claimID)
+      // const readStream = this.createFileReadStream(fileUUID, claimID)
+      const bufferStream = new stream.PassThrough()
+      bufferStream.end(buffer)
+      const uploadRes = await method(claimID, bufferStream, filename, options)
+      // await this.deleteFile(fileUUID, claimID)
       return uploadRes
     } catch (err) {
       console.log('\n\n\nERR', err)
