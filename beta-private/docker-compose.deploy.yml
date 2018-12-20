@@ -4,7 +4,7 @@ services:
   nginx:
     build:
       context: ./nginx
-      dockerfile: Dockerfile.deploy
+      dockerfile: Dockerfile
 
   oidc-provider:
     build:
