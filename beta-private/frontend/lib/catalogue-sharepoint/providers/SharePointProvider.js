@@ -92,20 +92,19 @@ class SharePointProvider {
     const options = {
       subFolder: subFolder
     }
+    const fileUUID = `${filename}-${uuidGenerator.generate()}`
+    await this.saveBuffer(buffer, fileUUID, claimID)
+    const readStream = this.createFileReadStream(fileUUID, claimID)
     try {
-      const fileUUID = `${filename}-${uuidGenerator.generate()}`
-      await this.saveBuffer(buffer, fileUUID, claimID)
-      const readStream = this.createFileReadStream(fileUUID, claimID)
       const uploadRes = await method(claimID, readStream, filename, options)
       await this.deleteFile(fileUUID, claimID)
       return uploadRes
     } catch (err) {
-      console.log('\n\n\nERR', err)
+      await this.deleteFile(fileUUID, claimID)
       throw err
     }
   }
   async saveBuffer (buffer, filename, claimID) {
-    console.log('SAVING FILE', filename)
     const storagePath = this.createFileStoragePath(filename, claimID)
     return new Promise((resolve, reject) => {
       this.writeFile(storagePath, buffer, (err) => {
@@ -116,14 +115,11 @@ class SharePointProvider {
   }
 
   createFileReadStream (filename, claimID) {
-    console.log('CREATING READSTREAM', filename)
     const storagePath = this.createFileStoragePath(filename, claimID)
     return this.createReadStream(storagePath)
   }
 
   async deleteFile (filename, claimID) {
-    console.log('DELETING FILE', filename)
-
     const storagePath = this.createFileStoragePath(filename, claimID)
 
     return new Promise((resolve, reject) => {
@@ -135,7 +131,6 @@ class SharePointProvider {
   }
 
   createFileStoragePath (filename, claimID, root) {
-    console.log('CREATING STORAGE PATH', filename)
     const folderPath = root || this.intermediateStoragePath || INTERMEDIATE_STORAGE
     return path.join(folderPath, filename)
   }
