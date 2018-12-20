@@ -17,130 +17,52 @@ beforeAll(() => {
     CapabilitiesImplementedEvidenceBlobStoreApi: MockCapBlobStoreApi,
     StandardsApplicableEvidenceBlobStoreApi: MockStdBlobStoreApi
   })
-})
-
-describe('createClaimFolderPath', () => {
-  beforeEach(() => {
-    subject.folderExists = jest.fn()
-    subject.createFolder = jest.fn()
-  })
-
-  it('Should not try and create a directory if it already exists', () => {
-    subject.folderExists.mockReturnValue(true)
-
-    subject.createClaimFolderPath('name_of_the_file')
-
-    expect(subject.folderExists).toBeCalled()
-    expect(subject.createFolder.mock.calls.length).toBe(0)
-  })
-
-  it('Should attempt to create a direectory if it doest already exist', () => {
-    subject.folderExists.mockReturnValue(false)
-
-    subject.createClaimFolderPath('name_of_the_file')
-
-    expect(subject.folderExists).toBeCalled()
-    expect(subject.createFolder).toBeCalled()
-  })
-
-  it('Should provide a folder path during folder creation process', () => {
-    subject.folderExists.mockReturnValue(false)
-    const fp = subject.intermediateStoragePath
-
-    subject.createClaimFolderPath('name_of_the_file')
-
-    expect(subject.folderExists).toBeCalledWith(fp)
-    expect(subject.createFolder).toBeCalledWith(fp)
-  })
-
-  it('Should throw if folder doesnt exist and createFolder fails', () => {
-    subject.folderExists.mockReturnValue(false)
-    subject.folderExists.mockImplementation(() => {
-      throw new Error()
-    })
-
-    let hasThrown
-    try{
-      subject.createClaimFolderPath('name_of_the_file')
-    }
-    catch(err) {
-      hasThrown = true
-    }
-
-    expect(hasThrown).toBeTruthy()
-  })
-
-  it('should return a path if no root is provided', () => {
-  
-    const root = 'foo'
-    subject.intermediateStoragePath = root
-    const fn = 'test_file'
-
-    const fp = subject.createClaimFolderPath(fn)
-
-    expect(fp).toBe(`${root}/${fn}`)
-  })
-
-  it('should return a path if with the root if provided', () => {
-    const root = 'foo'
-    const fn = 'test_file'
-
-    const fp = subject.createClaimFolderPath(fn, root)
-
-    expect(fp).toBe(`${root}/${fn}`)
-  })
+  subject.uuidGenerator = { generate: () => { return 'UUID-1234-ABCD' } }
 })
 
 describe('deleteFile', () => {
   const fn = 'test_file.txt'
-  const claim = '1234'
 
   beforeEach(() => {
     subject.createStoragePath = jest.fn()
     subject.unlinkFile = jest.fn()
     subject.createFileStoragePath = jest.fn()
-    subject.createClaimFolderPath = jest.fn()
 
     subject.createFileStoragePath.mockImplementation(() => {
-      return claim + '/' + fn
-    })
-    subject.createClaimFolderPath.mockImplementation(() => {
-      return claim
+      return fn
     })
   })
 
-  it('should try and create the storage paths with filename and claim.', () => {
-    subject.deleteFile(fn, claim)
+  it('should try and create the storage paths with filename.', () => {
+    subject.deleteFile(fn)
 
-    expect(subject.createClaimFolderPath).toBeCalledWith(claim)
-    expect(subject.createFileStoragePath).toBeCalledWith(fn, claim)
+    expect(subject.createFileStoragePath).toBeCalledWith(fn)
   })
 
   it('should try and unlink the a file at the specified storage path', () => {
-    subject.deleteFile(fn, claim)
-    const expectedPath = claim + '/' + fn
+    subject.deleteFile(fn)
+    const expectedPath = fn
     expect(subject.unlinkFile).toBeCalledWith(expectedPath, expect.any(Function))
   })
 
   it('Should return a promise that resolves if file successfully unlinks', async () => {
     subject.unlinkFile.mockImplementation((fp, cb) => {
-      cb(/*No Errors*/)
+      cb(/* No Errors */)
     })
-    await expect(subject.deleteFile(fn, claim)).resolves.toBe(undefined)
+    await expect(subject.deleteFile(fn)).resolves.toBe(undefined)
   })
 
   it('Should return a promise that rejects if file failes to unlinks', async () => {
     subject.unlinkFile.mockImplementation((fp, cb) => {
       cb('test_error_message')
     })
-    await expect(subject.deleteFile(fn, claim)).rejects.toBe('test_error_message')
+    await expect(subject.deleteFile(fn)).rejects.toBe('test_error_message')
   })
 })
 
 describe('createFileReadStream', () => {
   const fn = 'file'
-  const claim = '1234'
-  const claimFilePath = claim + '/' + fn
+  const claimFilePath = fn
 
   beforeEach(() => {
     subject.createReadStream = jest.fn()
@@ -152,12 +74,12 @@ describe('createFileReadStream', () => {
   })
 
   it('Should try and create storage path', () => {
-    subject.createFileReadStream(fn, claim)
-    expect(subject.createFileStoragePath).toBeCalledWith(fn, claim)
+    subject.createFileReadStream(fn)
+    expect(subject.createFileStoragePath).toBeCalledWith(fn)
   })
 
   it('Should try and create a fileReadStream', () => {
-    subject.createFileReadStream(fn, claim)
+    subject.createFileReadStream(fn)
     expect(subject.createReadStream).toBeCalledWith(claimFilePath)
   })
 
@@ -167,9 +89,8 @@ describe('createFileReadStream', () => {
     })
     let throws
     try {
-      subject.createFileReadStream(fn, claim)
-    }
-    catch(err) {
+      subject.createFileReadStream(fn)
+    } catch (err) {
       throws = true
     }
     expect(throws).toBeTruthy()
@@ -191,8 +112,6 @@ describe('createFileReadStream', () => {
 
 describe('saveBuffer', () => {
   const fn = 'test_file.txt'
-  const claim = '1234'
-  const claimFilePath = claim + '/' + fn
   const buffer = Buffer.from('test string', 'utf-8')
 
   beforeEach(() => {
@@ -200,18 +119,18 @@ describe('saveBuffer', () => {
     subject.writeFile = jest.fn()
 
     subject.createFileStoragePath.mockImplementation(() => {
-      return claimFilePath
+      return fn
     })
   })
 
   it('Should try and create storage path before writing to it.', () => {
-    subject.saveBuffer(buffer, fn, claim)
-    expect(subject.createFileStoragePath).toBeCalledWith(fn, claim)
+    subject.saveBuffer(buffer, fn)
+    expect(subject.createFileStoragePath).toBeCalledWith(fn)
   })
 
   it('should try and write a file providing storage path, buffer, and a callback', () => {
-    subject.saveBuffer(buffer, fn, claim)
-    expect(subject.writeFile).toBeCalledWith(claimFilePath, buffer, expect.any(Function))
+    subject.saveBuffer(buffer, fn)
+    expect(subject.writeFile).toBeCalledWith(fn, buffer, expect.any(Function))
   })
 
   it('Should return a resolvable promise if file writing is successful', async () => {
@@ -219,7 +138,7 @@ describe('saveBuffer', () => {
       cb(/*No Error*/)
     })
 
-    await expect(subject.saveBuffer(buffer, fn, claim)).resolves.toBe(undefined)
+    await expect(subject.saveBuffer(buffer, fn)).resolves.toBe(undefined)
   })
 
   it('Should return a rejecting promise if file writing is successful', async () => {
@@ -227,17 +146,18 @@ describe('saveBuffer', () => {
       cb('test_error_message')
     })
 
-    await expect(subject.saveBuffer(buffer, fn, claim)).rejects.toBe('test_error_message')
+    await expect(subject.saveBuffer(buffer, fn)).rejects.toBe('test_error_message')
   })
 })
 
 describe('uploadEvidence', () => {
   const mm = jest.fn()
-  const cm = 'test_claim'
+  const cm = '1234'
   const bf = Buffer.from('test_file')
   const fn = 'test_file.txt'
   const sb = '/test_sub/'
   const rs = 'test_read_stream'
+  const uuidfn = `${fn}-UUID-1234-ABCD`
 
   beforeEach(() => {
     subject.saveBuffer = jest.fn()
@@ -247,15 +167,15 @@ describe('uploadEvidence', () => {
 
   it('Should save buffer to file forwarding it on', async () => {
     await subject.uploadEvidence(mm, cm, bf, fn, sb)
-    expect(subject.saveBuffer).toBeCalledWith(bf, fn, cm)
+    expect(subject.saveBuffer).toBeCalledWith(bf, uuidfn)
   })
 
   it('Should create a file read stream', async () => {
     await subject.uploadEvidence(mm, cm, bf, fn, sb)
-    expect(subject.createFileReadStream).toBeCalledWith(fn, cm)
+    expect(subject.createFileReadStream).toBeCalledWith(uuidfn)
   })
 
-  it('Should call the proided method with params needed for posting file data', async () => {
+  it('Should call the provided method with params needed for posting file data', async () => {
     const mockMethod = jest.fn()
     mockMethod.mockImplementation((cm, rs, fn, op) => {
       return fn
@@ -271,7 +191,7 @@ describe('uploadEvidence', () => {
 
   it('should call the file delete method after it has uploaded a response', async () => {
     await subject.uploadEvidence(mm, cm, bf, fn, sb)
-    expect(subject.deleteFile).toBeCalledWith(fn, cm)
+    expect(subject.deleteFile).toBeCalledWith(uuidfn)
   })
 
   it('should return a rejecting promise with error message if saving buffer fails', async () => {

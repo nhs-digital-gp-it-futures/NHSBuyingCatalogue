@@ -2,7 +2,7 @@ const fetch = require('node-fetch')
 const fs = require('fs')
 const path = require('path')
 const os = require('os')
-
+const uuidGenerator = require('node-uuid-generator')
 const INTERMEDIATE_STORAGE = process.env.UPLOAD_TEMP_FILE_STORE || os.tmpdir()
 
 class SharePointProvider {
@@ -11,6 +11,7 @@ class SharePointProvider {
     this.stdBlobStoreApi = new CatalogueApi.StandardsApplicableEvidenceBlobStoreApi()
     this.capBlobStoreApi = new CatalogueApi.CapabilitiesImplementedEvidenceBlobStoreApi()
     this.intermediateStoragePath = intermediateStoragePath || INTERMEDIATE_STORAGE
+    this.uuidGenerator = uuidGenerator
   }
 
   async getCapEvidence (claimID, subFolder, pageIndex = 1) {
@@ -91,18 +92,20 @@ class SharePointProvider {
     const options = {
       subFolder: subFolder
     }
+    const fileUUID = `${filename}-${this.uuidGenerator.generate()}`
+    await this.saveBuffer(buffer, fileUUID)
     try {
-      await this.saveBuffer(buffer, filename, claimID)
-      const readStream = this.createFileReadStream(filename, claimID)
+      const readStream = this.createFileReadStream(fileUUID)
       const uploadRes = await method(claimID, readStream, filename, options)
-      await this.deleteFile(filename, claimID)
+      await this.deleteFile(fileUUID)
       return uploadRes
     } catch (err) {
+      await this.deleteFile(fileUUID)
       throw err
     }
   }
-  async saveBuffer (buffer, filename, claimID) {
-    const storagePath = this.createFileStoragePath(filename, claimID)
+  async saveBuffer (buffer, filename) {
+    const storagePath = this.createFileStoragePath(filename)
     return new Promise((resolve, reject) => {
       this.writeFile(storagePath, buffer, (err) => {
         if (err) reject(err)
@@ -111,46 +114,25 @@ class SharePointProvider {
     })
   }
 
-  createFileReadStream (filename, claimID) {
-    const storagePath = this.createFileStoragePath(filename, claimID)
+  createFileReadStream (filename) {
+    const storagePath = this.createFileStoragePath(filename)
     return this.createReadStream(storagePath)
   }
 
-  async deleteFile (filename, claimID) {
-    const claimFolderPath = this.createClaimFolderPath(claimID)
-    const storagePath = this.createFileStoragePath(filename, claimID)
+  async deleteFile (filename) {
+    const storagePath = this.createFileStoragePath(filename)
 
-    // Unlink the file, then unlink the folder
     return new Promise((resolve, reject) => {
       return this.unlinkFile(storagePath, (fileErr) => {
         if (fileErr) return reject(fileErr)
         return resolve()
       })
-    }).then(new Promise((resolve, reject) => {
-      this.removeFolder(claimFolderPath, (dirErr) => {
-        if (dirErr) return reject(dirErr)
-        return resolve()
-      })
-    }))
+    })
   }
 
-  createFileStoragePath (filename, claimID, root) {
+  createFileStoragePath (filename, root) {
     const folderPath = root || this.intermediateStoragePath || INTERMEDIATE_STORAGE
-    const claimFolderPath = this.createClaimFolderPath(claimID, folderPath)
-    return path.join(claimFolderPath, filename)
-  }
-
-  createClaimFolderPath (claimID, root) {
-    const folderPath = root || this.intermediateStoragePath || INTERMEDIATE_STORAGE
-    if (!this.folderExists(folderPath)) {
-      this.createFolder(folderPath)
-    }
-
-    const claimFolderPath = path.join(folderPath, claimID)
-    if (!this.folderExists(claimFolderPath)) {
-      this.createFolder(claimFolderPath)
-    }
-    return claimFolderPath
+    return path.join(folderPath, filename)
   }
 
   /**
