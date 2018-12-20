@@ -88,6 +88,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     {
       return GetInternal(() =>
       {
+        _logger.LogInformation($"AddEvidenceForClaim: claimId: {claimId} | fileName: {fileName} | subFolder: {subFolder}");
         return UploadFileSlicePerSlice(claimsInfoProvider, claimId, file, fileName, subFolder);
       });
     }
@@ -115,6 +116,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       _context.ExecuteQuery();
 
       // Get the information about the folder that will hold the file
+      _logger.LogInformation($"UploadFileSlicePerSlice: enumerating {_context.Url}/{claimFolderRelUrl}...");
       _context.Load(docClaimFolder.Files);
       _context.Load(docClaimFolder, folder => folder.ServerRelativeUrl);
       _context.ExecuteQuery();
@@ -171,6 +173,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
                 // Call the start upload method on the first slice
                 bytesUploaded = uploadFile.StartUpload(uploadId, strm);
 
+                _logger.LogInformation($"UploadFileSlicePerSlice: uploading first slice...");
                 _context.ExecuteQuery();
 
                 // fileoffset is the pointer where the next slice will be added
@@ -183,6 +186,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
           }
 
           // Get a reference to our file
+          _logger.LogInformation($"UploadFileSlicePerSlice: getting reference to file...");
           uploadFile = _context.Web.GetFileByServerRelativeUrl(docClaimFolder.ServerRelativeUrl + Path.AltDirectorySeparatorChar + fileName);
 
           if (last)
@@ -191,6 +195,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
             using (var strm = new MemoryStream(lastBuffer))
             {
               // End sliced upload by calling FinishUpload
+              _logger.LogInformation($"UploadFileSlicePerSlice: uploading last slice...");
               uploadFile = uploadFile.FinishUpload(uploadId, fileoffset, strm);
               _context.Load(uploadFile);
               _context.ExecuteQuery();
@@ -210,6 +215,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
           using (var strm = new MemoryStream(buffer))
           {
             // Continue sliced upload
+              _logger.LogInformation($"UploadFileSlicePerSlice: uploading intermediate slice...");
             bytesUploaded = uploadFile.ContinueUpload(uploadId, fileoffset, strm);
             _context.ExecuteQuery();
 
@@ -226,6 +232,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     {
       return GetInternal(() =>
       {
+        _logger.LogInformation($"EnumerateFolder: claimId: {claimId} | subFolder: {subFolder}");
         var claim = claimsInfoProvider.GetClaimById(claimId);
         var soln = _solutionsDatastore.ById(claim.SolutionId);
         var org = _organisationsDatastore.ById(soln.OrganisationId);
@@ -238,10 +245,12 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         _context.Load(claimFolder.Folders);
         try
         {
+          _logger.LogInformation($"EnumerateFolder: enumerating {_context.Url}/{claimFolderUrl}...");
           _context.ExecuteQuery();
         }
         catch (Exception ex)
         {
+          _logger.LogInformation($"EnumerateFolder: {_context.Url}/{claimFolderUrl} does not exist");
           throw new KeyNotFoundException($"Folder does not exist!: {_context.Url}/{claimFolderUrl}", ex);
         }
 
@@ -290,9 +299,11 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     {
       return GetInternal(() =>
       {
+        _logger.LogInformation($"GetFileStream: claimId: {claimId} | uniqueId: {uniqueId}");
         var file = _context.Web.GetFileById(Guid.Parse(uniqueId));
         _context.Load(file);
         _context.ExecuteQuery();
+        _logger.LogInformation($"GetFileStream: retrieved info for {file.Name}");
 
         return
           new FileStreamResult(Microsoft.SharePoint.Client.NetCore.File.OpenBinaryDirect(_context, file.ServerRelativeUrl)?.Stream, GetContentType(file.Name))
@@ -306,6 +317,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     {
       GetInternal(() =>
       {
+        _logger.LogInformation($"PrepareForSolution: solutionId: {solutionId}");
         var soln = _solutionsDatastore.ById(solutionId);
         if (soln == null)
         {
@@ -344,15 +356,18 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     // can only create sub-folder immediately under baseUrl
     private void CreateSubFolder(string baseUrl, string subFolder)
     {
+      _logger.LogInformation($"CreateSubFolder: baseUrl: {baseUrl} | subFolder: {subFolder}");
       var baseFolderExists = true;
       var baseFolder = _context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString($"{baseUrl}"));
       _context.Load(baseFolder);
       try
       {
+        _logger.LogInformation($"CreateSubFolder: checking base folder ({baseUrl}) exists...");
         _context.ExecuteQuery();
       }
       catch
       {
+        _logger.LogInformation($"CreateSubFolder: base folder ({baseUrl}) does not exist");
         baseFolderExists = false;
       }
       if (!baseFolderExists)
@@ -365,10 +380,12 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       _context.Load(targetFolder);
       try
       {
+        _logger.LogInformation($"CreateSubFolder: checking target folder ({baseUrl}/{subFolder}) exists...");
         _context.ExecuteQuery();
       }
       catch
       {
+        _logger.LogInformation($"CreateSubFolder: target folder ({baseUrl}/{subFolder}) does not exist");
         targetFolderExists = false;
       }
       if (targetFolderExists)
@@ -376,6 +393,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         return;
       }
 
+      _logger.LogInformation($"CreateSubFolder: adding sub-folder ({subFolder}) ...");
       baseFolder.AddSubFolder(subFolder);
       _context.ExecuteQuery();
     }
