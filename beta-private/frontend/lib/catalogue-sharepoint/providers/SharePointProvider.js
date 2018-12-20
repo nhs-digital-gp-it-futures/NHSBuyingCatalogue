@@ -94,8 +94,8 @@ class SharePointProvider {
     }
     const fileUUID = `${filename}-${this.uuidGenerator.generate()}`
     await this.saveBuffer(buffer, fileUUID)
-    const readStream = this.createFileReadStream(fileUUID)
     try {
+      const readStream = this.createFileReadStream(fileUUID)
       const uploadRes = await method(claimID, readStream, filename, options)
       await this.deleteFile(fileUUID)
       return uploadRes
