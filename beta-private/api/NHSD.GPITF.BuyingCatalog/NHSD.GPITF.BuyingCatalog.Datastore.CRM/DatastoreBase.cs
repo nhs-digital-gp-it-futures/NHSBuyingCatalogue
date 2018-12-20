@@ -10,6 +10,7 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
@@ -121,7 +122,13 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 
     protected IRestResponse GetRawResponse(RestRequest request)
     {
-      return _crmFactory.GetRestClient().Execute(request);
+      var resp = _crmFactory.GetRestClient().Execute(request);
+
+      // log here as may fail deserialisation
+      var body = request.Parameters.SingleOrDefault(x => x.Type == ParameterType.RequestBody)?.Value?.ToString();
+      _logger.LogInformation($"[{request.Resource}] {body} --> [{resp.StatusCode}] {resp.Content}");
+
+      return resp;
     }
 
     protected TOther GetResponse<TOther>(RestRequest request)
