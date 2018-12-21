@@ -279,11 +279,11 @@ async function confirmationPagePost (req, res) {
   if (req.body.action.save) {
     return confirmationPageGet(req, res)
   } else if (req.body.action.exit) {
-    return redirectToOnboardingDashboard()
+    return redirectToOnboardingDashboard(req, res)
   } else if (req.body.action.continue) {
     try {
       await submitCapabilityAssessment(req.solution.id)
-      return redirectToOnboardingDashboard(req, res)
+      return redirectToOnboardingDashboard(req, res, 'capabilityAssessmentSubmitted')
     } catch (err) {
       context.errors = {
         items: [{ msg: 'Validation.Capability.Evidence.Submission.FailedAction' }]
@@ -297,8 +297,9 @@ async function submitCapabilityAssessment (solutionID) {
   return dataProvider.submitSolutionForCapabilityAssessment(solutionID)
 }
 
-async function redirectToOnboardingDashboard (req, res) {
-  const route = path.join('/suppliers/solutions', req.params.solution_id)
+async function redirectToOnboardingDashboard (req, res, param) {
+  const route = `${path.join('/suppliers/solutions', req.params.solution_id)}${param ? `?${param}` : ''}`
+  console.log('\n\n\nRoute', route)
   return res.redirect(route)
 }
 

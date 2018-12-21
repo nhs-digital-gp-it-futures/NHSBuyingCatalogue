@@ -24,6 +24,7 @@
   "Overarching Standards": "Overarching $t(Standard_plural)",
   "Assessment": "Assessment",
   "Compliance": "Compliance",
+  "Capability_Assessment": "$t(Capability) $t(Assessment)",
   "Capabilities Assessment": "$t(Capability_plural) $t(Assessment)",
   "Standards Compliance": "$t(Standard_plural) $t(Compliance)",
   "Standards and Capabilities": "$t(Standard_plural) and $t(Capability_plural)",

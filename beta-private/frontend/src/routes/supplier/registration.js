@@ -104,7 +104,6 @@ function onboardingStatusPage (req, res) {
         context.registrationComplete = true
       }
     }
-
     if (status === 2) { // capability assessment
       context.stages[0].status = 'Complete'
       context.stages[0].class = 'complete'
@@ -112,6 +111,23 @@ function onboardingStatusPage (req, res) {
 
       context.stages[1].status = 'Awaiting outcome'
       context.stages[1].link = 'View'
+
+      if ('capabilityAssessmentSubmitted' in req.query) {
+        context.capabilityAssessmentSubmitted = true
+      }
+    }
+    if (status === 3) { // Standards Compliance
+      context.stages[0].status = 'Complete'
+      context.stages[0].class = 'complete'
+      context.stages[0].link = 'View'
+
+      context.stages[1].status = 'Passed'
+      context.stages[1].class = 'complete'
+      context.stages[1].link = 'View'
+
+      if ('capabilityAssessmentApproved' in req.query) {
+        context.capabilityAssessmentApproved = true
+      }
     }
   } else {
     context.stages[0].status = 'Not started'
