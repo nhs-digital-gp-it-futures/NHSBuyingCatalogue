@@ -125,23 +125,23 @@ namespace NHSD.GPITF.BuyingCatalog
           options.DescribeAllEnumsAsStrings();
           options.OperationFilter<ExamplesOperationFilter>();
         });
-
-        services
-          .AddAuthentication(BasicAuthenticationDefaults.AuthenticationScheme)
-          .AddBasicAuthentication(
-            options =>
-            {
-              options.Realm = "NHSD.GPITF.BuyingCatalog";
-              options.Events = new BasicAuthenticationEvents
-              {
-                OnValidatePrincipal = context =>
-                {
-                  var auth = ServiceProvider.GetService<IBasicAuthentication>();
-                  return auth.Authenticate(context);
-                }
-              };
-            });
       }
+
+      services
+        .AddAuthentication(BasicAuthenticationDefaults.AuthenticationScheme)
+        .AddBasicAuthentication(
+          options =>
+          {
+            options.Realm = "NHSD.GPITF.BuyingCatalog";
+            options.Events = new BasicAuthenticationEvents
+            {
+              OnValidatePrincipal = context =>
+              {
+                var auth = ServiceProvider.GetService<IBasicAuthentication>();
+                return auth.Authenticate(context);
+              }
+            };
+          });
 
       services
         .AddAuthentication(options =>

@@ -1,4 +1,5 @@
-﻿using NHSD.GPITF.BuyingCatalog.Interfaces;
+﻿using Microsoft.AspNetCore.Hosting;
+using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System;
 using System.Collections.Generic;
@@ -14,18 +15,28 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
   {
     private readonly IContactsDatastore _contactDatastore;
     private readonly IOrganisationsDatastore _organisationDatastore;
+    private readonly IHostingEnvironment _env;
 
     public BasicAuthentication(
       IContactsDatastore contactDatastore,
-      IOrganisationsDatastore organisationDatastore
+      IOrganisationsDatastore organisationDatastore,
+      IHostingEnvironment env
       )
     {
       _contactDatastore = contactDatastore;
       _organisationDatastore = organisationDatastore;
+      _env = env;
     }
 
     public Task Authenticate(ValidatePrincipalContext context)
     {
+      if (!_env.IsDevelopment())
+      {
+        context.AuthenticationFailMessage = "Basic authentication only available in Development environment";
+
+        return Task.CompletedTask;
+      }
+
       // use basic authentication to support Swagger
       if (context.UserName != context.Password)
       {
