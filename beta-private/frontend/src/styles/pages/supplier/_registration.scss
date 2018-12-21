@@ -82,6 +82,16 @@
   }
 }
 
+#supplier-guide {
+  ul {
+    list-style-type: none;
+    li::before {
+      content: " • ";
+      color: $color-nhs-blue;
+    }
+  }
+}
+
 #add-contact {
   margin-bottom: 1em;
 }
