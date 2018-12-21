@@ -25,30 +25,33 @@
       <div class="bottom {{#if onHomePage}}white-control-bar{{/if}}">
         {{#if activeForm}}
         <nav class="active-form" aria-label="Save controls">
-          <input type="submit"
-            {{#if activeForm.id}}
-            form="{{activeForm.id}}"
-            {{else}}
-            disabled
-            {{/if}}
-            class="button"
-            name="action[save]"
-            value="{{t 'Buttons.Save'}}">
-          {{#activeForm.title}}<span class="title">{{.}}</span>{{/activeForm.title}}
-          <a href="/about#content">Support</a>
-          <input type="submit"
-            {{#if activeForm.id}}
-            form="{{activeForm.id}}"
-            {{else}}
-            disabled
-            {{/if}}
-            class="button"
-            name="action[exit]"
-            value="{{t 'Buttons.Save and exit'}}">
+          <div class="left-nav-divide">
+              <input type="submit"
+              {{#if activeForm.id}}
+              form="{{activeForm.id}}"
+              {{else}}
+              disabled
+              {{/if}}
+              class="button"
+              name="action[save]"
+              value="{{t 'Buttons.Save'}}">
+            {{#activeForm.title}}<span class="title">{{.}}</span>{{/activeForm.title}}
+          </div>
+          <div class="right-nav-divide">
+              <a href="/about#content">Support</a>
+              <input type="submit"
+                {{#if activeForm.id}}
+                form="{{activeForm.id}}"
+                {{else}}
+                disabled
+                {{/if}}
+                class="button"
+                name="action[exit]"
+                value="{{t 'Buttons.Save and exit'}}">
+          </div>
         </nav>
         {{else}}
         <nav class="no-active-form" aria-label="Secondary">
-          <a href="/about#standards-and-capabilities">{{t 'Standards and Capabilities'}}</a>
           <a href="/about#content">Support</a>
         </nav>
         {{/if}}
