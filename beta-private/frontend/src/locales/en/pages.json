@@ -136,6 +136,20 @@
         "You can view stage 3, and start saving evidence against $t(Standard_plural_possessive) requirements. However, you cannot submit evidence for stage 3 until you have passed stage 2."
       ]
     },
+    "CapabilityAssessmentSubmittedCallout": {
+      "Title": "Your $t(Solution) has been Submitted for $t(Capability_Assessment).",
+      "Text": [
+        "You can now continue with stage 3 $t(Onboarding.Stages.2.Name) as soon as you’re ready.",
+        "You can view stage 3, and start saving evidence against each $t(Standard_plural_possessive) requirements. However, you cannot submit evidence for stage 3 until you have passed stage 2."
+      ]
+    },
+    "CapabilityAssessmentApprovedCallout": {
+      "Title": "Your $t(Solution) has Passed $t(Capability_Assessment).",
+      "Text": [
+        "You can now continue with stage 3 $t(Onboarding.Stages.2.Name) as soon as you’re ready.",
+        "Evidence can noe be submitted against each $t(Standard_plural_possessive) requirements."
+      ]
+    },
     "Details": {
       "Breadcrumb": "Register $t(Solution) (1 of 4)",
       "Backlink": {
