@@ -140,6 +140,10 @@ fieldset {
 a.submit-button {
   text-decoration: none;
   color:white;
+  &:hover {
+    background-color: $color-button-hover-bg;
+    color: $color-button-hover-fg;
+  }
 }
 
 a.submit-button,

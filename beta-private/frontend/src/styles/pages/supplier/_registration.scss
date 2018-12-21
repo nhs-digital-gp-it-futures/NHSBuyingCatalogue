@@ -119,6 +119,10 @@
   a.submit-button {
     text-decoration: none;
     color:$color-nhs-white;
+    &:hover {
+      background-color: $color-button-hover-bg;
+      color: $color-button-hover-fg;
+    }
   }
 }
 
