@@ -4,7 +4,7 @@
     "WelcomeMessage": "$t(Authentication.Greeting). Here you can add a new $t(Solution) and manage all your $t(Solution_plural) — both those in progress and published.",
     "AddSolutionButton": "Add a new $t(Solution)",
     "Onboarding": {
-      "Title": "Onboarding in Progress",
+      "Title": "In Progress",
       "Table": {
         "Headings": {
           "NameAndVersion": "Name | Version",
