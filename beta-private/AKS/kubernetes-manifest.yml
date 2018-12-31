@@ -221,7 +221,7 @@ spec:
       - name: regcred
       containers:
       - name: bc-private-beta-cache
-        image: index.docker.io/redis:alpine:#{Build.BuildId}#
+        image: index.docker.io/redis:alpine
         ports:
         - containerPort: 6379
         resources:
