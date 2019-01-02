@@ -1,0 +1,277 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bc-pb-deployment-api
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  selector:
+    matchLabels:
+      app: bc-pb-app-api  
+  template:
+    metadata:
+      labels:
+        app: bc-pb-app-api
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: bc-private-beta-api
+        image: buyingcat01.azurecr.io/gpitf/catalogue-api
+        ports:
+        - containerPort: 5100
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+        - name: CACHE_HOST        
+          value: "cache"
+        - name: ASPNETCORE_ENVIRONMENT 
+          value: "Development"
+        - name: USE_CRM
+          value: "true"
+        - name: CRM_APIURI
+          value: "http://crm:5001/api/"
+        - name: CRM_ACCESSTOKENURI
+          value: "http://crm:5001/connect/token"          
+        - name: CRM_CLIENTID
+          valueFrom:
+            secretKeyRef:
+              name: bccrmsecret
+              key: CRM_CLIENTID
+        - name: CRM_CLIENTSECRET
+          valueFrom:
+            secretKeyRef:
+              name: bccrmsecret
+              key: CRM_CLIENTSECRET 
+        - name: OIDC_ISSUER_URL
+          value: "https://buying-catalogue-beta-prototype.eu.auth0.com"
+        - name: OIDC_USERINFO_URL
+          value: "https://buying-catalogue-beta-prototype.eu.auth0.com/userinfo"
+        - name: OIDC_AUDIENCE
+          value: "api.buying-catalogue-beta-prototype"
+        - name: SHAREPOINT_BASEURL
+          value: "https://hscic365.sharepoint.com/sites/DTGPP/GPITF"
+        - name: SHAREPOINT_ORGANISATIONSRELATIVEURL
+          value: "Shared Documents/Archive/Buying Catalogue Team Folder/BC Integration"
+        - name: SHAREPOINT_LOGIN
+          value: "TRDA2@hscic.gov.uk"
+        - name: SHAREPOINT_PASSWORD
+          value: "B!LLG@te5"   
+        - name: DATASTORE_CONNECTIONTYPE
+          value: "SqlServer"
+        - name: DATASTORE_CONNECTIONSTRING
+          valueFrom:
+            secretKeyRef:
+              name: bcdbsecret
+              key: DATASTORE_CONNECTIONSTRING        
+        - name: LOG_CONNECTIONSTRING
+          valueFrom:
+            secretKeyRef:
+              name: bcdbsecret
+              key: LOG_CONNECTIONSTRING
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bc-pb-deployment-frontend
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  selector:
+    matchLabels:
+      app: bc-pb-app-frontend
+  template:
+    metadata:
+      labels:
+        app: bc-pb-app-frontend
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: bc-private-beta-frontend
+        image: buyingcat01.azurecr.io/gpitf/catalogue-frontend
+        ports:
+        - containerPort: 8000
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+        - name: BASE_URL
+          value: "http://buyingcatprivatebeta.uksouth.cloudapp.azure.com"
+        - name: API_BASE_URL
+          value: "http://api:5100"
+        - name: CACHE_HOST
+          value: "cache"
+        - name: OIDC_ISSUER_URL
+          value: "https://buying-catalogue-beta-prototype.eu.auth0.com"
+        - name: OIDC_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: bcoidcsecret
+              key: OIDC_CLIENT_ID
+        - name: OIDC_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: bcoidcsecret
+              key: OIDC_CLIENT_SECRET
+---  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bc-pb-deployment-crm
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  selector:
+    matchLabels:
+      app: bc-pb-app-crm   
+  template:
+    metadata:
+      labels:
+        app: bc-pb-app-crm
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: bc-private-beta-crm
+        image: buyingcat01.azurecr.io/gpitf/catalogue-crm
+        ports:
+        - containerPort: 5001
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m            
+---  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bc-pb-deployment-nginx
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  selector:
+    matchLabels:
+      app: bc-pb-app-nginx  
+  template:
+    metadata:
+      labels:
+        app: bc-pb-app-nginx
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: bc-private-beta-nginx
+        image: buyingcat01.azurecr.io/gpitf/catalogue-frontend-proxy
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+---  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bc-pb-deployment-cache
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  selector:
+    matchLabels:
+      app: bc-pb-app-cache  
+  template:
+    metadata:
+      labels:
+        app: bc-pb-app-cache
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: bc-private-beta-cache
+        image: index.docker.io/redis:alpine
+        ports:
+        - containerPort: 6379
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+spec:
+  ports:
+  - port: 5100
+  selector:
+    app: bc-pb-app-api
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  ports:
+  - port: 8000
+  selector:
+    app: bc-pb-app-frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bc-lb-nginx
+spec:
+  loadBalancerIP: 51.140.48.244
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: bc-pb-app-nginx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cache
+spec:
+  ports:
+  - port: 6379
+  selector:
+    app: bc-pb-app-cache
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: crm
+spec:
+  ports:
+  - port: 5001
+  selector:
+    app: bc-pb-app-crm 
