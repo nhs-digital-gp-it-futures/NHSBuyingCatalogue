@@ -66,13 +66,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       solution.ModifiedById = _contacts.ByEmail(email).Id;
       solution.ModifiedOn = DateTime.UtcNow;
 
+      _datastore.Update(solution);
+
       // create SharePoint folder structure
       if (solution.Status == SolutionStatus.Registered)
       {
         _evidenceBlobStoreLogic.PrepareForSolution(solution.Id);
       }
-
-      _datastore.Update(solution);
     }
 
     public void Delete(Solutions solution)
