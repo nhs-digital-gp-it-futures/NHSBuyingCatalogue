@@ -93,8 +93,8 @@ function onboardingStatusPage (req, res) {
     if (status === 0) { // draft
       context.stages[0].status = 'In progress'
       context.stages[0].link = 'Edit'
-      context.stages[1].class = 'unavailable'
-      context.stages[2].class = 'unavailable'
+      context.stages[1].link = ''
+      context.stages[2].link = ''
     }
 
     if (status === 1) { // registered
@@ -139,14 +139,6 @@ function onboardingStatusPage (req, res) {
   // solution page will be unavailable for the time being
   context.stages[3].class = 'unavailable'
 
-  // Helper checks if the provided class is the 'unavailable' class.
-  context.helpers = {
-    isAvailable: function (cssClass, url, link, options) {
-      if (cssClass !== 'unavailable') {
-        return options.fn({ url, link })
-      }
-    }
-  }
   res.render('supplier/registration/index', context)
 }
 
