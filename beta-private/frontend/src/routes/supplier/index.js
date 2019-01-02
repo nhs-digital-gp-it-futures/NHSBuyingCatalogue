@@ -11,6 +11,10 @@ function strictRouting (req, res, next) {
 
 router.get('/', strictRouting, async (req, res) => {
   const context = {
+    breadcrumbs: [
+      { label: 'HomePage.Breadcrumb', url: '/' },
+      { label: 'MySolutions.Title' }
+    ],
     errors: [],
     solutions: {
       onboarding: [],

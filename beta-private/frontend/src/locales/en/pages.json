@@ -28,6 +28,7 @@
     }
   },
   "HomePage": {
+    "Breadcrumb": "Home",
     "BannerSection": {
       "Title": "Introducing the $t(NHS.Name) $t(Catalogue.Title)",
       "Subtitle": "More choices, better patient outcomes",
