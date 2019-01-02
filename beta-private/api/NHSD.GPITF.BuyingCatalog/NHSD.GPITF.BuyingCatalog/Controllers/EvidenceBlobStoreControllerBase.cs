@@ -4,6 +4,7 @@ using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace NHSD.GPITF.BuyingCatalog.Controllers
 {
@@ -17,11 +18,11 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
       _logic = logic;
     }
 
-    protected IActionResult AddEvidenceForClaimInternal(string claimId, IFormFile file, string filename, string subFolder = null)
+    protected async Task<IActionResult> AddEvidenceForClaimInternal(string claimId, IFormFile file, string filename, string subFolder = null)
     {
       try
       {
-        var extUrl = _logic.AddEvidenceForClaim(claimId, file.OpenReadStream(), filename, subFolder);
+        var extUrl = await _logic.AddEvidenceForClaim(claimId, file.OpenReadStream(), filename, subFolder);
         return new OkObjectResult(extUrl);
       }
       catch (FluentValidation.ValidationException ex)

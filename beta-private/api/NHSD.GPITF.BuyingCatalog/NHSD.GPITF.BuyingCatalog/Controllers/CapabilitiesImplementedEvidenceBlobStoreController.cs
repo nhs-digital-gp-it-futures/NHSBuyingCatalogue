@@ -10,6 +10,7 @@ using NHSD.GPITF.BuyingCatalog.OperationFilters;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
+using System.Threading.Tasks;
 using ZNetCS.AspNetCore.Authentication.Basic;
 
 namespace NHSD.GPITF.BuyingCatalog.Controllers
@@ -34,6 +35,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     {
     }
 
+#pragma warning disable AsyncFixer01
     /// <summary>
     /// Upload a file to support a claim
     /// If the file already exists on the server, then a new version is created
@@ -67,10 +69,11 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [DisableRequestSizeLimit]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(string), description: "Success")]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Claim not found in CRM")]
-    public IActionResult AddEvidenceForClaim([Required]string claimId, [Required]IFormFile file, [Required]string filename, string subFolder = null)
+    public async Task<IActionResult> AddEvidenceForClaimAsync([Required]string claimId, [Required]IFormFile file, [Required]string filename, string subFolder = null)
     {
-      return AddEvidenceForClaimInternal(claimId, file, filename, subFolder);
+      return await AddEvidenceForClaimInternal(claimId, file, filename, subFolder);
     }
+#pragma warning restore AsyncFixer01
 
     /// <summary>
     /// Download a file which is supporting a claim

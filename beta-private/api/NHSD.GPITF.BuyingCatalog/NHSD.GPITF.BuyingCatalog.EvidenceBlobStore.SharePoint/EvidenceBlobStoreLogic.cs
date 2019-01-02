@@ -4,6 +4,7 @@ using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 {
@@ -38,7 +39,8 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       _claimValidator = claimValidator;
     }
 
-    public string AddEvidenceForClaim(string claimId, Stream file, string filename, string subFolder = null)
+#pragma warning disable AsyncFixer01
+    public async Task<string> AddEvidenceForClaim(string claimId, Stream file, string filename, string subFolder = null)
     {
       _claimValidator.ValidateAndThrow(claimId, ruleSet: nameof(IEvidenceBlobStoreLogic.AddEvidenceForClaim));
 
@@ -48,8 +50,9 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         throw new KeyNotFoundException($"Could not find claim: {claimId}");
       }
 
-      return _evidenceBlobStoreDatastore.AddEvidenceForClaim(this, claimId, file, filename, subFolder);
+      return await _evidenceBlobStoreDatastore.AddEvidenceForClaim(this, claimId, file, filename, subFolder);
     }
+#pragma warning restore AsyncFixer01
 
     public FileStreamResult GetFileStream(string claimId, string uniqueId)
     {

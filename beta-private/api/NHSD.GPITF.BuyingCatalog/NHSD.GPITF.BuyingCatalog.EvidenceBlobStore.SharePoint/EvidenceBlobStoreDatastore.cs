@@ -12,6 +12,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Security;
+using System.Threading.Tasks;
 
 namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 {
@@ -84,12 +85,12 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       };
     }
 
-    public string AddEvidenceForClaim(IClaimsInfoProvider claimsInfoProvider, string claimId, Stream file, string fileName, string subFolder = null)
+    public async Task<string> AddEvidenceForClaim(IClaimsInfoProvider claimsInfoProvider, string claimId, Stream file, string fileName, string subFolder = null)
     {
-      return GetInternal(() =>
+      return await GetInternal(async () =>
       {
         _logger.LogInformation($"AddEvidenceForClaim: claimId: {claimId} | fileName: {fileName} | subFolder: {subFolder}");
-        return UploadFileSlicePerSlice(claimsInfoProvider, claimId, file, fileName, subFolder);
+        return await Task.Run(() => UploadFileSlicePerSlice(claimsInfoProvider, claimId, file, fileName, subFolder));
       });
     }
 
@@ -215,7 +216,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
           using (var strm = new MemoryStream(buffer))
           {
             // Continue sliced upload
-              _logger.LogInformation($"UploadFileSlicePerSlice: uploading intermediate slice...");
+            _logger.LogInformation($"UploadFileSlicePerSlice: uploading intermediate slice...");
             bytesUploaded = uploadFile.ContinueUpload(uploadId, fileoffset, strm);
             _context.ExecuteQuery();
 

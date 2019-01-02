@@ -2,6 +2,7 @@
 using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace NHSD.GPITF.BuyingCatalog.Interfaces
 {
@@ -9,7 +10,7 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
   public interface IEvidenceBlobStoreLogic
   {
     void PrepareForSolution(string solutionId);
-    string AddEvidenceForClaim(string claimId, Stream file, string filename, string subFolder = null);
+    Task<string> AddEvidenceForClaim(string claimId, Stream file, string filename, string subFolder = null);
     FileStreamResult GetFileStream(string claimId, string uniqueId);
     IEnumerable<BlobInfo> EnumerateFolder(string claimId, string subFolder = null);
   }
