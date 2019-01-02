@@ -4,7 +4,7 @@
     "WelcomeMessage": "$t(Authentication.Greeting). Here you can add a new $t(Solution) and manage all your $t(Solution_plural) — both those in progress and published.",
     "AddSolutionButton": "Add a new $t(Solution)",
     "Onboarding": {
-      "Title": "Onboarding in Progress",
+      "Title": "In Progress",
       "Table": {
         "Headings": {
           "NameAndVersion": "Name | Version",
@@ -126,7 +126,7 @@
       "Title": "Help - Where can I find guidance on $t(Onboarding.Title)?",
       "Text": [
         "Follow the links below for guidance on each stage of <a href='#'>$t(Onboarding.Title)</a>.",
-        "<ul><li><a href='#'>Stage 1 - $t(Onboarding.Stages.0.Name)</a><li><a href='#'>Stage 2 - $t(Onboarding.Stages.1.Name)</a><li><a href='#'>Stage 1 - $t(Onboarding.Stages.0.Name)</a><li><a href='#'>$t(Solution) page (what buyers will see)</a></ul>"
+        "<ul><li><a href='#'>Stage 1 - $t(Onboarding.Stages.0.Name)</a><li><a href='#'>Stage 2 - $t(Onboarding.Stages.1.Name)</a><li><a href='#'>Stage 3 - $t(Onboarding.Stages.2.Name)</a><li><a href='#'>Stage 4 - $t(Solution) page (what buyers will see)</a></ul>"
       ]
     },
     "RegistrationCompleteCallout": {

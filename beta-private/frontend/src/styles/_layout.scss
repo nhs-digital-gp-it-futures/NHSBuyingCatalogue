@@ -109,10 +109,9 @@ body > header {
     padding: $header-padding;
 
     nav {
+      display: flex;
+      justify-content: flex-end;
       &.no-active-form {
-        margin: 0 auto;
-        width: 40%;
-
         a {
           margin-right: 2rem;
         }
