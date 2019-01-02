@@ -36,13 +36,19 @@ namespace Gif.Service
     /// Constructor
     /// </summary>
     /// <param name="env"></param>
-    /// <param name="configuration"></param>
-    public Startup(IHostingEnvironment env, IConfiguration configuration)
+    public Startup(IHostingEnvironment env)
     {
       _hostingEnv = env;
-      Configuration = configuration;
+
+      var builder = new ConfigurationBuilder()
+        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+        .AddJsonFile("hosting.json", optional: true, reloadOnChange: true)
+        .AddEnvironmentVariables()
+        .AddUserSecrets<Program>();
 
       DumpEnvironment();
+
+      Configuration = builder.Build();
     }
 
     /// <summary>
@@ -156,7 +162,15 @@ namespace Gif.Service
     {
       Console.WriteLine("Environment:");
       Console.WriteLine($"  GIF:");
-      Console.WriteLine($"    GIF_AUTHORITY_URI : {Environment.GetEnvironmentVariable("GIF_AUTHORITY_URI")}");
-    }
+      Console.WriteLine($"    GIF_AUTHORITY_URI           : {Environment.GetEnvironmentVariable("GIF_AUTHORITY_URI")}");
+      Console.WriteLine($"    GIF_CRM_AUTHORITY           : {Environment.GetEnvironmentVariable("GIF_CRM_AUTHORITY")}");
+      Console.WriteLine($"    GIF_CRM_URL                 : {Environment.GetEnvironmentVariable("GIF_CRM_URL")}");
+      Console.WriteLine($"    GIF_AZURE_CLIENT_ID         : {Environment.GetEnvironmentVariable("GIF_AZURE_CLIENT_ID")}");
+      Console.WriteLine($"    GIF_ENCRYPTED_CLIENT_SECRET : {Environment.GetEnvironmentVariable("GIF_ENCRYPTED_CLIENT_SECRET")}");
+
+
+
+
+}
   }
 }
