@@ -139,7 +139,7 @@ function onboardingStatusPage (req, res) {
   // solution page will be unavailable for the time being
   context.stages[3].class = 'unavailable'
 
-  // Helper checks if the provided class is the 'unavailable' class.'
+  // Helper checks if the provided class is the 'unavailable' class.
   context.helpers = {
     isAvailable: function (cssClass, url, link, options) {
       if (cssClass !== 'unavailable') {

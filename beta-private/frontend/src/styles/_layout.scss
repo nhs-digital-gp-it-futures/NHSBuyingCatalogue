@@ -213,3 +213,13 @@ body > footer {
     }
   }
 }
+
+/**
+ * Standardising fieldset width and padding
+ */
+ fieldset {
+  max-width: 55em;
+  p {
+    padding-right: 5em;
+  }
+}
