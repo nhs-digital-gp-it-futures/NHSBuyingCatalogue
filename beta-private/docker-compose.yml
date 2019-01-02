@@ -47,6 +47,22 @@ services:
       - CRM_CLIENTSECRET
       - USE_CRM
 
+  crm:
+    build: 
+     context: ./crm
+    image: gpitf/catalogue-crm:private-beta
+    ports:
+      - "5001:5001"
+    networks:
+      - beta_network
+    environment:
+      - ASPNETCORE_ENVIRONMENT
+      - GIF_AUTHORITY_URI
+      - GIF_CRM_AUTHORITY
+      - GIF_CRM_URL
+      - GIF_AZURE_CLIENT_ID
+      - GIF_ENCRYPTED_CLIENT_SECRET
+
   nginx:
     build: ./nginx
     image: gpitf/catalogue-frontend-proxy:private-beta
