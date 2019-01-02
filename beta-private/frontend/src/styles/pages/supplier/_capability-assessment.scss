@@ -1,5 +1,9 @@
     #capability-assessment-page {
 
+    p, h1, h2 {
+        max-width: 50em;
+    }
+
     fieldset {
         background: none;
     }
