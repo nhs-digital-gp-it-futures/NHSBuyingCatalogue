@@ -93,6 +93,8 @@ function onboardingStatusPage (req, res) {
     if (status === 0) { // draft
       context.stages[0].status = 'In progress'
       context.stages[0].link = 'Edit'
+      context.stages[1].link = ''
+      context.stages[2].link = ''
     }
 
     if (status === 1) { // registered

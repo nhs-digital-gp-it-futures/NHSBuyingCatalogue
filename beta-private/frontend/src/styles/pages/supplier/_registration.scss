@@ -8,7 +8,9 @@
     li {
       margin-bottom: 3em;
       position: relative;
-
+      p {
+        max-width: 30em;
+      }
       &::before {
         background-color: $color-bg;
         border: 1.5px solid $color-nhs-blue;
@@ -79,6 +81,12 @@
   .callout {
     @extend %callout-with-border;
     margin: 2em 0;
+  }
+}
+
+#submit-controls {
+  input {
+    margin: 1em 0em;
   }
 }
 
