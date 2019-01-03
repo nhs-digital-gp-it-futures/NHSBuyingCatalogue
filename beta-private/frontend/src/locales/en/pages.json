@@ -152,7 +152,7 @@
       ]
     },
     "Details": {
-      "Breadcrumb": "Register $t(Solution) (1 of 4)",
+      "Breadcrumb": "Enter details (page 1 of 2)",
       "Backlink": {
         "Title": "$t(Onboarding.Title)"
       },
@@ -234,7 +234,7 @@
       }
     },
     "Capabilities": {
-      "Breadcrumb": "Register $t(Solution) (2 of 4)",
+      "Breadcrumb": "Enter details (page 2 of 2)",
       "Backlink": {
         "Title": "$t(Solution) details"
       },
