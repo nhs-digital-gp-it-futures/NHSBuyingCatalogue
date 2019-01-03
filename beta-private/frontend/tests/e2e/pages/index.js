@@ -21,6 +21,7 @@ class HomePage extends Page {
     this.homePage = Selector('#home-page')
     this.welcomeBanner = Selector('#home-page > div.welcome-banner')
     this.cardContainer = Selector('#home-page > div.content > div.cards.container')
+    this.stepsContainer = Selector('#home-page > div.content > div.steps.container')
   }
 }
 
