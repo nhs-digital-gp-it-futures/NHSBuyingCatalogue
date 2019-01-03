@@ -18,7 +18,9 @@ class Page {
 class HomePage extends Page {
   constructor () {
     super()
-    this.something = 'foo'
+    this.homePage = Selector('#home-page')
+    this.welcomeBanner = Selector('#home-page > div.welcome-banner')
+    this.cardContainer = Selector('#home-page > div.content > div.cards.container')
   }
 }
 
