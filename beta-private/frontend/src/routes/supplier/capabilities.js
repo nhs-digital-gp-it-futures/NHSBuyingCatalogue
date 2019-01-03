@@ -103,7 +103,11 @@ async function capabilityPageContext (req) {
 
 async function solutionCapabilityPageGet (req, res) {
   const context = {
-    ...await capabilityPageContext(req)
+    ...await capabilityPageContext(req),
+    breadcrumbs: [
+      { label: 'Onboarding.Title', url: `../../solutions/${req.solution.id}` },
+      { label: 'CapAssPages.Breadcrumb' }
+    ]
   }
 
   // page is only editable if the solution is registered, and notyet submitted for assessment
@@ -120,7 +124,11 @@ async function solutionCapabilityPagePost (req, res) {
   const context = {
     errors: {
       items: []
-    }
+    },
+    breadcrumbs: [
+      { label: 'Onboarding.Title', url: `../../solutions/${req.solution.id}` },
+      { label: 'CapAssPages.Breadcrumb' }
+    ]
   }
 
   const valRes = validationResult(req)
