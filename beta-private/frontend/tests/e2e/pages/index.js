@@ -19,17 +19,13 @@ class HomePage extends Page {
   constructor () {
     super()
 
-    this.homePage = Selector('#home-page')
-
     this.loginLink = Selector('#account > div > a')
 
-    this.welcomeBanner = Selector('#home-page > div.welcome-banner')
+    this.welcomeBanner = Selector('#home-page .welcome-banner')
 
-    this.cardContainer = Selector('#home-page > div.content > div.cards.container')
+    this.cardContainer = Selector('#home-page .cards.container')
 
-    this.stepsContainer = Selector('#home-page > div.content > div.steps.container')
-
-    this.learnMoreButton = Selector('#home-page > div.welcome-banner > a')
+    this.stepsContainer = Selector('#home-page .steps.container')
   }
 }
 
