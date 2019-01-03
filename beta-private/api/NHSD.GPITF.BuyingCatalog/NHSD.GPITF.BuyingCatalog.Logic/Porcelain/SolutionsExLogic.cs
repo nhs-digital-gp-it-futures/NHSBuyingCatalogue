@@ -46,13 +46,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       solnEx.Solution.ModifiedById = _contacts.ByEmail(email).Id;
       solnEx.Solution.ModifiedOn = DateTime.UtcNow;
 
+      _datastore.Update(solnEx);
+
       // create SharePoint folder structure
       if (solnEx.Solution.Status == SolutionStatus.Registered)
       {
         _evidenceBlobStoreLogic.PrepareForSolution(solnEx.Solution.Id);
       }
-
-      _datastore.Update(solnEx);
     }
   }
 }
