@@ -15,6 +15,13 @@ class Page {
   }
 }
 
+class HomePage extends Page {
+  constructor () {
+    super()
+    this.something = 'foo'
+  }
+}
+
 class SupplierDashboardPage extends Page {
   constructor () {
     super()
@@ -76,6 +83,7 @@ class CapabilityEvidencePage extends Page {
 }
 
 export const page = new Page()
+export const homePage = new HomePage()
 export const supplierDashboardPage = new SupplierDashboardPage()
 export const onboardingDashboardPage = new OnboardingDashboardPage()
 export const registrationPage = new RegistrationPage()

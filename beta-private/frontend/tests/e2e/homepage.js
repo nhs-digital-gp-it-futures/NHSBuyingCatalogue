@@ -1,7 +1,7 @@
 /* global fixture, test */
 
 import axeCheck from 'axe-testcafe'
-import { page } from './pages'
+import { homePage } from './pages'
 
 fixture('Homepage')
   .page(page.baseUrl)
