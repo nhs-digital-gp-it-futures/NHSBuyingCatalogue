@@ -4,7 +4,7 @@ import { Selector, RequestLogger } from 'testcafe'
 import axeCheck from 'axe-testcafe'
 
 import { asSupplier } from './roles'
-import { supplierDashboardPage, onboardingDashboardPage, registrationPage, capabilityEvidencePage } from './pages'
+import { supplierDashboardPage, onboardingDashboardPage, capabilityEvidencePage } from './pages'
 
 fixture('Capability Assessment - Evidence')
   .page(supplierDashboardPage.baseUrl)

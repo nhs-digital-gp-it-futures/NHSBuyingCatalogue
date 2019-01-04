@@ -3,3 +3,5 @@ Id	PreviousId	ClaimId	CreatedById	CreatedOn	Evidence	HasRequestedLiveDemo	BlobId
 f16eafb8-9bcf-472c-8ed7-81a09b531689	6de621ab-7bf4-40a6-be91-4d812869ca4f	0F2614F9-2521-414A-A448-0096C0DF3AB1	371b20b7-3bed-487d-aa5f-995f5924e579	2016-06-29T17:33:00	First Standards Applicable Second Evidence	0	
 9930d931-d810-4cb9-bdd3-93c72620d95e		0F2614F9-2521-414A-A448-0096C0DF3AB1	371b20b7-3bed-487d-aa5f-995f5924e579	2007-03-21T06:03:00	Second Standards Applicable First Evidence	0	
 3c8c0849-e123-4280-97d1-54c63ea6558b	9930d931-d810-4cb9-bdd3-93c72620d95e	0F2614F9-2521-414A-A448-0096C0DF3AB1	371b20b7-3bed-487d-aa5f-995f5924e579	2017-07-30T17:33:00	Second Standards Applicable Second Evidence	0	
+07d7c1a6-0e15-4ade-9eb1-1cdd8893c655        f39f91de-64fc-4cca-88bf-3238fb1de69b    0F2614F9-2521-414A-A448-0096C0DF3AB1    2007-03-21T06:03:00 Data Migration Submitted Evidence (With Feedback)   0   
+736ab25a-2981-481d-8459-977ca8fc66a7        3a7735f2-759d-4f49-bca0-0828f32cf86c    0F2614F9-2521-414A-A448-0096C0DF3AB1    2007-03-21T06:03:00 Commercial Standard Submitted Evidence
