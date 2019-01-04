@@ -135,3 +135,10 @@ test('Registering the solution shows a confirmation message and status change on
     .click(page.homeLink)
     .expect(supplierDashboardPage.firstOnboardingSolutionStatus.textContent).eql('Registered')
 })
+
+test('A registered solution cannot have its name edited', async t => {
+  await t
+    .click('#content a.back-link')
+    .expect(Selector('#content [readonly]').count).eql(1)
+    .expect(registrationPage.solutionNameInput.hasAttribute('readonly')).ok()
+})
