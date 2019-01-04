@@ -68,7 +68,11 @@ async function dashboardContext (req) {
 
 async function solutionComplianceDashboard (req, res) {
   const context = {
-    ...await dashboardContext(req)
+    ...await dashboardContext(req),
+    breadcrumbs: [
+      { label: 'Onboarding.Title', url: `../../solutions/${req.solution.id}` },
+      { label: 'CompliancePages.Dashboard.Title' }
+    ]
   }
 
   context.solution.standards = _(context.solution.standards)
@@ -166,8 +170,15 @@ async function evidencePageContext (req) {
 async function solutionComplianceEvidencePageGet (req, res) {
   const context = {
     ...await evidencePageContext(req),
-    errors: req.body.errors || []
+    errors: req.body.errors || [],
+    breadcrumbs: [
+      { label: 'Onboarding.Title', url: `../../../../solutions/${req.solution.id}` },
+      { label: 'CompliancePages.Dashboard.Breadcrumb', url: `../../` }
+    ]
   }
+
+  // last breadcrumb is the name of the current standard
+  context.breadcrumbs.push({ label: context.claim.standard.name })
 
   let latestFile
 

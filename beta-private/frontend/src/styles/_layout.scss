@@ -214,3 +214,24 @@ body > footer {
     }
   }
 }
+
+main > .breadcrumb {
+  ol {
+    list-style-type: none;
+    margin-top: 1em;
+
+    li {
+      color: $color-nhs-blue;
+      display: inline-block;
+      font-size: smaller;
+
+      &::before {
+        content: '>';
+      }
+
+      &:first-child::before {
+        content: none;
+      }
+    }
+  }
+}

@@ -59,6 +59,10 @@ function commonOnboardingContext (req) {
 function onboardingStatusPage (req, res) {
   const context = {
     ...commonOnboardingContext(req),
+    breadcrumbs: [
+      { label: 'MySolutions.Title', url: '../../' },
+      { label: 'Onboarding.Title' }
+    ],
     stages: [
       {
         url: 'register#content'
@@ -144,7 +148,11 @@ function onboardingStatusPage (req, res) {
 
 function registrationPageContext (req) {
   const context = {
-    ...commonOnboardingContext(req)
+    ...commonOnboardingContext(req),
+    breadcrumbs: [
+      { label: 'Onboarding.Title', url: '../' },
+      { label: 'Onboarding.Details.Breadcrumb' }
+    ]
   }
 
   context.activeForm.id = 'registration-form'
@@ -267,7 +275,11 @@ async function registrationPagePost (req, res) {
 async function capabilitiesPageContext (req) {
   const context = {
     ...commonOnboardingContext(req),
-    ...await dataProvider.capabilityMappings()
+    ...await dataProvider.capabilityMappings(),
+    breadcrumbs: [
+      { label: 'Onboarding.Title', url: '../' },
+      { label: 'Onboarding.Capabilities.Breadcrumb' }
+    ]
   }
 
   context.activeForm.id = 'capability-selector-form'
