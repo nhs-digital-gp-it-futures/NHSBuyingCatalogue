@@ -11,6 +11,8 @@ const businessContinuityStdID = '719722d0-2354-437e-acdc-4625989bbca8'
 const dataMigrationStdID = 'f49f91de-64fc-4cca-88bf-3238fb1de69b'
 const testingStdID = '99619bdd-6452-4850-9244-a4ce9bec70ca'
 
+const downloadFileName = 'Dummy TraceabilityMatrix.xlsx'
+
 fixture('Standards Compliance - Evidence')
   .page(supplierDashboardPage.baseUrl)
   .beforeEach(navigateToStandardsDashboard)
@@ -49,23 +51,22 @@ const requestLogger = RequestLogger(
 test
   .requestHooks(requestLogger)(
     'On download, the previously uploaded file should be identical', async t => {
-      const fileDownloadSelector = await Selector(`a[href*="${testingStdID}"]`)
+      const testingStdSelector = await Selector(`a[href*="${testingStdID}"]`)
+
+      await t.click(testingStdSelector) // go from the dashboard to the download page
 
       requestLogger.clear()
 
-      await t
-        .click(fileDownloadSelector)
-
-        // Ensure that the response has been received and that its status code is 200.
+      await t.click(testingStdSelector) // click the download link.
         .expect(requestLogger.contains(record => record.response.statusCode === 200)).ok()
 
       // Compute the SHA1 hash of the downloaded data and compare to the known hash
       // of the file that was uploaded
       const crypto = require('crypto')
       const hash = crypto.createHash('sha1')
-      hash.update(requestLogger.requests[0].response.body)
-      console.log(requestLogger.requests[0].response.body, requestLogger.requests[0].response.body.toString())
+      hash.update(requestLogger.requests[0].response.body.toString())
+
       await t
-        .expect(hash.digest('hex')).eql('e199d8397d9cb790b338389b6aaa6ac5de2c2b00', 'Download does not match expected')
+        .expect(hash.digest('hex')).eql('3d1e87ebc4965111054f382b31329f710e4f991c', 'Download does not match expected')
     }
   )
