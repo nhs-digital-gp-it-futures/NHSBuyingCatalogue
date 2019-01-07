@@ -52,9 +52,9 @@ namespace Gif.Service.Crm
         .AddUserSecrets<Program>();
       config = builder.Build();
 
-      var secret = CipherUtil.Decrypt<AesManaged>(Environment.GetEnvironmentVariable("GIF_ENCRYPTED_CLIENT_SECRET") ?? config["EncryptedClientSecret"], "GifService", Environment.GetEnvironmentVariable("GIF_AZURE_CLIENT_ID") ?? config["AzureClientId"]);
-      var authContext = new AuthenticationContext(Environment.GetEnvironmentVariable("GIF_CRM_AUTHORITY") ?? config["CrmAuthority"], false);
-      _authResult = authContext.AcquireTokenAsync(Environment.GetEnvironmentVariable("GIF_CRM_URL") ?? config["CrmUrl"], new ClientCredential(Environment.GetEnvironmentVariable("GIF_AZURE_CLIENT_ID") ?? config["AzureClientId"], secret)).Result; 
+      var secret = CipherUtil.Decrypt<AesManaged>(Settings.GIF_ENCRYPTED_CLIENT_SECRET(config), "GifService", Settings.GIF_AZURE_CLIENT_ID(config));
+      var authContext = new AuthenticationContext(Settings.GIF_CRM_AUTHORITY(config), false);
+      _authResult = authContext.AcquireTokenAsync(Settings.GIF_CRM_URL(config), new ClientCredential(Settings.GIF_AZURE_CLIENT_ID(config), secret)).Result; 
 
       ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
     }

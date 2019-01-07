@@ -46,9 +46,9 @@ namespace Gif.Service
         .AddEnvironmentVariables()
         .AddUserSecrets<Program>();
 
-      DumpEnvironment();
-
       Configuration = builder.Build();
+
+      DumpEnvironment();
     }
 
     /// <summary>
@@ -113,7 +113,7 @@ namespace Gif.Service
       services.AddAuthentication("Bearer")
         .AddIdentityServerAuthentication(options =>
         {
-          options.Authority = Environment.GetEnvironmentVariable("GIF_AUTHORITY_URI") ?? Configuration["GIF:Authority_Uri"] ?? "http://localhost:5001";
+          options.Authority = Settings.GIF_AUTHORITY_URI(Configuration);
           options.RequireHttpsMetadata = false;
 
           options.ApiName = "GIFBuyingCatalogue";
@@ -158,19 +158,15 @@ namespace Gif.Service
       }
     }
 
-    private static void DumpEnvironment()
+    private void DumpEnvironment()
     {
       Console.WriteLine("Environment:");
       Console.WriteLine($"  GIF:");
-      Console.WriteLine($"    GIF_AUTHORITY_URI           : {Environment.GetEnvironmentVariable("GIF_AUTHORITY_URI")}");
-      Console.WriteLine($"    GIF_CRM_AUTHORITY           : {Environment.GetEnvironmentVariable("GIF_CRM_AUTHORITY")}");
-      Console.WriteLine($"    GIF_CRM_URL                 : {Environment.GetEnvironmentVariable("GIF_CRM_URL")}");
-      Console.WriteLine($"    GIF_AZURE_CLIENT_ID         : {Environment.GetEnvironmentVariable("GIF_AZURE_CLIENT_ID")}");
-      Console.WriteLine($"    GIF_ENCRYPTED_CLIENT_SECRET : {Environment.GetEnvironmentVariable("GIF_ENCRYPTED_CLIENT_SECRET")}");
-
-
-
-
-}
+      Console.WriteLine($"    GIF_AUTHORITY_URI           : {Settings.GIF_AUTHORITY_URI(Configuration)}");
+      Console.WriteLine($"    GIF_CRM_AUTHORITY           : {Settings.GIF_CRM_AUTHORITY(Configuration)}");
+      Console.WriteLine($"    GIF_CRM_URL                 : {Settings.GIF_CRM_URL(Configuration)}");
+      Console.WriteLine($"    GIF_AZURE_CLIENT_ID         : {Settings.GIF_AZURE_CLIENT_ID(Configuration)}");
+      Console.WriteLine($"    GIF_ENCRYPTED_CLIENT_SECRET : {Settings.GIF_ENCRYPTED_CLIENT_SECRET(Configuration)}");
+    }
   }
 }
