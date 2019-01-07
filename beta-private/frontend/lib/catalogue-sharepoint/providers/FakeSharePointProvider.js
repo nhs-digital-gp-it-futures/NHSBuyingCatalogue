@@ -26,10 +26,6 @@ class FakeFileStoreAPI {
     const interoperabilityStandard = '0e55d9ec-43e6-41b3-bcac-d8681384ea68'
     const businessContinuityClaimID = '719722d0-2354-437e-acdc-4625989bbca8'
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 48f5f172136516fad64742c0eeb6c93e8f8a94ad
     const fakeBuffer = Buffer.from('Content of the test "Dummy traceabilityMatrix.xlsx" file', 'utf8')
     const fakeName = 'Dummy TraceabilityMatrix.xlsx'
 
