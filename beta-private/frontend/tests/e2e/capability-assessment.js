@@ -9,8 +9,8 @@ fixture('Capability Assessment - First Access')
 test('Unregistered solution does not allow access to capability assessment', async t => {
   await asSupplier(t)
     .click(supplierDashboardPage.homeLink)
-    .expect(supplierDashboardPage.secondOnboardingSolutionName.textContent).eql('Draft')
-    .click(supplierDashboardPage.lastOnboardingOnboardingSolutionName)
+    .expect(supplierDashboardPage.secondOnboardingSolutionStatus.textContent).eql('Draft')
+    .click(supplierDashboardPage.secondOnboardingSolutionName)
     .expect(onboardingDashboardPage.capabilityAssessmentButton.exists).notOk()
 })
 
@@ -37,7 +37,7 @@ test('Register Really Kool Kore System with 3 core capabilities', async t => {
 test('Access button has correct text when no evidence submitted', async t => {
   await asSupplier(t)
     .click(supplierDashboardPage.homeLink)
-    .click(supplierDashboardPage.lastOnboardingSolutionName)
+    .click(supplierDashboardPage.secondOnboardingSolutionName)
 
     .expect(onboardingDashboardPage.capabilityAssessmentButton.textContent).eql('Start')
 })
