@@ -15,6 +15,20 @@ class Page {
   }
 }
 
+class HomePage extends Page {
+  constructor () {
+    super()
+
+    this.loginLink = Selector('#account a[href="/oidc/authenticate"]')
+
+    this.welcomeBanner = Selector('#home-page .welcome-banner')
+
+    this.cardContainer = Selector('#home-page .cards.container')
+
+    this.stepsContainer = Selector('#home-page .steps.container')
+  }
+}
+
 class SupplierDashboardPage extends Page {
   constructor () {
     super()
@@ -76,6 +90,7 @@ class CapabilityEvidencePage extends Page {
 }
 
 export const page = new Page()
+export const homePage = new HomePage()
 export const supplierDashboardPage = new SupplierDashboardPage()
 export const onboardingDashboardPage = new OnboardingDashboardPage()
 export const registrationPage = new RegistrationPage()
