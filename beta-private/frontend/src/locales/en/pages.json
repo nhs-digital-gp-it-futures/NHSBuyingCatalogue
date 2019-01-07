@@ -193,8 +193,8 @@
           }
         },
         "LeadContact": {
-          "Legend": "Add Lead Contact *",
-          "Preamble": "The Lead Contact is responsible for ensuring the accuracy of information provided. This contact will receive an invitation to register and all this $t(Solution)’s email notifications. All contact information subject to $t(NHSD.Name)’s privacy policy.",
+          "Legend": "Add $t(Lead Contact) *",
+          "Preamble": "The $t(Lead Contact) is responsible for ensuring the accuracy of information provided. This contact will receive an invitation to register and all this $t(Solution)’s email notifications. All contact information subject to $t(NHSD.Name)’s privacy policy.",
           "Fields": {
             "FirstName": {
               "Label": "First name *"
@@ -339,7 +339,7 @@
         "Heading": "Download current file",
         "Missing": [
           "Please wait for the $t(Standards Compliance) team to provide you with a $t(Traceability Matrix).",
-          "We will email the lead contact when this stage is ready."
+          "We will email the $t(Lead Contact) when this stage is ready."
         ]
       },
       "Reply": {
@@ -372,7 +372,7 @@
       "Information": "Review and edit as needed. This is your last chance to make changes before submitting this $t(Standard) to $t(NHSD.Name) for review. ",
       "Help": {
         "Title": "Help - What happens next?",
-        "Information": "When you Submit this page, the information you have provided will be sent to $t(NHSD.Name), and the $t(Compliance) team will begin reviewing your responses in the Traceability Matrix file you’ve provided. Your Lead Contact and designated $t(Standard) Owner (if there is one) will receive a notification linked to the outcome once the review is complete.  "
+        "Information": "When you Submit this page, the information you have provided will be sent to $t(NHSD.Name), and the $t(Compliance) team will begin reviewing your responses in the Traceability Matrix file you’ve provided. Your $t(Lead Contact) and designated $t(Standard) Owner (if there is one) will receive a notification linked to the outcome once the review is complete.  "
       },
       "Evidence":{
         "File": {
@@ -408,7 +408,7 @@
         },
         "Notice": {
           "Title": "$t(NHSD.Name) will contact you",
-          "Additional": "$t(NHSD.Name) will contact your Lead Contact to schedule the live witness demonstration."
+          "Additional": "$t(NHSD.Name) will contact your $t(Lead Contact) to schedule the live witness demonstration."
         }
       },
       "Submission": {
@@ -420,7 +420,7 @@
       "Information": "Review your answers and edit as needed. This is your last chance to make changes before submitting your $t(Solution) to $t(NHSD.Name) for Assessment. ",
       "Help":{
         "Title": "Help - What happens next?",
-        "Information": "When you Submit this page, the information you have provided will be sent to $t(NHSD.Name), and the Assessment team will begin reviewing your responses for each Capability. Your Lead Contact will receive a notification linked to an Outcome letter once the assessment is complete."
+        "Information": "When you Submit this page, the information you have provided will be sent to $t(NHSD.Name), and the Assessment team will begin reviewing your responses for each Capability. Your $t(Lead Contact) will receive a notification linked to an Outcome letter once the assessment is complete."
       },
       "Registration": {
         "Title": "Solution details and key contacts.",
