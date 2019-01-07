@@ -159,6 +159,17 @@ function registrationPageContext (req) {
 
   if (!context.solution) {
     context.solution = { id: 'new' }
+  } else {
+    switch (+context.solution.status) {
+      case 0: // draft - all fields editable
+        break
+      case 1: // registered - name is not editable
+        context.nameReadOnly = true
+        break
+      default: // any other status - no fields editable
+        context.nameReadOnly = true
+        context.readOnly = true
+    }
   }
 
   return context
@@ -231,7 +242,7 @@ async function registrationPagePost (req, res) {
         .keys().map(_.toPath).filter(p => p[0] === 'solution' && p[1] === 'contacts')
         .map(p => p[2]).uniq().map(k => [k, true]).fromPairs().value()
     }
-  } else {
+  } else if (!context.readOnly) {
     try {
       if (context.solution.id === 'new') {
         req.solution = await dataProvider.createSolutionForRegistration({
@@ -280,6 +291,10 @@ async function capabilitiesPageContext (req) {
       { label: 'Onboarding.Title', url: '../' },
       { label: 'Onboarding.Capabilities.Breadcrumb' }
     ]
+  }
+
+  if (+context.solution.status !== 0 && +context.solution.status !== 1) {
+    context.readOnly = true
   }
 
   context.activeForm.id = 'capability-selector-form'
@@ -340,7 +355,7 @@ async function capabilitiesPagePost (req, res) {
       items: valres.array({ onlyFirstError: true }),
       controls: valres.mapped()
     }
-  } else {
+  } else if (!context.readOnly) {
     req.solution.capabilities = _(context.capabilities)
       .filter('selected')
       .map(cap => ({

@@ -40,8 +40,8 @@ class OnboardingDashboardPage extends Page {
     super()
 
     this.continueRegistrationButton = Selector('#content a[href^=register]')
-    this.capabilityAssessmentButton = Selector('#content a[href^="../../capabilities"]')
-    this.capabilityAssessmentStatus = Selector('.onboarding-stages > :nth-child(2) .action')
+    this.capabilityAssessmentButton = Selector('#onboarding.dashboard.page a[href^="../../capabilities"]')
+    this.capabilityAssessmentStatus = Selector('#onboarding.dashboard.page .onboarding-stages > :nth-child(2) .action')
   }
 }
 

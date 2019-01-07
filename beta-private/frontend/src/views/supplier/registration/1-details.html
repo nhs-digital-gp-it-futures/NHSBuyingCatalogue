@@ -27,6 +27,7 @@
     {{/if}}
     <input id="solution.name" type="text" name="solution[name]" value="{{solution.name}}"
       autocomplete="off" aria-required="true" maxlength="60"
+      {{#if @root.nameReadOnly}}readonly{{/if}}
       {{#if errors.controls.[solution.name]}}aria-invalid="true" aria-errormessage="error-solution.name"{{/if}}>
   {{/control}}
 
@@ -45,6 +46,7 @@
     {{/if}}
     <textarea id="solution.description" name="solution[description]"
       aria-required="true" maxlength="300" rows="5"
+      {{#if @root.readOnly}}readonly{{/if}}
       {{#if errors.controls.[solution.description]}}aria-invalid="true" aria-errormessage="error-solution.description"{{/if}}>{{solution.description}}</textarea>
   {{/control}}
 
@@ -53,6 +55,7 @@
     <p class="info"></p>
     <input id="solution.version" type="text" name="solution[version]" value="{{solution.version}}" class="narrow"
       autocomplete="off" maxlength="10"
+      {{#if @root.readOnly}}readonly{{/if}}
       {{#if errors.controls.[solution.version]}}aria-invalid="true" aria-errormessage="error-solution.version"{{/if}}>
     {{#> help-reveal
       title='Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Help.Title'}}
@@ -86,6 +89,7 @@
         name="solution[contacts][0][firstName]"
         value="{{solution.contacts.0.firstName}}"
         maxlength="80"
+        {{#if @root.readOnly}}readonly{{/if}}
         {{#if (lookup errors.controls 'solution.contacts[0].firstName')}}
           aria-invalid="true"
           aria-errormessage="error-solution.contacts[0].firstName"
@@ -102,6 +106,7 @@
         name="solution[contacts][0][lastName]"
         value="{{solution.contacts.0.lastName}}"
         maxlength="80"
+        {{#if @root.readOnly}}readonly{{/if}}
         {{#if (lookup errors.controls 'solution.contacts[0].lastName')}}
           aria-invalid="true"
           aria-errormessage="error-solution.contacts[0].lastName"
@@ -118,6 +123,7 @@
         name="solution[contacts][0][emailAddress]"
         value="{{solution.contacts.0.emailAddress}}"
         maxlength="100"
+        {{#if @root.readOnly}}readonly{{/if}}
         {{#if (lookup errors.controls 'solution.contacts[0].emailAddress')}}
           aria-invalid="true"
           aria-errormessage="error-solution.contacts[0].emailAddress"
@@ -134,6 +140,7 @@
         name="solution[contacts][0][phoneNumber]"
         value="{{solution.contacts.0.phoneNumber}}"
         maxlength="88"
+        {{#if @root.readOnly}}readonly{{/if}}
         {{#if (lookup errors.controls 'solution.contacts[0].phoneNumber')}}
           aria-invalid="true"
           aria-errormessage="error-solution.contacts[0].phoneNumber"
@@ -164,6 +171,7 @@
             name="solution[contacts][{{contactIndex}}][contactType]"
             value="{{contact.contactType}}"
             maxlength="100"
+            {{#if @root.readOnly}}readonly{{/if}}
             {{#if invalid}}
               aria-invalid="true"
               aria-errormessage="error-solution.contacts[{{contactIndex}}].contactType"
@@ -180,6 +188,7 @@
             name="solution[contacts][{{contactIndex}}][firstName]"
             value="{{contact.firstName}}"
             maxlength="80"
+            {{#if @root.readOnly}}readonly{{/if}}
             {{#if invalid}}
               aria-invalid="true"
               aria-errormessage="error-solution.contacts[{{contactIndex}}].firstName"
@@ -196,6 +205,7 @@
             name="solution[contacts][{{contactIndex}}][lastName]"
             value="{{contact.lastName}}"
             maxlength="80"
+            {{#if @root.readOnly}}readonly{{/if}}
             {{#if invalid}}
               aria-invalid="true"
               aria-errormessage="error-solution.contacts[{{contactIndex}}].lastName"
@@ -212,6 +222,7 @@
             name="solution[contacts][{{contactIndex}}][emailAddress]"
             value="{{contact.emailAddress}}"
             maxlength="100"
+            {{#if @root.readOnly}}readonly{{/if}}
             {{#if invalid}}
               aria-invalid="true"
               aria-errormessage="error-solution.contacts[{{contactIndex}}].emailAddress"
@@ -228,6 +239,7 @@
             name="solution[contacts][{{contactIndex}}][phoneNumber]"
             value="{{contact.phoneNumber}}"
             maxlength="88"
+            {{#if @root.readOnly}}readonly{{/if}}
             {{#if invalid}}
               aria-invalid="true"
               aria-errormessage="error-solution.contacts[{{contactIndex}}].phoneNumber"
@@ -238,10 +250,12 @@
     {{/unless}}
   {{/each}}
 
+  {{#unless readOnly}}
   <div id="add-contact">
     <p>{{t 'Onboarding.Details.AddContact.Help'}}</p>
     <a id="add-contact-button" href="#">{{t 'Onboarding.Details.AddContact.Button'}}</a>
   </div>
+  {{/unless}}
 
   <input type="submit"
     class="button primary"

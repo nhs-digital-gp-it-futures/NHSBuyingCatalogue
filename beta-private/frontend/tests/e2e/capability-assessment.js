@@ -6,12 +6,13 @@ import { supplierDashboardPage, onboardingDashboardPage, registrationPage, capab
 fixture('Capability Assessment - First Access')
   .page(capabilityEvidencePage.baseUrl)
 
-test('Access button has correct text when no evidence submitted', async t => {
+test('Unregistered solution does not allow access to capability assessment', async t => {
   await asSupplier(t)
     .click(supplierDashboardPage.homeLink)
-    .click(supplierDashboardPage.lastOnboardingSolutionName)
+    .expect(supplierDashboardPage.lastOnboardingSolutionStatus.textContent).eql('Draft')
 
-    .expect(onboardingDashboardPage.capabilityAssessmentButton.textContent).eql('Start')
+    .click(supplierDashboardPage.lastOnboardingSolutionName)
+    .expect(onboardingDashboardPage.capabilityAssessmentButton.exists).notOk()
 })
 
 test('Register Really Kool Kore System with 3 core capabilities', async t => {
@@ -32,4 +33,12 @@ test('Register Really Kool Kore System with 3 core capabilities', async t => {
     .click(onboardingDashboardPage.homeLink)
 
     .expect(supplierDashboardPage.lastOnboardingSolutionStatus.textContent).eql('Registered')
+})
+
+test('Access button has correct text when no evidence submitted', async t => {
+  await asSupplier(t)
+    .click(supplierDashboardPage.homeLink)
+    .click(supplierDashboardPage.lastOnboardingSolutionName)
+
+    .expect(onboardingDashboardPage.capabilityAssessmentButton.textContent).eql('Start')
 })

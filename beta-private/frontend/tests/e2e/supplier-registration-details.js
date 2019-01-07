@@ -23,6 +23,7 @@ test('Registration page shows correct information accessibly', async t => {
     .expect(registrationPage.solutionNameInput.value).eql('Really Kool Document Manager')
     .expect(registrationPage.solutionDescriptionInput.value).eql('Does Really Kool document management')
     .expect(registrationPage.solutionVersionInput.value).eql('1')
+    .expect(Selector('#content [readonly]').count).eql(0)
 })
 
 test('Registration page validation is correct and accessible', async t => {
