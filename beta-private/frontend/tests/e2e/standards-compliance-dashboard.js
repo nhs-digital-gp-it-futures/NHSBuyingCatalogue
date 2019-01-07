@@ -41,7 +41,7 @@ fixture('Capability Assessment - Evidence')
 function navigateToStandardsDashboard (t) {
   return asSupplier(t)
     .click(supplierDashboardPage.homeLink)
-    .click(supplierDashboardPage.secondSolutionName)
+    .click(supplierDashboardPage.lastOnboardingSolutionName)
     .click(onboardingDashboardPage.standardsComplianceButton)
     .expect(Selector('#compliance').exists).ok()
 }

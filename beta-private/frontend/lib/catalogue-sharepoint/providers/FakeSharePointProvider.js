@@ -23,6 +23,9 @@ class FakeFileStoreAPI {
     const commercialClaimID = '3a7735f2-759d-4f49-bca0-0828f32cf86c'
     const clinicalSafetyClaimID = '7b62b29a-62a7-4b4a-bcc8-dfa65fb7e35c'
     const testingClaimID = '99619bdd-6452-4850-9244-a4ce9bec70ca'
+    const interoperabilityStandard = '0e55d9ec-43e6-41b3-bcac-d8681384ea68'
+    const businessContinuityClaimID = '719722d0-2354-437e-acdc-4625989bbca8'
+
 
     const fakeBuffer = Buffer.from('Dummy TraceabilityMatrix.xlsx', 'utf8')
     const fakeName = 'Dummy TraceabilityMatrix.xlsx'
@@ -31,6 +34,8 @@ class FakeFileStoreAPI {
     await this.addTestItem(commercialClaimID, fakeBuffer, fakeName)
     await this.addTestItem(clinicalSafetyClaimID, fakeBuffer, fakeName)
     await this.addTestItem(testingClaimID, fakeBuffer, fakeName)
+    await this.addTestItem(interoperabilityStandard, fakeBuffer, fakeName)
+    await this.addTestItem(businessContinuityClaimID, fakeBuffer, fakeName)
   }
 
   addTestItem (claimID, buffer, filename) {
