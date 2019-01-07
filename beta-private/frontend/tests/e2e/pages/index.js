@@ -19,7 +19,7 @@ class HomePage extends Page {
   constructor () {
     super()
 
-    this.loginLink = Selector('#account > div > a')
+    this.loginLink = Selector('#account a[href="/oidc/authenticate"]')
 
     this.welcomeBanner = Selector('#home-page .welcome-banner')
 
