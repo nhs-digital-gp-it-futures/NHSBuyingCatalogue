@@ -26,18 +26,6 @@ namespace Gif.Service.Crm
 
     #endregion
 
-    #region Properties
-
-    public virtual string CrmUrl
-    {
-      get
-      {
-        return config["CrmUrl"];
-      }
-    }
-
-    #endregion
-
     private const string jsonSeparator = "\":\"";
     private const string doubleQuote = "\"";
 
@@ -67,7 +55,7 @@ namespace Gif.Service.Crm
     {
       var httpClient = new HttpClient()
       {
-        BaseAddress = new Uri(config["CrmUrl"] + "/api/data/v9.0/"),
+        BaseAddress = new Uri((Environment.GetEnvironmentVariable("GIF_CRM_URL") ?? config["CrmUrl"]) + "/api/data/v9.0/"),
         Timeout = new TimeSpan(0, 2, 0)
       };
       httpClient.DefaultRequestHeaders.Add("OData-MaxVersion", "4.0");

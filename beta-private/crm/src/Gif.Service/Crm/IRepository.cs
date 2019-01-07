@@ -8,7 +8,6 @@ namespace Gif.Service.Crm
 {
     public interface IRepository
     {
-        string CrmUrl { get; }
         JObject Retrieve(string query);
         JToken RetrieveMultiple(string query, out int? count);
         void Associate(Guid entityId1, string entName1, Guid entityId2, string entName2, string relationshipKey);
