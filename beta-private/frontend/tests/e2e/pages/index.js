@@ -21,7 +21,9 @@ class SupplierDashboardPage extends Page {
 
     this.addNewSolutionButton = Selector('#add-new-solution')
 
-    // first solution
+    // First Solution on the dashboard
+    // Name: Really Kool Document Manager
+    // GUID: 12968eb4-4160-4ec5-8bb7-3deca7c3f53b
     this.firstOnboardingSolutionName = Selector(
       '#solutions-onboarding table > tbody > tr:first-child > td:first-child'
     )
@@ -29,15 +31,23 @@ class SupplierDashboardPage extends Page {
       '#solutions-onboarding table > tbody > tr:first-child > td:nth-child(4)'
     )
 
-    // Second Solution
-    this.secondSolutionName = Selector(
+    // Second Solution on the Dashboard
+    // Note. The selected will select a different during the running of the test suite.
+    // It begins as:
+    //  Name: Standards Compliance Test Solution
+    //  GUID: 9ddea405-a05d-4c34-959a-468d34caa2f1
+    // After the 'supplier-registration-add-new-solution' suite will eventually select:
+    //  Name: Really Kool Kore System
+    this.secondOnboardingSolutionName = Selector(
       '#solutions-onboarding table > tbody > tr:nth-child(2) > td:first-child'
     )
-    this.secondSolutionStatus = Selector(
+    this.secondOnboardingSolutionStatus = Selector(
       '#solutions-onboarding table > tbody > tr:nth-child(2) > td:nth-child(4)'
     )
 
-    // Last Solution
+    // Last Solution on the Dashboard
+    // Name: Standards Compliance test Solution
+    // GUID: 9ddea405-a05d-4c34-959a-468d34caa2f1
     this.lastOnboardingSolutionName = Selector(
       '#solutions-onboarding table > tbody > tr:last-child > td:first-child'
     )

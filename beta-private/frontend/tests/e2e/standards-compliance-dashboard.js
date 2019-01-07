@@ -33,7 +33,7 @@ const expectedStatusStandards = {
   ])
 }
 
-fixture('Capability Assessment - Evidence')
+fixture('Standards Compliance - Dashboard')
   .page(supplierDashboardPage.baseUrl)
   .beforeEach(navigateToStandardsDashboard)
   .afterEach(axeCheck)
@@ -63,7 +63,7 @@ test('Displayed Applicable Standards match expected standard\'s status descripti
     const currentStandard = await standards.nth(i)
     const currentLinkUUID = (
       await currentStandard.find('a').getAttribute('href')
-    ).replace('evidence/', '').replace('/', '') // I need learn regex properly.
+    ).match('evidence/([^/]+)/')[1] // I know Kung Fu (Thanks Paul!)
     const currentStatus = await currentStandard.find('.status').innerText
     await t.expect(expectedStatusStandards[currentStatus].has(currentLinkUUID)).ok()
   }

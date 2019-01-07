@@ -9,7 +9,7 @@ fixture('Capability Assessment - First Access')
 test('Access button has correct text when no evidence submitted', async t => {
   await asSupplier(t)
     .click(supplierDashboardPage.homeLink)
-    .click(supplierDashboardPage.firstOnboardingSolutionName)
+    .click(supplierDashboardPage.secondOnboardingSolutionName)
 
     .expect(onboardingDashboardPage.capabilityAssessmentButton.textContent).eql('Start')
 })
@@ -17,7 +17,7 @@ test('Access button has correct text when no evidence submitted', async t => {
 test('Register Really Kool Kore System with 3 core capabilities', async t => {
   await asSupplier(t)
     .click(supplierDashboardPage.homeLink)
-    .click(supplierDashboardPage.firstOnboardingSolutionName)
+    .click(supplierDashboardPage.secondOnboardingSolutionName)
     .click(onboardingDashboardPage.continueRegistrationButton)
     .click(registrationPage.continueButton)
 
@@ -31,5 +31,5 @@ test('Register Really Kool Kore System with 3 core capabilities', async t => {
     .click(registrationPage.continueButton)
     .click(onboardingDashboardPage.homeLink)
 
-    .expect(supplierDashboardPage.firstOnboardingSolutionStatus.textContent).eql('Registered')
+    .expect(supplierDashboardPage.secondOnboardingSolutionStatus.textContent).eql('Registered')
 })
