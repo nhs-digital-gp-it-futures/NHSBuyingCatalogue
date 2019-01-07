@@ -8,10 +8,25 @@ import { supplierDashboardPage, onboardingDashboardPage, standardsComplianceDash
 
 const nonFunctionalStdID = '2c8c9cc8-141b-4d06-872a-8d5e5efb3641'
 const businessContinuityStdID = '719722d0-2354-437e-acdc-4625989bbca8'
-const dataMigrationStdID = 'f49f91de-64fc-4cca-88bf-3238fb1de69b'
+const clinicalSafetyStdID = '7b62b29a-62a7-4b4a-bcc8-dfa65fb7e35c'
 const testingStdID = '99619bdd-6452-4850-9244-a4ce9bec70ca'
+const commercialStdID = '3a7735f2-759d-4f49-bca0-0828f32cf86c'
+const interopStdID = '0e55d9ec-43e6-41b3-bcac-d8681384ea68'
 
 const downloadFileName = 'Dummy TraceabilityMatrix.xlsx'
+
+function setFileToUpload (t, filename) {
+  return t
+    .setFilesToUpload(
+      Selector('input[type=file]'),
+      `./uploads/${filename}`
+    )
+}
+
+const requestLogger = RequestLogger(
+  request => request.url.startsWith(standardsComplianceDashboardPage.baseUrl),
+  { logResponseBody: true }
+)
 
 fixture('Standards Compliance - Evidence')
   .page(supplierDashboardPage.baseUrl)
@@ -21,7 +36,7 @@ fixture('Standards Compliance - Evidence')
 function navigateToStandardsDashboard (t) {
   return asSupplier(t)
     .click(supplierDashboardPage.homeLink)
-    .click(supplierDashboardPage.secondSolutionName)
+    .click(supplierDashboardPage.lastOnboardingSolutionName)
     .click(onboardingDashboardPage.standardsComplianceButton)
     .expect(Selector('#compliance').exists).ok()
 }
@@ -33,24 +48,30 @@ test('With no tracability Matrix present, the page displays a \'please wait\' me
     .expect(messageSelector.innerText).contains('Please wait')
 })
 
-test('a \'Not Started\' With a tracability Matrix present, the page shows a form', async t => {
-  const filename = 'Dummy TraceabilityMatrix.xlsx'
-
-  const fileDownloadSelector = await Selector(`a[href*="${testingStdID}"]`)
-
+test('a \'Not Started\' With a tracability Matrix present, the page shows a form with a file upload', async t => {
   await t
-    .click(fileDownloadSelector)
-    .expect(fileDownloadSelector.innerText).contains(filename)
+    .click(`a[href*="${testingStdID}"]`)
+    .expect(Selector('.file-input')).ok()
 })
 
-const requestLogger = RequestLogger(
-  request => request.url.startsWith(standardsComplianceDashboardPage.baseUrl),
-  { logResponseBody: true }
-)
+test('A submitted standard does not allow further uploads', async t => {
+  await t
+    .click(`a[href*="${commercialStdID}"]`)
+    .expect(Selector('.has-feedback').innerText).contains('Awaiting Compliance Outcome')
+})
+
+// Skipped as the acceptance criteria did not clearly specify this as being required,
+// meaning that it was not implemented with this in mind.
+// This test should be re-enabled once the tech debt is resolved.
+test.skip('A Failed standard should not allow the uploading of any more files', async t => {
+  await t
+    .click(`a[href*="${interopStdID}"]`)
+    .expect(Selector('.file-input').exists).notOk()
+})
 
 test
   .requestHooks(requestLogger)(
-    'On download, the previously uploaded file should be identical', async t => {
+    'A Standard with a file to download should allow the download of that file', async t => {
       const testingStdSelector = await Selector(`a[href*="${testingStdID}"]`)
 
       await t.click(testingStdSelector) // go from the dashboard to the download page
@@ -70,3 +91,32 @@ test
         .expect(hash.digest('hex')).eql('3d1e87ebc4965111054f382b31329f710e4f991c', 'Download does not match expected')
     }
   )
+
+test('A \'Not Started\' standard should change to draft if a file is saved against it.', async t => {
+  // navigate to 'business continuity...' standard evidence upload page.
+  const businessContinuitySelector = Selector(`a[href*="${businessContinuityStdID}"]`)
+  await t.click(businessContinuitySelector)
+  await setFileToUpload(t, downloadFileName)
+    .click('input[value="Save"]')
+    .click('.breadcrumb li:nth-child(2) > a')
+
+    // Selecting the Row that is the parent of the link, so that the sibling cell with containing status can be checked
+    .expect(businessContinuitySelector.parent().nth(1).find('.status').innerText).eql('Draft')
+})
+
+test('A standard should change to Submitted if evidence is submitted.', async t => {
+  // navigate to 'business continuity...' standard evidence upload page.
+  const clinicalSafetySelector = Selector(`a[href*="${clinicalSafetyStdID}"]`)
+
+  await t.click(clinicalSafetySelector)
+
+  await setFileToUpload(t, downloadFileName)
+    .click('#submit-for-compliance')
+    .expect(Selector('#compliance-confirmation > h1').innerText).contains('Review and submit')
+
+  await t
+    .click('#compliance-submission-confirmation-button')
+
+    // Selecting the Row that is the parent of the link, so that the sibling cell with containing status can be checked
+    .expect(clinicalSafetySelector.parent().nth(1).find('.status').innerText).eql('Submitted')
+})
