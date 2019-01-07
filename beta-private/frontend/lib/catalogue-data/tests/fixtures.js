@@ -9,6 +9,7 @@ module.exports = {
 
     function MockContactsApi () {
       this.apiContactsByEmailByEmailGet = jest.fn()
+      this.apiContactsByOrganisationByOrganisationIdGet = jest.fn()
     }
 
     function MockOrganisationsApi () {

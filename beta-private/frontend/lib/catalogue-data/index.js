@@ -76,6 +76,11 @@ class DataProvider {
     return { contact, org }
   }
 
+  async contactsByOrg (orgId) {
+    const contacts = await this.contactsApi.apiContactsByOrganisationByOrganisationIdGet(orgId, { pageSize: 9999 })
+    return contacts.items
+  }
+
   async solutionsForSupplierDashboard (supplierOrgId, solutionMapper = x => x) {
     const isLive = (soln) => +soln.status === 6 /* Solutions.StatusEnum.Approved */
     const isOnboarding = (soln) => +soln.status !== 6 /* Solutions.StatusEnum.Approved */
@@ -284,6 +289,7 @@ class DataProvider {
   async solutionForCompliance (solutionId) {
     const solution = await this.solutionForRegistration(solutionId)
 
+    solution.candidateOwners = await this.contactsByOrg(solution.organisationId)
     solution.evidence = solution._raw.claimedStandardEvidence
     solution.reviews = solution._raw.claimedStandardReview
 
@@ -291,13 +297,16 @@ class DataProvider {
 
     // compute status and ownership information for each standard
     solution.standards.forEach(std => {
+      const ownerContact = _.find(solution.candidateOwners, { id: std.ownerId }) || leadContact
+
       _.assign(std, {
         ...solutionComplianceStatusMap[std.status],
-        ownerContact: _.create(leadContact, {
-          displayName: `${leadContact.firstName} ${leadContact.lastName}`
+        ownerContact: _.create(ownerContact, {
+          displayName: `${ownerContact.firstName} ${ownerContact.lastName}`
         })
       })
     })
+
     return solution
   }
 
@@ -305,7 +314,7 @@ class DataProvider {
     const solnEx = await this.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet(solution.id)
 
     solnEx.claimedStandard = _.map(solution.standards,
-      std => _.pick(std, ['id', 'status', 'solutionId', 'standardId'])
+      std => _.pick(std, ['id', 'status', 'solutionId', 'standardId', 'ownerId'])
     )
     solnEx.claimedStandardEvidence = solution.evidence
     solnEx.claimedStandardReview = solution.reviews
