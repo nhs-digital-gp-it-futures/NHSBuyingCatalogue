@@ -294,6 +294,7 @@ class DataProvider {
     solution.reviews = solution._raw.claimedStandardReview
 
     const leadContact = _.find(solution.contacts, { contactType: 'Lead Contact' })
+    solution.candidateOwners.unshift({ ...leadContact, id: null })
 
     // compute status and ownership information for each standard
     solution.standards.forEach(std => {

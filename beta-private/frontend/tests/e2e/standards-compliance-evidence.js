@@ -100,6 +100,35 @@ test('A \'Not Started\' standard should change to draft if a file is saved again
     .expect(businessContinuitySelector.parent().nth(1).find('.status').innerText).eql('Draft')
 })
 
+test('The owner of a standard can be set correctly and is reflected on the Dashboard when saved', async t => {
+  // navigate to 'business continuity...' standard evidence upload page.
+  const businessContinuitySelector = Selector(`a[href*="${businessContinuityStdID}"]`)
+  const ownerDropdown = Selector('#compliance [name="ownerId"]')
+  const candidateOwners = ownerDropdown.child('option')
+
+  await t
+    .click(businessContinuitySelector)
+    .expect(Selector('#compliance .standard-owner .current-owner').textContent).eql('Helpma Boab')
+    .expect(ownerDropdown.visible).notOk()
+
+  await t
+    .click('#change-owner-button')
+    .expect(candidateOwners.count).eql(4)
+    .expect(candidateOwners.nth(0).textContent).contains('Lead Contact (Helpma Boab)')
+    .expect(candidateOwners.nth(1).textContent).contains('Dr Kool')
+    .expect(candidateOwners.nth(2).textContent).contains('Helpma Boab')
+    .expect(candidateOwners.nth(3).textContent).contains('Zyra Featherstonhaugh')
+
+  await setFileToUpload(t, downloadFileName)
+    .click(ownerDropdown)
+    .click(candidateOwners.nth(3))
+    .click('input[value="Save"]')
+    .click('.breadcrumb li:nth-child(2) > a')
+
+    // Selecting the Row that is the parent of the link, so that the sibling cell with containing owner can be checked
+    .expect(businessContinuitySelector.parent().nth(1).find('.owner').textContent).contains('Zyra Featherstonhaugh')
+})
+
 test('A standard should change to Submitted if evidence is submitted.', async t => {
   // navigate to 'business continuity...' standard evidence upload page.
   const clinicalSafetySelector = Selector(`a[href*="${clinicalSafetyStdID}"]`)

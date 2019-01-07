@@ -350,6 +350,14 @@
           "Help": "Include a message with your file. For example, you can use this field to describe changes between submission versions."
         }
       },
+      "Owner": {
+        "Label": "Sending from:",
+        "ChangeButton": "Change Owner",
+        "Help": {
+          "Title": "Help - Who is the Owner?",
+          "Text": "The Owner is the main point of contact for this $t(Standard). The Owner will receive all email notifications for this $t(Standard). The $t(Solution) $t(Lead Contact) will also receive all email notifications."
+        }
+      },
       "History": {
         "Heading": "Submission History",
         "Hide": "Hide history",
