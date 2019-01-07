@@ -27,7 +27,7 @@ class FakeFileStoreAPI {
     const businessContinuityClaimID = '719722d0-2354-437e-acdc-4625989bbca8'
 
 
-    const fakeBuffer = Buffer.from('Dummy TraceabilityMatrix.xlsx', 'utf8')
+    const fakeBuffer = Buffer.from('Content of the test "Dummy traceabilityMatrix.xlsx" file', 'utf8')
     const fakeName = 'Dummy TraceabilityMatrix.xlsx'
 
     await this.addTestItem(dataMigrationClaimID, fakeBuffer, fakeName)

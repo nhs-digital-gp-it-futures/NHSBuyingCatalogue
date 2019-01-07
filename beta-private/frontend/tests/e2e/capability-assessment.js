@@ -17,7 +17,7 @@ test('Unregistered solution does not allow access to capability assessment', asy
 test('Register Really Kool Kore System with 3 core capabilities', async t => {
   await asSupplier(t)
     .click(supplierDashboardPage.homeLink)
-    .click(supplierDashboardPage.firstOnboardingSolutionName)
+    .click(supplierDashboardPage.secondOnboardingSolutionName)
     .click(onboardingDashboardPage.continueRegistrationButton)
     .click(registrationPage.continueButton)
 
@@ -31,7 +31,7 @@ test('Register Really Kool Kore System with 3 core capabilities', async t => {
     .click(registrationPage.continueButton)
     .click(onboardingDashboardPage.homeLink)
 
-    .expect(supplierDashboardPage.firstOnboardingSolutionStatus.textContent).eql('Registered')
+    .expect(supplierDashboardPage.secondOnboardingSolutionStatus.textContent).eql('Registered')
 })
 
 test('Access button has correct text when no evidence submitted', async t => {

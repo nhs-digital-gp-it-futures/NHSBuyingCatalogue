@@ -14,7 +14,7 @@ fixture('Capability Assessment - Evidence')
 function navigateToCapabilityAssessment (t) {
   return asSupplier(t)
     .click(supplierDashboardPage.homeLink)
-    .click(supplierDashboardPage.firstOnboardingSolutionName)
+    .click(supplierDashboardPage.secondOnboardingSolutionName)
     .click(onboardingDashboardPage.capabilityAssessmentButton)
     .expect(Selector('#capability-assessment-page').exists).ok()
 }

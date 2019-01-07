@@ -41,14 +41,14 @@ function navigateToStandardsDashboard (t) {
     .expect(Selector('#compliance').exists).ok()
 }
 
-test('With no tracability Matrix present, the page displays a \'please wait\' message', async t => {
+test('With no traceability Matrix present, the page displays a \'please wait\' message', async t => {
   const messageSelector = await Selector('.message.feedback > p:first-child')
   await t
     .click(`a[href*="${nonFunctionalStdID}"]`)
     .expect(messageSelector.innerText).contains('Please wait')
 })
 
-test('a \'Not Started\' With a tracability Matrix present, the page shows a form with a file upload', async t => {
+test('a \'Not Started\' With a traceability Matrix present, the page shows a form with a file upload', async t => {
   await t
     .click(`a[href*="${testingStdID}"]`)
     .expect(Selector('.file-input')).ok()
@@ -81,14 +81,10 @@ test
       await t.click(testingStdSelector) // click the download link.
         .expect(requestLogger.contains(record => record.response.statusCode === 200)).ok()
 
-      // Compute the SHA1 hash of the downloaded data and compare to the known hash
-      // of the file that was uploaded
-      const crypto = require('crypto')
-      const hash = crypto.createHash('sha1')
-      hash.update(requestLogger.requests[0].response.body.toString())
-
       await t
-        .expect(hash.digest('hex')).eql('3d1e87ebc4965111054f382b31329f710e4f991c', 'Download does not match expected')
+        .expect(
+          requestLogger.requests[0].response.body.toString()
+        ).eql('Content of the test "Dummy traceabilityMatrix.xlsx" file', 'Download does not match expected')
     }
   )
 

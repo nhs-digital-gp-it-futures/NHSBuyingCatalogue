@@ -63,5 +63,5 @@ test('Solution cannot have the same name and version as another existing solutio
 
 test('Newly created solution appears in the correct place on the supplier dashboard', async t => {
   await t
-    .expect(supplierDashboardPage.secondSolutionName.textContent).eql('Really Kool Kore System | 1')
+    .expect(supplierDashboardPage.secondOnboardingSolutionName.textContent).eql('Really Kool Kore System | 1')
 })
