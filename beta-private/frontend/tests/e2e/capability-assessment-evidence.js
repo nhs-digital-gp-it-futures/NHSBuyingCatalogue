@@ -82,14 +82,11 @@ test('After uploading a file, the supplier dashboard and onboarding dashboard sh
   // we'll add evidence for "GP Resource Management"
   const capSection = Selector('fieldset.collapsible#CAP-C-003')
 
-  // Current Backend still interacts with sharepoint even though files are not being uploaded.
-  // this causes severe delays to the loading of pages since they are all awaiting the response
-  // from the server. As a result, a longer timeout as been added.
   await uploadFileWithMessage(t, capSection, 'Dummy TraceabilityMatrix.xlsx', 'Automation testing message sent with uploaded file')
     .click(capabilityEvidencePage.globalSaveAndExitButton)
 
-    .expect(onboardingDashboardPage.capabilityAssessmentButton.textContent).eql('Edit', { timeout: 10000 })
-    .expect(onboardingDashboardPage.capabilityAssessmentStatus.textContent).contains('In progress', { timeout: 10000 })
+    .expect(onboardingDashboardPage.capabilityAssessmentButton.textContent).eql('Edit')
+    .expect(onboardingDashboardPage.capabilityAssessmentStatus.textContent).contains('In progress')
 })
 
 test('After uploading a file, the name of the file should show against the capability', async t => {
@@ -161,13 +158,10 @@ test('Clicking Continue with incomplete evidence should trigger a validation mes
   const capSection1 = Selector('fieldset.collapsible#CAP-C-002')
   await uploadFileWithMessage(t, capSection1, 'Dummy TraceabilityMatrix 2.xlsx', 'Automated test message for CAP-C-002')
 
-  // Current Backend still interacts with sharepoint even though files are not being uploaded.
-  // this causes severe delays to the loading of pages since they are all awaiting the response
-  // from the server. As a result, a longer timeout as been added.
   await t
     .click(capabilityEvidencePage.continueButton)
-    .expect(Selector('#errors').exists).ok({ timeout: 10000 })
-    .expect(Selector('#error-uploading-video-evidence').textContent).contains('requiring evidence is missing a video', { timeout: 10000 })
+    .expect(Selector('#errors').exists).ok()
+    .expect(Selector('#error-uploading-video-evidence').textContent).contains('requiring evidence is missing a video')
 
   // as the first capability has no file or message, the missing file validation error should trigger
   // even with a validation message, the submitted file and message should hold
