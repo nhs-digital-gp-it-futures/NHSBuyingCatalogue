@@ -440,7 +440,10 @@
       },
       "Evidence": {
         "Title": "Provide Assessment evidence for your $t(Solution).",
-        "Information": "Evidence: {{#if isLiveDemo}}Live Witness Demonstration{{else}}Recorded Video{{/if}}",
+        "Information": {
+          "LiveDemo": "Evidence: Live Witness Demonstration",
+          "RecordedVideo": "Evidence: Recorded Video"
+        },
         "Error": "Error: This $t(Capability) is missing evidence."
       }
     }

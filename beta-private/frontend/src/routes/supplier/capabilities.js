@@ -240,7 +240,7 @@ async function confirmationPageGet (req, res) {
   context.solution.capabilities = context.solution.capabilities.map((cap) => {
     let isLiveDemo = false
     let missingEvidence = true
-
+    
     // if there is a latest evidence and it is indicating a live demo.
     if (cap.latestEvidence && cap.latestEvidence.evidence === LIVE_DEMO_MESSSAGE_INDICATOR) {
       isLiveDemo = true
@@ -248,7 +248,8 @@ async function confirmationPageGet (req, res) {
     } else if (cap.latestEvidence && cap.latestFile) {
       missingEvidence = false
     }
-
+    
+    console.log(cap)
     context.editUrls = {
       registration: `/suppliers/solutions/${req.params.solution_id}/register`,
       capabilities: {

@@ -57,10 +57,10 @@
         {{#solution.capabilities}}
         <div class="evidence">
             <h3>{{name}}</h3>
-            <p>{{t 'CapAssPages.Confirmation.Evidence.Information'}}</p>
             {{#if isLiveDemo}}
-
+                <p>{{t 'CapAssPages.Confirmation.Evidence.Information.LiveDemo'}}</p>
             {{else}}
+                <p>{{t 'CapAssPages.Confirmation.Evidence.Information.RecordedVideo'}}</p>
                 <p><a href="{{latestFile.downloadUrl}}">{{latestFile.name}}</a></p>
                 <p>{{latestEvidence.evidence}}</p>
             {{/if}}
