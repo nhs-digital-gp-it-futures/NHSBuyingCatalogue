@@ -48,7 +48,7 @@ namespace Gif.Service
 
       Configuration = builder.Build();
 
-      DumpEnvironment();
+      DumpSettings();
     }
 
     /// <summary>
@@ -158,9 +158,9 @@ namespace Gif.Service
       }
     }
 
-    private void DumpEnvironment()
+    private void DumpSettings()
     {
-      Console.WriteLine("Environment:");
+      Console.WriteLine("Settings:");
       Console.WriteLine($"  GIF:");
       Console.WriteLine($"    GIF_AUTHORITY_URI           : {Settings.GIF_AUTHORITY_URI(Configuration)}");
       Console.WriteLine($"    GIF_CRM_AUTHORITY           : {Settings.GIF_CRM_AUTHORITY(Configuration)}");
