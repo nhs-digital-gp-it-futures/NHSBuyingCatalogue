@@ -104,7 +104,7 @@ authentication(app).then(() => {
     const context = {
       error: {
         message: 'Error 404: Page Not Found',
-        stack: 'A request was made for a resource that could not be found.'
+        stack: `A request was made for a resource that could not be found:\n\n${req.originalUrl}`
       }
     }
     res.render('error', context)
