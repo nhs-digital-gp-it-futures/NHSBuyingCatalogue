@@ -307,7 +307,6 @@ async function submitCapabilityAssessment (solutionID) {
 
 async function redirectToOnboardingDashboard (req, res, param) {
   const route = `${path.join('/suppliers/solutions', req.params.solution_id)}${param ? `?${param}` : ''}`
-  console.log('\n\n\nRoute', route)
   return res.redirect(route)
 }
 
