@@ -24,7 +24,7 @@ createTestcafe('localhost')
     return testcafe.createRunner()
       .src(testfiles)
       .screenshots('e2e-failure-screenshots', true)
-      .browsers('chrome:headless')
+      .browsers('chrome')
       .run()
   })
   .then(failCount => {
