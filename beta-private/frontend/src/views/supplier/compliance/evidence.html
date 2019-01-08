@@ -35,7 +35,7 @@
 
 {{#if claim.submissionHistory}}
   <section class="history collapsed">
-    <h3>{{t 'CompliancePages.Evidence.History.Heading'}}</h3>
+    <h2>{{t 'CompliancePages.Evidence.History.Heading'}}</h2>
 
     {{#if collapseHistory}}
     <a href="#" class="expand-history">{{t 'CompliancePages.Evidence.History.Show'}}</a>
@@ -68,7 +68,7 @@
 {{#if latestFile}}
   {{#if allowSubmission}}
   <section class="current-file">
-    <h3>{{t 'CompliancePages.Evidence.CurrentFile.Heading'}}</h3>
+    <h2>{{t 'CompliancePages.Evidence.CurrentFile.Heading'}}</h2>
     <p class="callout">
       <a href="{{latestFile.downloadURL}}">{{latestFile.name}}</a>
     </p>
@@ -79,14 +79,14 @@
     {{#>form encoding="multipart/form-data" form_id=activeForm.id}}
       <fieldset class="callout">
         <div class="file-input">
-          <input type="file" name="matrix-file">
+          <input type="file" name="matrix-file" aria-label="File Upload">
           <a href="#" class="remove">{{t 'CompliancePages.Evidence.Reply.Remove'}}</a>
         </div>
 
         <div class="evidence-message">
           <h4 class="label">{{t 'CompliancePages.Evidence.Reply.Message.Label'}}</h4>
           <p class="help">{{t 'CompliancePages.Evidence.Reply.Message.Help'}}</p>
-          <textarea name="message"></textarea>
+          <textarea name="message" aria-label="Evidence Message Description Text Area"></textarea>
         </div>
       </fieldset>
 
@@ -138,14 +138,17 @@ document.addEventListener('DOMContentLoaded', function () {
     $('#submit-for-compliance').disabled = !fileInputFilled
   }
 
-  replyForm.addEventListener('change', updateForFileInputState)
-  $('.remove', replyForm).addEventListener('click', function (ev) {
-    ev.preventDefault()
+  if(replyForm) {
+    replyForm.addEventListener('change', updateForFileInputState)
+    $('.remove', replyForm).addEventListener('click', function (ev) {
+      ev.preventDefault()
 
-    replyFileInput.value = ''
+      replyFileInput.value = ''
+      updateForFileInputState()
+    })
+
     updateForFileInputState()
-  })
+  }
 
-  updateForFileInputState()
 })
 </script>

@@ -6,5 +6,6 @@ module.exports = {
   sharePointProvider: process.env.SHAREPOINT_PROVIDER_ENV === 'test'
     ? new FakeSharePointProvider()
     : new RealSharePointProvider(),
-  SharePointProvider: require('./providers/SharePointProvider')
+  SharePointProvider: require('./providers/SharePointProvider'),
+  fakeSharePointProvider: new FakeSharePointProvider()
 }

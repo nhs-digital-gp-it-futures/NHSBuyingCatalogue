@@ -4,7 +4,7 @@ import { Selector, RequestLogger } from 'testcafe'
 import axeCheck from 'axe-testcafe'
 
 import { asSupplier } from './roles'
-import { supplierDashboardPage, onboardingDashboardPage, registrationPage, capabilityEvidencePage } from './pages'
+import { supplierDashboardPage, onboardingDashboardPage, capabilityEvidencePage } from './pages'
 
 fixture('Capability Assessment - Evidence')
   .page(supplierDashboardPage.baseUrl)
@@ -14,7 +14,7 @@ fixture('Capability Assessment - Evidence')
 function navigateToCapabilityAssessment (t) {
   return asSupplier(t)
     .click(supplierDashboardPage.homeLink)
-    .click(supplierDashboardPage.lastOnboardingSolutionName)
+    .click(supplierDashboardPage.secondOnboardingSolutionName)
     .click(onboardingDashboardPage.capabilityAssessmentButton)
     .expect(Selector('#capability-assessment-page').exists).ok()
 }

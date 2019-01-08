@@ -34,12 +34,34 @@ class SupplierDashboardPage extends Page {
     super()
 
     this.addNewSolutionButton = Selector('#add-new-solution')
+
+    // First Solution on the dashboard
+    // Name: Really Kool Document Manager
+    // GUID: 12968eb4-4160-4ec5-8bb7-3deca7c3f53b
     this.firstOnboardingSolutionName = Selector(
       '#solutions-onboarding table > tbody > tr:first-child > td:first-child'
     )
     this.firstOnboardingSolutionStatus = Selector(
       '#solutions-onboarding table > tbody > tr:first-child > td:nth-child(4)'
     )
+
+    // Second Solution on the Dashboard
+    // Note. The selected will select a different during the running of the test suite.
+    // It begins as:
+    //  Name: Standards Compliance Test Solution
+    //  GUID: 9ddea405-a05d-4c34-959a-468d34caa2f1
+    // After the 'supplier-registration-add-new-solution' suite will eventually select:
+    //  Name: Really Kool Kore System
+    this.secondOnboardingSolutionName = Selector(
+      '#solutions-onboarding table > tbody > tr:nth-child(2) > td:first-child'
+    )
+    this.secondOnboardingSolutionStatus = Selector(
+      '#solutions-onboarding table > tbody > tr:nth-child(2) > td:nth-child(4)'
+    )
+
+    // Last Solution on the Dashboard
+    // Name: Standards Compliance test Solution
+    // GUID: 9ddea405-a05d-4c34-959a-468d34caa2f1
     this.lastOnboardingSolutionName = Selector(
       '#solutions-onboarding table > tbody > tr:last-child > td:first-child'
     )
@@ -54,8 +76,9 @@ class OnboardingDashboardPage extends Page {
     super()
 
     this.continueRegistrationButton = Selector('#content a[href^=register]')
-    this.capabilityAssessmentButton = Selector('#onboarding.dashboard.page a[href^="../../capabilities"]')
-    this.capabilityAssessmentStatus = Selector('#onboarding.dashboard.page .onboarding-stages > :nth-child(2) .action')
+    this.capabilityAssessmentButton = Selector('#content a[href^="../../capabilities"]')
+    this.capabilityAssessmentStatus = Selector('.onboarding-stages > :nth-child(2) .action')
+    this.standardsComplianceButton = Selector('#content a[href^="../../compliance"]')
   }
 }
 
@@ -83,6 +106,15 @@ class RegistrationPage extends Page {
   }
 }
 
+class StandardsComplianceDashboardPage extends Page {
+  constructor () {
+    super()
+    this.breadcrumb = Selector('#content > .breadcrumb')
+    this.associatedStandardsTable = Selector('#compliance > table:nth-child(4)')
+    this.overarchingStandards = Selector('#compliance > table:nth-child(7)')
+  }
+}
+
 class CapabilityEvidencePage extends Page {
   constructor () {
     super()
@@ -95,3 +127,4 @@ export const supplierDashboardPage = new SupplierDashboardPage()
 export const onboardingDashboardPage = new OnboardingDashboardPage()
 export const registrationPage = new RegistrationPage()
 export const capabilityEvidencePage = new CapabilityEvidencePage()
+export const standardsComplianceDashboardPage = new StandardsComplianceDashboardPage()
