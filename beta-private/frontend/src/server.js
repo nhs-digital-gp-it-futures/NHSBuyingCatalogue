@@ -92,11 +92,15 @@ authentication(app).then(() => {
 
     // don't allow the stack through to the template in production
     if (process.env.NODE_ENV === 'production') {
-      delete err.stack
+      // delete err.stack
+    }
+
+    const context = {
+      error: err
     }
 
     res.status(500)
-    res.render('error', { error: err })
+    res.render('error', context)
   })
 
   // Default route, 404: Page Not Found.
@@ -104,7 +108,7 @@ authentication(app).then(() => {
     const context = {
       error: {
         message: 'Error 404: Page Not Found',
-        stack: `A request was made for a resource that could not be found:\n\n${req.originalUrl}`
+        stack: `A request was made for a resource that could not be found:${req.originalUrl}\n\nPlease check you entered the correct URL.`
       }
     }
     res.render('error', context)

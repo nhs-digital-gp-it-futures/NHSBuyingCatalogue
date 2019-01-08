@@ -444,5 +444,11 @@
         "Error": "Error: This $t(Capability) is missing evidence."
       }
     }
+  },
+  "Error": {
+    "Greeting": "Unfortunately an Error has occured within our system.",
+    "Information": "We are currently monitoring any issues that may arise during the lifetime of the system",
+    "Help": "If you want to provide extra information about what has gone wrong, then please send the GP IT Futures Team an email at: <a href='mailto:$(Error.Email)'>$t(Error.Email)</a>",
+    "Email": "GPITFutures@nhs.net"
   }
 }
