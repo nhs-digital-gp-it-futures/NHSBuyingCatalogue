@@ -371,7 +371,7 @@
         "Title": "$t(CompliancePages.Dashboard.Title)"
       },
       "Buttons": {
-        "Submit": "Submit for $t(Compliance)",
+        "Submit": "Save and review",
         "Upload": "Upload"
       }
     },
