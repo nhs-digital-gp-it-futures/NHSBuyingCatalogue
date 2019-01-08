@@ -153,6 +153,10 @@ test.skip('Files and messages can be saved against multiple capabilities at once
 })
 
 test('Clicking Continue with incomplete evidence should trigger a validation message', async t => {
+  // ensure first capability is requesting a video upload
+  await t.click(
+    Selector('fieldset.collapsible#CAP-C-001').find('input[type=radio][value=yes]')
+  )
   // note that the second capability is done first so that the accordion click doesn't
   // close the first capability's fieldset
   const capSection1 = Selector('fieldset.collapsible#CAP-C-002')
@@ -186,15 +190,16 @@ test('Clicking Continue with incomplete evidence should trigger a validation mes
 test('Clicking Continue with complete evidence should lead to summary page with correct details', async t => {
   const capSection1 = Selector('fieldset.collapsible#CAP-C-001')
 
+  // Set one capability to request a live demo
   await t
     .click(capSection1.find('input[type=radio][value=no]'))
     .click(capabilityEvidencePage.continueButton)
 
   // Assert Summary section headings are there.
   await t
-    .expect(Selector('.summary-box h2:nth-child(4)').innerText).contains('Solution details')
-    .expect(Selector('.summary-box h2:nth-child(5)').innerText).contains('Capabilities')
-    .expect(Selector('.summary-box h2:nth-child(6)').innerText).contains('Assessment evidence')
+    .expect(Selector('.summary-box:nth-child(4) h2').innerText).contains('Solution details')
+    .expect(Selector('.summary-box:nth-child(5) h2').innerText).contains('Capabilities')
+    .expect(Selector('.summary-box:nth-child(6) h2').innerText).contains('Assessment evidence')
 
   // Assert Assessment Evidence is correct.
   await t
@@ -204,5 +209,12 @@ test('Clicking Continue with complete evidence should lead to summary page with 
 })
 
 test('Submitting from the summary page should update the status on the dashboard and onboarding page', async t => {
+  const capSection1 = Selector('fieldset.collapsible#CAP-C-001')
 
+  await t
+    .click(capSection1.find('input[type=radio][value=no]'))
+    .click(capabilityEvidencePage.continueButton)
+    .click('button[value="Save & continue"]')
+    .expect(Selector('.callout .title').innerText).contains('Submitted for Capability')
+    .expect(Selector('a[href^="../../compliance/"]')).ok()
 })

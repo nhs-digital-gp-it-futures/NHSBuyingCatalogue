@@ -1,14 +1,14 @@
 const path = require('path')
 const testfiles = [
-  // 'homepage.js',
-  // 'supplier-homepage.js',
-  // 'supplier-registration-details.js',
+  'homepage.js',
+  'supplier-homepage.js',
+  'supplier-registration-details.js',
   'supplier-registration-add-new-solution.js',
-  // 'supplier-registration-capabilities.js',
+  'supplier-registration-capabilities.js',
   'capability-assessment.js',
   'capability-assessment-evidence.js',
-  // 'standards-compliance-dashboard.js',
-  // 'standards-compliance-evidence.js'
+  'standards-compliance-dashboard.js',
+  'standards-compliance-evidence.js'
 ].map(
   f => path.join(__dirname, f)
 )
@@ -24,7 +24,7 @@ createTestcafe('localhost')
     return testcafe.createRunner()
       .src(testfiles)
       .screenshots('e2e-failure-screenshots', true)
-      .browsers('chrome:headless')
+      .browsers('chrome')
       .run()
   })
   .then(failCount => {
