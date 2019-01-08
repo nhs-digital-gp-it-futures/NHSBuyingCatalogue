@@ -80,7 +80,7 @@ authentication(app).then(() => {
   })
 
   app.use('/suppliers/', authorisation.suppliersOnly, require('./routes/supplier'))
-//  app.use('/assessment', authorisation.assessmentTeamOnly, require('./routes/assessment'))
+  //  app.use('/assessment', authorisation.assessmentTeamOnly, require('./routes/assessment'))
 
   // automatically redirect to canonical path (with or without trailing slash)
   // routes mostly use trailing slashes to enable path-relative URLs
@@ -97,6 +97,17 @@ authentication(app).then(() => {
 
     res.status(500)
     res.render('error', { error: err })
+  })
+
+  // Default route, 404: Page Not Found.
+  app.use('*', (req, res) => {
+    const context = {
+      error: {
+        message: 'Error 404: Page Not Found',
+        stack: 'A request was made for a resource that could not be found.'
+      }
+    }
+    res.render('error', context)
   })
 
   console.info('NODE_ENV:', process.env.NODE_ENV)
