@@ -11,14 +11,14 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy));
+      Assert.DoesNotThrow(() => new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy, _config));
     }
 
     [Test]
     public void ByEmail_ReturnsData()
     {
       var emails = Retriever.GetAllContacts(_policy).Select(ent => ent.EmailAddress1).ToList();
-      var datastore = new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
+      var datastore = new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy, _config);
 
       var datas = emails.Select(email => datastore.ByEmail(email)).ToList();
 
@@ -31,7 +31,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     public void ById_ReturnsData()
     {
       var ids = Retriever.GetAllContacts(_policy).Select(ent => ent.Id);
-      var datastore = new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
+      var datastore = new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy, _config);
 
       var datas = ids.Select(id => datastore.ById(id)).ToList();
 

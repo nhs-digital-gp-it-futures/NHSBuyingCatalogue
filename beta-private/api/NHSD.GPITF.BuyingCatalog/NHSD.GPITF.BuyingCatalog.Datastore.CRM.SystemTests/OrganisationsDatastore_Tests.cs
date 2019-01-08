@@ -13,19 +13,19 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new OrganisationsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy));
+      Assert.DoesNotThrow(() => new OrganisationsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy, _config));
     }
 
     [Test]
     public void ById_ReturnsData()
     {
-      var frameworksDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
+      var frameworksDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy, _config);
       var frameworks = frameworksDatastore.GetAll().ToList();
-      var solnDatastore = new SolutionsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<SolutionsDatastore>>().Object, _policy);
+      var solnDatastore = new SolutionsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<SolutionsDatastore>>().Object, _policy, _config);
       var allSolns = frameworks.SelectMany(fw => solnDatastore.ByFramework(fw.Id));
       var ids = allSolns.Select(soln => soln.OrganisationId).Distinct().ToList();
 
-      var datastore = new OrganisationsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
+      var datastore = new OrganisationsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy, _config);
 
       var datas = ids.Select(id => datastore.ById(id)).ToList();
 
@@ -37,14 +37,14 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void ByContact_ReturnsData()
     {
-      var frameworksDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
+      var frameworksDatastore = new FrameworksDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<FrameworksDatastore>>().Object, _policy, _config);
       var frameworks = frameworksDatastore.GetAll().ToList();
-      var solnDatastore = new SolutionsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<SolutionsDatastore>>().Object, _policy);
+      var solnDatastore = new SolutionsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<SolutionsDatastore>>().Object, _policy, _config);
       var allSolns = frameworks.SelectMany(fw => solnDatastore.ByFramework(fw.Id));
       var allOrgIds = allSolns.Select(soln => soln.OrganisationId).Distinct().ToList();
-      var contactsDatastore = new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<ContactsDatastore>>().Object, _policy);
+      var contactsDatastore = new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<ContactsDatastore>>().Object, _policy, _config);
       var allContacts = allOrgIds.SelectMany(orgId => contactsDatastore.ByOrganisation(orgId)).ToList();
-      var datastore = new OrganisationsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy);
+      var datastore = new OrganisationsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy, _config);
 
       var datas = allContacts.Select(contact => datastore.ByContact(contact.Id)).ToList();
 

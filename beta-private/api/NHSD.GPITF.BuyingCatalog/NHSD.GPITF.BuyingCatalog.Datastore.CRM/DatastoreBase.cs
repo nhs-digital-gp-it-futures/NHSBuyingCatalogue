@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
@@ -18,6 +19,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
   public abstract class DatastoreBase<T>
   {
     protected readonly IRestClientFactory _crmFactory;
+    private readonly bool _logCRM;
     protected readonly ILogger<DatastoreBase<T>> _logger;
     private readonly ISyncPolicy _policy;
     private readonly JsonSerializerSettings _settings = new JsonSerializerSettings();
@@ -25,9 +27,11 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     public DatastoreBase(
       IRestClientFactory crmFactory,
       ILogger<DatastoreBase<T>> logger,
-      ISyncPolicyFactory policy)
+      ISyncPolicyFactory policy,
+      IConfiguration config)
     {
       _crmFactory = crmFactory;
+      _logCRM = Settings.LOG_CRM(config);
       _logger = logger;
       _policy = policy.Build(_logger);
 
@@ -126,7 +130,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 
       // log here as may fail deserialisation
       var body = request.Parameters.SingleOrDefault(x => x.Type == ParameterType.RequestBody)?.Value?.ToString();
-      _logger.LogInformation($"[{request.Resource}] {body} --> [{resp.StatusCode}] {resp.Content}");
+      LogInformation($"[{request.Resource}] {body} --> [{resp.StatusCode}] {resp.Content}");
 
       return resp;
     }
@@ -161,6 +165,14 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       }
 
       return proposedId;
+    }
+
+    private void LogInformation(string msg)
+    {
+      if (_logCRM)
+      {
+        _logger.LogInformation(msg);
+      }
     }
   }
 }

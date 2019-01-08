@@ -291,6 +291,8 @@ namespace NHSD.GPITF.BuyingCatalog
 
       Console.WriteLine($"  LOG:");
       Console.WriteLine($"    LOG_CONNECTIONSTRING : {Settings.LOG_CONNECTIONSTRING(Configuration)}");
+      Console.WriteLine($"    LOG_CRM              : {Settings.LOG_CRM(Configuration)}");
+      Console.WriteLine($"    LOG_SHAREPOINT       : {Settings.LOG_SHAREPOINT(Configuration)}");
 
       Console.WriteLine($"  OIDC:");
       Console.WriteLine($"    OIDC_USERINFO_URL : {Settings.OIDC_USERINFO_URL(Configuration)}");

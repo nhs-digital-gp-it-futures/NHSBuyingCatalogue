@@ -12,6 +12,12 @@
 
   "UseCRM": false,
 
+  "Log":
+  {
+    "CRM": true,
+    "SharePoint":  true
+  },
+
   "Cache":
   {
     "Host" : "localhost"

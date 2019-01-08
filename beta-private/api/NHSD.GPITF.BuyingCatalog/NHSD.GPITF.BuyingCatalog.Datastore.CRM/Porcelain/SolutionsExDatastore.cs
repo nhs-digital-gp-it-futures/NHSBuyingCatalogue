@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
@@ -36,8 +37,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
 
       IStandardsApplicableDatastore claimedStandardDatastore,
       IStandardsApplicableEvidenceDatastore claimedStandardEvidenceDatastore,
-      IStandardsApplicableReviewsDatastore claimedStandardReviewsDatastore) :
-      base(crmConnectionFactory, logger, policy)
+      IStandardsApplicableReviewsDatastore claimedStandardReviewsDatastore,
+
+      IConfiguration config) :
+      base(crmConnectionFactory, logger, policy, config)
     {
       _solutionDatastore = solutionDatastore;
       _technicalContactDatastore = technicalContactDatastore;

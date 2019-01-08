@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
@@ -12,8 +13,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Tests
     public DummyReviewsDatastoreBase(
       IRestClientFactory dbConnectionFactory,
       ILogger<ReviewsDatastoreBase<ReviewsBase>> logger,
-      ISyncPolicyFactory policy) :
-      base(dbConnectionFactory, logger, policy)
+      ISyncPolicyFactory policy,
+      IConfiguration config) :
+      base(dbConnectionFactory, logger, policy, config)
     {
     }
   }

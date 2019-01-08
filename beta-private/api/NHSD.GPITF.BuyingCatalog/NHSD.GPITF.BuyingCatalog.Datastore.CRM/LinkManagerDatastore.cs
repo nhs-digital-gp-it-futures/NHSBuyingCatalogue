@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 
@@ -9,8 +10,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     public LinkManagerDatastore(
       IRestClientFactory crmConnectionFactory,
       ILogger<LinkManagerDatastore> logger,
-      ISyncPolicyFactory policy) :
-      base(crmConnectionFactory, logger, policy)
+      ISyncPolicyFactory policy,
+      IConfiguration config) :
+      base(crmConnectionFactory, logger, policy, config)
     {
     }
 

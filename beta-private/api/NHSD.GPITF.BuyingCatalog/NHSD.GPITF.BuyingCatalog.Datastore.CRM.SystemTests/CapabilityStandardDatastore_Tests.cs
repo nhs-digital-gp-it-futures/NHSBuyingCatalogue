@@ -13,13 +13,13 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new CapabilityStandardDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy));
+      Assert.DoesNotThrow(() => new CapabilityStandardDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy, _config));
     }
 
     [Test]
     public void GetAll_ReturnsData()
     {
-      var datastore = new CapabilityStandardDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<CapabilityStandardDatastore>>().Object, _policy);
+      var datastore = new CapabilityStandardDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<CapabilityStandardDatastore>>().Object, _policy, _config);
 
       var datas = datastore.GetAll().ToList();
 
