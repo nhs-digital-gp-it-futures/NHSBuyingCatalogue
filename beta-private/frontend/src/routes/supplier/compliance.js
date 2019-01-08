@@ -292,8 +292,6 @@ async function solutionComplianceEvidenceConfirmationGet (req, res) {
     }
   }
 
-  context.activeForm.id = 'compliance-submission-confirmation'
-
   const claim = _.find(req.solution.standards, { id: req.params.claim_id })
 
   context.standard = claim.standard
