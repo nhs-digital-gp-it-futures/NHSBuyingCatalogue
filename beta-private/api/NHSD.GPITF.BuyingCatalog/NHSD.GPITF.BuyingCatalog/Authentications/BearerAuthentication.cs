@@ -57,7 +57,7 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
       var response = cachedresponse?.UserInfoResponse;
       if (response == null)
       {
-        var userInfo = Environment.GetEnvironmentVariable("OIDC_USERINFO_URL") ?? _config["Jwt:UserInfo"];
+        var userInfo = Settings.OIDC_USERINFO_URL(_config);
         response = await _userInfoClient.GetAsync(userInfo, bearerToken.Substring(7));
         if (response == null)
         {

@@ -22,11 +22,11 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     public RestClientFactory(IConfiguration config)
     {
       // read out of user secret or environment
-      ApiUri = Environment.GetEnvironmentVariable("CRM_APIURI") ?? config["CRM:ApiUri"];
-      AccessTokenUri = Environment.GetEnvironmentVariable("CRM_ACCESSTOKENURI") ?? config["CRM:AccessTokenUri"];
+      ApiUri = Settings.CRM_APIURI(config);
+      AccessTokenUri =Settings.CRM_ACCESSTOKENURI(config);
 
-      ClientId = Environment.GetEnvironmentVariable("CRM_CLIENTID") ?? config["CRM:ClientId"];
-      ClientSecret = Environment.GetEnvironmentVariable("CRM_CLIENTSECRET") ?? config["CRM:ClientSecret"];
+      ClientId =Settings.CRM_CLIENTID(config);
+      ClientSecret =Settings.CRM_CLIENTSECRET(config);
 
       if (string.IsNullOrWhiteSpace(ApiUri) ||
         string.IsNullOrWhiteSpace(AccessTokenUri) ||

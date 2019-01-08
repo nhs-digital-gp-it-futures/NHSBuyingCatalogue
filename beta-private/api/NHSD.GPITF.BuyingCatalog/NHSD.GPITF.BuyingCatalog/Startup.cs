@@ -47,12 +47,12 @@ namespace NHSD.GPITF.BuyingCatalog
           .AddEnvironmentVariables()
           .AddUserSecrets<Program>();
 
-      DumpEnvironment();
-
       Configuration = builder.Build();
 
       // database connection string for nLog
-      GlobalDiagnosticsContext.Set("LOG_CONNECTIONSTRING", Environment.GetEnvironmentVariable("LOG_CONNECTIONSTRING") ?? Configuration["Log:ConnectionString"]);
+      GlobalDiagnosticsContext.Set("LOG_CONNECTIONSTRING", Settings.LOG_CONNECTIONSTRING(Configuration));
+
+      DumpSettings();
     }
 
     // This method gets called by the runtime. Use this method to add services to the container.
@@ -151,8 +151,8 @@ namespace NHSD.GPITF.BuyingCatalog
         })
         .AddJwtBearer(options =>
         {
-          options.Authority = Environment.GetEnvironmentVariable("OIDC_ISSUER_URL") ?? Configuration["Jwt:Authority"];
-          options.Audience = Environment.GetEnvironmentVariable("OIDC_AUDIENCE") ?? Configuration["Jwt:Audience"];
+          options.Authority = Settings.OIDC_ISSUER_URL(Configuration);
+          options.Audience = Settings.OIDC_AUDIENCE(Configuration);
           options.RequireHttpsMetadata = !CurrentEnvironment.IsDevelopment();
           options.Events = new JwtBearerEvents
           {
@@ -185,7 +185,7 @@ namespace NHSD.GPITF.BuyingCatalog
       var exeAssyDir = Path.GetDirectoryName(exeAssyPath);
       var assyPaths = Directory.EnumerateFiles(exeAssyDir, "NHSD.*.dll");
 
-      var useCRM = bool.Parse(Environment.GetEnvironmentVariable("USE_CRM") ?? Configuration["UseCRM"] ?? false.ToString());
+      var useCRM = Settings.USE_CRM(Configuration);
       if (useCRM)
       {
         // IUserInfoResponseDatastore will resolve to UserInfoResponseMemoryDatastore
@@ -272,38 +272,39 @@ namespace NHSD.GPITF.BuyingCatalog
       }
     }
 
-    private static void DumpEnvironment()
+    private void DumpSettings()
     {
-      Console.WriteLine("Environment:");
+      Console.WriteLine("Settings:");
       Console.WriteLine($"  CRM:");
-      Console.WriteLine($"    CRM_APIURI          : {Environment.GetEnvironmentVariable("CRM_APIURI")}");
-      Console.WriteLine($"    CRM_ACCESSTOKENURI  : {Environment.GetEnvironmentVariable("CRM_ACCESSTOKENURI")}");
-      Console.WriteLine($"    CRM_CLIENTID        : {Environment.GetEnvironmentVariable("CRM_CLIENTID")}");
-      Console.WriteLine($"    CRM_CLIENTSECRET    : {Environment.GetEnvironmentVariable("CRM_CLIENTSECRET")}");
+      Console.WriteLine($"    CRM_APIURI          : {Settings.CRM_APIURI(Configuration)}");
+      Console.WriteLine($"    CRM_ACCESSTOKENURI  : {Settings.CRM_ACCESSTOKENURI(Configuration)}");
+      Console.WriteLine($"    CRM_CLIENTID        : {Settings.CRM_CLIENTID(Configuration)}");
+      Console.WriteLine($"    CRM_CLIENTSECRET    : {Settings.CRM_CLIENTSECRET(Configuration)}");
 
       Console.WriteLine($"  USE_CRM:");
-      Console.WriteLine($"    USE_CRM : {Environment.GetEnvironmentVariable("USE_CRM")}");
+      Console.WriteLine($"    USE_CRM : {Settings.USE_CRM(Configuration)}");
 
       Console.WriteLine($"  DATASTORE:");
-      Console.WriteLine($"    DATASTORE_CONNECTIONTYPE    : {Environment.GetEnvironmentVariable("DATASTORE_CONNECTIONTYPE")}");
-      Console.WriteLine($"    DATASTORE_CONNECTIONSTRING  : {Environment.GetEnvironmentVariable("DATASTORE_CONNECTIONSTRING")}");
+      Console.WriteLine($"    DATASTORE_CONNECTION        : {Settings.DATASTORE_CONNECTION(Configuration)}");
+      Console.WriteLine($"    DATASTORE_CONNECTIONTYPE    : {Settings.DATASTORE_CONNECTIONTYPE(Configuration, Settings.DATASTORE_CONNECTION(Configuration))}");
+      Console.WriteLine($"    DATASTORE_CONNECTIONSTRING  : {Settings.DATASTORE_CONNECTIONSTRING(Configuration, Settings.DATASTORE_CONNECTION(Configuration))}");
 
       Console.WriteLine($"  LOG:");
-      Console.WriteLine($"    LOG_CONNECTIONSTRING : {Environment.GetEnvironmentVariable("LOG_CONNECTIONSTRING")}");
+      Console.WriteLine($"    LOG_CONNECTIONSTRING : {Settings.LOG_CONNECTIONSTRING(Configuration)}");
 
       Console.WriteLine($"  OIDC:");
-      Console.WriteLine($"    OIDC_USERINFO_URL : {Environment.GetEnvironmentVariable("OIDC_USERINFO_URL")}");
-      Console.WriteLine($"    OIDC_ISSUER_URL   : {Environment.GetEnvironmentVariable("OIDC_ISSUER_URL")}");
-      Console.WriteLine($"    OIDC_AUDIENCE     : {Environment.GetEnvironmentVariable("OIDC_AUDIENCE")}");
+      Console.WriteLine($"    OIDC_USERINFO_URL : {Settings.OIDC_USERINFO_URL(Configuration)}");
+      Console.WriteLine($"    OIDC_ISSUER_URL   : {Settings.OIDC_ISSUER_URL(Configuration)}");
+      Console.WriteLine($"    OIDC_AUDIENCE     : {Settings.OIDC_AUDIENCE(Configuration)}");
 
       Console.WriteLine($"  SHAREPOINT:");
-      Console.WriteLine($"    SHAREPOINT_BASEURL                  : {Environment.GetEnvironmentVariable("SHAREPOINT_BASEURL")}");
-      Console.WriteLine($"    SHAREPOINT_ORGANISATIONSRELATIVEURL : {Environment.GetEnvironmentVariable("SHAREPOINT_ORGANISATIONSRELATIVEURL")}");
-      Console.WriteLine($"    SHAREPOINT_LOGIN                    : {Environment.GetEnvironmentVariable("SHAREPOINT_LOGIN")}");
-      Console.WriteLine($"    SHAREPOINT_PASSWORD                 : {Environment.GetEnvironmentVariable("SHAREPOINT_PASSWORD")}");
+      Console.WriteLine($"    SHAREPOINT_BASEURL                  : {Settings.SHAREPOINT_BASEURL(Configuration)}");
+      Console.WriteLine($"    SHAREPOINT_ORGANISATIONSRELATIVEURL : {Settings.SHAREPOINT_ORGANISATIONSRELATIVEURL(Configuration)}");
+      Console.WriteLine($"    SHAREPOINT_LOGIN                    : {Settings.SHAREPOINT_LOGIN(Configuration)}");
+      Console.WriteLine($"    SHAREPOINT_PASSWORD                 : {Settings.SHAREPOINT_PASSWORD(Configuration)}");
 
       Console.WriteLine($"  CACHE:");
-      Console.WriteLine($"    CACHE_HOST : {Environment.GetEnvironmentVariable("CACHE_HOST")}");
+      Console.WriteLine($"    CACHE_HOST : {Settings.CACHE_HOST(Configuration)}");
     }
   }
 }

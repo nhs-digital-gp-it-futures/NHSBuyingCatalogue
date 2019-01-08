@@ -29,10 +29,7 @@ namespace NHSD.GPITF.BuyingCatalog.UserInfoResponseCache.Redis
       _logger = logger;
       _policy = policy.Build(_logger);
 
-      var cacheHost =
-        Environment.GetEnvironmentVariable("CACHE_HOST") ??
-        _config["Cache:Host"] ??
-        "localhost";
+      var cacheHost = Settings.CACHE_HOST(_config);
       var redis = ConnectionMultiplexer.Connect(cacheHost);
       _db = redis.GetDatabase();
     }

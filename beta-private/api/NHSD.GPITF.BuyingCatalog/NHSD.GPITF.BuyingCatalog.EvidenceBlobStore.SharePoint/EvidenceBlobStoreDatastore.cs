@@ -56,10 +56,10 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       _logger = logger;
       _policy = policy.Build(_logger);
 
-      SharePoint_BaseUrl = Environment.GetEnvironmentVariable("SHAREPOINT_BASEURL") ?? config["SharePoint:BaseUrl"];
-      SharePoint_OrganisationsRelativeUrl = Environment.GetEnvironmentVariable("SHAREPOINT_ORGANISATIONSRELATIVEURL") ?? config["SharePoint:OrganisationsRelativeUrl"];
-      SharePoint_Login = Environment.GetEnvironmentVariable("SHAREPOINT_LOGIN") ?? config["SharePoint:Login"];
-      SharePoint_Password = Environment.GetEnvironmentVariable("SHAREPOINT_PASSWORD") ?? config["SharePoint:Password"];
+      SharePoint_BaseUrl = Settings.SHAREPOINT_BASEURL(config);
+      SharePoint_OrganisationsRelativeUrl = Settings.SHAREPOINT_ORGANISATIONSRELATIVEURL(config);
+      SharePoint_Login = Settings.SHAREPOINT_LOGIN(config);
+      SharePoint_Password = Settings.SHAREPOINT_PASSWORD(config);
 
       if (string.IsNullOrWhiteSpace(SharePoint_BaseUrl) ||
         string.IsNullOrWhiteSpace(SharePoint_OrganisationsRelativeUrl) ||
@@ -215,7 +215,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
           using (var strm = new MemoryStream(buffer))
           {
             // Continue sliced upload
-              _logger.LogInformation($"UploadFileSlicePerSlice: uploading intermediate slice...");
+            _logger.LogInformation($"UploadFileSlicePerSlice: uploading intermediate slice...");
             bytesUploaded = uploadFile.ContinueUpload(uploadId, fileoffset, strm);
             _context.ExecuteQuery();
 
