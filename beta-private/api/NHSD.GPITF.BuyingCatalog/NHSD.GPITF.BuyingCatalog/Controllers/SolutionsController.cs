@@ -86,18 +86,16 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
     /// <param name="pageSize">number of items per page.  Defaults to 20</param>
     /// <response code="200">Success</response>
-    /// <response code="404">Organisation not found in CRM</response>
     [HttpGet]
     [Route("ByOrganisation/{organisationId}")]
     [ValidateModelState]
     [SwaggerResponse(statusCode: 200, type: typeof(PaginatedList<Solutions>), description: "Success")]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Solutions>), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Organisation not found in CRM")]
     public IActionResult ByOrganisation([FromRoute][Required]string organisationId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
       var solutions = _logic.ByOrganisation(organisationId);
       var retval = PaginatedList<Solutions>.Create(solutions, pageIndex, pageSize);
-      return solutions.Count() > 0 ? (IActionResult)new OkObjectResult(retval) : new NotFoundResult();
+      return new OkObjectResult(retval);
     }
 
     /// <summary>
