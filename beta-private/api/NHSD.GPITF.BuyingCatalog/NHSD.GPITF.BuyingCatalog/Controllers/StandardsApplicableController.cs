@@ -74,6 +74,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     {
       var stds = _logic.BySolution(solutionId);
       var retval = PaginatedList<StandardsApplicable>.Create(stds, pageIndex, pageSize);
+
+      // TODO   return empty array instead of 404
       return stds.Count() > 0 ? (IActionResult)new OkObjectResult(retval) : new NotFoundResult();
     }
 
