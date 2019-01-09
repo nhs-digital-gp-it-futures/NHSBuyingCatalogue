@@ -49,6 +49,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
     public IActionResult BySolution([FromRoute][Required]string solutionId)
     {
       var solnClaims = _logic.BySolution(solutionId);
+
+      // TODO   return empty array instead of 404
       return solnClaims.Solution != null ? (IActionResult)new OkObjectResult(solnClaims) : new NotFoundResult();
     }
 
