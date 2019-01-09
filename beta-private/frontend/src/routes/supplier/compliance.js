@@ -108,7 +108,7 @@ function formatTimestampForDisplay (ts) {
   })
 }
 
-async function evidencePageContext (req) {
+async function evidencePageContext (req, next) {
   const context = {
     ...commonComplianceContext(req),
     ...await dataProvider.capabilityMappings()
@@ -118,7 +118,8 @@ async function evidencePageContext (req) {
 
   // Need to get this to go to the Error page....
   if (!context.claim) {
-    throw new Error('Claim Not Found')
+    let err = new Error('Claim Not Found')
+    return next(err)
   }
 
   context.claim.standard = context.standards[context.claim.standardId]
@@ -173,9 +174,9 @@ async function evidencePageContext (req) {
   return context
 }
 
-async function solutionComplianceEvidencePageGet (req, res) {
+async function solutionComplianceEvidencePageGet (req, res, next) {
   const context = {
-    ...await evidencePageContext(req),
+    ...await evidencePageContext(req, next),
     errors: req.body.errors || [],
     breadcrumbs: [
       { label: 'Onboarding.Title', url: `../../../../solutions/${req.solution.id}` },
@@ -264,9 +265,9 @@ async function solutionComplianceEvidencePagePost (req, res) {
   solutionComplianceEvidencePageGet(req, res)
 }
 
-async function downloadEvidenceGet (req, res) {
+async function downloadEvidenceGet (req, res, next) {
   const context = {
-    ...await evidencePageContext(req)
+    ...await evidencePageContext(req, next)
   }
   req.body.errors = req.body.errors || []
 
