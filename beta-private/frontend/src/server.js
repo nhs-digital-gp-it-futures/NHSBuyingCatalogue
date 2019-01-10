@@ -88,19 +88,21 @@ authentication(app).then(() => {
 
   // generic error handler
   app.use((err, req, res, next) => {
-    console.error(err.stack)
+    const errMessage = {
+      stack: err.stack,
+      originalUrl: req.originalUrl,
+      datetime: (new Date(Date.now())).toISOString()
+    }
+
+    console.error(errMessage)
 
     // don't allow the stack through to the template in production
     if (process.env.NODE_ENV === 'production') {
       // delete err.stack
     }
 
-    const context = {
-      error: err
-    }
-
     res.status(500)
-    res.render('error', context)
+    res.render('error', { error: err })
   })
 
   // Default route, 404: Page Not Found.
