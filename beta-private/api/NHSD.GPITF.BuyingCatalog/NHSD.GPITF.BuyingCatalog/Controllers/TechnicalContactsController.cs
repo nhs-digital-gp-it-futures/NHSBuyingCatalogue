@@ -58,8 +58,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
       var techConts = _logic.BySolution(solutionId);
       var retval = PaginatedList<TechnicalContacts>.Create(techConts, pageIndex, pageSize);
 
-      // TODO   return empty array instead of 404
-      return techConts.Count() > 0 ? (IActionResult)new OkObjectResult(retval) : new NotFoundResult();
+      return new OkObjectResult(retval);
     }
 
     /// <summary>

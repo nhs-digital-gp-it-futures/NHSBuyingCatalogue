@@ -58,8 +58,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
       var reviews = _logic.ByEvidence(evidenceId);
       var retval = PaginatedList<IEnumerable<StandardsApplicableReviews>>.Create(reviews, pageIndex, pageSize);
 
-      // TODO   return empty array instead of 404
-      return reviews.Count() > 0 ? (IActionResult)new OkObjectResult(reviews) : new NotFoundResult();
+      return new OkObjectResult(retval);
     }
 
     /// <summary>
