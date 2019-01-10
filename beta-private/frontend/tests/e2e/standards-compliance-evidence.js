@@ -12,6 +12,7 @@ const clinicalSafetyStdID = '7b62b29a-62a7-4b4a-bcc8-dfa65fb7e35c'
 const testingStdID = '99619bdd-6452-4850-9244-a4ce9bec70ca'
 const commercialStdID = '3a7735f2-759d-4f49-bca0-0828f32cf86c'
 const interopStdID = '0e55d9ec-43e6-41b3-bcac-d8681384ea68'
+const dataMigrationStdID = '0e55d9ec-43e6-41b3-bcac-d8681384ea68'
 
 const downloadFileName = 'Dummy TraceabilityMatrix.xlsx'
 
@@ -146,4 +147,21 @@ test('A standard should change to Submitted if evidence is submitted.', async t 
     // Selecting the Row that is the parent of the link, so that the sibling cell with containing status can be checked
     .expect(clinicalSafetySelector.parent().nth(1).find('.status').innerText).eql('Submitted')
     .expect(Selector('.standard-submitted h3').innerText).contains('Evidence submitted')
+})
+
+test('A standard sent back to the supplier should allow the supplier to resubmit', async t => {
+  // navigate to 'business continuity...' standard evidence upload page.
+  const dataMigrationSelector = Selector(`a[href*="${dataMigrationStdID}"]`)
+
+  await t.click(dataMigrationSelector)
+
+  await setFileToUpload(t, downloadFileName)
+    .click('#submit-for-compliance')
+    .expect(Selector('#compliance-confirmation > h1').innerText).contains('Review and submit')
+
+  await t
+    .click('#compliance-submission-confirmation-button')
+
+    // Selecting the Row that is the parent of the link, so that the sibling cell with containing status can be checked
+    .expect(dataMigrationSelector.parent().nth(1).find('.status').innerText).eql('Submitted')
 })
