@@ -116,7 +116,6 @@ async function evidencePageContext (req, next) {
 
   context.claim = _.find(context.solution.standards, { id: req.params.claim_id })
 
-  // Need to get this to go to the Error page....
   if (!context.claim) {
     let err = new Error('Claim Not Found')
     return next(err)
