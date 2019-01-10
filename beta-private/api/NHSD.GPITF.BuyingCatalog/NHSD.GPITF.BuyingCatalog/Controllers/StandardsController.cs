@@ -58,8 +58,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
       var stds = _logic.ByCapability(capabilityId, isOptional);
       var retval = PaginatedList<Standards>.Create(stds, pageIndex, pageSize);
 
-      // TODO   return empty array instead of 404
-      return stds.Count() > 0 ? (IActionResult)new OkObjectResult(retval) : new NotFoundResult();
+      return new OkObjectResult(retval);
     }
 
     /// <summary>
@@ -80,8 +79,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
       var stds = _logic.ByFramework(frameworkId);
       var retval = PaginatedList<Standards>.Create(stds, pageIndex, pageSize);
 
-      // TODO   return empty array instead of 404
-      return stds.Count() > 0 ? (IActionResult)new OkObjectResult(retval) : new NotFoundResult();
+      return new OkObjectResult(retval);
     }
 
     /// <summary>
@@ -118,8 +116,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     {
       var stds = _logic.ByIds(ids);
 
-      // TODO   return empty array instead of 404
-      return stds.Count() > 0 ? (IActionResult)new OkObjectResult(stds) : new NotFoundResult();
+      return new OkObjectResult(stds);
     }
 
     /// <summary>

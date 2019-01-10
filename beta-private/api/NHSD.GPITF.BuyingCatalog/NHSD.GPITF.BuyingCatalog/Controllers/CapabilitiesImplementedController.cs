@@ -75,8 +75,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
       var caps = _logic.BySolution(solutionId);
       var retval = PaginatedList<CapabilitiesImplemented>.Create(caps, pageIndex, pageSize);
 
-      // TODO   return empty array instead of 404
-      return caps.Count() > 0 ? (IActionResult)new OkObjectResult(retval) : new NotFoundResult();
+      return new OkObjectResult(retval);
     }
 
     /// <summary>

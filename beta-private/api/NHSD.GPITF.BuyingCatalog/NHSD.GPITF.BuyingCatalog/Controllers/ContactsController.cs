@@ -54,8 +54,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
       var contacts = _logic.ByOrganisation(organisationId);
       var retval = PaginatedList<Contacts>.Create(contacts, pageIndex, pageSize);
 
-      // TODO   return empty array instead of 404
-      return contacts.Count() > 0 ? (IActionResult)new OkObjectResult(retval) : new NotFoundResult();
+      return new OkObjectResult(retval);
     }
 
     /// <summary>
