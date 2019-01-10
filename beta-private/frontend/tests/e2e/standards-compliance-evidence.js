@@ -54,10 +54,11 @@ test('a \'Not Started\' With a traceability Matrix present, the page shows a for
     .expect(Selector('.file-input')).ok()
 })
 
-test('A submitted standard does not allow further uploads', async t => {
+test('A submitted standard does not allow further uploads but does allow download', async t => {
   await t
     .click(`a[href*="${commercialStdID}"]`)
     .expect(Selector('.has-feedback').innerText).contains('Awaiting Compliance Outcome')
+    .expect(Selector('.current-file').exists).ok()
 })
 
 // Skipped as the acceptance criteria did not clearly specify this as being required,
@@ -98,6 +99,35 @@ test('A \'Not Started\' standard should change to draft if a file is saved again
 
     // Selecting the Row that is the parent of the link, so that the sibling cell with containing status can be checked
     .expect(businessContinuitySelector.parent().nth(1).find('.status').innerText).eql('Draft')
+})
+
+test('The owner of a standard can be set correctly and is reflected on the Dashboard when saved', async t => {
+  // navigate to 'business continuity...' standard evidence upload page.
+  const businessContinuitySelector = Selector(`a[href*="${businessContinuityStdID}"]`)
+  const ownerDropdown = Selector('#compliance [name="ownerId"]')
+  const candidateOwners = ownerDropdown.child('option')
+
+  await t
+    .click(businessContinuitySelector)
+    .expect(Selector('#compliance .standard-owner .current-owner').textContent).eql('Helpma Boab')
+    .expect(ownerDropdown.visible).notOk()
+
+  await t
+    .click('#change-owner-button')
+    .expect(candidateOwners.count).eql(4)
+    .expect(candidateOwners.nth(0).textContent).contains('Lead Contact (Helpma Boab)')
+    .expect(candidateOwners.nth(1).textContent).contains('Dr Kool')
+    .expect(candidateOwners.nth(2).textContent).contains('Helpma Boab')
+    .expect(candidateOwners.nth(3).textContent).contains('Zyra Featherstonhaugh')
+
+  await setFileToUpload(t, downloadFileName)
+    .click(ownerDropdown)
+    .click(candidateOwners.nth(3))
+    .click('input[value="Save"]')
+    .click('.breadcrumb li:nth-child(2) > a')
+
+    // Selecting the Row that is the parent of the link, so that the sibling cell with containing owner can be checked
+    .expect(businessContinuitySelector.parent().nth(1).find('.owner').textContent).contains('Zyra Featherstonhaugh')
 })
 
 test('A standard should change to Submitted if evidence is submitted.', async t => {

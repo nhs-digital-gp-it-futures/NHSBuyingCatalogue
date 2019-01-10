@@ -3,9 +3,9 @@ const _ = require('lodash')
 module.exports = {
   'capabilities': {
     'uploading-video-evidence': {
-      'in':'body',
+      'in': 'body',
       'custom': {
-        'options' : (value, { req }) => {
+        'options': (value, { req }) => {
           // Want to ensure that if there has been any indication that a capability is
           // to be assessed with a file upload, that there has been a file uploaded
           // either in this submission, or in a previous submision.

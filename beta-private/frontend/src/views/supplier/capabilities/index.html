@@ -5,7 +5,7 @@
   <p>
     {{t 'CapAssPages.Assessment.Instructions'}}
   </p>
-  <p>
+  <p id="uploading-video-evidence">
     {{t 'CapAssPages.Assessment.Guidance'}}
   </p>
 
@@ -93,15 +93,15 @@
   /* global $, $$ */
   "use strict";
 
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', function () {
     const triggeringFieldsets = $$('fieldset.trigger')
 
-    triggeringFieldsets.forEach((fieldset) => {
+    triggeringFieldsets.forEach(function (fieldset) {
       const id = fieldset.id.replace('triggering-fieldset-', '') // ID from: triggering-fieldset-{{id}}
       const upload = $('#upload-fieldset-' + id)
       const live = $('#live-fieldset-' + id)
 
-      fieldset.addEventListener('change', (evt) => {
+      fieldset.addEventListener('change', function (evt) {
             const enabled = evt.target.value === 'yes'
             upload.classList.toggle('hidden', !enabled)
             live.classList.toggle('hidden', enabled)
@@ -112,6 +112,5 @@
       upload.classList.toggle('hidden', !intitialState)
       live.classList.toggle('hidden', intitialState)
     })
-});
-
+})
 </script>

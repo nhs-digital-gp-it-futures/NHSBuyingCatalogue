@@ -156,6 +156,16 @@ async function evidencePageContext (req) {
       .map(id => dataProvider.contactById(id))
   ), 'id')
 
+  // prepare list of candidate owners for dropdown
+  context.candidateOwners = _(context.solution.candidateOwners)
+    .map(owner => ({
+      ...owner,
+      current: owner.id === context.claim.ownerId
+    }))
+    // Lead contact is always first, followed by the other users in firstName order
+    .orderBy(['contactType', 'firstName', 'lastName'])
+    .value()
+
   context.errors = req.body.errors || []
 
   try {
@@ -211,12 +221,7 @@ async function solutionComplianceEvidencePagePost (req, res) {
     : '../../'
 
   if (!req.files.length) {
-    if (action.submit) {
-      req.body.errors = { items: [{ msg: 'No file to upload.' }] }
-    } else {
-      res.redirect(redirectUrl)
-      return
-    }
+    req.body.errors = { items: [{ msg: 'No file to upload.' }] }
   } else {
     const fileToUpload = req.files[0]
 
@@ -232,6 +237,7 @@ async function solutionComplianceEvidencePagePost (req, res) {
       }
 
       claim.status = '1' /* draft */
+      claim.ownerId = req.body.ownerId || null
 
       // always write an evidence record
       // TODO: link previousId when appropriate
@@ -285,8 +291,6 @@ async function solutionComplianceEvidenceConfirmationGet (req, res) {
       title: req.solution && _([req.solution.name, req.solution.version]).filter().join(', ')
     }
   }
-
-  context.activeForm.id = 'compliance-submission-confirmation'
 
   const claim = _.find(req.solution.standards, { id: req.params.claim_id })
 

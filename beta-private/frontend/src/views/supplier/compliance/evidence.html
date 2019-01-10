@@ -66,7 +66,6 @@
 {{/if}}
 
 {{#if latestFile}}
-  {{#if allowSubmission}}
   <section class="current-file">
     <h2>{{t 'CompliancePages.Evidence.CurrentFile.Heading'}}</h2>
     <p class="callout">
@@ -74,6 +73,7 @@
     </p>
   </section>
 
+  {{#if allowSubmission}}
   <section class="upload-and-reply">
     <h3>{{t 'CompliancePages.Evidence.Reply.Heading'}}</h3>
     {{#>form encoding="multipart/form-data" form_id=activeForm.id}}
@@ -87,6 +87,28 @@
           <h4 class="label">{{t 'CompliancePages.Evidence.Reply.Message.Label'}}</h4>
           <p class="help">{{t 'CompliancePages.Evidence.Reply.Message.Help'}}</p>
           <textarea name="message" aria-label="Evidence Message Description Text Area"></textarea>
+        </div>
+
+        <div class="standard-owner">
+          <p class="owner">
+            <label id="candidate-owners-label">{{t 'CompliancePages.Evidence.Owner.Label'}}</label>
+            <span class="current-owner">{{claim.ownerContact.displayName}}</span>
+            <a id="change-owner-button" href="#">{{t 'CompliancePages.Evidence.Owner.ChangeButton'}}</a>
+            <select name="ownerId" aria-labelledby="candidate-owners-label">
+              {{#each candidateOwners}}
+              <option value="{{id}}"{{#current}} selected{{/current}}>
+                {{#if contactType}}
+                {{contactType}} ({{firstName}} {{lastName}})
+                {{else}}
+                {{firstName}} {{lastName}}
+                {{/if}}
+              </option>
+              {{/each}}
+            </select>
+          </p>
+          {{#> help-reveal title='CompliancePages.Evidence.Owner.Help.Title'}}
+            {{t 'CompliancePages.Evidence.Owner.Help.Text'}}
+          {{/help-reveal}}
         </div>
       </fieldset>
 
@@ -138,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function () {
     $('#submit-for-compliance').disabled = !fileInputFilled
   }
 
-  if(replyForm) {
+  if (replyForm) {
     replyForm.addEventListener('change', updateForFileInputState)
     $('.remove', replyForm).addEventListener('click', function (ev) {
       ev.preventDefault()
@@ -150,5 +172,13 @@ document.addEventListener('DOMContentLoaded', function () {
     updateForFileInputState()
   }
 
+  const changeOwnerButton = $('#change-owner-button')
+  if (changeOwnerButton) {
+    changeOwnerButton.addEventListener('click', function (ev) {
+      ev.preventDefault()
+
+      changeOwnerButton.closest('.owner').classList.add('changing')
+    })
+  }
 })
 </script>

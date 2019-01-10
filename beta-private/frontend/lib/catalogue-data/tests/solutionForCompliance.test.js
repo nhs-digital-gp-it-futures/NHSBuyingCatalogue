@@ -8,6 +8,12 @@ beforeEach(() => {
 
 describe('solutionForCompliance', () => {
   it('adds the extra properties to the SolutionEx standards correctly', async () => {
+    subject.contactsApi.apiContactsByOrganisationByOrganisationIdGet.mockReturnValue({
+      items: [
+        { id: 'testOwner1', firstName: 'Zyra', lastName: 'Featherstonhaugh' }
+      ]
+    })
+
     subject.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet.mockReturnValue({
       solution: {
         id: 'testid',
@@ -18,7 +24,7 @@ describe('solutionForCompliance', () => {
       ],
       claimedStandard: [
         { status: 0, claimedStandardId: 'testCSId' },
-        { status: 1, claimedStandardId: 'testCSId1' },
+        { status: 1, claimedStandardId: 'testCSId1', ownerId: 'testOwner1' },
         { status: 2, claimedStandardId: 'testCSId2' },
         { status: 3, claimedStandardId: 'testCSId3' },
         { status: 4, claimedStandardId: 'testCSId4' },
@@ -48,7 +54,7 @@ describe('solutionForCompliance', () => {
           status: 1,
           claimedStandardId: 'testCSId1',
           statusClass: 'draft',
-          ownerContact: { displayName: '🦄 Rainbow' }
+          ownerContact: { displayName: 'Zyra Featherstonhaugh' }
         },
         {
           status: 2,
@@ -58,7 +64,7 @@ describe('solutionForCompliance', () => {
         },
         {
           status: 3,
-          claimedStandardId: 'testCSId',
+          claimedStandardId: 'testCSId3',
           statusClass: 'remediation',
           ownerContact: { displayName: '🦄 Rainbow' }
         },
