@@ -1,0 +1,78 @@
+----------AKSset up-----
+
+1)   ---Create resource group
+
+az group create --name KubeResourceGroup01 --location uksouth 
+
+2) --Create Azure kubernetes service cluster
+
+az aks create --resource-group KubeResourceGroup01 --name KubeCluster02 --node-count 2 --generate-ssh-keys
+
+Note : you can enable monitor at creation time or enable it later from insights
+
+3) Connect to the cluster
+
+To manage a Kubernetes cluster, use kubectl, the Kubernetes command-line client.
+If you're using Azure Cloud Shell, kubectl is already installed. If you want to install it locally, use the az aks install-cli command.
+
+az aks install-cli
+
+4) To configure kubectl to connect to your Kubernetes cluster, use the az aks get-credentials command. 
+This step downloads credentials and configures the Kubernetes CLI to use them.
+---- Make sure you delete contents of C:\Users\<username>\.kube\config
+
+az aks get-credentials --resource-group KubeResourceGroup01 --name KubeCluster02
+
+above command will Merged "KubeCluster02" as current context in C:\Users\bcadmin\.kube\config
+
+5) To verify the connection to your cluster, 
+use the kubectl get command to return a list of the cluster nodes. It can take a few minutes for the nodes to appear.
+
+kubectl get nodes
+
+6) Create public static ip
+
+az network public-ip create --resource-group MC_KubeResourceGroup01_KubeCluster02_uksouth --name BuyCatPBPublicIP --dns-name buyingcatprivatebeta --allocation-method static
+
+Above comand will give you below results which will give public static ip address which will be load balancer ip:
+{
+  "publicIp": {
+    "dnsSettings": {
+      "domainNameLabel": "buyingcatprivatebeta",
+      "fqdn": "buyingcatprivatebeta.uksouth.cloudapp.azure.com",
+      "reverseFqdn": null
+    },
+    "etag": "W/\"6c78cf35-7716-499a-8918-d50cb401d3cf\"",
+    "id": "/subscriptions/7b12a8a2-f06f-456f-b6f9-aa2d92e0b2ec/resourceGroups/MC_KubeResourceGroup01_KubeCluster02_uksouth/providers/Microsoft.Network/publicIPAddresses/BuyCatPBPublicIP",
+    "idleTimeoutInMinutes": 4,
+    "ipAddress": "51.140.48.244",
+    "ipConfiguration": null,
+    "ipTags": [],
+    "location": "uksouth",
+    "name": "BuyCatPBPublicIP",
+    "provisioningState": "Succeeded",
+    "publicIpAddressVersion": "IPv4",
+    "publicIpAllocationMethod": "Static",
+    "publicIpPrefix": null,
+    "resourceGroup": "MC_KubeResourceGroup01_KubeCluster02_uksouth",
+    "resourceGuid": "0a4fad7a-e616-44f0-8f2e-b24fc8efcb68",
+    "sku": {
+      "name": "Basic",
+      "tier": "Regional"
+    },
+    "tags": null,
+    "type": "Microsoft.Network/publicIPAddresses",
+    "zones": null
+  }
+}
+
+
+7) get load balancer ip from above and add <loadBalancerIP: xxx.xxx.xxx.xxx> to loadbalancer in kubernetes manifest yaml
+
+
+8) create kubernetes manifest yaml file , its added in reposirory. Confirm all above mentioned things are added to kubernetes manifest yaml file
+
+9) Deploy all images as a separate containers using kubectl create
+
+kubectl apply -f kubernetes-manifest_test.yml
+
