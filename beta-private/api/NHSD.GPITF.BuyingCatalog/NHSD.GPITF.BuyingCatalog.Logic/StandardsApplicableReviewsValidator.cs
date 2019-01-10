@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 
@@ -11,8 +12,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       IStandardsApplicableEvidenceDatastore evidenceDatastore,
       IStandardsApplicableDatastore claimDatastore,
       ISolutionsDatastore solutionDatastore,
-      IHttpContextAccessor context) :
-      base((IReviewsDatastore<ReviewsBase>)datastore, (IEvidenceDatastore<EvidenceBase>)evidenceDatastore, (IClaimsDatastore<ClaimsBase>)claimDatastore, solutionDatastore, context)
+      IHttpContextAccessor context,
+      ILogger<StandardsApplicableReviewsValidator> logger) :
+      base((IReviewsDatastore<ReviewsBase>)datastore, (IEvidenceDatastore<EvidenceBase>)evidenceDatastore, (IClaimsDatastore<ClaimsBase>)claimDatastore, solutionDatastore, context, logger)
     {
     }
 

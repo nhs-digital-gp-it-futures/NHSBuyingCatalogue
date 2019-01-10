@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
@@ -13,8 +14,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
 
     public SolutionsExValidator(
       IHttpContextAccessor context,
+      ILogger<SolutionsExValidator> logger,
       ISolutionsValidator solutionsValidator) :
-      base(context)
+      base(context, logger)
     {
       _solutionsValidator = solutionsValidator;
 
@@ -48,7 +50,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       RuleFor(x => x.Solution)
         .Must(soln =>
         {
-          _solutionsValidator.ValidateAndThrow(soln, ruleSet: nameof(ISolutionsLogic.Update));
+          _solutionsValidator.ValidateAndThrowEx(soln, ruleSet: nameof(ISolutionsLogic.Update));
           return true;
         });
     }

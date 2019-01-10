@@ -1,6 +1,7 @@
 ﻿using System;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
@@ -13,6 +14,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
   public sealed class CapabilitiesImplementedReviewsValidator_Tests
   {
     private Mock<IHttpContextAccessor> _context;
+    private Mock<ILogger<CapabilitiesImplementedReviewsValidator>> _logger;
     private Mock<ICapabilitiesImplementedReviewsDatastore> _reviewsDatastore;
     private Mock<ICapabilitiesImplementedEvidenceDatastore> _evidenceDatastore;
     private Mock<ICapabilitiesImplementedDatastore> _claimDatastore;
@@ -22,6 +24,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void SetUp()
     {
       _context = new Mock<IHttpContextAccessor>();
+      _logger = new Mock<ILogger<CapabilitiesImplementedReviewsValidator>>();
       _reviewsDatastore = new Mock<ICapabilitiesImplementedReviewsDatastore>();
       _reviewsDatastore.As<IReviewsDatastore<ReviewsBase>>();
       _evidenceDatastore = new Mock<ICapabilitiesImplementedEvidenceDatastore>();
@@ -34,13 +37,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new CapabilitiesImplementedReviewsValidator(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object));
+      Assert.DoesNotThrow(() => new CapabilitiesImplementedReviewsValidator(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object, _logger.Object));
     }
 
     [TestCase(SolutionStatus.CapabilitiesAssessment)]
     public void SolutionMustBeInReview_Review_Succeeds(SolutionStatus status)
     {
-      var validator = new CapabilitiesImplementedReviewsValidator(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
+      var validator = new CapabilitiesImplementedReviewsValidator(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object, _logger.Object);
       var soln = Creator.GetSolution(status: status);
       var review = GetCapabilitiesImplementedReview();
       var claim = Creator.GetCapabilitiesImplemented(solnId: soln.Id);
@@ -64,7 +67,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [TestCase(SolutionStatus.Approved)]
     public void SolutionMustBeInReview_NonReview_ReturnsError(SolutionStatus status)
     {
-      var validator = new CapabilitiesImplementedReviewsValidator(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
+      var validator = new CapabilitiesImplementedReviewsValidator(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object, _logger.Object);
       var soln = Creator.GetSolution(status: status);
       var review = GetCapabilitiesImplementedReview();
       var claim = Creator.GetCapabilitiesImplemented(solnId: soln.Id);

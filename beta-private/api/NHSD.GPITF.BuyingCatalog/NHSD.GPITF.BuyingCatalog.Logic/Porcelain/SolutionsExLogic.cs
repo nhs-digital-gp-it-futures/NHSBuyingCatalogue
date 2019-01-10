@@ -40,7 +40,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
 
     public void Update(SolutionEx solnEx)
     {
-      _validator.ValidateAndThrow(solnEx, ruleSet: nameof(ISolutionsExLogic.Update));
+      _validator.ValidateAndThrowEx(solnEx, ruleSet: nameof(ISolutionsExLogic.Update));
 
       var email = Context.Email();
       solnEx.Solution.ModifiedById = _contacts.ByEmail(email).Id;

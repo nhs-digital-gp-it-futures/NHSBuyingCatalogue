@@ -2,7 +2,7 @@
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
-  public interface IKeywordSearchHistoryValidator : IValidator<object>
+  public interface IKeywordSearchHistoryValidator : IValidatorBase<object>
   {
   }
 }

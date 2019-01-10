@@ -24,7 +24,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     public IEnumerable<KeywordCount> Get(DateTime startDate, DateTime endDate)
     {
-      _validator.ValidateAndThrow(Context);
+      _validator.ValidateAndThrowEx(Context);
       return _datastore.Get(startDate, endDate);
     }
   }

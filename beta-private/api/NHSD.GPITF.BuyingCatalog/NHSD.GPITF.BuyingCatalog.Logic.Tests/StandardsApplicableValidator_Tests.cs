@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
@@ -12,6 +13,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
   public sealed class StandardsApplicableValidator_Tests
   {
     private Mock<IHttpContextAccessor> _context;
+    private Mock<ILogger<StandardsApplicableValidator>> _logger;
     private Mock<IStandardsApplicableDatastore> _claimDatastore;
     private Mock<IContactsDatastore> _contactsDatastore;
     private Mock<ISolutionsDatastore> _solutionsDatastore;
@@ -20,6 +22,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void SetUp()
     {
       _context = new Mock<IHttpContextAccessor>();
+      _logger = new Mock<ILogger<StandardsApplicableValidator>>();
       _claimDatastore = new Mock<IStandardsApplicableDatastore>();
       _contactsDatastore = new Mock<IContactsDatastore>();
       _solutionsDatastore = new Mock<ISolutionsDatastore>();
@@ -28,7 +31,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new StandardsApplicableValidator(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object));
+      Assert.DoesNotThrow(() => new StandardsApplicableValidator(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object));
     }
 
     [Test]
@@ -39,7 +42,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         StandardsApplicableStatus status)
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
-      var validator = new StandardsApplicableValidator(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var validator = new StandardsApplicableValidator(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetStandardsApplicable(status: status);
 
       validator.MustBePending();
@@ -56,7 +59,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         StandardsApplicableStatus status)
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
-      var validator = new StandardsApplicableValidator(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var validator = new StandardsApplicableValidator(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetStandardsApplicable(status: status);
 
       validator.MustBePending();
@@ -87,7 +90,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         StandardsApplicableStatus status)
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
-      var validator = new StandardsApplicableValidator(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var validator = new StandardsApplicableValidator(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetStandardsApplicable(status: status);
 
       validator.MustBePending();
@@ -110,7 +113,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void MustBeValidStatusTransition_Valid_Succeeds(StandardsApplicableStatus oldStatus, StandardsApplicableStatus newStatus, string role)
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
-      var validator = new StandardsApplicableValidator(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var validator = new StandardsApplicableValidator(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var oldClaim = Creator.GetStandardsApplicable(status: oldStatus);
       var newClaim = Creator.GetStandardsApplicable(status: newStatus);
       _claimDatastore.Setup(x => x.ById(newClaim.Id)).Returns(oldClaim);
@@ -213,7 +216,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void MustBeValidStatusTransition_Invalid_ReturnsError(StandardsApplicableStatus oldStatus, StandardsApplicableStatus newStatus, string role)
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
-      var validator = new StandardsApplicableValidator(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var validator = new StandardsApplicableValidator(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var oldClaim = Creator.GetStandardsApplicable(status: oldStatus);
       var newClaim = Creator.GetStandardsApplicable(status: newStatus);
       _claimDatastore.Setup(x => x.ById(newClaim.Id)).Returns(oldClaim);
@@ -252,7 +255,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
           string role)
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
-      var validator = new StandardsApplicableValidator(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var validator = new StandardsApplicableValidator(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var oldClaim = Creator.GetStandardsApplicable(status: oldStatus);
       var newClaim = Creator.GetStandardsApplicable(status: newStatus);
       _claimDatastore.Setup(x => x.ById(newClaim.Id)).Returns(oldClaim);

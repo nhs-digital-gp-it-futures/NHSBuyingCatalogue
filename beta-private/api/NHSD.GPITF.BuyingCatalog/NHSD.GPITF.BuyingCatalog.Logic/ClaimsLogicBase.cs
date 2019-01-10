@@ -37,21 +37,21 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     public T Create(T claim)
     {
-      _validator.ValidateAndThrow(claim, ruleSet: nameof(IClaimsLogic<T>.Create));
+      _validator.ValidateAndThrowEx(claim, ruleSet: nameof(IClaimsLogic<T>.Create));
 
       return _datastore.Create(claim);
     }
 
     public void Update(T claim)
     {
-      _validator.ValidateAndThrow(claim, ruleSet: nameof(IClaimsLogic<T>.Update));
+      _validator.ValidateAndThrowEx(claim, ruleSet: nameof(IClaimsLogic<T>.Update));
 
       _datastore.Update(claim);
     }
 
     public void Delete(T claim)
     {
-      _validator.ValidateAndThrow(claim, ruleSet: nameof(IClaimsLogic<T>.Delete));
+      _validator.ValidateAndThrowEx(claim, ruleSet: nameof(IClaimsLogic<T>.Delete));
 
       _datastore.Delete(claim);
     }

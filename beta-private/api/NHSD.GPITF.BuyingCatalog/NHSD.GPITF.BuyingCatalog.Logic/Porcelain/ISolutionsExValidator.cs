@@ -3,7 +3,7 @@ using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
 {
-  public interface ISolutionsExValidator : IValidator<SolutionEx>
+  public interface ISolutionsExValidator : IValidatorBase<SolutionEx>
   {
   }
 }

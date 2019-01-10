@@ -2,7 +2,7 @@
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
-  public interface ILinkManagerValidator : IValidator<object>
+  public interface ILinkManagerValidator : IValidatorBase<object>
   {
   }
 }

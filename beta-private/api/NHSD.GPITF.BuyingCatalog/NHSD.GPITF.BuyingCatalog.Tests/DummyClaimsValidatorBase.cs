@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Logic;
 using NHSD.GPITF.BuyingCatalog.Models;
@@ -9,10 +10,11 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
   {
     public DummyClaimsValidatorBase(
       IHttpContextAccessor context,
+      ILogger<DummyClaimsValidatorBase> logger,
       IClaimsDatastore<ClaimsBase> claimDatastore,
       IContactsDatastore contactsDatastore,
       ISolutionsDatastore solutionsDatastore) :
-      base(context, claimDatastore, contactsDatastore, solutionsDatastore)
+      base(context, logger, claimDatastore, contactsDatastore, solutionsDatastore)
     {
     }
 

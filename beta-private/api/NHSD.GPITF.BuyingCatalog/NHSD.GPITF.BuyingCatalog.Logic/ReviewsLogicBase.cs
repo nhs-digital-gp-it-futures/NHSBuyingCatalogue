@@ -35,7 +35,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     public T Create(T review)
     {
-      _validator.ValidateAndThrow(review, ruleSet: nameof(IReviewsLogic<T>.Create));
+      _validator.ValidateAndThrowEx(review, ruleSet: nameof(IReviewsLogic<T>.Create));
 
       var email = Context.Email();
       review.CreatedById = _contacts.ByEmail(email).Id;

@@ -46,12 +46,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       logic.Create(claim);
 
-      // obfuscated validation code because we use an extension method
-      _validator.Verify(x => x.Validate(It.Is<ValidationContext>(
-        vc =>
-          vc.InstanceToValidate == claim &&
-          vc.Selector is RulesetValidatorSelector &&
-          ((RulesetValidatorSelector)vc.Selector).RuleSets.Contains(nameof(IClaimsLogic<ClaimsBase>.Create)))), Times.Once());
+      _validator.Verify(x => x.ValidateAndThrowEx(
+        It.Is<ClaimsBase>(c => c == claim),
+        It.Is<string>(rs => rs == nameof(IClaimsLogic<ClaimsBase>.Create))), Times.Once());
     }
 
     [Test]
@@ -65,11 +62,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       logic.Update(claim);
 
-      _validator.Verify(x => x.Validate(It.Is<ValidationContext>(
-        vc =>
-          vc.InstanceToValidate == claim &&
-          vc.Selector is RulesetValidatorSelector &&
-          ((RulesetValidatorSelector)vc.Selector).RuleSets.Contains(nameof(IClaimsLogic<ClaimsBase>.Update)))), Times.Once());
+      _validator.Verify(x => x.ValidateAndThrowEx(
+        It.Is<ClaimsBase>(c => c == claim),
+        It.Is<string>(rs => rs == nameof(IClaimsLogic<ClaimsBase>.Update))), Times.Once());
     }
 
     [Test]
@@ -83,11 +78,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       logic.Delete(claim);
 
-      _validator.Verify(x => x.Validate(It.Is<ValidationContext>(
-        vc =>
-          vc.InstanceToValidate == claim &&
-          vc.Selector is RulesetValidatorSelector &&
-          ((RulesetValidatorSelector)vc.Selector).RuleSets.Contains(nameof(IClaimsLogic<ClaimsBase>.Delete)))), Times.Once());
+      _validator.Verify(x => x.ValidateAndThrowEx(
+        It.Is<ClaimsBase>(c => c == claim),
+        It.Is<string>(rs => rs == nameof(IClaimsLogic<ClaimsBase>.Delete))), Times.Once());
     }
 
     [Test]

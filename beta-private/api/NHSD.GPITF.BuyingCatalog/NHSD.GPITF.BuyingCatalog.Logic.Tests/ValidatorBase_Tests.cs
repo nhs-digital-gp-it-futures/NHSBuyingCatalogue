@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NHSD.GPITF.BuyingCatalog.Tests;
 using NUnit.Framework;
@@ -10,24 +11,26 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
   public sealed class ValidatorBase_Tests
   {
     private Mock<IHttpContextAccessor> _context;
+    private Mock<ILogger<DummyValidatorBase>> _logger;
 
     [SetUp]
     public void SetUp()
     {
       _context = new Mock<IHttpContextAccessor>();
+      _logger = new Mock<ILogger<DummyValidatorBase>>();
     }
 
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new DummyValidatorBase(_context.Object));
+      Assert.DoesNotThrow(() => new DummyValidatorBase(_context.Object, _logger.Object));
     }
 
     [TestCase(Roles.Supplier)]
     public void MustBeSupplier_Supplier_Succeeds(string role)
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
-      var validator = new DummyValidatorBase(_context.Object);
+      var validator = new DummyValidatorBase(_context.Object, _logger.Object);
       var evidence = Creator.GetEvidenceBase();
 
       validator.MustBeSupplier();
@@ -41,7 +44,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void MustBeSupplier_NonSupplier_ReturnsError(string role)
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
-      var validator = new DummyValidatorBase(_context.Object);
+      var validator = new DummyValidatorBase(_context.Object, _logger.Object);
       var evidence = Creator.GetEvidenceBase();
 
       validator.MustBeSupplier();
@@ -58,7 +61,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       var ctx = Creator.GetContext(role: role);
       _context.Setup(c => c.HttpContext).Returns(ctx);
-      var validator = new DummyValidatorBase(_context.Object);
+      var validator = new DummyValidatorBase(_context.Object, _logger.Object);
 
       validator.MustBeAdmin();
       var valres = validator.Validate(_context.Object);
@@ -72,7 +75,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       var ctx = Creator.GetContext(role: role);
       _context.Setup(c => c.HttpContext).Returns(ctx);
-      var validator = new DummyValidatorBase(_context.Object);
+      var validator = new DummyValidatorBase(_context.Object, _logger.Object);
 
       validator.MustBeAdmin();
       var valres = validator.Validate(_context.Object);
@@ -89,7 +92,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       var ctx = Creator.GetContext(role: role);
       _context.Setup(c => c.HttpContext).Returns(ctx);
-      var validator = new DummyValidatorBase(_context.Object);
+      var validator = new DummyValidatorBase(_context.Object, _logger.Object);
 
       validator.MustBeAdminOrSupplier();
       var valres = validator.Validate(_context.Object);
@@ -102,7 +105,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       var ctx = Creator.GetContext(role: role);
       _context.Setup(c => c.HttpContext).Returns(ctx);
-      var validator = new DummyValidatorBase(_context.Object);
+      var validator = new DummyValidatorBase(_context.Object, _logger.Object);
 
       validator.MustBeAdminOrSupplier();
       var valres = validator.Validate(_context.Object);

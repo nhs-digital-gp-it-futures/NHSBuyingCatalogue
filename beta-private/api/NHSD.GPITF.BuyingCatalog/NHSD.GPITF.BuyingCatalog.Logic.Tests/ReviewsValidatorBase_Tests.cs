@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
@@ -13,6 +14,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
   public sealed class ReviewsValidatorBase_Tests
   {
     private Mock<IHttpContextAccessor> _context;
+    private Mock<ILogger<DummyReviewsValidatorBase>> _logger;
     private Mock<IReviewsDatastore<ReviewsBase>> _reviewsDatastore;
     private Mock<IEvidenceDatastore<EvidenceBase>> _evidenceDatastore;
     private Mock<IClaimsDatastore<ClaimsBase>> _claimDatastore;
@@ -22,6 +24,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void SetUp()
     {
       _context = new Mock<IHttpContextAccessor>();
+      _logger = new Mock<ILogger<DummyReviewsValidatorBase>>();
       _reviewsDatastore = new Mock<IReviewsDatastore<ReviewsBase>>();
       _evidenceDatastore = new Mock<IEvidenceDatastore<EvidenceBase>>();
       _claimDatastore = new Mock<IClaimsDatastore<ClaimsBase>>();
@@ -31,13 +34,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object));
+      Assert.DoesNotThrow(() => new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object, _logger.Object));
     }
 
     [Test]
     public void MustBeValidEvidenceId_Valid_Succeeds()
     {
-      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
+      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object, _logger.Object);
       var review = Creator.GetReviewsBase();
 
       validator.MustBeValidEvidenceId();
@@ -49,7 +52,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void MustBeValidEvidenceId_Null_ReturnsError()
     {
-      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
+      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object, _logger.Object);
       var review = Creator.GetReviewsBase();
       review.EvidenceId = null;
 
@@ -67,7 +70,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void MustBeValidEvidenceId_NotGuid_ReturnsError()
     {
-      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
+      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object, _logger.Object);
       var review = Creator.GetReviewsBase(evidenceId: "some other Id");
 
       validator.MustBeValidEvidenceId();
@@ -82,7 +85,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void MustBeValidPreviousId_Valid_Succeeds()
     {
-      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
+      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object, _logger.Object);
       var review = Creator.GetReviewsBase();
 
       validator.MustBeValidPreviousId();
@@ -94,7 +97,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void MustBeValidPreviousId_Null_Succeeds()
     {
-      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
+      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object, _logger.Object);
       var review = Creator.GetReviewsBase(prevId: null);
 
       validator.MustBeValidPreviousId();
@@ -106,7 +109,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void MustBeValidPreviousId_NotGuid_ReturnsError()
     {
-      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
+      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object, _logger.Object);
       var review = Creator.GetReviewsBase(prevId: "not a GUID");
 
       validator.MustBeValidPreviousId();
@@ -122,7 +125,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void MustBeFromSameOrganisation_Same_Succeeds()
     {
       var orgId = Guid.NewGuid().ToString();
-      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
+      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object, _logger.Object);
       var review = Creator.GetReviewsBase();
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(orgId: orgId));
       var soln = Creator.GetSolution(orgId: orgId);
@@ -143,7 +146,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       var orgId = Guid.NewGuid().ToString();
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
-      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
+      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object, _logger.Object);
       var review = Creator.GetReviewsBase();
       var soln = Creator.GetSolution(orgId: orgId);
       var claim = Creator.GetClaimsBase(solnId: soln.Id);
@@ -164,7 +167,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void PreviousMustBeForSameEvidence_Same_Succeeds()
     {
-      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
+      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object, _logger.Object);
       var prevReview = Creator.GetReviewsBase();
       var review = Creator.GetReviewsBase(prevId: prevReview.Id, evidenceId: prevReview.EvidenceId);
       var prevEvidence = Creator.GetEvidenceBase();
@@ -180,7 +183,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void PreviousMustBeForSameEvidence_Other_ReturnsError()
     {
-      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
+      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object, _logger.Object);
       var prevReview = Creator.GetReviewsBase();
       var review = Creator.GetReviewsBase(prevId: prevReview.Id);
       var prevEvidence = Creator.GetEvidenceBase();
@@ -199,7 +202,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void PreviousMustNotBeInUse_NotInUse_Succeeds()
     {
-      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
+      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object, _logger.Object);
       var review = Creator.GetReviewsBase(prevId: Guid.NewGuid().ToString());
       _reviewsDatastore.Setup(x => x.ByEvidence(review.EvidenceId)).Returns(new[] { new[] { Creator.GetReviewsBase() } });
 
@@ -232,7 +235,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       // create new review linked (previous) to rev1 ie 'fan out'
       var review = Creator.GetReviewsBase(evidenceId: evidenceId, prevId: rev1.Id);
-      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object);
+      var validator = new DummyReviewsValidatorBase(_reviewsDatastore.Object, _evidenceDatastore.Object, _claimDatastore.Object, _solutionDatastore.Object, _context.Object, _logger.Object);
 
 
       validator.PreviousMustNotBeInUse();

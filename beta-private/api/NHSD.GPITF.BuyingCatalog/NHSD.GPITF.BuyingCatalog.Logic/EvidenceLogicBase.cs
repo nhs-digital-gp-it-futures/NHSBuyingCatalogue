@@ -35,7 +35,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     public T Create(T evidence)
     {
-      _validator.ValidateAndThrow(evidence, ruleSet: nameof(IEvidenceLogic<T>.Create));
+      _validator.ValidateAndThrowEx(evidence, ruleSet: nameof(IEvidenceLogic<T>.Create));
 
       var email = Context.Email();
       evidence.CreatedById = _contacts.ByEmail(email).Id;

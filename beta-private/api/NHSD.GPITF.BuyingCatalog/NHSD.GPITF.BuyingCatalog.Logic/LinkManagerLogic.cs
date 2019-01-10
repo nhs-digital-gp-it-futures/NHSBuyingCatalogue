@@ -21,7 +21,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     public void FrameworkSolutionCreate(string frameworkId, string solutionId)
     {
-      _validator.ValidateAndThrow(Context, ruleSet: nameof(ILinkManagerLogic.FrameworkSolutionCreate));
+      _validator.ValidateAndThrowEx(Context, ruleSet: nameof(ILinkManagerLogic.FrameworkSolutionCreate));
       _datastore.FrameworkSolutionCreate(frameworkId, solutionId);
     }
   }

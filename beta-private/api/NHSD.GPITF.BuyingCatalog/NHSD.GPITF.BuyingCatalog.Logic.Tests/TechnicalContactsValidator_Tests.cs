@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Tests;
@@ -13,11 +14,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
   public sealed class TechnicalContactsValidator_Tests
   {
     private Mock<IHttpContextAccessor> _context;
+    private Mock<ILogger<TechnicalContactsValidator>> _logger;
     private Mock<ISolutionsDatastore> _solutionDatastore;
 
     [SetUp]
     public void SetUp()
     {
+      _logger = new Mock<ILogger<TechnicalContactsValidator>>();
       _context = new Mock<IHttpContextAccessor>();
       _solutionDatastore = new Mock<ISolutionsDatastore>();
     }
@@ -25,7 +28,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new TechnicalContactsValidator(_context.Object, _solutionDatastore.Object));
+      Assert.DoesNotThrow(() => new TechnicalContactsValidator(_context.Object, _logger.Object, _solutionDatastore.Object));
     }
 
     [Test]
@@ -37,7 +40,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var soln = Creator.GetSolution(orgId: orgId);
       var techCont = Creator.GetTechnicalContact();
       _solutionDatastore.Setup(x => x.ById(techCont.SolutionId)).Returns(soln);
-      var validator = new TechnicalContactsValidator(_context.Object, _solutionDatastore.Object);
+      var validator = new TechnicalContactsValidator(_context.Object, _logger.Object, _solutionDatastore.Object);
 
       validator.SupplierOwn();
       var res = validator.Validate(techCont);
@@ -54,7 +57,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var soln = Creator.GetSolution();
       var techCont = Creator.GetTechnicalContact();
       _solutionDatastore.Setup(x => x.ById(techCont.SolutionId)).Returns(soln);
-      var validator = new TechnicalContactsValidator(_context.Object, _solutionDatastore.Object);
+      var validator = new TechnicalContactsValidator(_context.Object, _logger.Object, _solutionDatastore.Object);
 
       validator.SupplierOwn();
       var res = validator.Validate(techCont);

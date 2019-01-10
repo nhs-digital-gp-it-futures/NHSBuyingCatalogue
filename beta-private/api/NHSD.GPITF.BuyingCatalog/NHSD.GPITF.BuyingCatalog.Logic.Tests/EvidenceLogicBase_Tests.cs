@@ -60,12 +60,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       logic.Create(evidence);
 
-      // obfuscated validation code because we use an extension method
-      _validator.Verify(x => x.Validate(It.Is<ValidationContext>(
-        vc =>
-          vc.InstanceToValidate == evidence &&
-          vc.Selector is RulesetValidatorSelector &&
-          ((RulesetValidatorSelector)vc.Selector).RuleSets.Contains(nameof(IEvidenceLogic<EvidenceBase>.Create)))), Times.Once());
+      _validator.Verify(x => x.ValidateAndThrowEx(
+        It.Is<DummyEvidenceBase>(ev => ev == evidence),
+        It.Is<string>(rs => rs == nameof(IEvidenceLogic<EvidenceLogicBase<EvidenceBase>>.Create))), Times.Once());
     }
   }
 }
