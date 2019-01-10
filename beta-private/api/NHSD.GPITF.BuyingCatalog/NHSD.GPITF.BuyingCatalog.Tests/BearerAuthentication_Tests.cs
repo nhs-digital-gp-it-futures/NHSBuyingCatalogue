@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
 using NHSD.GPITF.BuyingCatalog.Authentications;
@@ -22,6 +23,7 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
 
     private TokenValidatedContext _context;
     private Mock<IConfiguration> _config;
+    private Mock<ILogger<BearerAuthentication>> _logger;
     private Mock<IUserInfoResponseCache> _cache;
     private Mock<IUserInfoResponseRetriever> _rover;
     private Mock<IContactsDatastore> _contactsDatastore;
@@ -32,6 +34,7 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
     {
       _context = Creator.GetTokenValidatedContext(BearerToken);
       _config = new Mock<IConfiguration>();
+      _logger = new Mock<ILogger<BearerAuthentication>>();
       _cache = new Mock<IUserInfoResponseCache>();
       _rover = new Mock<IUserInfoResponseRetriever>();
       _contactsDatastore = new Mock<IContactsDatastore>();
@@ -58,6 +61,7 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       var auth = new BearerAuthentication(
         _cache.Object,
         _config.Object,
+        _logger.Object,
         _rover.Object,
         _contactsDatastore.Object,
         _organisationDatastore.Object);
@@ -90,6 +94,7 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       var auth = new BearerAuthentication(
         _cache.Object,
         _config.Object,
+        _logger.Object,
         _rover.Object,
         _contactsDatastore.Object,
         _organisationDatastore.Object);
@@ -121,6 +126,7 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       var auth = new BearerAuthentication(
         _cache.Object,
         _config.Object,
+        _logger.Object,
         _rover.Object,
         _contactsDatastore.Object,
         _organisationDatastore.Object);
@@ -148,6 +154,7 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       var auth = new BearerAuthentication(
         _cache.Object,
         _config.Object,
+        _logger.Object,
         _rover.Object,
         _contactsDatastore.Object,
         _organisationDatastore.Object);
@@ -174,6 +181,7 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       var auth = new BearerAuthentication(
         _cache.Object,
         _config.Object,
+        _logger.Object,
         _rover.Object,
         _contactsDatastore.Object,
         _organisationDatastore.Object);

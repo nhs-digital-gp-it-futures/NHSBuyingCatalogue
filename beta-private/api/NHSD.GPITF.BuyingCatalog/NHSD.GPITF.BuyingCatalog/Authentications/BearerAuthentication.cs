@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
@@ -17,6 +18,7 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
   {
     private readonly IUserInfoResponseCache _cache;
     private readonly IConfiguration _config;
+    private readonly ILogger<BearerAuthentication> _logger;
     private readonly IUserInfoResponseRetriever _userInfoClient;
     private readonly IContactsDatastore _contactsDatastore;
     private readonly IOrganisationsDatastore _organisationDatastore;
@@ -26,12 +28,14 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
     public BearerAuthentication(
       IUserInfoResponseCache cache,
       IConfiguration config,
+      ILogger<BearerAuthentication> logger,
       IUserInfoResponseRetriever userInfoClient,
       IContactsDatastore contactsDatastore,
       IOrganisationsDatastore organisationDatastore)
     {
       _cache = cache;
       _config = config;
+      _logger = logger;
       _userInfoClient = userInfoClient;
       _contactsDatastore = contactsDatastore;
       _organisationDatastore = organisationDatastore;
@@ -54,13 +58,14 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
         }
       }
 
+      var userInfo = Settings.OIDC_USERINFO_URL(_config);
       var response = cachedresponse?.UserInfoResponse;
       if (response == null)
       {
-        var userInfo = Settings.OIDC_USERINFO_URL(_config);
         response = await _userInfoClient.GetAsync(userInfo, bearerToken.Substring(7));
         if (response == null)
         {
+          _logger.LogError($"No response from {userInfo}");
           return;
         }
         _cache.SafeAdd(bearerToken, JsonConvert.SerializeObject(new CachedUserInfoResponse(response)));
@@ -68,6 +73,7 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
 
       if (response?.Claims == null)
       {
+        _logger.LogError($"No claims from {userInfo}");
         return;
       }
 
@@ -79,12 +85,14 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
         var contact = _contactsDatastore.ByEmail(email);
         if (contact == null)
         {
+          _logger.LogError($"No contact for {email}");
           return;
         }
 
         var org = _organisationDatastore.ByContact(contact.Id);
         if (org == null)
         {
+          _logger.LogError($"No organisation for {contact.Id}");
           return;
         }
 
