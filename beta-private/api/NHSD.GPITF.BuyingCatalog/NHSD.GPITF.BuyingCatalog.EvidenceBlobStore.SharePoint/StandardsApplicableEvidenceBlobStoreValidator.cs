@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 
@@ -8,9 +9,10 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
   {
     public StandardsApplicableEvidenceBlobStoreValidator(
       IHttpContextAccessor context,
+      ILogger<StandardsApplicableEvidenceBlobStoreValidator> logger,
       ISolutionsDatastore solutionsDatastore,
       IStandardsApplicableDatastore claimsDatastore) :
-      base(context, solutionsDatastore, (IClaimsDatastore<ClaimsBase>)claimsDatastore)
+      base(context, logger, solutionsDatastore, (IClaimsDatastore<ClaimsBase>)claimsDatastore)
     {
     }
   }

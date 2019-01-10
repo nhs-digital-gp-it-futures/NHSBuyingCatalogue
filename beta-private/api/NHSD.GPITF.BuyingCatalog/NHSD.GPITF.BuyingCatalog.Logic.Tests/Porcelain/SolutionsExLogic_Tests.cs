@@ -8,6 +8,7 @@ using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Logic.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Models;
+using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Tests;
 using NUnit.Framework;
 using System;
@@ -55,12 +56,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
 
       logic.Update(solnEx);
 
-      // obfuscated validation code because we use an extension method
-      _validator.Verify(x => x.Validate(It.Is<ValidationContext>(
-        vc =>
-          vc.InstanceToValidate == solnEx &&
-          vc.Selector is RulesetValidatorSelector &&
-          ((RulesetValidatorSelector)vc.Selector).RuleSets.Contains(nameof(ISolutionsExLogic.Update)))), Times.Once());
+      _validator.Verify(x => x.ValidateAndThrowEx(
+        It.Is<SolutionEx>(sex => sex == solnEx),
+        It.Is<string>(rs => rs == nameof(ISolutionsExLogic.Update))), Times.Once());
     }
 
     [TestCase(SolutionStatus.Registered)]

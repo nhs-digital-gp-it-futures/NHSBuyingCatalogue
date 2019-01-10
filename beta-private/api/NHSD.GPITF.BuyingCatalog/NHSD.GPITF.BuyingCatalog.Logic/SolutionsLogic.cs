@@ -49,7 +49,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     public Solutions Create(Solutions solution)
     {
-      _validator.ValidateAndThrow(solution, ruleSet: nameof(ISolutionsLogic.Create));
+      _validator.ValidateAndThrowEx(solution, ruleSet: nameof(ISolutionsLogic.Create));
 
       var email = Context.Email();
       solution.CreatedById = solution.ModifiedById = _contacts.ByEmail(email).Id;
@@ -60,7 +60,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     public void Update(Solutions solution)
     {
-      _validator.ValidateAndThrow(solution, ruleSet: nameof(ISolutionsLogic.Update));
+      _validator.ValidateAndThrowEx(solution, ruleSet: nameof(ISolutionsLogic.Update));
 
       var email = Context.Email();
       solution.ModifiedById = _contacts.ByEmail(email).Id;
@@ -77,7 +77,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     public void Delete(Solutions solution)
     {
-      _validator.ValidateAndThrow(solution, ruleSet: nameof(ISolutionsLogic.Delete));
+      _validator.ValidateAndThrowEx(solution, ruleSet: nameof(ISolutionsLogic.Delete));
 
       _datastore.Delete(solution);
     }

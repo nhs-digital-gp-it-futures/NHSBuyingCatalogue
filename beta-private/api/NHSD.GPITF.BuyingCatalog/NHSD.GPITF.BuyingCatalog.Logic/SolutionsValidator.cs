@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
@@ -17,10 +18,11 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     public SolutionsValidator(
       IHttpContextAccessor context,
+      ILogger<SolutionsValidator> logger,
       ISolutionsDatastore solutionDatastore,
       IOrganisationsDatastore organisationDatastore,
       IHostingEnvironment env) :
-      base(context)
+      base(context, logger)
     {
       _solutionDatastore = solutionDatastore;
       _organisationDatastore = organisationDatastore;

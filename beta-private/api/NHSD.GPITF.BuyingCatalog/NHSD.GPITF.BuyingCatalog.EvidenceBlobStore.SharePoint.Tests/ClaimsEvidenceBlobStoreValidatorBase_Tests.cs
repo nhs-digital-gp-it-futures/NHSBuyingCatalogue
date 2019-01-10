@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Logic.Tests;
@@ -14,6 +15,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.Tests
   public sealed class ClaimsEvidenceBlobStoreValidatorBase_Tests
   {
     private Mock<IHttpContextAccessor> _context;
+    private Mock<ILogger<DummyClaimsEvidenceBlobStoreValidatorBase>> _logger;
     private Mock<ISolutionsDatastore> _solutionsDatastore;
     private Mock<IClaimsDatastore<ClaimsBase>> _claimsDatastore;
 
@@ -21,6 +23,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.Tests
     public void SetUp()
     {
       _context = new Mock<IHttpContextAccessor>();
+      _logger = new Mock<ILogger<DummyClaimsEvidenceBlobStoreValidatorBase>>();
       _solutionsDatastore = new Mock<ISolutionsDatastore>();
       _claimsDatastore = new Mock<IClaimsDatastore<ClaimsBase>>();
     }
@@ -28,7 +31,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.Tests
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new DummyClaimsEvidenceBlobStoreValidatorBase(_context.Object, _solutionsDatastore.Object, _claimsDatastore.Object));
+      Assert.DoesNotThrow(() => new DummyClaimsEvidenceBlobStoreValidatorBase(_context.Object, _logger.Object, _solutionsDatastore.Object, _claimsDatastore.Object));
     }
 
     [Test]
@@ -36,7 +39,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.Tests
     {
       var claimId = Guid.NewGuid().ToString();
       _claimsDatastore.Setup(x => x.ById(claimId)).Returns(Creator.GetClaimsBase());
-      var validator = new DummyClaimsEvidenceBlobStoreValidatorBase(_context.Object, _solutionsDatastore.Object, _claimsDatastore.Object);
+      var validator = new DummyClaimsEvidenceBlobStoreValidatorBase(_context.Object, _logger.Object, _solutionsDatastore.Object, _claimsDatastore.Object);
 
       validator.MustBeValidClaim();
       var valres = validator.Validate(claimId);
@@ -48,7 +51,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.Tests
     public void MustBeValidClaim_Invalid_ReturnsError()
     {
       var claimId = Guid.NewGuid().ToString();
-      var validator = new DummyClaimsEvidenceBlobStoreValidatorBase(_context.Object, _solutionsDatastore.Object, _claimsDatastore.Object);
+      var validator = new DummyClaimsEvidenceBlobStoreValidatorBase(_context.Object, _logger.Object, _solutionsDatastore.Object, _claimsDatastore.Object);
 
       validator.MustBeValidClaim();
       var valres = validator.Validate(claimId);
@@ -71,7 +74,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.Tests
       _claimsDatastore.Setup(x => x.ById(claimId)).Returns(claim);
       var soln = Creator.GetSolution(orgId: orgId);
       _solutionsDatastore.Setup(x => x.ById(claim.SolutionId)).Returns(soln);
-      var validator = new DummyClaimsEvidenceBlobStoreValidatorBase(_context.Object, _solutionsDatastore.Object, _claimsDatastore.Object);
+      var validator = new DummyClaimsEvidenceBlobStoreValidatorBase(_context.Object, _logger.Object, _solutionsDatastore.Object, _claimsDatastore.Object);
 
       validator.MustBeSameOrganisation();
       var valres = validator.Validate(claimId);
@@ -90,7 +93,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.Tests
       _claimsDatastore.Setup(x => x.ById(claimId)).Returns(claim);
       var soln = Creator.GetSolution(orgId: orgId);
       _solutionsDatastore.Setup(x => x.ById(claim.SolutionId)).Returns(soln);
-      var validator = new DummyClaimsEvidenceBlobStoreValidatorBase(_context.Object, _solutionsDatastore.Object, _claimsDatastore.Object);
+      var validator = new DummyClaimsEvidenceBlobStoreValidatorBase(_context.Object, _logger.Object, _solutionsDatastore.Object, _claimsDatastore.Object);
 
       validator.MustBeSameOrganisation();
       var valres = validator.Validate(claimId);
@@ -108,7 +111,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.Tests
       var ctx = Creator.GetContext(role: role);
       _context.Setup(c => c.HttpContext).Returns(ctx);
       var claimId = Guid.NewGuid().ToString();
-      var validator = new DummyClaimsEvidenceBlobStoreValidatorBase(_context.Object, _solutionsDatastore.Object, _claimsDatastore.Object);
+      var validator = new DummyClaimsEvidenceBlobStoreValidatorBase(_context.Object, _logger.Object, _solutionsDatastore.Object, _claimsDatastore.Object);
 
       validator.MustBeSameOrganisation();
       var valres = validator.Validate(claimId);

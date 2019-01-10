@@ -40,7 +40,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
     public string AddEvidenceForClaim(string claimId, Stream file, string filename, string subFolder = null)
     {
-      _claimValidator.ValidateAndThrow(claimId, ruleSet: nameof(IEvidenceBlobStoreLogic.AddEvidenceForClaim));
+      _claimValidator.ValidateAndThrowEx(claimId, ruleSet: nameof(IEvidenceBlobStoreLogic.AddEvidenceForClaim));
 
       var claim = ClaimsDatastore.ById(claimId);
       if (claim == null)
@@ -53,7 +53,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
     public FileStreamResult GetFileStream(string claimId, string uniqueId)
     {
-      _claimValidator.ValidateAndThrow(claimId, ruleSet: nameof(IEvidenceBlobStoreLogic.GetFileStream));
+      _claimValidator.ValidateAndThrowEx(claimId, ruleSet: nameof(IEvidenceBlobStoreLogic.GetFileStream));
 
       var claim = GetClaimById(claimId);
       if (claim == null)
@@ -66,7 +66,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
     public IEnumerable<BlobInfo> EnumerateFolder(string claimId, string subFolder = null)
     {
-      _claimValidator.ValidateAndThrow(claimId, ruleSet: nameof(IEvidenceBlobStoreLogic.EnumerateFolder));
+      _claimValidator.ValidateAndThrowEx(claimId, ruleSet: nameof(IEvidenceBlobStoreLogic.EnumerateFolder));
 
       var claim = GetClaimById(claimId);
       if (claim == null)
@@ -79,7 +79,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
     public void PrepareForSolution(string solutionId)
     {
-      _validator.ValidateAndThrow(solutionId, ruleSet: nameof(IEvidenceBlobStoreLogic.PrepareForSolution));
+      _validator.ValidateAndThrowEx(solutionId, ruleSet: nameof(IEvidenceBlobStoreLogic.PrepareForSolution));
 
       _evidenceBlobStoreDatastore.PrepareForSolution(this, solutionId);
     }

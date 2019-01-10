@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NHSD.GPITF.BuyingCatalog.Tests;
 using NUnit.Framework;
@@ -10,17 +11,19 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.Tests
   public sealed class EvidenceBlobStoreValidator_Tests
   {
     private Mock<IHttpContextAccessor> _context;
+    private Mock<ILogger<EvidenceBlobStoreValidator>> _logger;
 
     [SetUp]
     public void SetUp()
     {
       _context = new Mock<IHttpContextAccessor>();
+      _logger = new Mock<ILogger<EvidenceBlobStoreValidator>>();
     }
 
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new EvidenceBlobStoreValidator(_context.Object));
+      Assert.DoesNotThrow(() => new EvidenceBlobStoreValidator(_context.Object, _logger.Object));
     }
 
     [TestCase(Roles.Admin)]
@@ -29,7 +32,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.Tests
     {
       var ctx = Creator.GetContext(role: role);
       _context.Setup(c => c.HttpContext).Returns(ctx);
-      var validator = new EvidenceBlobStoreValidator(_context.Object);
+      var validator = new EvidenceBlobStoreValidator(_context.Object, _logger.Object);
 
       validator.MustBeAdminOrSupplier();
       var valres = validator.Validate(role);
@@ -42,7 +45,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.Tests
     {
       var ctx = Creator.GetContext(role: role);
       _context.Setup(c => c.HttpContext).Returns(ctx);
-      var validator = new EvidenceBlobStoreValidator(_context.Object);
+      var validator = new EvidenceBlobStoreValidator(_context.Object, _logger.Object);
 
       validator.MustBeAdminOrSupplier();
       var valres = validator.Validate(role);

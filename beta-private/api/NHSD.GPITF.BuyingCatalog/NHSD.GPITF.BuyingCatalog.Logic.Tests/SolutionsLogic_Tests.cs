@@ -84,12 +84,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       logic.Create(soln);
 
-      // obfuscated validation code because we use an extension method
-      _validator.Verify(x => x.Validate(It.Is<ValidationContext>(
-        vc =>
-          vc.InstanceToValidate == soln &&
-          vc.Selector is RulesetValidatorSelector &&
-          ((RulesetValidatorSelector)vc.Selector).RuleSets.Contains(nameof(ISolutionsLogic.Create)))), Times.Once());
+      _validator.Verify(x => x.ValidateAndThrowEx(
+        It.Is<Solutions>(s => s == soln),
+        It.Is<string>(rs => rs == nameof(ISolutionsLogic.Create))), Times.Once());
     }
 
     [Test]
@@ -105,12 +102,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       logic.Update(soln);
 
-      // obfuscated validation code because we use an extension method
-      _validator.Verify(x => x.Validate(It.Is<ValidationContext>(
-        vc =>
-          vc.InstanceToValidate == soln &&
-          vc.Selector is RulesetValidatorSelector &&
-          ((RulesetValidatorSelector)vc.Selector).RuleSets.Contains(nameof(ISolutionsLogic.Update)))), Times.Once());
+      _validator.Verify(x => x.ValidateAndThrowEx(
+        It.Is<Solutions>(s => s == soln),
+        It.Is<string>(rs => rs == nameof(ISolutionsLogic.Update))), Times.Once());
     }
 
     [TestCase(SolutionStatus.Registered)]

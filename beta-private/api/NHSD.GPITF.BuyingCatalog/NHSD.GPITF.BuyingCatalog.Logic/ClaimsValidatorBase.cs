@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System;
@@ -14,10 +15,11 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     public ClaimsValidatorBase(
       IHttpContextAccessor context,
+      ILogger<ClaimsValidatorBase<T>> logger,
       IClaimsDatastore<T> claimDatastore,
       IContactsDatastore contactsDatastore,
       ISolutionsDatastore solutionsDatastore) :
-      base(context)
+      base(context, logger)
     {
       _claimDatastore = claimDatastore;
       _contactsDatastore = contactsDatastore;

@@ -31,19 +31,19 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     public TechnicalContacts Create(TechnicalContacts techCont)
     {
-      _validator.ValidateAndThrow(techCont, ruleSet: nameof(ITechnicalContactsLogic.Create));
+      _validator.ValidateAndThrowEx(techCont, ruleSet: nameof(ITechnicalContactsLogic.Create));
       return _datastore.Create(techCont);
     }
 
     public void Delete(TechnicalContacts techCont)
     {
-      _validator.ValidateAndThrow(techCont, ruleSet: nameof(ITechnicalContactsLogic.Delete));
+      _validator.ValidateAndThrowEx(techCont, ruleSet: nameof(ITechnicalContactsLogic.Delete));
       _datastore.Delete(techCont);
     }
 
     public void Update(TechnicalContacts techCont)
     {
-      _validator.ValidateAndThrow(techCont, ruleSet: nameof(ITechnicalContactsLogic.Update));
+      _validator.ValidateAndThrowEx(techCont, ruleSet: nameof(ITechnicalContactsLogic.Update));
       _datastore.Update(techCont);
     }
   }

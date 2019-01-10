@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 
@@ -11,8 +12,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     public TechnicalContactsValidator(
       IHttpContextAccessor context,
+      ILogger<TechnicalContactsValidator> logger,
       ISolutionsDatastore solutionDatastore) :
-      base(context)
+      base(context, logger)
     {
       _solutionDatastore = solutionDatastore;
 

@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
@@ -13,6 +14,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
   public sealed class ClaimsValidatorBase_Tests
   {
     private Mock<IHttpContextAccessor> _context;
+    private Mock<ILogger<DummyClaimsValidatorBase>> _logger;
     private Mock<IClaimsDatastore<ClaimsBase>> _claimDatastore;
     private Mock<IContactsDatastore> _contactsDatastore;
     private Mock<ISolutionsDatastore> _solutionsDatastore;
@@ -21,6 +23,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void SetUp()
     {
       _context = new Mock<IHttpContextAccessor>();
+      _logger = new Mock<ILogger<DummyClaimsValidatorBase>>();
       _claimDatastore = new Mock<IClaimsDatastore<ClaimsBase>>();
       _contactsDatastore = new Mock<IContactsDatastore>();
       _solutionsDatastore = new Mock<ISolutionsDatastore>();
@@ -29,13 +32,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object));
+      Assert.DoesNotThrow(() => new DummyClaimsValidatorBase(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object));
     }
 
     [Test]
     public void MustBeValidId_Valid_Succeeds()
     {
-      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var validator = new DummyClaimsValidatorBase(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase();
 
       validator.MustBeValidId();
@@ -47,7 +50,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void MustBeValidId_Null_ReturnsError()
     {
-      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var validator = new DummyClaimsValidatorBase(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase();
       claim.Id = null;
 
@@ -65,7 +68,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void MustBeValidId_NotGuid_ReturnsError()
     {
-      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var validator = new DummyClaimsValidatorBase(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase(id: "some other Id");
 
       validator.MustBeValidId();
@@ -80,7 +83,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void MustBeValidSolutionId_Valid_Succeeds()
     {
-      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var validator = new DummyClaimsValidatorBase(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase();
 
       validator.MustBeValidSolutionId();
@@ -92,7 +95,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void MustBeValidSolutionId_Null_ReturnsError()
     {
-      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var validator = new DummyClaimsValidatorBase(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase();
       claim.SolutionId = null;
 
@@ -110,7 +113,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void MustBeValidSolutionId_NotGuid_ReturnsError()
     {
-      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var validator = new DummyClaimsValidatorBase(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase(solnId: "some other Id");
 
       validator.MustBeValidSolutionId();
@@ -125,7 +128,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void MustBeSameSolution_Same_Succeeds()
     {
-      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var validator = new DummyClaimsValidatorBase(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase();
       _claimDatastore.Setup(x => x.ById(claim.Id)).Returns(claim);
 
@@ -138,7 +141,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void MustBeSameSolution_Different_ReturnsError()
     {
-      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var validator = new DummyClaimsValidatorBase(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase();
       _claimDatastore.Setup(x => x.ById(claim.Id)).Returns(Creator.GetClaimsBase());
 
@@ -156,7 +159,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       var orgId = Guid.NewGuid().ToString();
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(orgId: orgId));
-      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var validator = new DummyClaimsValidatorBase(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase();
       _claimDatastore.Setup(x => x.ById(claim.Id)).Returns(claim);
       _solutionsDatastore.Setup(x => x.ById(claim.SolutionId)).Returns(Creator.GetSolution(orgId: orgId));
@@ -172,7 +175,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       var orgId = Guid.NewGuid().ToString();
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(orgId: orgId));
-      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var validator = new DummyClaimsValidatorBase(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase();
       _solutionsDatastore.Setup(x => x.ById(claim.SolutionId)).Returns(Creator.GetSolution(orgId: orgId));
 
@@ -187,7 +190,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       var orgId = Guid.NewGuid().ToString();
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(orgId: orgId));
-      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var validator = new DummyClaimsValidatorBase(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase();
       _claimDatastore.Setup(x => x.ById(claim.Id)).Returns(claim);
       _solutionsDatastore.Setup(x => x.ById(claim.SolutionId)).Returns(Creator.GetSolution());
@@ -206,7 +209,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       var orgId = Guid.NewGuid().ToString();
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(orgId: orgId));
-      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var validator = new DummyClaimsValidatorBase(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var contact = Creator.GetContact(orgId: orgId);
       var claim = Creator.GetClaimsBase(ownerId: contact.Id);
       _contactsDatastore.Setup(x => x.ById(contact.Id)).Returns(contact);
@@ -222,7 +225,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       var orgId = Guid.NewGuid().ToString();
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(orgId: orgId));
-      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var validator = new DummyClaimsValidatorBase(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var contact = Creator.GetContact(orgId: orgId);
       var claim = Creator.GetClaimsBase();
       _contactsDatastore.Setup(x => x.ById(contact.Id)).Returns(contact);
@@ -239,7 +242,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void MustBeValidOwnerId_Valid_Succeeds()
     {
-      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var validator = new DummyClaimsValidatorBase(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase();
 
       validator.MustBeValidOwnerId();
@@ -251,7 +254,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void MustBeValidOwnerId_Null_Succeeds()
     {
-      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var validator = new DummyClaimsValidatorBase(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase();
       claim.OwnerId = null;
 
@@ -264,7 +267,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void MustBeValidOwnerId_NotGuid_ReturnsError()
     {
-      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var validator = new DummyClaimsValidatorBase(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase(ownerId: "some other Id");
 
       validator.MustBeValidOwnerId();
@@ -279,7 +282,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void MustBeValidOwnerId_Empty_ReturnsError()
     {
-      var validator = new DummyClaimsValidatorBase(_context.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
+      var validator = new DummyClaimsValidatorBase(_context.Object, _logger.Object, _claimDatastore.Object, _contactsDatastore.Object, _solutionsDatastore.Object);
       var claim = Creator.GetClaimsBase(ownerId: string.Empty);
 
       validator.MustBeValidOwnerId();

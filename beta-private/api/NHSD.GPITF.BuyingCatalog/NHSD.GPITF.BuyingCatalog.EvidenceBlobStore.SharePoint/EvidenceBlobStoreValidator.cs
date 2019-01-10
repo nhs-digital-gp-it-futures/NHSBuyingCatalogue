@@ -1,16 +1,17 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
+using NHSD.GPITF.BuyingCatalog.Logic;
 
 namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 {
-  public class EvidenceBlobStoreValidator : AbstractValidator<string>, IEvidenceBlobStoreValidator
+  public class EvidenceBlobStoreValidator : ValidatorBase<string>, IEvidenceBlobStoreValidator
   {
-    protected readonly IHttpContextAccessor _context;
-
-    public EvidenceBlobStoreValidator(IHttpContextAccessor context)
+    public EvidenceBlobStoreValidator(
+      IHttpContextAccessor context,
+      ILogger<EvidenceBlobStoreValidator> logger) :
+      base(context, logger)
     {
-      _context = context;
 
       // solutionId
       RuleSet(nameof(IEvidenceBlobStoreLogic.PrepareForSolution), () =>
@@ -29,15 +30,6 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       {
         MustBeAdminOrSupplier();
       });
-    }
-
-    public void MustBeAdminOrSupplier()
-    {
-      RuleFor(x => x)
-        .Must(x =>
-          _context.HasRole(Roles.Admin) ||
-          _context.HasRole(Roles.Supplier))
-        .WithMessage("Must be admin or supplier");
     }
   }
 }
