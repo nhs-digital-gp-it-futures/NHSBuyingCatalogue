@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using ZNetCS.AspNetCore.Authentication.Basic;
+using Microsoft.Extensions.Configuration;
 
 namespace Gif.Service.Controllers
 {
@@ -34,6 +35,13 @@ namespace Gif.Service.Controllers
     /// <summary>
     /// Retrieve all Technical Contacts for a solution in a paged list,  given the solution’s CRM identifier
     /// </summary>
+
+    private readonly IConfiguration _config;
+
+    public TechnicalContactsApiController(IConfiguration config)
+    {
+      _config = config;
+    }
 
     /// <param name="solutionId">CRM identifier of solution</param>
     /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
@@ -52,7 +60,7 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new TechnicalContactService(new Repository());
+        var service = new TechnicalContactService(new Repository(_config));
         technicalContacts = service.BySolution(solutionId);
         technicalContacts = service.GetPagingValues(pageIndex, pageSize, technicalContacts, out totalPages);
       }
@@ -86,7 +94,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var svc = new TechnicalContactService(new Repository());
+        var svc = new TechnicalContactService(new Repository(_config));
         var techContGet = svc.ById(techCont.Id.ToString());
 
         if (techContGet.Id == Guid.Empty)
@@ -118,7 +126,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        new TechnicalContactService(new Repository()).Create(techCont);
+        new TechnicalContactService(new Repository(_config)).Create(techCont);
       }
       catch (Crm.CrmApiException ex)
       {
@@ -144,7 +152,7 @@ namespace Gif.Service.Controllers
 
       try
       {
-        new TechnicalContactService(new Repository()).Update(techCont);
+        new TechnicalContactService(new Repository(_config)).Update(techCont);
       }
       catch (Crm.CrmApiException ex)
       {

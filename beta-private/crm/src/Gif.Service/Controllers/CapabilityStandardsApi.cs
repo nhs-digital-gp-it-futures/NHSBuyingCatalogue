@@ -5,6 +5,7 @@ using Gif.Service.Models;
 using Gif.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,10 +23,17 @@ namespace Gif.Service.Controllers
     /// Retrieve all current capability standards in a paged list
     /// </summary>
 
-    /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
-    /// <param name="pageSize">number of items per page.  Defaults to 20</param>
-    /// <response code="200">Success - if no capability standards found, return empty list</response>
-    [HttpGet]
+    private readonly IConfiguration _config;
+
+    public CapabilityStandardsApi(IConfiguration config)
+    {
+      _config = config;
+    }
+
+  /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
+  /// <param name="pageSize">number of items per page.  Defaults to 20</param>
+  /// <response code="200">Success - if no capability standards found, return empty list</response>
+  [HttpGet]
     [Route("/api/CapabilityStandards")]
     [ValidateModelState]
     [SwaggerOperation("ApiCapabilityStandardsGet")]
@@ -37,7 +45,7 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new CapabilityStandardService(new Repository());
+        var service = new CapabilityStandardService(new Repository(_config));
         capabilitiesStandard = service.GetAll();
         capabilitiesStandard = service.GetPagingValues(pageIndex, pageSize, capabilitiesStandard, out totalPages);
       }

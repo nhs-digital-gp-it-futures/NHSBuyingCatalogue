@@ -15,6 +15,7 @@ using Gif.Service.Models;
 using Gif.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
@@ -35,6 +36,13 @@ namespace Gif.Service.Controllers
     /// Retrieve claim, given the claim’s CRM identifier
     /// </summary>
 
+    private readonly IConfiguration _config;
+
+    public StandardsApplicableApiController(IConfiguration config)
+    {
+      _config = config;
+    }
+
     /// <param name="id">CRM identifier of claim</param>
     /// <response code="200">Success</response>
     /// <response code="404">Claim not found in CRM</response>
@@ -47,7 +55,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var standard = new StandardsApplicableService(new Repository()).ById(id);
+        var standard = new StandardsApplicableService(new Repository(_config)).ById(id);
 
         if (standard.Id == Guid.Empty)
           return StatusCode(404);
@@ -82,7 +90,7 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new StandardsApplicableService(new Repository());
+        var service = new StandardsApplicableService(new Repository(_config));
         standardsApplicable = service.BySolution(solutionId);
         standardsApplicable = service.GetPagingValues(pageIndex, pageSize, standardsApplicable, out totalPages);
 
@@ -118,7 +126,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var svc = new StandardsApplicableService(new Repository());
+        var svc = new StandardsApplicableService(new Repository(_config));
         var claimedstandardGet = svc.ById(claimedstandard.Id.ToString());
 
         if (claimedstandardGet.Id == Guid.Empty)
@@ -150,7 +158,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        claimedstandard = new StandardsApplicableService(new Repository()).Create(claimedstandard);
+        claimedstandard = new StandardsApplicableService(new Repository(_config)).Create(claimedstandard);
       }
       catch (Crm.CrmApiException ex)
       {
@@ -175,7 +183,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        new StandardsApplicableService(new Repository()).Update(claimedstandard);
+        new StandardsApplicableService(new Repository(_config)).Update(claimedstandard);
       }
       catch (Crm.CrmApiException ex)
       {

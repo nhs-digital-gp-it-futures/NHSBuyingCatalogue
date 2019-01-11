@@ -22,6 +22,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Gif.Service.Const;
 using ZNetCS.AspNetCore.Authentication.Basic;
+using Microsoft.Extensions.Configuration;
 
 namespace Gif.Service.Controllers
 {
@@ -36,12 +37,19 @@ namespace Gif.Service.Controllers
     /// Get existing framework/s which have the given capability
     /// </summary>
 
-    /// <param name="capabilityId">CRM identifier of Capability</param>
-    /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
-    /// <param name="pageSize">number of items per page.  Defaults to 20</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Capability not found in CRM</response>
-    [HttpGet]
+    private readonly IConfiguration _config;
+
+    public FrameworksApiController(IConfiguration config)
+    {
+      _config = config;
+    }
+
+  /// <param name="capabilityId">CRM identifier of Capability</param>
+  /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
+  /// <param name="pageSize">number of items per page.  Defaults to 20</param>
+  /// <response code="200">Success</response>
+  /// <response code="404">Capability not found in CRM</response>
+  [HttpGet]
     [Route("/api/Frameworks/ByCapability/{capabilityId}")]
     [ValidateModelState]
     [SwaggerOperation("ApiFrameworksByCapabilityByCapabilityIdGet")]
@@ -53,7 +61,7 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new FrameworksService(new Repository());
+        var service = new FrameworksService(new Repository(_config));
         frameworks = service.ByCapability(capabilityId);
         frameworks = service.GetPagingValues(pageIndex, pageSize, frameworks, out totalPages);
       }
@@ -87,7 +95,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var framework = new FrameworksService(new Repository()).ById(id);
+        var framework = new FrameworksService(new Repository(_config)).ById(id);
 
         if (framework.Id == Guid.Empty)
           return StatusCode(404);
@@ -122,7 +130,7 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new FrameworksService(new Repository());
+        var service = new FrameworksService(new Repository(_config));
         frameworks = service.BySolution(solutionId);
         frameworks = service.GetPagingValues(pageIndex, pageSize, frameworks, out totalPages);
       }
@@ -161,7 +169,7 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new FrameworksService(new Repository());
+        var service = new FrameworksService(new Repository(_config));
         frameworks = service.ByStandard(standardId);
         frameworks = service.GetPagingValues(pageIndex, pageSize, frameworks, out totalPages);
       }
@@ -198,7 +206,7 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new FrameworksService(new Repository());
+        var service = new FrameworksService(new Repository(_config));
         frameworks = service.GetAll();
         frameworks = service.GetPagingValues(pageIndex, pageSize, frameworks, out totalPages);
       }

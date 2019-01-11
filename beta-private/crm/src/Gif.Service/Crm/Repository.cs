@@ -22,7 +22,7 @@ namespace Gif.Service.Crm
 
     protected readonly AuthenticationResult _authResult;
 
-    private IConfiguration config;
+    private readonly IConfiguration _config;
 
     #endregion
 
@@ -31,18 +31,13 @@ namespace Gif.Service.Crm
 
     #region Constructors
 
-    public Repository()
+    public Repository(IConfiguration config)
     {
-      var builder = new ConfigurationBuilder()
-        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-        .AddJsonFile("hosting.json", optional: true, reloadOnChange: true)
-        .AddEnvironmentVariables()
-        .AddUserSecrets<Program>();
-      config = builder.Build();
+      _config = config;
 
-      var secret = CipherUtil.Decrypt<AesManaged>(Settings.GIF_ENCRYPTED_CLIENT_SECRET(config), "GifService", Settings.GIF_AZURE_CLIENT_ID(config));
-      var authContext = new AuthenticationContext(Settings.GIF_CRM_AUTHORITY(config), false);
-      _authResult = authContext.AcquireTokenAsync(Settings.GIF_CRM_URL(config), new ClientCredential(Settings.GIF_AZURE_CLIENT_ID(config), secret)).Result; 
+      var secret = CipherUtil.Decrypt<AesManaged>(Settings.GIF_ENCRYPTED_CLIENT_SECRET(_config), "GifService", Settings.GIF_AZURE_CLIENT_ID(_config));
+      var authContext = new AuthenticationContext(Settings.GIF_CRM_AUTHORITY(_config), false);
+      _authResult = authContext.AcquireTokenAsync(Settings.GIF_CRM_URL(_config), new ClientCredential(Settings.GIF_AZURE_CLIENT_ID(_config), secret)).Result; 
 
       ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
     }
@@ -55,7 +50,7 @@ namespace Gif.Service.Crm
     {
       var httpClient = new HttpClient()
       {
-        BaseAddress = new Uri(Settings.GIF_CRM_URL(config) + "/api/data/v9.0/"),
+        BaseAddress = new Uri(Settings.GIF_CRM_URL(_config) + "/api/data/v9.0/"),
         Timeout = new TimeSpan(0, 2, 0)
       };
       httpClient.DefaultRequestHeaders.Add("OData-MaxVersion", "4.0");

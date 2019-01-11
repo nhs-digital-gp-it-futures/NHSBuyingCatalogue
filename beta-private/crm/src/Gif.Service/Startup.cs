@@ -35,7 +35,7 @@ namespace Gif.Service
     private readonly IHostingEnvironment _hostingEnv;
 
     private IServiceProvider ServiceProvider { get; set; }
-    private IConfiguration Configuration { get; }
+    private IConfiguration Configuration { get; set; }
 
     /// <summary>
     /// Constructor
@@ -63,6 +63,7 @@ namespace Gif.Service
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddSingleton<IBasicAuthentication, BasicAuthentication>();
+      services.AddSingleton(sp => Configuration);
 
       // Add framework services.
       services

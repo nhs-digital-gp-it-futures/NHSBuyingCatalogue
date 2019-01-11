@@ -15,6 +15,7 @@ using Gif.Service.Models;
 using Gif.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
@@ -35,6 +36,13 @@ namespace Gif.Service.Controllers
     /// Get an existing Standard Applicable Review for a given Review Id
     /// </summary>
 
+    private readonly IConfiguration _config;
+
+    public StandardsApplicableReviewsApiController(IConfiguration config)
+    {
+      _config = config;
+    }
+
     /// <param name="id">Review Id</param>
     /// <response code="200">Success</response>
     /// <response code="404">Solution not found in CRM</response>
@@ -47,13 +55,12 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var review = new StandardsApplicableReviewsService(new Repository()).ById(id);
+        var review = new StandardsApplicableReviewsService(new Repository(_config)).ById(id);
 
         if (review.Id == Guid.Empty)
           return StatusCode(404);
 
         return new ObjectResult(review);
-
       }
       catch (Crm.CrmApiException ex)
       {
@@ -83,7 +90,7 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new StandardsApplicableReviewsService(new Repository());
+        var service = new StandardsApplicableReviewsService(new Repository(_config));
         reviews = service.ByEvidence(evidenceId);
         reviews = service.GetPagingValues(pageIndex, pageSize, reviews, out totalPages);
       }
@@ -117,7 +124,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        review = new StandardsApplicableReviewsService(new Repository()).Create(review);
+        review = new StandardsApplicableReviewsService(new Repository(_config)).Create(review);
       }
       catch (Crm.CrmApiException ex)
       {

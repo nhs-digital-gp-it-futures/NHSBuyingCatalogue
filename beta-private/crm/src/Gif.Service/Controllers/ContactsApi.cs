@@ -22,6 +22,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Gif.Service.Const;
 using ZNetCS.AspNetCore.Authentication.Basic;
+using Microsoft.Extensions.Configuration;
 
 namespace Gif.Service.Controllers
 {
@@ -35,10 +36,17 @@ namespace Gif.Service.Controllers
     /// Retrieve a contacts for an organisation, given the contact’s email address  Email address is case insensitive
     /// </summary>
 
-    /// <param name="email">email address to search for</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Contact not found</response>
-    [HttpGet]
+    private readonly IConfiguration _config;
+
+    public ContactsApiController(IConfiguration config)
+    {
+      _config = config;
+    }
+
+  /// <param name="email">email address to search for</param>
+  /// <response code="200">Success</response>
+  /// <response code="404">Contact not found</response>
+  [HttpGet]
     [Route("/api/Contacts/ByEmail/{email}")]
     [ValidateModelState]
     [SwaggerOperation("ApiContactsByEmailByEmailGet")]
@@ -47,7 +55,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var contact = new ContactsService(new Repository()).ByEmail(email);
+        var contact = new ContactsService(new Repository(_config)).ByEmail(email);
 
         if (contact.Id == Guid.Empty)
           return StatusCode(404);
@@ -78,7 +86,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var contact = new ContactsService(new Repository()).ById(id);
+        var contact = new ContactsService(new Repository(_config)).ById(id);
 
         if (contact == null)
           return StatusCode(404);
@@ -112,7 +120,7 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new ContactsService(new Repository());
+        var service = new ContactsService(new Repository(_config));
         contacts = service.ByOrganisation(organisationId);
         contacts = service.GetPagingValues(pageIndex, pageSize, contacts, out totalPages);
       }

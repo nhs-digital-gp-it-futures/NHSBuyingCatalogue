@@ -15,6 +15,7 @@ using Gif.Service.Models;
 using Gif.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
@@ -35,12 +36,19 @@ namespace Gif.Service.Controllers
     /// Get all EvidenceEntity for the given Claim  Each list is a distinct &#39;chain&#39; of EvidenceEntity ie original EvidenceEntity with all subsequent EvidenceEntity  The first item in each &#39;chain&#39; is the most current EvidenceEntity.  The last item in each &#39;chain&#39; is the original EvidenceEntity.
     /// </summary>
 
-    /// <param name="claimId">CRM identifier of Claim</param>
-    /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
-    /// <param name="pageSize">number of items per page.  Defaults to 20</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Claim not found</response>
-    [HttpGet]
+    private readonly IConfiguration _config;
+
+    public CapabilitiesImplementedEvidenceApiController(IConfiguration config)
+    {
+      _config = config;
+    }
+
+  /// <param name="claimId">CRM identifier of Claim</param>
+  /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
+  /// <param name="pageSize">number of items per page.  Defaults to 20</param>
+  /// <response code="200">Success</response>
+  /// <response code="404">Claim not found</response>
+  [HttpGet]
     [Route("/api/CapabilitiesImplementedEvidence/ByClaim/{claimId}")]
     [ValidateModelState]
     [SwaggerOperation("ApiCapabilitiesImplementedEvidenceByClaimByClaimIdGet")]
@@ -52,7 +60,7 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new CapabilitiesImplementedEvidenceService(new Repository());
+        var service = new CapabilitiesImplementedEvidenceService(new Repository(_config));
         evidences = service.ByClaim(claimId);
         evidences = service.GetPagingValues(pageIndex, pageSize, evidences, out totalPages);
 
@@ -87,7 +95,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var capabilityImplemented = new CapabilitiesImplementedEvidenceService(new Repository()).ById(id);
+        var capabilityImplemented = new CapabilitiesImplementedEvidenceService(new Repository(_config)).ById(id);
 
         if (capabilityImplemented.Id == Guid.Empty)
           return StatusCode(404);
@@ -118,7 +126,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        evidenceEntity = new CapabilitiesImplementedEvidenceService(new Repository()).Create(evidenceEntity);
+        evidenceEntity = new CapabilitiesImplementedEvidenceService(new Repository(_config)).Create(evidenceEntity);
 
         if (evidenceEntity.Id == Guid.Empty)
           return StatusCode(404);

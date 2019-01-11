@@ -22,6 +22,7 @@ using System.Linq;
 using Gif.Service.Const;
 using Microsoft.AspNetCore.Authorization;
 using ZNetCS.AspNetCore.Authentication.Basic;
+using Microsoft.Extensions.Configuration;
 
 namespace Gif.Service.Controllers
 {
@@ -36,16 +37,23 @@ namespace Gif.Service.Controllers
     /// Get existing Capability/s which are in the given Framework
     /// </summary>
 
+    private readonly IConfiguration _config;
+
+    public CapabilitiesApiController(IConfiguration config)
+    {
+      _config = config;
+    }
+
     /// <param name="frameworkId">CRM identifier of Framework</param>
     /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
     /// <param name="pageSize">number of items per page.  Defaults to 20</param>
     /// <response code="200">Success</response>
     /// <response code="404">Framework not found in CRM</response>
     [HttpGet]
-    [Route("/api/Capabilities/ByFramework/{frameworkId}")]
-    [ValidateModelState]
-    [SwaggerOperation("ApiCapabilitiesByFrameworkByFrameworkIdGet")]
-    [SwaggerResponse(statusCode: 200, type: typeof(PaginatedListCapabilities), description: "Success")]
+  [Route("/api/Capabilities/ByFramework/{frameworkId}")]
+  [ValidateModelState]
+  [SwaggerOperation("ApiCapabilitiesByFrameworkByFrameworkIdGet")]
+  [SwaggerResponse(statusCode: 200, type: typeof(PaginatedListCapabilities), description: "Success")]
     public virtual IActionResult ApiCapabilitiesByFrameworkByFrameworkIdGet([FromRoute][Required]string frameworkId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
       IEnumerable<Capability> capabilities;
@@ -53,7 +61,7 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new CapabilitiesService(new Repository());
+        var service = new CapabilitiesService(new Repository(_config));
         capabilities = service.ByFramework(frameworkId);
         capabilities = service.GetPagingValues(pageIndex, pageSize, capabilities, out totalPages);
 
@@ -90,7 +98,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var capability = new CapabilitiesService(new Repository()).ById(id);
+        var capability = new CapabilitiesService(new Repository(_config)).ById(id);
 
         if (capability.Id == Guid.Empty)
           return StatusCode(404);
@@ -120,7 +128,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var capabilities = new CapabilitiesService(new Repository()).ByIds(ids);
+        var capabilities = new CapabilitiesService(new Repository(_config)).ByIds(ids);
 
         if (capabilities == null)
           return StatusCode(404);
@@ -158,7 +166,7 @@ namespace Gif.Service.Controllers
       try
       {
 
-        var service = new CapabilitiesService(new Repository());
+        var service = new CapabilitiesService(new Repository(_config));
         capabilities = service.ByStandard(standardId, isOptional != null && isOptional.Value);
         capabilities = service.GetPagingValues(pageIndex, pageSize, capabilities, out totalPages);
 
@@ -199,7 +207,7 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new CapabilitiesService(new Repository());
+        var service = new CapabilitiesService(new Repository(_config));
         capabilities = service.GetAll();
         capabilities = service.GetPagingValues(pageIndex, pageSize, capabilities, out totalPages);
       }

@@ -14,6 +14,7 @@ using Gif.Service.Models;
 using Gif.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,22 +28,28 @@ namespace Gif.Service.Controllers
   [Authorize(AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + ",Bearer")]
   public class SolutionsExApiController : Controller
   {
-
     /// <summary>
     /// Update an existing Solution, TechnicalContact, ClaimedCapability, ClaimedStandard et al with new information
     /// </summary>
 
-    /// <param name="solnEx">Solution, TechnicalContact, ClaimedCapability, ClaimedStandard et al with updated information</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Solution, TechnicalContact, ClaimedCapability, ClaimedStandard et al not found in CRM</response>
-    /// <response code="500">Datastore exception</response>
-    [HttpPut]
+    private readonly IConfiguration _config;
+
+    public SolutionsExApiController(IConfiguration config)
+    {
+      _config = config;
+    }
+
+  /// <param name="solnEx">Solution, TechnicalContact, ClaimedCapability, ClaimedStandard et al with updated information</param>
+  /// <response code="200">Success</response>
+  /// <response code="404">Solution, TechnicalContact, ClaimedCapability, ClaimedStandard et al not found in CRM</response>
+  /// <response code="500">Datastore exception</response>
+  [HttpPut]
     [Route("/api/porcelain/SolutionsEx/Update")]
     [ValidateModelState]
     [SwaggerOperation("ApiPorcelainSolutionsExUpdatePut")]
     public virtual IActionResult ApiPorcelainSolutionsExUpdatePut([FromBody]SolutionEx solnEx)
     {
-      var repository = new Repository();
+      var repository = new Repository(_config);
       var solutionFrameworks = new List<Framework>();
 
       try

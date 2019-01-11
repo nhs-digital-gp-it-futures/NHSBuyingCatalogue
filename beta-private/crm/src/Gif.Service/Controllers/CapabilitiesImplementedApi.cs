@@ -15,6 +15,7 @@ using Gif.Service.Models;
 using Gif.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
@@ -35,6 +36,13 @@ namespace Gif.Service.Controllers
     /// Retrieve claim, given the claim’s CRM identifier
     /// </summary>
 
+    private readonly IConfiguration _config;
+
+    public CapabilitiesImplementedApiController(IConfiguration config)
+    {
+      _config = config;
+    }
+
     /// <param name="id">CRM identifier of claim</param>
     /// <response code="200">Success</response>
     /// <response code="404">Claim not found in CRM</response>
@@ -47,7 +55,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var capabilityImplemented = new CapabilitiesImplementedService(new Repository()).ById(id);
+        var capabilityImplemented = new CapabilitiesImplementedService(new Repository(_config)).ById(id);
 
         if (capabilityImplemented.Id == Guid.Empty)
           return StatusCode(404);
@@ -81,7 +89,7 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new CapabilitiesImplementedService(new Repository());
+        var service = new CapabilitiesImplementedService(new Repository(_config));
         capabilitiesImplemented = service.BySolution(solutionId);
         capabilitiesImplemented =
             service.GetPagingValues(pageIndex, pageSize, capabilitiesImplemented, out totalPages);
@@ -116,7 +124,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var svc = new CapabilitiesImplementedService(new Repository());
+        var svc = new CapabilitiesImplementedService(new Repository(_config));
         var capabilityImplemented = svc.ById(claimedcapability.Id.ToString());
 
         if (capabilityImplemented.Id == Guid.Empty)
@@ -150,7 +158,7 @@ namespace Gif.Service.Controllers
 
       try
       {
-        capabilityImplemented = new CapabilitiesImplementedService(new Repository()).Create(claimedcapability);
+        capabilityImplemented = new CapabilitiesImplementedService(new Repository(_config)).Create(claimedcapability);
       }
       catch (Crm.CrmApiException ex)
       {
@@ -175,7 +183,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        new CapabilitiesImplementedService(new Repository()).Update(claimedcapability);
+        new CapabilitiesImplementedService(new Repository(_config)).Update(claimedcapability);
       }
       catch (Crm.CrmApiException ex)
       {

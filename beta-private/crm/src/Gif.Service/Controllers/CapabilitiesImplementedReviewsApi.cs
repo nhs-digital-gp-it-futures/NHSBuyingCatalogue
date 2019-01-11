@@ -15,6 +15,7 @@ using Gif.Service.Models;
 using Gif.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
@@ -35,10 +36,17 @@ namespace Gif.Service.Controllers
     /// Get an existing Capabilities Implemented Review for a given Review Id
     /// </summary>
 
-    /// <param name="id">Review Id</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Solution not found in CRM</response>
-    [HttpGet]
+    private readonly IConfiguration _config;
+
+    public CapabilitiesImplementedReviewsApiController(IConfiguration config)
+    {
+      _config = config;
+    }
+
+  /// <param name="id">Review Id</param>
+  /// <response code="200">Success</response>
+  /// <response code="404">Solution not found in CRM</response>
+  [HttpGet]
     [Route("/api/CapabilitiesImplementedReviews/ById/{id}")]
     [ValidateModelState]
     [SwaggerOperation("ApiCapabilitiesImplementedReviewByIdGet")]
@@ -47,7 +55,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var review = new CapabilitiesImplementedReviewsService(new Repository()).ById(id);
+        var review = new CapabilitiesImplementedReviewsService(new Repository(_config)).ById(id);
 
         if (review.Id == Guid.Empty)
           return StatusCode(404);
@@ -83,7 +91,7 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new CapabilitiesImplementedReviewsService(new Repository());
+        var service = new CapabilitiesImplementedReviewsService(new Repository(_config));
         reviews = service.ByEvidence(evidenceId);
         reviews = service.GetPagingValues(pageIndex, pageSize, reviews, out totalPages);
       }
@@ -117,7 +125,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        review = new CapabilitiesImplementedReviewsService(new Repository()).Create(review);
+        review = new CapabilitiesImplementedReviewsService(new Repository(_config)).Create(review);
       }
       catch (Crm.CrmApiException ex)
       {

@@ -19,6 +19,7 @@ using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.ComponentModel.DataAnnotations;
 using ZNetCS.AspNetCore.Authentication.Basic;
+using Microsoft.Extensions.Configuration;
 
 namespace Gif.Service.Controllers
 {
@@ -32,10 +33,17 @@ namespace Gif.Service.Controllers
     /// Retrieve an Organisation for the given Contact
     /// </summary>
 
-    /// <param name="contactId">CRM identifier of Contact</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Organisation not found</response>
-    [HttpGet]
+    private readonly IConfiguration _config;
+
+    public OrganisationsApiController(IConfiguration config)
+    {
+      _config = config;
+    }
+
+  /// <param name="contactId">CRM identifier of Contact</param>
+  /// <response code="200">Success</response>
+  /// <response code="404">Organisation not found</response>
+  [HttpGet]
     [Route("/api/Organisations/ByContact/{contactId}")]
     [ValidateModelState]
     [SwaggerOperation("ApiOrganisationsByContactByContactIdGet")]
@@ -44,7 +52,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var organisation = new OrganisationsService(new Repository()).ByContact(contactId);
+        var organisation = new OrganisationsService(new Repository(_config)).ByContact(contactId);
 
         if (organisation.Id == Guid.Empty)
           return StatusCode(404);
@@ -73,7 +81,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var organisation = new OrganisationsService(new Repository()).ById(organisationId);
+        var organisation = new OrganisationsService(new Repository(_config)).ById(organisationId);
 
         if (organisation.Id == Guid.Empty)
           return StatusCode(404);
