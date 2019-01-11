@@ -9,6 +9,7 @@
  */
 
 using Gif.Service.Attributes;
+using Gif.Service.Contracts;
 using Gif.Service.Crm;
 using Gif.Service.Models;
 using Gif.Service.Services;
@@ -32,11 +33,18 @@ namespace Gif.Service.Controllers
     /// Update an existing Solution, TechnicalContact, ClaimedCapability, ClaimedStandard et al with new information
     /// </summary>
 
-    private readonly IConfiguration _config;
+    private readonly ISolutionsExDatastore _datastore;
+    private readonly IFrameworksDatastore _frameworksDatastore;
+    private readonly ILinkManagerDatastore _linkManagerDatastore;
 
-    public SolutionsExApiController(IConfiguration config)
+    public SolutionsExApiController(
+      ISolutionsExDatastore datastore,
+      IFrameworksDatastore frameworksDatastore,
+      ILinkManagerDatastore linkManagerDatastore)
     {
-      _config = config;
+      _datastore = datastore;
+      _frameworksDatastore = frameworksDatastore;
+      _linkManagerDatastore = linkManagerDatastore;
     }
 
   /// <param name="solnEx">Solution, TechnicalContact, ClaimedCapability, ClaimedStandard et al with updated information</param>
@@ -49,13 +57,12 @@ namespace Gif.Service.Controllers
     [SwaggerOperation("ApiPorcelainSolutionsExUpdatePut")]
     public virtual IActionResult ApiPorcelainSolutionsExUpdatePut([FromBody]SolutionEx solnEx)
     {
-      var repository = new Repository(_config);
       var solutionFrameworks = new List<Framework>();
 
       try
       {
-        solutionFrameworks = new FrameworksService(repository).BySolution(solnEx.Solution.Id.ToString()).ToList();
-        new SolutionExService(repository).Update(solnEx);
+        solutionFrameworks = _frameworksDatastore.BySolution(solnEx.Solution.Id.ToString()).ToList();
+        _datastore.Update(solnEx);
       }
       catch (Crm.CrmApiException ex)
       {
@@ -64,11 +71,9 @@ namespace Gif.Service.Controllers
       finally
       {
 
-        var linkManagerService = new LinkManagerService(repository);
-
         foreach (var solutionFramework in solutionFrameworks)
         {
-          linkManagerService.FrameworkSolutionAssociate(solutionFramework.Id, solnEx.Solution.Id);
+          _linkManagerDatastore.FrameworkSolutionAssociate(solutionFramework.Id, solnEx.Solution.Id);
         }
       }
 

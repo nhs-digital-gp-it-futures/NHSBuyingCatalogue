@@ -9,8 +9,11 @@
  */
 
 using Gif.Service.Authentications;
+using Gif.Service.Contracts;
+using Gif.Service.Crm;
 using Gif.Service.Filters;
 using Gif.Service.Interfaces;
+using Gif.Service.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -62,12 +65,31 @@ namespace Gif.Service
     /// <param name="services"></param>
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddSingleton<IBasicAuthentication, BasicAuthentication>();
       services.AddSingleton(sp => Configuration);
+      services.AddSingleton<IBasicAuthentication, BasicAuthentication>();
+      services.AddSingleton<IRepository, Repository>();
+      services.AddSingleton<ICapabilityDatastore, CapabilitiesService>();
+      services.AddSingleton<ICapabilitiesImplementedDatastore, CapabilitiesImplementedService>();
+      services.AddSingleton<ICapabilitiesImplementedEvidenceDatastore, CapabilitiesImplementedEvidenceService>();
+      services.AddSingleton<ICapabilitiesImplementedReviewsDatastore, CapabilitiesImplementedReviewsService>();
+      services.AddSingleton<ICapabilityStandardDatastore, CapabilityStandardService>();
+      services.AddSingleton<IContactsDatastore, ContactsService>();
+      services.AddSingleton<IFrameworksDatastore, FrameworksService>();
+      services.AddSingleton<ILinkManagerDatastore, LinkManagerService>();
+      services.AddSingleton<IOrganisationsDatastore, OrganisationsService>();
+      services.AddSingleton<ISolutionsDatastore, SolutionsService>();
+      services.AddSingleton<ISolutionsExDatastore, SolutionExService>();
+      services.AddSingleton<IStandardsDatastore, StandardsService>();
+      services.AddSingleton<IStandardsApplicableDatastore, StandardsApplicableService>();
+      services.AddSingleton<IStandardsApplicableEvidenceDatastore, StandardsApplicableEvidenceService>();
+      services.AddSingleton<IStandardsApplicableReviewsDatastore, StandardsApplicableReviewsService>();
+      services.AddSingleton<ITechnicalContactsDatastore, TechnicalContactService>();
 
       // Add framework services.
       services
         .AddMvc()
+        // Add controllers as services so they'll be resolved.
+        .AddControllersAsServices()
         .AddJsonOptions(opts =>
         {
           opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
@@ -76,6 +98,7 @@ namespace Gif.Service
             CamelCaseText = false
           });
         });
+
 
       if (_hostingEnv.IsDevelopment())
       {
@@ -158,10 +181,9 @@ namespace Gif.Service
       app.UseAuthentication();
 
       app
+        .UseStaticFiles()
         .UseMvc()
-        .UseDefaultFiles()
-        .UseStaticFiles();
-
+        .UseDefaultFiles();
 
       if (env.IsDevelopment())
       {
@@ -176,11 +198,6 @@ namespace Gif.Service
           // c.SwaggerEndpoint("/swagger-original.json", "Buying Catalog API Original");
         })
         .UseDeveloperExceptionPage();
-      }
-      else
-      {
-        //TODO: Enable production exception handling (https://docs.microsoft.com/en-us/aspnet/core/fundamentals/error-handling)
-        // app.UseExceptionHandler("/Home/Error");
       }
     }
 

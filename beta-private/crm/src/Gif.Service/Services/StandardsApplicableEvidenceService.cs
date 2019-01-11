@@ -10,111 +10,111 @@ using System.Linq;
 
 namespace Gif.Service.Services
 {
-    public class StandardsApplicableEvidenceService : ServiceBase, IStandardsApplicableEvidenceDatastore
+  public class StandardsApplicableEvidenceService : ServiceBase<StandardApplicableEvidence>, IStandardsApplicableEvidenceDatastore
+  {
+    public StandardsApplicableEvidenceService(IRepository repository) : base(repository)
     {
-        public StandardsApplicableEvidenceService(IRepository repository) : base(repository)
-        {
-        }
+    }
 
-        public IEnumerable<IEnumerable<StandardApplicableEvidence>> ByClaim(string claimId)
-        {
-            var evidenceList = new List<StandardApplicableEvidence>();
-            var evidenceListList = new List<List<StandardApplicableEvidence>>();
+    public IEnumerable<IEnumerable<StandardApplicableEvidence>> ByClaim(string claimId)
+    {
+      var evidenceList = new List<StandardApplicableEvidence>();
+      var evidenceListList = new List<List<StandardApplicableEvidence>>();
 
-            // get all items at the end of the chain i.e. where the previous id is null
-            var filterEvidenceParent = new List<CrmFilterAttribute>
+      // get all items at the end of the chain i.e. where the previous id is null
+      var filterEvidenceParent = new List<CrmFilterAttribute>
             {
                 new CrmFilterAttribute("ClaimId") {FilterName = "_cc_standardapplicable_value", FilterValue = claimId},
                 new CrmFilterAttribute("Previous") {FilterName = "_cc_previousversion_value", FilterValue = "null"},
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var jsonEvidenceParent = Repository.RetrieveMultiple(new StandardApplicableEvidence().GetQueryString(null, filterEvidenceParent, true, true), out Count);
+      var jsonEvidenceParent = Repository.RetrieveMultiple(new StandardApplicableEvidence().GetQueryString(null, filterEvidenceParent, true, true), out Count);
 
-            // iterate through all items that are at the end of the chain
-            foreach (var evidenceChild in jsonEvidenceParent.Children())
-                AddEvidenceChainToList(evidenceChild, evidenceList, evidenceListList, claimId);
+      // iterate through all items that are at the end of the chain
+      foreach (var evidenceChild in jsonEvidenceParent.Children())
+        AddEvidenceChainToList(evidenceChild, evidenceList, evidenceListList, claimId);
 
-            Count = evidenceListList.Count;
+      Count = evidenceListList.Count;
 
-            return evidenceListList;
-        }
+      return evidenceListList;
+    }
 
-        private void AddEvidenceChainToList(JToken evidence, List<StandardApplicableEvidence> evidenceList, List<List<StandardApplicableEvidence>> evidenceListList, string claimId)
-        {
-            GetEvidencesChain(evidence, evidenceList, claimId);
+    private void AddEvidenceChainToList(JToken evidence, List<StandardApplicableEvidence> evidenceList, List<List<StandardApplicableEvidence>> evidenceListList, string claimId)
+    {
+      GetEvidencesChain(evidence, evidenceList, claimId);
 
-            var enumEvidenceList = StandardApplicableEvidence.OrderLinkedEvidences(evidenceList);
-            evidenceListList.Add(enumEvidenceList.ToList());
-        }
+      var enumEvidenceList = StandardApplicableEvidence.OrderLinkedEvidences(evidenceList);
+      evidenceListList.Add(enumEvidenceList.ToList());
+    }
 
-        private void GetEvidencesChain(JToken evidenceChainEnd, List<StandardApplicableEvidence> evidenceList, string claimId)
-        {
-            // store the end of the chain (with no previous id)
-            var evidence = new StandardApplicableEvidence(evidenceChainEnd);
-            evidenceList.Add(evidence);
-            var id = evidence.Id.ToString();
+    private void GetEvidencesChain(JToken evidenceChainEnd, List<StandardApplicableEvidence> evidenceList, string claimId)
+    {
+      // store the end of the chain (with no previous id)
+      var evidence = new StandardApplicableEvidence(evidenceChainEnd);
+      evidenceList.Add(evidence);
+      var id = evidence.Id.ToString();
 
-            // get the chain of evidences linked by previous id
-            while (true)
-            {
-                var filterEvidence = new List<CrmFilterAttribute>
+      // get the chain of evidences linked by previous id
+      while (true)
+      {
+        var filterEvidence = new List<CrmFilterAttribute>
                 {
                     new CrmFilterAttribute("ClaimId") {FilterName = "_cc_standardapplicable_value", FilterValue = claimId},
                     new CrmFilterAttribute("PreviousEvidence") {FilterName = "_cc_previousversion_value", FilterValue = id},
                     new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
                 };
 
-                var jsonEvidence = Repository.RetrieveMultiple(new StandardApplicableEvidence().GetQueryString(null, filterEvidence, true, true), out Count);
-                if (jsonEvidence.HasValues)
-                {
-                    evidence = new StandardApplicableEvidence(jsonEvidence.FirstOrDefault());
-                    evidenceList.Add(evidence);
-                    id = evidence.Id.ToString();
-                }
-                else
-                    break;
-            }
-        }
-
-        public StandardApplicableEvidence ById(string id)
+        var jsonEvidence = Repository.RetrieveMultiple(new StandardApplicableEvidence().GetQueryString(null, filterEvidence, true, true), out Count);
+        if (jsonEvidence.HasValues)
         {
-            var filterAttributes = new List<CrmFilterAttribute>
-            {
-                new CrmFilterAttribute("EvidenceId") {FilterName = "cc_evidenceid", FilterValue = id},
-                new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
-            };
-
-            var appJson = Repository.RetrieveMultiple(new StandardApplicableEvidence().GetQueryString(null, filterAttributes), out Count);
-            var evidence = appJson?.FirstOrDefault();
-
-            return new StandardApplicableEvidence(evidence);
+          evidence = new StandardApplicableEvidence(jsonEvidence.FirstOrDefault());
+          evidenceList.Add(evidence);
+          id = evidence.Id.ToString();
         }
-
-        public StandardApplicableEvidence Create(StandardApplicableEvidence evidenceEntity)
-        {
-            Repository.CreateEntity(evidenceEntity.EntityName, evidenceEntity.SerializeToODataPost());
-
-            return evidenceEntity;
-        }
-
-        public StandardApplicable ByEvidenceId(string id)
-        {
-            var filterAttributes = new List<CrmFilterAttribute>
-            {
-                new CrmFilterAttribute("EvidenceId") {FilterName = "cc_evidenceid", FilterValue = id},
-                new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
-            };
-
-            var appJson = Repository.RetrieveMultiple(new StandardApplicableEvidence().GetQueryString(null, filterAttributes, true), out Count);
-            var standardApplicable = appJson?.Children().FirstOrDefault();
-
-            var standardApplicableRecord = standardApplicable?[RelationshipNames.EvidenceStandardApplicables];
-
-            return standardApplicableRecord != null ?
-                new StandardApplicable(standardApplicableRecord) : null;
-        }
-
+        else
+          break;
+      }
     }
+
+    public StandardApplicableEvidence ById(string id)
+    {
+      var filterAttributes = new List<CrmFilterAttribute>
+            {
+                new CrmFilterAttribute("EvidenceId") {FilterName = "cc_evidenceid", FilterValue = id},
+                new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
+            };
+
+      var appJson = Repository.RetrieveMultiple(new StandardApplicableEvidence().GetQueryString(null, filterAttributes), out Count);
+      var evidence = appJson?.FirstOrDefault();
+
+      return new StandardApplicableEvidence(evidence);
+    }
+
+    public StandardApplicableEvidence Create(StandardApplicableEvidence evidenceEntity)
+    {
+      Repository.CreateEntity(evidenceEntity.EntityName, evidenceEntity.SerializeToODataPost());
+
+      return evidenceEntity;
+    }
+
+    public StandardApplicable ByEvidenceId(string id)
+    {
+      var filterAttributes = new List<CrmFilterAttribute>
+            {
+                new CrmFilterAttribute("EvidenceId") {FilterName = "cc_evidenceid", FilterValue = id},
+                new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
+            };
+
+      var appJson = Repository.RetrieveMultiple(new StandardApplicableEvidence().GetQueryString(null, filterAttributes, true), out Count);
+      var standardApplicable = appJson?.Children().FirstOrDefault();
+
+      var standardApplicableRecord = standardApplicable?[RelationshipNames.EvidenceStandardApplicables];
+
+      return standardApplicableRecord != null ?
+          new StandardApplicable(standardApplicableRecord) : null;
+    }
+
+  }
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

@@ -23,6 +23,7 @@ using Gif.Service.Const;
 using Microsoft.AspNetCore.Authorization;
 using ZNetCS.AspNetCore.Authentication.Basic;
 using Microsoft.Extensions.Configuration;
+using Gif.Service.Contracts;
 
 namespace Gif.Service.Controllers
 {
@@ -37,11 +38,11 @@ namespace Gif.Service.Controllers
     /// Get existing Capability/s which are in the given Framework
     /// </summary>
 
-    private readonly IConfiguration _config;
+    private readonly ICapabilityDatastore _datastore;
 
-    public CapabilitiesApiController(IConfiguration config)
+    public CapabilitiesApiController(ICapabilityDatastore datastore)
     {
-      _config = config;
+      _datastore = datastore;
     }
 
     /// <param name="frameworkId">CRM identifier of Framework</param>
@@ -61,9 +62,8 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new CapabilitiesService(new Repository(_config));
-        capabilities = service.ByFramework(frameworkId);
-        capabilities = service.GetPagingValues(pageIndex, pageSize, capabilities, out totalPages);
+        capabilities = _datastore.ByFramework(frameworkId);
+        capabilities = _datastore.GetPagingValues(pageIndex, pageSize, capabilities, out totalPages);
 
         if (capabilities == null)
           return StatusCode(404);
@@ -98,7 +98,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var capability = new CapabilitiesService(new Repository(_config)).ById(id);
+        var capability = _datastore.ById(id);
 
         if (capability.Id == Guid.Empty)
           return StatusCode(404);
@@ -128,7 +128,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var capabilities = new CapabilitiesService(new Repository(_config)).ByIds(ids);
+        var capabilities = _datastore.ByIds(ids);
 
         if (capabilities == null)
           return StatusCode(404);
@@ -165,10 +165,8 @@ namespace Gif.Service.Controllers
 
       try
       {
-
-        var service = new CapabilitiesService(new Repository(_config));
-        capabilities = service.ByStandard(standardId, isOptional != null && isOptional.Value);
-        capabilities = service.GetPagingValues(pageIndex, pageSize, capabilities, out totalPages);
+        capabilities = _datastore.ByStandard(standardId, isOptional != null && isOptional.Value);
+        capabilities = _datastore.GetPagingValues(pageIndex, pageSize, capabilities, out totalPages);
 
         if (capabilities == null)
           return StatusCode(404);
@@ -207,9 +205,8 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new CapabilitiesService(new Repository(_config));
-        capabilities = service.GetAll();
-        capabilities = service.GetPagingValues(pageIndex, pageSize, capabilities, out totalPages);
+        capabilities = _datastore.GetAll();
+        capabilities = _datastore.GetPagingValues(pageIndex, pageSize, capabilities, out totalPages);
       }
       catch (Crm.CrmApiException ex)
       {

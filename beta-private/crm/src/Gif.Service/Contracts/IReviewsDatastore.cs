@@ -3,7 +3,7 @@
 namespace Gif.Service.Contracts
 {
 #pragma warning disable CS1591
-  public interface IReviewsDatastore<T>
+  public interface IReviewsDatastore<T> : IDatastoreBase<T>
   {
     IEnumerable<IEnumerable<T>> ByEvidence(string evidenceId);
     T ById(string id);

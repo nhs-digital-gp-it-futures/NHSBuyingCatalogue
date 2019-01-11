@@ -10,6 +10,7 @@
 
 using Gif.Service.Attributes;
 using Gif.Service.Const;
+using Gif.Service.Contracts;
 using Gif.Service.Crm;
 using Gif.Service.Models;
 using Gif.Service.Services;
@@ -36,11 +37,11 @@ namespace Gif.Service.Controllers
     /// Get existing solution/s on which were onboarded onto a framework,  given the CRM identifier of the framework
     /// </summary>
 
-    private readonly IConfiguration _config;
+    private readonly ISolutionsDatastore _datastore;
 
-    public SolutionsApiController(IConfiguration config)
+    public SolutionsApiController(ISolutionsDatastore datastore)
     {
-      _config = config;
+      _datastore = datastore;
     }
 
   /// <param name="frameworkId">CRM identifier of organisation to find</param>
@@ -61,9 +62,8 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new SolutionsService(new Repository(_config));
-        solutions = service.ByFramework(frameworkId);
-        solutions = service.GetPagingValues(pageIndex, pageSize, solutions, out totalPages);
+        solutions = _datastore.ByFramework(frameworkId);
+        solutions = _datastore.GetPagingValues(pageIndex, pageSize, solutions, out totalPages);
       }
       catch (Crm.CrmApiException ex)
       {
@@ -96,7 +96,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var solution = new SolutionsService(new Repository(_config)).ById(id);
+        var solution = _datastore.ById(id);
 
         if (solution.Id == Guid.Empty)
           return StatusCode(404);
@@ -132,9 +132,8 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new SolutionsService(new Repository(_config));
-        solutions = service.ByOrganisation(organisationId);
-        solutions = service.GetPagingValues(pageIndex, pageSize, solutions, out totalPages);
+        solutions = _datastore.ByOrganisation(organisationId);
+        solutions = _datastore.GetPagingValues(pageIndex, pageSize, solutions, out totalPages);
 
       }
       catch (Crm.CrmApiException ex)
@@ -168,7 +167,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        solution = new SolutionsService(new Repository(_config)).Create(solution);
+        solution = _datastore.Create(solution);
       }
       catch (Crm.CrmApiException ex)
       {
@@ -193,7 +192,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        new SolutionsService(new Repository(_config)).Update(solution);
+        _datastore.Update(solution);
       }
       catch (Crm.CrmApiException ex)
       {
@@ -218,13 +217,12 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var svc = new SolutionsService(new Repository(_config));
-        var solutionGet = svc.ById(solution.Id.ToString());
+        var solutionGet = _datastore.ById(solution.Id.ToString());
 
         if (solutionGet.Id == Guid.Empty)
           return StatusCode(404);
 
-        svc.Delete(solution);
+        _datastore.Delete(solution);
       }
       catch (Crm.CrmApiException ex)
       {

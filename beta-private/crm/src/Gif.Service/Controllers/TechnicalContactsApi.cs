@@ -23,6 +23,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using ZNetCS.AspNetCore.Authentication.Basic;
 using Microsoft.Extensions.Configuration;
+using Gif.Service.Contracts;
 
 namespace Gif.Service.Controllers
 {
@@ -36,19 +37,19 @@ namespace Gif.Service.Controllers
     /// Retrieve all Technical Contacts for a solution in a paged list,  given the solution’s CRM identifier
     /// </summary>
 
-    private readonly IConfiguration _config;
+    private readonly ITechnicalContactsDatastore _datastore;
 
-    public TechnicalContactsApiController(IConfiguration config)
+    public TechnicalContactsApiController(ITechnicalContactsDatastore datastore)
     {
-      _config = config;
+      _datastore = datastore;
     }
 
-    /// <param name="solutionId">CRM identifier of solution</param>
-    /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
-    /// <param name="pageSize">number of items per page.  Defaults to 20</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Solution not found in CRM</response>
-    [HttpGet]
+  /// <param name="solutionId">CRM identifier of solution</param>
+  /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
+  /// <param name="pageSize">number of items per page.  Defaults to 20</param>
+  /// <response code="200">Success</response>
+  /// <response code="404">Solution not found in CRM</response>
+  [HttpGet]
     [Route("/api/TechnicalContacts/BySolution/{solutionId}")]
     [ValidateModelState]
     [SwaggerOperation("ApiTechnicalContactsBySolutionBySolutionIdGet")]
@@ -60,9 +61,8 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new TechnicalContactService(new Repository(_config));
-        technicalContacts = service.BySolution(solutionId);
-        technicalContacts = service.GetPagingValues(pageIndex, pageSize, technicalContacts, out totalPages);
+        technicalContacts = _datastore.BySolution(solutionId);
+        technicalContacts = _datastore.GetPagingValues(pageIndex, pageSize, technicalContacts, out totalPages);
       }
       catch (Crm.CrmApiException ex)
       {
@@ -94,13 +94,12 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var svc = new TechnicalContactService(new Repository(_config));
-        var techContGet = svc.ById(techCont.Id.ToString());
+        var techContGet = _datastore.ById(techCont.Id.ToString());
 
         if (techContGet.Id == Guid.Empty)
           return StatusCode(404);
 
-        svc.Delete(techCont);
+        _datastore.Delete(techCont);
       }
       catch (Crm.CrmApiException ex)
       {
@@ -126,7 +125,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        new TechnicalContactService(new Repository(_config)).Create(techCont);
+        _datastore.Create(techCont);
       }
       catch (Crm.CrmApiException ex)
       {
@@ -152,7 +151,7 @@ namespace Gif.Service.Controllers
 
       try
       {
-        new TechnicalContactService(new Repository(_config)).Update(techCont);
+        _datastore.Update(techCont);
       }
       catch (Crm.CrmApiException ex)
       {

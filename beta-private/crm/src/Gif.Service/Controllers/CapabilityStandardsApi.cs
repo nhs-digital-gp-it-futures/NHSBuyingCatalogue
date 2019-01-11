@@ -1,5 +1,6 @@
 using Gif.Service.Attributes;
 using Gif.Service.Const;
+using Gif.Service.Contracts;
 using Gif.Service.Crm;
 using Gif.Service.Models;
 using Gif.Service.Services;
@@ -23,11 +24,11 @@ namespace Gif.Service.Controllers
     /// Retrieve all current capability standards in a paged list
     /// </summary>
 
-    private readonly IConfiguration _config;
+    private readonly ICapabilityStandardDatastore _datastore;
 
-    public CapabilityStandardsApi(IConfiguration config)
+    public CapabilityStandardsApi(ICapabilityStandardDatastore datastore)
     {
-      _config = config;
+      _datastore = datastore;
     }
 
   /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
@@ -45,9 +46,8 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new CapabilityStandardService(new Repository(_config));
-        capabilitiesStandard = service.GetAll();
-        capabilitiesStandard = service.GetPagingValues(pageIndex, pageSize, capabilitiesStandard, out totalPages);
+        capabilitiesStandard = _datastore.GetAll();
+        capabilitiesStandard = _datastore.GetPagingValues(pageIndex, pageSize, capabilitiesStandard, out totalPages);
       }
       catch (Crm.CrmApiException ex)
       {

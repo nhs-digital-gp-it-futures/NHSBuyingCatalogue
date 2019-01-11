@@ -10,6 +10,7 @@
 
 using Gif.Service.Attributes;
 using Gif.Service.Const;
+using Gif.Service.Contracts;
 using Gif.Service.Crm;
 using Gif.Service.Models;
 using Gif.Service.Services;
@@ -36,11 +37,11 @@ namespace Gif.Service.Controllers
     /// Retrieve claim, given the claim’s CRM identifier
     /// </summary>
 
-    private readonly IConfiguration _config;
+    private readonly ICapabilitiesImplementedDatastore _datastore;
 
-    public CapabilitiesImplementedApiController(IConfiguration config)
+    public CapabilitiesImplementedApiController(ICapabilitiesImplementedDatastore datastore)
     {
-      _config = config;
+      _datastore = datastore;
     }
 
     /// <param name="id">CRM identifier of claim</param>
@@ -55,7 +56,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var capabilityImplemented = new CapabilitiesImplementedService(new Repository(_config)).ById(id);
+        var capabilityImplemented = _datastore.ById(id);
 
         if (capabilityImplemented.Id == Guid.Empty)
           return StatusCode(404);
@@ -89,10 +90,8 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new CapabilitiesImplementedService(new Repository(_config));
-        capabilitiesImplemented = service.BySolution(solutionId);
-        capabilitiesImplemented =
-            service.GetPagingValues(pageIndex, pageSize, capabilitiesImplemented, out totalPages);
+        capabilitiesImplemented = _datastore.BySolution(solutionId);
+        capabilitiesImplemented = _datastore.GetPagingValues(pageIndex, pageSize, capabilitiesImplemented, out totalPages);
       }
       catch (Crm.CrmApiException ex)
       {
@@ -124,13 +123,12 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var svc = new CapabilitiesImplementedService(new Repository(_config));
-        var capabilityImplemented = svc.ById(claimedcapability.Id.ToString());
+        var capabilityImplemented = _datastore.ById(claimedcapability.Id.ToString());
 
         if (capabilityImplemented.Id == Guid.Empty)
           return StatusCode(404);
 
-        svc.Delete(claimedcapability);
+        _datastore.Delete(claimedcapability);
       }
       catch (Crm.CrmApiException ex)
       {
@@ -158,7 +156,7 @@ namespace Gif.Service.Controllers
 
       try
       {
-        capabilityImplemented = new CapabilitiesImplementedService(new Repository(_config)).Create(claimedcapability);
+        capabilityImplemented = _datastore.Create(claimedcapability);
       }
       catch (Crm.CrmApiException ex)
       {
@@ -183,7 +181,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        new CapabilitiesImplementedService(new Repository(_config)).Update(claimedcapability);
+        _datastore.Update(claimedcapability);
       }
       catch (Crm.CrmApiException ex)
       {

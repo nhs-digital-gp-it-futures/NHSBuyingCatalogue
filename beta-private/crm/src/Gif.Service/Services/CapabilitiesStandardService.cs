@@ -8,32 +8,32 @@ using System.Linq;
 
 namespace Gif.Service.Services
 {
-    public class CapabilitiesStandardService : ServiceBase, ICapabilityStandardDatastore
+  public class CapabilitiesStandardService : ServiceBase<CapabilityStandard>, ICapabilityStandardDatastore
+  {
+    public CapabilitiesStandardService(IRepository repository) : base(repository)
     {
-        public CapabilitiesStandardService(IRepository repository) : base(repository)
-        {
-        }
+    }
 
-        public IEnumerable<CapabilityStandard> GetAll()
-        {
-            var capabilitiesStandard = new List<CapabilityStandard>();
+    public IEnumerable<CapabilityStandard> GetAll()
+    {
+      var capabilitiesStandard = new List<CapabilityStandard>();
 
-            var filterAttributes = new List<CrmFilterAttribute>
+      var filterAttributes = new List<CrmFilterAttribute>
             {
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new CapabilityStandard().GetQueryString(null, filterAttributes, true, true), out Count);
+      var appJson = Repository.RetrieveMultiple(new CapabilityStandard().GetQueryString(null, filterAttributes, true, true), out Count);
 
-            foreach (var capabilityStandard in appJson.Children())
-            {
-                capabilitiesStandard.Add(new CapabilityStandard(capabilityStandard));
-            }
+      foreach (var capabilityStandard in appJson.Children())
+      {
+        capabilitiesStandard.Add(new CapabilityStandard(capabilityStandard));
+      }
 
-            Count = capabilitiesStandard.Count();
+      Count = capabilitiesStandard.Count();
 
-            return capabilitiesStandard;
-        }
+      return capabilitiesStandard;
     }
+  }
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

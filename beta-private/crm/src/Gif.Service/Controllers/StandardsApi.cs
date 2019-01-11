@@ -23,6 +23,7 @@ using System.Linq;
 using Gif.Service.Const;
 using ZNetCS.AspNetCore.Authentication.Basic;
 using Microsoft.Extensions.Configuration;
+using Gif.Service.Contracts;
 
 namespace Gif.Service.Controllers
 {
@@ -36,11 +37,11 @@ namespace Gif.Service.Controllers
     /// Get existing/optional Standard/s which are in the given Capability
     /// </summary>
 
-    private readonly IConfiguration _config;
+    private readonly IStandardsDatastore _datastore;
 
-    public StandardsApiController(IConfiguration config)
+    public StandardsApiController(IStandardsDatastore datastore)
     {
-      _config = config;
+      _datastore = datastore;
     }
 
   /// <param name="capabilityId">CRM identifier of Capability</param>
@@ -61,9 +62,8 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new StandardsService(new Repository(_config));
-        standards = service.ByCapability(capabilityId, isOptional);
-        standards = service.GetPagingValues(pageIndex, pageSize, standards, out totalPages);
+        standards = _datastore.ByCapability(capabilityId, isOptional);
+        standards = _datastore.GetPagingValues(pageIndex, pageSize, standards, out totalPages);
 
       }
       catch (Crm.CrmApiException ex)
@@ -102,9 +102,8 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new StandardsService(new Repository(_config));
-        standards = service.ByFramework(frameworkId);
-        standards = service.GetPagingValues(pageIndex, pageSize, standards, out totalPages);
+        standards = _datastore.ByFramework(frameworkId);
+        standards = _datastore.GetPagingValues(pageIndex, pageSize, standards, out totalPages);
       }
       catch (Crm.CrmApiException ex)
       {
@@ -136,7 +135,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var standard = new StandardsService(new Repository(_config)).ById(id);
+        var standard = _datastore.ById(id);
 
         if (standard.Id == Guid.Empty)
           return StatusCode(404);
@@ -168,7 +167,7 @@ namespace Gif.Service.Controllers
 
       try
       {
-        standards = new StandardsService(new Repository(_config)).ByIds(ids);
+        standards = _datastore.ByIds(ids);
 
         return new ObjectResult(standards);
       }
@@ -198,9 +197,8 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new StandardsService(new Repository(_config));
-        standards = service.GetAll();
-        standards = service.GetPagingValues(pageIndex, pageSize, standards, out totalPages);
+        standards = _datastore.GetAll();
+        standards = _datastore.GetPagingValues(pageIndex, pageSize, standards, out totalPages);
       }
       catch (Crm.CrmApiException ex)
       {

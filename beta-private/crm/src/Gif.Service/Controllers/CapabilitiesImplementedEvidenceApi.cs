@@ -10,12 +10,10 @@
 
 using Gif.Service.Attributes;
 using Gif.Service.Const;
-using Gif.Service.Crm;
+using Gif.Service.Contracts;
 using Gif.Service.Models;
-using Gif.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
@@ -36,11 +34,11 @@ namespace Gif.Service.Controllers
     /// Get all EvidenceEntity for the given Claim  Each list is a distinct &#39;chain&#39; of EvidenceEntity ie original EvidenceEntity with all subsequent EvidenceEntity  The first item in each &#39;chain&#39; is the most current EvidenceEntity.  The last item in each &#39;chain&#39; is the original EvidenceEntity.
     /// </summary>
 
-    private readonly IConfiguration _config;
+    private readonly ICapabilitiesImplementedEvidenceDatastore _datastore;
 
-    public CapabilitiesImplementedEvidenceApiController(IConfiguration config)
+    public CapabilitiesImplementedEvidenceApiController(ICapabilitiesImplementedEvidenceDatastore datastore)
     {
-      _config = config;
+      _datastore = datastore;
     }
 
   /// <param name="claimId">CRM identifier of Claim</param>
@@ -60,9 +58,8 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new CapabilitiesImplementedEvidenceService(new Repository(_config));
-        evidences = service.ByClaim(claimId);
-        evidences = service.GetPagingValues(pageIndex, pageSize, evidences, out totalPages);
+        evidences = _datastore.ByClaim(claimId);
+        evidences = _datastore.GetPagingValues(pageIndex, pageSize, evidences, out totalPages);
 
       }
       catch (Crm.CrmApiException ex)
@@ -95,7 +92,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var capabilityImplemented = new CapabilitiesImplementedEvidenceService(new Repository(_config)).ById(id);
+        var capabilityImplemented = _datastore.ById(id);
 
         if (capabilityImplemented.Id == Guid.Empty)
           return StatusCode(404);
@@ -126,7 +123,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        evidenceEntity = new CapabilitiesImplementedEvidenceService(new Repository(_config)).Create(evidenceEntity);
+        evidenceEntity = _datastore.Create(evidenceEntity);
 
         if (evidenceEntity.Id == Guid.Empty)
           return StatusCode(404);

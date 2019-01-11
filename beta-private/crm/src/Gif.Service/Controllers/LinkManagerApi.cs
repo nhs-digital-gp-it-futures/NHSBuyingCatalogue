@@ -12,6 +12,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using Gif.Service.Attributes;
+using Gif.Service.Contracts;
 using Gif.Service.Crm;
 using Gif.Service.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -29,19 +30,19 @@ namespace Gif.Service.Controllers
     /// Create a link between a Framework and a Solution
     /// </summary>
 
-    private readonly IConfiguration _config;
+    private readonly ILinkManagerDatastore _datastore;
 
-    public LinkManagerApiController(IConfiguration config)
+    public LinkManagerApiController(ILinkManagerDatastore datastore)
     {
-      _config = config;
+      _datastore = datastore;
     }
 
-    /// <param name="frameworkId">CRM identifier of Framework</param>
-    /// <param name="solutionId">CRM identifier of Solution</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">One entity not found</response>
-    /// <response code="412">Link already exists</response>
-    [HttpPost]
+  /// <param name="frameworkId">CRM identifier of Framework</param>
+  /// <param name="solutionId">CRM identifier of Solution</param>
+  /// <response code="200">Success</response>
+  /// <response code="404">One entity not found</response>
+  /// <response code="412">Link already exists</response>
+  [HttpPost]
     [Route("/api/LinkManager/FrameworkSolution/Create/{frameworkId}/{solutionId}")]
     [ValidateModelState]
     [SwaggerOperation("ApiLinkManagerFrameworkSolutionCreateByFrameworkIdBySolutionIdPost")]
@@ -56,7 +57,7 @@ namespace Gif.Service.Controllers
         if (solutionIdParsed == Guid.Empty || frameworkIdParsed == Guid.Empty)
           throw new CrmApiException("Cannot parse strings into Guids", HttpStatusCode.BadRequest);
 
-        new LinkManagerService(new Repository(_config)).FrameworkSolutionAssociate(frameworkIdParsed, solutionIdParsed);
+        _datastore.FrameworkSolutionAssociate(frameworkIdParsed, solutionIdParsed);
       }
       catch (Crm.CrmApiException ex)
       {

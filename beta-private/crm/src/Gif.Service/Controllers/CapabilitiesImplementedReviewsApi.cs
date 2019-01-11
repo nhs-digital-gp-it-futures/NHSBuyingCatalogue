@@ -10,6 +10,7 @@
 
 using Gif.Service.Attributes;
 using Gif.Service.Const;
+using Gif.Service.Contracts;
 using Gif.Service.Crm;
 using Gif.Service.Models;
 using Gif.Service.Services;
@@ -36,17 +37,17 @@ namespace Gif.Service.Controllers
     /// Get an existing Capabilities Implemented Review for a given Review Id
     /// </summary>
 
-    private readonly IConfiguration _config;
+    private readonly ICapabilitiesImplementedReviewsDatastore _datastore;
 
-    public CapabilitiesImplementedReviewsApiController(IConfiguration config)
+    public CapabilitiesImplementedReviewsApiController(ICapabilitiesImplementedReviewsDatastore datastore)
     {
-      _config = config;
+      _datastore = datastore;
     }
 
-  /// <param name="id">Review Id</param>
-  /// <response code="200">Success</response>
-  /// <response code="404">Solution not found in CRM</response>
-  [HttpGet]
+    /// <param name="id">Review Id</param>
+    /// <response code="200">Success</response>
+    /// <response code="404">Solution not found in CRM</response>
+    [HttpGet]
     [Route("/api/CapabilitiesImplementedReviews/ById/{id}")]
     [ValidateModelState]
     [SwaggerOperation("ApiCapabilitiesImplementedReviewByIdGet")]
@@ -55,7 +56,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var review = new CapabilitiesImplementedReviewsService(new Repository(_config)).ById(id);
+        var review = _datastore.ById(id);
 
         if (review.Id == Guid.Empty)
           return StatusCode(404);
@@ -91,9 +92,8 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new CapabilitiesImplementedReviewsService(new Repository(_config));
-        reviews = service.ByEvidence(evidenceId);
-        reviews = service.GetPagingValues(pageIndex, pageSize, reviews, out totalPages);
+        reviews = _datastore.ByEvidence(evidenceId);
+        reviews = _datastore.GetPagingValues(pageIndex, pageSize, reviews, out totalPages);
       }
       catch (Crm.CrmApiException ex)
       {
@@ -125,7 +125,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        review = new CapabilitiesImplementedReviewsService(new Repository(_config)).Create(review);
+        review = _datastore.Create(review);
       }
       catch (Crm.CrmApiException ex)
       {

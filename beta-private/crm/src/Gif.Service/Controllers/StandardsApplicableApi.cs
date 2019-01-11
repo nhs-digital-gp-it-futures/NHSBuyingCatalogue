@@ -10,12 +10,10 @@
 
 using Gif.Service.Attributes;
 using Gif.Service.Const;
-using Gif.Service.Crm;
+using Gif.Service.Contracts;
 using Gif.Service.Models;
-using Gif.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
@@ -36,17 +34,17 @@ namespace Gif.Service.Controllers
     /// Retrieve claim, given the claim’s CRM identifier
     /// </summary>
 
-    private readonly IConfiguration _config;
+    private readonly IStandardsApplicableDatastore _datastore;
 
-    public StandardsApplicableApiController(IConfiguration config)
+    public StandardsApplicableApiController(IStandardsApplicableDatastore datastore)
     {
-      _config = config;
+      _datastore = datastore;
     }
 
-    /// <param name="id">CRM identifier of claim</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Claim not found in CRM</response>
-    [HttpGet]
+  /// <param name="id">CRM identifier of claim</param>
+  /// <response code="200">Success</response>
+  /// <response code="404">Claim not found in CRM</response>
+  [HttpGet]
     [Route("/api/StandardsApplicable/ById/{id}")]
     [ValidateModelState]
     [SwaggerOperation("ApiStandardsApplicableByIdGet")]
@@ -55,7 +53,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var standard = new StandardsApplicableService(new Repository(_config)).ById(id);
+        var standard = _datastore.ById(id);
 
         if (standard.Id == Guid.Empty)
           return StatusCode(404);
@@ -90,9 +88,8 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new StandardsApplicableService(new Repository(_config));
-        standardsApplicable = service.BySolution(solutionId);
-        standardsApplicable = service.GetPagingValues(pageIndex, pageSize, standardsApplicable, out totalPages);
+        standardsApplicable = _datastore.BySolution(solutionId);
+        standardsApplicable = _datastore.GetPagingValues(pageIndex, pageSize, standardsApplicable, out totalPages);
 
         if (standardsApplicable == null)
           return StatusCode(404);
@@ -126,13 +123,12 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var svc = new StandardsApplicableService(new Repository(_config));
-        var claimedstandardGet = svc.ById(claimedstandard.Id.ToString());
+        var claimedstandardGet = _datastore.ById(claimedstandard.Id.ToString());
 
         if (claimedstandardGet.Id == Guid.Empty)
           return StatusCode(404);
 
-        svc.Delete(claimedstandard);
+        _datastore.Delete(claimedstandard);
       }
       catch (Crm.CrmApiException ex)
       {
@@ -158,7 +154,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        claimedstandard = new StandardsApplicableService(new Repository(_config)).Create(claimedstandard);
+        claimedstandard = _datastore.Create(claimedstandard);
       }
       catch (Crm.CrmApiException ex)
       {
@@ -183,7 +179,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        new StandardsApplicableService(new Repository(_config)).Update(claimedstandard);
+        _datastore.Update(claimedstandard);
       }
       catch (Crm.CrmApiException ex)
       {

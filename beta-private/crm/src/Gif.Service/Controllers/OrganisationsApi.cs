@@ -20,6 +20,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System.ComponentModel.DataAnnotations;
 using ZNetCS.AspNetCore.Authentication.Basic;
 using Microsoft.Extensions.Configuration;
+using Gif.Service.Contracts;
 
 namespace Gif.Service.Controllers
 {
@@ -33,11 +34,11 @@ namespace Gif.Service.Controllers
     /// Retrieve an Organisation for the given Contact
     /// </summary>
 
-    private readonly IConfiguration _config;
+    private readonly IOrganisationsDatastore _datastore;
 
-    public OrganisationsApiController(IConfiguration config)
+    public OrganisationsApiController(IOrganisationsDatastore datastore)
     {
-      _config = config;
+      _datastore = datastore;
     }
 
   /// <param name="contactId">CRM identifier of Contact</param>
@@ -52,7 +53,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var organisation = new OrganisationsService(new Repository(_config)).ByContact(contactId);
+        var organisation = _datastore.ByContact(contactId);
 
         if (organisation.Id == Guid.Empty)
           return StatusCode(404);
@@ -81,7 +82,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var organisation = new OrganisationsService(new Repository(_config)).ById(organisationId);
+        var organisation = _datastore.ById(organisationId);
 
         if (organisation.Id == Guid.Empty)
           return StatusCode(404);
