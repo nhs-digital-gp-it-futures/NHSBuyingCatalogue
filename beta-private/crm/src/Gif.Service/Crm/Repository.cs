@@ -16,20 +16,10 @@ using Gif.Service.Enums;
 
 namespace Gif.Service.Crm
 {
-  public class Repository : IRepository
+  public sealed class Repository : IRepository
   {
-    #region Fields
-
-    protected readonly AuthenticationResult _authResult;
-
+    private readonly AuthenticationResult _authResult;
     private readonly IConfiguration _config;
-
-    #endregion
-
-    private const string jsonSeparator = "\":\"";
-    private const string doubleQuote = "\"";
-
-    #region Constructors
 
     public Repository(IConfiguration config)
     {
@@ -37,16 +27,12 @@ namespace Gif.Service.Crm
 
       var secret = CipherUtil.Decrypt<AesManaged>(Settings.GIF_ENCRYPTED_CLIENT_SECRET(_config), "GifService", Settings.GIF_AZURE_CLIENT_ID(_config));
       var authContext = new AuthenticationContext(Settings.GIF_CRM_AUTHORITY(_config), false);
-      _authResult = authContext.AcquireTokenAsync(Settings.GIF_CRM_URL(_config), new ClientCredential(Settings.GIF_AZURE_CLIENT_ID(_config), secret)).Result; 
+      _authResult = authContext.AcquireTokenAsync(Settings.GIF_CRM_URL(_config), new ClientCredential(Settings.GIF_AZURE_CLIENT_ID(_config), secret)).Result;
 
       ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
     }
 
-    #endregion
-
-    #region Private Methods
-
-    private HttpClient getCrmConnection()
+    private HttpClient GetCrmConnection()
     {
       var httpClient = new HttpClient()
       {
@@ -58,18 +44,15 @@ namespace Gif.Service.Crm
       httpClient.DefaultRequestHeaders.Add("Prefer", "odata.include-annotations=OData.Community.Display.V1.FormattedValue");
       httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
       httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _authResult.AccessToken);
+
       return httpClient;
     }
 
-    #endregion
-
-    #region Virtual Methods
-
-    public virtual JObject Retrieve(string query)
+    public JObject Retrieve(string query)
     {
       HttpResponseMessage httpResponse;
 
-      using (var httpClient = getCrmConnection())
+      using (var httpClient = GetCrmConnection())
       {
         httpResponse = httpClient.GetAsync(query).Result;
       }
@@ -88,14 +71,14 @@ namespace Gif.Service.Crm
       return jretrieveJObject;
     }
 
-    public virtual JToken RetrieveMultiple(string query, out int? count)
+    public JToken RetrieveMultiple(string query, out int? count)
     {
       JToken jretrieveToken = null;
       count = null;
 
       HttpResponseMessage retrieveResponse;
 
-      using (var httpClient = getCrmConnection())
+      using (var httpClient = GetCrmConnection())
       {
         retrieveResponse = httpClient.GetAsync(query).Result;
       }
@@ -118,11 +101,11 @@ namespace Gif.Service.Crm
       return jretrieveToken;
     }
 
-    public virtual void Associate(Guid entityId1, string entityName1, Guid entityId2, string entityName2, string relationshipKey)
+    public void Associate(Guid entityId1, string entityName1, Guid entityId2, string entityName2, string relationshipKey)
     {
       HttpResponseMessage resp;
 
-      using (var httpClient = getCrmConnection())
+      using (var httpClient = GetCrmConnection())
       {
         var address = $"{entityName1}({entityId1.ToString()})/{relationshipKey}/$ref";
 
@@ -138,42 +121,7 @@ namespace Gif.Service.Crm
 
     }
 
-    public virtual void UpdateField(string entityName, string entityField, Guid entityId, string value)
-    {
-      var address = entityName + "(" + entityId + ")/" + entityField;
-
-      //Don't add quotes if value is a bool/int
-      bool boolField; int intField; string updateBody;
-      if (bool.TryParse(value, out boolField) || int.TryParse(value, out intField))
-      {
-        updateBody = "{\"value\": " + value.ToLower() + "}";
-      }
-      else
-      {
-        updateBody = "{\"value\":\"" + value.ToLower() + "\"}";
-      }
-
-      var content = new StringContent(updateBody, Encoding.UTF8, "application/json");
-
-      HttpResponseMessage updateResponse;
-
-      using (var httpClient = getCrmConnection())
-      {
-        updateResponse = httpClient.PutAsync(address, content).Result;
-      }
-
-      if (updateResponse.StatusCode != HttpStatusCode.NoContent)
-        throw new CrmApiException(updateResponse.ReasonPhrase, updateResponse.StatusCode);
-    }
-
-    /// <summary>
-    /// Create a new CRM Entity
-    /// </summary>
-    /// <param name="entityName">The name of the new entity to create</param>
-    /// <param name="entityData">A JSON formatted string of the entity fields to be populated and the values to enter</param>
-    /// <param name="update"></param>
-    /// <returns>True or throws an error to be caught.</returns>
-    public virtual Guid CreateEntity(string entityName, string entityData, bool update = false)
+    public Guid CreateEntity(string entityName, string entityData, bool update = false)
     {
       var address = entityName;
       var content = new StringContent(entityData, Encoding.UTF8, "application/json");
@@ -181,7 +129,7 @@ namespace Gif.Service.Crm
       HttpResponseMessage updateResponse;
       string targetUri;
 
-      using (var httpClient = getCrmConnection())
+      using (var httpClient = GetCrmConnection())
       {
         updateResponse = httpClient.PostAsync(address, content).Result;
         targetUri = httpClient.BaseAddress.AbsoluteUri;
@@ -202,13 +150,13 @@ namespace Gif.Service.Crm
       return Guid.Parse(idString);
     }
 
-    public virtual void UpdateEntity(string entityName, Guid id, string entityData)
+    public void UpdateEntity(string entityName, Guid id, string entityData)
     {
       HttpResponseMessage response;
       var method = new HttpMethod("PATCH");
       var content = new StringContent(entityData, Encoding.UTF8, "application/json");
 
-      using (var httpClient = getCrmConnection())
+      using (var httpClient = GetCrmConnection())
       {
         var requestUri = new Uri($"{httpClient.BaseAddress.AbsoluteUri}{entityName}({id})");
 
@@ -225,12 +173,12 @@ namespace Gif.Service.Crm
 
     }
 
-    public virtual void Delete(string entityName, Guid id)
+    public void Delete(string entityName, Guid id)
     {
       HttpResponseMessage response;
       var method = new HttpMethod("DELETE");
 
-      using (var httpClient = getCrmConnection())
+      using (var httpClient = GetCrmConnection())
       {
         var requestUri = new Uri($"{httpClient.BaseAddress.AbsoluteUri}{entityName}({id})");
 
@@ -246,7 +194,7 @@ namespace Gif.Service.Crm
     {
       HttpResponseMessage response;
 
-      using (var httpClient = getCrmConnection())
+      using (var httpClient = GetCrmConnection())
       {
         // batch setup
         var batchId = Guid.NewGuid();
@@ -283,7 +231,6 @@ namespace Gif.Service.Crm
 
     }
 
-
     private void AddChangeSet(IList<BatchData> batchData, HttpClient httpClient, ref MultipartContent changeSet)
     {
       var count = 1;
@@ -310,7 +257,8 @@ namespace Gif.Service.Crm
         count++;
       }
     }
-    public void AddHeadersToChangeSets(ref MultipartContent content)
+
+    private void AddHeadersToChangeSets(ref MultipartContent content)
     {
       using (var enumChangeSet = content.GetEnumerator())
       {
@@ -323,9 +271,33 @@ namespace Gif.Service.Crm
       }
     }
 
-    #endregion
+    private void UpdateField(string entityName, string entityField, Guid entityId, string value)
+    {
+      var address = entityName + "(" + entityId + ")/" + entityField;
 
+      //Don't add quotes if value is a bool/int
+      bool boolField; int intField; string updateBody;
+      if (bool.TryParse(value, out boolField) || int.TryParse(value, out intField))
+      {
+        updateBody = "{\"value\": " + value.ToLower() + "}";
+      }
+      else
+      {
+        updateBody = "{\"value\":\"" + value.ToLower() + "\"}";
+      }
+
+      var content = new StringContent(updateBody, Encoding.UTF8, "application/json");
+
+      HttpResponseMessage updateResponse;
+
+      using (var httpClient = GetCrmConnection())
+      {
+        updateResponse = httpClient.PutAsync(address, content).Result;
+      }
+
+      if (updateResponse.StatusCode != HttpStatusCode.NoContent)
+        throw new CrmApiException(updateResponse.ReasonPhrase, updateResponse.StatusCode);
+    }
   }
-
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
