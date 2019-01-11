@@ -47,7 +47,7 @@
     <PackageReference Include="Microsoft.OData.Core" Version="7.5.1" />
     <PackageReference Include="Microsoft.OData.Edm" Version="7.5.1" />
     <PackageReference Include="Microsoft.Spatial" Version="7.5.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="1.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="2.4.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.1" />
     <PackageReference Include="System.ServiceModel.Web" Version="1.0.0" />
