@@ -13,6 +13,8 @@ using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using Gif.Service.Enums;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Gif.Service.Crm
 {
@@ -20,10 +22,16 @@ namespace Gif.Service.Crm
   {
     private readonly AuthenticationResult _authResult;
     private readonly IConfiguration _config;
+    private readonly ILogger<Repository> _logger;
+    private readonly bool _logCRM;
 
-    public Repository(IConfiguration config)
+    public Repository(
+      IConfiguration config,
+      ILogger<Repository> logger)
     {
       _config = config;
+      _logger = logger;
+      _logCRM = Settings.LOG_CRM(config);
 
       var secret = CipherUtil.Decrypt<AesManaged>(Settings.GIF_ENCRYPTED_CLIENT_SECRET(_config), "GifService", Settings.GIF_AZURE_CLIENT_ID(_config));
       var authContext = new AuthenticationContext(Settings.GIF_CRM_AUTHORITY(_config), false);
@@ -50,6 +58,8 @@ namespace Gif.Service.Crm
 
     public JObject Retrieve(string query)
     {
+      LogInformation($"[{nameof(Retrieve)}] --> {query}");
+
       HttpResponseMessage httpResponse;
 
       using (var httpClient = GetCrmConnection())
@@ -73,6 +83,8 @@ namespace Gif.Service.Crm
 
     public JToken RetrieveMultiple(string query, out int? count)
     {
+      LogInformation($"[{nameof(RetrieveMultiple)}] --> {query}");
+
       JToken jretrieveToken = null;
       count = null;
 
@@ -103,6 +115,8 @@ namespace Gif.Service.Crm
 
     public void Associate(Guid entityId1, string entityName1, Guid entityId2, string entityName2, string relationshipKey)
     {
+      LogInformation($"[{nameof(Associate)}] --> {entityName1}/{entityId1} -> [{relationshipKey}] -> {entityName2}/{entityId2}");
+
       HttpResponseMessage resp;
 
       using (var httpClient = GetCrmConnection())
@@ -118,11 +132,12 @@ namespace Gif.Service.Crm
 
       if (resp.StatusCode != HttpStatusCode.OK && resp.StatusCode != HttpStatusCode.NoContent)
         throw new CrmApiException(resp.ReasonPhrase, resp.StatusCode);
-
     }
 
     public Guid CreateEntity(string entityName, string entityData, bool update = false)
     {
+      LogInformation($"[{nameof(CreateEntity)}] --> {entityName}/{entityData}");
+
       var address = entityName;
       var content = new StringContent(entityData, Encoding.UTF8, "application/json");
 
@@ -152,6 +167,8 @@ namespace Gif.Service.Crm
 
     public void UpdateEntity(string entityName, Guid id, string entityData)
     {
+      LogInformation($"[{nameof(UpdateEntity)}] --> {entityName}/{entityData}");
+
       HttpResponseMessage response;
       var method = new HttpMethod("PATCH");
       var content = new StringContent(entityData, Encoding.UTF8, "application/json");
@@ -175,6 +192,8 @@ namespace Gif.Service.Crm
 
     public void Delete(string entityName, Guid id)
     {
+      LogInformation($"[{nameof(Delete)}] --> {entityName}/{id}");
+
       HttpResponseMessage response;
       var method = new HttpMethod("DELETE");
 
@@ -192,6 +211,8 @@ namespace Gif.Service.Crm
 
     public void CreateBatch(List<BatchData> batchData)
     {
+      LogInformation($"[{nameof(CreateBatch)}] --> {JsonConvert.SerializeObject(batchData)}");
+
       HttpResponseMessage response;
 
       using (var httpClient = GetCrmConnection())
@@ -228,7 +249,6 @@ namespace Gif.Service.Crm
         if (response.StatusCode != HttpStatusCode.OK)
           throw new CrmApiException(response.ReasonPhrase, response.StatusCode);
       }
-
     }
 
     private void AddChangeSet(IList<BatchData> batchData, HttpClient httpClient, ref MultipartContent changeSet)
@@ -297,6 +317,14 @@ namespace Gif.Service.Crm
 
       if (updateResponse.StatusCode != HttpStatusCode.NoContent)
         throw new CrmApiException(updateResponse.ReasonPhrase, updateResponse.StatusCode);
+    }
+
+    private void LogInformation(string msg)
+    {
+      if (_logCRM)
+      {
+        _logger.LogInformation(msg);
+      }
     }
   }
 }
