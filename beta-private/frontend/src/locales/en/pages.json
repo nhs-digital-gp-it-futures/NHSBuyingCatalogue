@@ -168,17 +168,11 @@
           "Preamble": "‘$t(Solution) name’ ‘Description’ and ‘Version’ will be sent to $t(NHSD.Name) to identify your $t(Solution). They will also be shown to buyers at the conclusion of onboarding.",
           "Fields": {
             "Name": {
-              "Label": "$t(Solution) name *",
-              "Validations": [
-                "60 characters max"
-              ]
+              "Label": "$t(Solution) name *"
             },
             "Description": {
               "Label": "Summary description *",
-              "Info": "Your Summary description will be displayed on your $t(Solution) page and in search results, but it will not affect search ranking or $t(Capabilities Assessment). You can edit this later.",
-              "Validations": [
-                "300 characters max"
-              ]
+              "Info": "Your Summary description will be displayed on your $t(Solution) page and in search results, but it will not affect search ranking or $t(Capabilities Assessment). You can edit this later."
             },
             "Version": {
               "Label": "Version (optional)",

@@ -15,20 +15,14 @@
 
   {{#> control invalid=errors.controls.[solution.name]}}
     <label for="solution.name">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Name.Label'}}</label>
-    {{#if (tt 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Name.Validations')}}
     {{#if errors.controls.[solution.name]}}
     <p class="action">{{t errors.controls.[solution.name].action}}</p>
-    {{/if}}
-    <ul class="validations">
-    {{#each (tt 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Name.Validations')}}
-      <li>{{.}}</li>
-    {{/each}}
-    </ul>
     {{/if}}
     <input id="solution.name" type="text" name="solution[name]" value="{{solution.name}}"
       autocomplete="off" aria-required="true" maxlength="60"
       {{#if @root.nameReadOnly}}readonly{{/if}}
       {{#if errors.controls.[solution.name]}}aria-invalid="true" aria-errormessage="error-solution.name"{{/if}}>
+    <p class="character-count"></p>
   {{/control}}
 
   {{#> control invalid=errors.controls.[solution.description]}}
@@ -37,17 +31,12 @@
     {{#if errors.controls.[solution.description]}}
     <p class="action">{{t errors.controls.[solution.description].action}}</p>
     {{/if}}
-    {{#if (tt 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Description.Validations')}}
-    <ul class="validations">
-    {{#each (tt 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Description.Validations')}}
-      <li>{{.}}</li>
-    {{/each}}
-    </ul>
-    {{/if}}
     <textarea id="solution.description" name="solution[description]"
       aria-required="true" maxlength="300" rows="5"
       {{#if @root.readOnly}}readonly{{/if}}
-      {{#if errors.controls.[solution.description]}}aria-invalid="true" aria-errormessage="error-solution.description"{{/if}}>{{solution.description}}</textarea>
+      {{#if errors.controls.[solution.description]}}aria-invalid="true" aria-errormessage="error-solution.description"{{/if}}
+    >{{solution.description}}</textarea>
+    <p class="character-count"></p>
   {{/control}}
 
   {{#> control invalid=errors.controls.[solution.version]}}

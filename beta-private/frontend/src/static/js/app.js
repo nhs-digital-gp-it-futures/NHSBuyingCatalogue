@@ -96,4 +96,34 @@ document.addEventListener('DOMContentLoaded', function () {
       handleCollapsibleFieldset(ev)
     }
   })
+
+  // character counts on inputs with a maxlength and associated count display element
+  $$('.control input[maxlength], .control textarea[maxlength]').forEach(function (elInput) {
+    const elCount = elInput.parentElement.$('.character-count')
+    if (!elCount) return
+
+    const maxLength = +elInput.maxLength
+    if (!maxLength || elInput.readOnly) {
+      elCount.parentNode.removeChild(elCount)
+      return
+    }
+
+    function refresh () {
+      const remaining = maxLength - elInput.value.length
+      const isInvalid = remaining < 0
+
+      elCount.classList.toggle('invalid', isInvalid)
+
+      if (isInvalid) {
+        elCount.textContent = 'You have ' + -remaining + ' characters too many (out of ' + maxLength + ').'
+      } else {
+        elCount.textContent = 'You have ' + remaining + ' (out of ' + maxLength + ') characters remaining.'
+      }
+    }
+
+    // remove the physical maxLength restriction
+    elInput.removeAttribute('maxlength')
+    refresh()
+    elInput.addEventListener('input', refresh)
+  })
 })
