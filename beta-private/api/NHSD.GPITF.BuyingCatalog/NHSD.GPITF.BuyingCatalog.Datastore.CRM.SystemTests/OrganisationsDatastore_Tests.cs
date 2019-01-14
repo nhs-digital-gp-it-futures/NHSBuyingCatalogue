@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
+using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Logic;
 using NUnit.Framework;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new OrganisationsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy, _config));
+      Assert.DoesNotThrow(() => new OrganisationsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy, _config, new Mock<IDatastoreCache>().Object));
     }
 
     [Test]
@@ -25,7 +26,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var allSolns = frameworks.SelectMany(fw => solnDatastore.ByFramework(fw.Id));
       var ids = allSolns.Select(soln => soln.OrganisationId).Distinct().ToList();
 
-      var datastore = new OrganisationsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy, _config);
+      var datastore = new OrganisationsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy, _config, new Mock<IDatastoreCache>().Object);
 
       var datas = ids.Select(id => datastore.ById(id)).ToList();
 
@@ -42,9 +43,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var solnDatastore = new SolutionsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<SolutionsDatastore>>().Object, _policy, _config);
       var allSolns = frameworks.SelectMany(fw => solnDatastore.ByFramework(fw.Id));
       var allOrgIds = allSolns.Select(soln => soln.OrganisationId).Distinct().ToList();
-      var contactsDatastore = new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<ContactsDatastore>>().Object, _policy, _config);
+      var contactsDatastore = new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<ContactsDatastore>>().Object, _policy, _config, new Mock<IDatastoreCache>().Object);
       var allContacts = allOrgIds.SelectMany(orgId => contactsDatastore.ByOrganisation(orgId)).ToList();
-      var datastore = new OrganisationsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy, _config);
+      var datastore = new OrganisationsDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy, _config, new Mock<IDatastoreCache>().Object);
 
       var datas = allContacts.Select(contact => datastore.ByContact(contact.Id)).ToList();
 
