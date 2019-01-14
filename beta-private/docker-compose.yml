@@ -46,6 +46,8 @@ services:
       - CRM_CLIENTID
       - CRM_CLIENTSECRET
       - USE_CRM
+      - LOG_CRM
+      - LOG_SHAREPOINT
 
   crm:
     build: 
@@ -62,6 +64,7 @@ services:
       - GIF_CRM_URL
       - GIF_AZURE_CLIENT_ID
       - GIF_ENCRYPTED_CLIENT_SECRET
+      - LOG_CRM
 
   nginx:
     build: ./nginx

@@ -9,11 +9,13 @@
  */
 
 using Gif.Service.Attributes;
+using Gif.Service.Contracts;
 using Gif.Service.Crm;
 using Gif.Service.Models;
 using Gif.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,28 +29,40 @@ namespace Gif.Service.Controllers
   [Authorize(AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + ",Bearer")]
   public class SolutionsExApiController : Controller
   {
-
     /// <summary>
     /// Update an existing Solution, TechnicalContact, ClaimedCapability, ClaimedStandard et al with new information
     /// </summary>
 
-    /// <param name="solnEx">Solution, TechnicalContact, ClaimedCapability, ClaimedStandard et al with updated information</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Solution, TechnicalContact, ClaimedCapability, ClaimedStandard et al not found in CRM</response>
-    /// <response code="500">Datastore exception</response>
-    [HttpPut]
+    private readonly ISolutionsExDatastore _datastore;
+    private readonly IFrameworksDatastore _frameworksDatastore;
+    private readonly ILinkManagerDatastore _linkManagerDatastore;
+
+    public SolutionsExApiController(
+      ISolutionsExDatastore datastore,
+      IFrameworksDatastore frameworksDatastore,
+      ILinkManagerDatastore linkManagerDatastore)
+    {
+      _datastore = datastore;
+      _frameworksDatastore = frameworksDatastore;
+      _linkManagerDatastore = linkManagerDatastore;
+    }
+
+  /// <param name="solnEx">Solution, TechnicalContact, ClaimedCapability, ClaimedStandard et al with updated information</param>
+  /// <response code="200">Success</response>
+  /// <response code="404">Solution, TechnicalContact, ClaimedCapability, ClaimedStandard et al not found in CRM</response>
+  /// <response code="500">Datastore exception</response>
+  [HttpPut]
     [Route("/api/porcelain/SolutionsEx/Update")]
     [ValidateModelState]
     [SwaggerOperation("ApiPorcelainSolutionsExUpdatePut")]
     public virtual IActionResult ApiPorcelainSolutionsExUpdatePut([FromBody]SolutionEx solnEx)
     {
-      var repository = new Repository();
       var solutionFrameworks = new List<Framework>();
 
       try
       {
-        solutionFrameworks = new FrameworksService(repository).BySolution(solnEx.Solution.Id.ToString()).ToList();
-        new SolutionExService(repository).Update(solnEx);
+        solutionFrameworks = _frameworksDatastore.BySolution(solnEx.Solution.Id.ToString()).ToList();
+        _datastore.Update(solnEx);
       }
       catch (Crm.CrmApiException ex)
       {
@@ -57,11 +71,9 @@ namespace Gif.Service.Controllers
       finally
       {
 
-        var linkManagerService = new LinkManagerService(repository);
-
         foreach (var solutionFramework in solutionFrameworks)
         {
-          linkManagerService.FrameworkSolutionAssociate(solutionFramework.Id, solnEx.Solution.Id);
+          _linkManagerDatastore.FrameworkSolutionAssociate(solutionFramework.Id, solnEx.Solution.Id);
         }
       }
 

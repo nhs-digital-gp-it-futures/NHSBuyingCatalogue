@@ -40,12 +40,12 @@ namespace NHSD.GPITF.BuyingCatalog
       CurrentEnvironment = env;
 
       var builder = new ConfigurationBuilder()
-          .SetBasePath(env.ContentRootPath)
-          .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-          .AddJsonFile("hosting.json", optional: true, reloadOnChange: true)
-          .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-          .AddEnvironmentVariables()
-          .AddUserSecrets<Program>();
+        .SetBasePath(env.ContentRootPath)
+        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+        .AddJsonFile("hosting.json", optional: true, reloadOnChange: true)
+        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+        .AddEnvironmentVariables()
+        .AddUserSecrets<Program>();
 
       Configuration = builder.Build();
 
@@ -61,7 +61,9 @@ namespace NHSD.GPITF.BuyingCatalog
       services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
       // Add controllers as services so they'll be resolved.
-      services.AddMvc().AddControllersAsServices();
+      services
+        .AddMvc()
+        .AddControllersAsServices();
 
       services.Configure<FormOptions>(x =>
       {
@@ -98,15 +100,15 @@ namespace NHSD.GPITF.BuyingCatalog
             }
 
             var versions = controllerActionDescriptor.MethodInfo.DeclaringType
-                .GetCustomAttributes(true)
-                .OfType<ApiVersionAttribute>()
-                .SelectMany(attr => attr.Versions);
+              .GetCustomAttributes(true)
+              .OfType<ApiVersionAttribute>()
+              .SelectMany(attr => attr.Versions);
             var tags = controllerActionDescriptor.MethodInfo.DeclaringType
-                .GetCustomAttributes(true)
-                .OfType<ApiTagAttribute>();
+              .GetCustomAttributes(true)
+              .OfType<ApiTagAttribute>();
 
-            return versions.Any(
-              v => $"v{v.ToString()}" == docName) ||
+            return versions.Any(v =>
+              $"v{v.ToString()}" == docName) ||
               tags.Any(tag => tag.Tag == docName);
           });
 
@@ -188,7 +190,6 @@ namespace NHSD.GPITF.BuyingCatalog
       var useCRM = Settings.USE_CRM(Configuration);
       if (useCRM)
       {
-        // IUserInfoResponseDatastore will resolve to UserInfoResponseMemoryDatastore
         assyPaths = assyPaths.Where(x => !x.Contains("Database"));
       }
       else

@@ -22,6 +22,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Gif.Service.Const;
 using ZNetCS.AspNetCore.Authentication.Basic;
+using Microsoft.Extensions.Configuration;
+using Gif.Service.Contracts;
 
 namespace Gif.Service.Controllers
 {
@@ -36,12 +38,19 @@ namespace Gif.Service.Controllers
     /// Get existing framework/s which have the given capability
     /// </summary>
 
-    /// <param name="capabilityId">CRM identifier of Capability</param>
-    /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
-    /// <param name="pageSize">number of items per page.  Defaults to 20</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Capability not found in CRM</response>
-    [HttpGet]
+    private readonly IFrameworksDatastore _datastore;
+
+    public FrameworksApiController(IFrameworksDatastore datastore)
+    {
+      _datastore = datastore;
+    }
+
+  /// <param name="capabilityId">CRM identifier of Capability</param>
+  /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
+  /// <param name="pageSize">number of items per page.  Defaults to 20</param>
+  /// <response code="200">Success</response>
+  /// <response code="404">Capability not found in CRM</response>
+  [HttpGet]
     [Route("/api/Frameworks/ByCapability/{capabilityId}")]
     [ValidateModelState]
     [SwaggerOperation("ApiFrameworksByCapabilityByCapabilityIdGet")]
@@ -53,9 +62,8 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new FrameworksService(new Repository());
-        frameworks = service.ByCapability(capabilityId);
-        frameworks = service.GetPagingValues(pageIndex, pageSize, frameworks, out totalPages);
+        frameworks = _datastore.ByCapability(capabilityId);
+        frameworks = _datastore.GetPagingValues(pageIndex, pageSize, frameworks, out totalPages);
       }
       catch (Crm.CrmApiException ex)
       {
@@ -87,7 +95,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var framework = new FrameworksService(new Repository()).ById(id);
+        var framework = _datastore.ById(id);
 
         if (framework.Id == Guid.Empty)
           return StatusCode(404);
@@ -122,9 +130,8 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new FrameworksService(new Repository());
-        frameworks = service.BySolution(solutionId);
-        frameworks = service.GetPagingValues(pageIndex, pageSize, frameworks, out totalPages);
+        frameworks = _datastore.BySolution(solutionId);
+        frameworks = _datastore.GetPagingValues(pageIndex, pageSize, frameworks, out totalPages);
       }
       catch (Crm.CrmApiException ex)
       {
@@ -161,9 +168,8 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new FrameworksService(new Repository());
-        frameworks = service.ByStandard(standardId);
-        frameworks = service.GetPagingValues(pageIndex, pageSize, frameworks, out totalPages);
+        frameworks = _datastore.ByStandard(standardId);
+        frameworks = _datastore.GetPagingValues(pageIndex, pageSize, frameworks, out totalPages);
       }
       catch (Crm.CrmApiException ex)
       {
@@ -198,9 +204,8 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new FrameworksService(new Repository());
-        frameworks = service.GetAll();
-        frameworks = service.GetPagingValues(pageIndex, pageSize, frameworks, out totalPages);
+        frameworks = _datastore.GetAll();
+        frameworks = _datastore.GetPagingValues(pageIndex, pageSize, frameworks, out totalPages);
       }
       catch (Crm.CrmApiException ex)
       {

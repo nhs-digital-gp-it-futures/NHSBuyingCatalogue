@@ -8,41 +8,41 @@ using System.Linq;
 
 namespace Gif.Service.Services
 {
-    public class OrganisationsService : ServiceBase, IOrganisationsDatastore
+  public class OrganisationsService : ServiceBase<Organisation>, IOrganisationsDatastore
+  {
+    public OrganisationsService(IRepository repository) : base(repository)
     {
-        public OrganisationsService(IRepository repository) : base(repository)
-        {
-        }
+    }
 
-        public Organisation ByContact(string contactId)
-        {
-            var filterAttributes = new List<CrmFilterAttribute>
+    public Organisation ByContact(string contactId)
+    {
+      var filterAttributes = new List<CrmFilterAttribute>
             {
                 new CrmFilterAttribute("ContactId") {FilterName = "contactid", FilterValue = contactId},
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new Contact().GetQueryString(null, filterAttributes), out Count);
-            var contactJson = appJson?.FirstOrDefault();
+      var appJson = Repository.RetrieveMultiple(new Contact().GetQueryString(null, filterAttributes), out Count);
+      var contactJson = appJson?.FirstOrDefault();
 
-            var contact = new Contact(contactJson);
+      var contact = new Contact(contactJson);
 
-            return ById(contact.OrganisationId.ToString());
-        }
+      return ById(contact.OrganisationId.ToString());
+    }
 
-        public Organisation ById(string organisationId)
-        {
-            var filterAttributes = new List<CrmFilterAttribute>
+    public Organisation ById(string organisationId)
+    {
+      var filterAttributes = new List<CrmFilterAttribute>
             {
                 new CrmFilterAttribute("OrganisationId") {FilterName = "accountid", FilterValue = organisationId},
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new Organisation().GetQueryString(null, filterAttributes), out Count);
-            var organisation = appJson?.FirstOrDefault();
+      var appJson = Repository.RetrieveMultiple(new Organisation().GetQueryString(null, filterAttributes), out Count);
+      var organisation = appJson?.FirstOrDefault();
 
-            return new Organisation(organisation);
-        }
+      return new Organisation(organisation);
     }
+  }
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

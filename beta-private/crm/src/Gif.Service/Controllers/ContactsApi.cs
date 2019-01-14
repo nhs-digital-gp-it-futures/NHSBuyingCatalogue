@@ -22,6 +22,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Gif.Service.Const;
 using ZNetCS.AspNetCore.Authentication.Basic;
+using Microsoft.Extensions.Configuration;
+using Gif.Service.Contracts;
 
 namespace Gif.Service.Controllers
 {
@@ -35,6 +37,13 @@ namespace Gif.Service.Controllers
     /// Retrieve a contacts for an organisation, given the contact’s email address  Email address is case insensitive
     /// </summary>
 
+    private readonly IContactsDatastore _datastore;
+
+    public ContactsApiController(IContactsDatastore datastore)
+    {
+      _datastore = datastore;
+    }
+
     /// <param name="email">email address to search for</param>
     /// <response code="200">Success</response>
     /// <response code="404">Contact not found</response>
@@ -47,7 +56,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var contact = new ContactsService(new Repository()).ByEmail(email);
+        var contact = _datastore.ByEmail(email);
 
         if (contact.Id == Guid.Empty)
           return StatusCode(404);
@@ -78,7 +87,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var contact = new ContactsService(new Repository()).ById(id);
+        var contact = _datastore.ById(id);
 
         if (contact == null)
           return StatusCode(404);
@@ -112,9 +121,8 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new ContactsService(new Repository());
-        contacts = service.ByOrganisation(organisationId);
-        contacts = service.GetPagingValues(pageIndex, pageSize, contacts, out totalPages);
+        contacts = _datastore.ByOrganisation(organisationId);
+        contacts = _datastore.GetPagingValues(pageIndex, pageSize, contacts, out totalPages);
       }
       catch (Crm.CrmApiException ex)
       {

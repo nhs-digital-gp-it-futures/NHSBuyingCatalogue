@@ -9,132 +9,132 @@ using System.Linq;
 
 namespace Gif.Service.Services
 {
-    public class CapabilitiesService : ServiceBase, ICapabilityDatastore
+  public class CapabilitiesService : ServiceBase<Capability>, ICapabilityDatastore
+  {
+    public CapabilitiesService(IRepository repository) : base(repository)
     {
-        public CapabilitiesService(IRepository repository) : base(repository)
-        {
-        }
+    }
 
-        public IEnumerable<Capability> ByFramework(string frameworkId)
-        {
-            var capabilities = new List<Capability>();
+    public IEnumerable<Capability> ByFramework(string frameworkId)
+    {
+      var capabilities = new List<Capability>();
 
-            var filterAttributes = new List<CrmFilterAttribute>
+      var filterAttributes = new List<CrmFilterAttribute>
                 {
                     new CrmFilterAttribute("Framework") {FilterName = "cc_frameworkid", FilterValue = frameworkId},
                     new CrmFilterAttribute("Statecode") {FilterName = "statecode", FilterValue = "0"}
                 };
 
 
-            var appJson = Repository.RetrieveMultiple(new Framework().GetQueryString(null, filterAttributes, true, true), out Count);
+      var appJson = Repository.RetrieveMultiple(new Framework().GetQueryString(null, filterAttributes, true, true), out Count);
 
-            var framework = appJson.Children().FirstOrDefault();
+      var framework = appJson.Children().FirstOrDefault();
 
-            if (framework?[RelationshipNames.CapabilityFramework] != null)
-            {
-                foreach (var capability in framework[RelationshipNames.CapabilityFramework].Children())
-                {
-                    capabilities.Add(new Capability(capability));
-                }
-            }
-
-            Count = capabilities.Count();
-
-            return capabilities;
-        }
-
-        public Capability ById(string id)
+      if (framework?[RelationshipNames.CapabilityFramework] != null)
+      {
+        foreach (var capability in framework[RelationshipNames.CapabilityFramework].Children())
         {
-            Capability capability = null;
+          capabilities.Add(new Capability(capability));
+        }
+      }
 
-            var filterAttributes = new List<CrmFilterAttribute>
+      Count = capabilities.Count();
+
+      return capabilities;
+    }
+
+    public Capability ById(string id)
+    {
+      Capability capability = null;
+
+      var filterAttributes = new List<CrmFilterAttribute>
             {
                 new CrmFilterAttribute("CapabilityId") {FilterName = "cc_capabilityid", FilterValue = id},
                 new CrmFilterAttribute("Statecode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new Capability().GetQueryString(null, filterAttributes), out Count);
-            var capabilityJson = appJson?.FirstOrDefault();
+      var appJson = Repository.RetrieveMultiple(new Capability().GetQueryString(null, filterAttributes), out Count);
+      var capabilityJson = appJson?.FirstOrDefault();
 
-            capability = new Capability(capabilityJson);
+      capability = new Capability(capabilityJson);
 
-            return capability;
-        }
+      return capability;
+    }
 
-        public IEnumerable<Capability> ByIds(IEnumerable<string> ids)
-        {
-            var capabilityList = new List<Capability>();
+    public IEnumerable<Capability> ByIds(IEnumerable<string> ids)
+    {
+      var capabilityList = new List<Capability>();
 
-            foreach (var id in ids)
-            {
-                var filterAttributes = new List<CrmFilterAttribute>
+      foreach (var id in ids)
+      {
+        var filterAttributes = new List<CrmFilterAttribute>
                 {
                     new CrmFilterAttribute("Capability") {FilterName = "cc_capabilityid", FilterValue = id},
                     new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
                 };
 
-                var appJson = Repository.RetrieveMultiple(new Capability().GetQueryString(null, filterAttributes, false, true), out Count);
+        var appJson = Repository.RetrieveMultiple(new Capability().GetQueryString(null, filterAttributes, false, true), out Count);
 
-                var capability = appJson?.FirstOrDefault();
+        var capability = appJson?.FirstOrDefault();
 
-                if (capability != null)
-                    capabilityList.Add(new Capability(capability));
+        if (capability != null)
+          capabilityList.Add(new Capability(capability));
 
-            }
+      }
 
-            Count = capabilityList.Count();
+      Count = capabilityList.Count();
 
-            return capabilityList;
-        }
+      return capabilityList;
+    }
 
-        public IEnumerable<Capability> ByStandard(string standardId, bool isOptional)
-        {
-            var capabilities = new List<Capability>();
+    public IEnumerable<Capability> ByStandard(string standardId, bool isOptional)
+    {
+      var capabilities = new List<Capability>();
 
 
-            var filterAttributes = new List<CrmFilterAttribute>
+      var filterAttributes = new List<CrmFilterAttribute>
                 {
                     new CrmFilterAttribute("Standard") {FilterName = "_cc_standard_value", FilterValue = standardId},
                     new CrmFilterAttribute("Statecode") {FilterName = "statecode", FilterValue = "0"},
                 };
 
-            var appJson = Repository.RetrieveMultiple(new CapabilityStandard().GetQueryString(null, filterAttributes, true, true), out Count);
+      var appJson = Repository.RetrieveMultiple(new CapabilityStandard().GetQueryString(null, filterAttributes, true, true), out Count);
 
-            foreach (var item in appJson)
-            {
-                if (item[RelationshipNames.CapabilityStandardCapability] == null)
-                    return null;
+      foreach (var item in appJson)
+      {
+        if (item[RelationshipNames.CapabilityStandardCapability] == null)
+          return null;
 
-                var capabilitiesJson = item[RelationshipNames.CapabilityStandardCapability];
+        var capabilitiesJson = item[RelationshipNames.CapabilityStandardCapability];
 
-                capabilities.Add(new Capability(capabilitiesJson));
-            }
+        capabilities.Add(new Capability(capabilitiesJson));
+      }
 
-            Count = capabilities.Count();
+      Count = capabilities.Count();
 
-            return capabilities;
-        }
+      return capabilities;
+    }
 
-        public IEnumerable<Capability> GetAll()
-        {
-            var capabilities = new List<Capability>();
+    public IEnumerable<Capability> GetAll()
+    {
+      var capabilities = new List<Capability>();
 
-            var filterAttributes = new List<CrmFilterAttribute>
+      var filterAttributes = new List<CrmFilterAttribute>
                 {
                     new CrmFilterAttribute("Statecode") {FilterName = "statecode", FilterValue = "0"}
                 };
 
-            var appJson = Repository.RetrieveMultiple(new Capability().GetQueryString(null, filterAttributes, true, true), out Count);
+      var appJson = Repository.RetrieveMultiple(new Capability().GetQueryString(null, filterAttributes, true, true), out Count);
 
-            foreach (var capability in appJson.Children())
-            {
-                capabilities.Add(new Capability(capability));
-            }
+      foreach (var capability in appJson.Children())
+      {
+        capabilities.Add(new Capability(capability));
+      }
 
-            Count = capabilities.Count();
+      Count = capabilities.Count();
 
-            return capabilities;
-        }
+      return capabilities;
     }
+  }
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

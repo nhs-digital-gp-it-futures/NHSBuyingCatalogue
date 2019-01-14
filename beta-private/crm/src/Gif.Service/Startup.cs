@@ -9,8 +9,11 @@
  */
 
 using Gif.Service.Authentications;
+using Gif.Service.Contracts;
+using Gif.Service.Crm;
 using Gif.Service.Filters;
 using Gif.Service.Interfaces;
+using Gif.Service.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +21,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using NLog;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
@@ -35,7 +39,7 @@ namespace Gif.Service
     private readonly IHostingEnvironment _hostingEnv;
 
     private IServiceProvider ServiceProvider { get; set; }
-    private IConfiguration Configuration { get; }
+    private IConfiguration Configuration { get; set; }
 
     /// <summary>
     /// Constructor
@@ -53,6 +57,9 @@ namespace Gif.Service
 
       Configuration = builder.Build();
 
+      // database connection string for nLog
+      GlobalDiagnosticsContext.Set("LOG_CONNECTIONSTRING", Settings.LOG_CONNECTIONSTRING(Configuration));
+
       DumpSettings();
     }
 
@@ -62,11 +69,31 @@ namespace Gif.Service
     /// <param name="services"></param>
     public void ConfigureServices(IServiceCollection services)
     {
+      services.AddSingleton(sp => Configuration);
       services.AddSingleton<IBasicAuthentication, BasicAuthentication>();
+      services.AddSingleton<IRepository, Repository>();
+      services.AddSingleton<ICapabilityDatastore, CapabilitiesService>();
+      services.AddSingleton<ICapabilitiesImplementedDatastore, CapabilitiesImplementedService>();
+      services.AddSingleton<ICapabilitiesImplementedEvidenceDatastore, CapabilitiesImplementedEvidenceService>();
+      services.AddSingleton<ICapabilitiesImplementedReviewsDatastore, CapabilitiesImplementedReviewsService>();
+      services.AddSingleton<ICapabilityStandardDatastore, CapabilityStandardService>();
+      services.AddSingleton<IContactsDatastore, ContactsService>();
+      services.AddSingleton<IFrameworksDatastore, FrameworksService>();
+      services.AddSingleton<ILinkManagerDatastore, LinkManagerService>();
+      services.AddSingleton<IOrganisationsDatastore, OrganisationsService>();
+      services.AddSingleton<ISolutionsDatastore, SolutionsService>();
+      services.AddSingleton<ISolutionsExDatastore, SolutionExService>();
+      services.AddSingleton<IStandardsDatastore, StandardsService>();
+      services.AddSingleton<IStandardsApplicableDatastore, StandardsApplicableService>();
+      services.AddSingleton<IStandardsApplicableEvidenceDatastore, StandardsApplicableEvidenceService>();
+      services.AddSingleton<IStandardsApplicableReviewsDatastore, StandardsApplicableReviewsService>();
+      services.AddSingleton<ITechnicalContactsDatastore, TechnicalContactService>();
 
       // Add framework services.
       services
         .AddMvc()
+        // Add controllers as services so they'll be resolved.
+        .AddControllersAsServices()
         .AddJsonOptions(opts =>
         {
           opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
@@ -75,6 +102,7 @@ namespace Gif.Service
             CamelCaseText = false
           });
         });
+
 
       if (_hostingEnv.IsDevelopment())
       {
@@ -157,10 +185,9 @@ namespace Gif.Service
       app.UseAuthentication();
 
       app
+        .UseStaticFiles()
         .UseMvc()
-        .UseDefaultFiles()
-        .UseStaticFiles();
-
+        .UseDefaultFiles();
 
       if (env.IsDevelopment())
       {
@@ -176,11 +203,6 @@ namespace Gif.Service
         })
         .UseDeveloperExceptionPage();
       }
-      else
-      {
-        //TODO: Enable production exception handling (https://docs.microsoft.com/en-us/aspnet/core/fundamentals/error-handling)
-        // app.UseExceptionHandler("/Home/Error");
-      }
     }
 
     private void DumpSettings()
@@ -192,6 +214,10 @@ namespace Gif.Service
       Console.WriteLine($"    GIF_CRM_URL                 : {Settings.GIF_CRM_URL(Configuration)}");
       Console.WriteLine($"    GIF_AZURE_CLIENT_ID         : {Settings.GIF_AZURE_CLIENT_ID(Configuration)}");
       Console.WriteLine($"    GIF_ENCRYPTED_CLIENT_SECRET : {Settings.GIF_ENCRYPTED_CLIENT_SECRET(Configuration)}");
+
+      Console.WriteLine($"  LOG:");
+      Console.WriteLine($"    LOG_CONNECTIONSTRING : {Settings.LOG_CONNECTIONSTRING(Configuration)}");
+      Console.WriteLine($"    LOG_CRM              : {Settings.LOG_CRM(Configuration)}");
     }
   }
 }

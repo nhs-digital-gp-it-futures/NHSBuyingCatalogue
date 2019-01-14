@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Gif.Service.Contracts
 {
 #pragma warning disable CS1591
-    public interface ICapabilitiesImplementedDatastore
+    public interface ICapabilitiesImplementedDatastore : IDatastoreBase<CapabilityImplemented>
     {
         CapabilityImplemented ById(string id);
         IEnumerable<CapabilityImplemented> BySolution(string solutionId);

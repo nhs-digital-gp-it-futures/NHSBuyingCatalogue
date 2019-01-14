@@ -10,9 +10,8 @@
 
 using Gif.Service.Attributes;
 using Gif.Service.Const;
-using Gif.Service.Crm;
+using Gif.Service.Contracts;
 using Gif.Service.Models;
-using Gif.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -35,12 +34,19 @@ namespace Gif.Service.Controllers
     /// Get all EvidenceEntity for the given Claim  Each list is a distinct &#39;chain&#39; of EvidenceEntity ie original EvidenceEntity with all subsequent EvidenceEntity  The first item in each &#39;chain&#39; is the most current EvidenceEntity.  The last item in each &#39;chain&#39; is the original EvidenceEntity.
     /// </summary>
 
-    /// <param name="claimId">CRM identifier of Claim</param>
-    /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
-    /// <param name="pageSize">number of items per page.  Defaults to 20</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Claim not found</response>
-    [HttpGet]
+    private readonly ICapabilitiesImplementedEvidenceDatastore _datastore;
+
+    public CapabilitiesImplementedEvidenceApiController(ICapabilitiesImplementedEvidenceDatastore datastore)
+    {
+      _datastore = datastore;
+    }
+
+  /// <param name="claimId">CRM identifier of Claim</param>
+  /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
+  /// <param name="pageSize">number of items per page.  Defaults to 20</param>
+  /// <response code="200">Success</response>
+  /// <response code="404">Claim not found</response>
+  [HttpGet]
     [Route("/api/CapabilitiesImplementedEvidence/ByClaim/{claimId}")]
     [ValidateModelState]
     [SwaggerOperation("ApiCapabilitiesImplementedEvidenceByClaimByClaimIdGet")]
@@ -52,9 +58,8 @@ namespace Gif.Service.Controllers
 
       try
       {
-        var service = new CapabilitiesImplementedEvidenceService(new Repository());
-        evidences = service.ByClaim(claimId);
-        evidences = service.GetPagingValues(pageIndex, pageSize, evidences, out totalPages);
+        evidences = _datastore.ByClaim(claimId);
+        evidences = _datastore.GetPagingValues(pageIndex, pageSize, evidences, out totalPages);
 
       }
       catch (Crm.CrmApiException ex)
@@ -87,7 +92,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        var capabilityImplemented = new CapabilitiesImplementedEvidenceService(new Repository()).ById(id);
+        var capabilityImplemented = _datastore.ById(id);
 
         if (capabilityImplemented.Id == Guid.Empty)
           return StatusCode(404);
@@ -118,7 +123,7 @@ namespace Gif.Service.Controllers
     {
       try
       {
-        evidenceEntity = new CapabilitiesImplementedEvidenceService(new Repository()).Create(evidenceEntity);
+        evidenceEntity = _datastore.Create(evidenceEntity);
 
         if (evidenceEntity.Id == Guid.Empty)
           return StatusCode(404);
