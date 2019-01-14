@@ -26,9 +26,9 @@ spec:
         - containerPort: 5100
         resources:
           requests:
-            cpu: 1000m
+            cpu: 500m
           limits:
-            cpu: 2
+            cpu: 1
         env:
         - name: CACHE_HOST
           value: "cache"
@@ -185,7 +185,14 @@ spec:
           valueFrom:
             secretKeyRef:
               name: bccrmazuresecret
-              key: GIF_ENCRYPTED_CLIENT_SECRET             
+              key: GIF_ENCRYPTED_CLIENT_SECRET
+        - name: LOG_CRM
+          value: "true"
+        - name: LOG_CONNECTIONSTRING
+          valueFrom:
+            secretKeyRef:
+              name: bcdbsecret
+              key: LOG_CONNECTIONSTRING                           
 ---  
 apiVersion: apps/v1
 kind: Deployment
