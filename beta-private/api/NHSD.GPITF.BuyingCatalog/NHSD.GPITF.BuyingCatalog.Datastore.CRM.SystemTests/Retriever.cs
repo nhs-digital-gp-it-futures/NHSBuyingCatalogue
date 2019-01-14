@@ -19,7 +19,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var solnDatastore = new SolutionsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<SolutionsDatastore>>().Object, _policy, _config);
       var allSolns = frameworks.SelectMany(fw => solnDatastore.ByFramework(fw.Id)).ToList();
       var allOrgIds = allSolns.Select(soln => soln.OrganisationId).Distinct().ToList();
-      var contactsDatastore = new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<ContactsDatastore>>().Object, _policy, _config);
+      var contactsDatastore = new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<ContactsDatastore>>().Object, _policy, _config, new Mock<IDatastoreCache>().Object);
       var allConts = allOrgIds.SelectMany(orgId => contactsDatastore.ByOrganisation(orgId)).ToList();
 
       return allConts;
@@ -38,7 +38,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     public static List<Organisations> GetAllOrganisations(ISyncPolicyFactory _policy)
     {
       var allOrgIds = GetAllSolutions(_policy).Select(soln => soln.OrganisationId).Distinct().ToList();
-      var orgDatastore = new OrganisationsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<OrganisationsDatastore>>().Object, _policy, _config);
+      var orgDatastore = new OrganisationsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<OrganisationsDatastore>>().Object, _policy, _config, new Mock<IDatastoreCache>().Object);
       var allOrgs = allOrgIds.Select(orgId => orgDatastore.ById(orgId)).ToList();
 
       return allOrgs;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
@@ -7,14 +8,15 @@ using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
-  public sealed class ContactsDatastore : DatastoreBase<Contacts>, IContactsDatastore
+  public sealed class ContactsDatastore : CachedDatastore<Contacts>, IContactsDatastore
   {
     public ContactsDatastore(
       IRestClientFactory crmConnectionFactory,
       ILogger<ContactsDatastore> logger,
       ISyncPolicyFactory policy,
-      IConfiguration config) :
-      base(crmConnectionFactory, logger, policy, config)
+      IConfiguration config,
+      IDatastoreCache cache) :
+      base(crmConnectionFactory, logger, policy, config, cache)
     {
     }
 
@@ -24,8 +26,18 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        var request = GetRequest($"{ResourceBase}/ByEmail/{email}");
+        var path = $"{ResourceBase}/ByEmail/{email}";
+        LogInformation($"[{path}]");
+        if (_cache.TryGetValue(path, out string jsonCachedResponse))
+        {
+          LogInformation($"[{path}] --> [{jsonCachedResponse}]");
+          return JsonConvert.DeserializeObject<Contacts>(jsonCachedResponse);
+        }
+
+        var request = GetRequest(path);
         var retval = GetResponse<Contacts>(request);
+
+        _cache.SafeAdd(path, JsonConvert.SerializeObject(retval));
 
         return retval;
       });

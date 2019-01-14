@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
+using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Logic;
 using NHSD.GPITF.BuyingCatalog.Tests;
 using NUnit.Framework;
@@ -91,7 +92,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
         .SelectMany(fw => datastore.ByFramework(fw.Id))
         .Select(soln => soln.OrganisationId)
         .First();
-      var contactsDatastore = new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<ContactsDatastore>>().Object, _policy, _config);
+      var contactsDatastore = new ContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<ContactsDatastore>>().Object, _policy, _config, new Mock<IDatastoreCache>().Object);
       var contactId = contactsDatastore.ByOrganisation(orgId).First().Id;
 
       // create
