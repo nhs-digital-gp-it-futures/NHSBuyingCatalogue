@@ -18,6 +18,9 @@ module.exports = {
         'errorMessage': 'Validation.Solution.Description.Missing'
       },
       'trim': {},
+      'blacklist': {
+        options: '\\r'
+      },
       'isLength': {
         'errorMessage': 'Validation.Solution.Description.TooLong',
         'options': {

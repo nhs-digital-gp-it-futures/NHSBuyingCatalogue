@@ -40,7 +40,10 @@ const hbs = expresshbs.create({
   layoutsDir: path.join(viewPath, 'layouts'),
   defaultLayout: 'layout.html',
   extname: '.html',
-  partialsDir: path.join(viewPath, 'partials')
+  partialsDir: path.join(viewPath, 'partials'),
+  compilerOptions: {
+    preventIndent: true
+  }
 })
 app.engine('html', hbs.engine)
 app.set('view engine', 'html')
