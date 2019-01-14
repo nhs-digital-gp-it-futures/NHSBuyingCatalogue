@@ -65,6 +65,7 @@ services:
       - GIF_AZURE_CLIENT_ID
       - GIF_ENCRYPTED_CLIENT_SECRET
       - LOG_CRM
+      - LOG_CONNECTIONSTRING
 
   nginx:
     build: ./nginx
