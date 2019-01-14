@@ -87,7 +87,9 @@ class RegistrationPage extends Page {
     super()
 
     this.solutionNameInput = Selector('#content [name="solution\\[name\\]"]')
+    this.solutionNameCounter = Selector('#content [name="solution\\[name\\]"] ~ .character-count')
     this.solutionDescriptionInput = Selector('#content [name="solution\\[description\\]"]')
+    this.solutionDescriptionCounter = Selector('#content [name="solution\\[description\\]"] ~ .character-count')
     this.solutionVersionInput = Selector('#content [name="solution\\[version\\]"]')
 
     this.leadContactFieldset = Selector('.contact[data-contact-index="0"] > fieldset > legend')
