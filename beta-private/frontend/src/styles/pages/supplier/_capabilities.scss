@@ -48,6 +48,7 @@
 
     legend {
       color: $color-capability-selector-group-fg;
+      cursor: pointer;
       font-size: 1.2em;
       font-weight: bold;
 
@@ -56,6 +57,20 @@
         display: inline-block;
         font-size: larger;
         padding-right: .25em;
+      }
+    }
+
+    &.collapsed {
+      max-height: 2em;
+
+      legend {
+        &::before {
+          content: '▶';
+        }
+      }
+
+      > *:not(legend) {
+        display: none;
       }
     }
 

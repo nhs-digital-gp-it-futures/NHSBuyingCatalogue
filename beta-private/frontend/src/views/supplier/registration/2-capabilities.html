@@ -21,7 +21,7 @@
 {{#> form form_id=activeForm.id}}
   <div id="capability-selector">
     <fieldset id="capabilities-core" class="capability-group">
-      <legend>{{t 'Onboarding.Capabilities.Fieldsets.Core.Legend'}}</legend>
+      <legend tabindex="0">{{t 'Onboarding.Capabilities.Fieldsets.Core.Legend'}}</legend>
       <ul class="capabilities">
         {{#capabilitiesByGroup.core}}
           {{> selectable-capability isFirst=@first firstId="capabilities"}}
@@ -29,7 +29,7 @@
       </ul>
     </fieldset>
     <fieldset id="capabilities-non-core" class="capability-group">
-      <legend>{{t 'Onboarding.Capabilities.Fieldsets.NonCore.Legend'}}</legend>
+      <legend tabindex="0">{{t 'Onboarding.Capabilities.Fieldsets.NonCore.Legend'}}</legend>
       <ul class="capabilities">
         {{#capabilitiesByGroup.noncore}}
           {{> selectable-capability}}
@@ -204,6 +204,12 @@ document.addEventListener('DOMContentLoaded', function () {
         elCapability.scrollIntoView({ behavior: 'smooth' })
       }
     }, true)
+  })
+
+  $$('#content fieldset.capability-group > legend').forEach(function (elGroup) {
+    elGroup.addEventListener('click', function () {
+      elGroup.parentElement.classList.toggle('collapsed')
+    })
   })
 })
 </script>
