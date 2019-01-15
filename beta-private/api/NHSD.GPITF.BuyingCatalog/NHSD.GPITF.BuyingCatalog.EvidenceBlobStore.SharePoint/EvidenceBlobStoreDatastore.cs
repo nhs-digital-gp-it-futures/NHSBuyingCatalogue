@@ -240,7 +240,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         var soln = _solutionsDatastore.ById(claim.SolutionId);
         var org = _organisationsDatastore.ById(soln.OrganisationId);
 
-        var claimFolderUrl = $"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{claimsInfoProvider.GetFolderName()}/{claimsInfoProvider.GetFolderClaimName(claim)}/{subFolder ?? string.Empty}";
+        var claimFolderUrl = $"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{claimsInfoProvider.GetFolderName()}/{CleanupFileName(claimsInfoProvider.GetFolderClaimName(claim))}/{subFolder ?? string.Empty}";
         var claimFolder = _context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString(claimFolderUrl));
 
         _context.Load(claimFolder);
