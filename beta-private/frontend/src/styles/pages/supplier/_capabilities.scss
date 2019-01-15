@@ -178,6 +178,16 @@
           .full-description-link {
             display: none;
           }
+
+          &::after {
+            bottom: -.3em;
+            content: '⟩';
+            display: none;
+            font-size: 250%;
+            left: 47.5%;
+            position: absolute;
+            transform: rotate(90deg);
+          }
         }
 
         &:hover .description {
@@ -189,6 +199,10 @@
 
           opacity: 1;
           transition: opacity .2s ease-in;
+
+          &::after {
+            display: inline-block;
+          }
         }
 
         .name {
@@ -239,6 +253,10 @@
               max-height: none;
               opacity: 1;
               text-overflow: all;
+
+              &::after {
+                display: none;
+              }
             }
 
             & > *:not(.description) {
