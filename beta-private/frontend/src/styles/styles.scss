@@ -32,6 +32,10 @@ a[target="_blank"]:after {
     &:hover {
       background-color: $color-link-hover-bg;
     }
+
+    &:visited {
+      color: $color-link-visited-fg;
+    }
   }
 
   // back link annotation
