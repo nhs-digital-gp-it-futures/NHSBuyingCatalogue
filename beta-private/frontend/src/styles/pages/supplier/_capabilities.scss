@@ -293,8 +293,8 @@
               display: flex;
               flex-direction: row;
 
-              .controls {
-                width: 40%;
+              .preamble {
+                margin-left: 1em;
               }
             }
 
@@ -319,6 +319,9 @@
               }
 
               ~ label.checked {
+                white-space: nowrap;
+                width: 40%;
+
                 .selected {
                   color: $color-nhs-green;
                   padding-right: 3em;
