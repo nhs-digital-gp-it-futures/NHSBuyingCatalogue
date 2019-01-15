@@ -12,6 +12,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Security;
+using System.Text.RegularExpressions;
 
 namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 {
@@ -333,18 +334,8 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
           .BySolution(solutionId)
           .Select(x => _standardsDatastore.ById(x.StandardId).Name);
 
-        CreateSubFolder(SharePoint_OrganisationsRelativeUrl, org.Name);
-        CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}", soln.Name);
-        CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}", claimsInfoProvider.GetCapabilityFolderName());
-        CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}", claimsInfoProvider.GetStandardsFolderName());
-        foreach (var folderName in claimedCapNames)
-        {
-          CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{claimsInfoProvider.GetCapabilityFolderName()}", folderName);
-        }
-        foreach (var folderName in claimedNameStds)
-        {
-          CreateSubFolder($"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{claimsInfoProvider.GetStandardsFolderName()}", folderName);
-        }
+        CreateClaimSubFolders(SharePoint_OrganisationsRelativeUrl, org.Name, soln.Name, claimsInfoProvider.GetCapabilityFolderName(), claimedCapNames);
+        CreateClaimSubFolders(SharePoint_OrganisationsRelativeUrl, org.Name, soln.Name, claimsInfoProvider.GetStandardsFolderName(), claimedNameStds);
 
         return 0;
       });
@@ -398,6 +389,72 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       LogInformation($"CreateSubFolder: adding sub-folder ({subFolder}) ...");
       baseFolder.AddSubFolder(subFolder);
       _context.ExecuteQuery();
+    }
+
+    private void CreateClaimSubFolders(
+      string baseUrl,
+      string organisation,
+      string solution,
+      string claimType,
+      IEnumerable<string> claimNames)
+    {
+      var baseFolder = _context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString($"{baseUrl}"));
+      _context.Load(baseFolder);
+      _context.ExecuteQuery();
+      LogInformation($"Created BaseFolder: {baseUrl}");
+
+      var orgFolder = baseFolder.Folders.Add(organisation);
+      _context.Load(orgFolder);
+      _context.ExecuteQuery();
+      LogInformation($"Created OrgFolder: {organisation}");
+
+      var solnFolder = orgFolder.Folders.Add(solution);
+      _context.Load(solnFolder);
+      _context.ExecuteQuery();
+      LogInformation($"Created SolnFolder: {solution}");
+
+      var claimTypeFolder = solnFolder.Folders.Add(claimType);
+      _context.Load(claimTypeFolder);
+      _context.ExecuteQuery();
+      LogInformation($"Created ClaimTypeFolder: {claimType}");
+
+      foreach (var claimName in claimNames)
+      {
+        var claimFolder = claimTypeFolder.Folders.Add(CleanupFileName(claimName));
+        _context.Load(claimFolder);
+      }
+      _context.ExecuteQuery();
+      LogInformation($"Created claims folders");
+    }
+
+    private string CleanupFileName(string fileName)
+    {
+      // Special Characters Not Allowed: ~ " # % & * : < > ? / \ { | }
+      if (!string.IsNullOrEmpty(fileName))
+      {
+        // Regex to Replace the Special Character
+        fileName = Regex.Replace(fileName, @"[~#'%&*:<>?/\{|}\n]", "");
+
+        if (fileName.Contains("\""))
+        {
+          fileName = fileName.Replace("\"", "");
+        }
+
+        if (fileName.StartsWith(".", StringComparison.OrdinalIgnoreCase) ||
+          fileName.EndsWith(".", StringComparison.OrdinalIgnoreCase))
+        {
+          fileName = fileName.TrimStart(new char[] { '.' });
+        }
+
+        if (fileName.IndexOf("..", StringComparison.OrdinalIgnoreCase) > -1)
+        {
+          fileName = fileName.Replace("..", "");
+        }
+
+        fileName = fileName.Replace("/n", string.Empty);
+      }
+
+      return fileName;
     }
 
     private static string GetContentType(string path)
