@@ -172,6 +172,10 @@ body > footer {
   a {
     color: $color-footer-link-fg;
 
+    &:hover {
+      text-decoration: underline;
+    }
+
     &:visited,
     &:active,
     &:focus {

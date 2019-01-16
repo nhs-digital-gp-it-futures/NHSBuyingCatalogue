@@ -177,3 +177,26 @@ button,
     transition: none;
   }
 }
+
+#errors {
+  border: 3px solid $color-input-invalid-border;
+  margin-top: 1em;
+  padding: .5em 1em;
+  width: 70%;
+
+  h2 {
+    font-size: 120%;
+    margin: 0;
+  }
+
+  ul {
+    color: $color-nhs-blue;
+    list-style-type: disc;
+    margin-bottom: 1em;
+    margin-left: 1.5em;
+
+    li {
+      margin-top: .75em;
+    }
+  }
+}
