@@ -83,10 +83,11 @@
           <a href="#" class="remove">{{t 'CompliancePages.Evidence.Reply.Remove'}}</a>
         </div>
 
-        <div class="evidence-message">
+        <div class="control evidence-message">
           <h4 class="label">{{t 'CompliancePages.Evidence.Reply.Message.Label'}}</h4>
           <p class="help">{{t 'CompliancePages.Evidence.Reply.Message.Help'}}</p>
-          <textarea name="message" aria-label="Evidence Message Description Text Area"></textarea>
+          <textarea name="message" maxlength="300" aria-label="Evidence Message Description Text Area"></textarea>
+          <p class="character-count"></p>
         </div>
 
         <div class="standard-owner">

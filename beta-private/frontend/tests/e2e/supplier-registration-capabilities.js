@@ -141,4 +141,5 @@ test('A registered solution cannot have its name edited', async t => {
     .click('#content a.back-link')
     .expect(Selector('#content [readonly]').count).eql(1)
     .expect(registrationPage.solutionNameInput.hasAttribute('readonly')).ok()
+    .expect(registrationPage.solutionNameCounter.exists).notOk()
 })

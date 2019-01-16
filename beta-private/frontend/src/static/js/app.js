@@ -1,4 +1,4 @@
-/* global $, Modernizr, Document, Element */
+/* global $, $$, Modernizr, Document, Element */
 
 // jQuery-esque shorthand for common element selection operations
 window.$ = function $ (selector, el) {
@@ -56,45 +56,74 @@ if (!Modernizr.formattribute) {
   })
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-
+document.addEventListener('DOMContentLoaded', function () {
   // collapse all but the first collapsible fieldsets by default, except ones that contain
   // invalid fields
-  function collapseAllFieldsetsExcept(elCurrent) {
-    $$("fieldset.collapsible").forEach(function(el) {
-      if (el !== elCurrent && !el.classList.contains("invalid")) {
-        el.classList.add("collapsed");
+  function collapseAllFieldsetsExcept (elCurrent) {
+    $$('fieldset.collapsible').forEach(function (el) {
+      if (el !== elCurrent && !el.classList.contains('invalid')) {
+        el.classList.add('collapsed')
       }
-    });
+    })
   }
 
   // HACK: improperly moved code broke the script at the original position, expose the
   //       missing function
   window.collapseAllFieldsetsExcept = collapseAllFieldsetsExcept
 
-  collapseAllFieldsetsExcept($("fieldset.collapsible:first-of-type"));
+  collapseAllFieldsetsExcept($('fieldset.collapsible:first-of-type'))
 
-  function handleCollapsibleFieldset(ev) {
-    if (ev.target.tagName === "LEGEND") {
-      const elFieldset = ev.target.parentNode;
-      if (elFieldset.classList.contains("collapsible")) {
-        ev.preventDefault();
+  function handleCollapsibleFieldset (ev) {
+    if (ev.target.tagName === 'LEGEND') {
+      const elFieldset = ev.target.parentNode
+      if (elFieldset.classList.contains('collapsible')) {
+        ev.preventDefault()
 
-        elFieldset.classList.toggle("collapsed");
-        if (!elFieldset.classList.contains("collapsed")) {
-          collapseAllFieldsetsExcept(elFieldset);
+        elFieldset.classList.toggle('collapsed')
+        if (!elFieldset.classList.contains('collapsed')) {
+          collapseAllFieldsetsExcept(elFieldset)
         }
 
-        return true;
+        return true
       }
     }
   }
 
   // support both mouse and keyboard access
-  $("#content").addEventListener("click", handleCollapsibleFieldset);
-  $("#content").addEventListener("keypress", function(ev) {
-    if (ev.key === " " || ev.key === "Enter") {
-      handleCollapsibleFieldset(ev);
+  $('#content').addEventListener('click', handleCollapsibleFieldset)
+  $('#content').addEventListener('keypress', function (ev) {
+    if (ev.key === ' ' || ev.key === 'Enter') {
+      handleCollapsibleFieldset(ev)
     }
-  });
-});
+  })
+
+  // character counts on inputs with a maxlength and associated count display element
+  $$('.control input[maxlength], .control textarea[maxlength]').forEach(function (elInput) {
+    const elCount = elInput.parentElement.$('.character-count')
+    if (!elCount) return
+
+    const maxLength = +elInput.maxLength
+    if (!maxLength || elInput.readOnly) {
+      elCount.parentNode.removeChild(elCount)
+      return
+    }
+
+    function refresh () {
+      const remaining = maxLength - elInput.value.length
+      const isInvalid = remaining < 0
+
+      elCount.classList.toggle('invalid', isInvalid)
+
+      if (isInvalid) {
+        elCount.textContent = 'You have ' + -remaining + ' characters too many (out of ' + maxLength + ').'
+      } else {
+        elCount.textContent = 'You have ' + remaining + ' (out of ' + maxLength + ') characters remaining.'
+      }
+    }
+
+    // remove the physical maxLength restriction
+    elInput.removeAttribute('maxlength')
+    refresh()
+    elInput.addEventListener('input', refresh)
+  })
+})

@@ -25,7 +25,9 @@ test('Creating a new solution leads to an empty form via a customised status pag
 
     .expect(page.globalSolutionName.exists).notOk()
     .expect(registrationPage.solutionNameInput.value).eql('')
+    .expect(registrationPage.solutionNameCounter.textContent).contains(' 60 (out of 60) ')
     .expect(registrationPage.solutionDescriptionInput.value).eql('')
+    .expect(registrationPage.solutionDescriptionCounter.textContent).contains(' 300 (out of 300) ')
     .expect(registrationPage.solutionVersionInput.value).eql('')
     .expect(registrationPage.leadContactFirstNameInput.value).eql('')
     .expect(registrationPage.leadContactLastNameInput.value).eql('')
@@ -59,6 +61,27 @@ test('Solution cannot have the same name and version as another existing solutio
 
     .expect(Selector('#errors').exists).notOk()
     .expect(page.globalSolutionName.textContent).eql('Really Kool Kore System, 1')
+})
+
+test('Solution description character counting is correct and consistent', async t => {
+  await t
+    .click(supplierDashboardPage.secondOnboardingSolutionName)
+    .click(onboardingDashboardPage.continueRegistrationButton)
+
+    .typeText(
+      registrationPage.solutionDescriptionInput,
+      'This is the koolest kore system!\n\nMultiple lines are supported.\n\n  Indents\n  are\n  preserved',
+      { replace: true }
+    )
+
+    .expect(registrationPage.solutionDescriptionCounter.textContent).contains(' 208 (out of 300) ')
+
+  await t
+    .click(page.globalSaveButton)
+
+    .expect(Selector('#errors').exists).notOk()
+    .expect(registrationPage.solutionDescriptionCounter.textContent).contains(' 208 (out of 300) ')
+    .expect(registrationPage.solutionDescriptionInput.value).eql('This is the koolest kore system!\n\nMultiple lines are supported.\n\n  Indents\n  are\n  preserved')
 })
 
 test('Newly created solution appears in the correct place on the supplier dashboard', async t => {

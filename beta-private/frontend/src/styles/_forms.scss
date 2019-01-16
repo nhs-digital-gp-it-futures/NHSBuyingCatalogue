@@ -25,6 +25,18 @@ textarea {
   }
 }
 
+.control {
+  .character-count {
+    color: $color-collapsible-fieldset-validations-fg;
+    font-size: smaller;
+    margin-top: .25em;
+
+    &.invalid {
+      color: $color-nhs-red;
+    }
+  }
+}
+
 fieldset {
   &.collapsible {
     background-color: $color-collapsible-fieldset-bg;
@@ -100,16 +112,6 @@ fieldset {
       label {
         font-size: larger;
         font-weight: bold;
-      }
-
-      .validations {
-        list-style-type: disc;
-        margin: .5em 0 .5em 2em;
-
-        li {
-          color: $color-collapsible-fieldset-validations-fg;
-          font-size: smaller;
-        }
       }
 
       .info {
