@@ -240,7 +240,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         var soln = _solutionsDatastore.ById(claim.SolutionId);
         var org = _organisationsDatastore.ById(soln.OrganisationId);
 
-        var claimFolderUrl = $"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{claimsInfoProvider.GetFolderName()}/{claimsInfoProvider.GetFolderClaimName(claim)}/{subFolder ?? string.Empty}";
+        var claimFolderUrl = $"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{claimsInfoProvider.GetFolderName()}/{CleanupFileName(claimsInfoProvider.GetFolderClaimName(claim))}/{subFolder ?? string.Empty}";
         var claimFolder = _context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString(claimFolderUrl));
 
         _context.Load(claimFolder);
@@ -259,6 +259,8 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
         var claimFolderInfo = new BlobInfo
         {
+          Id = claimFolder.UniqueId.ToString(),
+          ParentId = null,
           Name = claimFolder.Name,
           IsFolder = true,
           Url = new Uri(new Uri(_context.Url), claimFolder.ServerRelativeUrl).AbsoluteUri,
@@ -269,6 +271,8 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
           .Select(x =>
             new BlobInfo
             {
+              Id = x.UniqueId.ToString(),
+              ParentId = claimFolderInfo.Id,
               Name = x.Name,
               IsFolder = true,
               Length = 0,
@@ -281,6 +285,8 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
           .Select(x =>
             new BlobInfo
             {
+              Id = x.UniqueId.ToString(),
+              ParentId = claimFolderInfo.Id,
               Name = x.Name,
               IsFolder = false,
               Length = x.Length,
@@ -296,6 +302,102 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
         return retVal;
       });
+    }
+
+    public IEnumerable<BlobInfo> EnumerateClaimFolderTree(IClaimsInfoProvider claimsInfoProvider, string solutionId)
+    {
+      var soln = _solutionsDatastore.ById(solutionId);
+      var org = _organisationsDatastore.ById(soln.OrganisationId);
+      var claimFolder = claimsInfoProvider.GetFolderName();
+      var solutionUrl = $"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}";
+
+      return EnumerateFolderRecursively(solutionUrl, claimFolder);
+    }
+
+    private IEnumerable<BlobInfo> EnumerateFolderRecursively(string solutionUrl, string claimFolder)
+    {
+      // top level folder eg 'Standards Evidence'
+      var claimFolderUrl = $"{solutionUrl}/{claimFolder}";
+      var contextFolder = _context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString(claimFolderUrl));
+      _context.Load(contextFolder);
+      _context.Load(contextFolder.Folders);
+      _context.Load(contextFolder.Files);
+      _context.ExecuteQuery();
+
+      // each specific claim folder eg 'Standards Evidence/Patient Management'
+      contextFolder.Folders.ToList().ForEach(x => _context.Load(x.Files));
+      contextFolder.Folders.ToList().ForEach(x => _context.Load(x.Folders));
+      _context.ExecuteQuery();
+
+      // each specific claim sub folder eg 'Standards Evidence/Patient Management/Video Evidence'
+      contextFolder.Folders.ToList().SelectMany(x => x.Folders).ToList().ForEach(x => _context.Load(x.Files));
+      contextFolder.Folders.ToList().SelectMany(x => x.Folders).ToList().ForEach(x => _context.Load(x.Folders));
+      _context.ExecuteQuery();
+
+
+      var retval = new List<BlobInfo>();
+
+      retval.Add(new BlobInfo
+      {
+        Id = contextFolder.UniqueId.ToString(),
+        ParentId = null,
+        Name = contextFolder.Name,
+        IsFolder = true,
+        Url = new Uri(new Uri(_context.Url), contextFolder.ServerRelativeUrl).AbsoluteUri,
+        TimeLastModified = contextFolder.TimeLastModified
+      });
+      foreach (var folder in contextFolder.Folders)
+      {
+        retval.Add(new BlobInfo
+        {
+          Id = folder.UniqueId.ToString(),
+          ParentId = contextFolder.UniqueId.ToString(),
+          Name = folder.Name,
+          IsFolder = true,
+          Url = new Uri(new Uri(_context.Url), folder.ServerRelativeUrl).AbsoluteUri,
+          TimeLastModified = folder.TimeLastModified
+        });
+        foreach (var subFolder in folder.Folders)
+        {
+          retval.Add(new BlobInfo
+          {
+            Id = subFolder.UniqueId.ToString(),
+            ParentId = folder.UniqueId.ToString(),
+            Name = subFolder.Name,
+            IsFolder = true,
+            Url = new Uri(new Uri(_context.Url), subFolder.ServerRelativeUrl).AbsoluteUri,
+            TimeLastModified = subFolder.TimeLastModified
+          });
+          foreach (var subFile in subFolder.Files)
+          {
+            retval.Add(new BlobInfo
+            {
+              Id = subFile.UniqueId.ToString(),
+              ParentId = subFolder.UniqueId.ToString(),
+              Name = subFile.Name,
+              IsFolder = false,
+              Url = new Uri(new Uri(_context.Url), subFile.ServerRelativeUrl).AbsoluteUri,
+              TimeLastModified = subFile.TimeLastModified,
+              BlobId = subFile.UniqueId.ToString()
+            });
+          }
+        }
+        foreach (var file in folder.Files)
+        {
+          retval.Add(new BlobInfo
+          {
+            Id = file.UniqueId.ToString(),
+            ParentId = folder.UniqueId.ToString(),
+            Name = file.Name,
+            IsFolder = false,
+            Url = new Uri(new Uri(_context.Url), file.ServerRelativeUrl).AbsoluteUri,
+            TimeLastModified = file.TimeLastModified,
+            BlobId = file.UniqueId.ToString()
+          });
+        }
+      }
+
+      return retval;
     }
 
     public FileStreamResult GetFileStream(IClaimsInfoProvider claimsInfoProvider, string claimId, string uniqueId)

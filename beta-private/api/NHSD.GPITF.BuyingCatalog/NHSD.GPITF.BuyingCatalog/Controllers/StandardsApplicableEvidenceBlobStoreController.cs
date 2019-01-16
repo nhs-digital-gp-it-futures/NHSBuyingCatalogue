@@ -106,5 +106,22 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     {
       return EnumerateFolderInternal(claimId, subFolder, pageIndex, pageSize);
     }
+
+    /// <summary>
+    /// List all claim files and sub-folders for a solution
+    /// </summary>
+    /// <param name="solutionId">unique identifier of solution</param>
+    /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
+    /// <param name="pageSize">number of items per page.  Defaults to 20</param>
+    /// <returns>list of BlobInfo - first item is folder for claim</returns>
+    [HttpGet]
+    [Route("EnumerateClaimFolderTree/{solutionId}")]
+    [ValidateModelState]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<BlobInfo>), description: "Success")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Solution not found in CRM")]
+    public IActionResult EnumerateClaimFolderTree([FromRoute][Required]string solutionId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
+    {
+      return EnumerateClaimFolderTreeInternal(solutionId, pageIndex, pageSize);
+    }
   }
 }

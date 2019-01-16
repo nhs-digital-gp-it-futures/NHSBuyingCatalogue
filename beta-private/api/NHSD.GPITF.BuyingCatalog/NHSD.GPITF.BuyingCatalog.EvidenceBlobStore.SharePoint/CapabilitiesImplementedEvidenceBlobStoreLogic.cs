@@ -7,20 +7,20 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
   {
     public CapabilitiesImplementedEvidenceBlobStoreLogic(
       IEvidenceBlobStoreDatastore evidenceBlobStoreDatastore,
+      ISolutionsDatastore solutionsDatastore,
       ICapabilitiesImplementedDatastore capabilitiesImplementedDatastore,
       IStandardsApplicableDatastore standardsApplicableDatastore,
       ICapabilitiesDatastore capabilitiesDatastore,
       IStandardsDatastore standardsDatastore,
-      IEvidenceBlobStoreValidator validator,
-      ICapabilitiesImplementedEvidenceBlobStoreValidator claimValidator) :
+      ICapabilitiesImplementedEvidenceBlobStoreValidator validator) :
       base(
         evidenceBlobStoreDatastore,
+        solutionsDatastore,
         capabilitiesImplementedDatastore,
         standardsApplicableDatastore,
         capabilitiesDatastore,
         standardsDatastore,
-        validator,
-        claimValidator)
+        validator)
     {
     }
 

@@ -12,7 +12,6 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       ILogger<EvidenceBlobStoreValidator> logger) :
       base(context, logger)
     {
-
       // solutionId
       RuleSet(nameof(IEvidenceBlobStoreLogic.PrepareForSolution), () =>
       {

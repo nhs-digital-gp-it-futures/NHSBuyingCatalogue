@@ -75,6 +75,24 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
         return new NotFoundObjectResult(ex);
       }
     }
+
+    protected IActionResult EnumerateClaimFolderTreeInternal(string solutionId, int? pageIndex, int? pageSize)
+    {
+      try
+      {
+        var infos = _logic.EnumerateClaimFolderTree(solutionId);
+        var retval = PaginatedList<BlobInfo>.Create(infos, pageIndex, pageSize);
+        return new OkObjectResult(retval);
+      }
+      catch (FluentValidation.ValidationException ex)
+      {
+        return new InternalServerErrorObjectResult(ex);
+      }
+      catch (KeyNotFoundException ex)
+      {
+        return new NotFoundObjectResult(ex);
+      }
+    }
   }
 #pragma warning restore CS1591
 }

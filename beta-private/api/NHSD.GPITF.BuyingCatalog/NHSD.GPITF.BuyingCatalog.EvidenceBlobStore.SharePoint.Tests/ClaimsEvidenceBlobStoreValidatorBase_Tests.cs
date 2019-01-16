@@ -120,5 +120,58 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.Tests
       _claimsDatastore.Verify(x => x.ById(It.IsAny<string>()), Times.Never);
       _solutionsDatastore.Verify(x => x.ById(It.IsAny<string>()), Times.Never);
     }
+
+    [TestCase(Roles.Supplier)]
+    [TestCase(Roles.Admin)]
+    public void MustBeSameOrganisationById_Same_NonBuyer_Succeeds(string role)
+    {
+      var orgId = Guid.NewGuid().ToString();
+      var ctx = Creator.GetContext(orgId: orgId, role: role);
+      _context.Setup(c => c.HttpContext).Returns(ctx);
+      var soln = Creator.GetSolution(orgId: orgId);
+      _solutionsDatastore.Setup(x => x.ById(soln.Id)).Returns(soln);
+      var validator = new DummyClaimsEvidenceBlobStoreValidatorBase(_context.Object, _logger.Object, _solutionsDatastore.Object, _claimsDatastore.Object);
+
+      validator.MustBeSameOrganisationById();
+      var valres = validator.Validate(soln.Id);
+
+      valres.Errors.Should().BeEmpty();
+    }
+
+    [TestCase(Roles.Supplier)]
+    public void MustBeSameOrganisationById_Different_Supplier_ReturnsError(string role)
+    {
+      var orgId = Guid.NewGuid().ToString();
+      var ctx = Creator.GetContext(role: role);
+      _context.Setup(c => c.HttpContext).Returns(ctx);
+      var soln = Creator.GetSolution(orgId: orgId);
+      _solutionsDatastore.Setup(x => x.ById(soln.Id)).Returns(soln);
+      var validator = new DummyClaimsEvidenceBlobStoreValidatorBase(_context.Object, _logger.Object, _solutionsDatastore.Object, _claimsDatastore.Object);
+
+      validator.MustBeSameOrganisationById();
+      var valres = validator.Validate(soln.Id);
+
+      valres.Errors.Should()
+        .ContainSingle(x => x.ErrorMessage == "Cannot add/see evidence for other organisation")
+        .And
+        .HaveCount(1);
+    }
+
+    [TestCase(Roles.Buyer)]
+    public void MustBeSameOrganisationById_Buyer_Ignored(string role)
+    {
+      var orgId = Guid.NewGuid().ToString();
+      var ctx = Creator.GetContext(role: role);
+      _context.Setup(c => c.HttpContext).Returns(ctx);
+      var claimId = Guid.NewGuid().ToString();
+      var validator = new DummyClaimsEvidenceBlobStoreValidatorBase(_context.Object, _logger.Object, _solutionsDatastore.Object, _claimsDatastore.Object);
+
+      validator.MustBeSameOrganisationById();
+      var valres = validator.Validate(Guid.NewGuid().ToString());
+
+      valres.Errors.Should().BeEmpty();
+      _claimsDatastore.Verify(x => x.ById(It.IsAny<string>()), Times.Never);
+      _solutionsDatastore.Verify(x => x.ById(It.IsAny<string>()), Times.Never);
+    }
   }
 }
