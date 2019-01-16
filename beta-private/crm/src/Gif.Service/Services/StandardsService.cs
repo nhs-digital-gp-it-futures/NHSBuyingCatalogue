@@ -122,7 +122,7 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("Statecode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-      var appJson = Repository.RetrieveMultiple(new Standard().GetQueryString(null, filterAttributes, true, true), out Count);
+      var appJson = Repository.RetrieveMultiple(new Standard().GetQueryString(null, filterAttributes, false, true), out Count);
 
       foreach (var standard in appJson.Children())
       {
