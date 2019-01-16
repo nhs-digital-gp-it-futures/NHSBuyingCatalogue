@@ -92,7 +92,9 @@ namespace Gif.Service.Crm
 
       using (var httpClient = GetCrmConnection())
       {
+        LogInformation($"[{nameof(RetrieveMultiple)}] --> before call to CRM");
         retrieveResponse = httpClient.GetAsync(query).Result;
+        LogInformation($"[{nameof(RetrieveMultiple)}] --> after call to CRM");
       }
 
       if (retrieveResponse.StatusCode != HttpStatusCode.OK && retrieveResponse.StatusCode != HttpStatusCode.NoContent)
