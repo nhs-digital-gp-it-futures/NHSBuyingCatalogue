@@ -12,34 +12,34 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     protected const string StandardsFolderName = "Standards Evidence";
 
     private readonly IEvidenceBlobStoreDatastore _evidenceBlobStoreDatastore;
+    private readonly ISolutionsDatastore _solutionsDatastore;
     protected readonly ICapabilitiesImplementedDatastore _capabilitiesImplementedDatastore;
     protected readonly IStandardsApplicableDatastore _standardsApplicableDatastore;
     protected readonly ICapabilitiesDatastore _capabilitiesDatastore;
     protected readonly IStandardsDatastore _standardsDatastore;
     protected readonly IEvidenceBlobStoreValidator _validator;
-    protected readonly IEvidenceBlobStoreValidator _claimValidator;
 
     public EvidenceBlobStoreLogic(
       IEvidenceBlobStoreDatastore evidenceBlobStoreDatastore,
+      ISolutionsDatastore solutionsDatastore,
       ICapabilitiesImplementedDatastore capabilitiesImplementedDatastore,
       IStandardsApplicableDatastore standardsApplicableDatastore,
       ICapabilitiesDatastore capabilitiesDatastore,
       IStandardsDatastore standardsDatastore,
-      IEvidenceBlobStoreValidator validator,
-      IEvidenceBlobStoreValidator claimValidator)
+      IEvidenceBlobStoreValidator validator)
     {
       _evidenceBlobStoreDatastore = evidenceBlobStoreDatastore;
+      _solutionsDatastore = solutionsDatastore;
       _capabilitiesImplementedDatastore = capabilitiesImplementedDatastore;
       _standardsApplicableDatastore = standardsApplicableDatastore;
       _capabilitiesDatastore = capabilitiesDatastore;
       _standardsDatastore = standardsDatastore;
       _validator = validator;
-      _claimValidator = claimValidator;
     }
 
     public string AddEvidenceForClaim(string claimId, Stream file, string filename, string subFolder = null)
     {
-      _claimValidator.ValidateAndThrowEx(claimId, ruleSet: nameof(IEvidenceBlobStoreLogic.AddEvidenceForClaim));
+      _validator.ValidateAndThrowEx(claimId, ruleSet: nameof(IEvidenceBlobStoreLogic.AddEvidenceForClaim));
 
       var claim = ClaimsDatastore.ById(claimId);
       if (claim == null)
@@ -52,7 +52,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
     public FileStreamResult GetFileStream(string claimId, string uniqueId)
     {
-      _claimValidator.ValidateAndThrowEx(claimId, ruleSet: nameof(IEvidenceBlobStoreLogic.GetFileStream));
+      _validator.ValidateAndThrowEx(claimId, ruleSet: nameof(IEvidenceBlobStoreLogic.GetFileStream));
 
       var claim = GetClaimById(claimId);
       if (claim == null)
@@ -65,7 +65,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
     public IEnumerable<BlobInfo> EnumerateFolder(string claimId, string subFolder = null)
     {
-      _claimValidator.ValidateAndThrowEx(claimId, ruleSet: nameof(IEvidenceBlobStoreLogic.EnumerateFolder));
+      _validator.ValidateAndThrowEx(claimId, ruleSet: nameof(IEvidenceBlobStoreLogic.EnumerateFolder));
 
       var claim = GetClaimById(claimId);
       if (claim == null)
@@ -74,6 +74,19 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       }
 
       return _evidenceBlobStoreDatastore.EnumerateFolder(this, claimId, subFolder);
+    }
+
+    public IEnumerable<BlobInfo> EnumerateClaimFolderTree(string solutionId)
+    {
+      _validator.ValidateAndThrowEx(solutionId, ruleSet: nameof(IEvidenceBlobStoreLogic.EnumerateClaimFolderTree));
+
+      var soln = _solutionsDatastore.ById(solutionId);
+      if (soln == null)
+      {
+        throw new KeyNotFoundException($"Could not find solution: {solutionId}");
+      }
+
+      return _evidenceBlobStoreDatastore.EnumerateClaimFolderTree(this, solutionId);
     }
 
     public void PrepareForSolution(string solutionId)

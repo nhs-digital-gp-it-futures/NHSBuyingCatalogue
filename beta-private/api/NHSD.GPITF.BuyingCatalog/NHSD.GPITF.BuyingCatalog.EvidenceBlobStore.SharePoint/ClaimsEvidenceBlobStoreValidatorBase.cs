@@ -42,6 +42,12 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         MustBeValidClaim();
         MustBeSameOrganisation();
       });
+
+      // solutionId
+      RuleSet(nameof(IEvidenceBlobStoreLogic.EnumerateClaimFolderTree), () =>
+      {
+        MustBeSameOrganisationById();
+      });
     }
 
     public void MustBeValidClaim()
@@ -63,6 +69,19 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
           var orgId = _context.OrganisationId();
           var claim = _claimsDatastore.ById(x);
           var claimSoln = _solutionsDatastore.ById(claim?.SolutionId ?? Guid.NewGuid().ToString());
+          return claimSoln?.OrganisationId == orgId;
+        })
+        .When(x => _context.HasRole(Roles.Supplier))
+        .WithMessage("Cannot add/see evidence for other organisation");
+    }
+
+    public void MustBeSameOrganisationById()
+    {
+      RuleFor(x => x)
+        .Must(x =>
+        {
+          var orgId = _context.OrganisationId();
+          var claimSoln = _solutionsDatastore.ById(x);
           return claimSoln?.OrganisationId == orgId;
         })
         .When(x => _context.HasRole(Roles.Supplier))

@@ -6,6 +6,17 @@ namespace NHSD.GPITF.BuyingCatalog.Models
   public sealed class BlobInfo
   {
     /// <summary>
+    /// Unique identifier of entity
+    /// </summary>
+    public string Id { get; set; }
+
+    /// <summary>
+    /// Unique identifier of parent/owner of this entity
+    /// Will be null if this is the root entity
+    /// </summary>
+    public string ParentId { get; set; }
+
+    /// <summary>
     /// Display name
     /// </summary>
     public string Name { get; set; }
