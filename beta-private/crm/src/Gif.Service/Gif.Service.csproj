@@ -37,9 +37,6 @@
     <Content Remove="nlog.config" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="Models\GenCode.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="IdentityServer4" Version="2.2.0" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.6.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.3" />
