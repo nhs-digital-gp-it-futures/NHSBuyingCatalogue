@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <StartupObject>NHSD.GPITF.BuyingCatalog.Program</StartupObject>
     <UserSecretsId>ff108045-7917-4b80-b4b0-1a51e2881e04</UserSecretsId>
