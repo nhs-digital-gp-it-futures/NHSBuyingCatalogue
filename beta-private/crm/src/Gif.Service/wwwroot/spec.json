@@ -1198,6 +1198,36 @@
         } ]
       }
     },
+	"/api/porcelain/SolutionsEx/BySolution/{solutionId}" : {
+      "get" : {
+        "tags" : [ "SolutionsEx" ],
+        "summary" : "Get a Solution with a list of corresponding TechnicalContact, ClaimedCapability, ClaimedStandard et al",
+        "operationId" : "ApiPorcelainSolutionsExBySolution",
+        "consumes" : [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces" : [ ],
+        "parameters" : [ {
+          "name" : "solutionId",
+          "in" : "path",
+          "description" : "Id of the solution to retrieve.",
+          "required" : true,
+		  "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "404" : {
+            "description" : "Solution not found in CRM"
+          },
+          "500" : {
+            "description" : "Datastore exception"
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ]
+      }
+    },
     "/api/porcelain/SolutionsEx/Update" : {
       "put" : {
         "tags" : [ "SolutionsEx" ],
