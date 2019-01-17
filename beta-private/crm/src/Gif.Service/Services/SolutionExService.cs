@@ -4,6 +4,8 @@ using Gif.Service.Crm;
 using Gif.Service.Models;
 using System.Collections.Generic;
 using System.Linq;
+using Gif.Service.Attributes;
+using Gif.Service.Const;
 using Gif.Service.Enums;
 
 namespace Gif.Service.Services
@@ -41,12 +43,49 @@ namespace Gif.Service.Services
 
         public SolutionEx BySolution(string solutionId)
         {
+            var filterAttributes = new List<CrmFilterAttribute>
+            {
+                new CrmFilterAttribute("SolutionId") {FilterName = "cc_solutionid", FilterValue = solutionId},
+                new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
+            };
+
+            var appJson = Repository.RetrieveMultiple(new SolutionExFullRetrieve().GetQueryString(null, filterAttributes, true, true), out int? count);
+            var solutionJson = appJson?.FirstOrDefault();
+
+            var technicalContacts = new List<TechnicalContact>();
+            var claimedCapabilities = new List<CapabilityImplemented>();
+            var claimedStandard = new List<StandardApplicable>();
+
+            if (solutionJson?[RelationshipNames.SolutionTechnicalContact] != null)
+            {
+                foreach (var technicalContact in solutionJson[RelationshipNames.SolutionTechnicalContact].Children())
+                {
+                    technicalContacts.Add(new TechnicalContact(technicalContact));
+                }
+            }
+
+            if (solutionJson?[RelationshipNames.SolutionCapabilityImplemented] != null)
+            {
+                foreach (var capabilityImplemented in solutionJson[RelationshipNames.SolutionCapabilityImplemented].Children())
+                {
+                    claimedCapabilities.Add(new CapabilityImplemented(capabilityImplemented));
+                }
+            }
+
+            if (solutionJson?[RelationshipNames.SolutionStandardApplicable] != null)
+            {
+                foreach (var standardApplicable in solutionJson[RelationshipNames.SolutionStandardApplicable].Children())
+                {
+                    claimedStandard.Add(new StandardApplicable(standardApplicable));
+                }
+            }
+
             var solution = new SolutionEx
             {
-                Solution = _solutionsDatastore.ById(solutionId),
-                TechnicalContact = _technicalContactsDatastore.BySolution(solutionId).ToList(),
-                ClaimedCapability = _claimedCapabilityDatastore.BySolution(solutionId).ToList(),
-                ClaimedStandard = _claimedStandardDatastore.BySolution(solutionId).ToList()
+                Solution = new Solution(solutionJson),
+                TechnicalContact = technicalContacts,
+                ClaimedCapability = claimedCapabilities,
+                ClaimedStandard = claimedStandard
             };
 
             solution.ClaimedCapabilityEvidence = solution.ClaimedCapability
