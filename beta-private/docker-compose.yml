@@ -85,6 +85,8 @@ services:
     ports:
       - "6379:6379"
     restart: always
+    volumes:
+      - ./data:/data
 
 networks:
   beta_network:
