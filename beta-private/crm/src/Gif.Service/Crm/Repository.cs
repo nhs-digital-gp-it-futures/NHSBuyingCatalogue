@@ -45,9 +45,8 @@ namespace Gif.Service.Crm
             CreateCrmConnection();
         }
 
-        private HttpClient CreateCrmConnection()
+        private void CreateCrmConnection()
         {
-
             var httpHandler = new HttpClientHandler { Proxy = null, UseProxy = false };
 
             _httpClient = new HttpClient(httpHandler)
@@ -60,17 +59,15 @@ namespace Gif.Service.Crm
             _httpClient.DefaultRequestHeaders.Add("Prefer", "odata.include-annotations=OData.Community.Display.V1.FormattedValue");
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _authResult.AccessToken);
-
-            return _httpClient;
         }
 
         public JObject Retrieve(string query)
         {
             LogInformation($"[{nameof(Retrieve)}] --> {query}");
 
-            LogInformation($"[{nameof(RetrieveMultiple)}] --> before call to CRM");
+            LogInformation($"[{nameof(Retrieve)}] --> before call to CRM");
             var httpResponse = _httpClient.GetAsync(query).Result;
-            LogInformation($"[{nameof(RetrieveMultiple)}] --> after call to CRM");
+            LogInformation($"[{nameof(Retrieve)}] --> after call to CRM");
 
             JObject jretrieveJObject = null;
 
