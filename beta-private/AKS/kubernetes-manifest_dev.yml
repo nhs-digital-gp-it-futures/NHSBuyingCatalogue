@@ -75,12 +75,12 @@ spec:
         - name: DATASTORE_CONNECTIONSTRING
           valueFrom:
             secretKeyRef:
-              name: bcdbsecret
+              name: bcdbdevsecret
               key: DATASTORE_CONNECTIONSTRING        
         - name: LOG_CONNECTIONSTRING
           valueFrom:
             secretKeyRef:
-              name: bcdbsecret
+              name: bcdbdevsecret
               key: LOG_CONNECTIONSTRING
 ---
 apiVersion: apps/v1
@@ -191,7 +191,7 @@ spec:
         - name: LOG_CONNECTIONSTRING
           valueFrom:
             secretKeyRef:
-              name: bcdbsecret
+              name: bcdbdevsecret
               key: LOG_CONNECTIONSTRING                     
 ---  
 apiVersion: apps/v1
