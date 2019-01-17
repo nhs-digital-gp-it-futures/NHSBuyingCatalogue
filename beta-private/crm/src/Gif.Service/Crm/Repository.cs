@@ -65,9 +65,7 @@ namespace Gif.Service.Crm
         {
             LogInformation($"[{nameof(Retrieve)}] --> {query}");
 
-            LogInformation($"[{nameof(Retrieve)}] --> before call to CRM");
             var httpResponse = _httpClient.GetAsync(query).Result;
-            LogInformation($"[{nameof(Retrieve)}] --> after call to CRM");
 
             JObject jretrieveJObject = null;
 
@@ -85,32 +83,18 @@ namespace Gif.Service.Crm
 
         public JToken RetrieveMultiple(string query, out int? count)
         {
-            var stopwatch = new Stopwatch();
             LogInformation($"[{nameof(RetrieveMultiple)}] --> {query}");
 
             JToken jretrieveToken = null;
             count = null;
 
             HttpResponseMessage retrieveResponse;
-
-            LogInformation($"[{nameof(RetrieveMultiple)}] --> before call to CRM");
-            stopwatch.Start();
             retrieveResponse = _httpClient.GetAsync(query).Result;
-            stopwatch.Stop();
-            LogInformation($"[{nameof(RetrieveMultiple)}] --> after call to CRM. It took {stopwatch.ElapsedMilliseconds}ms.");
-
 
             if (retrieveResponse.StatusCode != HttpStatusCode.OK && retrieveResponse.StatusCode != HttpStatusCode.NoContent)
                 throw new CrmApiException(retrieveResponse.ReasonPhrase, retrieveResponse.StatusCode);
 
-            LogInformation($"Deserialsing...");
-            stopwatch.Reset();
-            stopwatch.Start();
             var jretrieveJObject = JObject.Parse(retrieveResponse.Content.ReadAsStringAsync().Result);
-            stopwatch.Stop();
-            LogInformation($"Finished deserialising in {stopwatch.ElapsedMilliseconds}");
-            stopwatch.Reset();
-            stopwatch.Start();
 
             if (jretrieveJObject == null)
                 return jretrieveToken;
@@ -122,8 +106,6 @@ namespace Gif.Service.Crm
                 count = int.Parse(jretrieveJObject["@odata.count"].ToString());
             }
 
-            stopwatch.Stop();
-            LogInformation($"Leaving [{nameof(RetrieveMultiple)}] ,  {stopwatch.ElapsedMilliseconds}");
             return jretrieveToken;
         }
 
