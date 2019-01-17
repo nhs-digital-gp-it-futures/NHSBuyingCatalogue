@@ -11,6 +11,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
   internal static class Retriever
   {
     private static IConfiguration _config = new Mock<IConfiguration>().Object;
+    private static IDatastoreCache _cache = new Mock<IDatastoreCache>().Object;
 
     public static List<Contacts> GetAllContacts(ISyncPolicyFactory _policy)
     {
@@ -46,7 +47,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
 
     public static List<Capabilities> GetAllCapabilities(ISyncPolicyFactory _policy)
     {
-      var capsDatastore = new CapabilitiesDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<CapabilitiesDatastore>>().Object, _policy, _config);
+      var capsDatastore = new CapabilitiesDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<CapabilitiesDatastore>>().Object, _policy, _config, _cache);
       var allCaps = capsDatastore.GetAll().ToList();
 
       return allCaps;
@@ -54,7 +55,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
 
     public static List<Standards> GetAllStandards(ISyncPolicyFactory _policy)
     {
-      var stdsDatastore = new StandardsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<StandardsDatastore>>().Object, _policy, _config);
+      var stdsDatastore = new StandardsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<StandardsDatastore>>().Object, _policy, _config, _cache);
       var allStds = stdsDatastore.GetAll().ToList();
 
       return allStds;
