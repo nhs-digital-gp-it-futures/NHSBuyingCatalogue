@@ -26,9 +26,9 @@ spec:
         - containerPort: 5100
         resources:
           requests:
-            cpu: 250m
-          limits:
             cpu: 500m
+          limits:
+            cpu: 1
         env:
         - name: CACHE_HOST
           value: "cache"
@@ -75,12 +75,12 @@ spec:
         - name: DATASTORE_CONNECTIONSTRING
           valueFrom:
             secretKeyRef:
-              name: bcdbsecret
+              name: bcdbdevsecret
               key: DATASTORE_CONNECTIONSTRING        
         - name: LOG_CONNECTIONSTRING
           valueFrom:
             secretKeyRef:
-              name: bcdbsecret
+              name: bcdbdevsecret
               key: LOG_CONNECTIONSTRING
 ---
 apiVersion: apps/v1
@@ -162,9 +162,37 @@ spec:
         - containerPort: 5001
         resources:
           requests:
-            cpu: 250m
+            cpu: 500m
           limits:
-            cpu: 500m            
+            cpu: 1
+        env:            
+        - name: GIF_CRM_URL
+          valueFrom:
+            secretKeyRef:
+              name: bccrmazuresecret
+              key: GIF_CRM_URL
+        - name: GIF_CRM_AUTHORITY
+          valueFrom:
+            secretKeyRef:
+              name: bccrmazuresecret
+              key: GIF_CRM_AUTHORITY       
+        - name: GIF_AZURE_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: bccrmazuresecret
+              key: GIF_AZURE_CLIENT_ID
+        - name: GIF_ENCRYPTED_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: bccrmazuresecret
+              key: GIF_ENCRYPTED_CLIENT_SECRET
+        - name: LOG_CRM
+          value: "true"
+        - name: LOG_CONNECTIONSTRING
+          valueFrom:
+            secretKeyRef:
+              name: bcdbdevsecret
+              key: LOG_CONNECTIONSTRING                     
 ---  
 apiVersion: apps/v1
 kind: Deployment

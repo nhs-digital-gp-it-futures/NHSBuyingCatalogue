@@ -7,14 +7,15 @@ using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
-  public sealed class CapabilityStandardDatastore : DatastoreBase<CapabilityStandard>, ICapabilityStandardDatastore
+  public sealed class CapabilityStandardDatastore : CachedDatastore<CapabilityStandard>, ICapabilityStandardDatastore
   {
     public CapabilityStandardDatastore(
       IRestClientFactory crmFactory,
       ILogger<DatastoreBase<CapabilityStandard>> logger,
       ISyncPolicyFactory policy,
-      IConfiguration config) :
-      base(crmFactory, logger, policy, config)
+      IConfiguration config,
+      IDatastoreCache cache) :
+      base(crmFactory, logger, policy, config, cache)
     {
     }
 
@@ -24,10 +25,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        var request = GetAllRequest($"{ResourceBase}");
-        var retval = GetResponse<PaginatedList<CapabilityStandard>>(request);
-
-        return retval.Items;
+        return GetAll($"{ResourceBase}");
       });
     }
   }

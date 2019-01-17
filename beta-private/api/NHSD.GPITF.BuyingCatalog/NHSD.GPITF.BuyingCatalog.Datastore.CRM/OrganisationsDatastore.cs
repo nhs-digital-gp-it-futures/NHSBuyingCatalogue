@@ -24,20 +24,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        var path = $"{ResourceBase}/ByContact/{contactId}";
-        LogInformation($"[{path}]");
-        if (_cache.TryGetValue(path, out string jsonCachedResponse))
-        {
-          LogInformation($"[{path}] --> [{jsonCachedResponse}]");
-          return JsonConvert.DeserializeObject<Organisations>(jsonCachedResponse);
-        }
-
-        var request = GetRequest(path);
-        var retval = GetResponse<Organisations>(request);
-
-        _cache.SafeAdd(path, JsonConvert.SerializeObject(retval));
-
-        return retval;
+        return Get($"{ResourceBase}/ByContact/{contactId}");
       });
     }
 
