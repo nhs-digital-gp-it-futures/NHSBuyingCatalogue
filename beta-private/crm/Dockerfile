@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:2.0-sdk
+FROM microsoft/dotnet:2.1-sdk
 
 ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
 
