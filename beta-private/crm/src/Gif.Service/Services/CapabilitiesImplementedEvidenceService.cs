@@ -1,4 +1,5 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+using System;
 using Gif.Service.Attributes;
 using Gif.Service.Contracts;
 using Gif.Service.Crm;
@@ -15,7 +16,38 @@ namespace Gif.Service.Services
     {
     }
 
-    public IEnumerable<IEnumerable<CapabilityEvidence>> ByClaim(string claimId)
+    public IEnumerable<IEnumerable<CapabilityEvidence>> ByClaimMultiple(List<Guid> claimIds)
+    {
+        var evidenceList = new List<CapabilityEvidence>();
+        var evidenceListList = new List<List<CapabilityEvidence>>();
+
+        // get all items at the end of the chain i.e. where the previous id is null
+        var filterEvidenceParent = new List<CrmFilterAttribute>
+        {
+            new CrmFilterAttribute("Previous") {FilterName = "_cc_previousversion_value", FilterValue = "null"},
+            new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
+        };
+
+        foreach (var claim in claimIds)
+        {
+            filterEvidenceParent.Add(new CrmFilterAttribute("ClaimId")
+                {FilterName = "_cc_capabilityimplemented_value", FilterValue = claim.ToString(), MultiConditional = true});
+        }
+
+        var jsonEvidenceParent = Repository.RetrieveMultiple(new CapabilityEvidence().GetQueryString(null, filterEvidenceParent, true, true), out Count);
+
+        foreach (var capabilityEvidence in jsonEvidenceParent)
+        {
+            foreach (var evidenceChild in capabilityEvidence.Children())
+                AddEvidenceChainToList(evidenceChild, evidenceList, evidenceListList);
+        }
+
+        Count = evidenceListList.Count;
+
+        return evidenceListList;
+    }
+
+        public IEnumerable<IEnumerable<CapabilityEvidence>> ByClaim(string claimId)
     {
       var evidenceList = new List<CapabilityEvidence>();
       var evidenceListList = new List<List<CapabilityEvidence>>();

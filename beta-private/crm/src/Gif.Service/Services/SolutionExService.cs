@@ -88,10 +88,12 @@ namespace Gif.Service.Services
                 ClaimedStandard = claimedStandard
             };
 
-            solution.ClaimedCapabilityEvidence = solution.ClaimedCapability
-            .SelectMany(cc => _claimedCapabilityEvidenceDatastore.ByClaim(cc.Id.ToString()))
-            .SelectMany(x => x)
-            .ToList();
+                             
+          var idList  = solution.ClaimedCapability.Select(cc => cc.Id).ToList();
+
+          solution.ClaimedCapabilityEvidence = _claimedCapabilityEvidenceDatastore.ByClaimMultiple(idList)
+              .SelectMany(x => x)
+              .ToList();
 
             solution.ClaimedCapabilityReview = solution.ClaimedCapabilityEvidence
             .SelectMany(cce => _claimedCapabilityReviewsDatastore.ByEvidence(cce.Id.ToString()))

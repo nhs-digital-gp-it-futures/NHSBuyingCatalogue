@@ -1,4 +1,5 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+using System;
 using Gif.Service.Attributes;
 using Gif.Service.Const;
 using Gif.Service.Contracts;
@@ -38,6 +39,11 @@ namespace Gif.Service.Services
       Count = evidenceListList.Count;
 
       return evidenceListList;
+    }
+
+    public IEnumerable<IEnumerable<StandardApplicableEvidence>> ByClaimMultiple(List<Guid> claimIds)
+    {
+        throw new NotImplementedException();
     }
 
     private void AddEvidenceChainToList(JToken evidence, List<StandardApplicableEvidence> evidenceList, List<List<StandardApplicableEvidence>> evidenceListList, string claimId)
