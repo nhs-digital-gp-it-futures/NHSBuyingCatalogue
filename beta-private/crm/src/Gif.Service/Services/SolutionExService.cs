@@ -88,27 +88,27 @@ namespace Gif.Service.Services
                 ClaimedStandard = claimedStandard
             };
 
-                             
-          var idList  = solution.ClaimedCapability.Select(cc => cc.Id).ToList();
+            var capabilitiesImplemented = solution.ClaimedCapability.Select(cc => cc.Id).ToList();
+            var standardsApplicable = solution.ClaimedStandard.Select(cs => cs.Id).ToList();
 
-          solution.ClaimedCapabilityEvidence = _claimedCapabilityEvidenceDatastore.ByClaimMultiple(idList)
+            solution.ClaimedCapabilityEvidence = _claimedCapabilityEvidenceDatastore.ByClaimMultiple(capabilitiesImplemented)
               .SelectMany(x => x)
               .ToList();
 
-            solution.ClaimedCapabilityReview = solution.ClaimedCapabilityEvidence
-            .SelectMany(cce => _claimedCapabilityReviewsDatastore.ByEvidence(cce.Id.ToString()))
-            .SelectMany(x => x)
-            .ToList();
+            solution.ClaimedStandardEvidence = _claimedStandardEvidenceDatastore.ByClaimMultiple(standardsApplicable)
+              .SelectMany(x => x)
+              .ToList();
 
-            solution.ClaimedStandardEvidence = solution.ClaimedStandard
-            .SelectMany(cs => _claimedStandardEvidenceDatastore.ByClaim(cs.Id.ToString()))
-            .SelectMany(x => x)
-            .ToList();
+            var capabilityEvidences = solution.ClaimedCapabilityEvidence.Select(cc => cc.Id).ToList();
+            var standardApplicableEvidences = solution.ClaimedStandardEvidence.Select(cs => cs.Id).ToList();
 
-            solution.ClaimedStandardReview = solution.ClaimedStandardEvidence
-            .SelectMany(cse => _claimedStandardReviewsDatastore.ByEvidence(cse.Id.ToString()))
-            .SelectMany(x => x)
-            .ToList();
+            solution.ClaimedCapabilityReview = _claimedCapabilityReviewsDatastore.ByEvidenceMultiple(capabilityEvidences)
+              .SelectMany(x => x)
+              .ToList();
+
+            solution.ClaimedStandardReview = _claimedStandardReviewsDatastore.ByEvidenceMultiple(standardApplicableEvidences)
+              .SelectMany(x => x)
+              .ToList();
 
             return solution;
         }
