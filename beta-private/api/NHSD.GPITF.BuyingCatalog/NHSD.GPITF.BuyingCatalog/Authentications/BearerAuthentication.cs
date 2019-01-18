@@ -50,9 +50,11 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
       CachedUserInfoResponse cachedresponse = null;
       if (_cache.TryGetValue(bearerToken, out string jsonCachedResponse))
       {
+        LogInformation($"cache[{bearerToken}] --> [{jsonCachedResponse}]");
         cachedresponse = JsonConvert.DeserializeObject<CachedUserInfoResponse>(jsonCachedResponse);
         if (cachedresponse.Created < DateTime.UtcNow.Subtract(Expiry))
         {
+          LogInformation($"Removing expired cached token --> [{bearerToken}]");
           _cache.Remove(bearerToken);
           cachedresponse = null;
         }
@@ -65,15 +67,16 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
         response = await _userInfoClient.GetAsync(userInfo, bearerToken.Substring(7));
         if (response == null)
         {
-          _logger.LogError($"No response from {userInfo}");
+          _logger.LogError($"No response from [{userInfo}]");
           return;
         }
+        LogInformation($"Updating token --> [{bearerToken}]");
         _cache.SafeAdd(bearerToken, JsonConvert.SerializeObject(new CachedUserInfoResponse(response)));
       }
 
       if (response?.Claims == null)
       {
-        _logger.LogError($"No claims from {userInfo}");
+        _logger.LogError($"No claims from [{userInfo}]");
         return;
       }
 
@@ -85,14 +88,14 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
         var contact = _contactsDatastore.ByEmail(email);
         if (contact == null)
         {
-          _logger.LogError($"No contact for {email}");
+          _logger.LogError($"No contact for [{email}]");
           return;
         }
 
         var org = _organisationDatastore.ByContact(contact.Id);
         if (org == null)
         {
-          _logger.LogError($"No organisation for {contact.Id}");
+          _logger.LogError($"No organisation for [{contact.Id}]");
           return;
         }
 
@@ -111,6 +114,11 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
       }
 
       context.Principal.AddIdentity(new ClaimsIdentity(claims));
+    }
+
+    private void LogInformation(string msg)
+    {
+      _logger.LogInformation(msg);
     }
   }
 #pragma warning restore CS1591
