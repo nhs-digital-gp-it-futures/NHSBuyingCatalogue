@@ -13,14 +13,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <OutputPath>bin\Debug\netcoreapp2.0\</OutputPath>
+    <OutputPath>bin\Debug\netcoreapp2.1\</OutputPath>
     <NoWarn>1701;1702;1705;8002;</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <OutputPath>bin\Release\netcoreapp2.0\</OutputPath>
+    <OutputPath>bin\Release\netcoreapp2.1\</OutputPath>
     <NoWarn>1701;1702;1705;8002;</NoWarn>
   </PropertyGroup>
 
