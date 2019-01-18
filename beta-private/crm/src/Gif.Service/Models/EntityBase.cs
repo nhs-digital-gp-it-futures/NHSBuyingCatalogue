@@ -348,7 +348,7 @@ namespace Gif.Service.Models
                 {
                     var filterAttribute = filterAttributes[i];
 
-                    if (filterAttribute.MultiConditional == true && numberOfResults > 0)
+                    if (filterAttribute.MultiConditional == true && filterAttributes.Count(x => x.MultiConditional == true) > 1)
                     {
                         query += "(";
                     }
