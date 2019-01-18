@@ -341,6 +341,7 @@ namespace Gif.Service.Models
 
                 var numberOfResults = filterAttributes.Count;
                 var index = 0;
+                var openedConditional = false;
 
                 filterAttributes = filterAttributes.OrderByDescending(x => x.MultiConditional == true).ToList();
 
@@ -348,9 +349,12 @@ namespace Gif.Service.Models
                 {
                     var filterAttribute = filterAttributes[i];
 
-                    if (filterAttribute.MultiConditional == true && filterAttributes.Count(x => x.MultiConditional == true) > 1)
+                    if (filterAttribute.MultiConditional == true && 
+                        filterAttributes.Count(x => x.MultiConditional == true) > 1
+                        && !openedConditional)
                     {
                         query += "(";
+                        openedConditional = true;
                     }
 
                     query += filterAttribute.FilterName + " eq " + (filterAttribute.QuotesRequired == true ? "'" : "") +
@@ -358,20 +362,20 @@ namespace Gif.Service.Models
 
                     if (++index < numberOfResults)
                     {
-                        if (filterAttributes[i+1].MultiConditional != true)
+                        if (filterAttributes[i].MultiConditional != true && filterAttributes[i+1].MultiConditional != true)
                             query += " and ";
-                        else
+                        else if (filterAttributes[i+1]?.MultiConditional == true)
                         {
                             query += " or ";
                         }
-                    }
-                    else
-                    {
-                        if (numberOfResults > 1 && filterAttributes[i].MultiConditional == true)
+
+                        if (numberOfResults > 1 && filterAttributes[i].MultiConditional == true &&
+                            filterAttributes[i + 1].MultiConditional != true)
                         {
-                            query += ")";
+                            query += ") and ";
                         }
                     }
+
                 }
             }
 

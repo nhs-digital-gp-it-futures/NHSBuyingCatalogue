@@ -36,11 +36,8 @@ namespace Gif.Service.Services
 
         var jsonEvidenceParent = Repository.RetrieveMultiple(new CapabilityEvidence().GetQueryString(null, filterEvidenceParent, true, true), out Count);
 
-        foreach (var capabilityEvidence in jsonEvidenceParent)
-        {
-            foreach (var evidenceChild in capabilityEvidence.Children())
-                AddEvidenceChainToList(evidenceChild, evidenceList, evidenceListList);
-        }
+        foreach (var evidenceChild in jsonEvidenceParent.Children())
+            AddEvidenceChainToList(evidenceChild, evidenceList, evidenceListList);
 
         Count = evidenceListList.Count;
 
