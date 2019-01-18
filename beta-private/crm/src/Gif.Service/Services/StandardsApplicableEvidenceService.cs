@@ -55,7 +55,7 @@ namespace Gif.Service.Services
         foreach (var claim in claimIds)
         {
             filterEvidenceParent.Add(new CrmFilterAttribute("ClaimId")
-                { FilterName = "_cc_capabilityimplemented_value", FilterValue = claim.ToString(), MultiConditional = true });
+                { FilterName = "_cc_standardapplicable_value", FilterValue = claim.ToString(), MultiConditional = true });
         }
 
         var jsonEvidenceParent = Repository.RetrieveMultiple(new StandardApplicableEvidence().GetQueryString(null, filterEvidenceParent, true, true), out Count);

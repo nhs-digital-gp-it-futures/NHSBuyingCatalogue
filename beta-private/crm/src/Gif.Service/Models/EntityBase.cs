@@ -372,7 +372,7 @@ namespace Gif.Service.Models
                         if (numberOfResults > 1 && filterAttributes[i].MultiConditional == true &&
                             filterAttributes[i + 1].MultiConditional != true)
                         {
-                            query += ") and ";
+                            query += openedConditional ? ") and " : " and ";
                         }
                     }
 
