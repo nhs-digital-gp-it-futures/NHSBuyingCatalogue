@@ -35,7 +35,7 @@ spec:
         - name: ASPNETCORE_ENVIRONMENT 
           value: "Development"     
         - name: USE_CRM
-          value: "false"
+          value: "true"
         - name: CRM_APIURI
           value: "http://crm:5001/api/"
         - name: CRM_ACCESSTOKENURI
