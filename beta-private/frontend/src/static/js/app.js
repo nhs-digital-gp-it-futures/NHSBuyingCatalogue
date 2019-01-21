@@ -82,6 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
         elFieldset.classList.toggle('collapsed')
         if (!elFieldset.classList.contains('collapsed')) {
           collapseAllFieldsetsExcept(elFieldset)
+          ev.target.scrollIntoView({ behavior: 'smooth' })
         }
 
         return true
