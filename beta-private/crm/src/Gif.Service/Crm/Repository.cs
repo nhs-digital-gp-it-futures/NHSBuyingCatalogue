@@ -60,19 +60,23 @@ namespace Gif.Service.Crm
         {
             var secret = CipherUtil.Decrypt<AesManaged>(Settings.GIF_ENCRYPTED_CLIENT_SECRET(_config), "GifService", Settings.GIF_AZURE_CLIENT_ID(_config));
             var authContext = new AuthenticationContext(Settings.GIF_CRM_AUTHORITY(_config), false);
+            AuthenticationResult authResult = null;
 
             try
             {
-                var authResult = authContext.AcquireTokenSilentAsync(Settings.GIF_CRM_URL(_config), Settings.GIF_AZURE_CLIENT_ID(_config)).Result;
-
-                if (_httpClient != null)
-                    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authResult.AccessToken);
+                authResult = authContext
+                    .AcquireTokenSilentAsync(Settings.GIF_CRM_URL(_config), Settings.GIF_AZURE_CLIENT_ID(_config))
+                    .Result;
             }
             catch (AggregateException e)
             {
-                var authResult = authContext.AcquireTokenAsync(Settings.GIF_CRM_URL(_config), new ClientCredential(Settings.GIF_AZURE_CLIENT_ID(_config), secret)).Result;
-
-                if (_httpClient != null)
+                authResult = authContext
+                    .AcquireTokenAsync(Settings.GIF_CRM_URL(_config), new ClientCredential(Settings.GIF_AZURE_CLIENT_ID(_config), secret))
+                    .Result;
+            }
+            finally
+            {
+                if (_httpClient != null && authResult != null)
                     _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authResult.AccessToken);
             }
         }
