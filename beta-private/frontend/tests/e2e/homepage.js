@@ -9,7 +9,7 @@ import axeCheck from 'axe-testcafe'
 import { homePage } from './pages'
 
 const HOMEPAGE_TITLE = 'NHS Store'
-const LOGIN_TEXT = 'Log In'
+const LOGIN_TEXT = 'Log in/Sign up'
 const NUMBER_OF_CARDS = 3
 const NUMBER_OF_STEPS = 4
 const NUMBER_OF_CHILDREN_PER_CARD = 1
