@@ -259,8 +259,6 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
         var claimFolderInfo = new BlobInfo
         {
-          Id = claimFolder.UniqueId.ToString(),
-          ParentId = null,
           Name = claimFolder.Name,
           IsFolder = true,
           Url = new Uri(new Uri(_context.Url), claimFolder.ServerRelativeUrl).AbsoluteUri,
@@ -271,8 +269,6 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
           .Select(x =>
             new BlobInfo
             {
-              Id = x.UniqueId.ToString(),
-              ParentId = claimFolderInfo.Id,
               Name = x.Name,
               IsFolder = true,
               Length = 0,
@@ -285,8 +281,6 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
           .Select(x =>
             new BlobInfo
             {
-              Id = x.UniqueId.ToString(),
-              ParentId = claimFolderInfo.Id,
               Name = x.Name,
               IsFolder = false,
               Length = x.Length,
