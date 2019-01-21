@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Gif.Service.Contracts
 {
@@ -6,6 +7,8 @@ namespace Gif.Service.Contracts
   public interface IReviewsDatastore<T> : IDatastoreBase<T>
   {
     IEnumerable<IEnumerable<T>> ByEvidence(string evidenceId);
+
+    IEnumerable<IEnumerable<T>> ByEvidenceMultiple(List<Guid> evidenceIds);
     T ById(string id);
     T Create(T review);
     void Delete(T review);

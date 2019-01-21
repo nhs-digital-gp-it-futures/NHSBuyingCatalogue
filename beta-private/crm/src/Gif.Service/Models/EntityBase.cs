@@ -341,14 +341,41 @@ namespace Gif.Service.Models
 
                 var numberOfResults = filterAttributes.Count;
                 var index = 0;
+                var openedConditional = false;
 
-                foreach (var filterAttribute in filterAttributes)
+                filterAttributes = filterAttributes.OrderByDescending(x => x.MultiConditional == true).ToList();
+
+                for (var i = 0; i < filterAttributes.Count; i++)
                 {
+                    var filterAttribute = filterAttributes[i];
+
+                    if (filterAttribute.MultiConditional == true && 
+                        filterAttributes.Count(x => x.MultiConditional == true) > 1
+                        && !openedConditional)
+                    {
+                        query += "(";
+                        openedConditional = true;
+                    }
+
                     query += filterAttribute.FilterName + " eq " + (filterAttribute.QuotesRequired == true ? "'" : "") +
                              filterAttribute.FilterValue + (filterAttribute.QuotesRequired == true ? "'" : "");
 
                     if (++index < numberOfResults)
-                        query += " and ";
+                    {
+                        if (filterAttributes[i].MultiConditional != true && filterAttributes[i+1].MultiConditional != true)
+                            query += " and ";
+                        else if (filterAttributes[i+1]?.MultiConditional == true)
+                        {
+                            query += " or ";
+                        }
+
+                        if (numberOfResults > 1 && filterAttributes[i].MultiConditional == true &&
+                            filterAttributes[i + 1].MultiConditional != true)
+                        {
+                            query += openedConditional ? ") and " : " and ";
+                        }
+                    }
+
                 }
             }
 

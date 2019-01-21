@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Gif.Service.Models;
 
 namespace Gif.Service.Contracts
 {
@@ -6,6 +8,8 @@ namespace Gif.Service.Contracts
   public interface IEvidenceDatastore<T> : IDatastoreBase<T>
   {
     IEnumerable<IEnumerable<T>> ByClaim(string claimId);
+
+    IEnumerable<IEnumerable<T>> ByClaimMultiple(List<Guid> claimIds);
     T ById(string id);
     T Create(T evidence);
   }

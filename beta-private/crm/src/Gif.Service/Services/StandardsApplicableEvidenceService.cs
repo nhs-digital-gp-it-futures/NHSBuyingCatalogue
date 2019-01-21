@@ -1,4 +1,5 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+using System;
 using Gif.Service.Attributes;
 using Gif.Service.Const;
 using Gif.Service.Contracts;
@@ -33,22 +34,49 @@ namespace Gif.Service.Services
 
       // iterate through all items that are at the end of the chain
       foreach (var evidenceChild in jsonEvidenceParent.Children())
-        AddEvidenceChainToList(evidenceChild, evidenceList, evidenceListList, claimId);
+        AddEvidenceChainToList(evidenceChild, evidenceList, evidenceListList);
 
       Count = evidenceListList.Count;
 
       return evidenceListList;
     }
 
-    private void AddEvidenceChainToList(JToken evidence, List<StandardApplicableEvidence> evidenceList, List<List<StandardApplicableEvidence>> evidenceListList, string claimId)
+    public IEnumerable<IEnumerable<StandardApplicableEvidence>> ByClaimMultiple(List<Guid> claimIds)
     {
-      GetEvidencesChain(evidence, evidenceList, claimId);
+        var evidenceListList = new List<List<StandardApplicableEvidence>>();
+
+        // get all items at the end of the chain i.e. where the previous id is null
+        var filterEvidenceParent = new List<CrmFilterAttribute>
+        {
+            new CrmFilterAttribute("Previous") {FilterName = "_cc_previousversion_value", FilterValue = "null"},
+            new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
+        };
+
+        foreach (var claim in claimIds)
+        {
+            filterEvidenceParent.Add(new CrmFilterAttribute("ClaimId")
+                { FilterName = "_cc_standardapplicable_value", FilterValue = claim.ToString(), MultiConditional = true });
+        }
+
+        var jsonEvidenceParent = Repository.RetrieveMultiple(new StandardApplicableEvidence().GetQueryString(null, filterEvidenceParent, true, true), out Count);
+
+        foreach (var evidenceChild in jsonEvidenceParent.Children())
+            AddEvidenceChainToList(evidenceChild, new List<StandardApplicableEvidence>(), evidenceListList);
+
+        Count = evidenceListList.Count;
+
+        return evidenceListList;
+     }
+
+    private void AddEvidenceChainToList(JToken evidence, List<StandardApplicableEvidence> evidenceList, List<List<StandardApplicableEvidence>> evidenceListList)
+    {
+      GetEvidencesChain(evidence, evidenceList);
 
       var enumEvidenceList = StandardApplicableEvidence.OrderLinkedEvidences(evidenceList);
       evidenceListList.Add(enumEvidenceList.ToList());
     }
 
-    private void GetEvidencesChain(JToken evidenceChainEnd, List<StandardApplicableEvidence> evidenceList, string claimId)
+    private void GetEvidencesChain(JToken evidenceChainEnd, List<StandardApplicableEvidence> evidenceList)
     {
       // store the end of the chain (with no previous id)
       var evidence = new StandardApplicableEvidence(evidenceChainEnd);
@@ -59,11 +87,11 @@ namespace Gif.Service.Services
       while (true)
       {
         var filterEvidence = new List<CrmFilterAttribute>
-                {
-                    new CrmFilterAttribute("ClaimId") {FilterName = "_cc_standardapplicable_value", FilterValue = claimId},
-                    new CrmFilterAttribute("PreviousEvidence") {FilterName = "_cc_previousversion_value", FilterValue = id},
-                    new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
-                };
+        {
+            new CrmFilterAttribute("ClaimId") {FilterName = "_cc_standardapplicable_value", FilterValue = id},
+            new CrmFilterAttribute("PreviousEvidence") {FilterName = "_cc_previousversion_value", FilterValue = id},
+            new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
+        };
 
         var jsonEvidence = Repository.RetrieveMultiple(new StandardApplicableEvidence().GetQueryString(null, filterEvidence, true, true), out Count);
         if (jsonEvidence.HasValues)

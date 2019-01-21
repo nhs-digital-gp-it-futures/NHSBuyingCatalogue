@@ -15,7 +15,8 @@
   "Log":
   {
     "CRM": true,
-    "SharePoint":  true
+    "SharePoint": true,
+    "BearerAuth": true
   },
 
   "Cache":
