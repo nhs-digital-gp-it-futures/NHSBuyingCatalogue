@@ -68,7 +68,7 @@ namespace Gif.Service.Crm
                 if (_httpClient != null)
                     _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authResult.AccessToken);
             }
-            catch (AdalException e)
+            catch (AggregateException e)
             {
                 var authResult = authContext.AcquireTokenAsync(Settings.GIF_CRM_URL(_config), new ClientCredential(Settings.GIF_AZURE_CLIENT_ID(_config), secret)).Result;
 
