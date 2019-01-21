@@ -239,7 +239,7 @@ namespace Gif.Service.Crm
             var patchChangeId = Guid.NewGuid();
             var batchUrl = new Uri($"{_httpClient.BaseAddress.AbsoluteUri}$batch");
 
-            var batchRequest = new HttpRequestMessage(HttpMethod.Post, batchUrl);
+            var batchRequest = new HttpRequestMessage(HttpMethod.Post, batchUrl) { Version = new Version(1, 1) };
             var batchContent = new MultipartContent("mixed", "batch_" + batchId);
 
             // changeset setup
@@ -285,7 +285,8 @@ namespace Gif.Service.Crm
 
                 var request = new HttpRequestMessage(method, requestUri)
                 {
-                    Content = content
+                    Content = content,
+                    Version = new Version(1,1)
                 };
 
                 // Add this content to the changeset
