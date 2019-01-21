@@ -7,7 +7,7 @@
         public const string CapabilityStandardStandard = "cc_Standard";
         public const string SolutionFramework = "cc_solution_cc_framework";
 
-        public const string SolutionCapabilityImplemented = "cc_cc_solution_cc_capabilityimplemented";
+        public const string SolutionCapabilityImplemented = "cc_cc_solution_cc_capabilityimplemented_Solution";
         public const string SolutionStandardApplicable = "cc_cc_solution_cc_standardapplicable_Solution";
         public const string SolutionTechnicalContact = "cc_cc_solution_cc_technicalcontact_Solution";
 
