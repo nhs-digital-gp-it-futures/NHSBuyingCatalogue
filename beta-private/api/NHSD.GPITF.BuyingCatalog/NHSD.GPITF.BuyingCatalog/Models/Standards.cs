@@ -1,6 +1,5 @@
 using Dapper.Contrib.Extensions;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
-using System.ComponentModel.DataAnnotations;
 
 namespace NHSD.GPITF.BuyingCatalog.Models
 {
