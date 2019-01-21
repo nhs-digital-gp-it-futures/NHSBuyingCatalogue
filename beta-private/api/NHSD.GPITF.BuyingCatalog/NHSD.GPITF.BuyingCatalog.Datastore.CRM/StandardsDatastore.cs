@@ -4,6 +4,7 @@ using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
@@ -48,10 +49,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        var request = GetRequest($"{ResourceBase}/ById/{id}");
-        var retval = GetResponse<Standards>(request);
-
-        return retval;
+        return GetAll().SingleOrDefault(x => x.Id == id);
       });
     }
 
