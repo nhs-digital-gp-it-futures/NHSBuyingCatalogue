@@ -24,7 +24,7 @@ namespace Gif.Service.Crm
         private readonly ILogger<Repository> _logger;
         private readonly bool _logCRM;
         private HttpClient _httpClient;
-
+        private AuthenticationContext _authContext;
 
         public Repository(
           IConfiguration config,
@@ -53,24 +53,24 @@ namespace Gif.Service.Crm
             _httpClient.DefaultRequestHeaders.Add("Prefer", "odata.include-annotations=OData.Community.Display.V1.FormattedValue");
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+            _authContext = new AuthenticationContext(Settings.GIF_CRM_AUTHORITY(_config), false);
             ApplyAccessToken();
         }
 
         private void ApplyAccessToken()
         {
             var secret = CipherUtil.Decrypt<AesManaged>(Settings.GIF_ENCRYPTED_CLIENT_SECRET(_config), "GifService", Settings.GIF_AZURE_CLIENT_ID(_config));
-            var authContext = new AuthenticationContext(Settings.GIF_CRM_AUTHORITY(_config), false);
             AuthenticationResult authResult = null;
 
             try
             {
-                authResult = authContext
+                authResult = _authContext
                     .AcquireTokenSilentAsync(Settings.GIF_CRM_URL(_config), Settings.GIF_AZURE_CLIENT_ID(_config))
                     .Result;
             }
             catch (AggregateException e)
             {
-                authResult = authContext
+                authResult = _authContext
                     .AcquireTokenAsync(Settings.GIF_CRM_URL(_config), new ClientCredential(Settings.GIF_AZURE_CLIENT_ID(_config), secret))
                     .Result;
             }
