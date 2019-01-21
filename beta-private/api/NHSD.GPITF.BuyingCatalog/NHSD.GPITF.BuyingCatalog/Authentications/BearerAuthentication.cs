@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -63,10 +64,9 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
       }
 
       var userInfo = Settings.OIDC_USERINFO_URL(_config);
-      var response = cachedresponse?.UserInfoResponse;
-      if (response == null)
+      if (cachedresponse == null)
       {
-        response = await _userInfoClient.GetAsync(userInfo, bearerToken.Substring(7));
+        var response = await _userInfoClient.GetAsync(userInfo, bearerToken.Substring(7));
         if (response == null)
         {
           _logger.LogError($"No response from [{userInfo}]");
@@ -74,16 +74,17 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
         }
         LogInformation($"Updating token --> [{bearerToken}]");
         _cache.SafeAdd(bearerToken, JsonConvert.SerializeObject(new CachedUserInfoResponse(response)));
+        cachedresponse = new CachedUserInfoResponse(response);
       }
 
-      if (response?.Claims == null)
+      if (cachedresponse.Claims == null)
       {
         _logger.LogError($"No claims from [{userInfo}]");
         return;
       }
 
-      var userClaims = response.Claims;
-      var claims = new List<Claim>(userClaims);
+      var userClaims = cachedresponse.Claims;
+      var claims = new List<Claim>(userClaims.Select(x => new Claim(x.Type, x.Value)));
       var email = userClaims.SingleOrDefault(x => x.Type == "email")?.Value;
       if (!string.IsNullOrEmpty(email))
       {
