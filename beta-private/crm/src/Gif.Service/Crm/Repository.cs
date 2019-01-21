@@ -25,6 +25,7 @@ namespace Gif.Service.Crm
         private readonly bool _logCRM;
         private HttpClient _httpClient;
         private AuthenticationContext _authContext;
+        private AccessToken _cachedAccessToken;
 
         public Repository(
           IConfiguration config,
@@ -59,26 +60,30 @@ namespace Gif.Service.Crm
 
         private void ApplyAccessToken()
         {
-            var secret = CipherUtil.Decrypt<AesManaged>(Settings.GIF_ENCRYPTED_CLIENT_SECRET(_config), "GifService", Settings.GIF_AZURE_CLIENT_ID(_config));
-            AuthenticationResult authResult = null;
+            if (_cachedAccessToken == null)
+                _cachedAccessToken = CreateAccessToken();
 
-            try
+            if (DateTime.UtcNow >= _cachedAccessToken.expires_on)
+                _cachedAccessToken = CreateAccessToken();
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _cachedAccessToken.access_token);
+        }
+
+        private AccessToken CreateAccessToken()
+        {
+            var secret = CipherUtil.Decrypt<AesManaged>(Settings.GIF_ENCRYPTED_CLIENT_SECRET(_config), "GifService", Settings.GIF_AZURE_CLIENT_ID(_config));
+
+            var result = _authContext
+                .AcquireTokenAsync(Settings.GIF_CRM_URL(_config), new ClientCredential(Settings.GIF_AZURE_CLIENT_ID(_config), secret))
+                .Result;
+
+            var accessToken = new AccessToken
             {
-                authResult = _authContext
-                    .AcquireTokenSilentAsync(Settings.GIF_CRM_URL(_config), Settings.GIF_AZURE_CLIENT_ID(_config))
-                    .Result;
-            }
-            catch (AggregateException e)
-            {
-                authResult = _authContext
-                    .AcquireTokenAsync(Settings.GIF_CRM_URL(_config), new ClientCredential(Settings.GIF_AZURE_CLIENT_ID(_config), secret))
-                    .Result;
-            }
-            finally
-            {
-                if (_httpClient != null && authResult != null)
-                    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authResult.AccessToken);
-            }
+                expires_on = result.ExpiresOn,
+                access_token = result.AccessToken
+            };
+
+            return accessToken;
         }
 
         public JObject Retrieve(string query)
