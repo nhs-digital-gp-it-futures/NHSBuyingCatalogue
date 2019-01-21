@@ -38,7 +38,6 @@ namespace NHSD.GPITF.BuyingCatalog.UserInfoResponseCache.Redis
         },
         SyncTimeout = int.MaxValue
       };
-
       var redis = ConnectionMultiplexer.Connect(cfg);
       _db = redis.GetDatabase();
     }
