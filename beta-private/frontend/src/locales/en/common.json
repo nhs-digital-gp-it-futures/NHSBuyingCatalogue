@@ -42,7 +42,7 @@
     "Save and exit": "Save & exit"
   },
   "Authentication": {
-    "Login": "Log In",
+    "Login": "Log in/Sign up",
     "Logout": "Log Out",
     "Greeting": "Welcome, {{user.contact.firstName}}"
   },

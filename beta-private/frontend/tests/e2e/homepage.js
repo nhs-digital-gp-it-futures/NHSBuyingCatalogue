@@ -5,18 +5,17 @@
 //  on the homepage at some point...
 //
 
-import axeCheck from 'axe-testcafe'
 import { homePage } from './pages'
 
 const HOMEPAGE_TITLE = 'NHS Store'
-const LOGIN_TEXT = 'Log In'
+const LOGIN_TEXT = 'Log in/Sign up'
 const NUMBER_OF_CARDS = 3
 const NUMBER_OF_STEPS = 4
 const NUMBER_OF_CHILDREN_PER_CARD = 1
 
 fixture('Homepage')
   .page(homePage.baseUrl)
-  .afterEach(axeCheck)
+  .afterEach(homePage.checkAccessibility)
 
 test('a11y: logged out homepage', async t => {
   await t.expect(homePage.loginLink.innerText).eql(LOGIN_TEXT)

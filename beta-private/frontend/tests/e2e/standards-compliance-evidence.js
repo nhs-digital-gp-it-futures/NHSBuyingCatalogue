@@ -1,7 +1,6 @@
 /* global fixture, test */
 
 import { Selector, RequestLogger } from 'testcafe'
-import axeCheck from 'axe-testcafe'
 
 import { asSupplier } from './roles'
 import { supplierDashboardPage, onboardingDashboardPage, standardsComplianceDashboardPage } from './pages'
@@ -32,7 +31,7 @@ const requestLogger = RequestLogger(
 fixture('Standards Compliance - Evidence')
   .page(supplierDashboardPage.baseUrl)
   .beforeEach(navigateToStandardsDashboard)
-  .afterEach(axeCheck)
+  .afterEach(supplierDashboardPage.checkAccessibility)
 
 function navigateToStandardsDashboard (t) {
   return asSupplier(t)

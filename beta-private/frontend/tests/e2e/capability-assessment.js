@@ -5,6 +5,7 @@ import { supplierDashboardPage, onboardingDashboardPage, registrationPage, capab
 
 fixture('Capability Assessment - First Access')
   .page(capabilityEvidencePage.baseUrl)
+  .afterEach(supplierDashboardPage.checkAccessibility)
 
 test('Unregistered solution does not allow access to capability assessment', async t => {
   await asSupplier(t)

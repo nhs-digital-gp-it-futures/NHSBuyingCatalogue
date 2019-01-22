@@ -1,14 +1,13 @@
 /* global fixture, test */
 
 import { Selector } from 'testcafe'
-import axeCheck from 'axe-testcafe'
 
 import { asSupplier } from './roles'
 import { supplierDashboardPage } from './pages'
 
 fixture('Supplier Homepage')
   .page(supplierDashboardPage.baseUrl)
-  .afterEach(axeCheck)
+  .afterEach(supplierDashboardPage.checkAccessibility)
 
 test('Login as supplier', async t => {
   await asSupplier(t)

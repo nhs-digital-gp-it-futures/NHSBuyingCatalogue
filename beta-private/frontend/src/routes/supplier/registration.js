@@ -20,7 +20,7 @@ router
 router
   .route('/new/register/')
   .get(registrationPageGet)
-  .post(registrationPageValidation, registrationPagePost)
+  .post(registrationPreValidation, registrationPageValidation, registrationPagePost)
 
 // all the remaining routes need to load a specified solution
 router.param('solution_id', async (req, res, next, solutionId) => {
@@ -67,9 +67,16 @@ function onboardingStatusPage (req, res) {
       {
         url: 'register#content'
       },
-      {},
-      {},
-      {}
+      {
+        class: 'unavailable'
+      },
+      {
+        class: 'unavailable'
+      },
+      // solution page will be unavailable for the time being
+      {
+        class: 'unavailable'
+      }
     ]
   }
 
@@ -78,10 +85,12 @@ function onboardingStatusPage (req, res) {
 
     context.stages[1].status = 'Not started'
     context.stages[1].link = 'Start'
+    context.stages[1].class = ''
     context.stages[1].url = `../../capabilities/${req.solution.id}`
 
     context.stages[2].status = 'Not started'
     context.stages[2].link = 'Start'
+    context.stages[2].class = ''
     context.stages[2].url = `../../compliance/${req.solution.id}`
 
     if (req.solution._raw.claimedCapabilityEvidence.length) {
@@ -139,9 +148,6 @@ function onboardingStatusPage (req, res) {
     context.stages[0].status = 'Not started'
     context.stages[0].link = 'Start'
   }
-
-  // solution page will be unavailable for the time being
-  context.stages[3].class = 'unavailable'
 
   res.render('supplier/registration/index', context)
 }

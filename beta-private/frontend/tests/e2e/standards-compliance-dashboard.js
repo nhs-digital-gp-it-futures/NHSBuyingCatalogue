@@ -1,7 +1,6 @@
 /* global fixture, test */
 
 import { Selector } from 'testcafe'
-import axeCheck from 'axe-testcafe'
 
 import { asSupplier } from './roles'
 import { supplierDashboardPage, onboardingDashboardPage, standardsComplianceDashboardPage } from './pages'
@@ -36,7 +35,7 @@ const expectedStatusStandards = {
 fixture('Standards Compliance - Dashboard')
   .page(supplierDashboardPage.baseUrl)
   .beforeEach(navigateToStandardsDashboard)
-  .afterEach(axeCheck)
+  .afterEach(supplierDashboardPage.checkAccessibility)
 
 function navigateToStandardsDashboard (t) {
   return asSupplier(t)

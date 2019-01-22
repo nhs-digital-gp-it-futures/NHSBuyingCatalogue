@@ -1,7 +1,6 @@
 /* global fixture, test */
 
 import { Selector, RequestLogger } from 'testcafe'
-import axeCheck from 'axe-testcafe'
 
 import { asSupplier } from './roles'
 import { supplierDashboardPage, onboardingDashboardPage, capabilityEvidencePage } from './pages'
@@ -9,7 +8,7 @@ import { supplierDashboardPage, onboardingDashboardPage, capabilityEvidencePage 
 fixture('Capability Assessment - Evidence')
   .page(supplierDashboardPage.baseUrl)
   .beforeEach(navigateToCapabilityAssessment)
-  .afterEach(axeCheck)
+  .afterEach(supplierDashboardPage.checkAccessibility)
 
 function navigateToCapabilityAssessment (t) {
   return asSupplier(t)
