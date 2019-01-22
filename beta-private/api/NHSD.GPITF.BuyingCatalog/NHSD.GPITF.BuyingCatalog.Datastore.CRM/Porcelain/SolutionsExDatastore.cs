@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
@@ -72,6 +73,17 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
         var resp = GetRawResponse(request);
 
         return 0;
+      });
+    }
+
+    public IEnumerable<SolutionEx> ByOrganisation(string organisationId)
+    {
+      return GetInternal(() =>
+      {
+        var request = GetRequest($"{ResourceBase}/ByOrganisation/{organisationId}");
+        var retval = GetResponse<IEnumerable<SolutionEx>>(request);
+
+        return retval;
       });
     }
   }

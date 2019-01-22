@@ -139,6 +139,11 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
       });
     }
 
+    public IEnumerable<SolutionEx> ByOrganisation(string organisationId)
+    {
+      throw new System.NotImplementedException();
+    }
+
     private static List<T> GetInsertionTree<T>(List<T> allNodes) where T : IHasPreviousId
     {
       var roots = GetRoots(allNodes);

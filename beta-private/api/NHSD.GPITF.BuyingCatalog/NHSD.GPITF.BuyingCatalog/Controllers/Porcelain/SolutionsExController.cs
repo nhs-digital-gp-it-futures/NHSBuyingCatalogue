@@ -7,6 +7,7 @@ using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using ZNetCS.AspNetCore.Authentication.Basic;
@@ -48,9 +49,9 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Solution not found in CRM")]
     public IActionResult BySolution([FromRoute][Required]string solutionId)
     {
-      var solnClaims = _logic.BySolution(solutionId);
+      var solnEx = _logic.BySolution(solutionId);
 
-      return solnClaims.Solution != null ? (IActionResult)new OkObjectResult(solnClaims) : new NotFoundResult();
+      return solnEx.Solution != null ? (IActionResult)new OkObjectResult(solnEx) : new NotFoundResult();
     }
 
     /// <summary>
@@ -85,6 +86,22 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
       {
         return new InternalServerErrorObjectResult(ex);
       }
+    }
+
+    /// <summary>
+    /// Get a list of Solutions, each with a list of corresponding TechnicalContact, ClaimedCapability, ClaimedStandard et al
+    /// </summary>
+    /// <param name="organisationId">CRM identifier of Organisation</param>
+    /// <response code="200">Success</response>
+    [HttpGet]
+    [Route("ByOrganisation/{organisationId}")]
+    [ValidateModelState]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(IEnumerable<SolutionEx>), description: "Success")]
+    public IActionResult ByOrganisation([FromRoute][Required]string organisationId)
+    {
+      var solnExs = _logic.ByOrganisation(organisationId);
+
+      return new OkObjectResult(solnExs);
     }
   }
 }
