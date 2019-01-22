@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.SharePoint.Client.NetCore;
@@ -18,6 +19,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 {
   public sealed class EvidenceBlobStoreDatastore : IEvidenceBlobStoreDatastore
   {
+    private readonly IHostingEnvironment _env;
     private readonly ClientContext _context;
 
     private readonly IOrganisationsDatastore _organisationsDatastore;
@@ -28,6 +30,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     private readonly IStandardsDatastore _standardsDatastore;
 
     private readonly bool _logSharePoint;
+    private readonly bool _isFakeSharePoint;
     private readonly ILogger<IEvidenceBlobStoreDatastore> _logger;
     private readonly ISyncPolicy _policy;
 
@@ -37,6 +40,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     private readonly string SharePoint_Password;
 
     public EvidenceBlobStoreDatastore(
+      IHostingEnvironment env,
       IConfiguration config,
       IOrganisationsDatastore organisationsDatastore,
       ISolutionsDatastore solutionsDatastore,
@@ -48,6 +52,8 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       ISyncPolicyFactory policy
       )
     {
+      _env = env;
+
       _solutionsDatastore = solutionsDatastore;
       _organisationsDatastore = organisationsDatastore;
       _capabilitiesImplementedDatastore = capabilitiesImplementedDatastore;
@@ -56,6 +62,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       _standardsDatastore = standardsDatastore;
 
       _logSharePoint = Settings.LOG_SHAREPOINT(config);
+      _isFakeSharePoint = Settings.SHAREPOINT_PROVIDER_FAKE(config);
       _logger = logger;
       _policy = policy.Build(_logger);
 
@@ -246,19 +253,13 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         _context.Load(claimFolder);
         _context.Load(claimFolder.Files);
         _context.Load(claimFolder.Folders);
-        try
-        {
-          LogInformation($"EnumerateFolder: enumerating {_context.Url}/{claimFolderUrl}...");
-          _context.ExecuteQuery();
-        }
-        catch (Exception ex)
-        {
-          LogInformation($"EnumerateFolder: {_context.Url}/{claimFolderUrl} does not exist");
-          throw new KeyNotFoundException($"Folder does not exist!: {_context.Url}/{claimFolderUrl}", ex);
-        }
+
+        LogInformation($"EnumerateFolder: enumerating {_context.Url}/{claimFolderUrl}...");
+        _context.ExecuteQuery();
 
         var claimFolderInfo = new BlobInfo
         {
+          Id = claimFolder.UniqueId.ToString(),
           Name = claimFolder.Name,
           IsFolder = true,
           Url = new Uri(new Uri(_context.Url), claimFolder.ServerRelativeUrl).AbsoluteUri,
@@ -269,18 +270,21 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
           .Select(x =>
             new BlobInfo
             {
+              Id = x.UniqueId.ToString(),
+              ParentId = claimFolderInfo.Id,
               Name = x.Name,
               IsFolder = true,
               Length = 0,
               Url = new Uri(new Uri(_context.Url), x.ServerRelativeUrl).AbsoluteUri,
-              TimeLastModified = x.TimeLastModified,
-              BlobId = x.UniqueId.ToString()
+              TimeLastModified = x.TimeLastModified
             });
         var claimFileInfos = claimFolder
           .Files
           .Select(x =>
             new BlobInfo
             {
+              Id = x.UniqueId.ToString(),
+              ParentId = claimFolderInfo.Id,
               Name = x.Name,
               IsFolder = false,
               Length = x.Length,
@@ -416,6 +420,12 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     {
       GetInternal(() =>
       {
+        if (_env.IsDevelopment() && _isFakeSharePoint)
+        {
+          LogInformation($"PrepareForSolution disabled in 'test' Development environment");
+          return 0;
+        }
+
         LogInformation($"PrepareForSolution: solutionId: {solutionId}");
         var soln = _solutionsDatastore.ById(solutionId);
         if (soln == null)
