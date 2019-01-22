@@ -24,8 +24,6 @@ const solutionComplianceStatusMap = {
 
 const EMPTY_UUID = '00000000-0000-0000-0000-000000000000'
 
-const isOverarchingStandard = std => _.startsWith(std.standardId || std.id, 'STD-O-')
-
 // set up the data layer caches
 const cacheManager = require('cache-manager')
 const cacheStoreParams = process.env.CACHE_HOST
@@ -240,7 +238,7 @@ class DataProvider {
               standards: capStds,
               standardsByGroup: _.zipObject(
                 ['overarching', 'associated'],
-                _.partition(capStds, isOverarchingStandard)
+                _.partition(capStds, std => std.isOverarching)
               ),
               types: _.kebabCase(capability.name)
             }
