@@ -301,6 +301,8 @@ async function solutionComplianceEvidenceConfirmationGet (req, res) {
   const claim = _.find(req.solution.standards, { id: req.params.claim_id })
 
   context.standard = claim.standard
+
+
   let latestFile
 
   if (context.files) {
@@ -313,6 +315,10 @@ async function solutionComplianceEvidenceConfirmationGet (req, res) {
   }
 
   context.latestSubmission = _.maxBy(claim.submissionHistory, (sub) => sub.createdOn)
+
+  if (!context.latestSubmission) {
+    return res.redirect('../../')
+  }
 
   res.render('supplier/compliance/confirmation', context)
 }
