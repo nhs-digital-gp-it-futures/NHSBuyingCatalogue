@@ -52,6 +52,10 @@ namespace Gif.Service.Models
         [CrmFieldName("cc_blobid")]
         public string BlobId { get; set; }
 
+        [DataMember]
+        [CrmFieldName("cc_createdonid")]
+        public override DateTime? CreatedOn { get; set; }
+
         public EvidenceBase() { }
 
         public EvidenceBase(JToken token) : base(token)

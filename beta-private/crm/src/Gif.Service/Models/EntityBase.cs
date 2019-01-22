@@ -40,7 +40,7 @@ namespace Gif.Service.Models
 
         [DataMember]
         [CrmFieldName("createdon")]
-        public DateTime? CreatedOn { get; set; }
+        public virtual DateTime? CreatedOn { get; set; }
 
         [DataMember]
         [CrmFieldName("modifiedon")]
@@ -349,7 +349,7 @@ namespace Gif.Service.Models
                 {
                     var filterAttribute = filterAttributes[i];
 
-                    if (filterAttribute.MultiConditional == true && 
+                    if (filterAttribute.MultiConditional == true &&
                         filterAttributes.Count(x => x.MultiConditional == true) > 1
                         && !openedConditional)
                     {
@@ -362,9 +362,9 @@ namespace Gif.Service.Models
 
                     if (++index < numberOfResults)
                     {
-                        if (filterAttributes[i].MultiConditional != true && filterAttributes[i+1].MultiConditional != true)
+                        if (filterAttributes[i].MultiConditional != true && filterAttributes[i + 1].MultiConditional != true)
                             query += " and ";
-                        else if (filterAttributes[i+1]?.MultiConditional == true)
+                        else if (filterAttributes[i + 1]?.MultiConditional == true)
                         {
                             query += " or ";
                         }
