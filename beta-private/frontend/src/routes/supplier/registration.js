@@ -20,7 +20,7 @@ router
 router
   .route('/new/register/')
   .get(registrationPageGet)
-  .post(registrationPageValidation, registrationPagePost)
+  .post(registrationPreValidation, registrationPageValidation, registrationPagePost)
 
 // all the remaining routes need to load a specified solution
 router.param('solution_id', async (req, res, next, solutionId) => {
