@@ -1,7 +1,6 @@
 /* global fixture, test */
 
 import { Selector } from 'testcafe'
-import axeCheck from 'axe-testcafe'
 
 import { asSupplier } from './roles'
 import { supplierDashboardPage, onboardingDashboardPage, registrationPage } from './pages'
@@ -9,7 +8,7 @@ import { supplierDashboardPage, onboardingDashboardPage, registrationPage } from
 fixture('Solution Registration - Details')
   .page(supplierDashboardPage.baseUrl)
   .beforeEach(navigateToSupplierOnboardingSolution)
-  .afterEach(axeCheck)
+  .afterEach(supplierDashboardPage.checkAccessibility)
 
 function navigateToSupplierOnboardingSolution (t) {
   return asSupplier(t)
@@ -146,7 +145,19 @@ test('Blanking any and all Lead Contact fields triggers validation', async t => 
     .expect(Selector('#errors #error-solution\\.contacts\\[0\\]\\.phoneNumber').textContent).contains('Contact phone number is missing')
 })
 
-test('Creating a new contact requires all fields to be filled', async t => {
+test('Creating a new contact, leaving it empty and saving removes it', async t => {
+  await t
+    .expect(registrationPage.newContactFieldset.exists).notOk()
+
+  await t
+    .click(registrationPage.addNewContactButton)
+    .click(registrationPage.globalSaveButton)
+
+    .expect(Selector('#errors').exists).notOk()
+    .expect(registrationPage.newContactFieldset.exists).notOk()
+})
+
+test('Creating a new contact requires all fields to be filled if any are', async t => {
   await t
     .expect(registrationPage.newContactFieldset.exists).notOk()
 

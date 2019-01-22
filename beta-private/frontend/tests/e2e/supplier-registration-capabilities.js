@@ -1,7 +1,6 @@
 /* global fixture, test */
 
 import { Selector } from 'testcafe'
-import axeCheck from 'axe-testcafe'
 
 import { asSupplier } from './roles'
 import { page, supplierDashboardPage, onboardingDashboardPage, registrationPage } from './pages'
@@ -9,7 +8,7 @@ import { page, supplierDashboardPage, onboardingDashboardPage, registrationPage 
 fixture('Solution Registration - Capabilities')
   .page(supplierDashboardPage.baseUrl)
   .beforeEach(navigateToSupplierOnboardingSolutionCapabilities)
-  .afterEach(axeCheck)
+  .afterEach(supplierDashboardPage.checkAccessibility)
 
 function navigateToSupplierOnboardingSolutionCapabilities (t) {
   return asSupplier(t)

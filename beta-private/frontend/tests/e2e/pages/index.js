@@ -1,4 +1,5 @@
 import { Selector } from 'testcafe'
+import axeCheck from 'axe-testcafe'
 
 class Page {
   constructor () {
@@ -12,6 +13,10 @@ class Page {
     this.globalSaveAndExitButton = Selector('body > header .active-form [name="action\\[exit\\]"]')
 
     this.continueButton = Selector('[name="action\\[continue\\]"]')
+  }
+
+  async checkAccessibility (t) {
+    await axeCheck(t)
   }
 }
 

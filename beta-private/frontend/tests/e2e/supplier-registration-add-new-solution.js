@@ -1,7 +1,6 @@
 /* global fixture, test */
 
 import { Selector } from 'testcafe'
-import axeCheck from 'axe-testcafe'
 
 import { asSupplier } from './roles'
 import { page, supplierDashboardPage, onboardingDashboardPage, registrationPage } from './pages'
@@ -12,7 +11,7 @@ fixture('Solution Registration - Add New Solution')
     return asSupplier(t)
       .click(supplierDashboardPage.homeLink)
   })
-  .afterEach(axeCheck)
+  .afterEach(supplierDashboardPage.checkAccessibility)
 
 test('Creating a new solution leads to an empty form via a customised status page', async t => {
   await t
@@ -33,6 +32,20 @@ test('Creating a new solution leads to an empty form via a customised status pag
     .expect(registrationPage.leadContactLastNameInput.value).eql('')
     .expect(registrationPage.leadContactEmailInput.value).eql('')
     .expect(registrationPage.leadContactPhoneInput.value).eql('')
+})
+
+test('Multiple, empty additional contacts are removed', async t => {
+  await t
+    .click(supplierDashboardPage.addNewSolutionButton)
+    .expect(onboardingDashboardPage.continueRegistrationButton.textContent).eql('Start')
+
+    .click(onboardingDashboardPage.continueRegistrationButton)
+    .click(registrationPage.addNewContactButton)
+    .click(registrationPage.addNewContactButton)
+    .click(registrationPage.globalSaveButton)
+
+    .expect(Selector('#errors').exists).ok()
+    .expect(registrationPage.newContactFieldset.exists).notOk()
 })
 
 test('Solution cannot have the same name and version as another existing solution', async t => {
