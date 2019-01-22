@@ -22,12 +22,12 @@ test('Register Really Kool Kore System with 3 core capabilities', async t => {
     .click(onboardingDashboardPage.continueRegistrationButton)
     .click(registrationPage.continueButton)
 
-    .click('#capability-selector .capability[data-cap-id="CAP-C-001"]:not(.selected)')
-    .click('[type=checkbox][data-id="CAP-C-001"]')
-    .click('#capability-selector .capability[data-cap-id="CAP-C-002"]:not(.selected)')
-    .click('[type=checkbox][data-id="CAP-C-002"]')
-    .click('#capability-selector .capability[data-cap-id="CAP-C-003"]:not(.selected)')
-    .click('[type=checkbox][data-id="CAP-C-003"]')
+    .click('#capability-selector .capability[data-cap-id="C1"]:not(.selected)')
+    .click('[type=checkbox][data-id="C1"]')
+    .click('#capability-selector .capability[data-cap-id="C2"]:not(.selected)')
+    .click('[type=checkbox][data-id="C2"]')
+    .click('#capability-selector .capability[data-cap-id="C3"]:not(.selected)')
+    .click('[type=checkbox][data-id="C3"]')
 
     .click(registrationPage.continueButton)
     .click(onboardingDashboardPage.homeLink)
