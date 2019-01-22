@@ -307,7 +307,6 @@ async function solutionComplianceEvidenceConfirmationGet (req, res) {
 
   context.standard = claim.standard
 
-
   let latestFile
 
   if (context.files) {
@@ -321,7 +320,7 @@ async function solutionComplianceEvidenceConfirmationGet (req, res) {
 
   context.latestSubmission = _.maxBy(claim.submissionHistory, (sub) => sub.createdOn)
 
-  if (!context.latestSubmission) {
+  if (!context.latestSubmission || req.solution.status !== 3 /* Standards Compliance */) {
     return res.redirect('../../')
   }
 
