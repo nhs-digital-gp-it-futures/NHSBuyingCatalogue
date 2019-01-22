@@ -6,6 +6,7 @@
   "main": "src/server.js",
   "scripts": {
     "dev": "npm rebuild node-sass; NODE_ENV=development nodemon -w src -w lib src/server.js",
+    "debug": "npm rebuild node-sass; NODE_ENV=development node --inspect=0.0.0.0 src/server.js",
     "start": "NODE_ENV=production node src/server.js",
     "test": "jest",
     "test:e2e": "node tests/e2e/index.js",

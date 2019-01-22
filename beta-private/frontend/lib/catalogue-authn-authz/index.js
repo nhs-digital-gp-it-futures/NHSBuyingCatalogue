@@ -3,12 +3,14 @@ const passport = require('passport')
 const { Issuer, Strategy } = require('openid-client')
 const { dataProvider } = require('catalogue-data')
 
+const OIDC_CALLBACK_PATH = '/oidc/callback'
+
 function authentication (app) {
   app.use(passport.initialize())
   app.use(passport.session())
 
   app.get('/oidc/authenticate', passport.authenticate('oidc'))
-  app.get('/oidc/callback', passport.authenticate('oidc', { successRedirect: '/#account', failureRedirect: '/' }))
+  app.get(OIDC_CALLBACK_PATH, authenticationHandler)
 
   Issuer.defaultHttpOptions = { timeout: 10000, retries: 3 }
 
@@ -39,7 +41,7 @@ function authentication (app) {
         client,
         params: {
           scope: 'openid email',
-          redirect_uri: `${process.env.BASE_URL}/oidc/callback/`
+          redirect_uri: `${process.env.BASE_URL}${OIDC_CALLBACK_PATH}/`
         }
       }, authCallback))
 
@@ -106,10 +108,38 @@ async function authCallback (tokenset, userinfo, done) {
   }
 }
 
+function authenticationHandler (req, res, next) {
+  // Preserve the originally requested page so that it can be returned to
+  // once authentication is successful. Blacklist the OIDC callback page
+  // as returning to that would cause an endless loop.
+  if (!req.session.redirectTo && !req.originalUrl.startsWith(OIDC_CALLBACK_PATH)) {
+    req.session.redirectTo = req.originalUrl
+  }
+
+  passport.authenticate('oidc', function (err, user, info) {
+    // This is where the "did not find expected authorization request details
+    // in session, req.session["oidc:oidc-provider"] is undefined" happens.
+    // Leaving it unhandled for now to assess the extent to which this new code
+    // fixes the reported issues.
+    if (err) { return next(err) }
+
+    // If no user resulted from authentication, send the user back through the process.
+    if (!user) { return res.redirect('/oidc/authenticate') }
+
+    // Log the user in and send them to their originally requested page.
+    req.logIn(user, function (err) {
+      if (err) { return next(err) }
+
+      const redirectTo = req.session.redirectTo || '/'
+      delete req.session.redirectTo
+      return res.redirect(redirectTo)
+    })
+  })(req, res, next)
+}
+
 function authenticatedOnly (req, res, next) {
   if (!req.user || !req.user.is_authenticated) {
-    req.session.redirectTo = req.originalUrl
-    passport.authenticate('oidc', { failureRedirect: '/' })(req, res, next)
+    authenticationHandler(req, res, next)
   } else next()
 }
 
