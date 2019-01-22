@@ -145,6 +145,9 @@ async function solutionCapabilityPagePost (req, res) {
     context.errors = validationErrors
   }
 
+  // parse anyfiles to be uploaded to SharePoint
+  const files = parseFiles(req.files)
+
   // With the lack of anything other than a single string for adding additional evidence
   // indicating that a live demo has been requested instead of using video evidence
   // must be indicated using the same string that evidence messages are entered.
@@ -158,8 +161,18 @@ async function solutionCapabilityPagePost (req, res) {
   // of the API will result in the endpoint only requiring us to Post the Evidence message
   // and not make up an ID, Date, CreatedById, previousId etc.
   const uploadingVideoEvidence = req.body['uploading-video-evidence']
+  let systemError
 
-  const evidenceDescriptions = _.map(uploadingVideoEvidence, (isUploading, claimID) => {
+  const evidenceDescriptions = await Promise.all(_.map(uploadingVideoEvidence, async (isUploading, claimID) => {
+    let fileToUpload = files[claimID]
+    let blobId = null
+
+    if (fileToUpload) {
+      blobId = await uploadFile(claimID, fileToUpload.buffer, fileToUpload.originalname).catch((err) => {
+        context.errors.items.push({ msg: 'Validation.Capability.Evidence.Upload.FailedAction' })
+        systemError = err
+      })
+    }
     return {
       id: require('node-uuid-generator').generate(),
       claimId: claimID,
@@ -167,26 +180,15 @@ async function solutionCapabilityPagePost (req, res) {
       createdOn: new Date().toISOString(),
       evidence: isUploading === 'yes' ? req.body['evidence-description'][claimID] : LIVE_DEMO_MESSSAGE_INDICATOR,
       hasRequestedLiveDemo: isUploading !== 'yes',
-      blobId: null
+      blobId: blobId
     }
-  })
-
-  let systemError
+  }))
 
   // Update solution evidence, communicate the error if there isn't any already.
   await updateSolutionCapabilityEvidence(req.solution.id, evidenceDescriptions).catch((err) => {
     context.errors.items.push({ msg: 'Validation.Capability.Evidence.Update.FailedAction' })
     systemError = err
   })
-
-  // upload files to SharePoint, communicate the error if there isn't any already.
-  if (req.files) {
-    const files = parseFiles(req.files)
-    await uploadFiles(files).catch((err) => {
-      context.errors.items.push({ msg: 'Validation.Capability.Evidence.Upload.FailedAction' })
-      systemError = err
-    })
-  }
 
   // only show validation errors if the user elected to continue, not just save
   if (systemError || (context.errors.items.length && req.body.action.continue)) {
@@ -331,26 +333,27 @@ function findLatestEvidence (evidence) {
 }
 
 function parseFiles (files) {
-  return files.map((file) => {
+  let fileMap = {}
+  files.map((file) => {
     return {
       ...file,
       claimID: extractClaimIDFromUploadFieldName(file.fieldname)
     }
+  }).forEach((file) => {
+    fileMap[file.claimID] = file
   })
+  return fileMap
 }
 
 function extractClaimIDFromUploadFieldName (fieldName) {
   return fieldName.replace('evidence-file[', '').replace(']', '')
 }
 
-async function uploadFiles (files) {
-  return Promise.all(
-    files.map((file) => uploadFile(file.claimID, file.buffer, file.originalname))
-  )
-}
-
 async function uploadFile (claimID, buffer, fileName) {
-  return sharePointProvider.uploadCapEvidence(claimID, buffer, fileName)
+  console.log('Uplading single File:', fileName)
+  let res = await sharePointProvider.uploadCapEvidence(claimID, buffer, fileName)
+  console.log('\n\n\n CAP EVIDENCE UPLOAD', res)
+  return res
 }
 
 module.exports = router
