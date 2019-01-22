@@ -210,7 +210,8 @@ async function solutionComplianceEvidencePageGet (req, res, next) {
     // only allow a submission if a file exists and;
     // a) evidence has not already been submitted, or
     // b) the latest submission is feedback from NHS Digital
-    context.allowSubmission = !context.isSubmitted || context.hasFeedback
+    // c) the solution is in the standards compliance stage.
+    context.allowSubmission = (!context.isSubmitted || context.hasFeedback) && context.solution.status === 3 /* Standards Compliance */
     if (context.allowSubmission) {
       context.activeForm.id = 'compliance-evidence-upload'
     }
@@ -221,6 +222,10 @@ async function solutionComplianceEvidencePageGet (req, res, next) {
 
 async function solutionComplianceEvidencePagePost (req, res) {
   const action = req.body.action || {}
+
+  if (req.solution.status !== 3 /* Standards Compliance */) {
+    return res.redirect('../../')
+  }
 
   let redirectUrl = action.save
     ? './'
@@ -301,6 +306,7 @@ async function solutionComplianceEvidenceConfirmationGet (req, res) {
   const claim = _.find(req.solution.standards, { id: req.params.claim_id })
 
   context.standard = claim.standard
+
   let latestFile
 
   if (context.files) {
@@ -313,6 +319,10 @@ async function solutionComplianceEvidenceConfirmationGet (req, res) {
   }
 
   context.latestSubmission = _.maxBy(claim.submissionHistory, (sub) => sub.createdOn)
+
+  if (!context.latestSubmission || req.solution.status !== 3 /* Standards Compliance */) {
+    return res.redirect('../../')
+  }
 
   res.render('supplier/compliance/confirmation', context)
 }
