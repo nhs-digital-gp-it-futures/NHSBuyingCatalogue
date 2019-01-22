@@ -82,7 +82,7 @@ async function capabilityPageContext (req) {
       }
 
       if (latestFile) {
-        latestFile.downloadURL = path.join(req.baseUrl, req.path, cap.claimID, latestFile.name)
+        latestFile.downloadURL = path.join(req.baseUrl, req.path.replace('/confirmation', ''), cap.claimID, latestFile.name)
       }
 
       const latestEvidence = findLatestEvidence(cap.evidence)
@@ -350,9 +350,7 @@ function extractClaimIDFromUploadFieldName (fieldName) {
 }
 
 async function uploadFile (claimID, buffer, fileName) {
-  console.log('Uplading single File:', fileName)
   let res = await sharePointProvider.uploadCapEvidence(claimID, buffer, fileName)
-  console.log('\n\n\n CAP EVIDENCE UPLOAD', res)
   return res
 }
 
