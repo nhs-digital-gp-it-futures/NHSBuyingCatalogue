@@ -319,12 +319,15 @@ async function capabilitiesPageContext (req) {
 
   context.capabilitiesByGroup = _.zipObject(
     ['core', 'noncore'],
-    _.partition(context.capabilities, c => _.startsWith(c.id, 'CAP-C-'))
+    _.partition(context.capabilities, c => c.type === 'C')
   )
 
-  context.standardsByGroup = _.zipObject(
-    ['overarching', 'associated'],
-    _.partition(context.standards, s => _.startsWith(s.id, 'STD-O-'))
+  context.standardsByGroup = _.mapValues(
+    _.zipObject(
+      ['overarching', 'associated'],
+      _.partition(context.standards, 'isOverarching')
+    ),
+    stds => _.orderBy(stds, a => a.name.toLowerCase())
   )
 
   return context
