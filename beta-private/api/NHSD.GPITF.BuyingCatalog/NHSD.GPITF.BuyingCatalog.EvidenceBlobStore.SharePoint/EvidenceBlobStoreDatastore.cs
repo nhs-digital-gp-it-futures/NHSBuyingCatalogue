@@ -253,19 +253,13 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         _context.Load(claimFolder);
         _context.Load(claimFolder.Files);
         _context.Load(claimFolder.Folders);
-        try
-        {
-          LogInformation($"EnumerateFolder: enumerating {_context.Url}/{claimFolderUrl}...");
-          _context.ExecuteQuery();
-        }
-        catch (Exception ex)
-        {
-          LogInformation($"EnumerateFolder: {_context.Url}/{claimFolderUrl} does not exist");
-          throw new KeyNotFoundException($"Folder does not exist!: {_context.Url}/{claimFolderUrl}", ex);
-        }
+
+        LogInformation($"EnumerateFolder: enumerating {_context.Url}/{claimFolderUrl}...");
+        _context.ExecuteQuery();
 
         var claimFolderInfo = new BlobInfo
         {
+          Id = claimFolder.UniqueId.ToString(),
           Name = claimFolder.Name,
           IsFolder = true,
           Url = new Uri(new Uri(_context.Url), claimFolder.ServerRelativeUrl).AbsoluteUri,
@@ -276,18 +270,21 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
           .Select(x =>
             new BlobInfo
             {
+              Id = x.UniqueId.ToString(),
+              ParentId = claimFolderInfo.Id,
               Name = x.Name,
               IsFolder = true,
               Length = 0,
               Url = new Uri(new Uri(_context.Url), x.ServerRelativeUrl).AbsoluteUri,
-              TimeLastModified = x.TimeLastModified,
-              BlobId = x.UniqueId.ToString()
+              TimeLastModified = x.TimeLastModified
             });
         var claimFileInfos = claimFolder
           .Files
           .Select(x =>
             new BlobInfo
             {
+              Id = x.UniqueId.ToString(),
+              ParentId = claimFolderInfo.Id,
               Name = x.Name,
               IsFolder = false,
               Length = x.Length,
