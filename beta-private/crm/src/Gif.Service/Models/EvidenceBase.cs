@@ -53,7 +53,7 @@ namespace Gif.Service.Models
         public string BlobId { get; set; }
 
         [DataMember]
-        [CrmFieldName("cc_createdonid")]
+        [CrmFieldName("createdon")]
         public new DateTime CreatedOn { get; set; }
 
         [DataMember]
