@@ -20,9 +20,9 @@ function navigateToSupplierOnboardingSolution (t) {
 test('Registration page shows correct information accessibly', async t => {
   await t
     .expect(registrationPage.solutionNameInput.value).eql('Really Kool Document Manager')
-    .expect(registrationPage.solutionNameCounter.textContent).contains(' 32 (out of 60) ')
+    .expect(registrationPage.solutionNameCounter.textContent).contains(' 32 characters remaining (out of 60)')
     .expect(registrationPage.solutionDescriptionInput.value).eql('Does Really Kool document management')
-    .expect(registrationPage.solutionDescriptionCounter.textContent).contains('264 (out of 300) ')
+    .expect(registrationPage.solutionDescriptionCounter.textContent).contains('264 characters remaining (out of 300)')
     .expect(registrationPage.solutionVersionInput.value).eql('1')
     .expect(Selector('#content [readonly]').count).eql(0)
 })
