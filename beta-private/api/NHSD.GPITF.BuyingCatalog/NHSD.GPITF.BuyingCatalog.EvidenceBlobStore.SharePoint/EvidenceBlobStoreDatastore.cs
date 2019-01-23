@@ -533,7 +533,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       LogInformation($"Created claims folders");
     }
 
-    private string CleanupFileName(string fileName)
+    private static string CleanupFileName(string fileName)
     {
       // Special Characters Not Allowed: ~ " # % & * : < > ? / \ { | }
       if (!string.IsNullOrEmpty(fileName))
