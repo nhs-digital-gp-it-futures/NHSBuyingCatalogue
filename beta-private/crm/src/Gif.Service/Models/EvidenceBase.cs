@@ -34,7 +34,7 @@ namespace Gif.Service.Models
         [CrmFieldName("_cc_createdbyid_value")]
         [CrmFieldNameDataBind("cc_CreatedByID@odata.bind")]
         [CrmFieldEntityDataBind("contacts")]
-        public Guid? CreatedById { get; set; }
+        public Guid CreatedById { get; set; }
 
         [DataMember]
         [CrmFieldName("_cc_previousversion_value")]
@@ -54,7 +54,11 @@ namespace Gif.Service.Models
 
         [DataMember]
         [CrmFieldName("cc_createdonid")]
-        public override DateTime? CreatedOn { get; set; }
+        public new DateTime CreatedOn { get; set; }
+
+        [DataMember]
+        [CrmFieldName("modifiedon")]
+        public new DateTime ModifiedOn { get; set; }
 
         public EvidenceBase() { }
 

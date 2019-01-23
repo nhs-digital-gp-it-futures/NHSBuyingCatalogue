@@ -40,7 +40,7 @@ namespace Gif.Service.Models
 
         [DataMember]
         [CrmFieldName("createdon")]
-        public virtual DateTime? CreatedOn { get; set; }
+        public DateTime? CreatedOn { get; set; }
 
         [DataMember]
         [CrmFieldName("modifiedon")]
