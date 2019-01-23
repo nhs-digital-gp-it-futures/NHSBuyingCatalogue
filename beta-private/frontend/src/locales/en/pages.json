@@ -252,10 +252,10 @@
       },
       "Fieldsets": {
         "Core": {
-          "Legend": "Core $t(Capability_plural)"
+          "Legend": "$t(Core Capabilities)"
         },
         "NonCore": {
-          "Legend": "Non-Core $t(Capability_plural)"
+          "Legend": "$t(Non-core Capabilities)"
         }
       },
       "Reveal": {
