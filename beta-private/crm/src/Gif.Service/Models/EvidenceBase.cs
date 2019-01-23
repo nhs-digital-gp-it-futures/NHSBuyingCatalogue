@@ -54,7 +54,11 @@ namespace Gif.Service.Models
 
         [DataMember]
         [CrmFieldName("cc_createdonid")]
-        public override DateTime? CreatedOn { get; set; }
+        public new DateTime CreatedOn { get; set; }
+
+        [DataMember]
+        [CrmFieldName("modifiedon")]
+        public new DateTime ModifiedOn { get; set; }
 
         public EvidenceBase() { }
 
