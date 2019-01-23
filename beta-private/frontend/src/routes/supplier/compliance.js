@@ -49,6 +49,10 @@ router
   .route('/:solution_id/evidence/:claim_id/confirmation')
   .post(solutionComplianceEvidenceConfirmationPost)
 
+function solutionInCompliance (solution) {
+  return +solution.status === 3
+}
+
 function commonComplianceContext (req) {
   return {
     solution: req.solution,
@@ -211,7 +215,7 @@ async function solutionComplianceEvidencePageGet (req, res, next) {
     // a) evidence has not already been submitted, or
     // b) the latest submission is feedback from NHS Digital
     // c) the solution is in the standards compliance stage.
-    context.allowSubmission = (!context.isSubmitted || context.hasFeedback) && context.solution.status === 3 /* Standards Compliance */
+    context.allowSubmission = (!context.isSubmitted || context.hasFeedback) && solutionInCompliance(context.solution)
     if (context.allowSubmission) {
       context.activeForm.id = 'compliance-evidence-upload'
     }
@@ -223,7 +227,7 @@ async function solutionComplianceEvidencePageGet (req, res, next) {
 async function solutionComplianceEvidencePagePost (req, res) {
   const action = req.body.action || {}
 
-  if (req.solution.status !== 3 /* Standards Compliance */) {
+  if (!solutionInCompliance(req.solution)) {
     return res.redirect('../../')
   }
 
@@ -320,7 +324,7 @@ async function solutionComplianceEvidenceConfirmationGet (req, res) {
 
   context.latestSubmission = _.maxBy(claim.submissionHistory, (sub) => sub.createdOn)
 
-  if (!context.latestSubmission || req.solution.status !== 3 /* Standards Compliance */) {
+  if (!context.latestSubmission || !solutionInCompliance(req.solution)) {
     return res.redirect('../../')
   }
 
