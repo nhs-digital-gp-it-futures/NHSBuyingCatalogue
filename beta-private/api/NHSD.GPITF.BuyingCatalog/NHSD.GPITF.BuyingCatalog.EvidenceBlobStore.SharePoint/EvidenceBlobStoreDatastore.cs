@@ -248,12 +248,12 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     {
       return GetInternal(() =>
       {
-        LogInformation($"EnumerateFolder: claimId: {claimId} | subFolder: {subFolder}");
+        LogInformation($"EnumerateFolder: claimId: {claimId} | subFolder: {CleanupFileName(subFolder)}");
         var claim = claimsInfoProvider.GetClaimById(claimId);
         var soln = _solutionsDatastore.ById(claim.SolutionId);
         var org = _organisationsDatastore.ById(soln.OrganisationId);
 
-        var claimFolderUrl = $"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}/{claimsInfoProvider.GetFolderName()}/{CleanupFileName(claimsInfoProvider.GetFolderClaimName(claim))}/{subFolder ?? string.Empty}";
+        var claimFolderUrl = $"{SharePoint_OrganisationsRelativeUrl}/{CleanupFileName(org.Name)}/{CleanupFileName(soln.Name)}/{CleanupFileName(claimsInfoProvider.GetFolderName())}/{CleanupFileName(claimsInfoProvider.GetFolderClaimName(claim))}/{CleanupFileName(subFolder ?? string.Empty)}";
         var claimFolder = _context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString(claimFolderUrl));
 
         _context.Load(claimFolder);
@@ -312,8 +312,8 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     {
       var soln = _solutionsDatastore.ById(solutionId);
       var org = _organisationsDatastore.ById(soln.OrganisationId);
-      var claimFolder = claimsInfoProvider.GetFolderName();
-      var solutionUrl = $"{SharePoint_OrganisationsRelativeUrl}/{org.Name}/{soln.Name}";
+      var claimFolder = CleanupFileName(claimsInfoProvider.GetFolderName());
+      var solutionUrl = $"{SharePoint_OrganisationsRelativeUrl}/{CleanupFileName(org.Name)}/{CleanupFileName(soln.Name)}";
 
       return EnumerateFolderRecursively(solutionUrl, claimFolder);
     }
