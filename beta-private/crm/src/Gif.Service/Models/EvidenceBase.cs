@@ -34,7 +34,7 @@ namespace Gif.Service.Models
         [CrmFieldName("_cc_createdbyid_value")]
         [CrmFieldNameDataBind("cc_CreatedByID@odata.bind")]
         [CrmFieldEntityDataBind("contacts")]
-        public Guid? CreatedById { get; set; }
+        public Guid CreatedById { get; set; }
 
         [DataMember]
         [CrmFieldName("_cc_previousversion_value")]
