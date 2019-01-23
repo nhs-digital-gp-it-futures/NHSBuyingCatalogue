@@ -1,13 +1,13 @@
 <div id="capability-assessment-page">
   {{> errors}}
 
-  <h1>{{t 'CapAssPages.Assessment.Title'}}</h1>
-  <p>
-    {{t 'CapAssPages.Assessment.Instructions'}}
-  </p>
-  <p id="uploading-video-evidence">
-    {{t 'CapAssPages.Assessment.Guidance'}}
-  </p>
+  <header class="page-main-heading">
+    <h1>{{t 'CapAssPages.Assessment.Title'}}</h1>
+    <p id="uploading-video-evidence" class="instructions">{{t 'CapAssPages.Assessment.Instructions'}}</p>
+    {{#each (tt 'CapAssPages.Assessment.Guidance')}}
+    <p>{{{.}}}</p>
+    {{/each}}
+  </header>
 
   {{#> form encoding="multipart/form-data" form_id=activeForm.id}}
     {{#each solution.capabilities}}
@@ -86,7 +86,7 @@
   <p>
     {{t 'CapAssPages.Assessment.Submission.Notice'}}
   </p>
-  <button type="submit" name="action[continue]" value="{{t 'Buttons.Save and continue'}}" {{#if notEditable}}disabled{{/if}}>Save & Continue</button> {{/form}}
+  <button type="submit" name="action[continue]" value="continue" {{#if notEditable}}disabled{{/if}}>{{t 'CapAssPages.Assessment.Buttons.Submit'}}</button> {{/form}}
 </div>
 
 <script type="text/javascript">
