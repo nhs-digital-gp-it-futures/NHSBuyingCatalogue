@@ -50,6 +50,16 @@
   }
 
   describe('SolutionsExApi', function() {
+    describe('apiPorcelainSolutionsExByOrganisationByOrganisationIdGet', function() {
+      it('should call apiPorcelainSolutionsExByOrganisationByOrganisationIdGet successfully', function(done) {
+        //uncomment below and update the code to test apiPorcelainSolutionsExByOrganisationByOrganisationIdGet
+        //instance.apiPorcelainSolutionsExByOrganisationByOrganisationIdGet(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
+      });
+    });
     describe('apiPorcelainSolutionsExBySolutionBySolutionIdGet', function() {
       it('should call apiPorcelainSolutionsExBySolutionBySolutionIdGet successfully', function(done) {
         //uncomment below and update the code to test apiPorcelainSolutionsExBySolutionBySolutionIdGet
