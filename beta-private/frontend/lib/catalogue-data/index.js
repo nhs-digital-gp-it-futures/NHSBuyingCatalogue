@@ -120,6 +120,7 @@ class DataProvider {
 
     const solutions = await this.solutionsByOrganisation(supplierOrgId)
 
+    console.log('Solutions Length: ', solutions.length)
     const onboardingSolutions = solutions.filter(isOnboarding).map(forDashboard).map(forOnboarding).map(failureReasons)
 
     console.log(onboardingSolutions)
