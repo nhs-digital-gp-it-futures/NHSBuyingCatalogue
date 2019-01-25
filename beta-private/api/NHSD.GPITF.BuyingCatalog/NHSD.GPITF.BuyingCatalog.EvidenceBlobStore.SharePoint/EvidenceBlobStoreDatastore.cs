@@ -437,8 +437,8 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
           .BySolution(solutionId)
           .Select(x => CleanupFileName(_standardsDatastore.ById(x.StandardId).Name));
 
-        var capsTask = Task.Factory.StartNew(() => CreateClaimSubFolders(SharePoint_OrganisationsRelativeUrl, CleanupFileName(org.Name), CleanupFileName(soln.Name), CleanupFileName(soln.Version), CleanupFileName(claimsInfoProvider.GetCapabilityFolderName()), claimedCapNames));
-        var stdsTask = Task.Factory.StartNew(() => CreateClaimSubFolders(SharePoint_OrganisationsRelativeUrl, CleanupFileName(org.Name), CleanupFileName(soln.Name), CleanupFileName(soln.Version), CleanupFileName(claimsInfoProvider.GetStandardsFolderName()), claimedNameStds));
+        var capsTask = Task.Factory.StartNew(() => CreateClaimSubFolders(CreateClientContext(), SharePoint_OrganisationsRelativeUrl, CleanupFileName(org.Name), CleanupFileName(soln.Name), CleanupFileName(soln.Version), CleanupFileName(claimsInfoProvider.GetCapabilityFolderName()), claimedCapNames));
+        var stdsTask = Task.Factory.StartNew(() => CreateClaimSubFolders(CreateClientContext(), SharePoint_OrganisationsRelativeUrl, CleanupFileName(org.Name), CleanupFileName(soln.Name), CleanupFileName(soln.Version), CleanupFileName(claimsInfoProvider.GetStandardsFolderName()), claimedNameStds));
         Task.WaitAll(capsTask, stdsTask);
 
         return 0;
@@ -514,6 +514,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     }
 
     private void CreateClaimSubFolders(
+      ClientContext context,
       string baseUrl,
       string organisation,
       string solution,
@@ -521,8 +522,6 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       string claimType,
       IEnumerable<string> claimNames)
     {
-      var context = CreateClientContext();
-
       var baseFolder = context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString($"{baseUrl}"));
       context.Load(baseFolder);
       context.ExecuteQuery();
