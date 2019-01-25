@@ -70,6 +70,16 @@
         done();
       });
     });
+    describe('apiCapabilitiesImplementedEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGet', function() {
+      it('should call apiCapabilitiesImplementedEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGet successfully', function(done) {
+        //uncomment below and update the code to test apiCapabilitiesImplementedEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGet
+        //instance.apiCapabilitiesImplementedEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGet(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
+      });
+    });
     describe('apiCapabilitiesImplementedEvidenceBlobStoreEnumerateFolderByClaimIdGet', function() {
       it('should call apiCapabilitiesImplementedEvidenceBlobStoreEnumerateFolderByClaimIdGet successfully', function(done) {
         //uncomment below and update the code to test apiCapabilitiesImplementedEvidenceBlobStoreEnumerateFolderByClaimIdGet
