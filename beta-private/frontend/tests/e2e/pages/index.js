@@ -47,7 +47,7 @@ class SupplierDashboardPage extends Page {
       '#solutions-onboarding table > tbody > tr:first-child > td:first-child'
     )
     this.firstOnboardingSolutionStatus = Selector(
-      '#solutions-onboarding table > tbody > tr:first-child > td:nth-child(4)'
+      '#solutions-onboarding table > tbody > tr:first-child > td:nth-child(3)'
     )
 
     // Second Solution on the Dashboard
@@ -61,7 +61,7 @@ class SupplierDashboardPage extends Page {
       '#solutions-onboarding table > tbody > tr:nth-child(2) > td:first-child'
     )
     this.secondOnboardingSolutionStatus = Selector(
-      '#solutions-onboarding table > tbody > tr:nth-child(2) > td:nth-child(4)'
+      '#solutions-onboarding table > tbody > tr:nth-child(2) > td:nth-child(3)'
     )
 
     // Last Solution on the Dashboard
@@ -71,7 +71,7 @@ class SupplierDashboardPage extends Page {
       '#solutions-onboarding table > tbody > tr:last-child > td:first-child'
     )
     this.lastOnboardingSolutionStatus = Selector(
-      '#solutions-onboarding table > tbody > tr:last-child > td:nth-child(4)'
+      '#solutions-onboarding table > tbody > tr:last-child > td:nth-child(3)'
     )
   }
 }

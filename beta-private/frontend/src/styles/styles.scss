@@ -31,6 +31,7 @@ a[target="_blank"]:after {
 
     &:hover {
       background-color: $color-link-hover-bg;
+      text-decoration: none;
     }
 
     &:visited {

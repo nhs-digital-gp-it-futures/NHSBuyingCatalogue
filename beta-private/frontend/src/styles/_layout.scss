@@ -112,11 +112,6 @@ body > header {
     nav {
       display: flex;
       justify-content: flex-end;
-      &.no-active-form {
-        a {
-          margin-right: 2rem;
-        }
-      }
 
       &.active-form {
         align-items: center;

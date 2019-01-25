@@ -252,10 +252,10 @@
       },
       "Fieldsets": {
         "Core": {
-          "Legend": "Core $t(Capability_plural)"
+          "Legend": "$t(Core Capabilities)"
         },
         "NonCore": {
-          "Legend": "Non-Core $t(Capability_plural)"
+          "Legend": "$t(Non-core Capabilities)"
         }
       },
       "Reveal": {
@@ -392,9 +392,12 @@
   "CapAssPages":{
     "Breadcrumb": "$t(Capability Assessment)",
     "Assessment":{
-      "Title": "Provide Assessment evidence for your $t(Solution).",
-      "Instructions": "Provide primary evidence for each $t(Capability) below. Once you have completed the required fields, review your answers on the next page before submitting them to $t(NHSD.Name).",
-      "Guidance": "For support, see guidance for this stage, and watch the example demonstration video. If this $t(Solution) is published, buyers can request the information you provide on this page. All Clarifications should be submitted in Bravo.",
+      "Title": "Provide $t(Capability) evidence for your $t(Solution).",
+      "Instructions": "Select evidence method and follow the instructions for each of your selected $t(Capability_plural) below. On the next page, you can review your answers and submit them to $t(NHSD.Name).",
+      "Guidance": [
+        "For what to put in each video, and how to plan for live demonstrations, see the <a href='#'>guidance</a>. You can also watch an <a href='#'>example video demonstration</a>.",
+        "For queries, <a href='mailto:gpitfutures@nhs.net'>email us</a>. (* indicates required field)"
+      ],
       "Evidence": {
         "Instructions": "Choose to provide a video, or give a live witness demonstration, to show how your $t(Solution) meets this Capability. Find further instructions, along with all Epics and Acceptance Criteria in Confluence: Document Management Capability. ",
         "Title":"Add primary evidence for this Capability.*",
@@ -415,6 +418,9 @@
       },
       "Submission": {
         "Notice":"By Submitting this information to $t(NHSD.Name) for Assessment, you are confirming you are able, to the best of your knowledge, to meet all $t(Capability) Assessment and $t(Standard_plural) $t(Compliance) requirements and to display the $t(Solution) named on the NHS Catalogue."
+      },
+      "Buttons": {
+        "Submit": "Save and review"
       }
     },
     "Confirmation": {

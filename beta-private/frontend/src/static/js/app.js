@@ -115,10 +115,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
       elCount.classList.toggle('invalid', isInvalid)
 
+      const characters = Math.abs(remaining) === 1 ? ' character' : ' characters'
       if (isInvalid) {
-        elCount.textContent = 'You have ' + -remaining + ' characters too many (out of ' + maxLength + ').'
+        elCount.textContent = 'You have ' + -remaining + characters + ' too many (out of ' + maxLength + ').'
       } else {
-        elCount.textContent = 'You have ' + remaining + ' (out of ' + maxLength + ') characters remaining.'
+        elCount.textContent = 'You have ' + remaining + characters + ' remaining (out of ' + maxLength + ').'
       }
     }
 
