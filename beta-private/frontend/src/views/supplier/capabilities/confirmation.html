@@ -11,7 +11,7 @@
         {{/help-reveal}}
     </div>
 
-    <div class="summary-box">
+    <div class="summary-box" id="summary-details">
         {{>section-header title="CapAssPages.Confirmation.Registration.Title" href=editUrls.registration}}
         <h3>{{t 'CapAssPages.Confirmation.Registration.Subtitle.Solution'}}</h3>
         {{#solution}}
@@ -29,7 +29,7 @@
         {{/solution}}
     </div>
 
-    <div class="summary-box">
+    <div class="summary-box" id="summary-capabilities">
         {{>section-header title="CapAssPages.Confirmation.Capabilities.Title" href=editUrls.capabilities.selection}}
 
         <h3>{{t 'CapAssPages.Confirmation.Capabilities.Subtitle.Capabilities'}}</h3>
@@ -51,7 +51,7 @@
         {{/help-reveal}}
     </div>
 
-    <div class="summary-box">
+    <div class="summary-box" id="summary-evidence">
         {{>section-header title="CapAssPages.Confirmation.Evidence.Title" href=editUrls.capabilities.evidence}}
 
         {{#solution.capabilities}}

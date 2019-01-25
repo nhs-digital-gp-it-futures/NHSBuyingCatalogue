@@ -155,7 +155,6 @@ async function solutionCapabilityPagePost (req, res) {
   // For that reason, if the supplier wants to do a live demo, then a string is
   // shoved into the evidence message field.
   //
-  // TODO: 🦄 previousId
   // The API this program interfaces with requires us to generate our own ID's
   // This is couter intuitive and has a tonne of flaws, the hope is eventually a redesign
   // of the API will result in the endpoint only requiring us to Post the Evidence message
@@ -173,8 +172,13 @@ async function solutionCapabilityPagePost (req, res) {
         systemError = err
       })
     }
+
+    const currentEvidence = _.filter(req.solution.evidence, { claimId: claimID })
+    const latestEvidence = findLatestEvidence(currentEvidence)
+
     return {
       id: require('node-uuid-generator').generate(),
+      previousId: latestEvidence ? latestEvidence.id : null,
       claimId: claimID,
       createdById: req.user.contact.id,
       createdOn: new Date().toISOString(),
@@ -329,7 +333,17 @@ function findLatestFile (files) {
 }
 
 function findLatestEvidence (evidence) {
-  return _.maxBy(evidence, 'createdOn')
+  // follow the trail of previousIds until there are no more
+  let previousId = null
+  let currentEvidence
+  let latestEvidence
+
+  while ((currentEvidence = _.find(evidence, { previousId }))) {
+    latestEvidence = currentEvidence
+    previousId = currentEvidence.id
+  }
+
+  return latestEvidence
 }
 
 function parseFiles (files) {
