@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Security;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 {
@@ -80,18 +81,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         throw new ConfigurationErrorsException("Missing SharePoint configuration - check UserSecrets or environment variables");
       }
 
-      var securePassword = new SecureString();
-      foreach (char item in SharePoint_Password)
-      {
-        securePassword.AppendChar(item);
-      }
-
-      var encodedUrl = Uri.EscapeUriString(SharePoint_BaseUrl);
-      var onlineCredentials = new SharePointOnlineCredentials(SharePoint_Login, securePassword);
-      _context = new ClientContext(encodedUrl)
-      {
-        Credentials = onlineCredentials
-      };
+      _context = CreateClientContext();
     }
 
     public string AddEvidenceForClaim(IClaimsInfoProvider claimsInfoProvider, string claimId, Stream file, string fileName, string subFolder = null)
@@ -447,11 +437,30 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
           .BySolution(solutionId)
           .Select(x => CleanupFileName(_standardsDatastore.ById(x.StandardId).Name));
 
-        CreateClaimSubFolders(SharePoint_OrganisationsRelativeUrl, CleanupFileName(org.Name), CleanupFileName(soln.Name), CleanupFileName(soln.Version), CleanupFileName(claimsInfoProvider.GetCapabilityFolderName()), claimedCapNames);
-        CreateClaimSubFolders(SharePoint_OrganisationsRelativeUrl, CleanupFileName(org.Name), CleanupFileName(soln.Name), CleanupFileName(soln.Version), CleanupFileName(claimsInfoProvider.GetStandardsFolderName()), claimedNameStds);
+        var capsTask = Task.Factory.StartNew(() => CreateClaimSubFolders(SharePoint_OrganisationsRelativeUrl, CleanupFileName(org.Name), CleanupFileName(soln.Name), CleanupFileName(soln.Version), CleanupFileName(claimsInfoProvider.GetCapabilityFolderName()), claimedCapNames));
+        var stdsTask = Task.Factory.StartNew(() => CreateClaimSubFolders(SharePoint_OrganisationsRelativeUrl, CleanupFileName(org.Name), CleanupFileName(soln.Name), CleanupFileName(soln.Version), CleanupFileName(claimsInfoProvider.GetStandardsFolderName()), claimedNameStds));
+        Task.WaitAll(capsTask, stdsTask);
 
         return 0;
       });
+    }
+
+    private ClientContext CreateClientContext()
+    {
+      var securePassword = new SecureString();
+      foreach (char item in SharePoint_Password)
+      {
+        securePassword.AppendChar(item);
+      }
+
+      var encodedUrl = Uri.EscapeUriString(SharePoint_BaseUrl);
+      var onlineCredentials = new SharePointOnlineCredentials(SharePoint_Login, securePassword);
+      var context = new ClientContext(encodedUrl)
+      {
+        Credentials = onlineCredentials
+      };
+
+      return context;
     }
 
     private TOther GetInternal<TOther>(Func<TOther> get)
@@ -512,33 +521,35 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       string claimType,
       IEnumerable<string> claimNames)
     {
-      var baseFolder = _context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString($"{baseUrl}"));
-      _context.Load(baseFolder);
-      _context.ExecuteQuery();
+      var context = CreateClientContext();
+
+      var baseFolder = context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString($"{baseUrl}"));
+      context.Load(baseFolder);
+      context.ExecuteQuery();
       LogInformation($"Created BaseFolder: {baseUrl}");
 
       var orgFolder = baseFolder.Folders.Add(organisation);
-      _context.Load(orgFolder);
-      _context.ExecuteQuery();
+      context.Load(orgFolder);
+      context.ExecuteQuery();
       LogInformation($"Created OrgFolder: {organisation}");
 
       var solnVer = GetSolutionVersionFolderName(solution, version);
       var solnFolder = orgFolder.Folders.Add(solnVer);
-      _context.Load(solnFolder);
-      _context.ExecuteQuery();
+      context.Load(solnFolder);
+      context.ExecuteQuery();
       LogInformation($"Created SolnVerFolder: {solnVer}");
 
       var claimTypeFolder = solnFolder.Folders.Add(claimType);
-      _context.Load(claimTypeFolder);
-      _context.ExecuteQuery();
+      context.Load(claimTypeFolder);
+      context.ExecuteQuery();
       LogInformation($"Created ClaimTypeFolder: {claimType}");
 
       foreach (var claimName in claimNames)
       {
         var claimFolder = claimTypeFolder.Folders.Add(claimName);
-        _context.Load(claimFolder);
+        context.Load(claimFolder);
       }
-      _context.ExecuteQuery();
+      context.ExecuteQuery();
       LogInformation($"Created claims folders");
     }
 
