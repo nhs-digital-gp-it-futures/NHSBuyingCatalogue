@@ -88,7 +88,7 @@ class DataProvider {
     const isOnboarding = (solnEx) => +solnEx.solution.status !== 6 /* Solutions.StatusEnum.Approved */
 
     const forDashboard = (solnEx) => ({
-      solnEx,
+      ...solnEx,
       raw: solnEx.solution,
       id: solnEx.solution.id,
       displayName: `${solnEx.solution.name}${solnEx.solution.version ? ` | ${solnEx.solution.version}` : ''}`,
@@ -120,14 +120,11 @@ class DataProvider {
 
     const solutions = await this.solutionsByOrganisation(supplierOrgId)
 
-    console.log('Solutions Length: ', solutions.length)
     const onboardingSolutions = solutions.filter(isOnboarding).map(forDashboard).map(forOnboarding).map(failureReasons)
-
-    console.log(onboardingSolutions)
 
     return {
       onboarding: onboardingSolutions.map(solutionMapper),
-      live: solutions.items.filter(isLive).map(forDashboard).map(forLive).map(solutionMapper)
+      live: solutions.filter(isLive).map(forDashboard).map(forLive).map(solutionMapper)
     }
   }
 
