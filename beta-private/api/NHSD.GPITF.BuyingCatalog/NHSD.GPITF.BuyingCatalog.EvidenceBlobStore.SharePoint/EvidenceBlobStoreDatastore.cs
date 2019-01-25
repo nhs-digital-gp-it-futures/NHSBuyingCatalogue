@@ -119,8 +119,9 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       var soln = _solutionsDatastore.ById(claim.SolutionId);
       var org = _organisationsDatastore.ById(soln.OrganisationId);
       var subFolderSeparator = !string.IsNullOrEmpty(subFolder) ? "/" : string.Empty;
-      var claimFolder = $"{SharePoint_BaseUrl}/{SharePoint_OrganisationsRelativeUrl}/{CleanupFileName(org.Name)}/{CleanupFileName(soln.Name)}/{CleanupFileName(claimsInfoProvider.GetFolderName())}/{CleanupFileName(claimsInfoProvider.GetFolderClaimName(claim))}";
-      var claimFolderRelUrl = $"{SharePoint_OrganisationsRelativeUrl}/{CleanupFileName(org.Name)}/{CleanupFileName(soln.Name)}/{CleanupFileName(claimsInfoProvider.GetFolderName())}/{CleanupFileName(claimsInfoProvider.GetFolderClaimName(claim))}/{subFolder ?? string.Empty}{subFolderSeparator}";
+      var solnVer = GetSolutionVersionFolderName(soln);
+      var claimFolder = $"{SharePoint_BaseUrl}/{SharePoint_OrganisationsRelativeUrl}/{solnVer}/{CleanupFileName(claimsInfoProvider.GetFolderName())}/{CleanupFileName(claimsInfoProvider.GetFolderClaimName(claim))}";
+      var claimFolderRelUrl = $"{SharePoint_OrganisationsRelativeUrl}/{CleanupFileName(org.Name)}/{solnVer}/{CleanupFileName(claimsInfoProvider.GetFolderName())}/{CleanupFileName(claimsInfoProvider.GetFolderClaimName(claim))}/{subFolder ?? string.Empty}{subFolderSeparator}";
 
       // create subFolder if not exists
       if (!string.IsNullOrEmpty(subFolder))
@@ -253,7 +254,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         var soln = _solutionsDatastore.ById(claim.SolutionId);
         var org = _organisationsDatastore.ById(soln.OrganisationId);
 
-        var claimFolderUrl = $"{SharePoint_OrganisationsRelativeUrl}/{CleanupFileName(org.Name)}/{CleanupFileName(soln.Name)}/{CleanupFileName(claimsInfoProvider.GetFolderName())}/{CleanupFileName(claimsInfoProvider.GetFolderClaimName(claim))}/{CleanupFileName(subFolder ?? string.Empty)}";
+        var claimFolderUrl = $"{SharePoint_OrganisationsRelativeUrl}/{CleanupFileName(org.Name)}/{GetSolutionVersionFolderName(soln)}/{CleanupFileName(claimsInfoProvider.GetFolderName())}/{CleanupFileName(claimsInfoProvider.GetFolderClaimName(claim))}/{CleanupFileName(subFolder ?? string.Empty)}";
         var claimFolder = _context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString(claimFolderUrl));
 
         _context.Load(claimFolder);
@@ -313,7 +314,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       var soln = _solutionsDatastore.ById(solutionId);
       var org = _organisationsDatastore.ById(soln.OrganisationId);
       var claimFolder = CleanupFileName(claimsInfoProvider.GetFolderName());
-      var solutionUrl = $"{SharePoint_OrganisationsRelativeUrl}/{CleanupFileName(org.Name)}/{CleanupFileName(soln.Name)}";
+      var solutionUrl = $"{SharePoint_OrganisationsRelativeUrl}/{CleanupFileName(org.Name)}/{GetSolutionVersionFolderName(soln)}";
 
       return EnumerateFolderRecursively(solutionUrl, claimFolder);
     }
@@ -446,8 +447,8 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
           .BySolution(solutionId)
           .Select(x => CleanupFileName(_standardsDatastore.ById(x.StandardId).Name));
 
-        CreateClaimSubFolders(SharePoint_OrganisationsRelativeUrl, CleanupFileName(org.Name), CleanupFileName(soln.Name), CleanupFileName(claimsInfoProvider.GetCapabilityFolderName()), claimedCapNames);
-        CreateClaimSubFolders(SharePoint_OrganisationsRelativeUrl, CleanupFileName(org.Name), CleanupFileName(soln.Name), CleanupFileName(claimsInfoProvider.GetStandardsFolderName()), claimedNameStds);
+        CreateClaimSubFolders(SharePoint_OrganisationsRelativeUrl, CleanupFileName(org.Name), CleanupFileName(soln.Name), CleanupFileName(soln.Version), CleanupFileName(claimsInfoProvider.GetCapabilityFolderName()), claimedCapNames);
+        CreateClaimSubFolders(SharePoint_OrganisationsRelativeUrl, CleanupFileName(org.Name), CleanupFileName(soln.Name), CleanupFileName(soln.Version), CleanupFileName(claimsInfoProvider.GetStandardsFolderName()), claimedNameStds);
 
         return 0;
       });
@@ -507,6 +508,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       string baseUrl,
       string organisation,
       string solution,
+      string version,
       string claimType,
       IEnumerable<string> claimNames)
     {
@@ -520,10 +522,11 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       _context.ExecuteQuery();
       LogInformation($"Created OrgFolder: {organisation}");
 
-      var solnFolder = orgFolder.Folders.Add(solution);
+      var solnVer = GetSolutionVersionFolderName(solution, version);
+      var solnFolder = orgFolder.Folders.Add(solnVer);
       _context.Load(solnFolder);
       _context.ExecuteQuery();
-      LogInformation($"Created SolnFolder: {solution}");
+      LogInformation($"Created SolnVerFolder: {solnVer}");
 
       var claimTypeFolder = solnFolder.Folders.Add(claimType);
       _context.Load(claimTypeFolder);
@@ -537,6 +540,16 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       }
       _context.ExecuteQuery();
       LogInformation($"Created claims folders");
+    }
+
+    private static string GetSolutionVersionFolderName(Solutions soln)
+    {
+      return GetSolutionVersionFolderName(soln.Name, soln.Version);
+    }
+
+    private static string GetSolutionVersionFolderName(string solution, string version)
+    {
+      return $"{CleanupFileName(solution)} - [{CleanupFileName(version) ?? string.Empty}]";
     }
 
     private static string CleanupFileName(string fileName)
