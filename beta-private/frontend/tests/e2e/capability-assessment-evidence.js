@@ -196,15 +196,16 @@ test('Clicking Continue with complete evidence should lead to summary page with 
 
   // Assert Summary section headings are there.
   await t
-    .expect(Selector('.summary-box:nth-child(4) h2').innerText).contains('Solution details')
-    .expect(Selector('.summary-box:nth-child(5) h2').innerText).contains('Capabilities')
-    .expect(Selector('.summary-box:nth-child(6) h2').innerText).contains('Assessment evidence')
+    .expect(Selector('#summary-details h2').innerText).contains('Solution details')
+    .expect(Selector('#summary-capabilities h2').innerText).contains('Capabilities')
+    .expect(Selector('#summary-evidence h2').innerText).contains('Assessment evidence')
 
   // Assert Assessment Evidence is correct.
+  const evidenceTypes = Selector('#summary-evidence .evidence p:nth-child(2)')
   await t
-    .expect(Selector('.summary-box:nth-child(6) .evidence:nth-child(2) p:nth-child(2)').innerText).contains('Evidence: Live Witness Demonstration')
-    .expect(Selector('.summary-box:nth-child(6) .evidence:nth-child(3) p:nth-child(2)').innerText).contains('Evidence: Recorded Video')
-    .expect(Selector('.summary-box:nth-child(6) .evidence:nth-child(4) p:nth-child(2)').innerText).contains('Evidence: Recorded Video')
+    .expect(evidenceTypes.nth(0).innerText).contains('Evidence: Live Witness Demonstration')
+    .expect(evidenceTypes.nth(1).innerText).contains('Evidence: Recorded Video')
+    .expect(evidenceTypes.nth(2).innerText).contains('Evidence: Recorded Video')
 })
 
 test('Submitting from the summary page should update the status on the dashboard and onboarding page', async t => {
