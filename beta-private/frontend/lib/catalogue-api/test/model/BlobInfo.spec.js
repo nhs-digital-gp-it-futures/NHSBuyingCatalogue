@@ -56,6 +56,18 @@
       //expect(instance).to.be.a(CatalogueApi.BlobInfo);
     });
 
+    it('should have the property id (base name: "id")', function() {
+      // uncomment below and update the code to test the property id
+      //var instance = new CatalogueApi.BlobInfo();
+      //expect(instance).to.be();
+    });
+
+    it('should have the property parentId (base name: "parentId")', function() {
+      // uncomment below and update the code to test the property parentId
+      //var instance = new CatalogueApi.BlobInfo();
+      //expect(instance).to.be();
+    });
+
     it('should have the property name (base name: "name")', function() {
       // uncomment below and update the code to test the property name
       //var instance = new CatalogueApi.BlobInfo();
