@@ -40,7 +40,7 @@
           name="uploading-video-evidence[{{claimID}}]"
           value="no"
           {{#if ../../notEditable}}disabled{{/if}}
-          {{#unless isUploadingEvidence}}checked{{/unless}}
+          {{#if hasRequestedLiveDemo}}checked{{/if}}
           aria-hidden="false"
         /><span class="checkmark"><span class="inner-checkmark"></span></span>{{t 'CapAssPages.Assessment.Evidence.Options.Negative'}}</label>
       </fieldset>
@@ -101,16 +101,15 @@
       const upload = $('#upload-fieldset-' + id)
       const live = $('#live-fieldset-' + id)
 
-      fieldset.addEventListener('change', function (evt) {
-            const enabled = evt.target.value === 'yes'
-            upload.classList.toggle('hidden', !enabled)
-            live.classList.toggle('hidden', enabled)
-      })
+      function showOnlyChosenInputSet () {
+        const yesRadio = fieldset.$('input[type="radio"][value="yes"]')
+        const noRadio = fieldset.$('input[type="radio"][value="no"]')
+        upload.classList.toggle('hidden', !yesRadio.checked)
+        live.classList.toggle('hidden', !noRadio.checked)
+      }
 
-      const yesRadio = $('input[name="uploading-video-evidence['+ id +']"][value="yes"]')
-      const intitialState = yesRadio.checked
-      upload.classList.toggle('hidden', !intitialState)
-      live.classList.toggle('hidden', intitialState)
+      fieldset.addEventListener('change', showOnlyChosenInputSet)
+      showOnlyChosenInputSet()
     })
 })
 </script>

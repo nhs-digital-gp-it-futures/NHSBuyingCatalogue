@@ -91,9 +91,10 @@ async function capabilityPageContext (req) {
 
     return {
       ...cap,
-      latestFile,
-      latestEvidence,
-      isUploadingEvidence: latestEvidence ? !latestEvidence.hasRequestedLiveDemo : true
+      latestFile: latestFile,
+      latestEvidence: latestEvidence,
+      isUploadingEvidence: latestEvidence && !latestEvidence.hasRequestedLiveDemo,
+      hasRequestedLiveDemo: latestEvidence && latestEvidence.hasRequestedLiveDemo
     }
   })
 
