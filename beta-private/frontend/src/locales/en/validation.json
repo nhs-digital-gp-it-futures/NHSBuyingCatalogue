@@ -5,6 +5,7 @@
         "Missing": "$t(Solution) name is missing",
         "MissingAction": "Please enter a $t(Solution) name",
         "TooLong": "$t(Solution) name exceeds maximum length of 60 characters",
+        "TooLongAction": "Please shorten. $t(Validation.Solution.Name.TooLong)",
         "Duplicate": "$t(Solution) name and version already exists",
         "DuplicateAction": "A $t(Solution) with this name and version has already been created. Please change $t(Solution) name or version."
       },
@@ -15,7 +16,8 @@
         "TooLongAction": "Please shorten. Summary description maximum length is 300 characters"
       },
       "Version": {
-        "TooLong": "$t(Solution) version exceeds maximum length of 10 characters"
+        "TooLong": "$t(Solution) version exceeds maximum length of 10 characters",
+        "TooLongAction": "Please shorten. $t(Validation.Solution.Version.TooLong)"
       },
       "Contacts": {        
         "ContactType": {
