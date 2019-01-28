@@ -48,37 +48,43 @@ describe('solutionForCompliance', () => {
           status: 0,
           claimedStandardId: 'testCSId',
           statusClass: 'not-started',
-          ownerContact: { displayName: '🦄 Rainbow' }
+          ownerContact: { displayName: '🦄 Rainbow' },
+          withContact: { displayName: '🦄 Rainbow' }
         },
         {
           status: 1,
           claimedStandardId: 'testCSId1',
           statusClass: 'draft',
-          ownerContact: { displayName: 'Zyra Featherstonhaugh' }
+          ownerContact: { displayName: 'Zyra Featherstonhaugh' },
+          withContact: { displayName: 'Zyra Featherstonhaugh' }
         },
         {
           status: 2,
           claimedStandardId: 'testCSId2',
           statusClass: 'submitted',
-          ownerContact: { displayName: '🦄 Rainbow' }
+          ownerContact: { displayName: '🦄 Rainbow' },
+          withContact: { displayName: 'NHS Digital' }
         },
         {
           status: 3,
           claimedStandardId: 'testCSId3',
           statusClass: 'remediation',
-          ownerContact: { displayName: '🦄 Rainbow' }
+          ownerContact: { displayName: '🦄 Rainbow' },
+          withContact: { displayName: '🦄 Rainbow' }
         },
         {
           status: 4,
           claimedStandardId: 'testCSId4',
           statusClass: 'approved',
-          ownerContact: { displayName: '🦄 Rainbow' }
+          ownerContact: { displayName: '🦄 Rainbow' },
+          withContact: { displayName: '🦄 Rainbow' }
         },
         {
           status: 7,
           claimedStandardId: 'testCSId7',
           statusClass: 'rejected',
-          ownerContact: { displayName: '🦄 Rainbow' }
+          ownerContact: { displayName: '🦄 Rainbow' },
+          withContact: { displayName: '🦄 Rainbow' }
         }
       ],
       contacts: [
