@@ -132,7 +132,7 @@ test('Registering the solution shows a confirmation message and status change on
     .expect(Selector('.onboarding-stages :first-child.complete').exists).ok()
 
     .click(page.homeLink)
-    .expect(supplierDashboardPage.firstOnboardingSolutionStatus.textContent).eql('Registered')
+    .expect(supplierDashboardPage.firstOnboardingSolutionStatus.textContent).eql('Complete')
 })
 
 test('A registered solution cannot have its name edited', async t => {

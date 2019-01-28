@@ -85,7 +85,7 @@ test('After uploading a file, the supplier dashboard and onboarding dashboard sh
     .click(capabilityEvidencePage.globalSaveAndExitButton)
 
     .expect(onboardingDashboardPage.capabilityAssessmentButton.textContent).eql('Edit')
-    .expect(onboardingDashboardPage.capabilityAssessmentStatus.textContent).contains('In progress')
+    .expect(onboardingDashboardPage.capabilityAssessmentStatus.textContent).contains('Draft Saved')
 })
 
 test('After uploading a file, the name of the file should show against the capability', async t => {
