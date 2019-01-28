@@ -99,6 +99,7 @@ test('A \'Not Started\' standard should change to draft if a file is saved again
 
     // Selecting the Row that is the parent of the link, so that the sibling cell with containing status can be checked
     .expect(businessContinuitySelector.parent().nth(1).find('.status').innerText).eql('Draft')
+    .expect(businessContinuitySelector.parent().nth(1).find('.owner').innerText).eql('With Helpma Boab')
 })
 
 test('The owner of a standard can be set correctly and is reflected on the Dashboard when saved', async t => {
@@ -145,6 +146,7 @@ test('A standard should change to Submitted if evidence is submitted.', async t 
 
     // Selecting the Row that is the parent of the link, so that the sibling cell with containing status can be checked
     .expect(clinicalSafetySelector.parent().nth(1).find('.status').innerText).eql('Submitted')
+    .expect(clinicalSafetySelector.parent().nth(1).find('.owner').innerText).eql('With NHS Digital')
     .expect(Selector('.standard-submitted h3').innerText).contains('Evidence submitted')
 })
 
