@@ -16,18 +16,18 @@
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['ApiClient', 'model/FileResult', 'model/PaginatedListBlobInfo'], factory);
+    define(['ApiClient', 'model/FileResult', 'model/PaginatedListBlobInfo', 'model/PaginatedListClaimBlobInfoMap'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('../ApiClient'), require('../model/FileResult'), require('../model/PaginatedListBlobInfo'));
+    module.exports = factory(require('../ApiClient'), require('../model/FileResult'), require('../model/PaginatedListBlobInfo'), require('../model/PaginatedListClaimBlobInfoMap'));
   } else {
     // Browser globals (root is window)
     if (!root.CatalogueApi) {
       root.CatalogueApi = {};
     }
-    root.CatalogueApi.CapabilitiesImplementedEvidenceBlobStoreApi = factory(root.CatalogueApi.ApiClient, root.CatalogueApi.FileResult, root.CatalogueApi.PaginatedListBlobInfo);
+    root.CatalogueApi.CapabilitiesImplementedEvidenceBlobStoreApi = factory(root.CatalogueApi.ApiClient, root.CatalogueApi.FileResult, root.CatalogueApi.PaginatedListBlobInfo, root.CatalogueApi.PaginatedListClaimBlobInfoMap);
   }
-}(this, function(ApiClient, FileResult, PaginatedListBlobInfo) {
+}(this, function(ApiClient, FileResult, PaginatedListBlobInfo, PaginatedListClaimBlobInfoMap) {
   'use strict';
 
   /**
@@ -186,7 +186,7 @@
      * @param {Object} opts Optional parameters
      * @param {Number} opts.pageIndex 1-based index of page to return.  Defaults to 1
      * @param {Number} opts.pageSize number of items per page.  Defaults to 20
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/PaginatedListBlobInfo} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/PaginatedListClaimBlobInfoMap} and HTTP response
      */
     this.apiCapabilitiesImplementedEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGetWithHttpInfo = function(solutionId, opts) {
       opts = opts || {};
@@ -215,7 +215,7 @@
       var authNames = ['basic', 'oauth2'];
       var contentTypes = [];
       var accepts = ['application/json'];
-      var returnType = PaginatedListBlobInfo;
+      var returnType = PaginatedListClaimBlobInfoMap;
 
       return this.apiClient.callApi(
         '/api/CapabilitiesImplementedEvidenceBlobStore/EnumerateClaimFolderTree/{solutionId}', 'GET',
@@ -230,7 +230,7 @@
      * @param {Object} opts Optional parameters
      * @param {Number} opts.pageIndex 1-based index of page to return.  Defaults to 1
      * @param {Number} opts.pageSize number of items per page.  Defaults to 20
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/PaginatedListBlobInfo}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/PaginatedListClaimBlobInfoMap}
      */
     this.apiCapabilitiesImplementedEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGet = function(solutionId, opts) {
       return this.apiCapabilitiesImplementedEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGetWithHttpInfo(solutionId, opts)

@@ -130,7 +130,7 @@ Name | Type | Description  | Notes
 
 <a name="apiCapabilitiesImplementedEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGet"></a>
 # **apiCapabilitiesImplementedEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGet**
-> PaginatedListBlobInfo apiCapabilitiesImplementedEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGet(solutionId, opts)
+> PaginatedListClaimBlobInfoMap apiCapabilitiesImplementedEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGet(solutionId, opts)
 
 List all claim files and sub-folders for a solution
 
@@ -174,7 +174,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PaginatedListBlobInfo**](PaginatedListBlobInfo.md)
+[**PaginatedListClaimBlobInfoMap**](PaginatedListClaimBlobInfoMap.md)
 
 ### Authorization
 
