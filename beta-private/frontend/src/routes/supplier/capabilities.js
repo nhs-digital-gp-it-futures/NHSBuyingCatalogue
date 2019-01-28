@@ -172,7 +172,6 @@ async function solutionCapabilityPagePost (req, res) {
       blobId = await uploadFile(claimID, fileToUpload.buffer, fileToUpload.originalname).catch((err) => {
         context.errors.items.push({ msg: 'Validation.Capability.Evidence.Upload.FailedAction' })
         systemError = err
-        console.log(err)
       })
     }
     return {
@@ -190,7 +189,6 @@ async function solutionCapabilityPagePost (req, res) {
   await updateSolutionCapabilityEvidence(req.solution.id, evidenceDescriptions).catch((err) => {
     context.errors.items.push({ msg: 'Validation.Capability.Evidence.Update.FailedAction' })
     systemError = err
-    console.log(err)
   })
 
   // only show validation errors if the user elected to continue, not just save
