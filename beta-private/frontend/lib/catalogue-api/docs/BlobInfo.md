@@ -3,8 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **String** | Unique identifier of entity | [optional] 
-**parentId** | **String** | Unique identifier of parent/owner of this entity  Will be null if this is the root entity | [optional] 
 **name** | **String** | Display name | [optional] 
 **isFolder** | **Boolean** | true if object is a folder | [optional] 
 **length** | **Number** | size of file in bytes (zero for a folder) | [optional] 
