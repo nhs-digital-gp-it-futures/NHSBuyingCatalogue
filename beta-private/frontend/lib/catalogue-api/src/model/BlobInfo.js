@@ -41,6 +41,7 @@
 
   /**
    * Constructs a new <code>BlobInfo</code>.
+   * Information about a folder or file in blob datastore,  typically SharePoint
    * @alias module:model/BlobInfo
    * @class
    */

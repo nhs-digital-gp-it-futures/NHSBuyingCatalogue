@@ -75,12 +75,14 @@ async function capabilityPageContext (req) {
   })
 
   context.solution.capabilities = context.solution.capabilities.map((cap) => {
-    const files = enumeration['Capability Evidence'].items.find((item) => item.name === cap.name)
+    const files = enumeration[cap.id]
+    console.log(cap)
+    console.log(enumeration)
 
     let latestFile
 
     if (files) {
-      latestFile = findLatestFile(files.items)
+      latestFile = findLatestFile(files)
     }
 
     if (latestFile) {
@@ -96,34 +98,6 @@ async function capabilityPageContext (req) {
       isUploadingEvidence: latestEvidence ? !latestEvidence.hasRequestedLiveDemo : true
     }
   })
-
-  // context.solution.capabilities = await Promise.all(
-  //   context.solution.capabilities.map(async (cap) => {
-  //     const files = await fetchFiles(cap.claimID).catch((err) => {
-  //       context.errors.items.push(
-  //         { msg: 'Validation.Capability.Evidence.Retrieval.FailedAction', err: err }
-  //       )
-  //     })
-  //     let latestFile
-
-  //     if (files) {
-  //       latestFile = findLatestFile(files.items)
-  //     }
-
-  //     if (latestFile) {
-  //       latestFile.downloadURL = path.join(req.baseUrl, req.path.replace('/confirmation', ''), cap.claimID, latestFile.name)
-  //     }
-
-  //     const latestEvidence = findLatestEvidence(cap.evidence)
-
-  //     return {
-  //       ...cap,
-  //       latestFile: latestFile,
-  //       latestEvidence: latestEvidence,
-  //       isUploadingEvidence: latestEvidence ? !latestEvidence.hasRequestedLiveDemo : true
-  //     }
-  //   })
-  // )
 
   context.solution.capabilities = _.sortBy(context.solution.capabilities, 'name')
 

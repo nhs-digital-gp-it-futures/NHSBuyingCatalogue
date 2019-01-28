@@ -127,6 +127,63 @@ Name | Type | Description  | Notes
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 
+<a name="apiCapabilitiesImplementedEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGet"></a>
+# **apiCapabilitiesImplementedEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGet**
+> PaginatedListClaimBlobInfoMap apiCapabilitiesImplementedEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGet(solutionId, opts)
+
+List all claim files and sub-folders for a solution
+
+### Example
+```javascript
+var CatalogueApi = require('catalogue-api');
+var defaultClient = CatalogueApi.ApiClient.instance;
+
+// Configure HTTP basic authorization: basic
+var basic = defaultClient.authentications['basic'];
+basic.username = 'YOUR USERNAME';
+basic.password = 'YOUR PASSWORD';
+
+// Configure OAuth2 access token for authorization: oauth2
+var oauth2 = defaultClient.authentications['oauth2'];
+oauth2.accessToken = 'YOUR ACCESS TOKEN';
+
+var apiInstance = new CatalogueApi.CapabilitiesImplementedEvidenceBlobStoreApi();
+
+var solutionId = "solutionId_example"; // String | unique identifier of solution
+
+var opts = { 
+  'pageIndex': 56, // Number | 1-based index of page to return.  Defaults to 1
+  'pageSize': 56 // Number | number of items per page.  Defaults to 20
+};
+apiInstance.apiCapabilitiesImplementedEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGet(solutionId, opts).then(function(data) {
+  console.log('API called successfully. Returned data: ' + data);
+}, function(error) {
+  console.error(error);
+});
+
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **solutionId** | **String**| unique identifier of solution | 
+ **pageIndex** | **Number**| 1-based index of page to return.  Defaults to 1 | [optional] 
+ **pageSize** | **Number**| number of items per page.  Defaults to 20 | [optional] 
+
+### Return type
+
+[**PaginatedListClaimBlobInfoMap**](PaginatedListClaimBlobInfoMap.md)
+
+### Authorization
+
+[basic](../README.md#basic), [oauth2](../README.md#oauth2)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
 <a name="apiCapabilitiesImplementedEvidenceBlobStoreEnumerateFolderByClaimIdGet"></a>
 # **apiCapabilitiesImplementedEvidenceBlobStoreEnumerateFolderByClaimIdGet**
 > PaginatedListBlobInfo apiCapabilitiesImplementedEvidenceBlobStoreEnumerateFolderByClaimIdGet(claimId, opts)
