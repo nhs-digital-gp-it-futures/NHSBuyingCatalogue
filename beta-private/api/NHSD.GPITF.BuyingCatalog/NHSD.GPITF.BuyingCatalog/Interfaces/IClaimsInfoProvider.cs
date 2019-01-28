@@ -1,4 +1,5 @@
 ﻿using NHSD.GPITF.BuyingCatalog.Models;
+using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Interfaces
 {
@@ -10,6 +11,7 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
     string GetFolderClaimName(ClaimsBase claim);
     string GetCapabilityFolderName();
     string GetStandardsFolderName();
+    IEnumerable<Quality> GetAllQualities();
   }
 #pragma warning restore CS1591
 }

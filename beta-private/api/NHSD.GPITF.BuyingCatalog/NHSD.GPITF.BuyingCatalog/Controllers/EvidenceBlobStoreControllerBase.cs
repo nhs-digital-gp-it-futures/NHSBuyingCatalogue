@@ -81,7 +81,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
       try
       {
         var infos = _logic.EnumerateClaimFolderTree(solutionId);
-        var retval = PaginatedList<BlobInfo>.Create(infos, pageIndex, pageSize);
+        var retval = PaginatedList<ClaimBlobInfoMap>.Create(infos, pageIndex, pageSize);
         return new OkObjectResult(retval);
       }
       catch (FluentValidation.ValidationException ex)
