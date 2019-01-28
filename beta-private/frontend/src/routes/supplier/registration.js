@@ -93,18 +93,27 @@ function onboardingStatusPage (req, res) {
     context.stages[2].class = ''
     context.stages[2].url = `../../compliance/${req.solution.id}`
 
+    // Capability Assessment has some evidence
     if (req.solution._raw.claimedCapabilityEvidence.length) {
-      context.stages[1].status = 'In progress'
+      context.stages[1].status = 'Draft Saved'
       context.stages[1].link = 'Edit'
     }
 
+    // Standards Compliance has some evidence
     if (req.solution._raw.claimedStandardEvidence.length) {
-      context.stages[2].status = 'In progress'
+      context.stages[2].status = 'Draft Saved'
+      context.stages[2].link = 'Edit'
+    }
+
+    console.log(req.solution._raw.claimedStandard)
+    // Standards Compliance has a none draft standard
+    if (req.solution._raw.claimedStandard.filter((std) => +std.status !== 0).length) {
+      context.stages[2].status = 'In Progress'
       context.stages[2].link = 'Edit'
     }
 
     if (status === 0) { // draft
-      context.stages[0].status = 'In progress'
+      context.stages[0].status = 'Draft Saved'
       context.stages[0].link = 'Edit'
       context.stages[1].link = ''
       context.stages[2].link = ''
@@ -118,6 +127,7 @@ function onboardingStatusPage (req, res) {
       if ('registered' in req.query) {
         context.registrationComplete = true
       }
+
     }
     if (status === 2) { // capability assessment
       context.stages[0].status = 'Complete'
@@ -136,7 +146,7 @@ function onboardingStatusPage (req, res) {
       context.stages[0].class = 'complete'
       context.stages[0].link = 'View'
 
-      context.stages[1].status = 'Passed'
+      context.stages[1].status = 'Complete'
       context.stages[1].class = 'complete'
       context.stages[1].link = 'View'
 
