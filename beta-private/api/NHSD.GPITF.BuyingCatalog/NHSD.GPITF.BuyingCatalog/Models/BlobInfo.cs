@@ -2,7 +2,10 @@
 
 namespace NHSD.GPITF.BuyingCatalog.Models
 {
-#pragma warning disable CS1591
+  /// <summary>
+  /// Information about a folder or file in blob datastore,
+  /// typically SharePoint
+  /// </summary>
   public sealed class BlobInfo
   {
     /// <summary>
@@ -49,5 +52,4 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     /// </summary>
     public string BlobId { get; set; }
   }
-#pragma warning restore CS1591
 }
