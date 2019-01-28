@@ -105,11 +105,16 @@ function onboardingStatusPage (req, res) {
       context.stages[2].link = 'Edit'
     }
 
-    console.log(req.solution._raw.claimedStandard)
     // Standards Compliance has a none draft standard
     if (req.solution._raw.claimedStandard.filter((std) => +std.status !== 0).length) {
       context.stages[2].status = 'In Progress'
       context.stages[2].link = 'Edit'
+    }
+
+    // Standards Compliance has no in progress standards
+    if (req.solution._raw.claimedStandard.every((std) => +std.status < 0 && +std.status < 3)) {
+      context.stages[2].status = 'Complete'
+      context.stages[2].link = 'View'
     }
 
     if (status === 0) { // draft
