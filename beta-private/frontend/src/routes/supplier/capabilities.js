@@ -76,8 +76,6 @@ async function capabilityPageContext (req) {
 
   context.solution.capabilities = context.solution.capabilities.map((cap) => {
     const files = enumeration[cap.id]
-    console.log(cap)
-    console.log(enumeration)
 
     let latestFile
 
@@ -173,6 +171,7 @@ async function solutionCapabilityPagePost (req, res) {
       blobId = await uploadFile(claimID, fileToUpload.buffer, fileToUpload.originalname).catch((err) => {
         context.errors.items.push({ msg: 'Validation.Capability.Evidence.Upload.FailedAction' })
         systemError = err
+        console.log(err)
       })
     }
 
@@ -195,6 +194,7 @@ async function solutionCapabilityPagePost (req, res) {
   await updateSolutionCapabilityEvidence(req.solution.id, evidenceDescriptions).catch((err) => {
     context.errors.items.push({ msg: 'Validation.Capability.Evidence.Update.FailedAction' })
     systemError = err
+    console.log(err)
   })
 
   // only show validation errors if the user elected to continue, not just save
@@ -235,6 +235,7 @@ async function confirmationPageGet (req, res) {
   const context = {
     ...await capabilityPageContext(req)
   }
+  console.log('\n\n\nConfirmation Page Get\n\n\n')
 
   context.solution.standardsByGroup = context.solution.capabilities.reduce((obj, cap) => {
     cap.standardsByGroup.associated.forEach((std) => { obj.associated[std.id] = std })
