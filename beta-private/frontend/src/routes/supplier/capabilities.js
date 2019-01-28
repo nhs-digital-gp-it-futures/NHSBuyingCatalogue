@@ -91,7 +91,8 @@ async function capabilityPageContext (req) {
         ...cap,
         latestFile: latestFile,
         latestEvidence: latestEvidence,
-        isUploadingEvidence: latestEvidence ? !latestEvidence.hasRequestedLiveDemo : true
+        isUploadingEvidence: latestEvidence && !latestEvidence.hasRequestedLiveDemo,
+        hasRequestedLiveDemo: latestEvidence && latestEvidence.hasRequestedLiveDemo
       }
     })
   )
