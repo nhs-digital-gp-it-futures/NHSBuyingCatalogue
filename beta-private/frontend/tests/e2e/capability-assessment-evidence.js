@@ -51,6 +51,19 @@ test('Collapsible fieldsets behave as an accordion', async t => {
     .expect(allTheFieldsets.nth(2).hasClass('collapsed')).ok()
 })
 
+test('No default selection of upload/live demo', async t => {
+  const allTheFieldsets = Selector('form#capability-assessment-form > fieldset.collapsible')
+
+  await t
+    .expect(allTheFieldsets.nth(0).find('input[type=radio]:checked').count).eql(0)
+
+    .click(allTheFieldsets.nth(1).find('legend'))
+    .expect(allTheFieldsets.nth(1).find('input[type=radio]:checked').count).eql(0)
+
+    .click(allTheFieldsets.nth(2).find('legend'))
+    .expect(allTheFieldsets.nth(2).find('input[type=radio]:checked').count).eql(0)
+})
+
 function uploadFile (t, sel, filename) {
   return t
     .click(sel.child('legend'))
