@@ -46,6 +46,17 @@ const sessionStore = new CacheManagerStore(cacheManager.caching({
   prefix: 'bcbeta-sess:'
 })
 
+const NHS_DIGITAL_CONTACT = {
+  firstName: 'NHS',
+  lastName: 'Digital'
+}
+
+function contactWithDisplayName (contact) {
+  return _.create(contact, {
+    displayName: `${contact.firstName} ${contact.lastName}`
+  })
+}
+
 class DataProvider {
   constructor (CatalogueApi) {
     this.CatalogueApi = CatalogueApi
@@ -298,9 +309,8 @@ class DataProvider {
 
       _.assign(std, {
         ...solutionComplianceStatusMap[std.status],
-        ownerContact: _.create(ownerContact, {
-          displayName: `${ownerContact.firstName} ${ownerContact.lastName}`
-        })
+        ownerContact: contactWithDisplayName(ownerContact),
+        withContact: contactWithDisplayName(+std.status === 2 ? NHS_DIGITAL_CONTACT : ownerContact)
       })
     })
 
