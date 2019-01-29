@@ -301,39 +301,51 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
     public IEnumerable<ClaimBlobInfoMap> EnumerateClaimFolderTree(IClaimsInfoProvider claimsInfoProvider, string solutionId)
     {
-      var soln = _solutionsDatastore.ById(solutionId);
-      var org = _organisationsDatastore.ById(soln.OrganisationId);
-      var claimFolder = CleanupFileName(claimsInfoProvider.GetFolderName());
-      var solutionUrl = $"{SharePoint_OrganisationsRelativeUrl}/{CleanupFileName(org.Name)}/{GetSolutionVersionFolderName(soln)}";
-      var allBlobInfos = EnumerateFolderRecursively(solutionUrl, claimFolder);
-      var quals = claimsInfoProvider.GetAllQualities();
-
-      var retval = new List<ClaimBlobInfoMap>();
-      foreach (var qual in quals)
+      return GetInternal(() =>
       {
-        // specific claim folder eg 'Standards Evidence/Patient Management'
-        var qualFolder = allBlobInfos.SingleOrDefault(bi => bi.Name == qual.Name && bi.IsFolder);
-        if (qualFolder == null)
+        var soln = _solutionsDatastore.ById(solutionId);
+        var claims = claimsInfoProvider.GetClaimBySolution(solutionId);
+        var org = _organisationsDatastore.ById(soln.OrganisationId);
+        var claimFolder = CleanupFileName(claimsInfoProvider.GetFolderName());
+        var solutionUrl = $"{SharePoint_OrganisationsRelativeUrl}/{CleanupFileName(org.Name)}/{GetSolutionVersionFolderName(soln)}";
+        var allBlobInfos = EnumerateFolderRecursively(solutionUrl, claimFolder);
+        var quals = claimsInfoProvider.GetAllQualities();
+
+        var retval = new List<ClaimBlobInfoMap>();
+        foreach (var qual in quals)
         {
-          continue;
+          // specific claim folder eg 'Standards Evidence/Patient Management'
+          var qualFolder = allBlobInfos.SingleOrDefault(bi => bi.Name == qual.Name && bi.IsFolder);
+          if (qualFolder == null)
+          {
+            continue;
+          }
+
+          // look for claim corresponding to this Capability/Standard
+          var claim = claims.SingleOrDefault(c => c.QualityId == qual.Id);
+          if (claim == null)
+          {
+            continue;
+          }
+
+          var map = new ClaimBlobInfoMap { ClaimId = claim.Id };
+          var blobInfos = new List<BlobInfo>(new[] { qualFolder });
+
+          // files and sub-folders in specific claim folder
+          var subBlobInfos = allBlobInfos.Where(abi => abi.ParentId == qualFolder.Id);
+          blobInfos.AddRange(subBlobInfos);
+
+          // files in a specific claim sub folder eg 'Standards Evidence/Patient Management/Video Evidence'
+          var subBlobInfosFolders = subBlobInfos.Where(sbi => sbi.IsFolder);
+          var subBlobInfosFiles = subBlobInfosFolders.SelectMany(sbif => allBlobInfos.Where(abi => abi.ParentId == sbif.Id));
+          blobInfos.AddRange(subBlobInfosFiles);
+
+          map.BlobInfos = blobInfos;
+          retval.Add(map);
         }
-        var map = new ClaimBlobInfoMap { ClaimId = qual.Id };
-        var blobInfos = new List<BlobInfo>(new[] { qualFolder });
 
-        // files and sub-folders in specific claim folder
-        var subBlobInfos = allBlobInfos.Where(abi => abi.ParentId == qualFolder.Id);
-        blobInfos.AddRange(subBlobInfos);
-
-        // files in a specific claim sub folder eg 'Standards Evidence/Patient Management/Video Evidence'
-        var subBlobInfosFolders = subBlobInfos.Where(sbi => sbi.IsFolder);
-        var subBlobInfosFiles = subBlobInfosFolders.SelectMany(sbif => allBlobInfos.Where(abi => abi.ParentId == sbif.Id));
-        blobInfos.AddRange(subBlobInfosFiles);
-
-        map.BlobInfos = blobInfos;
-        retval.Add(map);
-      }
-
-      return retval;
+        return retval;
+      });
     }
 
     private IEnumerable<BlobInfo> EnumerateFolderRecursively(string solutionUrl, string claimFolder)

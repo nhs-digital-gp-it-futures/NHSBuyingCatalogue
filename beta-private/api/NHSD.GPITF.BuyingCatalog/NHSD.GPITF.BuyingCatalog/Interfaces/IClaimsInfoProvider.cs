@@ -7,6 +7,7 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
   public interface IClaimsInfoProvider
   {
     ClaimsBase GetClaimById(string claimId);
+    IEnumerable<ClaimsBase> GetClaimBySolution(string solutionId);
     string GetFolderName();
     string GetFolderClaimName(ClaimsBase claim);
     string GetCapabilityFolderName();
