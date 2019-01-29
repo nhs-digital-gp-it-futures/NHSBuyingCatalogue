@@ -3,7 +3,7 @@ const _ = require('lodash')
 const solutionOnboardingStatusMap = {
   '-1': { stageName: 'Failure', status: 'Failed' },
   '0': { stageName: 'Registration', stageStep: '1 of 4', status: 'Draft' },
-  '1': { stageName: 'Registration', stageStep: '1 of 4', status: 'Registered' },
+  '1': { stageName: 'Registration', stageStep: '1 of 4', status: 'Complete' },
   '2': { stageName: 'Assessment', stageStep: '2 of 4', status: 'Submitted' },
   '3': { stageName: 'Compliance', stageStep: '3 of 4', status: 'In progress' },
   '4': { stageName: 'Final Approval', stageStep: '3 of 4', status: 'In progress' },
