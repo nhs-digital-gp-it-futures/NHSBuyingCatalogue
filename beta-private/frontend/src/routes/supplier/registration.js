@@ -112,7 +112,7 @@ function onboardingStatusPage (req, res) {
     }
 
     // Standards Compliance has no in progress standards
-    if (req.solution._raw.claimedStandard.every((std) => +std.status < 0 && +std.status < 3)) {
+    if (req.solution._raw.claimedStandard.every((std) => +std.status < 0 && +std.status > 3)) {
       context.stages[2].status = 'Complete'
       context.stages[2].link = 'View'
     }
