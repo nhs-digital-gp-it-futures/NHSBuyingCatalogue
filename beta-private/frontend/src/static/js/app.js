@@ -17,6 +17,29 @@ Document.prototype.$$ = Element.prototype.$$ = function (selector) {
   return Array.from(this.querySelectorAll(selector))
 }
 
+function restoreSavedFormInputs () {
+  // we only support restoration on modern browsers
+  if (!window.URLSearchParams) return
+
+  // if there is no "restore" key, there's nothing to do
+  const url = new URL(window.location)
+  const qs = new URLSearchParams(decodeURI(url.search))
+  if (!qs.has('restore')) return
+
+  // iterate over all the form elements that can be found, check if
+  // a restoration key exists and if so restore that value
+  $$('#content [name]:not([type=hidden])').forEach(function (elInput) {
+    if (qs.has(elInput.name)) {
+      console.log('Restored', elInput.name)
+      elInput.value = qs.get(elInput.name)
+      elInput.dispatchEvent(new InputEvent('input'))
+    }
+  })
+
+  // finally remove the entire query string to avoid it being reused
+  window.history.replaceState(null, '', window.location.origin + window.location.pathname + window.location.hash)
+}
+
 // Compensate for fixed page header height causing anchored links to appear
 // off-screen on page load. Note that this can't be DOMContentLoaded as the
 // initial scroll position isn't set at that point. Nor is it set during the
@@ -29,6 +52,8 @@ window.onload = window.onhashchange = function () {
 
   setTimeout(function () {
     scrollingElement.scrollTop = Math.max(0, scrollingElement.scrollTop - adjustment)
+
+    restoreSavedFormInputs()
   }, 25)
 }
 

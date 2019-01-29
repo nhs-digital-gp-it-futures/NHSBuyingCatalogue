@@ -127,6 +127,10 @@ function authenticationHandler (req, res, next) {
     // so check the actual session entry and, if it doesn't exist, force a login.
     if (err) {
       if (!(passportOIDCSessionKey in req.session)) {
+        req.session.bodyOnRedirect = {
+          ...req.body
+        }
+        delete req.session.bodyOnRedirect._csrf
         return res.redirect(OIDC_AUTHENTICATE_PATH)
       }
 
@@ -140,8 +144,18 @@ function authenticationHandler (req, res, next) {
     req.logIn(user, function (err) {
       if (err) { return next(err) }
 
-      const redirectTo = req.session.redirectTo || '/'
+      let redirectTo = req.session.redirectTo || '/'
+      if (req.session.redirectTo && req.session.bodyOnRedirect) {
+        const redirectUrl = new URL(redirectTo, process.env.BASE_URL)
+        redirectUrl.search = require('qs').stringify({
+          restore: '',
+          ...req.session.bodyOnRedirect
+        })
+        redirectTo = redirectUrl.pathname + redirectUrl.search + redirectUrl.hash
+      }
+
       delete req.session.redirectTo
+      delete req.session.bodyOnRedirect
       return res.redirect(redirectTo)
     })
   })(req, res, next)
