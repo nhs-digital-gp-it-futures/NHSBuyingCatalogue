@@ -179,6 +179,14 @@
           .name { font-size: 95%; }
         }
         &.data-analytics-for-integrated-and-federated-care.selected { background-image: url('/img/capabilities/data-analytics-for-integrated-and-federated-care-y.png'); }
+        &.care-homes { background-image: url('/img/capabilities/care-homes.png'); }
+        &.care-homes.selected { background-image: url('/img/capabilities/care-homes-y.png'); }
+        &.digital-diagnostics { background-image: url('/img/capabilities/digital-diagnostics.png'); }
+        &.digital-diagnostics.selected { background-image: url('/img/capabilities/digital-diagnostics-y.png'); }
+        &.gp-referral-management { background-image: url('/img/capabilities/gp-referral-management.png'); }
+        &.gp-referral-management.selected { background-image: url('/img/capabilities/gp-referral-management-y.png'); }
+        &.social-prescribing { background-image: url('/img/capabilities/social-prescribing.png'); }
+        &.social-prescribing.selected { background-image: url('/img/capabilities/social-prescribing-y.png'); }
 
         &:not(.revealed):hover {
           background-image: none;
