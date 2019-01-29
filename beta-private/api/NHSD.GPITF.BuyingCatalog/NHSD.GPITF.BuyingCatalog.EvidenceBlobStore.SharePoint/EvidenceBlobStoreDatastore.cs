@@ -20,7 +20,6 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
   public sealed class EvidenceBlobStoreDatastore : IEvidenceBlobStoreDatastore
   {
     private readonly IHostingEnvironment _env;
-    private readonly ClientContext _context;
 
     private readonly IOrganisationsDatastore _organisationsDatastore;
     private readonly ISolutionsDatastore _solutionsDatastore;
@@ -79,19 +78,6 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       {
         throw new ConfigurationErrorsException("Missing SharePoint configuration - check UserSecrets or environment variables");
       }
-
-      var securePassword = new SecureString();
-      foreach (char item in SharePoint_Password)
-      {
-        securePassword.AppendChar(item);
-      }
-
-      var encodedUrl = Uri.EscapeUriString(SharePoint_BaseUrl);
-      var onlineCredentials = new SharePointOnlineCredentials(SharePoint_Login, securePassword);
-      _context = new ClientContext(encodedUrl)
-      {
-        Credentials = onlineCredentials
-      };
     }
 
     public string AddEvidenceForClaim(IClaimsInfoProvider claimsInfoProvider, string claimId, Stream file, string fileName, string subFolder = null)
@@ -128,14 +114,15 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         CreateSubFolder(claimFolder, subFolder);
       }
 
-      var docClaimFolder = _context.Web.GetFolderByServerRelativeUrl(claimFolderRelUrl);
-      _context.ExecuteQuery();
+      var context = GetClientContextByUserNamePassword();
+      var docClaimFolder = context.Web.GetFolderByServerRelativeUrl(claimFolderRelUrl);
+      context.ExecuteQuery();
 
       // Get the information about the folder that will hold the file
-      LogInformation($"UploadFileSlicePerSlice: enumerating {_context.Url}/{claimFolderRelUrl}...");
-      _context.Load(docClaimFolder.Files);
-      _context.Load(docClaimFolder, folder => folder.ServerRelativeUrl);
-      _context.ExecuteQuery();
+      LogInformation($"UploadFileSlicePerSlice: enumerating {context.Url}/{claimFolderRelUrl}...");
+      context.Load(docClaimFolder.Files);
+      context.Load(docClaimFolder, folder => folder.ServerRelativeUrl);
+      context.ExecuteQuery();
 
       using (var br = new BinaryReader(file))
       {
@@ -190,7 +177,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
                 bytesUploaded = uploadFile.StartUpload(uploadId, strm);
 
                 LogInformation($"UploadFileSlicePerSlice: uploading first slice...");
-                _context.ExecuteQuery();
+                context.ExecuteQuery();
 
                 // fileoffset is the pointer where the next slice will be added
                 fileoffset = bytesUploaded.Value;
@@ -203,7 +190,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
           // Get a reference to our file
           LogInformation($"UploadFileSlicePerSlice: getting reference to file...");
-          uploadFile = _context.Web.GetFileByServerRelativeUrl(docClaimFolder.ServerRelativeUrl + Path.AltDirectorySeparatorChar + fileName);
+          uploadFile = context.Web.GetFileByServerRelativeUrl(docClaimFolder.ServerRelativeUrl + Path.AltDirectorySeparatorChar + fileName);
 
           if (last)
           {
@@ -213,8 +200,8 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
               // End sliced upload by calling FinishUpload
               LogInformation($"UploadFileSlicePerSlice: uploading last slice...");
               uploadFile = uploadFile.FinishUpload(uploadId, fileoffset, strm);
-              _context.Load(uploadFile);
-              _context.ExecuteQuery();
+              context.Load(uploadFile);
+              context.ExecuteQuery();
 
               return uploadFile.UniqueId.ToString();
             }
@@ -233,7 +220,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
             // Continue sliced upload
             LogInformation($"UploadFileSlicePerSlice: uploading intermediate slice...");
             bytesUploaded = uploadFile.ContinueUpload(uploadId, fileoffset, strm);
-            _context.ExecuteQuery();
+            context.ExecuteQuery();
 
             // update fileoffset for the next slice
             fileoffset = bytesUploaded.Value;
@@ -253,22 +240,23 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         var soln = _solutionsDatastore.ById(claim.SolutionId);
         var org = _organisationsDatastore.ById(soln.OrganisationId);
 
+        var context = GetClientContextByUserNamePassword();
         var claimFolderUrl = $"{SharePoint_OrganisationsRelativeUrl}/{CleanupFileName(org.Name)}/{CleanupFileName(soln.Name)}/{CleanupFileName(claimsInfoProvider.GetFolderName())}/{CleanupFileName(claimsInfoProvider.GetFolderClaimName(claim))}/{CleanupFileName(subFolder ?? string.Empty)}";
-        var claimFolder = _context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString(claimFolderUrl));
+        var claimFolder = context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString(claimFolderUrl));
 
-        _context.Load(claimFolder);
-        _context.Load(claimFolder.Files);
-        _context.Load(claimFolder.Folders);
+        context.Load(claimFolder);
+        context.Load(claimFolder.Files);
+        context.Load(claimFolder.Folders);
 
-        LogInformation($"EnumerateFolder: enumerating {_context.Url}/{claimFolderUrl}...");
-        _context.ExecuteQuery();
+        LogInformation($"EnumerateFolder: enumerating {context.Url}/{claimFolderUrl}...");
+        context.ExecuteQuery();
 
         var claimFolderInfo = new BlobInfo
         {
           Id = claimFolder.UniqueId.ToString(),
           Name = claimFolder.Name,
           IsFolder = true,
-          Url = new Uri(new Uri(_context.Url), claimFolder.ServerRelativeUrl).AbsoluteUri,
+          Url = new Uri(new Uri(context.Url), claimFolder.ServerRelativeUrl).AbsoluteUri,
           TimeLastModified = claimFolder.TimeLastModified
         };
         var claimSubFolderInfos = claimFolder
@@ -281,7 +269,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
               Name = x.Name,
               IsFolder = true,
               Length = 0,
-              Url = new Uri(new Uri(_context.Url), x.ServerRelativeUrl).AbsoluteUri,
+              Url = new Uri(new Uri(context.Url), x.ServerRelativeUrl).AbsoluteUri,
               TimeLastModified = x.TimeLastModified
             });
         var claimFileInfos = claimFolder
@@ -294,7 +282,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
               Name = x.Name,
               IsFolder = false,
               Length = x.Length,
-              Url = new Uri(new Uri(_context.Url), x.ServerRelativeUrl).AbsoluteUri,
+              Url = new Uri(new Uri(context.Url), x.ServerRelativeUrl).AbsoluteUri,
               TimeLastModified = x.TimeLastModified,
               BlobId = x.UniqueId.ToString()
             });
@@ -320,23 +308,25 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
     private IEnumerable<BlobInfo> EnumerateFolderRecursively(string solutionUrl, string claimFolder)
     {
+      var context = GetClientContextByUserNamePassword();
+
       // top level folder eg 'Standards Evidence'
       var claimFolderUrl = $"{solutionUrl}/{claimFolder}";
-      var contextFolder = _context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString(claimFolderUrl));
-      _context.Load(contextFolder);
-      _context.Load(contextFolder.Folders);
-      _context.Load(contextFolder.Files);
-      _context.ExecuteQuery();
+      var contextFolder = context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString(claimFolderUrl));
+      context.Load(contextFolder);
+      context.Load(contextFolder.Folders);
+      context.Load(contextFolder.Files);
+      context.ExecuteQuery();
 
       // each specific claim folder eg 'Standards Evidence/Patient Management'
-      contextFolder.Folders.ToList().ForEach(x => _context.Load(x.Files));
-      contextFolder.Folders.ToList().ForEach(x => _context.Load(x.Folders));
-      _context.ExecuteQuery();
+      contextFolder.Folders.ToList().ForEach(x => context.Load(x.Files));
+      contextFolder.Folders.ToList().ForEach(x => context.Load(x.Folders));
+      context.ExecuteQuery();
 
       // each specific claim sub folder eg 'Standards Evidence/Patient Management/Video Evidence'
-      contextFolder.Folders.ToList().SelectMany(x => x.Folders).ToList().ForEach(x => _context.Load(x.Files));
-      contextFolder.Folders.ToList().SelectMany(x => x.Folders).ToList().ForEach(x => _context.Load(x.Folders));
-      _context.ExecuteQuery();
+      contextFolder.Folders.ToList().SelectMany(x => x.Folders).ToList().ForEach(x => context.Load(x.Files));
+      contextFolder.Folders.ToList().SelectMany(x => x.Folders).ToList().ForEach(x => context.Load(x.Folders));
+      context.ExecuteQuery();
 
 
       var retval = new List<BlobInfo>();
@@ -347,7 +337,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         ParentId = null,
         Name = contextFolder.Name,
         IsFolder = true,
-        Url = new Uri(new Uri(_context.Url), contextFolder.ServerRelativeUrl).AbsoluteUri,
+        Url = new Uri(new Uri(context.Url), contextFolder.ServerRelativeUrl).AbsoluteUri,
         TimeLastModified = contextFolder.TimeLastModified
       });
       foreach (var folder in contextFolder.Folders)
@@ -358,7 +348,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
           ParentId = contextFolder.UniqueId.ToString(),
           Name = folder.Name,
           IsFolder = true,
-          Url = new Uri(new Uri(_context.Url), folder.ServerRelativeUrl).AbsoluteUri,
+          Url = new Uri(new Uri(context.Url), folder.ServerRelativeUrl).AbsoluteUri,
           TimeLastModified = folder.TimeLastModified
         });
         foreach (var subFolder in folder.Folders)
@@ -369,7 +359,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
             ParentId = folder.UniqueId.ToString(),
             Name = subFolder.Name,
             IsFolder = true,
-            Url = new Uri(new Uri(_context.Url), subFolder.ServerRelativeUrl).AbsoluteUri,
+            Url = new Uri(new Uri(context.Url), subFolder.ServerRelativeUrl).AbsoluteUri,
             TimeLastModified = subFolder.TimeLastModified
           });
           foreach (var subFile in subFolder.Files)
@@ -380,7 +370,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
               ParentId = subFolder.UniqueId.ToString(),
               Name = subFile.Name,
               IsFolder = false,
-              Url = new Uri(new Uri(_context.Url), subFile.ServerRelativeUrl).AbsoluteUri,
+              Url = new Uri(new Uri(context.Url), subFile.ServerRelativeUrl).AbsoluteUri,
               TimeLastModified = subFile.TimeLastModified,
               BlobId = subFile.UniqueId.ToString()
             });
@@ -394,7 +384,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
             ParentId = folder.UniqueId.ToString(),
             Name = file.Name,
             IsFolder = false,
-            Url = new Uri(new Uri(_context.Url), file.ServerRelativeUrl).AbsoluteUri,
+            Url = new Uri(new Uri(context.Url), file.ServerRelativeUrl).AbsoluteUri,
             TimeLastModified = file.TimeLastModified,
             BlobId = file.UniqueId.ToString()
           });
@@ -409,13 +399,14 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       return GetInternal(() =>
       {
         LogInformation($"GetFileStream: claimId: {claimId} | uniqueId: {uniqueId}");
-        var file = _context.Web.GetFileById(Guid.Parse(uniqueId));
-        _context.Load(file);
-        _context.ExecuteQuery();
+        var context = GetClientContextByUserNamePassword();
+        var file = context.Web.GetFileById(Guid.Parse(uniqueId));
+        context.Load(file);
+        context.ExecuteQuery();
         LogInformation($"GetFileStream: retrieved info for {file.Name}");
 
         return
-          new FileStreamResult(Microsoft.SharePoint.Client.NetCore.File.OpenBinaryDirect(_context, file.ServerRelativeUrl)?.Stream, GetContentType(file.Name))
+          new FileStreamResult(Microsoft.SharePoint.Client.NetCore.File.OpenBinaryDirect(context, file.ServerRelativeUrl)?.Stream, GetContentType(file.Name))
           {
             FileDownloadName = Path.GetFileName(file.Name)
           };
@@ -463,12 +454,13 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     {
       LogInformation($"CreateSubFolder: baseUrl: {baseUrl} | subFolder: {subFolder}");
       var baseFolderExists = true;
-      var baseFolder = _context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString($"{baseUrl}"));
-      _context.Load(baseFolder);
+      var context = GetClientContextByUserNamePassword();
+      var baseFolder = context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString($"{baseUrl}"));
+      context.Load(baseFolder);
       try
       {
         LogInformation($"CreateSubFolder: checking base folder ({baseUrl}) exists...");
-        _context.ExecuteQuery();
+        context.ExecuteQuery();
       }
       catch
       {
@@ -481,12 +473,12 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       }
 
       var targetFolderExists = true;
-      var targetFolder = _context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString($"{baseUrl}/{subFolder}"));
-      _context.Load(targetFolder);
+      var targetFolder = context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString($"{baseUrl}/{subFolder}"));
+      context.Load(targetFolder);
       try
       {
         LogInformation($"CreateSubFolder: checking target folder ({baseUrl}/{subFolder}) exists...");
-        _context.ExecuteQuery();
+        context.ExecuteQuery();
       }
       catch
       {
@@ -500,7 +492,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
       LogInformation($"CreateSubFolder: adding sub-folder ({subFolder}) ...");
       baseFolder.AddSubFolder(subFolder);
-      _context.ExecuteQuery();
+      context.ExecuteQuery();
     }
 
     private void CreateClaimSubFolders(
@@ -510,32 +502,33 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       string claimType,
       IEnumerable<string> claimNames)
     {
-      var baseFolder = _context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString($"{baseUrl}"));
-      _context.Load(baseFolder);
-      _context.ExecuteQuery();
+      var context = GetClientContextByUserNamePassword();
+      var baseFolder = context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString($"{baseUrl}"));
+      context.Load(baseFolder);
+      context.ExecuteQuery();
       LogInformation($"Created BaseFolder: {baseUrl}");
 
       var orgFolder = baseFolder.Folders.Add(organisation);
-      _context.Load(orgFolder);
-      _context.ExecuteQuery();
+      context.Load(orgFolder);
+      context.ExecuteQuery();
       LogInformation($"Created OrgFolder: {organisation}");
 
       var solnFolder = orgFolder.Folders.Add(solution);
-      _context.Load(solnFolder);
-      _context.ExecuteQuery();
+      context.Load(solnFolder);
+      context.ExecuteQuery();
       LogInformation($"Created SolnFolder: {solution}");
 
       var claimTypeFolder = solnFolder.Folders.Add(claimType);
-      _context.Load(claimTypeFolder);
-      _context.ExecuteQuery();
+      context.Load(claimTypeFolder);
+      context.ExecuteQuery();
       LogInformation($"Created ClaimTypeFolder: {claimType}");
 
       foreach (var claimName in claimNames)
       {
         var claimFolder = claimTypeFolder.Folders.Add(claimName);
-        _context.Load(claimFolder);
+        context.Load(claimFolder);
       }
-      _context.ExecuteQuery();
+      context.ExecuteQuery();
       LogInformation($"Created claims folders");
     }
 
@@ -604,6 +597,21 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       {
         _logger.LogInformation(msg);
       }
+    }
+
+    private ClientContext GetClientContextByUserNamePassword()
+    {
+      var securePassword = new SecureString();
+      foreach (char item in SharePoint_Password)
+      {
+        securePassword.AppendChar(item);
+      }
+
+      var encodedUrl = Uri.EscapeUriString(SharePoint_BaseUrl);
+      var onlineCredentials = new SharePointOnlineCredentials(SharePoint_Login, securePassword);
+      var ctx = new ClientContext(encodedUrl) { Credentials = onlineCredentials };
+
+      return ctx;
     }
   }
 }
