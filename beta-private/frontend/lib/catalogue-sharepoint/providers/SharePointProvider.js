@@ -35,6 +35,7 @@ class SharePointProvider {
     enumeration.items.forEach((item) => {
       claimMap[item.claimId] = item.blobInfos.filter((item) => !item.isFolder)
     })
+
     return claimMap
   }
 

@@ -73,11 +73,13 @@ async function capabilityPageContext (req) {
       { msg: 'Validation.Capability.Evidence.Retrieval.FailedAction', err: err }
     )
   })
+  console.log('ENUMERATION\n\n', enumeration, '\n\n', Object.keys(enumeration), '\n\n')
 
   context.solution.capabilities = context.solution.capabilities.map((cap) => {
-    const files = enumeration[cap.id]
-    console.log(cap)
-    console.log(enumeration)
+    const files = enumeration[cap.claimID]
+
+    console.log('CLAIM ID\n', cap.claimID, 'CAP ID', cap.id)
+    console.log('FILES\n', files)
 
     let latestFile
 
