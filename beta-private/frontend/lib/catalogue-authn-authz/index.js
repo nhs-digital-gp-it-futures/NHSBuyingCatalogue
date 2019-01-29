@@ -3,13 +3,14 @@ const passport = require('passport')
 const { Issuer, Strategy } = require('openid-client')
 const { dataProvider } = require('catalogue-data')
 
+const OIDC_AUTHENTICATE_PATH = '/oidc/authenticate'
 const OIDC_CALLBACK_PATH = '/oidc/callback'
 
 function authentication (app) {
   app.use(passport.initialize())
   app.use(passport.session())
 
-  app.get('/oidc/authenticate', passport.authenticate('oidc'))
+  app.get(OIDC_AUTHENTICATE_PATH, passport.authenticate('oidc'))
   app.get(OIDC_CALLBACK_PATH, authenticationHandler)
 
   Issuer.defaultHttpOptions = { timeout: 10000, retries: 3 }
@@ -117,14 +118,23 @@ function authenticationHandler (req, res, next) {
   }
 
   passport.authenticate('oidc', function (err, user, info) {
+    // FIXME: using "private" members, not a sustainable long-term strategy
+    const passportOIDCSessionKey = passport._strategies.oidc._key
+
     // This is where the "did not find expected authorization request details
     // in session, req.session["oidc:oidc-provider"] is undefined" happens.
-    // Leaving it unhandled for now to assess the extent to which this new code
-    // fixes the reported issues.
-    if (err) { return next(err) }
+    // The error object itself is not differentiated enough to use as a signal
+    // so check the actual session entry and, if it doesn't exist, force a login.
+    if (err) {
+      if (!(passportOIDCSessionKey in req.session)) {
+        return res.redirect(OIDC_AUTHENTICATE_PATH)
+      }
+
+      return next(err)
+    }
 
     // If no user resulted from authentication, send the user back through the process.
-    if (!user) { return res.redirect('/oidc/authenticate') }
+    if (!user) { return res.redirect(OIDC_AUTHENTICATE_PATH) }
 
     // Log the user in and send them to their originally requested page.
     req.logIn(user, function (err) {
@@ -154,7 +164,7 @@ function catchHandler (err, res, context) {
   // if the API call returns unauthorised, redirect the user to login again
   // otherwise add the error to the page
   if (err.status === 401) {
-    res.redirect('/oidc/authenticate')
+    res.redirect(OIDC_AUTHENTICATE_PATH)
     return true
   } else if (context && context.errors) {
     if (!context.errors.items) {
