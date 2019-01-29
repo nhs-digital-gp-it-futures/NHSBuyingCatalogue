@@ -247,8 +247,7 @@ async function confirmationPageGet (req, res) {
     let isLiveDemo = false
     let missingEvidence = true
 
-    // if there is a latest evidence and it is indicating a live demo.
-    if (cap.latestEvidence && cap.latestEvidence.evidence === LIVE_DEMO_MESSSAGE_INDICATOR) {
+    if (cap.latestEvidence && cap.latestEvidence.hasRequestedLiveDemo) {
       isLiveDemo = true
       missingEvidence = false
     } else if (cap.latestEvidence && cap.latestFile) {
