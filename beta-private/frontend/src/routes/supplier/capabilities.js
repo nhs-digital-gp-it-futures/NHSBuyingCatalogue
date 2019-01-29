@@ -73,9 +73,13 @@ async function capabilityPageContext (req) {
       { msg: 'Validation.Capability.Evidence.Retrieval.FailedAction', err: err }
     )
   })
+  console.log('ENUMERATION\n\n', enumeration, '\n\n', Object.keys(enumeration), '\n\n')
 
   context.solution.capabilities = context.solution.capabilities.map((cap) => {
-    const files = enumeration[cap.id]
+    const files = enumeration[cap.claimID]
+
+    console.log('CLAIM ID\n', cap.claimID, 'CAP ID', cap.id)
+    console.log('FILES\n', files)
 
     let latestFile
 
@@ -229,7 +233,6 @@ async function confirmationPageGet (req, res) {
   const context = {
     ...await capabilityPageContext(req)
   }
-  console.log('\n\n\nConfirmation Page Get\n\n\n')
 
   context.solution.standardsByGroup = context.solution.capabilities.reduce((obj, cap) => {
     cap.standardsByGroup.associated.forEach((std) => { obj.associated[std.id] = std })
