@@ -105,6 +105,11 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       return ClaimsDatastore.ById(claimId);
     }
 
+    public IEnumerable<ClaimsBase> GetClaimBySolution(string solutionId)
+    {
+      return ClaimsDatastore.BySolution(solutionId);
+    }
+
     public string GetCapabilityFolderName()
     {
       return CapabilityFolderName;
