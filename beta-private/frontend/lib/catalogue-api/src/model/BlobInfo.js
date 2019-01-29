@@ -54,6 +54,8 @@
 
 
 
+
+
   };
 
   /**
@@ -67,6 +69,12 @@
     if (data) {
       obj = obj || new exports();
 
+      if (data.hasOwnProperty('id')) {
+        obj['id'] = ApiClient.convertToType(data['id'], 'String');
+      }
+      if (data.hasOwnProperty('parentId')) {
+        obj['parentId'] = ApiClient.convertToType(data['parentId'], 'String');
+      }
       if (data.hasOwnProperty('name')) {
         obj['name'] = ApiClient.convertToType(data['name'], 'String');
       }
@@ -89,6 +97,16 @@
     return obj;
   }
 
+  /**
+   * Unique identifier of entity
+   * @member {String} id
+   */
+  exports.prototype['id'] = undefined;
+  /**
+   * Unique identifier of parent/owner of this entity  Will be null if this is the root entity
+   * @member {String} parentId
+   */
+  exports.prototype['parentId'] = undefined;
   /**
    * Display name
    * @member {String} name

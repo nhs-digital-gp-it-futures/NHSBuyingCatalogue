@@ -53,6 +53,7 @@
 
     _this['capabilityId'] = capabilityId;
 
+
     _this['id'] = id;
     _this['solutionId'] = solutionId;
 
@@ -74,6 +75,9 @@
       }
       if (data.hasOwnProperty('status')) {
         obj['status'] = ApiClient.convertToType(data['status'], 'String');
+      }
+      if (data.hasOwnProperty('qualityId')) {
+        obj['qualityId'] = ApiClient.convertToType(data['qualityId'], 'String');
       }
       if (data.hasOwnProperty('id')) {
         obj['id'] = ApiClient.convertToType(data['id'], 'String');
@@ -98,6 +102,11 @@
    * @member {module:model/CapabilitiesImplemented.StatusEnum} status
    */
   exports.prototype['status'] = undefined;
+  /**
+   * Unique identifier of Capability
+   * @member {String} qualityId
+   */
+  exports.prototype['qualityId'] = undefined;
   /**
    * Unique identifier of entity
    * @member {String} id

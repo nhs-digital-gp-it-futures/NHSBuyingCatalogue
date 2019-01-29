@@ -68,6 +68,12 @@
       //expect(instance).to.be();
     });
 
+    it('should have the property qualityId (base name: "qualityId")', function() {
+      // uncomment below and update the code to test the property qualityId
+      //var instance = new CatalogueApi.CapabilitiesImplemented();
+      //expect(instance).to.be();
+    });
+
     it('should have the property id (base name: "id")', function() {
       // uncomment below and update the code to test the property id
       //var instance = new CatalogueApi.CapabilitiesImplemented();

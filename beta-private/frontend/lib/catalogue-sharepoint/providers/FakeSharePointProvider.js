@@ -77,7 +77,6 @@ class FakeFileStoreAPI {
         }
       })
     }
-    console.log(enumeration)
     return enumeration
   }
 

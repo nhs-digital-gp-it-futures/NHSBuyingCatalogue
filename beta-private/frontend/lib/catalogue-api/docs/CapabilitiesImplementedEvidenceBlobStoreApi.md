@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**apiCapabilitiesImplementedEvidenceBlobStoreAddEvidenceForClaimPost**](CapabilitiesImplementedEvidenceBlobStoreApi.md#apiCapabilitiesImplementedEvidenceBlobStoreAddEvidenceForClaimPost) | **POST** /api/CapabilitiesImplementedEvidenceBlobStore/AddEvidenceForClaim | Upload a file to support a claim  If the file already exists on the server, then a new version is created
 [**apiCapabilitiesImplementedEvidenceBlobStoreDownloadByClaimIdPost**](CapabilitiesImplementedEvidenceBlobStoreApi.md#apiCapabilitiesImplementedEvidenceBlobStoreDownloadByClaimIdPost) | **POST** /api/CapabilitiesImplementedEvidenceBlobStore/Download/{claimId} | Download a file which is supporting a claim
+[**apiCapabilitiesImplementedEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGet**](CapabilitiesImplementedEvidenceBlobStoreApi.md#apiCapabilitiesImplementedEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGet) | **GET** /api/CapabilitiesImplementedEvidenceBlobStore/EnumerateClaimFolderTree/{solutionId} | List all claim files and sub-folders for a solution
 [**apiCapabilitiesImplementedEvidenceBlobStoreEnumerateFolderByClaimIdGet**](CapabilitiesImplementedEvidenceBlobStoreApi.md#apiCapabilitiesImplementedEvidenceBlobStoreEnumerateFolderByClaimIdGet) | **GET** /api/CapabilitiesImplementedEvidenceBlobStore/EnumerateFolder/{claimId} | List all files and sub-folders for a claim including folder for claim
 
 
