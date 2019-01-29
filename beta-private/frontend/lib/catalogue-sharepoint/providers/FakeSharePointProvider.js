@@ -68,6 +68,18 @@ class FakeFileStoreAPI {
     }
   }
 
+  async enumerateAllClaims () {
+    const enumeration = {
+      items: Object.keys(this.folders).map((claimId) => {
+        return {
+          claimId: claimId,
+          blobInfos: this.folders[claimId].items
+        }
+      })
+    }
+    return enumeration
+  }
+
   async addItemToClaim (claimID, readStream, filename, options) {
     if (!this.folders[claimID]) {
       this.initialiseClaim(claimID)
@@ -146,6 +158,13 @@ class FakeCapabilitiesImplementedEvidenceBlobStoreApi extends FakeFileStoreAPI {
 
   async apiCapabilitiesImplementedEvidenceBlobStoreDownloadByClaimIdPost (claimID, opts) {
     return this.downloadFile(claimID, opts)
+  }
+
+  async apiCapabilitiesImplementedEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGet (solutionId) {
+    // Enumerates all claims in FakePoint since there is no way to which claims are associated to a solution
+    // If the user of this method is performing adequate checks of which Capabilities are actually being
+    // claimed by a solution, then those not applicable will be filtered out.
+    return this.enumerateAllClaims()
   }
 }
 

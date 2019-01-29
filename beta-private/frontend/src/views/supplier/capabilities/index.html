@@ -40,7 +40,7 @@
           name="uploading-video-evidence[{{claimID}}]"
           value="no"
           {{#if ../../notEditable}}disabled{{/if}}
-          {{#if isUploadingEvidence}}{{else}}checked{{/if}}
+          {{#unless isUploadingEvidence}}checked{{/unless}}
           aria-hidden="false"
         /><span class="checkmark"><span class="inner-checkmark"></span></span>{{t 'CapAssPages.Assessment.Evidence.Options.Negative'}}</label>
       </fieldset>

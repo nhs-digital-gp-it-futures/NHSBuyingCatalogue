@@ -49,6 +49,57 @@
 
 
     /**
+     * Get a list of Solutions, each with a list of corresponding TechnicalContact, ClaimedCapability, ClaimedStandard et al
+     * @param {String} organisationId CRM identifier of Organisation
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/SolutionEx>} and HTTP response
+     */
+    this.apiPorcelainSolutionsExByOrganisationByOrganisationIdGetWithHttpInfo = function(organisationId) {
+      var postBody = null;
+
+      // verify the required parameter 'organisationId' is set
+      if (organisationId === undefined || organisationId === null) {
+        throw new Error("Missing the required parameter 'organisationId' when calling apiPorcelainSolutionsExByOrganisationByOrganisationIdGet");
+      }
+
+
+      var pathParams = {
+        'organisationId': organisationId
+      };
+      var queryParams = {
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
+
+      var authNames = ['basic', 'oauth2'];
+      var contentTypes = [];
+      var accepts = ['application/json'];
+      var returnType = [SolutionEx];
+
+      return this.apiClient.callApi(
+        '/api/porcelain/SolutionsEx/ByOrganisation/{organisationId}', 'GET',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType
+      );
+    }
+
+    /**
+     * Get a list of Solutions, each with a list of corresponding TechnicalContact, ClaimedCapability, ClaimedStandard et al
+     * @param {String} organisationId CRM identifier of Organisation
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/SolutionEx>}
+     */
+    this.apiPorcelainSolutionsExByOrganisationByOrganisationIdGet = function(organisationId) {
+      return this.apiPorcelainSolutionsExByOrganisationByOrganisationIdGetWithHttpInfo(organisationId)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
+
+    /**
      * Get a Solution with a list of corresponding TechnicalContact, ClaimedCapability, ClaimedStandard et al
      * @param {String} solutionId CRM identifier of Solution
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/SolutionEx} and HTTP response

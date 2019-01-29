@@ -68,33 +68,34 @@ async function capabilityPageContext (req) {
 
   context.activeForm.id = 'capability-assessment-form'
 
-  context.solution.capabilities = await Promise.all(
-    context.solution.capabilities.map(async (cap) => {
-      const files = await fetchFiles(cap.claimID).catch((err) => {
-        context.errors.items.push(
-          { msg: 'Validation.Capability.Evidence.Retrieval.FailedAction', err: err }
-        )
-      })
-      let latestFile
+  const enumeration = await sharePointProvider.enumerateCapFolderFiles(req.solution.id).catch((err) => {
+    context.errors.items.push(
+      { msg: 'Validation.Capability.Evidence.Retrieval.FailedAction', err: err }
+    )
+  })
 
-      if (files) {
-        latestFile = findLatestFile(files.items)
-      }
+  context.solution.capabilities = context.solution.capabilities.map((cap) => {
+    const files = enumeration[cap.claimID]
 
-      if (latestFile) {
-        latestFile.downloadURL = path.join(req.baseUrl, req.path.replace('/confirmation', ''), cap.claimID, latestFile.name)
-      }
+    let latestFile
 
-      const latestEvidence = findLatestEvidence(cap.evidence)
+    if (files) {
+      latestFile = findLatestFile(files)
+    }
 
-      return {
-        ...cap,
-        latestFile: latestFile,
-        latestEvidence: latestEvidence,
-        isUploadingEvidence: latestEvidence ? !latestEvidence.hasRequestedLiveDemo : true
-      }
-    })
-  )
+    if (latestFile) {
+      latestFile.downloadURL = path.join(req.baseUrl, req.path.replace('/confirmation', ''), cap.claimID, latestFile.name)
+    }
+
+    const latestEvidence = findLatestEvidence(cap.evidence)
+
+    return {
+      ...cap,
+      latestFile,
+      latestEvidence,
+      isUploadingEvidence: latestEvidence ? !latestEvidence.hasRequestedLiveDemo : true
+    }
+  })
 
   context.solution.capabilities = _.sortBy(context.solution.capabilities, 'name')
 

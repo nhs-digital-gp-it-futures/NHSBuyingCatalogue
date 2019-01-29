@@ -76,7 +76,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       return _evidenceBlobStoreDatastore.EnumerateFolder(this, claimId, subFolder);
     }
 
-    public IEnumerable<BlobInfo> EnumerateClaimFolderTree(string solutionId)
+    public IEnumerable<ClaimBlobInfoMap> EnumerateClaimFolderTree(string solutionId)
     {
       _validator.ValidateAndThrowEx(solutionId, ruleSet: nameof(IEvidenceBlobStoreLogic.EnumerateClaimFolderTree));
 
@@ -105,6 +105,11 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       return ClaimsDatastore.ById(claimId);
     }
 
+    public IEnumerable<ClaimsBase> GetClaimBySolution(string solutionId)
+    {
+      return ClaimsDatastore.BySolution(solutionId);
+    }
+
     public string GetCapabilityFolderName()
     {
       return CapabilityFolderName;
@@ -114,6 +119,8 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     {
       return StandardsFolderName;
     }
+
+    public abstract IEnumerable<Quality> GetAllQualities();
 
     protected abstract IClaimsDatastore<ClaimsBase> ClaimsDatastore { get; }
   }

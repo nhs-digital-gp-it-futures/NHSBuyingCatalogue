@@ -23,6 +23,12 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     /// Unique identifier of supplier Contact who is responsible for this claim
     /// </summary>
     public string OwnerId { get; set; }
+
+    /// <summary>
+    /// Unique identifier of Capability or Standard
+    /// </summary>
+    [Computed]
+    public abstract string QualityId { get; }
   }
 #pragma warning restore CS1591
 }
