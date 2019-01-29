@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -89,6 +90,10 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
         return new InternalServerErrorObjectResult(ex);
       }
       catch (KeyNotFoundException ex)
+      {
+        return new NotFoundObjectResult(ex);
+      }
+      catch (Exception ex)
       {
         return new NotFoundObjectResult(ex);
       }
