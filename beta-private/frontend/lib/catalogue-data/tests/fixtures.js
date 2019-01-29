@@ -23,6 +23,7 @@ module.exports = {
     function MockSolutionsExApi () {
       this.apiPorcelainSolutionsExBySolutionBySolutionIdGet = jest.fn()
       this.apiPorcelainSolutionsExUpdatePut = jest.fn()
+      this.apiPorcelainSolutionsExByOrganisationByOrganisationIdGet = jest.fn()
     }
 
     function MockCapabilityMappingsApi () {
