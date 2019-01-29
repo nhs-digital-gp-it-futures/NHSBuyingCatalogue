@@ -24,6 +24,7 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     /// <summary>
     /// Unique identifier of Standard
     /// </summary>
+    [Computed]
     public override string QualityId => StandardId;
   }
 }

@@ -24,6 +24,7 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     /// <summary>
     /// Unique identifier of Capability
     /// </summary>
+    [Computed]
     public override string QualityId => CapabilityId;
   }
 }
