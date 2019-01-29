@@ -143,6 +143,28 @@ function authenticatedOnly (req, res, next) {
   } else next()
 }
 
+/**
+ * A generic error handler for dealing with API failures.
+ *
+ * Call this in the catch handler for a failed API call to automatically
+ * deal with errors caused by authentication failure. If this function
+ * returns true, exit the request handler as quickly as possible e.g. return.
+ */
+function catchHandler (err, res, context) {
+  // if the API call returns unauthorised, redirect the user to login again
+  // otherwise add the error to the page
+  if (err.status === 401) {
+    res.redirect('/oidc/authenticate')
+    return true
+  } else if (context && context.errors) {
+    if (!context.errors.items) {
+      context.errors.items = []
+    }
+
+    context.errors.items.push({ msg: err.toString() })
+  }
+}
+
 module.exports = {
   authentication,
   authorisation: {
@@ -161,5 +183,6 @@ module.exports = {
         else res.redirect('/')
       }
     ]
-  }
+  },
+  catchHandler
 }
