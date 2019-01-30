@@ -21,7 +21,7 @@ spec:
       - name: regcred
       containers:
       - name: bc-private-beta-api
-        image: buyingcat01.azurecr.io/gpitf/catalogue-api:#{Build.BuildId}#
+        image: bcprepodacr.azurecr.io/gpitf/catalogue-api:#{Build.BuildId}#
         ports:
         - containerPort: 5100
         resources:
@@ -88,7 +88,7 @@ kind: Deployment
 metadata:
   name: bc-pb-deployment-frontend
 spec:
-  replicas: 1
+  replicas: 2
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -106,7 +106,7 @@ spec:
       - name: regcred
       containers:
       - name: bc-private-beta-frontend
-        image: buyingcat01.azurecr.io/gpitf/catalogue-frontend:#{Build.BuildId}#
+        image: bcprepodacr.azurecr.io/gpitf/catalogue-frontend:#{Build.BuildId}#
         ports:
         - containerPort: 8000
         resources:
@@ -116,7 +116,7 @@ spec:
             cpu: 500m
         env:
         - name: BASE_URL
-          value: "http://buyingcatprivatebeta.uksouth.cloudapp.azure.com"
+          value: "http://nhstoreprepod.uksouth.cloudapp.azure.com"
         - name: API_BASE_URL
           value: "http://api:5100"
         - name: CACHE_HOST
@@ -139,7 +139,7 @@ kind: Deployment
 metadata:
   name: bc-pb-deployment-crm
 spec:
-  replicas: 1
+  replicas: 2
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -157,7 +157,7 @@ spec:
       - name: regcred
       containers:
       - name: bc-private-beta-crm
-        image: buyingcat01.azurecr.io/gpitf/catalogue-crm:#{Build.BuildId}#
+        image: bcprepodacr.azurecr.io/gpitf/catalogue-crm:#{Build.BuildId}#
         ports:
         - containerPort: 5001
         resources:
@@ -199,7 +199,7 @@ kind: Deployment
 metadata:
   name: bc-pb-deployment-nginx
 spec:
-  replicas: 1
+  replicas: 2
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -217,7 +217,7 @@ spec:
       - name: regcred
       containers:
       - name: bc-private-beta-nginx
-        image: buyingcat01.azurecr.io/gpitf/catalogue-frontend-proxy:#{Build.BuildId}#
+        image: bcprepodacr.azurecr.io/gpitf/catalogue-frontend-proxy:#{Build.BuildId}#
         ports:
         - containerPort: 80
         resources:
@@ -231,7 +231,7 @@ kind: Deployment
 metadata:
   name: bc-pb-deployment-cache
 spec:
-  replicas: 1
+  replicas: 2
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -283,7 +283,7 @@ kind: Service
 metadata:
   name: bc-lb-nginx
 spec:
-  loadBalancerIP: 51.140.48.244
+  loadBalancerIP: 51.140.142.224
   type: LoadBalancer
   ports:
   - port: 80
