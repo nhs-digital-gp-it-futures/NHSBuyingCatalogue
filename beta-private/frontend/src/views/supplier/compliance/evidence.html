@@ -117,7 +117,7 @@
         id="submit-for-compliance"
         type="submit"
         name="action[submit]"
-        value="submit"
+        value="{{#if allowDirectSubmission}}direct{{else}}submit{{/if}}"
         class="primary">{{t 'CompliancePages.Evidence.Buttons.Submit'}}</button>
     {{/form}}
   </section>
@@ -157,8 +157,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function updateForFileInputState () {
     const fileInputFilled = !!replyFileInput.value
+    const elSubmit = $('#submit-for-compliance')
     replyForm.classList.toggle('has-file', fileInputFilled)
-    $('#submit-for-compliance').disabled = !fileInputFilled
+    elSubmit.disabled = !fileInputFilled && elSubmit.value !== 'direct'
   }
 
   if (replyForm) {
