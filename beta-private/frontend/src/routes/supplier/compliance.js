@@ -218,6 +218,7 @@ async function solutionComplianceEvidencePageGet (req, res, next) {
     context.allowSubmission = (!context.isSubmitted || context.hasFeedback) && solutionInCompliance(context.solution)
     if (context.allowSubmission) {
       context.activeForm.id = 'compliance-evidence-upload'
+      context.allowDirectSubmission = context.claim.submissionHistory.length && !context.isSubmitted && !context.hasFeedback
     }
   }
 
@@ -233,11 +234,13 @@ async function solutionComplianceEvidencePagePost (req, res) {
 
   let redirectUrl = action.save
     ? './'
-    : '../../'
+    : action.submit
+      ? './confirmation'
+      : '../../'
 
-  if (!req.files.length) {
+  if (!req.files.length && action.submit !== 'direct') {
     req.body.errors = { items: [{ msg: 'No file to upload.' }] }
-  } else {
+  } else if (req.files.length) {
     const fileToUpload = req.files[0]
 
     try {
@@ -246,10 +249,6 @@ async function solutionComplianceEvidencePagePost (req, res) {
       // update the status of the claim based on the file uploading successfully (not started -> draft)
       // and if the user requested submission to NHS Digital (* -> submitted)
       const claim = _.find(req.solution.standards, { id: req.params.claim_id })
-
-      if (action.submit) {
-        redirectUrl = './confirmation'
-      }
 
       claim.status = '1' /* draft */
       claim.ownerId = req.body.ownerId || null
@@ -266,17 +265,17 @@ async function solutionComplianceEvidencePagePost (req, res) {
       })
 
       await dataProvider.updateSolutionForCompliance(req.solution)
-
-      // redirect accourdingly
-      res.redirect(redirectUrl)
-      return
     } catch (err) {
       req.body.errors = { items: [{ msg: String(err) }] }
     }
   }
 
   // re-render if an error occurred
-  solutionComplianceEvidencePageGet(req, res)
+  if (req.body.errors) {
+    solutionComplianceEvidencePageGet(req, res)
+  } else {
+    res.redirect(redirectUrl)
+  }
 }
 
 async function downloadEvidenceGet (req, res, next) {
