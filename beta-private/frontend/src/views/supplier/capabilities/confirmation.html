@@ -2,14 +2,14 @@
 
     {{> errors}}
 
-    <h1>{{t 'CapAssPages.Confirmation.Title'}}</h1>
-    <p class="information">{{t 'CapAssPages.Confirmation.Information'}}</p>
+    <header class="page-main-heading">
+        <h1>{{t 'CapAssPages.Confirmation.Title'}}</h1>
+        <p>{{t 'CapAssPages.Confirmation.Information'}}</p>
+    </header>
 
-    <div class="help-box">
-        {{#>help-reveal title="CapAssPages.Confirmation.Help.Title" }}
-            <p>{{t 'CapAssPages.Confirmation.Help.Information'}}</p>
-        {{/help-reveal}}
-    </div>
+    {{#>help-reveal title="CapAssPages.Confirmation.Help.Title" }}
+        <p>{{t 'CapAssPages.Confirmation.Help.Information'}}</p>
+    {{/help-reveal}}
 
     <div class="summary-box" id="summary-details">
         {{>section-header title="CapAssPages.Confirmation.Registration.Title" href=editUrls.registration}}
@@ -19,13 +19,36 @@
             <p>{{description}}</p>
             <p>{{version}}</p>
 
-            <h3>{{t 'CapAssPages.Confirmation.Registration.Subtitle.Contacts'}}</h3>
-            {{#contacts}}
-                <p>{{contactType}}</p>
-                <p>{{firstName}} {{lastName}}</p>
-                <p>{{emailAddress}}</p>
-                <p>{{number}}</p>
-            {{/contacts}}
+            <div class="lead contact">
+                <h3>{{t 'CapAssPages.Confirmation.Registration.Subtitle.LeadContact'}}</h3>
+                {{#contacts.[0]}}
+                    <address>
+                    <p class="name">{{firstName}} {{lastName}}</p>
+                    <p class="email">{{emailAddress}}</p>
+                    <p class="phone">{{phoneNumber}}</p>
+                    </address>
+                {{/contacts.[0]}}
+            </div>
+
+            {{#if contacts.[1]}}
+            <div class="contacts">
+                <h3>{{t 'CapAssPages.Confirmation.Registration.Subtitle.Contacts'}}</h3>
+                <ul>
+                {{#contacts}}
+                    {{#unless @first}}
+                    <li class="contact">
+                        <address>
+                        <p class="role">{{contactType}}</p>
+                        <p class="name">{{firstName}} {{lastName}}</p>
+                        <p class="email">{{emailAddress}}</p>
+                        <p class="phone">{{phoneNumber}}</p>
+                        </address>
+                    </li>
+                    {{/unless}}
+                {{/contacts}}
+                </ul>
+            </div>
+            {{/if}}
         {{/solution}}
     </div>
 

@@ -417,7 +417,7 @@
         }
       },
       "Submission": {
-        "Notice":"By Submitting this information to $t(NHSD.Name) for Assessment, you are confirming you are able, to the best of your knowledge, to meet all $t(Capability) Assessment and $t(Standard_plural) $t(Compliance) requirements and to display the $t(Solution) named on the NHS Catalogue."
+        "Notice":"By Submitting this information to $t(NHSD.Name) for Assessment, you are confirming you are able, to the best of your knowledge, to meet all $t(Capability_Assessment) and $t(Standards Compliance) requirements and to display the $t(Solution) named on the $t(Catalogue)."
       },
       "Buttons": {
         "Submit": "Save and review"
@@ -431,10 +431,11 @@
         "Information": "When you Submit this page, the information you have provided will be sent to $t(NHSD.Name), and the Assessment team will begin reviewing your responses for each Capability. Your $t(Lead Contact) will receive a notification linked to an Outcome letter once the assessment is complete."
       },
       "Registration": {
-        "Title": "Solution details and key contacts.",
+        "Title": "Enter $t(Solution) details and key contacts.",
         "Subtitle": {
-          "Solution": "Solution Name, Description, Version",
-          "Contacts": "Contacts"
+          "Solution": "Enter $t(Solution) name, description, version",
+          "LeadContact": "Enter $t(Lead Contact) Details",
+          "Contacts": "Additional Contacts"
         }
       },
       "Capabilities": {
