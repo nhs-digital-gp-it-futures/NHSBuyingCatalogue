@@ -116,25 +116,20 @@
             border-bottom: 2px solid $color-nhs-light-mid-grey;
             margin: 0em 0em 0.7em 0em;
         }
-        h2 {
-            margin: 0.1em;
-            color: black;
-            font-size: 2em;
-        }
-        h3 {
-            font-size: 1.5em;
-            color: $color-nhs-dark-grey;
-        }
-        p {
-            font-size: 1.1em;
-            color: $color-nhs-dark-grey;
-        }
 
         div.section-header {
             width: 100%;
             display: flex;
             justify-content: space-between;
             align-content: center;
+
+            h2 {
+                margin: 0 0 .25em;
+            }
+        }
+
+        h3 {
+            margin: 0.5em 0 .25em;
         }
 
         details {
@@ -147,24 +142,31 @@
                 border: none;
             }
         }
-    }
 
-    p.information {
-        font-size: 1.2em;
-    }
+        .contact {
+            address {
+                margin-bottom: 1.5em;
 
-    .help-box {
-        details {
-            summary > span {
-                font-size: 1.2em;
-                color: $color-nhs-blue;
-                text-decoration: underline;
+                p {
+                    font-size: 100%;
+                    font-style: normal;
+                    line-height: 1.66;
+                    margin: 0;                    
+                }
+
+                .role {
+                    font-weight: bold;
+                }
             }
-            div.contents {
-                font-size: 1em;
-                margin: 1em 0em;
-                padding: 0.1em 0.7em;
-                border-left: 0.7em solid $color-nhs-blue;
+        }
+
+        .contacts {
+            ul {
+                columns: 2;
+
+                li {
+                    break-inside: avoid;
+                }
             }
         }
     }
