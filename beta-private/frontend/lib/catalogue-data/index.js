@@ -120,6 +120,17 @@ class DataProvider {
       contractCount: 0
     })
 
+    const hasStartedAssessment = (soln) => {
+      if (+soln.raw.status === 1 && soln.claimedCapabilityEvidence.length) {
+        return {
+          ...soln,
+          stageName: 'Assessment',
+          stageStep: '2 of 4',
+          status: 'Draft'
+        }
+      } else return soln
+    }
+
     const failureReasons = (soln) => {
       if (+soln.raw.status !== -1 || _.isEmpty(soln)) return { ...soln }
       else if (soln.standards.some((std) => +std.status === -1)) {
@@ -131,7 +142,12 @@ class DataProvider {
 
     const solutions = await this.solutionsByOrganisation(supplierOrgId)
 
-    const onboardingSolutions = solutions.filter(isOnboarding).map(forDashboard).map(forOnboarding).map(failureReasons)
+    const onboardingSolutions = solutions
+      .filter(isOnboarding)
+      .map(forDashboard)
+      .map(forOnboarding)
+      .map(hasStartedAssessment)
+      .map(failureReasons)
 
     return {
       onboarding: onboardingSolutions.map(solutionMapper),
