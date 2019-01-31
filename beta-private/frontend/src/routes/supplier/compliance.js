@@ -135,13 +135,19 @@ async function evidencePageContext (req, next) {
   // compute the message history from the relevant evidence and reviews
   context.claim.submissionHistory = _(context.solution.evidence)
     .filter({ claimId: context.claim.id })
-    .flatMap(ev => [ev, ..._.filter(context.solution.reviews, { evidenceId: ev.id })])
-    .map(({ id, createdOn, createdById, message, evidence }) => ({
+    .map((ev) => ({ ...ev, isFeedback: false })) // Flag all Evidence as not being Feedback
+    .flatMap(ev => [
+      ev,
+      ..._
+        .filter(context.solution.reviews, { evidenceId: ev.id })
+        .map((re) => ({ ...re, isFeedback: true })) // Flag all Reviews as being Feedback
+    ])
+    .map(({ id, createdOn, createdById, message, evidence, isFeedback }) => ({
       id,
       createdOn,
       createdById,
       message: message || evidence,
-      isFeedback: !!message
+      isFeedback
     }))
     .orderBy('createdOn', 'asc')
     .each(msg => {
