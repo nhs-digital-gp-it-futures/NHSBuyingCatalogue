@@ -52,6 +52,8 @@ spec:
               key: CRM_CLIENTSECRET 
         - name: OIDC_ISSUER_URL
           value: "https://nhsstore-preprod.eu.auth0.com"
+        - name: OIDC_USERINFO_URL
+          value: "https://nhsstore-preprod.eu.auth0.com/userinfo"
         - name: OIDC_AUDIENCE
           value: "api.preprod.store.digital.nhs.uk"
         - name: SHAREPOINT_BASEURL
