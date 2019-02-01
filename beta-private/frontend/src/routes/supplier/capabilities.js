@@ -206,7 +206,7 @@ async function solutionCapabilityPagePost (req, res) {
   } else if (req.body.action.continue) {
     res.redirect(path.join(req.baseUrl, req.url, 'confirmation'))
   } else if (req.body.action.exit) {
-    redirectToOnboardingDashboard(req, res)
+    res.redirect('/')
   } else {
     res.redirect(path.join(req.baseUrl, req.url))
   }
@@ -294,7 +294,7 @@ async function confirmationPagePost (req, res) {
   if (req.body.action.save) {
     return confirmationPageGet(req, res)
   } else if (req.body.action.exit) {
-    return redirectToOnboardingDashboard(req, res)
+    return res.redirect('/')
   } else if (req.body.action.continue) {
     try {
       await submitCapabilityAssessment(req.solution.id)
