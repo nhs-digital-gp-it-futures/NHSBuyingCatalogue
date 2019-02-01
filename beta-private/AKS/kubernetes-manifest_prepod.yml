@@ -49,7 +49,9 @@ spec:
           valueFrom:
             secretKeyRef:
               name: bccrmsecret
-              key: CRM_CLIENTSECRET  
+              key: CRM_CLIENTSECRET 
+        - name: LOG_BEARERAUTH
+          value: "true"       
         - name: OIDC_ISSUER_URL
           value: "https://nhsstore-preprod.eu.auth0.com"
         - name: OIDC_USERINFO_URL
