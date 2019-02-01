@@ -96,6 +96,7 @@ test('After uploading a file, the supplier dashboard and onboarding dashboard sh
 
   await uploadFileWithMessage(t, capSection, 'Dummy TraceabilityMatrix.xlsx', 'Automation testing message sent with uploaded file')
     .click(capabilityEvidencePage.globalSaveAndExitButton)
+    .click(supplierDashboardPage.secondOnboardingSolutionName)
 
     .expect(onboardingDashboardPage.capabilityAssessmentButton.textContent).eql('Edit')
     .expect(onboardingDashboardPage.capabilityAssessmentStatus.textContent).contains('Draft Saved')
