@@ -298,7 +298,7 @@ async function registrationPagePost (req, res) {
 
     if (req.body.action) {
       if (req.body.action.continue) redirectUrl += '../capabilities/'
-      if (req.body.action.exit) redirectUrl += '../'
+      if (req.body.action.exit) redirectUrl = '/'
     }
 
     res.redirect(redirectUrl)
@@ -363,9 +363,12 @@ async function capabilitiesPagePost (req, res) {
   const context = await capabilitiesPageContext(req)
 
   // redirect based on action chosen
-  let redirectUrl = (req.body.action && req.body.action.save)
-    ? './'
-    : '../'
+  let redirectUrl = '../'
+
+  if (req.body.action) {
+    if (req.body.action.save) redirectUrl = './'
+    else if (req.body.action.exit) redirectUrl = '/'
+  }
 
   // the "selected" property holds the current ID for each claimed capability,
   // or a newly generated ID for an added capability

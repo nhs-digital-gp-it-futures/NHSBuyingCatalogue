@@ -12,7 +12,6 @@ fixture('Solution Registration - Details')
 
 function navigateToSupplierOnboardingSolution (t) {
   return asSupplier(t)
-    .click(supplierDashboardPage.homeLink)
     .click(supplierDashboardPage.firstOnboardingSolutionName)
     .click(onboardingDashboardPage.continueRegistrationButton)
 }
@@ -58,6 +57,7 @@ test('Solution name shows in top bar and updates correctly when saved', async t 
     .selectText(registrationPage.solutionVersionInput)
     .typeText(registrationPage.solutionVersionInput, '1')
     .click(registrationPage.globalSaveAndExitButton)
+    .click(supplierDashboardPage.firstOnboardingSolutionName)
     .click(onboardingDashboardPage.continueRegistrationButton)
     .expect(registrationPage.globalSolutionName.textContent).eql('Really Kool Document Manager, 1')
 })
@@ -176,7 +176,7 @@ test('Creating a new contact requires all fields to be filled if any are', async
     .typeText(registrationPage.newContactLastNameInput, 'Smith Fotheringham-Shaw')
     .typeText(registrationPage.newContactEmailInput, 'safety.unicorn@example.com')
     .typeText(registrationPage.newContactPhoneInput, '555 123 4567')
-    .click(registrationPage.globalSaveButton)
+    .click(registrationPage.globalSaveAndExitButton)
 
   await navigateToSupplierOnboardingSolution(t)
     .click(registrationPage.newContactFieldset)
