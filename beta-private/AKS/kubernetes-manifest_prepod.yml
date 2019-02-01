@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: bc-pb-deployment-api
 spec:
-  replicas: 2
+  replicas: 1
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -21,7 +21,7 @@ spec:
       - name: regcred
       containers:
       - name: bc-private-beta-api
-        image: bcprepodacr.azurecr.io/gpitf/catalogue-api:#{Build.BuildId}#
+        image: bcprepodacr.azurecr.io/gpitf/catalogue-api:latest
         ports:
         - containerPort: 5100
         resources:
@@ -51,11 +51,11 @@ spec:
               name: bccrmsecret
               key: CRM_CLIENTSECRET 
         - name: OIDC_ISSUER_URL
-          value: "https://buying-catalogue-beta-prototype.eu.auth0.com"
+          value: "https://nhsstore-preprod.eu.auth0.com"
         - name: OIDC_USERINFO_URL
-          value: "https://buying-catalogue-beta-prototype.eu.auth0.com/userinfo"
+          value: "https://nhsstore-preprod.eu.auth0.com/userinfo"
         - name: OIDC_AUDIENCE
-          value: "api.buying-catalogue-beta-prototype"
+          value: "api.preprod.store.digital.nhs.uk"
         - name: SHAREPOINT_BASEURL
           value: "https://hscic365.sharepoint.com/sites/DTGPP/GPITF"
         - name: SHAREPOINT_ORGANISATIONSRELATIVEURL
@@ -88,7 +88,7 @@ kind: Deployment
 metadata:
   name: bc-pb-deployment-frontend
 spec:
-  replicas: 2
+  replicas: 1
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -106,7 +106,7 @@ spec:
       - name: regcred
       containers:
       - name: bc-private-beta-frontend
-        image: bcprepodacr.azurecr.io/gpitf/catalogue-frontend:#{Build.BuildId}#
+        image: bcprepodacr.azurecr.io/gpitf/catalogue-frontend:latest
         ports:
         - containerPort: 8000
         resources:
@@ -122,7 +122,7 @@ spec:
         - name: CACHE_HOST
           value: "cache"
         - name: OIDC_ISSUER_URL
-          value: "https://buying-catalogue-beta-prototype.eu.auth0.com"
+          value: "https://nhsstore-preprod.eu.auth0.com"
         - name: OIDC_CLIENT_ID
           valueFrom:
             secretKeyRef:
@@ -139,7 +139,7 @@ kind: Deployment
 metadata:
   name: bc-pb-deployment-crm
 spec:
-  replicas: 2
+  replicas: 1
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -157,7 +157,7 @@ spec:
       - name: regcred
       containers:
       - name: bc-private-beta-crm
-        image: bcprepodacr.azurecr.io/gpitf/catalogue-crm:#{Build.BuildId}#
+        image: bcprepodacr.azurecr.io/gpitf/catalogue-crm:latest
         ports:
         - containerPort: 5001
         resources:
@@ -199,7 +199,7 @@ kind: Deployment
 metadata:
   name: bc-pb-deployment-nginx
 spec:
-  replicas: 2
+  replicas: 1
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -217,7 +217,7 @@ spec:
       - name: regcred
       containers:
       - name: bc-private-beta-nginx
-        image: bcprepodacr.azurecr.io/gpitf/catalogue-frontend-proxy:#{Build.BuildId}#
+        image: bcprepodacr.azurecr.io/gpitf/catalogue-frontend-proxy:latest
         ports:
         - containerPort: 80
         resources:
@@ -231,7 +231,7 @@ kind: Deployment
 metadata:
   name: bc-pb-deployment-cache
 spec:
-  replicas: 2
+  replicas: 1
   strategy:
     rollingUpdate:
       maxSurge: 1
