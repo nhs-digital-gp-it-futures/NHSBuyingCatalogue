@@ -21,7 +21,7 @@ spec:
       - name: regcred
       containers:
       - name: bc-private-beta-api
-        image: bcprepodacr.azurecr.io/gpitf/catalogue-api:latest
+        image: bcprepodacr.azurecr.io/gpitf/catalogue-api:#{Build.BuildId}#
         ports:
         - containerPort: 5100
         resources:
@@ -52,8 +52,6 @@ spec:
               key: CRM_CLIENTSECRET 
         - name: OIDC_ISSUER_URL
           value: "https://nhsstore-preprod.eu.auth0.com"
-        - name: OIDC_USERINFO_URL
-          value: "https://nhsstore-preprod.eu.auth0.com/userinfo"
         - name: OIDC_AUDIENCE
           value: "api.preprod.store.digital.nhs.uk"
         - name: SHAREPOINT_BASEURL
@@ -106,7 +104,7 @@ spec:
       - name: regcred
       containers:
       - name: bc-private-beta-frontend
-        image: bcprepodacr.azurecr.io/gpitf/catalogue-frontend:latest
+        image: bcprepodacr.azurecr.io/gpitf/catalogue-frontend:#{Build.BuildId}#
         ports:
         - containerPort: 8000
         resources:
@@ -157,7 +155,7 @@ spec:
       - name: regcred
       containers:
       - name: bc-private-beta-crm
-        image: bcprepodacr.azurecr.io/gpitf/catalogue-crm:latest
+        image: bcprepodacr.azurecr.io/gpitf/catalogue-crm:#{Build.BuildId}#
         ports:
         - containerPort: 5001
         resources:
@@ -217,7 +215,7 @@ spec:
       - name: regcred
       containers:
       - name: bc-private-beta-nginx
-        image: bcprepodacr.azurecr.io/gpitf/catalogue-frontend-proxy:latest
+        image: bcprepodacr.azurecr.io/gpitf/catalogue-frontend-proxy:#{Build.BuildId}#
         ports:
         - containerPort: 80
         resources:
