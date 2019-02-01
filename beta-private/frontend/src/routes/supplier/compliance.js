@@ -238,11 +238,12 @@ async function solutionComplianceEvidencePagePost (req, res) {
     return res.redirect('../../')
   }
 
-  let redirectUrl = action.save
-    ? './'
-    : action.submit
-      ? './confirmation'
-      : '../../'
+  let redirectUrl = './'
+
+  if (action.save) redirectUrl = './'
+  else if (action.save) redirectUrl = './'
+  else if (action.submit) redirectUrl = './confirmation'
+  else if (action.exit) redirectUrl = '/'
 
   if (!req.files.length && action.submit !== 'direct') {
     req.body.errors = { items: [{ msg: 'No file to upload.' }] }
