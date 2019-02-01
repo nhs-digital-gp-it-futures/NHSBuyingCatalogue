@@ -239,10 +239,7 @@ async function solutionComplianceEvidencePagePost (req, res) {
   }
 
   let redirectUrl = './'
-
-  if (action.save) redirectUrl = './'
-  else if (action.save) redirectUrl = './'
-  else if (action.submit) redirectUrl = './confirmation'
+  if (action.submit) redirectUrl = './confirmation'
   else if (action.exit) redirectUrl = '/'
 
   if (!req.files.length && action.submit !== 'direct') {
