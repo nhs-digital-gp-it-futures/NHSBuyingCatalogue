@@ -128,4 +128,10 @@ document.addEventListener('DOMContentLoaded', function () {
     refresh()
     elInput.addEventListener('input', refresh)
   })
+
+  window.addEventListener('beforeunload', function () {
+    setTimeout(function () {
+      $('body > .loading-spinner').classList.add('enabled')
+    }, 2000)
+  })
 })
