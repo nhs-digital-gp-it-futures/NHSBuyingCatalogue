@@ -85,12 +85,12 @@ function onboardingStatusPage (req, res) {
 
     context.stages[1].status = 'Not started'
     context.stages[1].link = 'Start'
-    context.stages[1].class = ''
+    context.stages[1].class = 'unavailable'
     context.stages[1].url = `../../capabilities/${req.solution.id}`
 
     context.stages[2].status = 'Not started'
     context.stages[2].link = 'Start'
-    context.stages[2].class = ''
+    context.stages[2].class = 'unavailable'
     context.stages[2].url = `../../compliance/${req.solution.id}`
 
     // Capability Assessment has some evidence
@@ -128,11 +128,12 @@ function onboardingStatusPage (req, res) {
       context.stages[0].status = 'Complete'
       context.stages[0].class = 'complete'
       context.stages[0].link = 'Edit'
+      context.stages[1].class = ''
+      context.stages[2].class = ''
 
       if ('registered' in req.query) {
         context.registrationComplete = true
       }
-
     }
     if (status === 2) { // capability assessment
       context.stages[0].status = 'Complete'
