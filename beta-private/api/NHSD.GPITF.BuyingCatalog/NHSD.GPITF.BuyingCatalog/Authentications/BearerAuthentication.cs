@@ -48,6 +48,7 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
     {
       // set roles based on email-->organisation-->org.PrimaryRoleId
       var bearerToken = ((FrameRequestHeaders)context.HttpContext.Request.Headers).HeaderAuthorization.Single();
+      LogInformation($"Extracted token --> [{bearerToken}]");
 
       // have to cache responses or UserInfo endpoint thinks we are a DOS attack
       CachedUserInfoResponse cachedresponse = null;
