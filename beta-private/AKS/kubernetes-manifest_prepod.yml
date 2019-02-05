@@ -116,7 +116,7 @@ spec:
             cpu: 500m
         env:
         - name: BASE_URL
-          value: "http://nhstoreprepod.uksouth.cloudapp.azure.com"
+          value: "http://nhstoreprepodwf.uksouth.cloudapp.azure.com"
         - name: API_BASE_URL
           value: "http://api:5100"
         - name: CACHE_HOST
@@ -282,8 +282,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: bc-lb-nginx
-spec:
-  loadBalancerIP: 51.140.142.224
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"  
+spec:  
   type: LoadBalancer
   ports:
   - port: 80
