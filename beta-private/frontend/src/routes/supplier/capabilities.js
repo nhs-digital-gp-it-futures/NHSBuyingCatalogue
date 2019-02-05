@@ -63,7 +63,11 @@ async function capabilityPageContext (req) {
     ...await dataProvider.capabilityMappings(),
     errors: {
       items: []
-    }
+    },
+    breadcrumbs: [
+      { label: 'Onboarding.Title', url: `../../solutions/${req.solution.id}` },
+      { label: 'CapAssPages.Breadcrumb' }
+    ]
   }
 
   context.activeForm.id = 'capability-assessment-form'
@@ -105,11 +109,7 @@ async function capabilityPageContext (req) {
 
 async function solutionCapabilityPageGet (req, res) {
   const context = {
-    ...await capabilityPageContext(req),
-    breadcrumbs: [
-      { label: 'Onboarding.Title', url: `../../solutions/${req.solution.id}` },
-      { label: 'CapAssPages.Breadcrumb' }
-    ]
+    ...await capabilityPageContext(req)
   }
 
   // page is only editable if the solution is registered, and notyet submitted for assessment
@@ -126,11 +126,7 @@ async function solutionCapabilityPagePost (req, res) {
   const context = {
     errors: {
       items: []
-    },
-    breadcrumbs: [
-      { label: 'Onboarding.Title', url: `../../solutions/${req.solution.id}` },
-      { label: 'CapAssPages.Breadcrumb' }
-    ]
+    }
   }
 
   const valRes = validationResult(req)
@@ -234,6 +230,8 @@ async function confirmationPageGet (req, res) {
   const context = {
     ...await capabilityPageContext(req)
   }
+
+  delete context.breadcrumbs
 
   context.solution.standardsByGroup = context.solution.capabilities.reduce((obj, cap) => {
     cap.standardsByGroup.associated.forEach((std) => { obj.associated[std.id] = std })
