@@ -7,37 +7,52 @@
     fieldset.trigger {
         border: none;
         background: $color-nhs-light-grey;
-    }
-
-    fieldset.trigger,
-    fieldset.evidence-field {
-        padding-top: 3rem;
-        position: relative;
+        padding: 0;
 
         legend {
-            position: absolute;
-            top: 1rem;
+            background: $color-nhs-light-grey;
+            display: block;
+            width: 100%;
 
-            > h2 {
-                margin: 0;
+            h3 {
+                padding-left: 2rem;
             }
         }
-    }
-    div.instructions {
-        padding: 0em 1em;
+
+        .question {
+            margin: 0;
+            padding: 0 2rem 1em;
+        }
     }
 
     div.instructions {
-        padding: 0em 1em;
+        padding: 0 1em;
     }
 
     div.dependant {
-        margin: 1em 0em 1em 2em;
-        border-left: 0.7em solid $color-nhs-light-mid-grey;
+        margin: .5em 0 0 2.67rem;
+        border-left: .5em solid $color-nhs-light-mid-grey;
+
         fieldset.evidence-field {
-            margin-left: 2em;
             background: $color-nhs-light-grey;
             border: none;
+            margin-left: 1.25em;
+            padding: 0;
+
+            legend {
+                background: $color-nhs-light-grey;
+                display: block;
+                width: 100%;
+
+                h3 {
+                    padding-left: 1rem;
+                }
+            }
+
+            p {
+                margin-top: 0;
+                padding-left: 1rem;
+            }
         }
     }
 
@@ -53,7 +68,7 @@
         cursor: pointer;
         display: flex;
         align-items: center;
-        padding: 1em;
+        padding: 0 2rem 1em;
 
         input {
             // width: 0px;
@@ -63,13 +78,13 @@
         }
 
         .checkmark {
-            height: 2em;
-            width: 2em;
+            height: 1.67em;
+            width: 1.67em;
             background-color: white;
             margin-right: 1em;
             display: block;
             border-radius: 50%;
-            border: solid 4px $color-nhs-blue;
+            border: solid 3px $color-nhs-blue;
             .inner-checkmark {
                 border-radius: 50%;
                 width: 50%;
@@ -82,7 +97,7 @@
 
         input:disabled:checked ~ .checkmark,
         input:disabled ~ .checkmark {
-            border: solid 4px $color-nhs-mid-grey;
+            border-color: $color-nhs-mid-grey;
         }
 
         input:hover:active ~ .checkmark {
@@ -93,7 +108,7 @@
 
         input:checked ~ .checkmark {
             background: none;
-            border: solid 4px $color-nhs-warm-yellow;
+            border-color: $color-nhs-warm-yellow;
             .inner-checkmark {
                 background: black;
             }
