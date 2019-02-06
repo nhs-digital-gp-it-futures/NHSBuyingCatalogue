@@ -45,6 +45,7 @@
     <PackageReference Include="Dapper" Version="1.50.4" />
     <PackageReference Include="Dapper.Contrib" Version="1.50.4" />
     <PackageReference Include="FluentValidation" Version="7.5.2" />
+    <PackageReference Include="Flurl" Version="2.8.0" />
     <PackageReference Include="IdentityModel" Version="3.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.8" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="2.0.1" />

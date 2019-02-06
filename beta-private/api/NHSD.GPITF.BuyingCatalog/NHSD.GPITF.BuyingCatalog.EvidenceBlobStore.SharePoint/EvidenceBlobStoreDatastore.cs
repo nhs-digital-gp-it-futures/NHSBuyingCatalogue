@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Flurl;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -107,15 +108,19 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       var claim = claimsInfoProvider.GetClaimById(claimId);
       var soln = _solutionsDatastore.ById(claim.SolutionId);
       var org = _organisationsDatastore.ById(soln.OrganisationId);
-      var subFolderSeparator = !string.IsNullOrEmpty(subFolder) ? "/" : string.Empty;
       var solnVer = GetSolutionVersionFolderName(soln);
-      var claimFolder = $"{SharePoint_BaseUrl}/{SharePoint_OrganisationsRelativeUrl}/{solnVer}/{CleanupFileName(claimsInfoProvider.GetFolderName())}/{CleanupFileName(claimsInfoProvider.GetFolderClaimName(claim))}";
-      var claimFolderRelUrl = $"{SharePoint_OrganisationsRelativeUrl}/{CleanupFileName(org.Name)}/{solnVer}/{CleanupFileName(claimsInfoProvider.GetFolderName())}/{CleanupFileName(claimsInfoProvider.GetFolderClaimName(claim))}/{subFolder ?? string.Empty}{subFolderSeparator}";
+      var claimFolderRelUrl = Url.Combine(
+        SharePoint_OrganisationsRelativeUrl,
+        CleanupFileName(org.Name),
+        solnVer,
+        CleanupFileName(claimsInfoProvider.GetFolderName()),
+        CleanupFileName(claimsInfoProvider.GetFolderClaimName(claim)));
 
       // create subFolder if not exists
       if (!string.IsNullOrEmpty(subFolder))
       {
-        CreateSubFolder(claimFolder, subFolder);
+        CreateSubFolder(claimFolderRelUrl, subFolder);
+        claimFolderRelUrl = Url.Combine(claimFolderRelUrl, subFolder);
       }
 
       var context = GetClientContext();
@@ -123,7 +128,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       context.ExecuteQuery();
 
       // Get the information about the folder that will hold the file
-      LogInformation($"UploadFileSlicePerSlice: enumerating {context.Url}/{claimFolderRelUrl}...");
+      LogInformation($"UploadFileSlicePerSlice: enumerating {Url.Combine(context.Url, claimFolderRelUrl)}...");
       context.Load(docClaimFolder.Files);
       context.Load(docClaimFolder, folder => folder.ServerRelativeUrl);
       context.ExecuteQuery();
@@ -194,7 +199,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
           // Get a reference to our file
           LogInformation($"UploadFileSlicePerSlice: getting reference to file...");
-          uploadFile = context.Web.GetFileByServerRelativeUrl(docClaimFolder.ServerRelativeUrl + Path.AltDirectorySeparatorChar + fileName);
+          uploadFile = context.Web.GetFileByServerRelativeUrl(Url.Combine(docClaimFolder.ServerRelativeUrl, fileName));
 
           if (last)
           {
@@ -245,14 +250,23 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         var org = _organisationsDatastore.ById(soln.OrganisationId);
 
         var context = GetClientContext();
-        var claimFolderUrl = $"{SharePoint_OrganisationsRelativeUrl}/{CleanupFileName(org.Name)}/{GetSolutionVersionFolderName(soln)}/{CleanupFileName(claimsInfoProvider.GetFolderName())}/{CleanupFileName(claimsInfoProvider.GetFolderClaimName(claim))}/{CleanupFileName(subFolder ?? string.Empty)}";
-        var claimFolder = context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString(claimFolderUrl));
+        var claimFolderUrl = Url.Combine(
+          SharePoint_OrganisationsRelativeUrl,
+          CleanupFileName(org.Name),
+          GetSolutionVersionFolderName(soln),
+          CleanupFileName(claimsInfoProvider.GetFolderName()),
+          CleanupFileName(claimsInfoProvider.GetFolderClaimName(claim)));
+        if (!string.IsNullOrEmpty(subFolder))
+        {
+          claimFolderUrl = Url.Combine(claimFolderUrl, subFolder);
+        }
+        var claimFolder = context.Web.GetFolderByServerRelativeUrl(claimFolderUrl);
 
         context.Load(claimFolder);
         context.Load(claimFolder.Files);
         context.Load(claimFolder.Folders);
 
-        LogInformation($"EnumerateFolder: enumerating {context.Url}/{claimFolderUrl}...");
+        LogInformation($"EnumerateFolder: enumerating {Url.Combine(context.Url, claimFolderUrl)}...");
         context.ExecuteQuery();
 
         var claimFolderInfo = new BlobInfo
@@ -308,7 +322,10 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         var claims = claimsInfoProvider.GetClaimBySolution(solutionId);
         var org = _organisationsDatastore.ById(soln.OrganisationId);
         var claimFolder = CleanupFileName(claimsInfoProvider.GetFolderName());
-        var solutionUrl = $"{SharePoint_OrganisationsRelativeUrl}/{CleanupFileName(org.Name)}/{GetSolutionVersionFolderName(soln)}";
+        var solutionUrl = Url.Combine(
+          SharePoint_OrganisationsRelativeUrl,
+          CleanupFileName(org.Name),
+          GetSolutionVersionFolderName(soln));
         var allBlobInfos = EnumerateFolderRecursively(solutionUrl, claimFolder);
         var quals = claimsInfoProvider.GetAllQualities();
 
@@ -354,8 +371,8 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       var context = GetClientContext();
 
       // top level folder eg 'Standards Evidence'
-      var claimFolderUrl = $"{solutionUrl}/{claimFolder}";
-      var contextFolder = context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString(claimFolderUrl));
+      var claimFolderUrl = Url.Combine(solutionUrl, claimFolder);
+      var contextFolder = context.Web.GetFolderByServerRelativeUrl(claimFolderUrl);
       context.Load(contextFolder);
       context.Load(contextFolder.Folders);
       context.Load(contextFolder.Files);
@@ -498,50 +515,25 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       return _policy.Execute(get);
     }
 
+    private const int SPServerFolderAlreadyExistsExceptionErrorCode = -2130245363;
+
     // can only create sub-folder immediately under baseUrl
     private void CreateSubFolder(string baseUrl, string subFolder)
     {
       LogInformation($"CreateSubFolder: baseUrl: {baseUrl} | subFolder: {subFolder}");
-      var baseFolderExists = true;
       var context = GetClientContext();
-      var baseFolder = context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString($"{baseUrl}"));
+      var baseFolder = context.Web.GetFolderByServerRelativeUrl(baseUrl);
+      baseFolder.AddSubFolder(subFolder);
       context.Load(baseFolder);
       try
       {
-        LogInformation($"CreateSubFolder: checking base folder ({baseUrl}) exists...");
+        LogInformation($"CreateSubFolder: creating sub-folder [{subFolder}]");
         context.ExecuteQuery();
       }
-      catch
+      catch (ServerException sex) when (sex.ServerErrorCode == SPServerFolderAlreadyExistsExceptionErrorCode)
       {
-        LogInformation($"CreateSubFolder: base folder ({baseUrl}) does not exist");
-        baseFolderExists = false;
+        LogInformation($"CreateSubFolder: sub-folder [{subFolder}] exists");
       }
-      if (!baseFolderExists)
-      {
-        return;
-      }
-
-      var targetFolderExists = true;
-      var targetFolder = context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString($"{baseUrl}/{subFolder}"));
-      context.Load(targetFolder);
-      try
-      {
-        LogInformation($"CreateSubFolder: checking target folder ({baseUrl}/{subFolder}) exists...");
-        context.ExecuteQuery();
-      }
-      catch
-      {
-        LogInformation($"CreateSubFolder: target folder ({baseUrl}/{subFolder}) does not exist");
-        targetFolderExists = false;
-      }
-      if (targetFolderExists)
-      {
-        return;
-      }
-
-      LogInformation($"CreateSubFolder: adding sub-folder ({subFolder}) ...");
-      baseFolder.AddSubFolder(subFolder);
-      context.ExecuteQuery();
     }
 
     private void CreateClaimSubFolders(
@@ -553,7 +545,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       string claimType,
       IEnumerable<string> claimNames)
     {
-      var baseFolder = context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString($"{baseUrl}"));
+      var baseFolder = context.Web.GetFolderByServerRelativeUrl(baseUrl);
       context.Load(baseFolder);
       context.ExecuteQuery();
       LogInformation($"Created BaseFolder: {baseUrl}");
