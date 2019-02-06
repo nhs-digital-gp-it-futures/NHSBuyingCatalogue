@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Security;
 using System.Text.RegularExpressions;
 
 namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
@@ -20,6 +19,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
   public sealed class EvidenceBlobStoreDatastore : IEvidenceBlobStoreDatastore
   {
     private readonly IHostingEnvironment _env;
+    private readonly IAuthenticationManager _authMgr;
 
     private readonly IOrganisationsDatastore _organisationsDatastore;
     private readonly ISolutionsDatastore _solutionsDatastore;
@@ -35,12 +35,13 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
     private readonly string SharePoint_BaseUrl;
     private readonly string SharePoint_OrganisationsRelativeUrl;
-    private readonly string SharePoint_Login;
-    private readonly string SharePoint_Password;
+    private readonly string SharePoint_ClientId;
+    private readonly string SharePoint_ClientSecret;
 
     public EvidenceBlobStoreDatastore(
       IHostingEnvironment env,
       IConfiguration config,
+      IAuthenticationManager authMgr,
       IOrganisationsDatastore organisationsDatastore,
       ISolutionsDatastore solutionsDatastore,
       ICapabilitiesImplementedDatastore capabilitiesImplementedDatastore,
@@ -52,6 +53,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       )
     {
       _env = env;
+      _authMgr = authMgr;
 
       _solutionsDatastore = solutionsDatastore;
       _organisationsDatastore = organisationsDatastore;
@@ -67,13 +69,13 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
       SharePoint_BaseUrl = Settings.SHAREPOINT_BASEURL(config);
       SharePoint_OrganisationsRelativeUrl = Settings.SHAREPOINT_ORGANISATIONSRELATIVEURL(config);
-      SharePoint_Login = Settings.SHAREPOINT_LOGIN(config);
-      SharePoint_Password = Settings.SHAREPOINT_PASSWORD(config);
+      SharePoint_ClientId = Settings.SHAREPOINT_CLIENT_ID(config);
+      SharePoint_ClientSecret = Settings.SHAREPOINT_CLIENT_SECRET(config);
 
       if (string.IsNullOrWhiteSpace(SharePoint_BaseUrl) ||
         string.IsNullOrWhiteSpace(SharePoint_OrganisationsRelativeUrl) ||
-        string.IsNullOrWhiteSpace(SharePoint_Login) ||
-        string.IsNullOrWhiteSpace(SharePoint_Password)
+        string.IsNullOrWhiteSpace(SharePoint_ClientId) ||
+        string.IsNullOrWhiteSpace(SharePoint_ClientSecret)
         )
       {
         throw new ConfigurationErrorsException("Missing SharePoint configuration - check UserSecrets or environment variables");
@@ -114,7 +116,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         CreateSubFolder(claimFolder, subFolder);
       }
 
-      var context = GetClientContextByUserNamePassword();
+      var context = GetClientContext();
       var docClaimFolder = context.Web.GetFolderByServerRelativeUrl(claimFolderRelUrl);
       context.ExecuteQuery();
 
@@ -240,7 +242,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         var soln = _solutionsDatastore.ById(claim.SolutionId);
         var org = _organisationsDatastore.ById(soln.OrganisationId);
 
-        var context = GetClientContextByUserNamePassword();
+        var context = GetClientContext();
         var claimFolderUrl = $"{SharePoint_OrganisationsRelativeUrl}/{CleanupFileName(org.Name)}/{CleanupFileName(soln.Name)}/{CleanupFileName(claimsInfoProvider.GetFolderName())}/{CleanupFileName(claimsInfoProvider.GetFolderClaimName(claim))}/{CleanupFileName(subFolder ?? string.Empty)}";
         var claimFolder = context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString(claimFolderUrl));
 
@@ -308,7 +310,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
     private IEnumerable<BlobInfo> EnumerateFolderRecursively(string solutionUrl, string claimFolder)
     {
-      var context = GetClientContextByUserNamePassword();
+      var context = GetClientContext();
 
       // top level folder eg 'Standards Evidence'
       var claimFolderUrl = $"{solutionUrl}/{claimFolder}";
@@ -399,7 +401,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       return GetInternal(() =>
       {
         LogInformation($"GetFileStream: claimId: {claimId} | uniqueId: {uniqueId}");
-        var context = GetClientContextByUserNamePassword();
+        var context = GetClientContext();
         var file = context.Web.GetFileById(Guid.Parse(uniqueId));
         context.Load(file);
         context.ExecuteQuery();
@@ -454,7 +456,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     {
       LogInformation($"CreateSubFolder: baseUrl: {baseUrl} | subFolder: {subFolder}");
       var baseFolderExists = true;
-      var context = GetClientContextByUserNamePassword();
+      var context = GetClientContext();
       var baseFolder = context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString($"{baseUrl}"));
       context.Load(baseFolder);
       try
@@ -502,7 +504,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       string claimType,
       IEnumerable<string> claimNames)
     {
-      var context = GetClientContextByUserNamePassword();
+      var context = GetClientContext();
       var baseFolder = context.Web.GetFolderByServerRelativeUrl(Uri.EscapeUriString($"{baseUrl}"));
       context.Load(baseFolder);
       context.ExecuteQuery();
@@ -599,19 +601,9 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       }
     }
 
-    private ClientContext GetClientContextByUserNamePassword()
+    private ClientContext GetClientContext()
     {
-      var securePassword = new SecureString();
-      foreach (char item in SharePoint_Password)
-      {
-        securePassword.AppendChar(item);
-      }
-
-      var encodedUrl = Uri.EscapeUriString(SharePoint_BaseUrl);
-      var onlineCredentials = new SharePointOnlineCredentials(SharePoint_Login, securePassword);
-      var ctx = new ClientContext(encodedUrl) { Credentials = onlineCredentials };
-
-      return ctx;
+      return _authMgr.GetAppOnlyAuthenticatedContext(SharePoint_BaseUrl, SharePoint_ClientId, SharePoint_ClientSecret);
     }
   }
 }
