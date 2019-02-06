@@ -417,7 +417,7 @@
         }
       },
       "Submission": {
-        "Notice":"By Submitting this information to $t(NHSD.Name) for Assessment, you are confirming you are able, to the best of your knowledge, to meet all $t(Capability_Assessment) and $t(Standards Compliance) requirements and to display the $t(Solution) named on the $t(Catalogue)."
+        "Notice":"By Submitting this information to $t(NHSD.Name) for Assessment, you are confirming you are able, to the best of your knowledge, to meet all $t(Capability_Assessment) and $t(Standards Compliance) requirements and to display the $t(Solution) named on the $t(Catalogue.Title)."
       },
       "Buttons": {
         "Submit": "Save and review"

@@ -11,7 +11,7 @@
 
   {{#> form encoding="multipart/form-data" form_id=activeForm.id}}
     {{#each solution.capabilities}}
-    {{#>collapsible-fieldset legend=name}}
+    {{#>collapsible-fieldset heading=name}}
       <div class="instructions">
         <p>
           {{t 'CapAssPages.Assessment.Evidence.Instructions'}}
@@ -20,8 +20,8 @@
       </div>
 
       <fieldset class="trigger" id="triggering-fieldset-{{claimID}}">
-        <legend><h2>{{t 'CapAssPages.Assessment.Evidence.Title'}}</h2></legend>
-        <p>
+        <legend><h3>{{t 'CapAssPages.Assessment.Evidence.Title'}}</h3></legend>
+        <p class="question">
           {{t 'CapAssPages.Assessment.Evidence.Options.Question'}}
         </p>
         <label class="radio-container">
@@ -47,14 +47,14 @@
 
       <div class="dependant" id="upload-fieldset-{{claimID}}">
         <fieldset class="evidence-field">
-          <legend><h2>{{t 'CapAssPages.Assessment.Evidence.Video.Title'}}</h2></legend>
+          <legend><h3>{{t 'CapAssPages.Assessment.Evidence.Video.Title'}}</h3></legend>
 
           {{#if latestFile}}
           <input type="hidden" name="evidence-file[{{claimID}}]" value="true" {{#if ../../notEditable}}disabled{{/if}}/>
           {{/if}}
 
           <div>
-            <input type="file" name="evidence-file[{{claimID}}]" {{#if ../../notEditable}}disabled{{/if}} aria-label="Choose evidence file to upload"/>
+            <p><input type="file" name="evidence-file[{{claimID}}]" {{#if ../../notEditable}}disabled{{/if}} aria-label="Choose evidence file to upload"/></p>
           </div>
 
           {{#latestFile}}
@@ -67,16 +67,18 @@
             <p id="evidence-description-label-{{claimID}}">
               {{t 'CapAssPages.Assessment.Evidence.Video.Additional'}}
             </p>
-          <textarea name="evidence-description[{{claimID}}]"
-            {{#if ../../notEditable}}disabled{{/if}}
-            aria-labelledby="evidence-description-label-{{claimID}}">{{#if isUploadingEvidence}}{{latestEvidence.evidence}}{{/if}}</textarea>
+            <p>
+            <textarea name="evidence-description[{{claimID}}]"
+              {{#if ../../notEditable}}disabled{{/if}}
+              aria-labelledby="evidence-description-label-{{claimID}}">{{#if isUploadingEvidence}}{{latestEvidence.evidence}}{{/if}}</textarea>
+            </p>
           </div>
         </fieldset>
       </div>
 
       <div class="dependant" id="live-fieldset-{{claimID}}">
         <fieldset class="evidence-field" {{#if ../../notEditable}}disabled{{/if}}>
-          <legend><h2>{{t 'CapAssPages.Assessment.Evidence.Notice.Title'}}</h2></legend>
+          <legend><h3>{{t 'CapAssPages.Assessment.Evidence.Notice.Title'}}</h3></legend>
           <p>{{t 'CapAssPages.Assessment.Evidence.Notice.Additional'}}</p>
         </fieldset>
       </div>
