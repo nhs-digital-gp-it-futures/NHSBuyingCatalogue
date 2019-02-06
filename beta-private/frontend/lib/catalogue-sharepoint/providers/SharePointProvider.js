@@ -26,6 +26,19 @@ class SharePointProvider {
     )
   }
 
+  async enumerateCapFolderFiles (solutionId) {
+    const enumeration = await this.capBlobStoreApi.apiCapabilitiesImplementedEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGet(
+      solutionId
+    )
+
+    const claimMap = {}
+    enumeration.items.forEach((item) => {
+      claimMap[item.claimId] = item.blobInfos.filter((item) => !item.isFolder)
+    })
+
+    return claimMap
+  }
+
   async getCapEvidenceFolders (claimID, subFolder) {
     const enumeratedBlobs = await this.getCapEvidence(claimID, subFolder)
     const filteredBlobs = enumeratedBlobs.items.filter((blob) => blob.isFolder)

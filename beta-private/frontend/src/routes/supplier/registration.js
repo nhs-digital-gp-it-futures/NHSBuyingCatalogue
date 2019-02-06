@@ -85,26 +85,40 @@ function onboardingStatusPage (req, res) {
 
     context.stages[1].status = 'Not started'
     context.stages[1].link = 'Start'
-    context.stages[1].class = ''
+    context.stages[1].class = 'unavailable'
     context.stages[1].url = `../../capabilities/${req.solution.id}`
 
     context.stages[2].status = 'Not started'
     context.stages[2].link = 'Start'
-    context.stages[2].class = ''
+    context.stages[2].class = 'unavailable'
     context.stages[2].url = `../../compliance/${req.solution.id}`
 
+    // Capability Assessment has some evidence
     if (req.solution._raw.claimedCapabilityEvidence.length) {
-      context.stages[1].status = 'In progress'
+      context.stages[1].status = 'Draft Saved'
       context.stages[1].link = 'Edit'
     }
 
+    // Standards Compliance has some evidence
     if (req.solution._raw.claimedStandardEvidence.length) {
-      context.stages[2].status = 'In progress'
+      context.stages[2].status = 'Draft Saved'
       context.stages[2].link = 'Edit'
     }
 
+    // Standards Compliance has a none draft standard
+    if (req.solution._raw.claimedStandard.filter((std) => +std.status !== 0).length) {
+      context.stages[2].status = 'In Progress'
+      context.stages[2].link = 'Edit'
+    }
+
+    // Standards Compliance has no in progress standards
+    if (req.solution._raw.claimedStandard.every((std) => +std.status < 0 && +std.status > 3)) {
+      context.stages[2].status = 'Complete'
+      context.stages[2].link = 'View'
+    }
+
     if (status === 0) { // draft
-      context.stages[0].status = 'In progress'
+      context.stages[0].status = 'Draft Saved'
       context.stages[0].link = 'Edit'
       context.stages[1].link = ''
       context.stages[2].link = ''
@@ -114,6 +128,8 @@ function onboardingStatusPage (req, res) {
       context.stages[0].status = 'Complete'
       context.stages[0].class = 'complete'
       context.stages[0].link = 'Edit'
+      context.stages[1].class = ''
+      context.stages[2].class = ''
 
       if ('registered' in req.query) {
         context.registrationComplete = true
@@ -136,7 +152,7 @@ function onboardingStatusPage (req, res) {
       context.stages[0].class = 'complete'
       context.stages[0].link = 'View'
 
-      context.stages[1].status = 'Passed'
+      context.stages[1].status = 'Complete'
       context.stages[1].class = 'complete'
       context.stages[1].link = 'View'
 
@@ -282,7 +298,7 @@ async function registrationPagePost (req, res) {
 
     if (req.body.action) {
       if (req.body.action.continue) redirectUrl += '../capabilities/'
-      if (req.body.action.exit) redirectUrl += '../'
+      if (req.body.action.exit) redirectUrl = '/'
     }
 
     res.redirect(redirectUrl)
@@ -347,9 +363,12 @@ async function capabilitiesPagePost (req, res) {
   const context = await capabilitiesPageContext(req)
 
   // redirect based on action chosen
-  let redirectUrl = (req.body.action && req.body.action.save)
-    ? './'
-    : '../'
+  let redirectUrl = '../'
+
+  if (req.body.action) {
+    if (req.body.action.save) redirectUrl = './'
+    else if (req.body.action.exit) redirectUrl = '/'
+  }
 
   // the "selected" property holds the current ID for each claimed capability,
   // or a newly generated ID for an added capability

@@ -32,7 +32,7 @@ test('Register Really Kool Kore System with 3 core capabilities', async t => {
     .click(registrationPage.continueButton)
     .click(onboardingDashboardPage.homeLink)
 
-    .expect(supplierDashboardPage.secondOnboardingSolutionStatus.textContent).eql('Registered')
+    .expect(supplierDashboardPage.secondOnboardingSolutionStatus.textContent).eql('Complete')
 })
 
 test('Access button has correct text when no evidence submitted', async t => {

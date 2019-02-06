@@ -51,6 +51,19 @@ test('Collapsible fieldsets behave as an accordion', async t => {
     .expect(allTheFieldsets.nth(2).hasClass('collapsed')).ok()
 })
 
+test('No default selection of upload/live demo', async t => {
+  const allTheFieldsets = Selector('form#capability-assessment-form > fieldset.collapsible')
+
+  await t
+    .expect(allTheFieldsets.nth(0).find('input[type=radio]:checked').count).eql(0)
+
+    .click(allTheFieldsets.nth(1).find('legend'))
+    .expect(allTheFieldsets.nth(1).find('input[type=radio]:checked').count).eql(0)
+
+    .click(allTheFieldsets.nth(2).find('legend'))
+    .expect(allTheFieldsets.nth(2).find('input[type=radio]:checked').count).eql(0)
+})
+
 function uploadFile (t, sel, filename) {
   return t
     .click(sel.child('legend'))
@@ -83,9 +96,10 @@ test('After uploading a file, the supplier dashboard and onboarding dashboard sh
 
   await uploadFileWithMessage(t, capSection, 'Dummy TraceabilityMatrix.xlsx', 'Automation testing message sent with uploaded file')
     .click(capabilityEvidencePage.globalSaveAndExitButton)
+    .click(supplierDashboardPage.secondOnboardingSolutionName)
 
     .expect(onboardingDashboardPage.capabilityAssessmentButton.textContent).eql('Edit')
-    .expect(onboardingDashboardPage.capabilityAssessmentStatus.textContent).contains('In progress')
+    .expect(onboardingDashboardPage.capabilityAssessmentStatus.textContent).contains('Draft Saved')
 })
 
 test('After uploading a file, the name of the file should show against the capability', async t => {
@@ -196,15 +210,16 @@ test('Clicking Continue with complete evidence should lead to summary page with 
 
   // Assert Summary section headings are there.
   await t
-    .expect(Selector('.summary-box:nth-child(4) h2').innerText).contains('Solution details')
-    .expect(Selector('.summary-box:nth-child(5) h2').innerText).contains('Capabilities')
-    .expect(Selector('.summary-box:nth-child(6) h2').innerText).contains('Assessment evidence')
+    .expect(Selector('#summary-details h2').innerText).contains('Solution details')
+    .expect(Selector('#summary-capabilities h2').innerText).contains('Capabilities')
+    .expect(Selector('#summary-evidence h2').innerText).contains('Assessment evidence')
 
   // Assert Assessment Evidence is correct.
+  const evidenceTypes = Selector('#summary-evidence .evidence p:nth-child(2)')
   await t
-    .expect(Selector('.summary-box:nth-child(6) .evidence:nth-child(2) p:nth-child(2)').innerText).contains('Evidence: Live Witness Demonstration')
-    .expect(Selector('.summary-box:nth-child(6) .evidence:nth-child(3) p:nth-child(2)').innerText).contains('Evidence: Recorded Video')
-    .expect(Selector('.summary-box:nth-child(6) .evidence:nth-child(4) p:nth-child(2)').innerText).contains('Evidence: Recorded Video')
+    .expect(evidenceTypes.nth(0).innerText).contains('Evidence: Live Witness Demonstration')
+    .expect(evidenceTypes.nth(1).innerText).contains('Evidence: Recorded Video')
+    .expect(evidenceTypes.nth(2).innerText).contains('Evidence: Recorded Video')
 })
 
 test('Submitting from the summary page should update the status on the dashboard and onboarding page', async t => {

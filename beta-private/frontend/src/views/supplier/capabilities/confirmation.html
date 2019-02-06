@@ -2,16 +2,16 @@
 
     {{> errors}}
 
-    <h1>{{t 'CapAssPages.Confirmation.Title'}}</h1>
-    <p class="information">{{t 'CapAssPages.Confirmation.Information'}}</p>
+    <header class="page-main-heading">
+        <h1>{{t 'CapAssPages.Confirmation.Title'}}</h1>
+        <p>{{t 'CapAssPages.Confirmation.Information'}}</p>
+    </header>
 
-    <div class="help-box">
-        {{#>help-reveal title="CapAssPages.Confirmation.Help.Title" }}
-            <p>{{t 'CapAssPages.Confirmation.Help.Information'}}</p>
-        {{/help-reveal}}
-    </div>
+    {{#>help-reveal title="CapAssPages.Confirmation.Help.Title" }}
+        <p>{{t 'CapAssPages.Confirmation.Help.Information'}}</p>
+    {{/help-reveal}}
 
-    <div class="summary-box">
+    <div class="summary-box" id="summary-details">
         {{>section-header title="CapAssPages.Confirmation.Registration.Title" href=editUrls.registration}}
         <h3>{{t 'CapAssPages.Confirmation.Registration.Subtitle.Solution'}}</h3>
         {{#solution}}
@@ -19,17 +19,40 @@
             <p>{{description}}</p>
             <p>{{version}}</p>
 
-            <h3>{{t 'CapAssPages.Confirmation.Registration.Subtitle.Contacts'}}</h3>
-            {{#contacts}}
-                <p>{{contactType}}</p>
-                <p>{{firstName}} {{lastName}}</p>
-                <p>{{emailAddress}}</p>
-                <p>{{number}}</p>
-            {{/contacts}}
+            <div class="lead contact">
+                <h3>{{t 'CapAssPages.Confirmation.Registration.Subtitle.LeadContact'}}</h3>
+                {{#contacts.[0]}}
+                    <address>
+                    <p class="name">{{firstName}} {{lastName}}</p>
+                    <p class="email">{{emailAddress}}</p>
+                    <p class="phone">{{phoneNumber}}</p>
+                    </address>
+                {{/contacts.[0]}}
+            </div>
+
+            {{#if contacts.[1]}}
+            <div class="contacts">
+                <h3>{{t 'CapAssPages.Confirmation.Registration.Subtitle.Contacts'}}</h3>
+                <ul>
+                {{#contacts}}
+                    {{#unless @first}}
+                    <li class="contact">
+                        <address>
+                        <p class="role">{{contactType}}</p>
+                        <p class="name">{{firstName}} {{lastName}}</p>
+                        <p class="email">{{emailAddress}}</p>
+                        <p class="phone">{{phoneNumber}}</p>
+                        </address>
+                    </li>
+                    {{/unless}}
+                {{/contacts}}
+                </ul>
+            </div>
+            {{/if}}
         {{/solution}}
     </div>
 
-    <div class="summary-box">
+    <div class="summary-box" id="summary-capabilities">
         {{>section-header title="CapAssPages.Confirmation.Capabilities.Title" href=editUrls.capabilities.selection}}
 
         <h3>{{t 'CapAssPages.Confirmation.Capabilities.Subtitle.Capabilities'}}</h3>
@@ -51,7 +74,7 @@
         {{/help-reveal}}
     </div>
 
-    <div class="summary-box">
+    <div class="summary-box" id="summary-evidence">
         {{>section-header title="CapAssPages.Confirmation.Evidence.Title" href=editUrls.capabilities.evidence}}
 
         {{#solution.capabilities}}
@@ -69,7 +92,7 @@
         {{/solution.capabilities}}
     </div>
 
-    {{#> form form_id=activeFormId}}
+    {{#> form form_id=activeForm.id}}
         <button type="submit" name="action[continue]" value="{{t 'Buttons.Save and continue'}}" {{#if notEditable}}disabled{{/if}}>Submit to NHS Digital &#8250;</button>
     {{/form}}
 </div>

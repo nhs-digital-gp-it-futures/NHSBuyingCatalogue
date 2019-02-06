@@ -181,6 +181,66 @@
 
 
     /**
+     * List all claim files and sub-folders for a solution
+     * @param {String} solutionId unique identifier of solution
+     * @param {Object} opts Optional parameters
+     * @param {Number} opts.pageIndex 1-based index of page to return.  Defaults to 1
+     * @param {Number} opts.pageSize number of items per page.  Defaults to 20
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/PaginatedListBlobInfo} and HTTP response
+     */
+    this.apiStandardsApplicableEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGetWithHttpInfo = function(solutionId, opts) {
+      opts = opts || {};
+      var postBody = null;
+
+      // verify the required parameter 'solutionId' is set
+      if (solutionId === undefined || solutionId === null) {
+        throw new Error("Missing the required parameter 'solutionId' when calling apiStandardsApplicableEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGet");
+      }
+
+
+      var pathParams = {
+        'solutionId': solutionId
+      };
+      var queryParams = {
+        'pageIndex': opts['pageIndex'],
+        'pageSize': opts['pageSize'],
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
+
+      var authNames = ['basic', 'oauth2'];
+      var contentTypes = [];
+      var accepts = ['application/json'];
+      var returnType = PaginatedListBlobInfo;
+
+      return this.apiClient.callApi(
+        '/api/StandardsApplicableEvidenceBlobStore/EnumerateClaimFolderTree/{solutionId}', 'GET',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType
+      );
+    }
+
+    /**
+     * List all claim files and sub-folders for a solution
+     * @param {String} solutionId unique identifier of solution
+     * @param {Object} opts Optional parameters
+     * @param {Number} opts.pageIndex 1-based index of page to return.  Defaults to 1
+     * @param {Number} opts.pageSize number of items per page.  Defaults to 20
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/PaginatedListBlobInfo}
+     */
+    this.apiStandardsApplicableEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGet = function(solutionId, opts) {
+      return this.apiStandardsApplicableEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGetWithHttpInfo(solutionId, opts)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
+
+    /**
      * List all files and sub-folders for a claim including folder for claim
      * @param {String} claimId unique identifier of solution claim
      * @param {Object} opts Optional parameters

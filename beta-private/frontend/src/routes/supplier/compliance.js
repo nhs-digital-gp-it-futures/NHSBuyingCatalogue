@@ -135,13 +135,19 @@ async function evidencePageContext (req, next) {
   // compute the message history from the relevant evidence and reviews
   context.claim.submissionHistory = _(context.solution.evidence)
     .filter({ claimId: context.claim.id })
-    .flatMap(ev => [ev, ..._.filter(context.solution.reviews, { evidenceId: ev.id })])
-    .map(({ id, createdOn, createdById, message, evidence }) => ({
+    .map((ev) => ({ ...ev, isFeedback: false })) // Flag all Evidence as not being Feedback
+    .flatMap(ev => [
+      ev,
+      ..._
+        .filter(context.solution.reviews, { evidenceId: ev.id })
+        .map((re) => ({ ...re, isFeedback: true })) // Flag all Reviews as being Feedback
+    ])
+    .map(({ id, createdOn, createdById, message, evidence, isFeedback }) => ({
       id,
       createdOn,
       createdById,
       message: message || evidence,
-      isFeedback: !!message
+      isFeedback
     }))
     .orderBy('createdOn', 'asc')
     .each(msg => {
@@ -218,6 +224,7 @@ async function solutionComplianceEvidencePageGet (req, res, next) {
     context.allowSubmission = (!context.isSubmitted || context.hasFeedback) && solutionInCompliance(context.solution)
     if (context.allowSubmission) {
       context.activeForm.id = 'compliance-evidence-upload'
+      context.allowDirectSubmission = context.claim.submissionHistory.length && !context.isSubmitted && !context.hasFeedback
     }
   }
 
@@ -231,13 +238,13 @@ async function solutionComplianceEvidencePagePost (req, res) {
     return res.redirect('../../')
   }
 
-  let redirectUrl = action.save
-    ? './'
-    : '../../'
+  let redirectUrl = './'
+  if (action.submit) redirectUrl = './confirmation'
+  else if (action.exit) redirectUrl = '/'
 
-  if (!req.files.length) {
+  if (!req.files.length && action.submit !== 'direct') {
     req.body.errors = { items: [{ msg: 'No file to upload.' }] }
-  } else {
+  } else if (req.files.length) {
     const fileToUpload = req.files[0]
 
     try {
@@ -246,10 +253,6 @@ async function solutionComplianceEvidencePagePost (req, res) {
       // update the status of the claim based on the file uploading successfully (not started -> draft)
       // and if the user requested submission to NHS Digital (* -> submitted)
       const claim = _.find(req.solution.standards, { id: req.params.claim_id })
-
-      if (action.submit) {
-        redirectUrl = './confirmation'
-      }
 
       claim.status = '1' /* draft */
       claim.ownerId = req.body.ownerId || null
@@ -266,17 +269,17 @@ async function solutionComplianceEvidencePagePost (req, res) {
       })
 
       await dataProvider.updateSolutionForCompliance(req.solution)
-
-      // redirect accourdingly
-      res.redirect(redirectUrl)
-      return
     } catch (err) {
       req.body.errors = { items: [{ msg: String(err) }] }
     }
   }
 
   // re-render if an error occurred
-  solutionComplianceEvidencePageGet(req, res)
+  if (req.body.errors) {
+    solutionComplianceEvidencePageGet(req, res)
+  } else {
+    res.redirect(redirectUrl)
+  }
 }
 
 async function downloadEvidenceGet (req, res, next) {

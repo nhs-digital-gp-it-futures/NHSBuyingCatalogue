@@ -52,6 +52,12 @@ a[target="_blank"]:after {
       font-weight: normal;
     }
   }
+
+  // default style for paragraphs
+  p {
+    line-height: 1.33;
+    max-width: 770px;
+  }
 }
 
 @import 'components/help-reveal';

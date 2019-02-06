@@ -3,7 +3,7 @@ const _ = require('lodash')
 const solutionOnboardingStatusMap = {
   '-1': { stageName: 'Failure', status: 'Failed' },
   '0': { stageName: 'Registration', stageStep: '1 of 4', status: 'Draft' },
-  '1': { stageName: 'Registration', stageStep: '1 of 4', status: 'Registered' },
+  '1': { stageName: 'Registration', stageStep: '1 of 4', status: 'Complete' },
   '2': { stageName: 'Assessment', stageStep: '2 of 4', status: 'Submitted' },
   '3': { stageName: 'Compliance', stageStep: '3 of 4', status: 'In progress' },
   '4': { stageName: 'Final Approval', stageStep: '3 of 4', status: 'In progress' },
@@ -46,6 +46,17 @@ const sessionStore = new CacheManagerStore(cacheManager.caching({
   prefix: 'bcbeta-sess:'
 })
 
+const NHS_DIGITAL_CONTACT = {
+  firstName: 'NHS',
+  lastName: 'Digital'
+}
+
+function contactWithDisplayName (contact) {
+  return _.create(contact, {
+    displayName: `${contact.firstName} ${contact.lastName}`
+  })
+}
+
 class DataProvider {
   constructor (CatalogueApi) {
     this.CatalogueApi = CatalogueApi
@@ -79,14 +90,19 @@ class DataProvider {
     return contacts.items
   }
 
-  async solutionsForSupplierDashboard (supplierOrgId, solutionMapper = x => x) {
-    const isLive = (soln) => +soln.status === 6 /* Solutions.StatusEnum.Approved */
-    const isOnboarding = (soln) => +soln.status !== 6 /* Solutions.StatusEnum.Approved */
+  solutionsByOrganisation (orgId) {
+    return this.solutionsExApi.apiPorcelainSolutionsExByOrganisationByOrganisationIdGet(orgId)
+  }
 
-    const forDashboard = (soln) => ({
-      raw: soln,
-      id: soln.id,
-      displayName: `${soln.name}${soln.version ? ` | ${soln.version}` : ''}`,
+  async solutionsForSupplierDashboard (supplierOrgId, solutionMapper = x => x) {
+    const isLive = (solnEx) => +solnEx.solution.status === 6 /* Solutions.StatusEnum.Approved */
+    const isOnboarding = (solnEx) => +solnEx.solution.status !== 6 /* Solutions.StatusEnum.Approved */
+
+    const forDashboard = (solnEx) => ({
+      ...solnEx,
+      raw: solnEx.solution,
+      id: solnEx.solution.id,
+      displayName: `${solnEx.solution.name}${solnEx.solution.version ? ` | ${solnEx.solution.version}` : ''}`,
       notifications: []
     })
 
@@ -104,29 +120,38 @@ class DataProvider {
       contractCount: 0
     })
 
-    const failureReasons = async (soln) => {
-      let solution
-      try {
-        solution = await this.solutionForCompliance(soln.id)
-      } catch (err) {
-        return { ...soln }
-      }
-      if (+soln.raw.status !== -1 || _.isEmpty(solution)) return { ...soln }
-      else if (solution.standards.some((std) => +std.status === -1)) {
+    const hasStartedAssessment = (soln) => {
+      if (+soln.raw.status === 1 && soln.claimedCapabilityEvidence.length) {
+        return {
+          ...soln,
+          stageName: 'Assessment',
+          stageStep: '2 of 4',
+          status: 'Draft'
+        }
+      } else return soln
+    }
+
+    const failureReasons = (soln) => {
+      if (+soln.raw.status !== -1 || _.isEmpty(soln)) return { ...soln }
+      else if (soln.standards.some((std) => +std.status === -1)) {
         return { ...soln, stageStep: 'Compliance Outcome' }
       } else {
         return { ...soln, stageStep: 'Assessment Outcome' }
       }
     }
 
-    const paginatedSolutions = await this.solutionsApi.apiSolutionsByOrganisationByOrganisationIdGet(
-      supplierOrgId,
-      { pageSize: 9999 }
-    )
-    const onboardingSolutions = await Promise.all(paginatedSolutions.items.filter(isOnboarding).map(forDashboard).map(forOnboarding).map(failureReasons))
+    const solutions = await this.solutionsByOrganisation(supplierOrgId)
+
+    const onboardingSolutions = solutions
+      .filter(isOnboarding)
+      .map(forDashboard)
+      .map(forOnboarding)
+      .map(hasStartedAssessment)
+      .map(failureReasons)
+
     return {
       onboarding: onboardingSolutions.map(solutionMapper),
-      live: paginatedSolutions.items.filter(isLive).map(forDashboard).map(forLive).map(solutionMapper)
+      live: solutions.filter(isLive).map(forDashboard).map(forLive).map(solutionMapper)
     }
   }
 
@@ -300,9 +325,8 @@ class DataProvider {
 
       _.assign(std, {
         ...solutionComplianceStatusMap[std.status],
-        ownerContact: _.create(ownerContact, {
-          displayName: `${ownerContact.firstName} ${ownerContact.lastName}`
-        })
+        ownerContact: contactWithDisplayName(ownerContact),
+        withContact: contactWithDisplayName(+std.status === 2 ? NHS_DIGITAL_CONTACT : ownerContact)
       })
     })
 

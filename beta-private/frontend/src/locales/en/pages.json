@@ -94,12 +94,12 @@
   "Onboarding": {
     "Title": "Adding a $t(Solution)",
     "Subtitle": {
-      "New": "Start with Stage 1 to register your $t(Solution) and build the requirements for the next two stages.",
+      "New": "There are four stages to adding a $t(Solution) to the $t(Catalogue.Title). Start with Stage 1 below.",
       "Existing": "Continue adding your $t(Solution) below."
     },
     "StartingCallout": {
       "Title": "Before you start",
-      "Text": "We recommend you read the <a href='#supplier-guide'>Supplier Guide</a>. It contains helpful detail and guidance to make your journey as swift and easy as possible."
+      "Text": "We recommend you read the <a href='#supplier-guide' target='_blank'>Supplier Guide</a>. It contains helpful detail and guidance to make your journey as swift and easy as possible."
     },
     "Status": {
       "Title": "$t(Solution) Onboarding Status"
@@ -108,22 +108,22 @@
       {
         "Name": "$t(Solution) Registration",
         "Title": "Provide basic details and select $t(Capability_plural)",
-        "Narrative": "Provide $t(Solution) name, description, version and contact details. Select the $t(Capability_plural) that describe what your $t(Solution) does to build the requirements for the next two stages."
+        "Narrative": "Provide $t(Solution) name, description, version and contact details. Select your $t(Solution_possessive) $t(Capability_plural) to progress to the next stages."
       },
       {
         "Name": "$t(Capabilities Assessment)",
         "Title": "Provide evidence for your $t(Solution_possessive) $t(Capability_plural)",
-        "Narrative": "Provide evidence that shows how your $t(Solution) meets each of its $t(Capability_plural). Your $t(Solution) will be assessed to ensure it meets the $t(Capability_plural) asserted."
+        "Narrative": "Provide evidence that shows how your $t(Solution) meets each of the $t(Capability_plural) selected. $t(NHSD.Name) will assess whether or not your $t(Solution) meets the $t(Capability_plural)."
       },
       {
         "Name": "$t(Standards Compliance)",
         "Title": "Provide evidence for your $t(Solution_possessive) $t(Standard_plural)",
-        "Narrative": "Provide evidence that shows how your $t(Solution) meets each $t(Standard_possessive) requirements. Your $t(Solution) will be evaluated for $t(Compliance) with each $t(Standard)."
+        "Narrative": "Provide evidence that shows how your $t(Solution) meets the requirements in each $t(Standard). $t(NHSD.Name) will evaluate your $t(Solution) for $t(Compliance) with each $t(Standard)."
       },
       {
         "Name": "$t(Solution) Detail",
         "Title": "Build your $t(Solution) page",
-        "Narrative": "Provide information to help buyers evaluate your $t(Solution). This information will be moderated. It not affect either $t(Assessment) (Stage 2) or $t(Compliance) (Stage 3)."
+        "Narrative": "Provide information to help buyers evaluate your $t(Solution). $t(NHSD.Name) will moderate the information added. Then, publish your $t(Solution) page."
       }
     ],
     "Help": {
@@ -137,7 +137,7 @@
       "Title": "$t(Solution) registration complete.",
       "Text": [
         "You can now continue with stage 2 $t(Onboarding.Stages.1.Name) as soon as you’re ready.",
-        "You can view stage 3, and start saving evidence against $t(Standard_plural_possessive) requirements. However, you cannot submit evidence for stage 3 until you have passed stage 2."
+        "You can also view stage 3. However, you cannot save and submit evidence against $t(Standard_plural) until you have passed stage 2."
       ]
     },
     "CapabilityAssessmentSubmittedCallout": {
@@ -417,7 +417,7 @@
         }
       },
       "Submission": {
-        "Notice":"By Submitting this information to $t(NHSD.Name) for Assessment, you are confirming you are able, to the best of your knowledge, to meet all $t(Capability) Assessment and $t(Standard_plural) $t(Compliance) requirements and to display the $t(Solution) named on the NHS Catalogue."
+        "Notice":"By Submitting this information to $t(NHSD.Name) for Assessment, you are confirming you are able, to the best of your knowledge, to meet all $t(Capability_Assessment) and $t(Standards Compliance) requirements and to display the $t(Solution) named on the $t(Catalogue.Title)."
       },
       "Buttons": {
         "Submit": "Save and review"
@@ -431,10 +431,11 @@
         "Information": "When you Submit this page, the information you have provided will be sent to $t(NHSD.Name), and the Assessment team will begin reviewing your responses for each Capability. Your $t(Lead Contact) will receive a notification linked to an Outcome letter once the assessment is complete."
       },
       "Registration": {
-        "Title": "Solution details and key contacts.",
+        "Title": "Enter $t(Solution) details and key contacts.",
         "Subtitle": {
-          "Solution": "Solution Name, Description, Version",
-          "Contacts": "Contacts"
+          "Solution": "Enter $t(Solution) name, description, version",
+          "LeadContact": "Enter $t(Lead Contact) Details",
+          "Contacts": "Additional Contacts"
         }
       },
       "Capabilities": {

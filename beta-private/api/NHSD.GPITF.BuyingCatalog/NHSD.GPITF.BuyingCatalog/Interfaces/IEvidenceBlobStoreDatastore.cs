@@ -12,7 +12,7 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
     string AddEvidenceForClaim(IClaimsInfoProvider claimsInfoProvider, string claimId, Stream file, string filename, string subFolder = null);
     FileStreamResult GetFileStream(IClaimsInfoProvider claimsInfoProvider, string claimId, string uniqueId);
     IEnumerable<BlobInfo> EnumerateFolder(IClaimsInfoProvider claimsInfoProvider, string claimId, string subFolder = null);
-    IEnumerable<BlobInfo> EnumerateClaimFolderTree(IClaimsInfoProvider claimsInfoProvider, string solutionId);
+    IEnumerable<ClaimBlobInfoMap> EnumerateClaimFolderTree(IClaimsInfoProvider claimsInfoProvider, string solutionId);
   }
 #pragma warning restore CS1591
 }

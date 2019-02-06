@@ -1,171 +1,192 @@
 #capability-assessment-page {
+  fieldset {
+    background: none;
+  }
 
-    fieldset {
-        background: none;
+  fieldset.trigger {
+    background: $color-nhs-light-grey;
+    border: 0;
+    padding: 0;
+
+    > legend {
+      background: $color-nhs-light-grey;
+      display: block;
+      width: 100%;
+
+      h3 {
+        padding-left: 2rem;
+      }
     }
 
-    fieldset.trigger {
-        border: none;
-        background: $color-nhs-light-grey;
+    .question {
+      margin: 0;
+      padding: 0 2rem 1em;
     }
+  }
 
-    fieldset.trigger,
+  div.instructions {
+    padding: 0 1em;
+  }
+
+  div.dependant {
+    border-left: .5em solid $color-nhs-light-mid-grey;
+    margin: .5em 0 0 2.67rem;
+
     fieldset.evidence-field {
-        padding-top: 3rem;
-        position: relative;
+      background: $color-nhs-light-grey;
+      border: 0;
+      margin-left: 1.25em;
+      padding: 0;
 
-        legend {
-            position: absolute;
-            top: 1rem;
+      > legend {
+        background: $color-nhs-light-grey;
+        display: block;
+        width: 100%;
 
-            > h2 {
-                margin: 0;
-            }
+        h3 {
+          padding-left: 1rem;
         }
+      }
+
+      p {
+        margin-top: 0;
+        padding-left: 1rem;
+      }
     }
-    div.instructions {
-        padding: 0em 1em;
+  }
+
+  div.latest-upload {
+    padding: 1em 0;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  label.radio-container {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    padding: 0 2rem 1em;
+
+    input {
+      // width: 0px;
+      // height: 0px;
+      opacity: 0;
+      position: absolute;
     }
 
-    div.instructions {
-        padding: 0em 1em;
+    .checkmark {
+      background-color: white;
+      border: solid 3px $color-nhs-blue;
+      border-radius: 50%;
+      display: block;
+      height: 1.67em;
+      margin-right: 1em;
+      width: 1.67em;
+
+      .inner-checkmark {
+        background: white;
+        border-radius: 50%;
+        display: block;
+        height: 50%;
+        margin: 25%;
+        width: 50%;
+      }
     }
 
-    div.dependant {
-        margin: 1em 0em 1em 2em;
-        border-left: 0.7em solid $color-nhs-light-mid-grey;
-        fieldset.evidence-field {
-            margin-left: 2em;
-            background: $color-nhs-light-grey;
-            border: none;
-        }
+    input:disabled:checked ~ .checkmark,
+    input:disabled ~ .checkmark {
+      border-color: $color-nhs-mid-grey;
     }
 
-    div.latest-upload {
-        padding: 1em 0em;
+    input:hover:active ~ .checkmark {
+      .inner-checkmark {
+        background: $color-nhs-light-mid-grey;
+      }
     }
 
-    .hidden {
-        display: none;
+    input:checked ~ .checkmark {
+      background: none;
+      border-color: $color-nhs-warm-yellow;
+
+      .inner-checkmark {
+        background: black;
+      }
     }
-
-    label.radio-container {
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        padding: 1em;
-
-        input {
-            // width: 0px;
-            // height: 0px;
-            opacity: 0;
-            position:absolute;
-        }
-
-        .checkmark {
-            height: 2em;
-            width: 2em;
-            background-color: white;
-            margin-right: 1em;
-            display: block;
-            border-radius: 50%;
-            border: solid 4px $color-nhs-blue;
-            .inner-checkmark {
-                border-radius: 50%;
-                width: 50%;
-                height: 50%;
-                margin: 25%;
-                background: white;
-                display: block;
-            }
-        }
-
-        input:disabled:checked ~ .checkmark,
-        input:disabled ~ .checkmark {
-            border: solid 4px $color-nhs-mid-grey;
-        }
-
-        input:hover:active ~ .checkmark {
-            .inner-checkmark {
-                background: $color-nhs-light-mid-grey;
-            }
-        }
-
-        input:checked ~ .checkmark {
-            background: none;
-            border: solid 4px $color-nhs-warm-yellow;
-            .inner-checkmark {
-                background: black;
-            }
-        }
-    }
+  }
 }
 
 #capability-submission-confirmation {
-    div.summary-box {
-        padding: 0.75em 2em;
-        margin: 1em 0em;
-        width: auto;
-        background: $color-nhs-light-grey;
-        border: 1px solid black;
-        div.evidence {
-            border-bottom: 2px solid $color-nhs-light-mid-grey;
-            padding: 1em 0em;
-        }
-        div.capabilities {
-            border-bottom: 2px solid $color-nhs-light-mid-grey;
-            margin: 0em 0em 0.7em 0em;
-        }
-        h2 {
-            margin: 0.1em;
-            color: black;
-            font-size: 2em;
-        }
-        h3 {
-            font-size: 1.5em;
-            color: $color-nhs-dark-grey;
-        }
+  div.summary-box {
+    background: $color-nhs-light-grey;
+    border: 1px solid black;
+    margin: 1em 0;
+    padding: .75em 2em;
+    width: auto;
+
+    div.evidence {
+      border-bottom: 2px solid $color-nhs-light-mid-grey;
+      padding: 1em 0;
+    }
+
+    div.capabilities {
+      border-bottom: 2px solid $color-nhs-light-mid-grey;
+      margin: 0 0 .7em 0;
+    }
+
+    div.section-header {
+      align-content: center;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+
+      h2 {
+        margin: 0 0 .25em;
+      }
+    }
+
+    h3 {
+      margin: 0.5em 0 .25em;
+    }
+
+    details {
+      summary > span {
+        color: $color-nhs-blue;
+        font-size: 1.4em;
+      }
+
+      summary ~ div.contents {
+        background: none;
+        border: 0;
+      }
+    }
+
+    .contact {
+      address {
+        margin-bottom: 1.5em;
+
         p {
-            font-size: 1.1em;
-            color: $color-nhs-dark-grey;
+          font-size: 100%;
+          font-style: normal;
+          line-height: 1.66;
+          margin: 0;
         }
 
-        div.section-header {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-content: center;
+        .role {
+          font-weight: bold;
         }
-
-        details {
-            summary > span {
-                font-size: 1.4em;
-                color: $color-nhs-blue;
-            }
-            summary ~ div.contents {
-                background: none;
-                border: none;
-            }
-        }
+      }
     }
 
-    p.information {
-        font-size: 1.2em;
-    }
+    .contacts {
+      ul {
+        columns: 2;
 
-    .help-box {
-        details {
-            summary > span {
-                font-size: 1.2em;
-                color: $color-nhs-blue;
-                text-decoration: underline;
-            }
-            div.contents {
-                font-size: 1em;
-                margin: 1em 0em;
-                padding: 0.1em 0.7em;
-                border-left: 0.7em solid $color-nhs-blue;
-            }
+        li {
+          break-inside: avoid;
         }
+      }
     }
+  }
 }

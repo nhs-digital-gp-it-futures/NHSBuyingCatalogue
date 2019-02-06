@@ -20,5 +20,11 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     /// Current status of this ClaimedStandard
     /// </summary>
     public StandardsApplicableStatus Status { get; set; } = StandardsApplicableStatus.Submitted;
+
+    /// <summary>
+    /// Unique identifier of Standard
+    /// </summary>
+    [Computed]
+    public override string QualityId => StandardId;
   }
 }
