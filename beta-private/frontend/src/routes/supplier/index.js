@@ -1,6 +1,7 @@
 const _ = require('lodash')
 const router = require('express').Router({ strict: true, mergeParams: true })
 const { dataProvider } = require('catalogue-data')
+const { catchHandler } = require('catalogue-authn-authz')
 
 // work-around for Express bug 2281, open since 2014
 // https://github.com/expressjs/express/issues/2281
@@ -15,7 +16,7 @@ router.get('/', strictRouting, async (req, res) => {
       { label: 'HomePage.Breadcrumb', url: '/' },
       { label: 'MySolutions.Title' }
     ],
-    errors: [],
+    errors: { items: [] },
     solutions: {
       onboarding: [],
       live: []
@@ -32,7 +33,7 @@ router.get('/', strictRouting, async (req, res) => {
     context.solutions.onboarding = _.orderBy(context.solutions.onboarding, 'displayName')
     context.solutions.live = _.orderBy(context.solutions.live, 'displayName')
   } catch (err) {
-    context.errors.push(err)
+    if (catchHandler(err, res, context)) return
   }
 
   res.render('supplier/index', context)
