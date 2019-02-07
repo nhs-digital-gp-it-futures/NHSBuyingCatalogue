@@ -216,8 +216,8 @@ function registrationPageGet (req, res) {
 
   addContactFieldsToContext(context)
 
-  /* If Solution has submitted Capability Assessment Evidence */
-  if (+context.solution.status === 2) {
+  /* If Solution has progressed further than registering. */
+  if (+context.solution.status && +context.solution.status !== 0 && +context.solution.status !== 1) {
     res.redirect(`../../../capabilities/${req.solution.id}/summary`)
   } else {
     res.render('supplier/registration/1-details', context)
@@ -320,7 +320,7 @@ async function capabilitiesPageContext (req) {
     ]
   }
 
-  if (+context.solution.status !== 0 && +context.solution.status !== 1) {
+  if (+context.solution.status && +context.solution.status !== 0 && +context.solution.status !== 1) {
     context.readOnly = true
   }
 
@@ -360,12 +360,12 @@ async function capabilitiesPageGet (req, res) {
   context.capabilities.forEach(cap => {
     cap.selected = _.get(_.find(req.solution.capabilities, { capabilityId: cap.id }), 'id')
   })
-  /* If Solution has submitted Capability Assessment Evidence */
-  if (+context.solution.status === 2) {
+  /* If Solution has progressed further than registration. */
+  if (+context.solution.status && +context.solution.status !== 0 && +context.solution.status !== 1) {
     res.redirect(`../../../capabilities/${req.solution.id}/summary`)
   } else {
     res.render('supplier/registration/2-capabilities', context)
-}
+  }
 }
 
 async function capabilitiesPagePost (req, res) {
