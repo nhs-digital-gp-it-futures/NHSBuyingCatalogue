@@ -9,7 +9,7 @@
         {{>section-header title="{{standard.name}}" href="./"}}
         <h2>{{t 'CompliancePages.Confirmation.Evidence.File.Heading'}}</h2>
         {{#if latestFile}}
-            <a href="{{latestFile.downloadURL}}">{{latestFile.name}}</a>
+            <a download href="{{latestFile.downloadURL}}">{{latestFile.name}}</a>
         {{else}}
             <p>{{t 'CompliancePages.Confirmation.Evidence.File.NotFound'}}</p>
         {{/if}}
