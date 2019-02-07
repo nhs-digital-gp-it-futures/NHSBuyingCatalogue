@@ -232,3 +232,15 @@ test('Submitting from the summary page should update the status on the dashboard
     .expect(Selector('.callout .title').innerText).contains('Submitted for Capability')
     .expect(Selector('a[href^="../../compliance/"]')).ok()
 })
+
+test('After Submitting Evidence for Capability Assessment, the Registration Pages should redirect to a Summary Page', async t => {
+  await asSupplier(t)
+    .click(supplierDashboardPage.homeLink)
+    .click(supplierDashboardPage.secondOnboardingSolutionName)
+
+  await t
+    .click(onboardingDashboardPage.continueRegistrationButton)
+    .expect(Selector('#summary-details h2').innerText).contains('Enter Solution details')
+    .expect(Selector('#summary-capabilities h2').innerText).contains('Which Capabilities')
+    .expect(Selector('#summary-evidence h2').innerText).contains('Provide Assessment')
+})

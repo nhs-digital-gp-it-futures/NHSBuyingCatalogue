@@ -285,7 +285,7 @@ async function summaryPageGet (req, res) {
 
 async function confirmationPageGet (req, res) {
   const context = {
-    ...await confirmationPageContext
+    ...await confirmationPageContext(req)
   }
 
   // page is only editable if the solution is registered, and notyet submitted for assessment
