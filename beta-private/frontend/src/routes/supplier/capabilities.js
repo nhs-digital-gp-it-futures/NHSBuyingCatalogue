@@ -45,7 +45,8 @@ router
   .post(confirmationPagePost)
 
 router
-  .route('/:solution_id/confirmation')
+  .route('/:solution_id/summary')
+  .get(summaryPageGet)
 
 function commonContext (req) {
   return {
@@ -226,12 +227,10 @@ async function downloadEvidenceGet (req, res) {
   })
 }
 
-async function confirmationPageGet (req, res) {
+async function confirmationPageContext (req) {
   const context = {
     ...await capabilityPageContext(req)
   }
-
-  delete context.breadcrumbs
 
   context.solution.standardsByGroup = context.solution.capabilities.reduce((obj, cap) => {
     cap.standardsByGroup.associated.forEach((std) => { obj.associated[std.id] = std })
@@ -268,6 +267,24 @@ async function confirmationPageGet (req, res) {
       missingEvidence
     }
   })
+  return context
+}
+
+async function summaryPageGet (req, res) {
+  const context = {
+    ...await confirmationPageContext(req)
+  }
+  context.breadcrumbs = [
+    { label: 'Onboarding.Title', url: `../../solutions/${req.solution.id}` },
+    { label: 'CapAssPages.Breadcrumb' }
+  ]
+  res.render('supplier/capabilities/summary', context)
+}
+
+async function confirmationPageGet (req, res) {
+  const context = {
+    ...await confirmationPageContext
+  }
 
   // page is only editable if the solution is registered, and notyet submitted for assessment
   context.notEditable = context.solution.status !== dataProvider.getRegisteredStatusCode()
