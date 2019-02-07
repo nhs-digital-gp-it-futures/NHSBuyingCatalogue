@@ -276,8 +276,10 @@ async function summaryPageGet (req, res) {
   }
   context.breadcrumbs = [
     { label: 'Onboarding.Title', url: `../../solutions/${req.solution.id}` },
-    { label: 'CapAssPages.Breadcrumb' }
+    { label: 'CapAssPages.Summary.Breadcrumb' }
   ]
+  context.editUrls = {}
+  context.backlink = `../../solutions/${req.solution.id}`
   res.render('supplier/capabilities/summary', context)
 }
 
