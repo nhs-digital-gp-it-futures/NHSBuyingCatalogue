@@ -11,6 +11,7 @@
         <p>{{t 'CapAssPages.Confirmation.Help.Information'}}</p>
     {{/help-reveal}}
 
+<<<<<<< HEAD
     <div class="summary-box" id="summary-details">
         {{>section-header title="CapAssPages.Confirmation.Registration.Title" href=editUrls.registration}}
         <h3>{{t 'CapAssPages.Confirmation.Registration.Subtitle.Solution'}}</h3>
@@ -91,6 +92,9 @@
         </div>
         {{/solution.capabilities}}
     </div>
+=======
+    {{> solution-summary-details}}
+>>>>>>> [Whoopsie] Set off totally in the wrong direction, forgot that details were only readonly after submitting for CapAss
 
     {{#> form form_id=activeForm.id}}
         <button type="submit" name="action[continue]" value="{{t 'Buttons.Save and continue'}}" {{#if notEditable}}disabled{{/if}}>Submit to NHS Digital &#8250;</button>
