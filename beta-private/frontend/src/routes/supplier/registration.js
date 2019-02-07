@@ -216,7 +216,12 @@ function registrationPageGet (req, res) {
 
   addContactFieldsToContext(context)
 
-  res.render('supplier/registration/1-details', context)
+  /* If Solution has submitted Capability Assessment Evidence */
+  if (+context.solution.status === 2) {
+    res.redirect(`../../../capabilities/${req.solution.id}/summary`)
+  } else {
+    res.render('supplier/registration/1-details', context)
+  }
 }
 
 // before attempting to validate the body for registration,
@@ -355,8 +360,12 @@ async function capabilitiesPageGet (req, res) {
   context.capabilities.forEach(cap => {
     cap.selected = _.get(_.find(req.solution.capabilities, { capabilityId: cap.id }), 'id')
   })
-
-  res.render('supplier/registration/2-capabilities', context)
+  /* If Solution has submitted Capability Assessment Evidence */
+  if (+context.solution.status === 2) {
+    res.redirect(`../../../capabilities/${req.solution.id}/summary`)
+  } else {
+    res.render('supplier/registration/2-capabilities', context)
+}
 }
 
 async function capabilitiesPagePost (req, res) {

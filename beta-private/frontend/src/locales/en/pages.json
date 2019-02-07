@@ -455,6 +455,14 @@
         },
         "Error": "Error: This $t(Capability) is missing evidence."
       }
+    },
+    "Summary": {
+      "Breadcrumb": "Submission Summary",
+      "Title": "Submission Summary",
+      "Information": "The following information is what you have supplied to $t(NHSD.Name). This information is used during the assessment process.",
+      "Backlink": {
+        "Title": "$t(Onboarding.Title)"
+      }
     }
   },
   "Error": {
