@@ -6,6 +6,6 @@
 rm -rf swagger_temp
 mkdir swagger_temp
 cp lib/catalogue-api/swagger.json swagger_temp/
-docker run --rm -v ${PWD}:/local swaggerapi/swagger-codegen-cli:unstable generate -i ./local/swagger_temp/swagger.json -l javascript -o /local/swagger_temp --additional-properties usePromises=true,projectName=catalogue-api
+docker run --rm -v ${PWD}:/local swaggerapi/swagger-codegen-cli:unstable generate -i ./local/swagger_temp/swagger.json -l javascript -o /local/swagger_temp --additional-properties usePromises=true,projectName=catalogue-api -t/local/utils/templates
 rm -rf lib/catalogue-api
 mv swagger_temp lib/catalogue-api
