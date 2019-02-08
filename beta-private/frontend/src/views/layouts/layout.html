@@ -68,6 +68,20 @@
     </header>
     <main id="content" class="{{#if onHomePage}}no-padding{{/if}}">
       {{> breadcrumbs}}
+      <div id="unsaved-changes">
+        <h2>You have unsaved changes</h2>
+        <p>If you leave without saving, you will lose any changes you have made to this page.</p>
+        <input type="submit"
+              {{#if activeForm.id}}
+              form="{{activeForm.id}}"
+              {{else}}
+              disabled
+              {{/if}}
+              class="button"
+              name="action[save]"
+              value="{{t 'Buttons.Save'}}">
+          <a class="button">Continue without Saving</a>
+        </div>
       {{{body}}}
     </main>
     <footer aria-label="Site footer">

@@ -17,6 +17,13 @@ Document.prototype.$$ = Element.prototype.$$ = function (selector) {
   return Array.from(this.querySelectorAll(selector))
 }
 
+/**
+ * Global Dirty Flag
+ * Used to ensure that unsaved changes are communicated.
+ */
+
+var DIRTY_PAGE = false
+
 function restoreSavedFormInputs () {
   // we only support restoration on modern browsers
   if (!window.URLSearchParams) return
@@ -154,9 +161,54 @@ document.addEventListener('DOMContentLoaded', function () {
     elInput.addEventListener('input', refresh)
   })
 
-  window.addEventListener('beforeunload', function () {
-    setTimeout(function () {
-      $('body > .loading-spinner').classList.add('enabled')
-    }, 2000)
+  window.addEventListener('beforeunload', function (event) {
+    if (DIRTY_PAGE) {
+      event.preventDefault()
+      event.returnValue = ''
+    } else {
+      setTimeout(function () {
+        $('body > .loading-spinner').classList.add('enabled')
+      }, 2000)
+    }
+  })
+
+  /**
+   * Flag that there are unsaved changes
+   */
+  $$('form').forEach(function (form) {
+    form.addEventListener('change', function () {
+      DIRTY_PAGE = true
+    })
+  })
+
+  /**
+   * Submitting a Form flags that there are no unsaved changes
+   */
+  $$('input[type="submit"]').forEach(function (input) {
+    input.addEventListener('click', function () {
+      DIRTY_PAGE = false
+      $('#unsaved-changes').classList.remove('enabled')
+    })
+  })
+
+  // global click listener for handling navigation away from a dirty page.
+  window.addEventListener('click', function (event) {
+    // bail if the click isn't targeting an anchor else or the page isn't Dirty.
+    if (event.target.tagName !== 'A' || !DIRTY_PAGE) return
+
+    const continueButton = $('#unsaved-changes a.button')
+
+    // Allow continue without Saving button to leave.
+    if (event.target === continueButton) {
+      DIRTY_PAGE = false
+      return
+    }
+
+    // Set continue without saving button href and display the notice.
+    $('#unsaved-changes a.button').setAttribute('href', event.target.href)
+    $('#unsaved-changes').classList.add('enabled')
+    $('#unsaved-changes').scrollIntoView({ behavior: 'smooth' })
+    
+    event.preventDefault()
   })
 })
