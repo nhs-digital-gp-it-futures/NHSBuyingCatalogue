@@ -382,6 +382,10 @@ class RealDataProvider extends DataProvider {
   constructor () {
     super(require('catalogue-api'))
     this.CatalogueApi.ApiClient.instance.basePath = process.env.API_BASE_URL || 'http://api:5100'
+    this.CatalogueApi.ApiClient.instance.logger = require('superagent-logger')({
+      timestamp: true,
+      outgoing: true
+    })
   }
 
   // support for the authentication layer
