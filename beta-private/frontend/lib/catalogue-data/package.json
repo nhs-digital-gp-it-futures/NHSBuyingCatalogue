@@ -14,6 +14,8 @@
     "cache-manager-redis-store": "^1.5.0",
     "catalogue-api": "../catalogue-api",
     "express-session-cache-manager": "^1.0.2",
-    "lodash": "^4.17.10"
+    "lodash": "^4.17.10",
+    "superagent-logger": "^1.1.0",
+    "superagent": "*"
   }
 }
