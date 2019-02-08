@@ -291,6 +291,14 @@ main > .breadcrumb {
       color: $color-link-reversed-fg;
     }
   }
+  a.button {
+    background-color: $color-nhs-white;
+    color: $color-nhs-blue;
+    border: 1px solid $color-nhs-blue;
+    &:hover {
+      background-color: $color-nhs-light-grey;
+    }
+  }
   input[type="submit"] {
     width: 12em;
     margin-right: 1em;
