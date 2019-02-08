@@ -207,8 +207,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Set continue without saving button href and display the notice.
     $('#unsaved-changes a.button').setAttribute('href', event.target.href)
     $('#unsaved-changes').classList.add('enabled')
-    $('#unsaved-changes').scrollIntoView({ behavior: 'smooth' })
-    
+    document.body.scrollTop = document.documentElement.scrollTop = 0
     event.preventDefault()
   })
 })

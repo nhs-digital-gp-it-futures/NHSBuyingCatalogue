@@ -283,7 +283,14 @@ main > .breadcrumb {
   padding: 1em 4em;
   display: none;
   margin: 1em 0em;
-
+  
+  a {
+    &:visited,
+    &:active,
+    &:focus {
+      color: $color-link-reversed-fg;
+    }
+  }
   input[type="submit"] {
     width: 12em;
     margin-right: 1em;
