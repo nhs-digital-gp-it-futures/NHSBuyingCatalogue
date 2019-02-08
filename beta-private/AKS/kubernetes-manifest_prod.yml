@@ -282,11 +282,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: bc-lb-nginx
-  annotations: 
-    service.beta.kubernetes.io/azure-load-balancer-internal: "true"  
-spec:  
+spec:
+  loadBalancerIP: 51.145.112.215
   type: LoadBalancer
-  loadBalancerIP: 10.240.0.100
   ports:
   - port: 80
   selector:
