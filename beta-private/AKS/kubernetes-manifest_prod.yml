@@ -51,11 +51,11 @@ spec:
               name: bccrmsecret
               key: CRM_CLIENTSECRET   
         - name: OIDC_ISSUER_URL
-          value: "https://nhsstore-preprod.eu.auth0.com"
+          value: "https://nhsstore-prod.eu.auth0.com"
         - name: OIDC_USERINFO_URL
-          value: "https://nhsstore-preprod.eu.auth0.com/userinfo"
+          value: "https://nhsstore-prod.eu.auth0.com/userinfo"
         - name: OIDC_AUDIENCE
-          value: "api.preprod.store.digital.nhs.uk"
+          value: "api.prod.store.digital.nhs.uk"
         - name: SHAREPOINT_BASEURL
           value: "https://hscic365.sharepoint.com/sites/DTGPP/GPITF"
         - name: SHAREPOINT_ORGANISATIONSRELATIVEURL
@@ -122,7 +122,7 @@ spec:
         - name: CACHE_HOST
           value: "cache"
         - name: OIDC_ISSUER_URL
-          value: "https://nhsstore-preprod.eu.auth0.com"
+          value: "https://nhsstore-prod.eu.auth0.com"
         - name: OIDC_CLIENT_ID
           valueFrom:
             secretKeyRef:
