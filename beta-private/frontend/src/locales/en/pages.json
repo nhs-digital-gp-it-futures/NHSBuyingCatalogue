@@ -459,7 +459,7 @@
     "Summary": {
       "Breadcrumb": "Submission Summary",
       "Title": "Information Provided For Your $t(Solution)",
-      "Information": "The following information is what you have supplied to $t(NHSD.Name). This information is used during the assessment process to determine if you satisfy the criteria defined for each Capability.",
+      "Information": "The following information is what you have supplied to $t(NHSD.Name). This information is used during the assessment process to determine if you satisfy the criteria defined for each $t(Capability).",
       "Backlink": {
         "Title": "$t(Onboarding.Title)"
       }
