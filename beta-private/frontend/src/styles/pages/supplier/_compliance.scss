@@ -90,6 +90,18 @@
     margin-bottom: .5em;
   }
 
+  .notification {
+    background-color: $color-nhs-blue;
+    color: $color-nhs-white;
+    margin-top: 1.5em;
+    max-width: 770px;
+    padding: 1em;
+
+    h1 {
+      margin: 0;
+    }
+  }
+
   .has-feedback {
     background-color: $color-nhs-light-grey;
     border: 2px solid $color-nhs-blue;

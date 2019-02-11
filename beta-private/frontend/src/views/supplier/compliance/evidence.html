@@ -2,6 +2,24 @@
 
 {{> errors}}
 
+{{#unless latestFile}}
+<div class="notification" role="alert">
+  <h1>{{t 'CompliancePages.Evidence.NoCurrentFileNotification.Heading'}}</h1>
+  {{#each (tt 'CompliancePages.Evidence.NoCurrentFileNotification.Text')}}
+  <p>{{{.}}}</p>
+  {{/each}}
+</div>
+{{else}}
+  {{#if assessmentIncomplete}}
+  <div class="notification" role="alert">
+    <h1>{{t 'CompliancePages.Evidence.CapAssIncompleteNotification.Heading'}}</h1>
+    {{#each (tt 'CompliancePages.Evidence.CapAssIncompleteNotification.Text')}}
+    <p>{{{.}}}</p>
+    {{/each}}
+  </div>
+  {{/if}}
+{{/unless}}
+
 {{#if hasFeedback}}
 <p class="has-feedback">
   {{{t 'CompliancePages.Evidence.History.HasFeedback' id=feedbackId}}}
@@ -126,14 +144,6 @@
     <button id="submit-for-compliance" type="submit" class="primary" disabled>{{t 'CompliancePages.Evidence.Buttons.Submit'}}</button>
   </section>
   {{/if}}
-{{else}}
-  <div class="history">
-    <div class="message feedback">
-      {{#each (tt 'CompliancePages.Evidence.CurrentFile.Missing')}}
-      <p>{{{.}}}</p>
-      {{/each}}
-    </div>
-  </div>
 {{/if}}
 
 <a class="back-link" href="../../">{{t 'CompliancePages.Evidence.Backlink.Title'}}</a>
