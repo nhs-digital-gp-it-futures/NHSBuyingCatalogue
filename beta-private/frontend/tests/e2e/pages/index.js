@@ -40,15 +40,25 @@ class SupplierDashboardPage extends Page {
 
     this.addNewSolutionButton = Selector('#add-new-solution')
 
+    const table = Selector('#solutions-onboarding table > tbody')
+
+    this.capAssSubmittedSolution = table
+      .find('tr > td:first-child')
+      .withText('Capability Assessment Submitted Test Solution')
+      .parent('tr')
+
+    this.capAssSubmittedSolutionName = this.capAssSubmittedSolution.find('td:first-child a')
+
     // First Solution on the dashboard
     // Name: Really Kool Document Manager
     // GUID: 12968eb4-4160-4ec5-8bb7-3deca7c3f53b
-    this.firstOnboardingSolutionName = Selector(
-      '#solutions-onboarding table > tbody > tr:first-child > td:first-child'
-    )
-    this.firstOnboardingSolutionStatus = Selector(
-      '#solutions-onboarding table > tbody > tr:first-child > td:nth-child(3)'
-    )
+    this.registrationTestSolution = table
+      .find('tr > td:first-child')
+      .withText('Really Kool Document Manager')
+      .parent('tr')
+
+    this.firstOnboardingSolutionName = this.registrationTestSolution.find('td:first-child a')
+    this.firstOnboardingSolutionStatus = this.registrationTestSolution.child('td').nth(2)
 
     // Second Solution on the Dashboard
     // Note. The selected will select a different during the running of the test suite.
@@ -57,22 +67,24 @@ class SupplierDashboardPage extends Page {
     //  GUID: 9ddea405-a05d-4c34-959a-468d34caa2f1
     // After the 'supplier-registration-add-new-solution' suite will eventually select:
     //  Name: Really Kool Kore System
-    this.secondOnboardingSolutionName = Selector(
-      '#solutions-onboarding table > tbody > tr:nth-child(2) > td:first-child'
-    )
-    this.secondOnboardingSolutionStatus = Selector(
-      '#solutions-onboarding table > tbody > tr:nth-child(2) > td:nth-child(3)'
-    )
+    this.addNewSolutionTestSolution = table
+      .find('tr > td:first-child')
+      .withText('Really Kool Kore System')
+      .parent('tr')
+
+    this.secondOnboardingSolutionName = this.addNewSolutionTestSolution.find('td:first-child a')
+    this.secondOnboardingSolutionStatus = this.addNewSolutionTestSolution.child('td').nth(2)
 
     // Last Solution on the Dashboard
     // Name: Standards Compliance test Solution
     // GUID: 9ddea405-a05d-4c34-959a-468d34caa2f1
-    this.lastOnboardingSolutionName = Selector(
-      '#solutions-onboarding table > tbody > tr:last-child > td:first-child'
-    )
-    this.lastOnboardingSolutionStatus = Selector(
-      '#solutions-onboarding table > tbody > tr:last-child > td:nth-child(3)'
-    )
+    this.stdCompTestSolution = table
+      .find('tr > td:first-child')
+      .withText('Standards Compliance Test Solution')
+      .parent('tr')
+
+    this.lastOnboardingSolutionName = this.stdCompTestSolution.find('td:first-child a')
+    this.lastOnboardingSolutionStatus = this.stdCompTestSolution.child('td').nth(2)
   }
 }
 
