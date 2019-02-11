@@ -1,4 +1,5 @@
 /* global $, $$, Modernizr, Document, Element */
+/* eslint-env browser */
 
 // jQuery-esque shorthand for common element selection operations
 window.$ = function $ (selector, el) {
@@ -67,23 +68,25 @@ window.onload = window.onhashchange = function () {
 // Simulate support for the form attribute on inputs for IE11
 if (!Modernizr.formattribute) {
   document.addEventListener('DOMContentLoaded', function () {
-    $('body > header').addEventListener('click', function (ev) {
-      if (ev.target.tagName === 'INPUT' && ev.target.hasAttribute('form')) {
-        const form = document.getElementById(ev.target.getAttribute('form'))
-        if (form) {
-          ev.preventDefault()
+    $$('body > header, #unsaved-changes').forEach(function (elContainer) {
+      elContainer.addEventListener('click', function (ev) {
+        if (ev.target.tagName === 'INPUT' && ev.target.hasAttribute('form')) {
+          const form = document.getElementById(ev.target.getAttribute('form'))
+          if (form) {
+            ev.preventDefault()
 
-          // append a hidden input with the name and value of the clicked button to
-          // the form, then ask it to submit
-          const input = document.createElement('input')
-          input.type = 'hidden'
-          input.name = ev.target.name
-          input.value = ev.target.value
+            // append a hidden input with the name and value of the clicked button to
+            // the form, then ask it to submit
+            const input = document.createElement('input')
+            input.type = 'hidden'
+            input.name = ev.target.name
+            input.value = ev.target.value
 
-          form.appendChild(input)
-          form.submit()
+            form.appendChild(input)
+            form.submit()
+          }
         }
-      }
+      })
     })
   })
 }
