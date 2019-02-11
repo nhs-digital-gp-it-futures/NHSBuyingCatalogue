@@ -68,9 +68,12 @@
     </header>
     <main id="content" class="{{#if onHomePage}}no-padding{{/if}}">
       {{> breadcrumbs}}
-      <div id="unsaved-changes">
-        <h2>{{t 'Unsaved Changes.Title'}}</h2>
-        <p>{{t 'Unsaved Changes.Information'}}</p>
+      <div id="unsaved-changes"
+            role="alertdialog"
+            aria-labelledby="unsaved-changes-title"
+            aria-describedby="unsaved-changes-desc">
+        <h2 id="unsaved-changes-title">{{t 'Unsaved Changes.Title'}}</h2>
+        <p id="unsaved-changes-desc">{{t 'Unsaved Changes.Information'}}</p>
         <input type="submit"
               {{#if activeForm.id}}
               form="{{activeForm.id}}"
