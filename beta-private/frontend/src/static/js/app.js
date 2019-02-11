@@ -193,19 +193,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // global click listener for handling navigation away from a dirty page.
   window.addEventListener('click', function (event) {
+    // Is whatever was clicked an anchor or is it wrapped in one?
+    const clickedAnchor = event.target.tagName === 'A' ? event.target : event.target.closest('a')
+
     // bail if the click isn't targeting an anchor else or the page isn't Dirty.
-    if (event.target.tagName !== 'A' || !DIRTY_PAGE) return
+    if (!clickedAnchor || !DIRTY_PAGE) return
 
     const continueButton = $('#unsaved-changes a.button')
 
-    // Allow continue without Saving button to leave.
+    // Allow 'Continue without Saving' button to leave.
     if (event.target === continueButton) {
       DIRTY_PAGE = false
       return
     }
 
     // Set continue without saving button href and display the notice.
-    $('#unsaved-changes a.button').setAttribute('href', event.target.href)
+    $('#unsaved-changes a.button').setAttribute('href', clickedAnchor.href)
     $('#unsaved-changes').classList.add('enabled')
     document.body.scrollTop = document.documentElement.scrollTop = 0
     event.preventDefault()

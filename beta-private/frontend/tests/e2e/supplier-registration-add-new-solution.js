@@ -132,3 +132,38 @@ test('Newly created solution appears in the correct place on the supplier dashbo
   await t
     .expect(supplierDashboardPage.secondOnboardingSolutionName.textContent).eql('Really Kool Kore System | 1')
 })
+
+test('Attempting to leave with unsaved changes triggers an alert', async t => {
+  // Navigate to an in-progress solution.
+  await t
+    .click(supplierDashboardPage.secondOnboardingSolutionName)
+    .click(onboardingDashboardPage.continueRegistrationButton)
+
+    // Edit the text
+    .typeText(registrationPage.solutionNameInput, 'ch-ch-ch-ch-ch-changes')
+
+    // Click breadcrumb to leave...
+    .click(registrationPage.breadcrumb)
+
+    // The warning banner should be there now.
+    .expect(supplierDashboardPage.unsavedChangesBanner).ok()
+})
+
+test('continuing without saving with unsaved changes lets you continue and does not save', async t => {
+  // Navigate to an in-progress solution.
+  await t
+    .click(supplierDashboardPage.secondOnboardingSolutionName)
+    .click(onboardingDashboardPage.continueRegistrationButton)
+
+    // Edit the text
+    .typeText(registrationPage.solutionNameInput, 'ch-ch-ch-ch-ch-changes')
+
+    // click the Homepage anchor...
+    .click(supplierDashboardPage.homeLink)
+
+    // click the continue without saving button
+    .click(supplierDashboardPage.continueWithoutSavingButton)
+
+    // You should be on the dashboard now with the original solution and name.
+    .expect(supplierDashboardPage.secondOnboardingSolutionName.textContent).eql('Really Kool Kore System | 1')
+})
