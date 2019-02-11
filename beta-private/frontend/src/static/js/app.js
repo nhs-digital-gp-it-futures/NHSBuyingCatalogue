@@ -181,15 +181,18 @@ document.addEventListener('DOMContentLoaded', function () {
     })
   })
 
-  /**
-   * Submitting a Form flags that there are no unsaved changes
-   */
-  $$('input[type="submit"]').forEach(function (input) {
+  const dirtyPageSubmitHandler = function (input) {
     input.addEventListener('click', function () {
       DIRTY_PAGE = false
       $('#unsaved-changes').classList.remove('enabled')
     })
-  })
+  }
+
+  /**
+   * Submitting a Form flags that there are no unsaved changes
+   */
+  $$('input[type="submit"]').forEach(dirtyPageSubmitHandler)
+  $$('button[type="submit"]').forEach(dirtyPageSubmitHandler)
 
   // global click listener for handling navigation away from a dirty page.
   window.addEventListener('click', function (event) {

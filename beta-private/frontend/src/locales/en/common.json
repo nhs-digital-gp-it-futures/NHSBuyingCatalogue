@@ -59,6 +59,11 @@
       "Rejected": "Rejected {{when}}"
     }
   },
+  "Unsaved Changes": {
+    "Title": "You have unsaved changes",
+    "Continue Without Saving": "Continue without Saving",
+    "Information": "If you leave without saving, you will lose any changes you have made to this page."
+  },
   "Footer": {
     "Sections": [
       {
