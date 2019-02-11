@@ -1,4 +1,5 @@
 /* global $, $$, Modernizr, Document, Element */
+/* eslint-env browser */
 
 // jQuery-esque shorthand for common element selection operations
 window.$ = function $ (selector, el) {
@@ -16,6 +17,13 @@ Document.prototype.$ = Element.prototype.$ = function (selector) {
 Document.prototype.$$ = Element.prototype.$$ = function (selector) {
   return Array.from(this.querySelectorAll(selector))
 }
+
+/**
+ * Global Dirty Flag
+ * Used to ensure that unsaved changes are communicated.
+ */
+
+var DIRTY_PAGE = false
 
 function restoreSavedFormInputs () {
   // we only support restoration on modern browsers
@@ -60,23 +68,25 @@ window.onload = window.onhashchange = function () {
 // Simulate support for the form attribute on inputs for IE11
 if (!Modernizr.formattribute) {
   document.addEventListener('DOMContentLoaded', function () {
-    $('body > header').addEventListener('click', function (ev) {
-      if (ev.target.tagName === 'INPUT' && ev.target.hasAttribute('form')) {
-        const form = document.getElementById(ev.target.getAttribute('form'))
-        if (form) {
-          ev.preventDefault()
+    $$('body > header, #unsaved-changes').forEach(function (elContainer) {
+      elContainer.addEventListener('click', function (ev) {
+        if (ev.target.tagName === 'INPUT' && ev.target.hasAttribute('form')) {
+          const form = document.getElementById(ev.target.getAttribute('form'))
+          if (form) {
+            ev.preventDefault()
 
-          // append a hidden input with the name and value of the clicked button to
-          // the form, then ask it to submit
-          const input = document.createElement('input')
-          input.type = 'hidden'
-          input.name = ev.target.name
-          input.value = ev.target.value
+            // append a hidden input with the name and value of the clicked button to
+            // the form, then ask it to submit
+            const input = document.createElement('input')
+            input.type = 'hidden'
+            input.name = ev.target.name
+            input.value = ev.target.value
 
-          form.appendChild(input)
-          form.submit()
+            form.appendChild(input)
+            form.submit()
+          }
         }
-      }
+      })
     })
   })
 }
@@ -154,9 +164,59 @@ document.addEventListener('DOMContentLoaded', function () {
     elInput.addEventListener('input', refresh)
   })
 
-  window.addEventListener('beforeunload', function () {
-    setTimeout(function () {
-      $('body > .loading-spinner').classList.add('enabled')
-    }, 2000)
+  window.addEventListener('beforeunload', function (event) {
+    if (DIRTY_PAGE) {
+      event.preventDefault()
+      event.returnValue = ''
+    } else {
+      setTimeout(function () {
+        $('body > .loading-spinner').classList.add('enabled')
+      }, 2000)
+    }
+  })
+
+  /**
+   * Flag that there are unsaved changes
+   */
+  $$('form').forEach(function (form) {
+    form.addEventListener('change', function () {
+      DIRTY_PAGE = true
+    })
+  })
+
+  const dirtyPageSubmitHandler = function (input) {
+    input.addEventListener('click', function () {
+      DIRTY_PAGE = false
+      $('#unsaved-changes').classList.remove('enabled')
+    })
+  }
+
+  /**
+   * Submitting a Form flags that there are no unsaved changes
+   */
+  $$('input[type="submit"]').forEach(dirtyPageSubmitHandler)
+  $$('button[type="submit"]').forEach(dirtyPageSubmitHandler)
+
+  // global click listener for handling navigation away from a dirty page.
+  window.addEventListener('click', function (event) {
+    // Is whatever was clicked an anchor or is it wrapped in one?
+    const clickedAnchor = event.target.tagName === 'A' ? event.target : event.target.closest('a')
+
+    // bail if the click isn't targeting an anchor else or the page isn't Dirty.
+    if (!clickedAnchor || !DIRTY_PAGE) return
+
+    const continueButton = $('#unsaved-changes a.button')
+
+    // Allow 'Continue without Saving' button to leave.
+    if (event.target === continueButton) {
+      DIRTY_PAGE = false
+      return
+    }
+
+    // Set continue without saving button href and display the notice.
+    $('#unsaved-changes a.button').setAttribute('href', clickedAnchor.href)
+    $('#unsaved-changes').classList.add('enabled')
+    document.body.scrollTop = document.documentElement.scrollTop = 0
+    event.preventDefault()
   })
 })

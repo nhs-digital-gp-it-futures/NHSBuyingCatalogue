@@ -13,6 +13,9 @@ class Page {
     this.globalSaveAndExitButton = Selector('body > header .active-form [name="action\\[exit\\]"]')
 
     this.continueButton = Selector('[name="action\\[continue\\]"]')
+
+    this.unsavedChangesBanner = Selector('#unsaved-changes')
+    this.continueWithoutSavingButton = Selector('#unsaved-changes > a.button')
   }
 
   async checkAccessibility (t) {
@@ -90,6 +93,7 @@ class OnboardingDashboardPage extends Page {
 class RegistrationPage extends Page {
   constructor () {
     super()
+    this.breadcrumb = Selector('#content > .breadcrumb a')
 
     this.solutionNameInput = Selector('#content [name="solution\\[name\\]"]')
     this.solutionNameCounter = Selector('#content [name="solution\\[name\\]"] ~ .character-count')
