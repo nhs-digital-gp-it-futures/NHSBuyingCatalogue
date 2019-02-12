@@ -1,2 +1,2 @@
-FROM index.docker.io/nginx:alpine
+FROM index.docker.io/nginx:latest
 COPY nginx.conf /etc/nginx/nginx.conf

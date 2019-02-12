@@ -82,7 +82,7 @@ services:
       - frontend
 
   cache:
-    image: redis:alpine
+    image: redis:latest
     networks:
       - beta_network
     ports:
