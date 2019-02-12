@@ -10,24 +10,28 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\NHSD.GPITF.BuyingCatalog.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>bin\Debug\netcoreapp2.1\NHSD.GPITF.BuyingCatalog.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
     <NoWarn>1701;1702;1705;8002;</NoWarn>
   </PropertyGroup>
+  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>bin\Release\netcoreapp2.1\NHSD.GPITF.BuyingCatalog.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
     <NoWarn>1701;1702;1705;8002;</NoWarn>
   </PropertyGroup>
+  
   <ItemGroup>
     <Compile Remove="Logs\**" />
     <Content Remove="Logs\**" />
     <EmbeddedResource Remove="Logs\**" />
     <None Remove="Logs\**" />
   </ItemGroup>
+  
   <ItemGroup>
     <Content Remove="appsettings.json" />
     <Content Remove="hosting.json" />
