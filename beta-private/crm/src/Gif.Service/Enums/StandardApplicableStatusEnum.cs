@@ -8,13 +8,13 @@ namespace Gif.Service.Enums
         Approved = 948120004,
 
         [EnumMember(Value = "Approved First Of Type")]
-        ApprovedFirstOfType = 948120005,
+        ApprovedFirstOfType = 948120004,
 
         [EnumMember(Value = "ApprovedPartial")]
-        ApprovedPartial = 948120006,
+        ApprovedPartial = 948120004,
 
         [EnumMember(Value = "Draft")]
-        Draft = 948120001,
+        Draft = 948120004,
 
         [EnumMember(Value = "NotStarted")]
         NotStarted = 948120000,
