@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -81,7 +82,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
       try
       {
         var infos = _logic.EnumerateClaimFolderTree(solutionId);
-        var retval = PaginatedList<BlobInfo>.Create(infos, pageIndex, pageSize);
+        var retval = PaginatedList<ClaimBlobInfoMap>.Create(infos, pageIndex, pageSize);
         return new OkObjectResult(retval);
       }
       catch (FluentValidation.ValidationException ex)
@@ -89,6 +90,10 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
         return new InternalServerErrorObjectResult(ex);
       }
       catch (KeyNotFoundException ex)
+      {
+        return new NotFoundObjectResult(ex);
+      }
+      catch (Exception ex)
       {
         return new NotFoundObjectResult(ex);
       }

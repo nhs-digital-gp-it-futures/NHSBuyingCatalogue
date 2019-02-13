@@ -1,7 +1,6 @@
 /* global fixture, test */
 
 import { Selector } from 'testcafe'
-import axeCheck from 'axe-testcafe'
 
 import { asSupplier } from './roles'
 import { page, supplierDashboardPage, onboardingDashboardPage, registrationPage } from './pages'
@@ -9,7 +8,7 @@ import { page, supplierDashboardPage, onboardingDashboardPage, registrationPage 
 fixture('Solution Registration - Capabilities')
   .page(supplierDashboardPage.baseUrl)
   .beforeEach(navigateToSupplierOnboardingSolutionCapabilities)
-  .afterEach(axeCheck)
+  .afterEach(supplierDashboardPage.checkAccessibility)
 
 function navigateToSupplierOnboardingSolutionCapabilities (t) {
   return asSupplier(t)
@@ -37,7 +36,7 @@ test('Capabilities page shows correct information accessibly', async t => {
     .expect(allNonCoreCapNames.nth(13).innerText).eql('e-Consultations (Patient/Service User to Professional)')
     .expect(allNonCoreCapNames.nth(30).innerText).eql('Workflow')
 
-    .expect(Selector('#capability-selector .capability[data-cap-id="CAP-C-004"].selected')).ok()
+    .expect(Selector('#capability-selector .capability[data-cap-id="C4"].selected')).ok()
 })
 
 test('Capabilities page validation is correct and accessible', async t => {
@@ -65,21 +64,21 @@ test('Capabilities can be changed, summary updates and data save correctly', asy
 
   await t
 
-    .click('#capability-selector .capability[data-cap-id="CAP-C-004"].selected')
-    .click('[type=checkbox][data-id="CAP-C-004"]')
+    .click('#capability-selector .capability[data-cap-id="C4"].selected')
+    .click('[type=checkbox][data-id="C4"]')
 
     .expect(capabilityCount).eql('0 Capabilities selected')
     .expect(standardCount).eql('11 Standards will be required')
     .expect(Selector('#capability-summary .standards .associated').visible).notOk()
 
-    .click('#capability-selector .capability[data-cap-id="CAP-C-001"]:not(.selected)')
-    .click('[type=checkbox][data-id="CAP-C-001"]')
+    .click('#capability-selector .capability[data-cap-id="C1"]:not(.selected)')
+    .click('[type=checkbox][data-id="C1"]')
 
-    .click('#capability-selector .capability[data-cap-id="CAP-N-037"]:not(.selected)')
-    .click('[type=checkbox][data-id="CAP-N-037"]')
+    .click('#capability-selector .capability[data-cap-id="C37"]:not(.selected)')
+    .click('[type=checkbox][data-id="C37"]')
 
-    .click('#capability-selector .capability[data-cap-id="CAP-N-020"]:not(.selected)')
-    .click('[type=checkbox][data-id="CAP-N-020"]')
+    .click('#capability-selector .capability[data-cap-id="C20"]:not(.selected)')
+    .click('[type=checkbox][data-id="C20"]')
 
     .expect(capabilityCount).eql('3 Capabilities selected')
     .expect(standardCount).eql('14 Standards will be required')
@@ -93,7 +92,7 @@ test('Capabilities can be changed, summary updates and data save correctly', asy
     .expect(selSelectedStandards.nth(1).textContent).eql('General Practice Appointments Data Reporting')
     .expect(selSelectedStandards.nth(2).textContent).eql('Workflow - Standard')
     .expect(selSelectedStandards.nth(4).textContent).eql('Clinical Safety')
-    .expect(selSelectedStandards.nth(13).textContent).eql('Service Management')
+    .expect(selSelectedStandards.nth(13).textContent).eql('Testing')
 
     .click(page.globalSaveButton)
 
@@ -101,21 +100,21 @@ test('Capabilities can be changed, summary updates and data save correctly', asy
     .expect(capabilityCount).eql('3 Capabilities selected')
     .expect(standardCount).eql('14 Standards will be required')
 
-    .click('#capability-selector .capability[data-cap-id="CAP-C-001"].selected')
-    .click('[type=checkbox][data-id="CAP-C-001"]')
+    .click('#capability-selector .capability[data-cap-id="C1"].selected')
+    .click('[type=checkbox][data-id="C1"]')
 
-    .click('#capability-selector .capability[data-cap-id="CAP-N-037"].selected')
-    .click('[type=checkbox][data-id="CAP-N-037"]')
+    .click('#capability-selector .capability[data-cap-id="C37"].selected')
+    .click('[type=checkbox][data-id="C37"]')
 
-    .click('#capability-selector .capability[data-cap-id="CAP-N-020"].selected')
-    .click('[type=checkbox][data-id="CAP-N-020"]')
+    .click('#capability-selector .capability[data-cap-id="C20"].selected')
+    .click('[type=checkbox][data-id="C20"]')
 
     .expect(capabilityCount).eql('0 Capabilities selected')
     .expect(standardCount).eql('11 Standards will be required')
     .expect(Selector('#capability-summary .standards .associated').visible).notOk()
 
-    .click('#capability-selector .capability[data-cap-id="CAP-C-004"]:not(.selected)')
-    .click('[type=checkbox][data-id="CAP-C-004"]')
+    .click('#capability-selector .capability[data-cap-id="C4"]:not(.selected)')
+    .click('[type=checkbox][data-id="C4"]')
 
     .expect(capabilityCount).eql('1 Capability selected')
     .expect(standardCount).eql('14 Standards will be required')
@@ -133,7 +132,7 @@ test('Registering the solution shows a confirmation message and status change on
     .expect(Selector('.onboarding-stages :first-child.complete').exists).ok()
 
     .click(page.homeLink)
-    .expect(supplierDashboardPage.firstOnboardingSolutionStatus.textContent).eql('Registered')
+    .expect(supplierDashboardPage.firstOnboardingSolutionStatus.textContent).eql('Complete')
 })
 
 test('A registered solution cannot have its name edited', async t => {

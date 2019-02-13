@@ -3,12 +3,15 @@ const passport = require('passport')
 const { Issuer, Strategy } = require('openid-client')
 const { dataProvider } = require('catalogue-data')
 
+const OIDC_AUTHENTICATE_PATH = '/oidc/authenticate'
+const OIDC_CALLBACK_PATH = '/oidc/callback'
+
 function authentication (app) {
   app.use(passport.initialize())
   app.use(passport.session())
 
-  app.get('/oidc/authenticate', passport.authenticate('oidc'))
-  app.get('/oidc/callback', passport.authenticate('oidc', { successRedirect: '/#account', failureRedirect: '/' }))
+  app.get(OIDC_AUTHENTICATE_PATH, passport.authenticate('oidc'))
+  app.get(OIDC_CALLBACK_PATH, authenticationHandler)
 
   Issuer.defaultHttpOptions = { timeout: 10000, retries: 3 }
 
@@ -39,7 +42,7 @@ function authentication (app) {
         client,
         params: {
           scope: 'openid email',
-          redirect_uri: `${process.env.BASE_URL}/oidc/callback/`
+          redirect_uri: `${process.env.BASE_URL}${OIDC_CALLBACK_PATH}/`
         }
       }, authCallback))
 
@@ -106,11 +109,84 @@ async function authCallback (tokenset, userinfo, done) {
   }
 }
 
+function authenticationHandler (req, res, next) {
+  // Preserve the originally requested page so that it can be returned to
+  // once authentication is successful. Blacklist the OIDC callback page
+  // as returning to that would cause an endless loop.
+  if (!req.session.redirectTo && !req.originalUrl.startsWith(OIDC_CALLBACK_PATH)) {
+    req.session.redirectTo = req.originalUrl
+  }
+
+  passport.authenticate('oidc', function (err, user, info) {
+    // FIXME: using "private" members, not a sustainable long-term strategy
+    const passportOIDCSessionKey = passport._strategies.oidc._key
+
+    // This is where the "did not find expected authorization request details
+    // in session, req.session["oidc:oidc-provider"] is undefined" happens.
+    // The error object itself is not differentiated enough to use as a signal
+    // so check the actual session entry and, if it doesn't exist, force a login.
+    if (err) {
+      if (!(passportOIDCSessionKey in req.session)) {
+        req.session.bodyOnRedirect = {
+          ...req.body
+        }
+        delete req.session.bodyOnRedirect._csrf
+        return res.redirect(OIDC_AUTHENTICATE_PATH)
+      }
+
+      return next(err)
+    }
+
+    // If no user resulted from authentication, send the user back through the process.
+    if (!user) { return res.redirect(OIDC_AUTHENTICATE_PATH) }
+
+    // Log the user in and send them to their originally requested page.
+    req.logIn(user, function (err) {
+      if (err) { return next(err) }
+
+      let redirectTo = req.session.redirectTo || '/'
+      if (req.session.redirectTo && req.session.bodyOnRedirect) {
+        const redirectUrl = new URL(redirectTo, process.env.BASE_URL)
+        redirectUrl.search = require('qs').stringify({
+          restore: '',
+          ...req.session.bodyOnRedirect
+        })
+        redirectTo = redirectUrl.pathname + redirectUrl.search + redirectUrl.hash
+      }
+
+      delete req.session.redirectTo
+      delete req.session.bodyOnRedirect
+      return res.redirect(redirectTo)
+    })
+  })(req, res, next)
+}
+
 function authenticatedOnly (req, res, next) {
   if (!req.user || !req.user.is_authenticated) {
-    req.session.redirectTo = req.originalUrl
-    passport.authenticate('oidc', { failureRedirect: '/' })(req, res, next)
+    authenticationHandler(req, res, next)
   } else next()
+}
+
+/**
+ * A generic error handler for dealing with API failures.
+ *
+ * Call this in the catch handler for a failed API call to automatically
+ * deal with errors caused by authentication failure. If this function
+ * returns true, exit the request handler as quickly as possible e.g. return.
+ */
+function catchHandler (err, res, context) {
+  // if the API call returns unauthorised, redirect the user to login again
+  // otherwise add the error to the page
+  if (err.status === 401) {
+    res.redirect(OIDC_AUTHENTICATE_PATH)
+    return true
+  } else if (context && context.errors) {
+    if (!context.errors.items) {
+      context.errors.items = []
+    }
+
+    context.errors.items.push({ msg: err.toString() })
+  }
 }
 
 module.exports = {
@@ -131,5 +207,6 @@ module.exports = {
         else res.redirect('/')
       }
     ]
-  }
+  },
+  catchHandler
 }

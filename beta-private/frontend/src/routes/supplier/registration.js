@@ -20,7 +20,7 @@ router
 router
   .route('/new/register/')
   .get(registrationPageGet)
-  .post(registrationPageValidation, registrationPagePost)
+  .post(registrationPreValidation, registrationPageValidation, registrationPagePost)
 
 // all the remaining routes need to load a specified solution
 router.param('solution_id', async (req, res, next, solutionId) => {
@@ -67,9 +67,16 @@ function onboardingStatusPage (req, res) {
       {
         url: 'register#content'
       },
-      {},
-      {},
-      {}
+      {
+        class: 'unavailable'
+      },
+      {
+        class: 'unavailable'
+      },
+      // solution page will be unavailable for the time being
+      {
+        class: 'unavailable'
+      }
     ]
   }
 
@@ -78,24 +85,40 @@ function onboardingStatusPage (req, res) {
 
     context.stages[1].status = 'Not started'
     context.stages[1].link = 'Start'
+    context.stages[1].class = 'unavailable'
     context.stages[1].url = `../../capabilities/${req.solution.id}`
 
     context.stages[2].status = 'Not started'
     context.stages[2].link = 'Start'
+    context.stages[2].class = 'unavailable'
     context.stages[2].url = `../../compliance/${req.solution.id}`
 
+    // Capability Assessment has some evidence
     if (req.solution._raw.claimedCapabilityEvidence.length) {
-      context.stages[1].status = 'In progress'
+      context.stages[1].status = 'Draft Saved'
       context.stages[1].link = 'Edit'
     }
 
+    // Standards Compliance has some evidence
     if (req.solution._raw.claimedStandardEvidence.length) {
-      context.stages[2].status = 'In progress'
+      context.stages[2].status = 'Draft Saved'
       context.stages[2].link = 'Edit'
     }
 
+    // Standards Compliance has a none draft standard
+    if (req.solution._raw.claimedStandard.filter((std) => +std.status !== 0).length) {
+      context.stages[2].status = 'In Progress'
+      context.stages[2].link = 'Edit'
+    }
+
+    // Standards Compliance has no in progress standards
+    if (req.solution._raw.claimedStandard.every((std) => +std.status < 0 && +std.status > 3)) {
+      context.stages[2].status = 'Complete'
+      context.stages[2].link = 'View'
+    }
+
     if (status === 0) { // draft
-      context.stages[0].status = 'In progress'
+      context.stages[0].status = 'Draft Saved'
       context.stages[0].link = 'Edit'
       context.stages[1].link = ''
       context.stages[2].link = ''
@@ -105,6 +128,8 @@ function onboardingStatusPage (req, res) {
       context.stages[0].status = 'Complete'
       context.stages[0].class = 'complete'
       context.stages[0].link = 'Edit'
+      context.stages[1].class = ''
+      context.stages[2].class = ''
 
       if ('registered' in req.query) {
         context.registrationComplete = true
@@ -127,7 +152,7 @@ function onboardingStatusPage (req, res) {
       context.stages[0].class = 'complete'
       context.stages[0].link = 'View'
 
-      context.stages[1].status = 'Passed'
+      context.stages[1].status = 'Complete'
       context.stages[1].class = 'complete'
       context.stages[1].link = 'View'
 
@@ -139,9 +164,6 @@ function onboardingStatusPage (req, res) {
     context.stages[0].status = 'Not started'
     context.stages[0].link = 'Start'
   }
-
-  // solution page will be unavailable for the time being
-  context.stages[3].class = 'unavailable'
 
   res.render('supplier/registration/index', context)
 }
@@ -194,7 +216,12 @@ function registrationPageGet (req, res) {
 
   addContactFieldsToContext(context)
 
-  res.render('supplier/registration/1-details', context)
+  /* If Solution has progressed further than registering. */
+  if (+context.solution.status && +context.solution.status !== 0 && +context.solution.status !== 1) {
+    res.redirect(`../../../capabilities/${req.solution.id}/summary`)
+  } else {
+    res.render('supplier/registration/1-details', context)
+  }
 }
 
 // before attempting to validate the body for registration,
@@ -276,7 +303,7 @@ async function registrationPagePost (req, res) {
 
     if (req.body.action) {
       if (req.body.action.continue) redirectUrl += '../capabilities/'
-      if (req.body.action.exit) redirectUrl += '../'
+      if (req.body.action.exit) redirectUrl = '/'
     }
 
     res.redirect(redirectUrl)
@@ -293,7 +320,7 @@ async function capabilitiesPageContext (req) {
     ]
   }
 
-  if (+context.solution.status !== 0 && +context.solution.status !== 1) {
+  if (+context.solution.status && +context.solution.status !== 0 && +context.solution.status !== 1) {
     context.readOnly = true
   }
 
@@ -313,12 +340,15 @@ async function capabilitiesPageContext (req) {
 
   context.capabilitiesByGroup = _.zipObject(
     ['core', 'noncore'],
-    _.partition(context.capabilities, c => _.startsWith(c.id, 'CAP-C-'))
+    _.partition(context.capabilities, c => c.type === 'C')
   )
 
-  context.standardsByGroup = _.zipObject(
-    ['overarching', 'associated'],
-    _.partition(context.standards, s => _.startsWith(s.id, 'STD-O-'))
+  context.standardsByGroup = _.mapValues(
+    _.zipObject(
+      ['overarching', 'associated'],
+      _.partition(context.standards, 'isOverarching')
+    ),
+    stds => _.orderBy(stds, a => a.name.toLowerCase())
   )
 
   return context
@@ -330,17 +360,24 @@ async function capabilitiesPageGet (req, res) {
   context.capabilities.forEach(cap => {
     cap.selected = _.get(_.find(req.solution.capabilities, { capabilityId: cap.id }), 'id')
   })
-
-  res.render('supplier/registration/2-capabilities', context)
+  /* If Solution has progressed further than registration. */
+  if (+context.solution.status && +context.solution.status !== 0 && +context.solution.status !== 1) {
+    res.redirect(`../../../capabilities/${req.solution.id}/summary`)
+  } else {
+    res.render('supplier/registration/2-capabilities', context)
+  }
 }
 
 async function capabilitiesPagePost (req, res) {
   const context = await capabilitiesPageContext(req)
 
   // redirect based on action chosen
-  let redirectUrl = (req.body.action && req.body.action.save)
-    ? './'
-    : '../'
+  let redirectUrl = '../'
+
+  if (req.body.action) {
+    if (req.body.action.save) redirectUrl = './'
+    else if (req.body.action.exit) redirectUrl = '/'
+  }
 
   // the "selected" property holds the current ID for each claimed capability,
   // or a newly generated ID for an added capability

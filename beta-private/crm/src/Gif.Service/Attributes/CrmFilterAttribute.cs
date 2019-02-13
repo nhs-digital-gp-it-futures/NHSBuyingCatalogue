@@ -31,10 +31,17 @@ namespace Gif.Service.Attributes
             set { quotesRequired = value; }
         }
 
+        public virtual bool? MultiConditional
+        {
+            get { return quotesRequired; }
+            set { quotesRequired = value; }
+        }
+
         private string name;
         private string filterName;
         private string filterValue;
         private bool? quotesRequired;
+        private bool? multiConditionl;
 
         public CrmFilterAttribute(string name)
         {

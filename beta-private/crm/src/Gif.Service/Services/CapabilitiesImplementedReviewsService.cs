@@ -1,4 +1,5 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+using System;
 using Gif.Service.Attributes;
 using Gif.Service.Contracts;
 using Gif.Service.Crm;
@@ -32,22 +33,49 @@ namespace Gif.Service.Services
 
       // iterate through all items that are at the end of the chain
       foreach (var reviewChild in jsonReviewParent.Children())
-        AddReviewChainToList(reviewChild, reviewList, reviewsListList, evidenceId);
+        AddReviewChainToList(reviewChild, reviewList, reviewsListList);
 
       Count = reviewsListList.Count;
 
       return reviewsListList;
     }
 
-    private void AddReviewChainToList(JToken review, List<Review> reviewList, List<List<Review>> reviewsListList, string evidenceId)
+    public IEnumerable<IEnumerable<Review>> ByEvidenceMultiple(List<Guid> evidenceIds)
     {
-      GetReviewsChain(review, reviewList, evidenceId);
+        var evidenceListList = new List<List<Review>>();
+
+        // get all items at the end of the chain i.e. where the previous id is null
+        var filterReviewParent = new List<CrmFilterAttribute>
+        {
+            new CrmFilterAttribute("Previous") {FilterName = "_cc_previousversion_value", FilterValue = "null"},
+            new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
+        };
+
+        foreach (var evidence in evidenceIds)
+        {
+            filterReviewParent.Add(new CrmFilterAttribute("EvidenceId")
+                { FilterName = "_cc_evidence_value", FilterValue = evidence.ToString(), MultiConditional = true });
+        }
+
+        var jsonEvidenceParent = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterReviewParent, true, true), out Count);
+
+        foreach (var reviewChild in jsonEvidenceParent.Children())
+            AddReviewChainToList(reviewChild, new List<Review>(), evidenceListList);
+
+        Count = evidenceListList.Count;
+
+        return evidenceListList;
+    }
+
+    private void AddReviewChainToList(JToken review, List<Review> reviewList, List<List<Review>> reviewsListList)
+    {
+      GetReviewsChain(review, reviewList);
 
       var enumReviewList = Review.OrderLinkedReviews(reviewList);
       reviewsListList.Add(enumReviewList.ToList());
     }
 
-    private void GetReviewsChain(JToken reviewChainEnd, List<Review> reviewList, string evidenceId)
+    private void GetReviewsChain(JToken reviewChainEnd, List<Review> reviewList)
     {
       // store the end of the chain (with no previous id)
       var review = new Review(reviewChainEnd);
@@ -59,7 +87,6 @@ namespace Gif.Service.Services
       {
         var filterReview = new List<CrmFilterAttribute>
         {
-          new CrmFilterAttribute("EvidenceEntity") {FilterName = "_cc_evidence_value", FilterValue = evidenceId},
           new CrmFilterAttribute("EvidenceEntity") {FilterName = "_cc_previousversion_value", FilterValue = id},
           new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
         };

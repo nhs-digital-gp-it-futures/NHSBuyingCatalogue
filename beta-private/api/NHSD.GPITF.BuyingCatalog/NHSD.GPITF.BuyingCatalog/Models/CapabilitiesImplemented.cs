@@ -20,5 +20,11 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     /// Current status of this ClaimedCapability
     /// </summary>
     public CapabilitiesImplementedStatus Status { get; set; } = CapabilitiesImplementedStatus.Submitted;
+
+    /// <summary>
+    /// Unique identifier of Capability
+    /// </summary>
+    [Computed]
+    public override string QualityId => CapabilityId;
   }
 }

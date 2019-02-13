@@ -35,7 +35,7 @@ spec:
         - name: ASPNETCORE_ENVIRONMENT 
           value: "Development"     
         - name: USE_CRM
-          value: "false"
+          value: "true"
         - name: CRM_APIURI
           value: "http://crm:5001/api/"
         - name: CRM_ACCESSTOKENURI
@@ -60,16 +60,16 @@ spec:
           value: "https://hscic365.sharepoint.com/sites/DTGPP/GPITF"
         - name: SHAREPOINT_ORGANISATIONSRELATIVEURL
           value: "Shared Documents/Archive/Buying Catalogue Team Folder/BC Integration"
-        - name: SHAREPOINT_LOGIN
+        - name: SHAREPOINT_CLIENT_ID
           valueFrom:
             secretKeyRef:
               name: bcspsecret
-              key: SHAREPOINT_LOGIN
-        - name: SHAREPOINT_PASSWORD
+              key: SHAREPOINT_CLIENT_ID
+        - name: SHAREPOINT_CLIENT_SECRET
           valueFrom:
             secretKeyRef:
               name: bcspsecret
-              key: SHAREPOINT_PASSWORD
+              key: SHAREPOINT_CLIENT_SECRET
         - name: DATASTORE_CONNECTIONTYPE
           value: "SqlServer"
         - name: DATASTORE_CONNECTIONSTRING
@@ -249,7 +249,7 @@ spec:
       - name: regcred
       containers:
       - name: bc-private-beta-cache
-        image: index.docker.io/redis:alpine
+        image: index.docker.io/redis:latest
         ports:
         - containerPort: 6379
         resources:

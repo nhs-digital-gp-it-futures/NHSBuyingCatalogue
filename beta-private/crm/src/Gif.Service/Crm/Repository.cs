@@ -1,32 +1,31 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+using Gif.Service.Enums;
 using Gif.Service.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Samc4.CipherUtil;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
-using Gif.Service.Enums;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace Gif.Service.Crm
 {
     public sealed class Repository : IRepository
     {
-        private readonly AuthenticationResult _authResult;
         private readonly IConfiguration _config;
         private readonly ILogger<Repository> _logger;
         private readonly bool _logCRM;
         private HttpClient _httpClient;
-
+        private AuthenticationContext _authContext;
+        private AccessToken _cachedAccessToken;
 
         public Repository(
           IConfiguration config,
@@ -36,18 +35,13 @@ namespace Gif.Service.Crm
             _logger = logger;
             _logCRM = Settings.LOG_CRM(config);
 
-            var secret = CipherUtil.Decrypt<AesManaged>(Settings.GIF_ENCRYPTED_CLIENT_SECRET(_config), "GifService", Settings.GIF_AZURE_CLIENT_ID(_config));
-            var authContext = new AuthenticationContext(Settings.GIF_CRM_AUTHORITY(_config), false);
-            _authResult = authContext.AcquireTokenAsync(Settings.GIF_CRM_URL(_config), new ClientCredential(Settings.GIF_AZURE_CLIENT_ID(_config), secret)).Result;
-
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             CreateCrmConnection();
         }
 
-        private HttpClient CreateCrmConnection()
+        private void CreateCrmConnection()
         {
-
             var httpHandler = new HttpClientHandler { Proxy = null, UseProxy = false };
 
             _httpClient = new HttpClient(httpHandler)
@@ -59,18 +53,45 @@ namespace Gif.Service.Crm
             _httpClient.DefaultRequestHeaders.Add("OData-Version", "4.0");
             _httpClient.DefaultRequestHeaders.Add("Prefer", "odata.include-annotations=OData.Community.Display.V1.FormattedValue");
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _authResult.AccessToken);
 
-            return _httpClient;
+            _authContext = new AuthenticationContext(Settings.GIF_CRM_AUTHORITY(_config), false);
+            ApplyAccessToken();
+        }
+
+        private void ApplyAccessToken()
+        {
+            if (_cachedAccessToken == null)
+                _cachedAccessToken = CreateAccessToken();
+
+            if (DateTime.UtcNow >= _cachedAccessToken.expires_on)
+                _cachedAccessToken = CreateAccessToken();
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _cachedAccessToken.access_token);
+        }
+
+        private AccessToken CreateAccessToken()
+        {
+            var secret = CipherUtil.Decrypt<AesManaged>(Settings.GIF_ENCRYPTED_CLIENT_SECRET(_config), "GifService", Settings.GIF_AZURE_CLIENT_ID(_config));
+
+            var result = _authContext
+                .AcquireTokenAsync(Settings.GIF_CRM_URL(_config), new ClientCredential(Settings.GIF_AZURE_CLIENT_ID(_config), secret))
+                .Result;
+
+            var accessToken = new AccessToken
+            {
+                expires_on = result.ExpiresOn,
+                access_token = result.AccessToken
+            };
+
+            return accessToken;
         }
 
         public JObject Retrieve(string query)
         {
             LogInformation($"[{nameof(Retrieve)}] --> {query}");
+            ApplyAccessToken();
 
-            LogInformation($"[{nameof(RetrieveMultiple)}] --> before call to CRM");
             var httpResponse = _httpClient.GetAsync(query).Result;
-            LogInformation($"[{nameof(RetrieveMultiple)}] --> after call to CRM");
 
             JObject jretrieveJObject = null;
 
@@ -88,32 +109,19 @@ namespace Gif.Service.Crm
 
         public JToken RetrieveMultiple(string query, out int? count)
         {
-            var stopwatch = new Stopwatch();
             LogInformation($"[{nameof(RetrieveMultiple)}] --> {query}");
+            ApplyAccessToken();
 
             JToken jretrieveToken = null;
             count = null;
 
             HttpResponseMessage retrieveResponse;
-
-            LogInformation($"[{nameof(RetrieveMultiple)}] --> before call to CRM");
-            stopwatch.Start();
             retrieveResponse = _httpClient.GetAsync(query).Result;
-            stopwatch.Stop();
-            LogInformation($"[{nameof(RetrieveMultiple)}] --> after call to CRM. It took {stopwatch.ElapsedMilliseconds}ms.");
-
 
             if (retrieveResponse.StatusCode != HttpStatusCode.OK && retrieveResponse.StatusCode != HttpStatusCode.NoContent)
                 throw new CrmApiException(retrieveResponse.ReasonPhrase, retrieveResponse.StatusCode);
 
-            LogInformation($"Deserialsing...");
-            stopwatch.Reset();
-            stopwatch.Start();
             var jretrieveJObject = JObject.Parse(retrieveResponse.Content.ReadAsStringAsync().Result);
-            stopwatch.Stop();
-            LogInformation($"Finished deserialising in {stopwatch.ElapsedMilliseconds}");
-            stopwatch.Reset();
-            stopwatch.Start();
 
             if (jretrieveJObject == null)
                 return jretrieveToken;
@@ -125,14 +133,13 @@ namespace Gif.Service.Crm
                 count = int.Parse(jretrieveJObject["@odata.count"].ToString());
             }
 
-            stopwatch.Stop();
-            LogInformation($"Leaving [{nameof(RetrieveMultiple)}] ,  {stopwatch.ElapsedMilliseconds}");
             return jretrieveToken;
         }
 
         public void Associate(Guid entityId1, string entityName1, Guid entityId2, string entityName2, string relationshipKey)
         {
             LogInformation($"[{nameof(Associate)}] --> {entityName1}/{entityId1} -> [{relationshipKey}] -> {entityName2}/{entityId2}");
+            ApplyAccessToken();
 
             HttpResponseMessage resp;
 
@@ -149,6 +156,7 @@ namespace Gif.Service.Crm
         public Guid CreateEntity(string entityName, string entityData, bool update = false)
         {
             LogInformation($"[{nameof(CreateEntity)}] --> {entityName}/{entityData}");
+            ApplyAccessToken();
 
             var address = entityName;
             var content = new StringContent(entityData, Encoding.UTF8, "application/json");
@@ -178,6 +186,7 @@ namespace Gif.Service.Crm
         public void UpdateEntity(string entityName, Guid id, string entityData)
         {
             LogInformation($"[{nameof(UpdateEntity)}] --> {entityName}/{entityData}");
+            ApplyAccessToken();
 
             HttpResponseMessage response;
             var method = new HttpMethod("PATCH");
@@ -202,6 +211,7 @@ namespace Gif.Service.Crm
         public void Delete(string entityName, Guid id)
         {
             LogInformation($"[{nameof(Delete)}] --> {entityName}/{id}");
+            ApplyAccessToken();
 
             HttpResponseMessage response;
             var method = new HttpMethod("DELETE");
@@ -219,6 +229,7 @@ namespace Gif.Service.Crm
         public void CreateBatch(List<BatchData> batchData)
         {
             LogInformation($"[{nameof(CreateBatch)}] --> {JsonConvert.SerializeObject(batchData)}");
+            ApplyAccessToken();
 
             HttpResponseMessage response;
 
@@ -228,7 +239,7 @@ namespace Gif.Service.Crm
             var patchChangeId = Guid.NewGuid();
             var batchUrl = new Uri($"{_httpClient.BaseAddress.AbsoluteUri}$batch");
 
-            var batchRequest = new HttpRequestMessage(HttpMethod.Post, batchUrl);
+            var batchRequest = new HttpRequestMessage(HttpMethod.Post, batchUrl) { Version = new Version(1, 1) };
             var batchContent = new MultipartContent("mixed", "batch_" + batchId);
 
             // changeset setup
@@ -274,7 +285,8 @@ namespace Gif.Service.Crm
 
                 var request = new HttpRequestMessage(method, requestUri)
                 {
-                    Content = content
+                    Content = content,
+                    Version = new Version(1,1)
                 };
 
                 // Add this content to the changeset

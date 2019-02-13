@@ -1,10 +1,10 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
@@ -53,6 +53,11 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       {
         _evidenceBlobStoreLogic.PrepareForSolution(solnEx.Solution.Id);
       }
+    }
+
+    public IEnumerable<SolutionEx> ByOrganisation(string organisationId)
+    {
+      return _filter.Filter( _datastore.ByOrganisation(organisationId) );
     }
   }
 }

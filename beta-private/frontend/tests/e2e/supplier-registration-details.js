@@ -1,7 +1,6 @@
 /* global fixture, test */
 
 import { Selector } from 'testcafe'
-import axeCheck from 'axe-testcafe'
 
 import { asSupplier } from './roles'
 import { supplierDashboardPage, onboardingDashboardPage, registrationPage } from './pages'
@@ -9,11 +8,10 @@ import { supplierDashboardPage, onboardingDashboardPage, registrationPage } from
 fixture('Solution Registration - Details')
   .page(supplierDashboardPage.baseUrl)
   .beforeEach(navigateToSupplierOnboardingSolution)
-  .afterEach(axeCheck)
+  .afterEach(supplierDashboardPage.checkAccessibility)
 
 function navigateToSupplierOnboardingSolution (t) {
   return asSupplier(t)
-    .click(supplierDashboardPage.homeLink)
     .click(supplierDashboardPage.firstOnboardingSolutionName)
     .click(onboardingDashboardPage.continueRegistrationButton)
 }
@@ -21,9 +19,9 @@ function navigateToSupplierOnboardingSolution (t) {
 test('Registration page shows correct information accessibly', async t => {
   await t
     .expect(registrationPage.solutionNameInput.value).eql('Really Kool Document Manager')
-    .expect(registrationPage.solutionNameCounter.textContent).contains(' 32 (out of 60) ')
+    .expect(registrationPage.solutionNameCounter.textContent).contains(' 32 characters remaining (out of 60)')
     .expect(registrationPage.solutionDescriptionInput.value).eql('Does Really Kool document management')
-    .expect(registrationPage.solutionDescriptionCounter.textContent).contains('264 (out of 300) ')
+    .expect(registrationPage.solutionDescriptionCounter.textContent).contains('264 characters remaining (out of 300)')
     .expect(registrationPage.solutionVersionInput.value).eql('1')
     .expect(Selector('#content [readonly]').count).eql(0)
 })
@@ -59,6 +57,7 @@ test('Solution name shows in top bar and updates correctly when saved', async t 
     .selectText(registrationPage.solutionVersionInput)
     .typeText(registrationPage.solutionVersionInput, '1')
     .click(registrationPage.globalSaveAndExitButton)
+    .click(supplierDashboardPage.firstOnboardingSolutionName)
     .click(onboardingDashboardPage.continueRegistrationButton)
     .expect(registrationPage.globalSolutionName.textContent).eql('Really Kool Document Manager, 1')
 })
@@ -146,7 +145,19 @@ test('Blanking any and all Lead Contact fields triggers validation', async t => 
     .expect(Selector('#errors #error-solution\\.contacts\\[0\\]\\.phoneNumber').textContent).contains('Contact phone number is missing')
 })
 
-test('Creating a new contact requires all fields to be filled', async t => {
+test('Creating a new contact, leaving it empty and saving removes it', async t => {
+  await t
+    .expect(registrationPage.newContactFieldset.exists).notOk()
+
+  await t
+    .click(registrationPage.addNewContactButton)
+    .click(registrationPage.globalSaveButton)
+
+    .expect(Selector('#errors').exists).notOk()
+    .expect(registrationPage.newContactFieldset.exists).notOk()
+})
+
+test('Creating a new contact requires all fields to be filled if any are', async t => {
   await t
     .expect(registrationPage.newContactFieldset.exists).notOk()
 
@@ -165,7 +176,7 @@ test('Creating a new contact requires all fields to be filled', async t => {
     .typeText(registrationPage.newContactLastNameInput, 'Smith Fotheringham-Shaw')
     .typeText(registrationPage.newContactEmailInput, 'safety.unicorn@example.com')
     .typeText(registrationPage.newContactPhoneInput, '555 123 4567')
-    .click(registrationPage.globalSaveButton)
+    .click(registrationPage.globalSaveAndExitButton)
 
   await navigateToSupplierOnboardingSolution(t)
     .click(registrationPage.newContactFieldset)

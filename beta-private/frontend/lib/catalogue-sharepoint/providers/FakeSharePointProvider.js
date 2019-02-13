@@ -26,6 +26,13 @@ class FakeFileStoreAPI {
     const interoperabilityStandard = '0e55d9ec-43e6-41b3-bcac-d8681384ea68'
     const businessContinuityClaimID = '719722d0-2354-437e-acdc-4625989bbca8'
 
+    // Claims for solution ID 9A74133F-A437-4B2C-A57C-0F8B4EDDEA31, used to test
+    // Capability ID C1, claim ID 7C0D087F-445A-4D13-8B66-7749F004CFEB
+    // Standards ID S1, claim ID A36D09B6-CEB3-4C52-B8B4-58AE35E91F12
+    // the Standards Compliance screens in their unsubmittable form (that is,
+    // the solution has been submitted for assessment but has not yet completed it)
+    const apptMgmtGpStdClaimID = 'A36D09B6-CEB3-4C52-B8B4-58AE35E91F12'
+
     const fakeBuffer = Buffer.from('Content of the test "Dummy traceabilityMatrix.xlsx" file', 'utf8')
     const fakeName = 'Dummy TraceabilityMatrix.xlsx'
 
@@ -35,6 +42,8 @@ class FakeFileStoreAPI {
     await this.addTestItem(testingClaimID, fakeBuffer, fakeName)
     await this.addTestItem(interoperabilityStandard, fakeBuffer, fakeName)
     await this.addTestItem(businessContinuityClaimID, fakeBuffer, fakeName)
+
+    await this.addTestItem(apptMgmtGpStdClaimID, fakeBuffer, fakeName)
   }
 
   addTestItem (claimID, buffer, filename) {
@@ -66,6 +75,18 @@ class FakeFileStoreAPI {
       hasPreviousPage: false,
       hasNextPage: false
     }
+  }
+
+  async enumerateAllClaims () {
+    const enumeration = {
+      items: Object.keys(this.folders).map((claimId) => {
+        return {
+          claimId: claimId,
+          blobInfos: this.folders[claimId].items
+        }
+      })
+    }
+    return enumeration
   }
 
   async addItemToClaim (claimID, readStream, filename, options) {
@@ -146,6 +167,13 @@ class FakeCapabilitiesImplementedEvidenceBlobStoreApi extends FakeFileStoreAPI {
 
   async apiCapabilitiesImplementedEvidenceBlobStoreDownloadByClaimIdPost (claimID, opts) {
     return this.downloadFile(claimID, opts)
+  }
+
+  async apiCapabilitiesImplementedEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGet (solutionId) {
+    // Enumerates all claims in FakePoint since there is no way to which claims are associated to a solution
+    // If the user of this method is performing adequate checks of which Capabilities are actually being
+    // claimed by a solution, then those not applicable will be filtered out.
+    return this.enumerateAllClaims()
   }
 }
 

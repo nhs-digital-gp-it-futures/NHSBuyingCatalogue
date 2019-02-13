@@ -14,6 +14,8 @@
   "Solution_possessive": "Solution's",
   "Capability": "Capability",
   "Capability_plural": "Capabilities",
+  "Core Capabilities": "Foundation $t(Capability_plural)",
+  "Non-core Capabilities": "Other $t(Capability_plural)",
   "Standard": "Standard",
   "Standard_plural": "Standards",
   "Standard_possessive": "Standard's",
@@ -42,7 +44,7 @@
     "Save and exit": "Save & exit"
   },
   "Authentication": {
-    "Login": "Log In",
+    "Login": "Log in/Sign up",
     "Logout": "Log Out",
     "Greeting": "Welcome, {{user.contact.firstName}}"
   },
@@ -56,6 +58,11 @@
       "Approved": "Approved {{when}}",
       "Rejected": "Rejected {{when}}"
     }
+  },
+  "Unsaved Changes": {
+    "Title": "You have unsaved changes",
+    "Continue Without Saving": "Continue without Saving",
+    "Information": "If you leave without saving, you will lose any changes you have made to this page."
   },
   "Footer": {
     "Sections": [

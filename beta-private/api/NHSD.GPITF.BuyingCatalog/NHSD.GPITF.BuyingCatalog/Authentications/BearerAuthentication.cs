@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -22,6 +23,7 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
     private readonly IUserInfoResponseRetriever _userInfoClient;
     private readonly IContactsDatastore _contactsDatastore;
     private readonly IOrganisationsDatastore _organisationDatastore;
+    private readonly bool _logBearerAuth;
 
     private static TimeSpan Expiry = TimeSpan.FromMinutes(60);
 
@@ -39,60 +41,65 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
       _userInfoClient = userInfoClient;
       _contactsDatastore = contactsDatastore;
       _organisationDatastore = organisationDatastore;
+      _logBearerAuth = Settings.LOG_BEARERAUTH(_config);
     }
 
     public async Task Authenticate(TokenValidatedContext context)
     {
       // set roles based on email-->organisation-->org.PrimaryRoleId
       var bearerToken = ((FrameRequestHeaders)context.HttpContext.Request.Headers).HeaderAuthorization.Single();
+      LogInformation($"Extracted token --> [{bearerToken}]");
 
       // have to cache responses or UserInfo endpoint thinks we are a DOS attack
       CachedUserInfoResponse cachedresponse = null;
       if (_cache.TryGetValue(bearerToken, out string jsonCachedResponse))
       {
+        LogInformation($"cache[{bearerToken}] --> [{jsonCachedResponse}]");
         cachedresponse = JsonConvert.DeserializeObject<CachedUserInfoResponse>(jsonCachedResponse);
         if (cachedresponse.Created < DateTime.UtcNow.Subtract(Expiry))
         {
+          LogInformation($"Removing expired cached token --> [{bearerToken}]");
           _cache.Remove(bearerToken);
           cachedresponse = null;
         }
       }
 
       var userInfo = Settings.OIDC_USERINFO_URL(_config);
-      var response = cachedresponse?.UserInfoResponse;
-      if (response == null)
+      if (cachedresponse == null)
       {
-        response = await _userInfoClient.GetAsync(userInfo, bearerToken.Substring(7));
+        var response = await _userInfoClient.GetAsync(userInfo, bearerToken.Substring(7));
         if (response == null)
         {
-          _logger.LogError($"No response from {userInfo}");
+          _logger.LogError($"No response from [{userInfo}]");
           return;
         }
+        LogInformation($"Updating token --> [{bearerToken}]");
         _cache.SafeAdd(bearerToken, JsonConvert.SerializeObject(new CachedUserInfoResponse(response)));
+        cachedresponse = new CachedUserInfoResponse(response);
       }
 
-      if (response?.Claims == null)
+      if (cachedresponse.Claims == null)
       {
-        _logger.LogError($"No claims from {userInfo}");
+        _logger.LogError($"No claims from [{userInfo}]");
         return;
       }
 
-      var userClaims = response.Claims;
-      var claims = new List<Claim>(userClaims);
+      var userClaims = cachedresponse.Claims;
+      var claims = new List<Claim>(userClaims.Select(x => new Claim(x.Type, x.Value)));
       var email = userClaims.SingleOrDefault(x => x.Type == "email")?.Value;
       if (!string.IsNullOrEmpty(email))
       {
         var contact = _contactsDatastore.ByEmail(email);
         if (contact == null)
         {
-          _logger.LogError($"No contact for {email}");
+          _logger.LogError($"No contact for [{email}]");
           return;
         }
 
         var org = _organisationDatastore.ByContact(contact.Id);
         if (org == null)
         {
-          _logger.LogError($"No organisation for {contact.Id}");
+          _logger.LogError($"No organisation for [{contact.Id}]");
           return;
         }
 
@@ -111,6 +118,14 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
       }
 
       context.Principal.AddIdentity(new ClaimsIdentity(claims));
+    }
+
+    private void LogInformation(string msg)
+    {
+      if (_logBearerAuth)
+      {
+        _logger.LogInformation(msg);
+      }
     }
   }
 #pragma warning restore CS1591

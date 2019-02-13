@@ -3,6 +3,15 @@
   <head>
     <meta charset="utf-8">
     <title>{{meta.title}}{{#meta.title}} - {{/meta.title}}{{t 'Catalogue.Fullname'}}</title>
+
+    <!--[if IE]><link rel="shortcut icon" href="/webfiles/1548245354813/icons/favicon.ico"><![endif]-->
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="manifest" href="/icons/manifest.json">
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg">
+    <meta name="theme-color" content="#ffffff">
+
     <link rel="stylesheet" href="/styles.css">
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=default,es7"></script>
     <script type="text/javascript" src="/js/vendor/modernizr-custom.js"></script>
@@ -59,6 +68,23 @@
     </header>
     <main id="content" class="{{#if onHomePage}}no-padding{{/if}}">
       {{> breadcrumbs}}
+      <div id="unsaved-changes"
+            role="alertdialog"
+            aria-labelledby="unsaved-changes-title"
+            aria-describedby="unsaved-changes-desc">
+        <h2 id="unsaved-changes-title">{{t 'Unsaved Changes.Title'}}</h2>
+        <p id="unsaved-changes-desc">{{t 'Unsaved Changes.Information'}}</p>
+        <input type="submit"
+              {{#if activeForm.id}}
+              form="{{activeForm.id}}"
+              {{else}}
+              disabled
+              {{/if}}
+              class="button"
+              name="action[save]"
+              value="{{t 'Buttons.Save'}}">
+          <a class="button">{{t 'Unsaved Changes.Continue Without Saving'}}</a>
+        </div>
       {{{body}}}
     </main>
     <footer aria-label="Site footer">
@@ -82,5 +108,6 @@
         </p>
       </div>
     </footer>
+    <div class="loading-spinner"></div>
   </body>
 </html>

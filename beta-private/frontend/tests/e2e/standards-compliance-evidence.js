@@ -1,7 +1,6 @@
 /* global fixture, test */
 
 import { Selector, RequestLogger } from 'testcafe'
-import axeCheck from 'axe-testcafe'
 
 import { asSupplier } from './roles'
 import { supplierDashboardPage, onboardingDashboardPage, standardsComplianceDashboardPage } from './pages'
@@ -13,6 +12,7 @@ const testingStdID = '99619bdd-6452-4850-9244-a4ce9bec70ca'
 const commercialStdID = '3a7735f2-759d-4f49-bca0-0828f32cf86c'
 const interopStdID = '0e55d9ec-43e6-41b3-bcac-d8681384ea68'
 const dataMigrationStdID = '0e55d9ec-43e6-41b3-bcac-d8681384ea68'
+const apptMgmtGpStdClaimID = 'A36D09B6-CEB3-4C52-B8B4-58AE35E91F12'
 
 const downloadFileName = 'Dummy TraceabilityMatrix.xlsx'
 
@@ -32,7 +32,7 @@ const requestLogger = RequestLogger(
 fixture('Standards Compliance - Evidence')
   .page(supplierDashboardPage.baseUrl)
   .beforeEach(navigateToStandardsDashboard)
-  .afterEach(axeCheck)
+  .afterEach(supplierDashboardPage.checkAccessibility)
 
 function navigateToStandardsDashboard (t) {
   return asSupplier(t)
@@ -43,10 +43,24 @@ function navigateToStandardsDashboard (t) {
 }
 
 test('With no traceability Matrix present, the page displays a \'please wait\' message', async t => {
-  const messageSelector = await Selector('.message.feedback > p:first-child')
+  const messageSelector = Selector('#compliance .notification h1')
   await t
     .click(`a[href*="${nonFunctionalStdID}"]`)
-    .expect(messageSelector.innerText).contains('Please wait')
+    .expect(messageSelector.innerText).contains('Waiting for file')
+})
+
+test('With a solution that has not passed assessment but has a TM present, the page shows an appropriate notification', async t => {
+  const messageSelector = Selector('#compliance .notification h1')
+
+  await asSupplier(t)
+    .click(supplierDashboardPage.homeLink)
+    .click(supplierDashboardPage.capAssSubmittedSolutionName)
+    .click(onboardingDashboardPage.standardsComplianceButton)
+    .expect(Selector('#compliance').exists).ok()
+
+  await t
+    .click(`a[href*="${apptMgmtGpStdClaimID}"]`)
+    .expect(messageSelector.innerText).contains('File available')
 })
 
 test('a \'Not Started\' With a traceability Matrix present, the page shows a form with a file upload', async t => {
@@ -100,6 +114,7 @@ test('A \'Not Started\' standard should change to draft if a file is saved again
 
     // Selecting the Row that is the parent of the link, so that the sibling cell with containing status can be checked
     .expect(businessContinuitySelector.parent().nth(1).find('.status').innerText).eql('Draft')
+    .expect(businessContinuitySelector.parent().nth(1).find('.owner').innerText).eql('With Helpma Boab')
 })
 
 test('The owner of a standard can be set correctly and is reflected on the Dashboard when saved', async t => {
@@ -146,6 +161,7 @@ test('A standard should change to Submitted if evidence is submitted.', async t 
 
     // Selecting the Row that is the parent of the link, so that the sibling cell with containing status can be checked
     .expect(clinicalSafetySelector.parent().nth(1).find('.status').innerText).eql('Submitted')
+    .expect(clinicalSafetySelector.parent().nth(1).find('.owner').innerText).eql('With NHS Digital')
     .expect(Selector('.standard-submitted h3').innerText).contains('Evidence submitted')
 })
 

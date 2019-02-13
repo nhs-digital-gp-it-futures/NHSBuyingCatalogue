@@ -94,12 +94,12 @@
   "Onboarding": {
     "Title": "Adding a $t(Solution)",
     "Subtitle": {
-      "New": "Start with Stage 1 to register your $t(Solution) and build the requirements for the next two stages.",
+      "New": "There are four stages to adding a $t(Solution) to the $t(Catalogue.Title). Start with Stage 1 below.",
       "Existing": "Continue adding your $t(Solution) below."
     },
     "StartingCallout": {
       "Title": "Before you start",
-      "Text": "We recommend you read the <a href='#supplier-guide'>Supplier Guide</a>. It contains helpful detail and guidance to make your journey as swift and easy as possible."
+      "Text": "We recommend you read the <a href='#supplier-guide' target='_blank'>Supplier Guide</a>. It contains helpful detail and guidance to make your journey as swift and easy as possible."
     },
     "Status": {
       "Title": "$t(Solution) Onboarding Status"
@@ -108,22 +108,22 @@
       {
         "Name": "$t(Solution) Registration",
         "Title": "Provide basic details and select $t(Capability_plural)",
-        "Narrative": "Provide $t(Solution) name, description, version and contact details. Select the $t(Capability_plural) that describe what your $t(Solution) does to build the requirements for the next two stages."
+        "Narrative": "Provide $t(Solution) name, description, version and contact details. Select your $t(Solution_possessive) $t(Capability_plural) to progress to the next stages."
       },
       {
         "Name": "$t(Capabilities Assessment)",
         "Title": "Provide evidence for your $t(Solution_possessive) $t(Capability_plural)",
-        "Narrative": "Provide evidence that shows how your $t(Solution) meets each of its $t(Capability_plural). Your $t(Solution) will be assessed to ensure it meets the $t(Capability_plural) asserted."
+        "Narrative": "Provide evidence that shows how your $t(Solution) meets each of the $t(Capability_plural) selected. $t(NHSD.Name) will assess whether or not your $t(Solution) meets the $t(Capability_plural)."
       },
       {
         "Name": "$t(Standards Compliance)",
         "Title": "Provide evidence for your $t(Solution_possessive) $t(Standard_plural)",
-        "Narrative": "Provide evidence that shows how your $t(Solution) meets each $t(Standard_possessive) requirements. Your $t(Solution) will be evaluated for $t(Compliance) with each $t(Standard)."
+        "Narrative": "Provide evidence that shows how your $t(Solution) meets the requirements in each $t(Standard). $t(NHSD.Name) will evaluate your $t(Solution) for $t(Compliance) with each $t(Standard)."
       },
       {
         "Name": "$t(Solution) Detail",
         "Title": "Build your $t(Solution) page",
-        "Narrative": "Provide information to help buyers evaluate your $t(Solution). This information will be moderated. It not affect either $t(Assessment) (Stage 2) or $t(Compliance) (Stage 3)."
+        "Narrative": "Provide information to help buyers evaluate your $t(Solution). $t(NHSD.Name) will moderate the information added. Then, publish your $t(Solution) page."
       }
     ],
     "Help": {
@@ -137,7 +137,7 @@
       "Title": "$t(Solution) registration complete.",
       "Text": [
         "You can now continue with stage 2 $t(Onboarding.Stages.1.Name) as soon as you’re ready.",
-        "You can view stage 3, and start saving evidence against $t(Standard_plural_possessive) requirements. However, you cannot submit evidence for stage 3 until you have passed stage 2."
+        "You can also view stage 3. However, you cannot save and submit evidence against $t(Standard_plural) until you have passed stage 2."
       ]
     },
     "CapabilityAssessmentSubmittedCallout": {
@@ -252,10 +252,10 @@
       },
       "Fieldsets": {
         "Core": {
-          "Legend": "Core $t(Capability_plural)"
+          "Legend": "$t(Core Capabilities)"
         },
         "NonCore": {
-          "Legend": "Non-Core $t(Capability_plural)"
+          "Legend": "$t(Non-core Capabilities)"
         }
       },
       "Reveal": {
@@ -329,12 +329,22 @@
       "QuickLinks": {
         "Heading": "Quick Links — $t(Standard) & Related $t(Capability_plural)"
       },
-      "CurrentFile": {
-        "Heading": "Download current file",
-        "Missing": [
-          "Please wait for the $t(Standards Compliance) team to provide you with a $t(Traceability Matrix).",
-          "We will email the $t(Lead Contact) when this stage is ready."
+      "NoCurrentFileNotification": {
+        "Heading": "Waiting for file",
+        "Text": [
+          "Please wait for the $t(Standards Compliance) team to provide you with a $t(Traceability Matrix) for this $t(Standard).",
+          "We will email your $t(Lead Contact) when the file is ready."
         ]
+      },
+      "CapAssIncompleteNotification": {
+        "Heading": "File available",
+        "Text": [
+          "The $t(Standards Compliance) team has provided you with a $t(Traceability Matrix), which you may download and work on.",
+          "However, you cannot submit your file to $t(NHSD.Name) until your $t(Compliance Assessment) is complete."
+        ]
+      },
+      "CurrentFile": {
+        "Heading": "Download current file"
       },
       "Reply": {
         "Heading": "Upload file and reply*",
@@ -392,9 +402,12 @@
   "CapAssPages":{
     "Breadcrumb": "$t(Capability Assessment)",
     "Assessment":{
-      "Title": "Provide Assessment evidence for your $t(Solution).",
-      "Instructions": "Provide primary evidence for each $t(Capability) below. Once you have completed the required fields, review your answers on the next page before submitting them to $t(NHSD.Name).",
-      "Guidance": "For support, see guidance for this stage, and watch the example demonstration video. If this $t(Solution) is published, buyers can request the information you provide on this page. All Clarifications should be submitted in Bravo.",
+      "Title": "Provide $t(Capability) evidence for your $t(Solution).",
+      "Instructions": "Select evidence method and follow the instructions for each of your selected $t(Capability_plural) below. On the next page, you can review your answers and submit them to $t(NHSD.Name).",
+      "Guidance": [
+        "For what to put in each video, and how to plan for live demonstrations, see the <a href='#'>guidance</a>. You can also watch an <a href='#'>example video demonstration</a>.",
+        "For queries, <a href='mailto:gpitfutures@nhs.net'>email us</a>. (* indicates required field)"
+      ],
       "Evidence": {
         "Instructions": "Choose to provide a video, or give a live witness demonstration, to show how your $t(Solution) meets this Capability. Find further instructions, along with all Epics and Acceptance Criteria in Confluence: Document Management Capability. ",
         "Title":"Add primary evidence for this Capability.*",
@@ -414,7 +427,10 @@
         }
       },
       "Submission": {
-        "Notice":"By Submitting this information to $t(NHSD.Name) for Assessment, you are confirming you are able, to the best of your knowledge, to meet all $t(Capability) Assessment and $t(Standard_plural) $t(Compliance) requirements and to display the $t(Solution) named on the NHS Catalogue."
+        "Notice":"By Submitting this information to $t(NHSD.Name) for Assessment, you are confirming you are able, to the best of your knowledge, to meet all $t(Capability_Assessment) and $t(Standards Compliance) requirements and to display the $t(Solution) named on the $t(Catalogue.Title)."
+      },
+      "Buttons": {
+        "Submit": "Save and review"
       }
     },
     "Confirmation": {
@@ -425,10 +441,11 @@
         "Information": "When you Submit this page, the information you have provided will be sent to $t(NHSD.Name), and the Assessment team will begin reviewing your responses for each Capability. Your $t(Lead Contact) will receive a notification linked to an Outcome letter once the assessment is complete."
       },
       "Registration": {
-        "Title": "Solution details and key contacts.",
+        "Title": "Enter $t(Solution) details and key contacts.",
         "Subtitle": {
-          "Solution": "Solution Name, Description, Version",
-          "Contacts": "Contacts"
+          "Solution": "Enter $t(Solution) name, description, version",
+          "LeadContact": "Enter $t(Lead Contact) Details",
+          "Contacts": "Additional Contacts"
         }
       },
       "Capabilities": {
@@ -447,6 +464,14 @@
           "RecordedVideo": "Evidence: Recorded Video"
         },
         "Error": "Error: This $t(Capability) is missing evidence."
+      }
+    },
+    "Summary": {
+      "Breadcrumb": "Submission Summary",
+      "Title": "Information Provided For Your $t(Solution)",
+      "Information": "The following information is what you have supplied to $t(NHSD.Name). This information is used during the assessment process to determine if you satisfy the criteria defined for each $t(Capability).",
+      "Backlink": {
+        "Title": "$t(Onboarding.Title)"
       }
     }
   },

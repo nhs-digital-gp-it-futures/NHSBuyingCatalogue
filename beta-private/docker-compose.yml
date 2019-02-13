@@ -39,8 +39,8 @@ services:
       - LOG_CONNECTIONSTRING
       - SHAREPOINT_BASEURL
       - SHAREPOINT_ORGANISATIONSRELATIVEURL
-      - SHAREPOINT_LOGIN
-      - SHAREPOINT_PASSWORD
+      - SHAREPOINT_CLIENT_ID
+      - SHAREPOINT_CLIENT_SECRET
       - CRM_APIURI
       - CRM_ACCESSTOKENURI
       - CRM_CLIENTID
@@ -48,6 +48,9 @@ services:
       - USE_CRM
       - LOG_CRM
       - LOG_SHAREPOINT
+    depends_on:
+      - cache
+      - crm
 
   crm:
     build: 
@@ -79,12 +82,14 @@ services:
       - frontend
 
   cache:
-    image: redis:alpine
+    image: redis:latest
     networks:
       - beta_network
     ports:
       - "6379:6379"
     restart: always
+    volumes:
+      - ./data:/data
 
 networks:
   beta_network:

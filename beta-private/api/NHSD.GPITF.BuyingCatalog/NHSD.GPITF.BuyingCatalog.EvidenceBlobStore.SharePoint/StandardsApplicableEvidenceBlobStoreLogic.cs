@@ -1,4 +1,6 @@
-﻿using NHSD.GPITF.BuyingCatalog.Interfaces;
+﻿using System.Collections.Generic;
+using System.Linq;
+using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 
 namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
@@ -35,6 +37,11 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       var std = _standardsDatastore.ById(specifiClaim.StandardId);
 
       return std.Name;
+    }
+
+    public override IEnumerable<Quality> GetAllQualities()
+    {
+      return _standardsDatastore.GetAll();
     }
 
     protected override IClaimsDatastore<ClaimsBase> ClaimsDatastore

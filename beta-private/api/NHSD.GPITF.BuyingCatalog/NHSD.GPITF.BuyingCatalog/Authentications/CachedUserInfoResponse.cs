@@ -1,12 +1,14 @@
 ﻿using IdentityModel.Client;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Authentications
 {
 #pragma warning disable CS1591
   public sealed class CachedUserInfoResponse
   {
-    public UserInfoResponse UserInfoResponse { get; }
+    public IEnumerable<ClaimEx> Claims { get; set; }
     public DateTime Created { get; set; } = DateTime.UtcNow;
 
     // required for Json constructor
@@ -22,7 +24,7 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
 
     public CachedUserInfoResponse(UserInfoResponse userInfoResponse)
     {
-      UserInfoResponse = userInfoResponse;
+      Claims = userInfoResponse.Claims.Select(x => new ClaimEx(x));
     }
   }
 #pragma warning restore CS1591

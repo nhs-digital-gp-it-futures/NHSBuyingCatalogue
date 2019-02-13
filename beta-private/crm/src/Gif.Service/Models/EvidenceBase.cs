@@ -1,9 +1,9 @@
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 using Gif.Service.Attributes;
+using Gif.Service.Contracts;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Runtime.Serialization;
-using Gif.Service.Contracts;
 
 namespace Gif.Service.Models
 {
@@ -34,7 +34,7 @@ namespace Gif.Service.Models
         [CrmFieldName("_cc_createdbyid_value")]
         [CrmFieldNameDataBind("cc_CreatedByID@odata.bind")]
         [CrmFieldEntityDataBind("contacts")]
-        public Guid? CreatedById { get; set; }
+        public Guid CreatedById { get; set; }
 
         [DataMember]
         [CrmFieldName("_cc_previousversion_value")]
@@ -43,6 +43,22 @@ namespace Gif.Service.Models
         public Guid? PreviousId { get; set; }
 
         public int Order { get; set; }
+
+        [DataMember]
+        [CrmFieldName("cc_hasrequestedlivedemo")]
+        public bool HasRequestedLiveDemo { get; set; }
+
+        [DataMember]
+        [CrmFieldName("cc_blobid")]
+        public string BlobId { get; set; }
+
+        [DataMember]
+        [CrmFieldName("createdon")]
+        public new DateTime CreatedOn { get; set; }
+
+        [DataMember]
+        [CrmFieldName("modifiedon")]
+        public new DateTime ModifiedOn { get; set; }
 
         public EvidenceBase() { }
 

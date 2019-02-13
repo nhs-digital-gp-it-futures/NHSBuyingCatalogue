@@ -31,6 +31,7 @@ a[target="_blank"]:after {
 
     &:hover {
       background-color: $color-link-hover-bg;
+      text-decoration: none;
     }
 
     &:visited {
@@ -50,6 +51,12 @@ a[target="_blank"]:after {
       content: '← Back ';
       font-weight: normal;
     }
+  }
+
+  // default style for paragraphs
+  p {
+    line-height: 1.33;
+    max-width: 770px;
   }
 }
 

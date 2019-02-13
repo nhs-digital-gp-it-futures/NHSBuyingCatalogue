@@ -3,19 +3,13 @@
 
   "wwwroot": "wwwroot",
 
-  "Jwt":
-  {
-    "Authority": "http://oidc-provider:9000",
-    "UserInfo": "http://oidc-provider:9000/me",
-    "Audience": "catalogue-private-beta-ci"
-  },
-
   "UseCRM": false,
 
   "Log":
   {
     "CRM": true,
-    "SharePoint":  true
+    "SharePoint": true,
+    "BearerAuth": true
   },
 
   "Cache":

@@ -49,6 +49,14 @@ router
   .route('/:solution_id/evidence/:claim_id/confirmation')
   .post(solutionComplianceEvidenceConfirmationPost)
 
+function solutionInAssessment (solution) {
+  return +solution.status === 2
+}
+
+function solutionInCompliance (solution) {
+  return +solution.status === 3
+}
+
 function commonComplianceContext (req) {
   return {
     solution: req.solution,
@@ -131,13 +139,19 @@ async function evidencePageContext (req, next) {
   // compute the message history from the relevant evidence and reviews
   context.claim.submissionHistory = _(context.solution.evidence)
     .filter({ claimId: context.claim.id })
-    .flatMap(ev => [ev, ..._.filter(context.solution.reviews, { evidenceId: ev.id })])
-    .map(({ id, createdOn, createdById, message, evidence }) => ({
+    .map((ev) => ({ ...ev, isFeedback: false })) // Flag all Evidence as not being Feedback
+    .flatMap(ev => [
+      ev,
+      ..._
+        .filter(context.solution.reviews, { evidenceId: ev.id })
+        .map((re) => ({ ...re, isFeedback: true })) // Flag all Reviews as being Feedback
+    ])
+    .map(({ id, createdOn, createdById, message, evidence, isFeedback }) => ({
       id,
       createdOn,
       createdById,
       message: message || evidence,
-      isFeedback: !!message
+      isFeedback
     }))
     .orderBy('createdOn', 'asc')
     .each(msg => {
@@ -206,13 +220,16 @@ async function solutionComplianceEvidencePageGet (req, res, next) {
     latestFile.downloadURL = path.join(req.baseUrl, req.path, latestFile.name)
 
     context.latestFile = latestFile
+    context.assessmentIncomplete = solutionInAssessment(context.solution)
 
     // only allow a submission if a file exists and;
     // a) evidence has not already been submitted, or
     // b) the latest submission is feedback from NHS Digital
-    context.allowSubmission = !context.isSubmitted || context.hasFeedback
+    // c) the solution is in the standards compliance stage.
+    context.allowSubmission = (!context.isSubmitted || context.hasFeedback) && solutionInCompliance(context.solution)
     if (context.allowSubmission) {
       context.activeForm.id = 'compliance-evidence-upload'
+      context.allowDirectSubmission = context.claim.submissionHistory.length && !context.isSubmitted && !context.hasFeedback
     }
   }
 
@@ -222,13 +239,17 @@ async function solutionComplianceEvidencePageGet (req, res, next) {
 async function solutionComplianceEvidencePagePost (req, res) {
   const action = req.body.action || {}
 
-  let redirectUrl = action.save
-    ? './'
-    : '../../'
+  if (!solutionInCompliance(req.solution)) {
+    return res.redirect('../../')
+  }
 
-  if (!req.files.length) {
+  let redirectUrl = './'
+  if (action.submit) redirectUrl = './confirmation'
+  else if (action.exit) redirectUrl = '/'
+
+  if (!req.files.length && action.submit !== 'direct') {
     req.body.errors = { items: [{ msg: 'No file to upload.' }] }
-  } else {
+  } else if (req.files.length) {
     const fileToUpload = req.files[0]
 
     try {
@@ -237,10 +258,6 @@ async function solutionComplianceEvidencePagePost (req, res) {
       // update the status of the claim based on the file uploading successfully (not started -> draft)
       // and if the user requested submission to NHS Digital (* -> submitted)
       const claim = _.find(req.solution.standards, { id: req.params.claim_id })
-
-      if (action.submit) {
-        redirectUrl = './confirmation'
-      }
 
       claim.status = '1' /* draft */
       claim.ownerId = req.body.ownerId || null
@@ -257,17 +274,17 @@ async function solutionComplianceEvidencePagePost (req, res) {
       })
 
       await dataProvider.updateSolutionForCompliance(req.solution)
-
-      // redirect accourdingly
-      res.redirect(redirectUrl)
-      return
     } catch (err) {
       req.body.errors = { items: [{ msg: String(err) }] }
     }
   }
 
   // re-render if an error occurred
-  solutionComplianceEvidencePageGet(req, res)
+  if (req.body.errors) {
+    solutionComplianceEvidencePageGet(req, res)
+  } else {
+    res.redirect(redirectUrl)
+  }
 }
 
 async function downloadEvidenceGet (req, res, next) {
@@ -301,6 +318,7 @@ async function solutionComplianceEvidenceConfirmationGet (req, res) {
   const claim = _.find(req.solution.standards, { id: req.params.claim_id })
 
   context.standard = claim.standard
+
   let latestFile
 
   if (context.files) {
@@ -313,6 +331,10 @@ async function solutionComplianceEvidenceConfirmationGet (req, res) {
   }
 
   context.latestSubmission = _.maxBy(claim.submissionHistory, (sub) => sub.createdOn)
+
+  if (!context.latestSubmission || !solutionInCompliance(req.solution)) {
+    return res.redirect('../../')
+  }
 
   res.render('supplier/compliance/confirmation', context)
 }

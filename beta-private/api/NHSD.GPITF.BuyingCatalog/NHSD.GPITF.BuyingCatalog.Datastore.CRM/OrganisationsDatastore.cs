@@ -32,10 +32,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        var request = GetRequest($"{ResourceBase}/ById/{id}");
-        var retval = GetResponse<Organisations>(request);
-
-        return retval;
+        return Get($"{ResourceBase}/ById/{id}");
       });
     }
   }

@@ -11,7 +11,7 @@
     legend="Onboarding.Details.Fieldsets.NameDescVersion.Legend"
     invalid=errors.fieldsets.NameDescVersion
   }}
-  <p class="preamble">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Preamble'}}</p>
+  <div class="preamble"><p>{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Preamble'}}</p></div>
 
   {{#> control invalid=errors.controls.[solution.name]}}
     <label for="solution.name">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Name.Label'}}</label>
@@ -66,7 +66,7 @@
       name="solution[contacts][0][contactType]"
       value="Lead Contact">
 
-    <p class="preamble">{{t 'Onboarding.Details.Fieldsets.LeadContact.Preamble'}}</p>
+    <div class="preamble"><p>{{t 'Onboarding.Details.Fieldsets.LeadContact.Preamble'}}</p></div>
 
     {{#> control invalid=(lookup errors.controls 'solution.contacts[0].firstName')}}
       <label for="solution.contacts[0].firstName">{{t 'Onboarding.Details.Fieldsets.LeadContact.Fields.FirstName.Label'}}</label>

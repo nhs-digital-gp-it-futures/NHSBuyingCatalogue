@@ -2,6 +2,24 @@
 
 {{> errors}}
 
+{{#unless latestFile}}
+<div class="notification" role="alert">
+  <h1>{{t 'CompliancePages.Evidence.NoCurrentFileNotification.Heading'}}</h1>
+  {{#each (tt 'CompliancePages.Evidence.NoCurrentFileNotification.Text')}}
+  <p>{{{.}}}</p>
+  {{/each}}
+</div>
+{{else}}
+  {{#if assessmentIncomplete}}
+  <div class="notification" role="alert">
+    <h1>{{t 'CompliancePages.Evidence.CapAssIncompleteNotification.Heading'}}</h1>
+    {{#each (tt 'CompliancePages.Evidence.CapAssIncompleteNotification.Text')}}
+    <p>{{{.}}}</p>
+    {{/each}}
+  </div>
+  {{/if}}
+{{/unless}}
+
 {{#if hasFeedback}}
 <p class="has-feedback">
   {{{t 'CompliancePages.Evidence.History.HasFeedback' id=feedbackId}}}
@@ -69,7 +87,7 @@
   <section class="current-file">
     <h2>{{t 'CompliancePages.Evidence.CurrentFile.Heading'}}</h2>
     <p class="callout">
-      <a href="{{latestFile.downloadURL}}">{{latestFile.name}}</a>
+      <a download href="{{latestFile.downloadURL}}">{{latestFile.name}}</a>
     </p>
   </section>
 
@@ -117,7 +135,7 @@
         id="submit-for-compliance"
         type="submit"
         name="action[submit]"
-        value="submit"
+        value="{{#if allowDirectSubmission}}direct{{else}}submit{{/if}}"
         class="primary">{{t 'CompliancePages.Evidence.Buttons.Submit'}}</button>
     {{/form}}
   </section>
@@ -126,14 +144,6 @@
     <button id="submit-for-compliance" type="submit" class="primary" disabled>{{t 'CompliancePages.Evidence.Buttons.Submit'}}</button>
   </section>
   {{/if}}
-{{else}}
-  <div class="history">
-    <div class="message feedback">
-      {{#each (tt 'CompliancePages.Evidence.CurrentFile.Missing')}}
-      <p>{{{.}}}</p>
-      {{/each}}
-    </div>
-  </div>
 {{/if}}
 
 <a class="back-link" href="../../">{{t 'CompliancePages.Evidence.Backlink.Title'}}</a>
@@ -157,8 +167,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function updateForFileInputState () {
     const fileInputFilled = !!replyFileInput.value
+    const elSubmit = $('#submit-for-compliance')
     replyForm.classList.toggle('has-file', fileInputFilled)
-    $('#submit-for-compliance').disabled = !fileInputFilled
+    elSubmit.disabled = !fileInputFilled && elSubmit.value !== 'direct'
   }
 
   if (replyForm) {

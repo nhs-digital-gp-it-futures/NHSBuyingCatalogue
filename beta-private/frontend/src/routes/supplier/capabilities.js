@@ -45,7 +45,8 @@ router
   .post(confirmationPagePost)
 
 router
-  .route('/:solution_id/confirmation')
+  .route('/:solution_id/summary')
+  .get(summaryPageGet)
 
 function commonContext (req) {
   return {
@@ -63,38 +64,44 @@ async function capabilityPageContext (req) {
     ...await dataProvider.capabilityMappings(),
     errors: {
       items: []
-    }
+    },
+    breadcrumbs: [
+      { label: 'Onboarding.Title', url: `../../solutions/${req.solution.id}` },
+      { label: 'CapAssPages.Breadcrumb' }
+    ]
   }
 
   context.activeForm.id = 'capability-assessment-form'
 
-  context.solution.capabilities = await Promise.all(
-    context.solution.capabilities.map(async (cap) => {
-      const files = await fetchFiles(cap.claimID).catch((err) => {
-        context.errors.items.push(
-          { msg: 'Validation.Capability.Evidence.Retrieval.FailedAction', err: err }
-        )
-      })
-      let latestFile
+  const enumeration = await sharePointProvider.enumerateCapFolderFiles(req.solution.id).catch((err) => {
+    context.errors.items.push(
+      { msg: 'Validation.Capability.Evidence.Retrieval.FailedAction', err: err }
+    )
+  })
 
-      if (files) {
-        latestFile = findLatestFile(files.items)
-      }
+  context.solution.capabilities = context.solution.capabilities.map((cap) => {
+    const files = enumeration[cap.claimID]
 
-      if (latestFile) {
-        latestFile.downloadURL = path.join(req.baseUrl, req.path, cap.claimID, latestFile.name)
-      }
+    let latestFile
 
-      const latestEvidence = findLatestEvidence(cap.evidence)
+    if (files) {
+      latestFile = findLatestFile(files)
+    }
 
-      return {
-        ...cap,
-        latestFile: latestFile,
-        latestEvidence: latestEvidence,
-        isUploadingEvidence: latestEvidence ? !latestEvidence.hasRequestedLiveDemo : true
-      }
-    })
-  )
+    if (latestFile) {
+      latestFile.downloadURL = path.join(req.baseUrl, req.path.replace('/confirmation', ''), cap.claimID, latestFile.name)
+    }
+
+    const latestEvidence = findLatestEvidence(cap.evidence)
+
+    return {
+      ...cap,
+      latestFile: latestFile,
+      latestEvidence: latestEvidence,
+      isUploadingEvidence: latestEvidence && !latestEvidence.hasRequestedLiveDemo,
+      hasRequestedLiveDemo: latestEvidence && latestEvidence.hasRequestedLiveDemo
+    }
+  })
 
   context.solution.capabilities = _.sortBy(context.solution.capabilities, 'name')
 
@@ -103,11 +110,7 @@ async function capabilityPageContext (req) {
 
 async function solutionCapabilityPageGet (req, res) {
   const context = {
-    ...await capabilityPageContext(req),
-    breadcrumbs: [
-      { label: 'Onboarding.Title', url: `../../solutions/${req.solution.id}` },
-      { label: 'CapAssPages.Breadcrumb' }
-    ]
+    ...await capabilityPageContext(req)
   }
 
   // page is only editable if the solution is registered, and notyet submitted for assessment
@@ -124,11 +127,7 @@ async function solutionCapabilityPagePost (req, res) {
   const context = {
     errors: {
       items: []
-    },
-    breadcrumbs: [
-      { label: 'Onboarding.Title', url: `../../solutions/${req.solution.id}` },
-      { label: 'CapAssPages.Breadcrumb' }
-    ]
+    }
   }
 
   const valRes = validationResult(req)
@@ -145,6 +144,9 @@ async function solutionCapabilityPagePost (req, res) {
     context.errors = validationErrors
   }
 
+  // parse anyfiles to be uploaded to SharePoint
+  const files = parseFiles(req.files)
+
   // With the lack of anything other than a single string for adding additional evidence
   // indicating that a live demo has been requested instead of using video evidence
   // must be indicated using the same string that evidence messages are entered.
@@ -152,41 +154,44 @@ async function solutionCapabilityPagePost (req, res) {
   // For that reason, if the supplier wants to do a live demo, then a string is
   // shoved into the evidence message field.
   //
-  // TODO: 🦄 previousId
   // The API this program interfaces with requires us to generate our own ID's
   // This is couter intuitive and has a tonne of flaws, the hope is eventually a redesign
   // of the API will result in the endpoint only requiring us to Post the Evidence message
   // and not make up an ID, Date, CreatedById, previousId etc.
   const uploadingVideoEvidence = req.body['uploading-video-evidence']
+  let systemError
 
-  const evidenceDescriptions = _.map(uploadingVideoEvidence, (isUploading, claimID) => {
+  const evidenceDescriptions = await Promise.all(_.map(uploadingVideoEvidence, async (isUploading, claimID) => {
+    let fileToUpload = files[claimID]
+    let blobId = null
+
+    if (fileToUpload) {
+      blobId = await uploadFile(claimID, fileToUpload.buffer, fileToUpload.originalname).catch((err) => {
+        context.errors.items.push({ msg: 'Validation.Capability.Evidence.Upload.FailedAction' })
+        systemError = err
+      })
+    }
+
+    const currentEvidence = _.filter(req.solution.evidence, { claimId: claimID })
+    const latestEvidence = findLatestEvidence(currentEvidence)
+
     return {
       id: require('node-uuid-generator').generate(),
+      previousId: latestEvidence ? latestEvidence.id : null,
       claimId: claimID,
       createdById: req.user.contact.id,
       createdOn: new Date().toISOString(),
       evidence: isUploading === 'yes' ? req.body['evidence-description'][claimID] : LIVE_DEMO_MESSSAGE_INDICATOR,
       hasRequestedLiveDemo: isUploading !== 'yes',
-      blobId: null
+      blobId: blobId
     }
-  })
-
-  let systemError
+  }))
 
   // Update solution evidence, communicate the error if there isn't any already.
   await updateSolutionCapabilityEvidence(req.solution.id, evidenceDescriptions).catch((err) => {
     context.errors.items.push({ msg: 'Validation.Capability.Evidence.Update.FailedAction' })
     systemError = err
   })
-
-  // upload files to SharePoint, communicate the error if there isn't any already.
-  if (req.files) {
-    const files = parseFiles(req.files)
-    await uploadFiles(files).catch((err) => {
-      context.errors.items.push({ msg: 'Validation.Capability.Evidence.Upload.FailedAction' })
-      systemError = err
-    })
-  }
 
   // only show validation errors if the user elected to continue, not just save
   if (systemError || (context.errors.items.length && req.body.action.continue)) {
@@ -198,7 +203,7 @@ async function solutionCapabilityPagePost (req, res) {
   } else if (req.body.action.continue) {
     res.redirect(path.join(req.baseUrl, req.url, 'confirmation'))
   } else if (req.body.action.exit) {
-    redirectToOnboardingDashboard(req, res)
+    res.redirect('/')
   } else {
     res.redirect(path.join(req.baseUrl, req.url))
   }
@@ -222,7 +227,7 @@ async function downloadEvidenceGet (req, res) {
   })
 }
 
-async function confirmationPageGet (req, res) {
+async function confirmationPageContext (req) {
   const context = {
     ...await capabilityPageContext(req)
   }
@@ -241,8 +246,7 @@ async function confirmationPageGet (req, res) {
     let isLiveDemo = false
     let missingEvidence = true
 
-    // if there is a latest evidence and it is indicating a live demo.
-    if (cap.latestEvidence && cap.latestEvidence.evidence === LIVE_DEMO_MESSSAGE_INDICATOR) {
+    if (cap.latestEvidence && cap.latestEvidence.hasRequestedLiveDemo) {
       isLiveDemo = true
       missingEvidence = false
     } else if (cap.latestEvidence && cap.latestFile) {
@@ -263,6 +267,26 @@ async function confirmationPageGet (req, res) {
       missingEvidence
     }
   })
+  return context
+}
+
+async function summaryPageGet (req, res) {
+  const context = {
+    ...await confirmationPageContext(req)
+  }
+  context.breadcrumbs = [
+    { label: 'Onboarding.Title', url: `../../solutions/${req.solution.id}` },
+    { label: 'CapAssPages.Summary.Breadcrumb' }
+  ]
+  context.editUrls = {}
+  context.backlink = `../../solutions/${req.solution.id}`
+  res.render('supplier/capabilities/summary', context)
+}
+
+async function confirmationPageGet (req, res) {
+  const context = {
+    ...await confirmationPageContext(req)
+  }
 
   // page is only editable if the solution is registered, and notyet submitted for assessment
   context.notEditable = context.solution.status !== dataProvider.getRegisteredStatusCode()
@@ -287,7 +311,7 @@ async function confirmationPagePost (req, res) {
   if (req.body.action.save) {
     return confirmationPageGet(req, res)
   } else if (req.body.action.exit) {
-    return redirectToOnboardingDashboard(req, res)
+    return res.redirect('/')
   } else if (req.body.action.continue) {
     try {
       await submitCapabilityAssessment(req.solution.id)
@@ -327,30 +351,39 @@ function findLatestFile (files) {
 }
 
 function findLatestEvidence (evidence) {
-  return _.maxBy(evidence, 'createdOn')
+  // follow the trail of previousIds until there are no more
+  let previousId = null
+  let currentEvidence
+  let latestEvidence
+
+  while ((currentEvidence = _.find(evidence, { previousId }))) {
+    latestEvidence = currentEvidence
+    previousId = currentEvidence.id
+  }
+
+  return latestEvidence
 }
 
 function parseFiles (files) {
-  return files.map((file) => {
+  let fileMap = {}
+  files.map((file) => {
     return {
       ...file,
       claimID: extractClaimIDFromUploadFieldName(file.fieldname)
     }
+  }).forEach((file) => {
+    fileMap[file.claimID] = file
   })
+  return fileMap
 }
 
 function extractClaimIDFromUploadFieldName (fieldName) {
   return fieldName.replace('evidence-file[', '').replace(']', '')
 }
 
-async function uploadFiles (files) {
-  return Promise.all(
-    files.map((file) => uploadFile(file.claimID, file.buffer, file.originalname))
-  )
-}
-
 async function uploadFile (claimID, buffer, fileName) {
-  return sharePointProvider.uploadCapEvidence(claimID, buffer, fileName)
+  let res = await sharePointProvider.uploadCapEvidence(claimID, buffer, fileName)
+  return res
 }
 
 module.exports = router

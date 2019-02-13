@@ -30,7 +30,15 @@ namespace NHSD.GPITF.BuyingCatalog.UserInfoResponseCache.Redis
       _policy = policy.Build(_logger);
 
       var cacheHost = Settings.CACHE_HOST(_config);
-      var redis = ConnectionMultiplexer.Connect(cacheHost);
+      var cfg = new ConfigurationOptions
+      {
+        EndPoints =
+        {
+          { cacheHost }
+        },
+        SyncTimeout = int.MaxValue
+      };
+      var redis = ConnectionMultiplexer.Connect(cfg);
       _db = redis.GetDatabase();
     }
 
