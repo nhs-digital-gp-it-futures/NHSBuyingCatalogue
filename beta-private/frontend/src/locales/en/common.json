@@ -56,7 +56,8 @@
       "Submitted": "Submitted {{when}}",
       "Remediation": "Feedback {{when}}",
       "Approved": "Approved {{when}}",
-      "Rejected": "Rejected {{when}}"
+      "Rejected": "Rejected {{when}}",
+      "NotReady": "Waiting for TM"
     }
   },
   "Unsaved Changes": {

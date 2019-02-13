@@ -75,19 +75,32 @@ async function dashboardContext (req) {
 }
 
 async function solutionComplianceDashboard (req, res) {
-  const context = {
-    ...await dashboardContext(req),
-    breadcrumbs: [
-      { label: 'Onboarding.Title', url: `../../solutions/${req.solution.id}` },
-      { label: 'CompliancePages.Dashboard.Title' }
-    ]
+  const [context, evidenceFiles] = await Promise.all([
+    dashboardContext(req),
+    sharePointProvider.enumerateStdFolderFiles(req.solution.id)
+  ])
+
+  context.breadcrumbs = [
+    { label: 'Onboarding.Title', url: `../../solutions/${req.solution.id}` },
+    { label: 'CompliancePages.Dashboard.Title' }
+  ]
+
+  const notReadyStatus = {
+    statusClass: 'not-ready',
+    statusTransKey: 'Statuses.Standard.NotReady',
+    withContact: {
+      displayName: 'NHS Digital'
+    }
   }
 
   context.solution.standards = _(context.solution.standards)
     .map(std => ({
       ...context.standards[std.standardId],
       ...std,
-      continueUrl: `evidence/${std.id}/`
+      continueUrl: `evidence/${std.id}/`,
+      ..._.has(evidenceFiles, std.id)
+        ? {}
+        : notReadyStatus
     }))
     .value()
 

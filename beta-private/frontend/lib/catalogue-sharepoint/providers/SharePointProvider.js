@@ -76,6 +76,19 @@ class SharePointProvider {
     )
   }
 
+  async enumerateStdFolderFiles (solutionId) {
+    const enumeration = await this.stdBlobStoreApi.apiStandardsApplicableEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGet(
+      solutionId
+    )
+
+    const claimMap = {}
+    enumeration.items.forEach((item) => {
+      claimMap[item.claimId] = item.blobInfos.filter((item) => !item.isFolder)
+    })
+
+    return claimMap
+  }
+
   async getStdEvidenceFolders (claimID, subFolder) {
     const enumeratedBlobs = await this.getStdEvidence(claimID, subFolder)
     const filteredBlobs = enumeratedBlobs.items.filter((blob) => blob.isFolder)

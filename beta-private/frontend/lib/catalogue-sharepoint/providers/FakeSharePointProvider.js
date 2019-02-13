@@ -154,6 +154,10 @@ class FakeStandardsApplicableEvidenceBlobStoreApi extends FakeFileStoreAPI {
   async apiStandardsApplicableEvidenceBlobStoreDownloadByClaimIdPost (claimID, opts) {
     return this.downloadFile(claimID, opts)
   }
+
+  async apiStandardsApplicableEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGet (solutionId, opts) {
+    return this.enumerateAllClaims()
+  }
 }
 
 class FakeCapabilitiesImplementedEvidenceBlobStoreApi extends FakeFileStoreAPI {

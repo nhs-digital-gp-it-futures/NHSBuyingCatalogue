@@ -24,7 +24,7 @@
 
 {{#*inline "standard-row"}}
 <tr class="standard {{statusClass}}">
-  <td class="name"><a href="{{continueUrl}}">{{name}}</a></td>
+  <td class="name">{{#if continueUrl}}<a href="{{continueUrl}}">{{name}}</a>{{else}}{{name}}{{/if}}</td>
   <td class="status">{{t statusTransKey when=statusChangeDate}}</td>
   <td class="owner">{{t 'CompliancePages.Dashboard.Standard.With' name=withContact.displayName}}</td>
 </tr>
