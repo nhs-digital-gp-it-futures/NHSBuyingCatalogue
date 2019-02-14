@@ -358,7 +358,8 @@ class DataProvider {
 
     const solnEx = await this.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet(solutionID)
 
-    console.log(solnEx.claimedCapabilityEvidence)
+    // All Capabilities should now be submitted.
+    solnEx.claimedCapability = solnEx.claimedCapability.map((cap) => ({ ...cap, status: 1 }))
 
     solnEx.solution.status = CAP_ASS_STATUS
     await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
