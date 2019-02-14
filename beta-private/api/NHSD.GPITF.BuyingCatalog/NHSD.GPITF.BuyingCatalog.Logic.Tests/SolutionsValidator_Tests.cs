@@ -120,6 +120,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         .HaveCount(1);
     }
 
+    #region transitions
     [TestCase(SolutionStatus.Draft, SolutionStatus.Draft, Roles.Supplier)]
     [TestCase(SolutionStatus.Draft, SolutionStatus.Registered, Roles.Supplier)]
     [TestCase(SolutionStatus.Registered, SolutionStatus.Registered, Roles.Supplier)]
@@ -131,6 +132,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [TestCase(SolutionStatus.StandardsCompliance, SolutionStatus.FinalApproval, Roles.Admin)]
     [TestCase(SolutionStatus.FinalApproval, SolutionStatus.SolutionPage, Roles.Admin)]
     [TestCase(SolutionStatus.SolutionPage, SolutionStatus.Approved, Roles.Admin)]
+    #endregion
     public void MustBeValidStatusTransition_Valid_Succeeds(SolutionStatus oldStatus, SolutionStatus newStatus, string role)
     {
       var solnId = Guid.NewGuid().ToString();
@@ -146,6 +148,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       valres.Errors.Should().BeEmpty();
     }
 
+    #region transitions
     [TestCase(SolutionStatus.Draft, SolutionStatus.Failed, Roles.Buyer)]
     [TestCase(SolutionStatus.Draft, SolutionStatus.CapabilitiesAssessment, Roles.Buyer)]
     [TestCase(SolutionStatus.Draft, SolutionStatus.StandardsCompliance, Roles.Buyer)]
@@ -234,6 +237,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [TestCase(SolutionStatus.SolutionPage, SolutionStatus.StandardsCompliance, Roles.Supplier)]
     [TestCase(SolutionStatus.SolutionPage, SolutionStatus.SolutionPage, Roles.Supplier)]
     [TestCase(SolutionStatus.SolutionPage, SolutionStatus.FinalApproval, Roles.Supplier)]
+    #endregion
     public void MustBeValidStatusTransition_Invalid_ReturnsError(SolutionStatus oldStatus, SolutionStatus newStatus, string role)
     {
       var solnId = Guid.NewGuid().ToString();
@@ -254,6 +258,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
     [Test]
     public void MustBeValidStatusTransition_FinalState_ReturnsError(
+    #region params
       [Values(
         SolutionStatus.Approved,
         SolutionStatus.Failed)]
@@ -272,6 +277,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         Roles.Admin,
         Roles.Buyer,
         Roles.Supplier)]
+    #endregion
           string role)
     {
       var solnId = Guid.NewGuid().ToString();
@@ -412,6 +418,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       valres.Errors.Should().BeEmpty();
     }
 
+    #region statuses
     [TestCase(SolutionStatus.Failed)]
     [TestCase(SolutionStatus.Registered)]
     [TestCase(SolutionStatus.CapabilitiesAssessment)]
@@ -419,6 +426,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [TestCase(SolutionStatus.FinalApproval)]
     [TestCase(SolutionStatus.SolutionPage)]
     [TestCase(SolutionStatus.Approved)]
+    #endregion
     public void MustBePending_NonDraft_ReturnsError(SolutionStatus status)
     {
       var validator = new SolutionsValidator(_context.Object, _logger.Object, _solutionDatastore.Object, _organisationDatastore.Object, _env.Object);
@@ -477,6 +485,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       valres.Errors.Should().BeEmpty();
     }
 
+    #region statuses
     [TestCase(SolutionStatus.Failed)]
     [TestCase(SolutionStatus.Registered)]
     [TestCase(SolutionStatus.CapabilitiesAssessment)]
@@ -484,6 +493,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [TestCase(SolutionStatus.FinalApproval)]
     [TestCase(SolutionStatus.SolutionPage)]
     [TestCase(SolutionStatus.Approved)]
+    #endregion
     public void MustBePendingToChangeName_NonDraft_ReturnsError(SolutionStatus status)
     {
       var validator = new SolutionsValidator(_context.Object, _logger.Object, _solutionDatastore.Object, _organisationDatastore.Object, _env.Object);
@@ -518,6 +528,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       valres.Errors.Should().BeEmpty();
     }
 
+    #region statuses
     [TestCase(SolutionStatus.Failed)]
     [TestCase(SolutionStatus.Draft)]
     [TestCase(SolutionStatus.Registered)]
@@ -526,6 +537,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [TestCase(SolutionStatus.FinalApproval)]
     [TestCase(SolutionStatus.SolutionPage)]
     [TestCase(SolutionStatus.Approved)]
+    #endregion
     public void MustBePendingToChangeName_SameName_Succeeds(SolutionStatus status)
     {
       var validator = new SolutionsValidator(_context.Object, _logger.Object, _solutionDatastore.Object, _organisationDatastore.Object, _env.Object);
