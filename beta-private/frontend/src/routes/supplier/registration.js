@@ -155,8 +155,8 @@ function onboardingStatusPage (req, res) {
     }
 
     if (status === 2 || status === 3) {
-      // if all capabilities have passed, then display complete
-      if (req.solution._raw.claimedCapability.every((cap) => +cap.status === 3)) {
+      // if all capabilities have passed, then display complete               TEMPORARY UNTILL CRM IS LESS BAD.
+      if (req.solution._raw.claimedCapability.every((cap) => +cap.status === 3 || +cap.status === 948120000)) {
         context.stages[1].status = 'Complete'
         context.stages[1].class = 'complete'
         context.stages[1].link = 'View'
