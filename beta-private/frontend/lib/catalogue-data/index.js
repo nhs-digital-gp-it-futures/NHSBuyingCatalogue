@@ -354,18 +354,15 @@ class DataProvider {
   }
 
   async submitSolutionForCapabilityAssessment (solutionID) {
-    const CAP_ASS_STATUS = this.getCapabilityAssessmentStatusCode() // ✨🧙 magic 🧙✨
-
     const solnEx = await this.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet(solutionID)
 
     // All Capabilities should now be submitted.
     solnEx.claimedCapability = solnEx.claimedCapability.map((cap) => ({ ...cap, status: 1 }))
 
-    solnEx.solution.status = CAP_ASS_STATUS
+    // Skip through to the Statuses
+    solnEx.solution.status = this.getCapabilityAssessmentStatusCode() // ✨🧙 magic 🧙✨
     await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
-
-    // Jump to Status 3
-    solnEx.solution.status = 3
+    solnEx.solution.status = this.getStandardsComplianceStatusCode()
     await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
 
     return this.solutionForAssessment(solutionID)
@@ -376,6 +373,10 @@ class DataProvider {
   // status of a solution can be set to the same number whenever a solution is needed to be in
   // Capability Assessment Status
   // I.E. Get the code that says: 'Solution has capability evidence and has been submitted for Assessment'
+  getStandardsComplianceStatusCode () {
+    return '3' // ✨🧙 magic 🧙✨
+  }
+
   getCapabilityAssessmentStatusCode () {
     return '2' // ✨🧙 magic 🧙✨
   }
