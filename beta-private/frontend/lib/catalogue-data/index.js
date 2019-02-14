@@ -357,8 +357,16 @@ class DataProvider {
     const CAP_ASS_STATUS = this.getCapabilityAssessmentStatusCode() // ✨🧙 magic 🧙✨
 
     const solnEx = await this.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet(solutionID)
+
+    console.log(solnEx.claimedCapabilityEvidence)
+
     solnEx.solution.status = CAP_ASS_STATUS
     await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
+
+    // Jump to Status 3
+    solnEx.solution.status = 3
+    await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
+
     return this.solutionForAssessment(solutionID)
   }
 
