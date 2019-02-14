@@ -127,6 +127,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [TestCase(SolutionStatus.Registered, SolutionStatus.CapabilitiesAssessment, Roles.Supplier)]
     [TestCase(SolutionStatus.CapabilitiesAssessment, SolutionStatus.Failed, Roles.Admin)]
     [TestCase(SolutionStatus.CapabilitiesAssessment, SolutionStatus.StandardsCompliance, Roles.Admin)]
+    [TestCase(SolutionStatus.CapabilitiesAssessment, SolutionStatus.StandardsCompliance, Roles.Supplier)]
     [TestCase(SolutionStatus.StandardsCompliance, SolutionStatus.StandardsCompliance, Roles.Supplier)]
     [TestCase(SolutionStatus.StandardsCompliance, SolutionStatus.Failed, Roles.Admin)]
     [TestCase(SolutionStatus.StandardsCompliance, SolutionStatus.FinalApproval, Roles.Admin)]
