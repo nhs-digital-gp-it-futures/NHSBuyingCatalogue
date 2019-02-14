@@ -140,9 +140,6 @@ function onboardingStatusPage (req, res) {
       context.stages[0].class = 'complete'
       context.stages[0].link = 'View'
 
-      context.stages[1].status = 'Awaiting outcome'
-      context.stages[1].link = 'View'
-
       if ('capabilityAssessmentSubmitted' in req.query) {
         context.capabilityAssessmentSubmitted = true
       }
@@ -152,12 +149,20 @@ function onboardingStatusPage (req, res) {
       context.stages[0].class = 'complete'
       context.stages[0].link = 'View'
 
-      context.stages[1].status = 'Complete'
-      context.stages[1].class = 'complete'
-      context.stages[1].link = 'View'
-
       if ('capabilityAssessmentApproved' in req.query) {
         context.capabilityAssessmentApproved = true
+      }
+    }
+
+    if (status === 2 || status === 3) {
+      // if all capabilities have passed, then display complete
+      if (req.solution._raw.claimedCapability.every((cap) => +cap.status === 3)) {
+        context.stages[1].status = 'Complete'
+        context.stages[1].class = 'complete'
+        context.stages[1].link = 'View'
+      } else {
+        context.stages[1].status = 'Awaiting outcome'
+        context.stages[1].link = 'View'
       }
     }
   } else {
