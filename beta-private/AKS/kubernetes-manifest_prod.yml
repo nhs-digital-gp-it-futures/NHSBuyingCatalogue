@@ -116,7 +116,7 @@ spec:
             cpu: 500m
         env:
         - name: BASE_URL
-          value: "http://nhsstorepbprod.uksouth.cloudapp.azure.com"
+          value: "https://store.digital.nhs.uk"
         - name: API_BASE_URL
           value: "http://api:5100"
         - name: CACHE_HOST
