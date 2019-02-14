@@ -57,7 +57,9 @@ authentication(app).then(() => {
   // middleware to set global template context variables
   app.use('*', (req, res, next) => {
     res.locals.user = req.user
-    res.locals.meta = {}
+    res.locals.meta = {
+      deployedEnvironment: process.env.DEPLOYED_ENV_LABEL
+    }
     next()
   })
 

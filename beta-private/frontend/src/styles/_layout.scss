@@ -79,6 +79,17 @@ body {
   position: relative;
 }
 
+#deployed-environment-label {
+  background-color: $color-nhs-blue;
+  border: 1px solid $color-nhs-blue;
+  border-radius: 4px;
+  color: $color-nhs-white;
+  left: 20%;
+  padding: .2em;
+  position: absolute;
+  top: 0;
+}
+
 body > header {
   max-width: 1020px;
   position: fixed;
