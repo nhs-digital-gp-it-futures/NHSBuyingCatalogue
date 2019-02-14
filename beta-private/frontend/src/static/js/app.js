@@ -109,8 +109,8 @@ document.addEventListener('DOMContentLoaded', function () {
   collapseAllFieldsetsExcept($('fieldset.collapsible:first-of-type'))
 
   function handleCollapsibleFieldset (ev) {
-    if (ev.target.tagName === 'LEGEND') {
-      const elFieldset = ev.target.parentNode
+    if (ev.target.closest('legend')) {
+      const elFieldset = ev.target.closest('fieldset')
       if (elFieldset.classList.contains('collapsible')) {
         ev.preventDefault()
 
