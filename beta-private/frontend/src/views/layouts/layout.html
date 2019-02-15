@@ -27,6 +27,9 @@
             {{> nhs-digital-logo }}
           </a>
         </nav>
+        {{#meta.deployedEnvironment}}
+        <p id="deployed-environment-label">{{.}}</p>
+        {{/meta.deployedEnvironment}}
         <div id="account" aria-label="Account">
           {{> user-authentication-nav }}
         </div>
