@@ -362,6 +362,7 @@ class DataProvider {
     // Skip through to the Statuses
     solnEx.solution.status = this.getCapabilityAssessmentStatusCode() // ✨🧙 magic 🧙✨
     await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
+    
     solnEx.solution.status = this.getStandardsComplianceStatusCode()
     await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
 
