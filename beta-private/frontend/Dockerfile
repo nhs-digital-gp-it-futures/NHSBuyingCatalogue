@@ -23,6 +23,6 @@ COPY --from=dependencies /home/node/app/package.json .
 COPY --from=dependencies /home/node/app/lib ./lib
 RUN npm install --production
 COPY --from=build /home/node/app/src ./src
-RUN adduser -D app
+RUN adduser --disabled-password app
 USER app
 CMD ["npm", "start"]
