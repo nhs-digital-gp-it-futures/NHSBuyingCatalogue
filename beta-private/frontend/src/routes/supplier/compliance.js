@@ -4,6 +4,7 @@ const path = require('path')
 
 const { dataProvider } = require('catalogue-data')
 const { sharePointProvider } = require('catalogue-sharepoint')
+const { catchHandler } = require('catalogue-authn-authz')
 
 const multer = require('multer')
 const storage = multer.memoryStorage()
@@ -75,27 +76,52 @@ async function dashboardContext (req) {
 }
 
 async function solutionComplianceDashboard (req, res) {
-  const context = {
-    ...await dashboardContext(req),
+  let context = {
     breadcrumbs: [
       { label: 'Onboarding.Title', url: `../../solutions/${req.solution.id}` },
       { label: 'CompliancePages.Dashboard.Title' }
-    ]
+    ],
+    errors: {}
   }
 
-  context.solution.standards = _(context.solution.standards)
-    .map(std => ({
-      ...context.standards[std.standardId],
-      ...std,
-      continueUrl: `evidence/${std.id}/`
-    }))
-    .value()
+  try {
+    const [contextData, evidenceFiles] = await Promise.all([
+      dashboardContext(req),
+      sharePointProvider.enumerateStdFolderFiles(req.solution.id)
+    ])
 
-  if ('submitted' in req.query) {
-    const submittedStandard = context.standards[req.query.submitted]
-    if (submittedStandard) {
-      context.submittedStandard = submittedStandard.name
+    context = {
+      ...context,
+      ...contextData
     }
+
+    const notReadyStatus = {
+      statusClass: 'not-ready',
+      statusTransKey: 'Statuses.Standard.NotReady',
+      withContact: {
+        displayName: 'NHS Digital'
+      }
+    }
+
+    context.solution.standards = _(context.solution.standards)
+      .map(std => ({
+        ...context.standards[std.standardId],
+        ...std,
+        continueUrl: `evidence/${std.id}/`,
+        ...!_.isEmpty(evidenceFiles[std.id]) || +std.status !== 0
+          ? {}
+          : notReadyStatus
+      }))
+      .value()
+
+    if ('submitted' in req.query) {
+      const submittedStandard = context.standards[req.query.submitted]
+      if (submittedStandard) {
+        context.submittedStandard = submittedStandard.name
+      }
+    }
+  } catch (err) {
+    catchHandler(err, res, context)
   }
 
   res.render('supplier/compliance/index', context)

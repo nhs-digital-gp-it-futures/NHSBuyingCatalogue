@@ -5,7 +5,17 @@ import { Selector } from 'testcafe'
 import { asSupplier } from './roles'
 import { supplierDashboardPage, onboardingDashboardPage, standardsComplianceDashboardPage } from './pages'
 
+/**
+ * Expected statuses are predefined in the seed data used in testing.
+ * There should be at least one of each status, a label is applied to those in draft
+ * that don't yet have a file to download.
+ */
 const expectedStatusStandards = {
+  'Waiting for TM': new Set([
+    'ca874860-4593-4541-8586-038201945d17',
+    '2c8c9cc8-141b-4d06-872a-8d5e5efb3641',
+    '9e7780e9-7263-4ee4-a722-b3e1aaff4476'
+  ]),
   'Failed': new Set([
     '0e55d9ec-43e6-41b3-bcac-d8681384ea68'
   ]),
@@ -13,10 +23,7 @@ const expectedStatusStandards = {
     '7b62b29a-62a7-4b4a-bcc8-dfa65fb7e35c'
   ]),
   'Not started': new Set([
-    'ca874860-4593-4541-8586-038201945d17',
-    '2c8c9cc8-141b-4d06-872a-8d5e5efb3641',
     '99619bdd-6452-4850-9244-a4ce9bec70ca',
-    '9e7780e9-7263-4ee4-a722-b3e1aaff4476',
     '719722d0-2354-437e-acdc-4625989bbca8'
   ]),
   'Submitted': new Set([
