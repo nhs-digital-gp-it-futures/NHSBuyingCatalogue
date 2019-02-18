@@ -108,7 +108,7 @@ async function solutionComplianceDashboard (req, res) {
         ...context.standards[std.standardId],
         ...std,
         continueUrl: `evidence/${std.id}/`,
-        ..._.has(evidenceFiles, std.id)
+        ...!_.isEmpty(evidenceFiles[std.id]) || +std.status !== 0
           ? {}
           : notReadyStatus
       }))
