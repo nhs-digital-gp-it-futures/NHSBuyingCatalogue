@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Security;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -39,6 +40,8 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     private readonly string SharePoint_OrganisationsRelativeUrl;
     private readonly string SharePoint_ClientId;
     private readonly string SharePoint_ClientSecret;
+    private readonly string SharePoint_Login;
+    private readonly string SharePoint_Password;
 
     public EvidenceBlobStoreDatastore(
       IHostingEnvironment env,
@@ -73,11 +76,15 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       SharePoint_OrganisationsRelativeUrl = Settings.SHAREPOINT_ORGANISATIONSRELATIVEURL(config);
       SharePoint_ClientId = Settings.SHAREPOINT_CLIENT_ID(config);
       SharePoint_ClientSecret = Settings.SHAREPOINT_CLIENT_SECRET(config);
+      SharePoint_Login = Settings.SHAREPOINT_LOGIN(config);
+      SharePoint_Password = Settings.SHAREPOINT_PASSWORD(config);
 
       if (string.IsNullOrWhiteSpace(SharePoint_BaseUrl) ||
         string.IsNullOrWhiteSpace(SharePoint_OrganisationsRelativeUrl) ||
         string.IsNullOrWhiteSpace(SharePoint_ClientId) ||
-        string.IsNullOrWhiteSpace(SharePoint_ClientSecret)
+        string.IsNullOrWhiteSpace(SharePoint_ClientSecret) ||
+        string.IsNullOrWhiteSpace(SharePoint_Login) ||
+        string.IsNullOrWhiteSpace(SharePoint_Password)
         )
       {
         throw new ConfigurationErrorsException("Missing SharePoint configuration - check UserSecrets or environment variables");
@@ -89,7 +96,10 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       return GetInternal(() =>
       {
         LogInformation($"AddEvidenceForClaim: claimId: {claimId} | fileName: {CleanupFileName(fileName)} | subFolder: {CleanupFileName(subFolder)}");
-        return UploadFileSlicePerSlice(claimsInfoProvider, claimId, file, CleanupFileName(fileName), CleanupFileName(subFolder));
+        var blobId = UploadFileSlicePerSlice(claimsInfoProvider, claimId, file, CleanupFileName(fileName), CleanupFileName(subFolder));
+        LogInformation($"AddEvidenceForClaim: claimId: {claimId} | fileName: {CleanupFileName(fileName)} | subFolder: {CleanupFileName(subFolder)} --> {blobId}");
+
+        return blobId;
       });
     }
 
@@ -459,13 +469,25 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       return GetInternal(() =>
       {
         LogInformation($"GetFileStream: claimId: {claimId} | uniqueId: {uniqueId}");
-        var context = GetClientContext();
+
+        var context = CreateClientContextByUserNamePassword();
         var file = context.Web.GetFileById(Guid.Parse(uniqueId));
         context.Load(file);
         context.ExecuteQuery();
         LogInformation($"GetFileStream: retrieved info for {file.Name}");
 
         return
+          // File.OpenBinaryDirect will only work with a username/password context as CSOM uses basic authentication.
+          // For an add-in context, CSOM does not set the authentication.
+          // This probably because SP uses WebDAV as the underlying protocol and this will allow SP
+          // to determine the calling user's permissions.
+          //
+          // An add-in should use:
+          //    File.OpenBinaryStream
+          // but this is broken for Dot Net Core CSOM (but works for .NET CSOM).
+          // It may be possible to directly call the SP restful API:
+          //    https://docs.microsoft.com/en-us/previous-versions/office/developer/sharepoint-rest-reference/dn450841%28v%3doffice.15%29
+          // but I (TDE) couldn't get it working.
           new FileStreamResult(Microsoft.SharePoint.Client.NetCore.File.OpenBinaryDirect(context, file.ServerRelativeUrl)?.Stream, GetContentType(file.Name))
           {
             FileDownloadName = Path.GetFileName(file.Name)
@@ -508,6 +530,24 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     private ClientContext CreateClientContext()
     {
       return _authMgr.GetAppOnlyAuthenticatedContext(SharePoint_BaseUrl, SharePoint_ClientId, SharePoint_ClientSecret);
+    }
+
+    private ClientContext CreateClientContextByUserNamePassword()
+    {
+      var securePassword = new SecureString();
+      foreach (char item in SharePoint_Password)
+      {
+        securePassword.AppendChar(item);
+      }
+
+      var encodedUrl = Uri.EscapeUriString(SharePoint_BaseUrl);
+      var onlineCredentials = new SharePointOnlineCredentials(SharePoint_Login, securePassword);
+      var context = new ClientContext(encodedUrl)
+      {
+        Credentials = onlineCredentials
+      };
+
+      return context;
     }
 
     private TOther GetInternal<TOther>(Func<TOther> get)
@@ -572,7 +612,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         context.Load(claimFolder);
       }
       context.ExecuteQuery();
-      LogInformation($"Created claims folders");
+      LogInformation($"Created claims folders: [{string.Join(',', claimNames)}]");
     }
 
     private static string GetSolutionVersionFolderName(Solutions soln)
