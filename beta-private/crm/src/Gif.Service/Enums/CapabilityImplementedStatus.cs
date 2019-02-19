@@ -17,15 +17,6 @@ namespace Gif.Service.Enums
         Remediation = 948120004,
 
         [EnumMember(Value = "Submitted")]
-        Submitted = 948120003,
-
-        [EnumMember(Value = "In Progress")]
-        InProgress = 1,
-
-        [EnumMember(Value = "Pass")]
-        Pass = 948120000,
-
-        [EnumMember(Value = "Fail")]
-        Fail = 948120001
+        Submitted = 948120003
     }
 }
