@@ -70,6 +70,16 @@ spec:
             secretKeyRef:
               name: bcspsecret
               key: SHAREPOINT_CLIENT_SECRET
+        - name: SHAREPOINT_LOGIN
+          valueFrom:
+            secretKeyRef:
+              name: bcspsecret
+              key: SHAREPOINT_LOGIN
+        - name: SHAREPOINT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: bcspsecret
+              key: SHAREPOINT_PASSWORD              
         - name: DATASTORE_CONNECTIONTYPE
           value: "SqlServer"
         - name: DATASTORE_CONNECTIONSTRING
