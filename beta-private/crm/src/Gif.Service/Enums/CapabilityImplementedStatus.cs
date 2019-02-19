@@ -20,12 +20,12 @@ namespace Gif.Service.Enums
         Submitted = 948120003,
 
         [EnumMember(Value = "In Progress")]
-        Submitted = 1,
+        InProgress = 1,
 
         [EnumMember(Value = "Pass")]
-        Submitted = 948120000,
+        Pass = 948120000,
 
         [EnumMember(Value = "Fail")]
-        Submitted = 948120001
+        Fail = 948120001
     }
 }

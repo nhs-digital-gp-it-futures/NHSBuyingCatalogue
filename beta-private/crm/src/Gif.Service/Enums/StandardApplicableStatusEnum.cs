@@ -29,7 +29,7 @@ namespace Gif.Service.Enums
         Submitted = 948120002,
 
         [EnumMember(Value = "Active")]
-        Submitted = 1
+        Active = 1
     }
 
 }
