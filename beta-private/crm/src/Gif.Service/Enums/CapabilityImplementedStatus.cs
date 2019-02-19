@@ -2,8 +2,8 @@
 
 namespace Gif.Service.Enums
 {
-	public enum CapabilityImplementedStatus
-	{
+    public enum CapabilityImplementedStatus
+    {
         [EnumMember(Value = "Approved")]
         Approved = 948120005,
 
@@ -18,5 +18,14 @@ namespace Gif.Service.Enums
 
         [EnumMember(Value = "Submitted")]
         Submitted = 948120003,
+
+        [EnumMember(Value = "In Progress")]
+        Submitted = 1,
+
+        [EnumMember(Value = "Pass")]
+        Submitted = 948120000,
+
+        [EnumMember(Value = "Fail")]
+        Submitted = 948120001
     }
 }

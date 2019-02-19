@@ -26,7 +26,10 @@ namespace Gif.Service.Enums
         Remediation = 948120003,
 
         [EnumMember(Value = "Submitted")]
-        Submitted = 948120002
+        Submitted = 948120002,
+
+        [EnumMember(Value = "Active")]
+        Submitted = 1
     }
 
 }
