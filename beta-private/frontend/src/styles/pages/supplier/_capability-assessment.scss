@@ -153,12 +153,13 @@
     details {
       summary > span {
         color: $color-nhs-blue;
-        font-size: 1.4em;
+        font-size: larger;
       }
 
       summary ~ div.contents {
         background: none;
         border: 0;
+        font-size: initial;
       }
     }
 
