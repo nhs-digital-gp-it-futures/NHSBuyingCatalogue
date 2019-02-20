@@ -71,7 +71,7 @@
             <p>{{t 'CapAssPages.Confirmation.Evidence.Information.LiveDemo'}}</p>
         {{else}}
             <p>{{t 'CapAssPages.Confirmation.Evidence.Information.RecordedVideo'}}</p>
-            <p><a href="{{latestFile.downloadURL}}">{{latestFile.name}}</a></p>
+            <p><a download target="_blank" href="{{latestFile.downloadURL}}">{{latestFile.name}}</a></p>
             <p>{{latestEvidence.evidence}}</p>
         {{/if}}
         {{#if missingEvidence}}{{t 'CapAssPages.Confirmation.Evidence.Error'}}{{/if}}

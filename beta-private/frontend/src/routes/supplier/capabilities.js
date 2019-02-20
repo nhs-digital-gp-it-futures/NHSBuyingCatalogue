@@ -12,6 +12,10 @@ const multer = require('multer')
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage }).any()
 
+/**
+ * There is a boolean flag in the CRM that is set to 'true' when a live-witness demonstration was requested.
+ * In order to improve the clarity of this message in the CRM, a string is also placed in the evidence description field.
+ */
 const LIVE_DEMO_MESSSAGE_INDICATOR = 'A live demonstration was requested for this Capability.'
 
 // Multer is required to be used before CSRF for multi-part form parsing
@@ -147,17 +151,6 @@ async function solutionCapabilityPagePost (req, res) {
   // parse anyfiles to be uploaded to SharePoint
   const files = parseFiles(req.files)
 
-  // With the lack of anything other than a single string for adding additional evidence
-  // indicating that a live demo has been requested instead of using video evidence
-  // must be indicated using the same string that evidence messages are entered.
-  //
-  // For that reason, if the supplier wants to do a live demo, then a string is
-  // shoved into the evidence message field.
-  //
-  // The API this program interfaces with requires us to generate our own ID's
-  // This is couter intuitive and has a tonne of flaws, the hope is eventually a redesign
-  // of the API will result in the endpoint only requiring us to Post the Evidence message
-  // and not make up an ID, Date, CreatedById, previousId etc.
   const uploadingVideoEvidence = req.body['uploading-video-evidence']
   let systemError
 
