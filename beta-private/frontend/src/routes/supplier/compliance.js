@@ -115,8 +115,8 @@ async function solutionComplianceDashboard (req, res) {
       .value()
 
     if ('submitted' in req.query) {
-      const submittedStandard = context.standards[req.query.submitted]
-      if (submittedStandard) {
+      const submittedStandard = context.solution.standards.find((std) => std.standardId === req.query.submitted)
+      if (submittedStandard && +submittedStandard.status === 2) {
         context.submittedStandard = submittedStandard.name
       }
     }
