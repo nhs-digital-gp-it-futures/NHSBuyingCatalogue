@@ -45,7 +45,7 @@
     <h3>{{t 'CapAssPages.Confirmation.Capabilities.Subtitle.Capabilities'}}</h3>
     <div class="capabilities">
         {{#solution.capabilities}}
-            <p><a href="{{url}}">{{name}}</a></p>
+            <p><a target="_blank" href="{{url}}">{{name}}</a></p>
         {{/solution.capabilities}}
     </div>
     {{#>help-reveal title="CapAssPages.Confirmation.Capabilities.Subtitle.Standards"}}
@@ -56,7 +56,7 @@
 
         <h3>{{t 'CapAssPages.Confirmation.Capabilities.Subtitle.Overarching'}}</h3>
         {{#solution.standardsByGroup.overarching}}
-            <p><a href="">{{name}}</a></p>
+            <p><a target="_blank" href="{{url}}">{{name}}</a></p>
         {{/solution.standardsByGroup.overarching}}
     {{/help-reveal}}
 </div>

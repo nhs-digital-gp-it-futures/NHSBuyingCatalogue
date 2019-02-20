@@ -65,6 +65,9 @@
   fieldset.callout,
   .standard-submitted {
     @extend %callout;
+    a[target="_blank"]:after {
+      content: none;
+    }
   }
 
   .standard-submitted {
@@ -243,7 +246,9 @@
       justify-content: space-between;
       align-content: center;
     }
-
+    a[target="_blank"]:after {
+      content: none;
+    }
     p, a {
       margin-bottom: 2em;
     }
