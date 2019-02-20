@@ -56,7 +56,10 @@
   }
 
   div.latest-upload {
-    padding: 1em 0;
+    padding: 1em 0em 1em 1em;
+    a[target="_blank"]:after {
+      content: none;
+    }
   }
 
   .hidden {
@@ -128,6 +131,9 @@
     div.evidence {
       border-bottom: 2px solid $color-nhs-light-mid-grey;
       padding: 1em 0;
+      a[target="_blank"]:after {
+        content: none;
+      }
     }
 
     div.capabilities {
@@ -153,12 +159,13 @@
     details {
       summary > span {
         color: $color-nhs-blue;
-        font-size: 1.4em;
+        font-size: larger;
       }
 
       summary ~ div.contents {
         background: none;
         border: 0;
+        font-size: initial;
       }
     }
 

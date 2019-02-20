@@ -4,9 +4,9 @@
   <ul>
     {{#errors.items}}
       {{#if param}}
-      <li id="error-{{param}}" aria-live="assertive"><a href="#{{param}}">{{t msg}}</a></li>
+      <li id="error-{{param}}" aria-live="assertive"><a href="#{{param}}">{{t msg}} {{additional-info}}</a></li>
       {{else}}
-      <li aria-live="assertive">{{t msg}}</li>
+      <li aria-live="assertive">{{t msg}} {{additional-info}}</li>
       {{/if}}
     {{/errors.items}}
   </ul>
