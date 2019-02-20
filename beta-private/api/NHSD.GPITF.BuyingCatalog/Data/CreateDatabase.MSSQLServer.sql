@@ -156,6 +156,7 @@ CREATE TABLE Log
   Callsite TEXT,
   Message TEXT
 );
+CREATE INDEX IDX_Timestamp ON Log(Timestamp);
 
 
 -- create relationship tables
