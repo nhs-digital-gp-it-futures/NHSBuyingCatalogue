@@ -41,7 +41,7 @@
 
   {{#> control invalid=errors.controls.[solution.version]}}
     <label for="solution.version">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Label'}}</label>
-    <p class="info"></p>
+    <p class="info">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Information'}}</p>
     <input id="solution.version" type="text" name="solution[version]" value="{{solution.version}}" class="narrow"
       autocomplete="off" maxlength="10"
       {{#if @root.readOnly}}readonly{{/if}}

@@ -39,7 +39,9 @@
 {{#unless solution}}
 <div class="callout">
   <h2>{{t 'Onboarding.StartingCallout.Title'}}</h2>
-  <p>{{{t 'Onboarding.StartingCallout.Text'}}}</p>
+  {{#each (tt 'Onboarding.StartingCallout.Text')}}
+    <p>{{{.}}}</p>
+  {{/each}}
 </div>
 {{/unless}}
 

@@ -99,7 +99,10 @@
     },
     "StartingCallout": {
       "Title": "Before you start",
-      "Text": "Note that when you click ‘save’ on any page, the information you’ve provided will be stored by NHS Digital. If you change this information later, the original version will continue to be stored, but only the latest version will be reviewed by NHS Digital as part your submission. We also recommend reading the <a href='#supplier-guide' target='_blank'>Supplier Guide</a>. It contains details to help you prepare for and complete each stage."
+      "Text": [
+        "Note that when you click ‘save’ on any page, the information you’ve provided will be stored by NHS Digital. If you change this information later, the original version will continue to be stored, but only the latest version will be reviewed by NHS Digital as part your submission. We also recommend reading the <a href='#supplier-guide' target='_blank'>Supplier Guide</a>. It contains details to help you prepare for and complete each stage.",
+        "We also recommend reading the Supplier Guide before you start. It contains details to help you prepare for and complete each stage."
+      ]
     },
     "Status": {
       "Title": "$t(Solution) Onboarding Status"
@@ -176,10 +179,11 @@
             },
             "Version": {
               "Label": "Version (optional)",
+              "Information": "This should be the major release number only, for example: 2. It will display next to your Solution name. For example: Really Kool Document Manager, 2",
               "Help": {
                 "Title": "Help - What is Version?",
                 "Text": [
-                  "t(Solution) version is a numbering system used to distinguish between instances or releases of a t(Solution). Here, t(Solution) version is intended to be used for the major release number only. In other words, when significant feature developments have been made.",
+                  "$t(Solution) version is a numbering system used to distinguish between instances or releases of a $t(Solution). Here, t(Solution) version is intended to be used for the major release number only. In other words, when significant feature developments have been made.",
                   "For example, the major number would change for a new release with expanded functionality, or different $t(Capability_plural), from a previous version. "
                 ]
               }
@@ -350,6 +354,7 @@
       },
       "Reply": {
         "Heading": "Upload file and reply*",
+        "Information": "To include multiple files, compress them into a single zip file. There's no maximum file size but note that very large files will take longer to upload.",
         "Remove": "remove",
         "Message": {
           "Label": "Message (optional)",
