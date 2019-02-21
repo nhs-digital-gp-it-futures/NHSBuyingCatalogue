@@ -1,7 +1,7 @@
 {
   "MySolutions": {
     "Title": "My $t(Solution_plural)",
-    "WelcomeMessage": "$t(Authentication.Greeting). Here you can add a new $t(Solution) and manage all your $t(Solution_plural) — both those in progress and published.",
+    "WelcomeMessage": "$t(Authentication.Greeting). Here you can add a new $t(Solution) and manage all your company's $t(Solution_plural).",
     "AddSolutionButton": "Add a new $t(Solution)",
     "Onboarding": {
       "Title": "In Progress",
@@ -32,7 +32,7 @@
     "BannerSection": {
       "Title": "Introducing the $t(NHS.Name) $t(Catalogue.Title)",
       "Subtitle": "More choices, better patient outcomes",
-      "Information": "IT Suppliers may now apply to sell to the $t(NHS.Name) from our store.",
+      "Information": "IT Suppliers may now apply to sell to the $t(NHS.Name) from our Catalogue.",
       "Button": {
         "Text":"Learn More",
         "Href":"/about#content"
@@ -40,7 +40,7 @@
     },
     "AboutSection" : {
       "Title": "About Us",
-      "Information": "The $t(NHS.Name) $t(Catalogue.Title) is a procurement platform where clinical commissioners and other $t(NHS.Name) buyers can find, evaluate and purchase NHS-approved IT $t(Solution_plural). To be in the Store, all Solutions must pass an initial commercial assessment, and successfully demonstrate compliance with relevant $t(NHS.Name) $t(Standard_plural).",
+      "Information": "The $t(NHS.Name) $t(Catalogue.Title) is a procurement platform where clinical commissioners and other $t(NHS.Name) buyers can find, evaluate and purchase NHS-approved IT $t(Solution_plural). To be in the Catalogue, all $t(Solution_plural) must pass an initial commercial assessment, and successfully demonstrate compliance with relevant $t(NHS.Name) $t(Standard_plural).",
       "Cards": [
         {
           "title": "$t(GPITFutures.Fullname)",
@@ -94,12 +94,15 @@
   "Onboarding": {
     "Title": "Adding a $t(Solution)",
     "Subtitle": {
-      "New": "There are four stages to adding a $t(Solution) to the $t(Catalogue.Title). Start with Stage 1 below.",
+      "New": "There are four stages to adding a Catalogue $t(Solution) to the $t(Catalogue.Title). Start with Stage 1 below.",
       "Existing": "Continue adding your $t(Solution) below."
     },
     "StartingCallout": {
       "Title": "Before you start",
-      "Text": "We recommend you read the <a href='#supplier-guide' target='_blank'>Supplier Guide</a>. It contains helpful detail and guidance to make your journey as swift and easy as possible."
+      "Text": [
+        "Note that when you click ‘save’ on any page, the information you’ve provided will be stored by NHS Digital. If you change this information later, the original version will continue to be stored, but only the latest version will be reviewed by NHS Digital as part your submission. We also recommend reading the <a href='#supplier-guide' target='_blank'>Supplier Guide</a>. It contains details to help you prepare for and complete each stage.",
+        "We also recommend reading the Supplier Guide before you start. It contains details to help you prepare for and complete each stage."
+      ]
     },
     "Status": {
       "Title": "$t(Solution) Onboarding Status"
@@ -108,7 +111,7 @@
       {
         "Name": "$t(Solution) Registration",
         "Title": "Provide basic details and select $t(Capability_plural)",
-        "Narrative": "Provide $t(Solution) name, description, version and contact details. Select your $t(Solution_possessive) $t(Capability_plural) to progress to the next stages."
+        "Narrative": "Provide $t(Solution) name, description, and contacts. Then select your $t(Solution_possessive) $t(Capability_plural) to progress to the next steps."
       },
       {
         "Name": "$t(Capabilities Assessment)",
@@ -122,8 +125,8 @@
       },
       {
         "Name": "$t(Solution) Detail",
-        "Title": "Build your $t(Solution) page",
-        "Narrative": "Provide information to help buyers evaluate your $t(Solution). $t(NHSD.Name) will moderate the information added. Then, publish your $t(Solution) page."
+        "Title": "Build your $t(Solution) Listing page",
+        "Narrative": "Provide information to help buyers evaluate your $t(Solution). $t(NHSD.Name) will moderate the information added. Then publish your $t(Solution) Listing page."
       }
     ],
     "Help": {
@@ -137,21 +140,21 @@
       "Title": "$t(Solution) registration complete.",
       "Text": [
         "You can now continue with stage 2 $t(Onboarding.Stages.1.Name) as soon as you’re ready.",
-        "You can also view stage 3. However, you cannot save and submit evidence against $t(Standard_plural) until you have passed stage 2."
+        "You can also start stage 3 $t(Standard_plural) $t(Compliance). However, you cannot save and submit evidence for $t(Standard_plural) until you have submitted evidence for $t(Capability_plural)."
       ]
     },
     "CapabilityAssessmentSubmittedCallout": {
-      "Title": "Your $t(Solution) has been Submitted for $t(Capability_Assessment).",
+      "Title": "$t(Solution) submitted",
       "Text": [
-        "You can now continue with stage 3 $t(Onboarding.Stages.2.Name) as soon as you’re ready.",
-        "You can view stage 3, and start saving evidence against each $t(Standard_plural_possessive) requirements. However, you cannot submit evidence for stage 3 until you have passed stage 2."
+        "Your responses have been submitted to $t(NHSD.Name). Once our assessment is complete, your lead contact will receive an email with the outcome. During private beta, the Catalogue Authority will endeavour to notify your lead contact of the outcome within 20 Working Days of starting its assessment.",
+      
+        "While you wait, you may now submit evidence for stage 3 $t(Standard_plural) Compliance."
       ]
     },
     "CapabilityAssessmentApprovedCallout": {
-      "Title": "Your $t(Solution) has Passed $t(Capability_Assessment).",
+      "Title": "$t(Capability_Assessment) Complete",
       "Text": [
-        "You can now continue with stage 3 $t(Onboarding.Stages.2.Name) as soon as you’re ready.",
-        "Evidence can noe be submitted against each $t(Standard_plural_possessive) requirements."
+        "We have completed our assessment of your $t(Solution) against the $t(Capability_Plural) selected."
       ]
     },
     "Details": {
@@ -160,27 +163,28 @@
         "Title": "$t(Onboarding.Title)"
       },
       "Title": "Enter $t(Solution) details and key contacts.",
-      "Subtitle": "Provide basic information and key contacts for your $t(Solution) below.",
-      "Preamble": "This information will be shared with $t(NHSD.Name) to identify your $t(Solution) and enable communication. You can edit this information until you submit evidence for $t(Capability Assessment) in stage 2.",
+      "Subtitle": "Provide basic information and key contacts for your Catalogue $t(Solution).",
+      "Preamble": "$t(NHSD.Name) will use this information to identify your $t(Solution) and communicate with you. You can edit this information until you submit $t(Capability) evidence for assessment in stage 2. (* indicates required field)",
       "Fieldsets": {
         "NameDescVersion": {
           "Legend": "Enter $t(Solution) name, description, version *",
-          "Preamble": "‘$t(Solution) name’ ‘Description’ and ‘Version’ will be sent to $t(NHSD.Name) to identify your $t(Solution). They will also be shown to buyers at the conclusion of onboarding.",
+          "Preamble": "These fields will be visible to buyers on your $t(Solution) Listing page when all assurance activities have been successfully completed.",
           "Fields": {
             "Name": {
               "Label": "$t(Solution) name *"
             },
             "Description": {
               "Label": "Summary description *",
-              "Info": "Your Summary description will be displayed on your $t(Solution) page and in search results, but it will not affect search ranking or $t(Capabilities Assessment). You can edit this later."
+              "Info": "Your Summary description will be displayed on your $t(Solution) page and in search results, but it will not affect search ranking or assurance activities. You can edit this later."
             },
             "Version": {
               "Label": "Version (optional)",
+              "Information": "This should be the major release number only, for example: 2. It will display next to your Solution name. For example: Really Kool Document Manager, 2",
               "Help": {
                 "Title": "Help - What is Version?",
                 "Text": [
-                  "$t(Solution) version is a numbering system used to distinguish between instances or releases of a particular $t(Solution). Here, $t(Solution) version is intended to be used when new $t(Solution_plural) are released with significant feature developments. In other words, when the ‘major number’ has changed, in $t(Standard) semantic versioning schemes.",
-                  "For example, a new version number could describe a new release that has expanded functionality or different $t(Capability_plural) from a previous version."
+                  "$t(Solution) version is a numbering system used to distinguish between instances or releases of a $t(Solution). Here, t(Solution) version is intended to be used for the major release number only. In other words, when significant feature developments have been made.",
+                  "For example, the major number would change for a new release with expanded functionality, or different $t(Capability_plural), from a previous version. "
                 ]
               }
             }
@@ -188,7 +192,7 @@
         },
         "LeadContact": {
           "Legend": "Add $t(Lead Contact) *",
-          "Preamble": "The $t(Lead Contact) is responsible for ensuring the accuracy of information provided. This contact will receive an invitation to register and all this $t(Solution)’s email notifications. All contact information subject to $t(NHSD.Name)’s privacy policy.",
+          "Preamble":"The $t(Lead Contact) is responsible for ensuring the accuracy of information provided. This contact will receive all this $t(Solution)’s email notifications (use a generic email address if notifications should be accessible by multiple users). This contact will not be shared outside $t(NHSD.Name).",
           "Fields": {
             "FirstName": {
               "Label": "First name *"
@@ -208,7 +212,7 @@
           "Legend": "Add another contact (optional)",
           "Fields": {
             "ContactType": {
-              "Label": "Role or Title *"
+              "Label": "Role or job title *"
             },
             "FirstName": {
               "Label": "First name *"
@@ -226,7 +230,7 @@
         }
       },
       "AddContact": {
-        "Help": "Some organisations work with multiple people in similar roles. Please add any additional $t(Solution) contacts, as relevant.",
+        "Help": "Add any additional contacts as relevant to this $t(Solution). For example, if your lead contact cannot be reached, we may contact your additional contact(s); or, you may wish to name a Clinical Safety Officer, or other key contact, for this $t(Solution). Any contacts added will not be shared outside $t(NHSD.Name).",
         "Button": "Add another contact (optional)"
       }
     },
@@ -236,19 +240,21 @@
         "Title": "$t(Solution) details"
       },
       "Title": "Which $t(Capability_plural) does your $t(Solution) provide?*",
-      "Subtitle": "Select all that apply to build the requirements for the next two stages.",
+      "Subtitle": "Select all that apply and review the required Standards.",
       "Preamble": [
-        "You may change your $t(Capability) selections until you have submitted responses for assessment in Stage 2.",
+        "As you select $t(Capability_plural), a summary of required Standards will form below. You may return here to change these selections until you submit $t(Capability) evidence for assessment in the next stage. The $t(Capability_plural) selected will be visible to buyers on your $t(Solution) Listing page when all assurance activities have been successfully completed",
         "Asserted $t(Capability_plural) will be shown to the public on your $t(Solution) page once you’ve complete all four stages of Adding a $t(Solution).",
-        "For queries, email: <a href='#'>{email address}</a>."
+        "For queries, email us: <a href='#'>{email address}</a>.",
+        "To check the requirements for each, including which epics are required, see all <a href='#'>Capabilities & Standards in Confluence</a>.(* indicates required field)."
       ],
       "Help": {
-        "Title": "Help - What are $t(Capability_plural)?",
+        "Title": "Help - What if my Solution only matches some of a $t(Capability_plural)'s epics?",
         "Text": [
-          "$t(Capability_plural) describe what your $t(Solution) does.",
-          "Some $t(Standard_plural) are associated with $t(Capability_plural). Others are overarching and required for all $t(Solution_plural). $t(Standard_plural) contain requirements your $t(Solution) must meet to provide a minimum level of quality.",
-          "<a href='#'>Learn more and view all $t(Standards and Capabilities).</a>"
+          "To meet some $t(Capability_plural), the Solution must demonstrate compliance with all epics within that $t(Capability). For other $t(Capability_plural), the Solution must demonstrate compliance with only one or more epics. See Confluence to check the epics required for each Capability.",
+          "."
         ]
+
+
       },
       "Fieldsets": {
         "Core": {
@@ -259,7 +265,7 @@
         }
       },
       "Reveal": {
-        "FullDescriptionLinkText": "See $t(Capability) detail and Associated $t(Standard_plural) in Confluence",
+        "FullDescriptionLinkText": "See $t(Capability) detail, including which epics are required, and Associated $t(Standard_plural) in Confluence",
         "CompliancePreamble": "To meet this $t(Capability), you must comply with these Associated $t(Standard_plural).",
         "Selection": {
           "Preamble": "By selecting this $t(Capability), you are acknowledging the set of $t(Standard_plural) your $t(Solution) must meet to attain compliance.",
@@ -294,7 +300,7 @@
     "Dashboard": {
       "Title": "$t(Standard_plural) Dashboard",
       "Breadcrumb": "All $t(Standard_plural)",
-      "Subtitle": "Your $t(Solution) must comply with all of the $t(Standard_plural) below in order to be available for purchasing from the $t(Catalogue.Title). You may submit the evidence for one $t(Standard) at a time. Click on each $t(Standard) to see and submit requirements for that $t(Standard).",
+      "Subtitle": "These are the $t(Standard_plural) relevant to your $t(Solution) based on the $t(Capability_plural) selected. You may submit evidence for one $t(Standard) at a time. Click on each $t(Standard) to access and submit requirements for that $t(Standard).",
       "Associated": {
         "Heading": "$t(Associated Standards)",
         "Help": {
@@ -314,17 +320,17 @@
         "Submitted": {
           "Heading": "$t(Standard) $t(Compliance) Evidence submitted.",
           "Narrative": [
-            "Your evidence for {{name}} has been submitted to $t(NHSD.Name). You can expect to receive a reply within 5 working days.",
-            "While your submission is being reviewed, you are free to keep working on gathering and submitting evidence for the remaining $t(Standard_plural)."
+            "Your evidence for {{name}} has been submitted to $t(NHSD.Name). During private beta, the Catalogue Authority will endeavour to notify your lead contact of the initial outcome of its evaluation within 5 Working Days of starting its review.",
+            "While your file is being reviewed, you may submit evidence for any remaining $t(Standard_plural) that are currently with a Supplier contact."
           ]
         }
       }
     },
     "Evidence": {
-      "Subtitle": "Detailed instructions are included in the $t(Traceability Matrix) from the $t(Assessment team) below. Download the file. Complete the requirements in the file and upload it. ‘$t(CompliancePages.Evidence.Buttons.Submit)’ to send it to $t(NHSD.Name) for evaluation.",
+      "Subtitle": "Download the $t(Traceability Matrix) file below. Detailed instructions are included in the file. When you have finished addressing the requirements in the file, upload it. Review on the next page before submitting the file to $t(NHSD.Name).",
       "Preamble": [
-        "For support, see <a href='#'>guidance</a> for this stage. If this $t(Solution) is published, buyers can request the final version of the evidence you submit in the $t(Traceability Matrix).",
-        "For Clarifications and other queries, <a href='#'>email us</a>."
+        "For support, see <a href='#'>guidance</a>. Buyers will be able to request the final version of your completed $t(Traceability Matrix) file for this $t(Standard).",
+        "For queries, email us <a href='#'>email us</a>. (* indicates required field)"
       ],
       "QuickLinks": {
         "Heading": "Quick Links — $t(Standard) & Related $t(Capability_plural)"
@@ -340,7 +346,7 @@
         "Heading": "File available",
         "Text": [
           "The $t(Standards Compliance) team has provided you with a $t(Traceability Matrix), which you may download and work on.",
-          "However, you cannot submit your file to $t(NHSD.Name) until your $t(Compliance Assessment) is complete."
+          "You can submit your completed file to $t(NHSD.Name) once you have submitted your evidence for $t(Capability_plural) in stage 2."
         ]
       },
       "CurrentFile": {
@@ -348,6 +354,7 @@
       },
       "Reply": {
         "Heading": "Upload file and reply*",
+        "Information": "To include multiple files, compress them into a single zip file. There's no maximum file size but note that very large files will take longer to upload.",
         "Remove": "remove",
         "Message": {
           "Label": "Message (optional)",
@@ -355,7 +362,7 @@
         }
       },
       "Owner": {
-        "Label": "Sending from:",
+        "Label": "Standard Owner:",
         "ChangeButton": "Change Owner",
         "Help": {
           "Title": "Help - Who is the Owner?",
@@ -384,7 +391,7 @@
       "Information": "Review and edit as needed. This is your last chance to make changes before submitting this $t(Standard) to $t(NHSD.Name) for review. ",
       "Help": {
         "Title": "Help - What happens next?",
-        "Information": "When you Submit this page, the information you have provided will be sent to $t(NHSD.Name), and the $t(Compliance) team will begin reviewing your responses in the Traceability Matrix file you’ve provided. Your $t(Lead Contact) and designated $t(Standard) Owner (if there is one) will receive a notification linked to the outcome once the review is complete.  "
+        "Information": "When you Submit this page, the information you have provided will be sent to $t(NHSD.Name), and the $t(Compliance) team will begin reviewing your responses in the $t(Traceability Matrix) file you’ve provided. Your $t(Lead Contact) will receive a notification once the review is complete."
       },
       "Evidence":{
         "File": {

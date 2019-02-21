@@ -229,7 +229,7 @@ test('Submitting from the summary page should update the status on the dashboard
     .click(capSection1.find('input[type=radio][value=no]'))
     .click(capabilityEvidencePage.continueButton)
     .click('button[name="action\\[continue\\]"]')
-    .expect(Selector('.callout .title').innerText).contains('Submitted for Capability')
+    .expect(Selector('.callout .title').innerText).contains('Solution submitted')
     .expect(Selector('a[href^="../../compliance/"]')).ok()
 })
 

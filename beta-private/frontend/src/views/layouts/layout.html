@@ -20,19 +20,25 @@
   </head>
   <body>
     <header role="banner" aria-label="Site header">
+      <div class="beta-banner">
+        <div class="beta-icon">{{t 'Beta Banner.Title'}}</div>
+        <div>{{t 'Beta Banner.Message'}}</div>
+      </div>
       <div class="top">
         <nav aria-label="Main">
           <a href="#content" class="sr" id="skip-to-main-content-link">Skip to main content</a>
           <a id="home-link" href="/#content" aria-label="Home">
             {{> nhs-digital-logo }}
           </a>
+          {{#meta.deployedEnvironment}}
+            <div>
+              <p id="deployed-environment-label">{{.}}</p>
+            </div>
+          {{/meta.deployedEnvironment}}
+          <div id="account" aria-label="Account">
+            {{> user-authentication-nav }}
+          </div>
         </nav>
-        {{#meta.deployedEnvironment}}
-        <p id="deployed-environment-label">{{.}}</p>
-        {{/meta.deployedEnvironment}}
-        <div id="account" aria-label="Account">
-          {{> user-authentication-nav }}
-        </div>
       </div>
       <div class="bottom {{#if onHomePage}}white-control-bar{{/if}}">
         {{#if activeForm}}

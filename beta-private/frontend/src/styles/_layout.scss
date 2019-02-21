@@ -1,6 +1,7 @@
 $header-top-height: 5rem;
 $header-bottom-height: 3rem;
-$header-total-height: $header-top-height + $header-bottom-height;
+$beta-banner-height: 4rem;
+$header-total-height: $header-top-height + $header-bottom-height + $beta-banner-height;
 $header-padding: 1rem;
 
 $content-padding: 1rem;
@@ -97,6 +98,19 @@ body > header {
   width: 100%;
   z-index: 2;
 
+  .beta-banner {
+    background: $color-nhs-light-grey;
+    padding: 1.5em 1em;
+    display: inline-flex;
+    width: 100%;
+    .beta-icon {
+      background: $color-nhs-blue;
+      padding:0em 0.75em;
+      color: $color-nhs-white;
+      margin-right: 0.5em;
+    }
+  }
+
   .top {
     background-color: $color-bg;
     display: flex;
@@ -104,7 +118,9 @@ body > header {
     padding: $header-padding;
 
     > nav {
-      flex: auto;
+      width: 100%;
+      display: inline-flex;
+      justify-content: space-between
     }
 
     .auth {
