@@ -115,5 +115,9 @@
         "Url": "http://example.com/bravo"
       }
     }
+  },
+  "Beta Banner": {
+    "Title": "BETA",
+    "Message": "This is a new service –  your <a href='mailto:gpitfutures@nhs.net'>feedback</a> will help us to improve it. "
   }
 }
