@@ -1,4 +1,8 @@
 {
+  "Beta Banner": {
+    "Title": "BETA",
+    "Message": "This is a new service –  your <a href='mailto:gpitfutures@nhs.net'>feedback</a> will help us to improve it. "
+  },
   "MySolutions": {
     "Title": "My $t(Solution_plural)",
     "WelcomeMessage": "$t(Authentication.Greeting). Here you can add a new $t(Solution) and manage all your company's $t(Solution_plural).",
