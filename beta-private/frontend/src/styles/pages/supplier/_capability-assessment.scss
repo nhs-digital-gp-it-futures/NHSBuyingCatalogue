@@ -37,7 +37,9 @@
       border: 0;
       margin-left: 1.25em;
       padding: 0;
-
+      p.sub-info {
+        font-size: smaller;
+      }
       > legend {
         background: $color-nhs-light-grey;
         display: block;
