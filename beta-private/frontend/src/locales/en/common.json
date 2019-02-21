@@ -6,7 +6,7 @@
     "Name": "NHS"
   },
   "Catalogue": {
-    "Title": "Store",
+    "Title": "Buying Catalogue",
     "Fullname": "$t(NHSD.Name) $t(Catalogue.Title)"
   },
   "Solution": "Solution",
@@ -32,7 +32,7 @@
   "Standards and Capabilities": "$t(Standard_plural) and $t(Capability_plural)",
   "Traceability Matrix": "Traceability Matrix",
   "Assessment team": "$t(Assessment) team",
-  "Lead Contact": "Lead Contact",
+  "Lead Contact": "lead contact",
   "GPITFutures": {
     "Name": "GP IT Futures",
     "Framework": "Framework",

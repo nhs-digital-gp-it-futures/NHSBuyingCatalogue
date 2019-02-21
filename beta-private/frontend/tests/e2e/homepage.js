@@ -7,7 +7,7 @@
 
 import { homePage } from './pages'
 
-const HOMEPAGE_TITLE = 'NHS Store'
+const HOMEPAGE_TITLE = 'NHS Buying Catalogue'
 const LOGIN_TEXT = 'Log in/Sign up'
 const NUMBER_OF_CARDS = 3
 const NUMBER_OF_STEPS = 4
