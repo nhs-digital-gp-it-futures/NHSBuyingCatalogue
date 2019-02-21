@@ -18,13 +18,6 @@ Document.prototype.$$ = Element.prototype.$$ = function (selector) {
   return Array.from(this.querySelectorAll(selector))
 }
 
-/**
- * Global Dirty Flag
- * Used to ensure that unsaved changes are communicated.
- */
-
-var DIRTY_PAGE = false
-
 function restoreSavedFormInputs () {
   // we only support restoration on modern browsers
   if (!window.URLSearchParams) return
@@ -92,6 +85,16 @@ if (!Modernizr.formattribute) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+
+  /**
+   * Global Dirty Flag
+   * Used to ensure that unsaved changes are communicated.
+   *
+   * If there are active save buttons on the page, and there is an error on the page
+   * then the user has unsaved changes and should be warned.
+   */
+  var DIRTY_PAGE = ($('#errors') && $('input[type="submit"]'))
+
   // collapse all but the first collapsible fieldsets by default, except ones that contain
   // invalid fields
   function collapseAllFieldsetsExcept (elCurrent) {
