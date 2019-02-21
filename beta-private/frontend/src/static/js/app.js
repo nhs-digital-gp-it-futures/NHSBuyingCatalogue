@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
    * If there are active save buttons on the page, and there is an error on the page
    * then the user has unsaved changes and should be warned.
    */
-  var DIRTY_PAGE = ($('#errors') && $('input[type="submit"]'))
+  var DIRTY_PAGE = ($('#errors') && $('input[type="submit"]')) || false
 
   // collapse all but the first collapsible fieldsets by default, except ones that contain
   // invalid fields

@@ -139,22 +139,17 @@ function onboardingStatusPage (req, res) {
       context.stages[0].status = 'Complete'
       context.stages[0].class = 'complete'
       context.stages[0].link = 'View'
-
-      if ('capabilityAssessmentSubmitted' in req.query) {
-        context.capabilityAssessmentSubmitted = true
-      }
     }
     if (status === 3) { // Standards Compliance
       context.stages[0].status = 'Complete'
       context.stages[0].class = 'complete'
       context.stages[0].link = 'View'
-
-      if ('capabilityAssessmentApproved' in req.query) {
-        context.capabilityAssessmentApproved = true
-      }
     }
 
     if (status === 2 || status === 3) {
+      if ('capabilityAssessmentSubmitted' in req.query) {
+        context.capabilityAssessmentSubmitted = true
+      }
       // if all capabilities have passed, then display complete               TEMPORARY UNTILL CRM IS LESS BAD.
       if (req.solution._raw.claimedCapability.every((cap) => +cap.status === 3 || +cap.status === 948120000)) {
         context.stages[1].status = 'Complete'
