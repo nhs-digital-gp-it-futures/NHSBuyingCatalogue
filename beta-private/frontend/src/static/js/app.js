@@ -38,7 +38,6 @@ function restoreSavedFormInputs () {
   // a restoration key exists and if so restore that value
   $$('#content [name]:not([type=hidden])').forEach(function (elInput) {
     if (qs.has(elInput.name)) {
-      console.log('Restored', elInput.name)
       elInput.value = qs.get(elInput.name)
       elInput.dispatchEvent(new InputEvent('input'))
     }
