@@ -204,9 +204,13 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('click', function (event) {
     // Is whatever was clicked an anchor or is it wrapped in one?
     const clickedAnchor = event.target.tagName === 'A' ? event.target : event.target.closest('a')
-
+    console.log(clickedAnchor.getAttribute('href'))
     // bail if the click isn't targeting an anchor else or the page isn't Dirty.
-    if (!clickedAnchor || !DIRTY_PAGE) return
+    if (
+      !clickedAnchor ||
+      !DIRTY_PAGE ||
+      clickedAnchor.getAttribute('href').startsWith('#')
+    ) return
 
     const continueButton = $('#unsaved-changes a.button')
 
