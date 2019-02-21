@@ -183,7 +183,9 @@
         flex-grow: 1;
       }
     }
-
+    p.sub-info {
+      font-size: smaller;
+    }
     &.has-file {
       .remove {
         display: inline;

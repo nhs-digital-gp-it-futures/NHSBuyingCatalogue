@@ -146,7 +146,7 @@
     "CapabilityAssessmentSubmittedCallout": {
       "Title": "$t(Solution) submitted",
       "Text": [
-        "Your responses have been submitted to $t(NHSD.Name). Once our assessment is complete, your lead contact will receive an email with the outcome. During private beta, the Catalogue Authority will endeavour to notify your lead contact of the outcome within 20 Working Days of starting its assessment.",
+        "Your responses have been submitted. During private beta, we will aim to notify your lead contact of the outcome within 20 Working Days of starting our assessment. See 'Supplier Onboarding Process' {link to come} for full detail around timescales.",
       
         "While you wait, you may now submit evidence for stage 3 $t(Standard_plural) Compliance."
       ]
@@ -320,8 +320,7 @@
         "Submitted": {
           "Heading": "$t(Standard) $t(Compliance) Evidence submitted.",
           "Narrative": [
-            "Your evidence for {{name}} has been submitted to $t(NHSD.Name). During private beta, the Catalogue Authority will endeavour to notify your lead contact of the initial outcome of its evaluation within 5 Working Days of starting its review.",
-            "While your file is being reviewed, you may submit evidence for any remaining $t(Standard_plural) that are currently with a Supplier contact."
+            "Your evidence for {{name}} has been submitted. During private beta, we will aim to notify your lead contact of the initial outcome of our evaluation within 5 Working Days of starting our review. See 'Supplier Onboarding Process' (link to come) for full detail around timescales."
           ]
         }
       }
@@ -354,7 +353,7 @@
       },
       "Reply": {
         "Heading": "Upload file and reply*",
-        "Information": "To include multiple files, compress them into a single zip file. There's no maximum file size but note that very large files will take longer to upload.",
+        "Information": "To include multiple files, compress them into a single zip file. During private beta, file upload times may be slow. Thank you for your patience.",
         "Remove": "remove",
         "Message": {
           "Label": "Message (optional)",
@@ -425,8 +424,9 @@
         },
         "Video" : {
           "Title": "1. Add video file and describe epics (required)*",
+          "Information": "This should be the major release number only, for example: 2. It will display next to your Solution name. For example: Really Kool Document Manager, 2",
           "Previous": "The last file you uploaded was:",
-          "Additional": "Indicate which epics are demonstrated in the video, including the time where each epic is demonstrated. For example, Epic 3 at 4:56."
+          "Additional": "State the time where each epic is demonstrated in each file, using the file name. For example, In DocumentManagement.mp4, see Epic 3 at 4:56."
         },
         "Notice": {
           "Title": "$t(NHSD.Name) will contact you",
