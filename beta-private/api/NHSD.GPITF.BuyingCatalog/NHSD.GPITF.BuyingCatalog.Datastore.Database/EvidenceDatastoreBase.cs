@@ -46,15 +46,15 @@ ClaimId = @claimId
         {
           var sqlCurrent = $@"
 -- get all previous versions from a specified (CurrentId) version
-with recursive Links(CurrentId, Id, PreviousId, ClaimId, CreatedById, CreatedOn, Evidence, HasRequestedLiveDemo, BlobId) as (
+with recursive Links(CurrentId, Id, PreviousId, ClaimId, CreatedById, CreatedOn, OriginalDate, Evidence, HasRequestedLiveDemo, BlobId) as (
   select
-    Id, Id, PreviousId, ClaimId, CreatedById, CreatedOn, Evidence, HasRequestedLiveDemo, BlobId
+    Id, Id, PreviousId, ClaimId, CreatedById, CreatedOn, OriginalDate, Evidence, HasRequestedLiveDemo, BlobId
   from {table.Name}
   where PreviousId is null
   
   union all
   select
-    Id, Id, PreviousId, ClaimId, CreatedById, CreatedOn, Evidence, HasRequestedLiveDemo, BlobId
+    Id, Id, PreviousId, ClaimId, CreatedById, CreatedOn, OriginalDate, Evidence, HasRequestedLiveDemo, BlobId
   from {table.Name} 
   where PreviousId is not null
   
@@ -66,6 +66,7 @@ with recursive Links(CurrentId, Id, PreviousId, ClaimId, CreatedById, CreatedOn,
     {table.Name}.ClaimId,
     {table.Name}.CreatedById,
     {table.Name}.CreatedOn,
+    {table.Name}.OriginalDate,
     {table.Name}.Evidence,
     {table.Name}.HasRequestedLiveDemo,
     {table.Name}.BlobId
@@ -73,7 +74,7 @@ with recursive Links(CurrentId, Id, PreviousId, ClaimId, CreatedById, CreatedOn,
   join {table.Name}
   on Links.PreviousId = {table.Name}.Id
 )
-  select Links.Id, Links.PreviousId, Links.ClaimId, Links.CreatedById, Links.CreatedOn, Links.Evidence, Links.HasRequestedLiveDemo, Links.BlobId
+  select Links.Id, Links.PreviousId, Links.ClaimId, Links.CreatedById, Links.CreatedOn, Links.OriginalDate, Links.Evidence, Links.HasRequestedLiveDemo, Links.BlobId
   from Links
   where CurrentId = @currentId;
 ";
