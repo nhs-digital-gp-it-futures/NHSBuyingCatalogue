@@ -110,6 +110,11 @@ body > header {
     padding: 1.5em 1em;
     display: inline-flex;
     width: 100%;
+
+    a[target="_blank"]:after {
+      content: none;
+    }
+
     .beta-icon {
       background: $color-nhs-blue;
       padding:0em 0.75em;

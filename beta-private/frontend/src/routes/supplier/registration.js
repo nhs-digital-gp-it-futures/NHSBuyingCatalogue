@@ -297,24 +297,22 @@ async function registrationPagePost (req, res) {
     }
   }
 
-  console.log(context.errors)
-
   if (context.errors) {
-    res.render('supplier/registration/1-details', context)
-  } else {
-    // redirect based on action chosen and whether a new solution was just created
-    let redirectUrl = context.solution.id === 'new'
-      ? `../../${req.solution.id}/register/`
-      : './'
-
-    if (req.body.action) {
-      if (req.body.action.continue) redirectUrl += '../capabilities/'
-      if (req.body.action.exit) redirectUrl = '/'
-      if (req.body.action.save) redirectUrl = './?saved'
-    }
-
-    res.redirect(redirectUrl)
+    return res.render('supplier/registration/1-details', context)
   }
+
+  // redirect based on action chosen and whether a new solution was just created
+  let redirectUrl = context.solution.id === 'new'
+    ? `../../${req.solution.id}/register/`
+    : './'
+
+  if (req.body.action) {
+    if (req.body.action.continue) redirectUrl += '../capabilities/'
+    else if (req.body.action.exit) redirectUrl = '/'
+    else if (req.body.action.save) redirectUrl += '?saved'
+  }
+
+  res.redirect(redirectUrl)
 }
 
 async function capabilitiesPageContext (req) {

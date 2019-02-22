@@ -126,6 +126,6 @@
   },
   "Beta Banner": {
     "Title": "BETA",
-    "Message": "This is a new service –  your <a href='mailto:gpitfutures@nhs.net'>feedback</a> will help us to improve it. "
+    "Message": "This is a new service –  your <a target='_blank' href='mailto:gpitfutures@nhs.net'>feedback</a> will help us to improve it. "
   }
 }
