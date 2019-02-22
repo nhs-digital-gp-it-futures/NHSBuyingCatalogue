@@ -38,6 +38,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         MustBeCurrentVersion();
         PreviousVersionMustBeFromSameOrganisation();
         MustBePendingToChangeName();
+        MustBePendingToChangeVersion();
       });
 
       RuleSet(nameof(ISolutionsLogic.Create), () =>
@@ -182,6 +183,19 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
             x.Name == soln.Name;
         })
         .WithMessage("Can only change name in Draft");
+    }
+
+    public void MustBePendingToChangeVersion()
+    {
+      RuleFor(x => x)
+        .Must(x =>
+        {
+          var soln = _solutionDatastore.ById(x.Id);
+          return
+            x.Status == SolutionStatus.Draft ||
+            x.Version == soln.Version;
+        })
+        .WithMessage("Can only change version in Draft");
     }
 
     private static IEnumerable<(SolutionStatus OldStatus, SolutionStatus NewStatus, bool HasValidRole)> ValidStatusTransitions(IHttpContextAccessor context)
