@@ -29,7 +29,7 @@
   "Capability_Assessment": "$t(Capability) $t(Assessment)",
   "Capabilities Assessment": "$t(Capability_plural) $t(Assessment)",
   "Standards Compliance": "$t(Standard_plural) $t(Compliance)",
-  "Standards and Capabilities": "$t(Standard_plural) and $t(Capability_plural)",
+  "Standards and Capabilities": "$t(Capability_plural) and $t(Standard_plural)",
   "Traceability Matrix": "Traceability Matrix",
   "Assessment team": "$t(Assessment) team",
   "Lead Contact": "lead contact",
@@ -96,8 +96,8 @@
         "Heading": "Contact us",
         "Links": [
           {
-            "Text": "Email: gpitfutures@digital.nhs.uk",
-            "Url": "mailto:gpitfutures@digital.nhs.uk"
+            "Text": "Email: gpitfutures@nhs.net",
+            "Url": "mailto:gpitfutures@nhs.net"
           }
         ]
       },

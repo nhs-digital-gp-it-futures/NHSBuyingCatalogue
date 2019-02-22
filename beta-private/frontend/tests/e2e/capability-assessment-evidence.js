@@ -214,7 +214,7 @@ test('Clicking Continue with complete evidence should lead to summary page with 
   await t
     .expect(Selector('#summary-details h2').innerText).contains('Solution details')
     .expect(Selector('#summary-capabilities h2').innerText).contains('Capabilities')
-    .expect(Selector('#summary-evidence h2').innerText).contains('Assessment evidence')
+    .expect(Selector('#summary-evidence h2').innerText).contains('Provide evidence')
 
   // Assert Assessment Evidence is correct.
   const evidenceTypes = Selector('#summary-evidence .evidence p:nth-child(2)')
@@ -244,5 +244,5 @@ test('After Submitting Evidence for Capability Assessment, the Registration Page
     .click(onboardingDashboardPage.continueRegistrationButton)
     .expect(Selector('#summary-details h2').innerText).contains('Enter Solution details')
     .expect(Selector('#summary-capabilities h2').innerText).contains('Which Capabilities')
-    .expect(Selector('#summary-evidence h2').innerText).contains('Provide Assessment')
+    .expect(Selector('#summary-evidence h2').innerText).contains('Provide evidence')
 })
