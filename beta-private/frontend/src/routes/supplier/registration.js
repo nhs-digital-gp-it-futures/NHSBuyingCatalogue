@@ -214,6 +214,10 @@ function registrationPageGet (req, res) {
     ...registrationPageContext(req)
   }
 
+  if ('saved' in req.query) {
+    context.solutionSaved = true
+  }
+
   addContactFieldsToContext(context)
 
   /* If Solution has progressed further than registering. */
@@ -304,6 +308,7 @@ async function registrationPagePost (req, res) {
     if (req.body.action) {
       if (req.body.action.continue) redirectUrl += '../capabilities/'
       if (req.body.action.exit) redirectUrl = '/'
+      if (req.body.action.save) redirectUrl = './?saved'
     }
 
     res.redirect(redirectUrl)
@@ -357,6 +362,10 @@ async function capabilitiesPageContext (req) {
 async function capabilitiesPageGet (req, res) {
   const context = await capabilitiesPageContext(req)
 
+  if ('saved' in req.query) {
+    context.solutionSaved = true
+  }
+
   context.capabilities.forEach(cap => {
     cap.selected = _.get(_.find(req.solution.capabilities, { capabilityId: cap.id }), 'id')
   })
@@ -375,7 +384,7 @@ async function capabilitiesPagePost (req, res) {
   let redirectUrl = '../'
 
   if (req.body.action) {
-    if (req.body.action.save) redirectUrl = './'
+    if (req.body.action.save) redirectUrl = './?saved'
     else if (req.body.action.exit) redirectUrl = '/'
   }
 

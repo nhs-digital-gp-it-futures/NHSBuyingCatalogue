@@ -65,6 +65,14 @@
     "Continue Without Saving": "Continue without Saving",
     "Information": "If you leave without saving, you will lose any changes you have made to this page."
   },
+  "Notice": {
+    "Saved": {
+      "Title": "Solution Saved",
+      "Text": [
+        "Your solution was successfully saved."
+      ]
+    }
+  },
   "Footer": {
     "Sections": [
       {
