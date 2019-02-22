@@ -159,6 +159,8 @@ test.skip('Files and messages can be saved against multiple capabilities at once
   await t
     .click(capabilityEvidencePage.globalSaveButton)
 
+  await t.expect(capabilityEvidencePage.savedNoticeTitle.innerText).contains('Saved')
+
   await verifyFileUploaded(t, capSection1, 'Dummy TraceabilityMatrix 2.xlsx')
     .expect(capSection1.find('textarea').value).eql('Automated test message for C2')
   await verifyFileUploaded(t, capSection2, 'Dummy TraceabilityMatrix 3.xlsx')

@@ -233,6 +233,10 @@ async function solutionComplianceEvidencePageGet (req, res, next) {
     ]
   }
 
+  if ('saved' in req.query) {
+    context.solutionSaved = true
+  }
+
   // last breadcrumb is the name of the current standard
   context.breadcrumbs.push({ label: context.claim.standard.name })
 
@@ -270,6 +274,7 @@ async function solutionComplianceEvidencePagePost (req, res) {
   }
 
   let redirectUrl = './'
+  if (action.save) redirectUrl += '?saved'
   if (action.submit) redirectUrl = './confirmation'
   else if (action.exit) redirectUrl = '/'
 
@@ -347,6 +352,10 @@ async function solutionComplianceEvidenceConfirmationGet (req, res) {
 
   let latestFile
 
+  if ('saved' in req.query) {
+    context.solutionSaved = true
+  }
+
   if (context.files) {
     latestFile = findLatestFile(context.files.items)
   }
@@ -378,6 +387,9 @@ async function solutionComplianceEvidenceConfirmationPost (req, res) {
     claim.status = '2' /* submitted */
     redirectUrl += `?submitted=${claim.standardId}`
     await dataProvider.updateSolutionForCompliance(req.solution)
+  }
+  if (action.save) {
+    redirectUrl += '?saved'
   }
 
   res.redirect(redirectUrl)

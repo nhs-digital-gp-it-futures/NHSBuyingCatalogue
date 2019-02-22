@@ -124,6 +124,10 @@ async function solutionCapabilityPageGet (req, res) {
     delete context.activeForm.id
   }
 
+  if ('saved' in req.query) {
+    context.solutionSaved = true
+  }
+
   res.render('supplier/capabilities/index', context)
 }
 
@@ -194,9 +198,12 @@ async function solutionCapabilityPagePost (req, res) {
     fullContext.errors = context.errors
     res.render('supplier/capabilities/index', fullContext)
   } else if (req.body.action.continue) {
-    res.redirect(path.join(req.baseUrl, req.url, 'confirmation'))
+    const url = req.url.split('?')[0]
+    res.redirect(path.join(req.baseUrl, url, 'confirmation'))
   } else if (req.body.action.exit) {
     res.redirect('/')
+  } else if (req.body.action.save) {
+    res.redirect(path.join(req.baseUrl, `${req.url}?saved`))
   } else {
     res.redirect(path.join(req.baseUrl, req.url))
   }
@@ -276,9 +283,13 @@ async function summaryPageGet (req, res) {
   res.render('supplier/capabilities/summary', context)
 }
 
-async function confirmationPageGet (req, res) {
+async function confirmationPageGet (req, res, prevAction) {
   const context = {
     ...await confirmationPageContext(req)
+  }
+
+  if (_.get(req, 'body.action.save')) {
+    context.solutionSaved = true
   }
 
   // page is only editable if the solution is registered, and notyet submitted for assessment
