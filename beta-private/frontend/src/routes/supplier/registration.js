@@ -297,6 +297,8 @@ async function registrationPagePost (req, res) {
     }
   }
 
+  console.log(context.errors)
+
   if (context.errors) {
     res.render('supplier/registration/1-details', context)
   } else {

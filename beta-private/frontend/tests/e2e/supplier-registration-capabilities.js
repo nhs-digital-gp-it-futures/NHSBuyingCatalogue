@@ -96,6 +96,9 @@ test('Capabilities can be changed, summary updates and data save correctly', asy
 
     .click(page.globalSaveButton)
 
+  await t.expect(registrationPage.savedNoticeTitle.innerText).contains('Saved')
+
+  await t
     .expect(Selector('#errors').exists).notOk()
     .expect(capabilityCount).eql('3 Capabilities selected')
     .expect(standardCount).eql('14 Standards will be required')

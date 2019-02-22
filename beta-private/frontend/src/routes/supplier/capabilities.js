@@ -198,7 +198,8 @@ async function solutionCapabilityPagePost (req, res) {
     fullContext.errors = context.errors
     res.render('supplier/capabilities/index', fullContext)
   } else if (req.body.action.continue) {
-    res.redirect(path.join(req.baseUrl, req.url, 'confirmation'))
+    const url = req.url.split('?')[0]
+    res.redirect(path.join(req.baseUrl, url, 'confirmation'))
   } else if (req.body.action.exit) {
     res.redirect('/')
   } else if (req.body.action.save) {

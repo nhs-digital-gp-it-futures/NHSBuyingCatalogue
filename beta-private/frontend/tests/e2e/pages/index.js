@@ -16,6 +16,8 @@ class Page {
 
     this.unsavedChangesBanner = Selector('#unsaved-changes')
     this.continueWithoutSavingButton = Selector('#unsaved-changes > a.button')
+
+    this.savedNoticeTitle = Selector('#content .save-notice.callout h2')
   }
 
   async checkAccessibility (t) {
