@@ -38,15 +38,15 @@ EvidenceId = @evidenceId
         {
           var sqlCurrent = $@"
 -- get all previous versions from a specified (CurrentId) version
-with recursive Links(CurrentId, Id, PreviousId, EvidenceId, CreatedById, CreatedOn, Message) as (
+with recursive Links(CurrentId, Id, PreviousId, EvidenceId, CreatedById, CreatedOn, OriginalDate, Message) as (
   select
-    Id, Id, PreviousId, EvidenceId, CreatedById, CreatedOn, Message
+    Id, Id, PreviousId, EvidenceId, CreatedById, CreatedOn, OriginalDate, Message
   from {table.Name}
   where PreviousId is null
   
   union all
   select
-    Id, Id, PreviousId, EvidenceId, CreatedById, CreatedOn, Message
+    Id, Id, PreviousId, EvidenceId, CreatedById, CreatedOn, OriginalDate, Message
   from {table.Name} 
   where PreviousId is not null
   
@@ -58,12 +58,13 @@ with recursive Links(CurrentId, Id, PreviousId, EvidenceId, CreatedById, Created
     {table.Name}.EvidenceId,
     {table.Name}.CreatedById,
     {table.Name}.CreatedOn,
+    {table.Name}.OriginalDate,
     {table.Name}.Message
   from Links
   join {table.Name}
   on Links.PreviousId = {table.Name}.Id
 )
-  select Links.Id, Links.PreviousId, Links.EvidenceId, Links.CreatedById, Links.CreatedOn, Links.Message
+  select Links.Id, Links.PreviousId, Links.EvidenceId, Links.CreatedById, Links.CreatedOn, Links.OriginalDate, Links.Message
   from Links
   where CurrentId = @currentId;
 ";
