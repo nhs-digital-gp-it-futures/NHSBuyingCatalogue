@@ -353,7 +353,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       string prevId = null,
       string evidenceId = null,
       string createdById = null,
-      DateTime? createdOn = null)
+      DateTime? createdOn = null,
+      DateTime? originalDate = null)
     {
       var retval = new DummyReviewsBase
       {
@@ -361,7 +362,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
         PreviousId = prevId,
         EvidenceId = evidenceId ?? Guid.NewGuid().ToString(),
         CreatedById = createdById ?? Guid.NewGuid().ToString(),
-        CreatedOn = createdOn ?? DateTime.Now
+        CreatedOn = createdOn ?? DateTime.Now,
+        OriginalDate = originalDate ?? DateTime.UtcNow
       };
       Verifier.Verify(retval);
       return retval;
@@ -372,7 +374,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       string prevId = null,
       string evidenceId = null,
       string createdById = null,
-      DateTime? createdOn = null)
+      DateTime? createdOn = null,
+      DateTime? originalDate = null)
     {
       var retval = new CapabilitiesImplementedReviews
       {
@@ -380,7 +383,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
         PreviousId = prevId,
         EvidenceId = evidenceId ?? Guid.NewGuid().ToString(),
         CreatedById = createdById ?? Guid.NewGuid().ToString(),
-        CreatedOn = createdOn ?? DateTime.UtcNow
+        CreatedOn = createdOn ?? DateTime.UtcNow,
+        OriginalDate = originalDate ?? DateTime.UtcNow
       };
       Verifier.Verify(retval);
       return retval;
@@ -391,7 +395,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       string prevId = null,
       string evidenceId = null,
       string createdById = null,
-      DateTime? createdOn = null)
+      DateTime? createdOn = null,
+      DateTime? originalDate = null)
     {
       var retval = new StandardsApplicableReviews
       {
@@ -399,11 +404,11 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
         PreviousId = prevId,
         EvidenceId = evidenceId ?? Guid.NewGuid().ToString(),
         CreatedById = createdById ?? Guid.NewGuid().ToString(),
-        CreatedOn = createdOn ?? DateTime.UtcNow
+        CreatedOn = createdOn ?? DateTime.UtcNow,
+        OriginalDate = originalDate ?? DateTime.UtcNow
       };
       Verifier.Verify(retval);
       return retval;
     }
-
   }
 }
