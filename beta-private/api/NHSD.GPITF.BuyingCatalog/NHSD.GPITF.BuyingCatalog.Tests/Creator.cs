@@ -290,7 +290,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       string prevId = null,
       string claimId = null,
       string createdById = null,
-      DateTime? createdOn = null)
+      DateTime? createdOn = null,
+      DateTime? originalDate = null)
     {
       var retval = new DummyEvidenceBase
       {
@@ -298,7 +299,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
         PreviousId = prevId,
         ClaimId = claimId ?? Guid.NewGuid().ToString(),
         CreatedById = createdById ?? Guid.NewGuid().ToString(),
-        CreatedOn = createdOn ?? DateTime.Now
+        CreatedOn = createdOn ?? DateTime.Now,
+        OriginalDate = originalDate ?? DateTime.UtcNow
       };
       Verifier.Verify(retval);
       return retval;
@@ -309,7 +311,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       string prevId = null,
       string claimId = null,
       string createdById = null,
-      DateTime? createdOn = null)
+      DateTime? createdOn = null,
+      DateTime? originalDate = null)
     {
       var retval = new CapabilitiesImplementedEvidence
       {
@@ -317,7 +320,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
         PreviousId = prevId,
         ClaimId = claimId ?? Guid.NewGuid().ToString(),
         CreatedById = createdById ?? Guid.NewGuid().ToString(),
-        CreatedOn = createdOn ?? DateTime.UtcNow
+        CreatedOn = createdOn ?? DateTime.UtcNow,
+        OriginalDate = originalDate ?? DateTime.UtcNow
       };
       Verifier.Verify(retval);
       return retval;
@@ -328,7 +332,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       string prevId = null,
       string claimId = null,
       string createdById = null,
-      DateTime? createdOn = null)
+      DateTime? createdOn = null,
+      DateTime? originalDate = null)
     {
       var retval = new StandardsApplicableEvidence
       {
@@ -336,7 +341,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
         PreviousId = prevId,
         ClaimId = claimId ?? Guid.NewGuid().ToString(),
         CreatedById = createdById ?? Guid.NewGuid().ToString(),
-        CreatedOn = createdOn ?? DateTime.UtcNow
+        CreatedOn = createdOn ?? DateTime.UtcNow,
+        OriginalDate = originalDate ?? DateTime.UtcNow
       };
       Verifier.Verify(retval);
       return retval;
