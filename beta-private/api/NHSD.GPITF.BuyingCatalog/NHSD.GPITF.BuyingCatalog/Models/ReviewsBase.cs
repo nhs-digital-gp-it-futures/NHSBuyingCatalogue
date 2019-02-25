@@ -43,6 +43,14 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     public DateTime CreatedOn { get; set; }
 
     /// <summary>
+    /// UTC date and time at which record was originally created
+    /// Set by server when first creating record
+    /// SET ON SERVER
+    /// </summary>
+    [Required]
+    public DateTime OriginalDate { get; set; }
+
+    /// <summary>
     /// Serialised message data
     /// </summary>
     public string Message { get; set; } = string.Empty;
