@@ -38,7 +38,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void ById_CallsFilter()
+    public void ByClaim_CallsFilter()
     {
       var logic = new DummyEvidenceLogicBase(_datastore.Object, _contacts.Object, _validator.Object, _filter.Object, _context.Object);
 
