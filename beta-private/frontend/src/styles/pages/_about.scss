@@ -1,0 +1,26 @@
+#about-page {
+    div.title-banner {
+        padding: 1em;
+        background: $color-nhs-blue;
+        color: $color-nhs-white;
+        width: 100%;
+        text-align: center;
+        margin-top: 1em;
+    }
+
+    div.about-content {
+        display: inline-flex;
+    }
+    div.about-content > div.nav-panel {
+        width: 20em;
+        div.nav-title {
+            border-bottom: 5px solid $color-nhs-mid-grey;
+        }
+        div.nav-item {
+            padding: 0.5em 0em;
+        }
+    }
+    div.about-content > div.page-content {
+        padding: 0em 1em;
+    }
+}

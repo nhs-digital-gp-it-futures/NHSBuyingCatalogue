@@ -1,5 +1,32 @@
-<h1 id="catalogue">About the {{t 'Catalogue.Fullname'}}</h1>
-<p>The {{t 'Catalogue.Title'}} is in private beta.</p>
 
-<h2 id="nhs-digital">About {{t 'NHSD.Name'}}</h2>
-<p>Find out more about {{t 'NHSD.Name'}} <a href="https://digital.nhs.uk/about-nhs-digital">here</a></p>
+<div id="about-page">
+    <div class="title-banner">
+        <h1>{{t 'Support.Title'}}</h1>
+    </div>
+    <div class="about-content">
+        <div class="nav-panel">
+            <div class="nav-title">
+                <h2>{{t 'Support.Nav Title'}}</h2>
+            </div>
+            {{#each (tt 'Support.Sections')}}
+                <div class="nav-item">
+                    <a href="#{{'Nav Title'}}">{{'Nav Title'}}</a>
+                </div>
+            {{/each}}
+        </div>
+        <div class="page-content">
+            {{#each (tt 'Support.Sections')}}
+                <h2 id="{{'Nav Title'}}">{{Title}}</h2>
+                {{#Text}}
+                    <p>{{.}}</p>
+                {{/Text}}
+                {{#Subsections}}
+                    <h3>{{Title}}</h3>
+                    {{#Text}}
+                        <p>{{.}}</p>
+                    {{/Text}}
+                {{/Subsections}}
+            {{/each}}
+        </div>
+    </div>
+</div>
