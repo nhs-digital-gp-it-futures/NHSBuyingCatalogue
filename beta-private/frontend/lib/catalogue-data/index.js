@@ -91,67 +91,34 @@ class DataProvider {
   }
 
   solutionsByOrganisation (orgId) {
-    return this.solutionsExApi.apiPorcelainSolutionsExByOrganisationByOrganisationIdGet(orgId)
+    return this.solutionsApi.apiSolutionsByOrganisationByOrganisationIdGet(orgId, {
+      pageSize: 9999
+    })
   }
 
   async solutionsForSupplierDashboard (supplierOrgId, solutionMapper = x => x) {
-    const isLive = (solnEx) => +solnEx.solution.status === 6 /* Solutions.StatusEnum.Approved */
-    const isOnboarding = (solnEx) => +solnEx.solution.status !== 6 /* Solutions.StatusEnum.Approved */
+    const isLive = (soln) => +soln.status === 6 /* Solutions.StatusEnum.Approved */
+    const isOnboarding = (soln) => +soln.status !== 6 /* Solutions.StatusEnum.Approved */
 
-    const forDashboard = (solnEx) => ({
-      ...solnEx,
-      raw: solnEx.solution,
-      id: solnEx.solution.id,
-      displayName: `${solnEx.solution.name}${solnEx.solution.version ? ` | ${solnEx.solution.version}` : ''}`,
+    const forDashboard = (soln) => ({
+      ...soln,
+      displayName: `${soln.name}${soln.version ? ` | ${soln.version}` : ''}`,
       notifications: []
     })
 
-    const forOnboarding = (soln) => {
-      soln = {
-        ...soln,
-        ...solutionOnboardingStatusMap[+soln.raw.status]
-      }
-      return soln
-    }
-
-    const forLive = (soln) => ({
-      ...soln,
-      status: 'Accepting call-offs',
-      contractCount: 0
-    })
-
-    const hasStartedAssessment = (soln) => {
-      if (+soln.raw.status === 1 && soln.claimedCapabilityEvidence.length) {
-        return {
-          ...soln,
-          stageName: 'Assessment',
-          stageStep: '2 of 4',
-          status: 'Draft'
-        }
-      } else return soln
-    }
-
-    const failureReasons = (soln) => {
-      if (+soln.raw.status !== -1 || _.isEmpty(soln)) return { ...soln }
-      else if (soln.standards.some((std) => +std.status === -1)) {
-        return { ...soln, stageStep: 'Compliance Outcome' }
-      } else {
-        return { ...soln, stageStep: 'Assessment Outcome' }
-      }
-    }
-
-    const solutions = await this.solutionsByOrganisation(supplierOrgId)
+    const solutions = (await this.solutionsByOrganisation(supplierOrgId)).items
 
     const onboardingSolutions = solutions
       .filter(isOnboarding)
       .map(forDashboard)
-      .map(forOnboarding)
-      .map(hasStartedAssessment)
-      .map(failureReasons)
+
+    const liveSolutions = solutions
+      .filter(isLive)
+      .map(forDashboard)
 
     return {
       onboarding: onboardingSolutions.map(solutionMapper),
-      live: solutions.filter(isLive).map(forDashboard).map(forLive).map(solutionMapper)
+      live: liveSolutions.map(solutionMapper)
     }
   }
 
