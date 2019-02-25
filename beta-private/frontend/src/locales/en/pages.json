@@ -433,6 +433,9 @@
           "Additional": "$t(NHSD.Name) will contact your $t(Lead Contact) to schedule the live witness demonstration."
         }
       },
+      "Save": {
+        "Notice":"By clicking save, all information you've added to this page will be stored by NHS Digital. If you change any information later this version will continue to be stored, but only the latest version will be reviewed by NHS Digital as part your submission."
+      },
       "Submission": {
         "Notice":"By Submitting this information to $t(NHSD.Name) for Assessment, you are confirming you are able, to the best of your knowledge, to meet all $t(Capability_Assessment) and $t(Standards Compliance) requirements and to display the $t(Solution) named on the $t(Catalogue.Title)."
       },
