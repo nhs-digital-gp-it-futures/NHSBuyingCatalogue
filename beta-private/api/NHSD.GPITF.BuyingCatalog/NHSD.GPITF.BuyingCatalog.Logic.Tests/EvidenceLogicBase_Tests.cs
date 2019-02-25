@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using FluentAssertions;
+using FluentValidation;
 using FluentValidation.Internal;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +8,7 @@ using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Tests;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -63,6 +65,20 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       _validator.Verify(x => x.ValidateAndThrowEx(
         It.Is<DummyEvidenceBase>(ev => ev == evidence),
         It.Is<string>(rs => rs == nameof(IEvidenceLogic<EvidenceLogicBase<EvidenceBase>>.Create))), Times.Once());
+    }
+
+    [Test]
+    public void Create_SetsOriginalDate_ToUtcNow()
+    {
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
+      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(Creator.GetContact());
+      var logic = new DummyEvidenceLogicBase(_datastore.Object, _contacts.Object, _validator.Object, _filter.Object, _context.Object);
+      var evidence = Creator.GetEvidenceBase(originalDate: DateTime.MinValue);
+      _datastore.Setup(x => x.Create(evidence)).Returns(evidence);
+
+      var result = logic.Create(evidence);
+
+      result.OriginalDate.Should().BeCloseTo(DateTime.UtcNow);
     }
   }
 }
