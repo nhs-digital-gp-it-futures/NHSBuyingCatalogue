@@ -553,5 +553,76 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       valres.Errors.Should().BeEmpty();
     }
+
+
+
+    #region statuses
+    [TestCase(SolutionStatus.Failed)]
+    [TestCase(SolutionStatus.Registered)]
+    [TestCase(SolutionStatus.CapabilitiesAssessment)]
+    [TestCase(SolutionStatus.StandardsCompliance)]
+    [TestCase(SolutionStatus.FinalApproval)]
+    [TestCase(SolutionStatus.SolutionPage)]
+    [TestCase(SolutionStatus.Approved)]
+    #endregion
+    public void MustBePendingToChangeVersion_NonDraft_ReturnsError(SolutionStatus status)
+    {
+      var validator = new SolutionsValidator(_context.Object, _logger.Object, _solutionDatastore.Object, _organisationDatastore.Object, _env.Object);
+      var soln = Creator.GetSolution(status: status);
+      soln.Version = "New version";
+      var solnOld = Creator.GetSolution(status: status, id:soln.Id);
+      solnOld.Version = "Original version";
+      _solutionDatastore.Setup(x => x.ById(soln.Id)).Returns(solnOld);
+
+      validator.MustBePendingToChangeVersion();
+      var valres = validator.Validate(soln);
+
+      valres.Errors.Should()
+        .ContainSingle(x => x.ErrorMessage == "Can only change version in Draft")
+        .And
+        .HaveCount(1);
+    }
+
+    [TestCase(SolutionStatus.Draft)]
+    public void MustBePendingToChangeVersion_Draft_Succeeds(SolutionStatus status)
+    {
+      var validator = new SolutionsValidator(_context.Object, _logger.Object, _solutionDatastore.Object, _organisationDatastore.Object, _env.Object);
+      var soln = Creator.GetSolution(status: status);
+      soln.Version = "New version";
+      var solnOld = Creator.GetSolution(status: status, id:soln.Id);
+      solnOld.Version = "Original version";
+      _solutionDatastore.Setup(x => x.ById(soln.Id)).Returns(solnOld);
+
+      validator.MustBePendingToChangeVersion();
+      var valres = validator.Validate(soln);
+
+      valres.Errors.Should().BeEmpty();
+    }
+
+    #region statuses
+    [TestCase(SolutionStatus.Failed)]
+    [TestCase(SolutionStatus.Draft)]
+    [TestCase(SolutionStatus.Registered)]
+    [TestCase(SolutionStatus.CapabilitiesAssessment)]
+    [TestCase(SolutionStatus.StandardsCompliance)]
+    [TestCase(SolutionStatus.FinalApproval)]
+    [TestCase(SolutionStatus.SolutionPage)]
+    [TestCase(SolutionStatus.Approved)]
+    #endregion
+    public void MustBePendingToChangeVersion_SameVersion_Succeeds(SolutionStatus status)
+    {
+      var validator = new SolutionsValidator(_context.Object, _logger.Object, _solutionDatastore.Object, _organisationDatastore.Object, _env.Object);
+      var soln = Creator.GetSolution(status: status);
+      soln.Version = "Original version";
+      var solnOld = Creator.GetSolution(status: status, id:soln.Id);
+      solnOld.Version = "Original version";
+      _solutionDatastore.Setup(x => x.ById(soln.Id)).Returns(solnOld);
+
+      validator.MustBePendingToChangeVersion();
+      var valres = validator.Validate(soln);
+
+      valres.Errors.Should().BeEmpty();
+    }
+
   }
 }
