@@ -60,6 +60,16 @@ spec:
           value: "https://hscic365.sharepoint.com/sites/DTGPP/GPITF"
         - name: SHAREPOINT_ORGANISATIONSRELATIVEURL
           value: "Shared Documents/Archive/Buying Catalogue Team Folder/BC Integration"
+        - name: SHAREPOINT_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: bcspsecret
+              key: SHAREPOINT_CLIENT_ID
+        - name: SHAREPOINT_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: bcspsecret
+              key: SHAREPOINT_CLIENT_SECRET
         - name: SHAREPOINT_LOGIN
           valueFrom:
             secretKeyRef:
