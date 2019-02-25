@@ -172,9 +172,9 @@ async function evidencePageContext (req, next) {
         .filter(context.solution.reviews, { evidenceId: ev.id })
         .map((re) => ({ ...re, isFeedback: true })) // Flag all Reviews as being Feedback
     ])
-    .map(({ id, createdOn, createdById, message, evidence, isFeedback }) => ({
+    .map(({ id, originalDate, createdById, message, evidence, isFeedback }) => ({
       id,
-      createdOn,
+      createdOn: originalDate,
       createdById,
       message: message || evidence,
       isFeedback
@@ -294,6 +294,7 @@ async function solutionComplianceEvidencePagePost (req, res) {
         id: require('node-uuid-generator').generate(),
         claimId: req.params.claim_id,
         createdOn: new Date(),
+        originalDate: new Date(),
         createdById: req.user.contact.id,
         evidence: req.body.message,
         blobId // ID of the file that was just uploaded, this relates a message to a file.
