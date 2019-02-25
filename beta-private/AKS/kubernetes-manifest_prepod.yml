@@ -59,7 +59,7 @@ spec:
         - name: SHAREPOINT_BASEURL
           value: "https://hscic365.sharepoint.com/sites/DTGPP/GPITF"
         - name: SHAREPOINT_ORGANISATIONSRELATIVEURL
-          value: "Shared Documents/Archive/Buying Catalogue Team Folder/BC Integration"
+          value: "Shared Documents/Archive/Buying Catalogue Team Folder/BC Integration Pre-production"
         - name: SHAREPOINT_CLIENT_ID
           valueFrom:
             secretKeyRef:
