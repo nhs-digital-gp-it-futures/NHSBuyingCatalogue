@@ -18,16 +18,16 @@ function authentication (app) {
   const makeIssuer = process.env.OIDC_ISSUER_URL
     ? Issuer.discover(process.env.OIDC_ISSUER_URL)
     : Promise.resolve(
-        new Issuer({
-          issuer: 'http://oidc-provider:9000',
-          authorization_endpoint: 'http://localhost:9000/auth',
-          token_endpoint: 'http://oidc-provider:9000/token',
-          userinfo_endpoint: 'http://oidc-provider:9000/me',
-          jwks_uri: 'http://oidc-provider:9000/certs',
-          check_session_iframe: 'http://localhost:9000/session/check',
-          end_session_endpoint: 'http://localhost:9000/session/end'
-        })
-      )
+      new Issuer({
+        issuer: 'http://oidc-provider:9000',
+        authorization_endpoint: 'http://localhost:9000/auth',
+        token_endpoint: 'http://oidc-provider:9000/token',
+        userinfo_endpoint: 'http://oidc-provider:9000/me',
+        jwks_uri: 'http://oidc-provider:9000/certs',
+        check_session_iframe: 'http://localhost:9000/session/check',
+        end_session_endpoint: 'http://localhost:9000/session/end'
+      })
+    )
 
   return makeIssuer
     .then(issuer => {
