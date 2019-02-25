@@ -57,6 +57,7 @@
     _this['createdById'] = createdById;
 
 
+
   };
 
   /**
@@ -84,6 +85,9 @@
       }
       if (data.hasOwnProperty('createdOn')) {
         obj['createdOn'] = ApiClient.convertToType(data['createdOn'], 'Date');
+      }
+      if (data.hasOwnProperty('originalDate')) {
+        obj['originalDate'] = ApiClient.convertToType(data['originalDate'], 'Date');
       }
       if (data.hasOwnProperty('message')) {
         obj['message'] = ApiClient.convertToType(data['message'], 'String');
@@ -117,6 +121,11 @@
    * @member {Date} createdOn
    */
   exports.prototype['createdOn'] = undefined;
+  /**
+   * UTC date and time at which record was originally created  Set by server when first creating record  SET ON SERVER
+   * @member {Date} originalDate
+   */
+  exports.prototype['originalDate'] = undefined;
   /**
    * Serialised message data
    * @member {String} message

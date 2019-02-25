@@ -86,6 +86,12 @@
       //expect(instance).to.be();
     });
 
+    it('should have the property originalDate (base name: "originalDate")', function() {
+      // uncomment below and update the code to test the property originalDate
+      //var instance = new CatalogueApi.StandardsApplicableReviews();
+      //expect(instance).to.be();
+    });
+
     it('should have the property message (base name: "message")', function() {
       // uncomment below and update the code to test the property message
       //var instance = new CatalogueApi.StandardsApplicableReviews();
