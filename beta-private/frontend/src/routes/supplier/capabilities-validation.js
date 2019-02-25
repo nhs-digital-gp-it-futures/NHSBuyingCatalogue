@@ -35,6 +35,16 @@ module.exports = {
           const evidenceDescriptions = req.body['evidence-description']
           const allFilesHaveDescriptions = _.every(claimsWithFiles, (claim) => !_.isEmpty(evidenceDescriptions[claim]))
 
+          // Any descriptions too long?
+          if (_.values(evidenceDescriptions).some((desc) => desc.length > 400)) {
+            return Promise.reject('Validation.Capability.Evidence.Description.Too Long')
+          }
+
+          // if we're not submitting, we don't want to check the videos
+          if (!_.has(req, 'body.action.submit') && !_.has(req, 'body.action.continue')) {
+            return Promise.resolve()
+          }
+
           if (numberOfClaimsRequiringFiles !== numberOfClaimsWithFiles) {
             return Promise.reject('Validation.Capability.Evidence.File.Missing')
           } else if (!allFilesHaveDescriptions) {

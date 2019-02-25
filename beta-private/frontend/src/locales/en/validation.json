@@ -62,7 +62,9 @@
         },
         "Description": {
           "Missing":"A $t(Capability) with an uploaded video is missing a description",
-          "MissingAction":"Please ensure all uploaded videos have been sufficiently described."
+          "MissingAction":"Please ensure all uploaded videos have been sufficiently described.",
+          "Too Long": "A description you entered exceeded 400 characters.",
+          "Too LongAction": "Please ensure all descriptions do not exceed 400 characters."
         },
         "Submission": {
           "Failed": "The $t(Solution) failed to be submitted for $t(Capability Assessment).",

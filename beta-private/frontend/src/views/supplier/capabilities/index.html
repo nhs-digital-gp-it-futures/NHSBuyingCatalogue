@@ -68,11 +68,15 @@
             <p id="evidence-description-label-{{claimID}}">
               {{t 'CapAssPages.Assessment.Evidence.Video.Additional'}}
             </p>
-            <p>
-            <textarea name="evidence-description[{{claimID}}]"
-              {{#if ../../notEditable}}disabled{{/if}}
-              aria-labelledby="evidence-description-label-{{claimID}}">{{#if isUploadingEvidence}}{{latestEvidence.evidence}}{{/if}}</textarea>
-            </p>
+            <div>
+              {{#>control}}
+                <textarea name="evidence-description[{{claimID}}]"
+                  aria-required="true" maxlength="400" rows="5"
+                  {{#if ../../notEditable}}disabled{{/if}}
+                  aria-labelledby="evidence-description-label-{{claimID}}">{{#if isUploadingEvidence}}{{latestEvidence.evidence}}{{/if}}</textarea>
+                  <p class="character-count"></p>
+              {{/control}}
+            </div>
           </div>
         </fieldset>
       </div>
