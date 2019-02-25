@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using FluentValidation;
-using FluentValidation.Internal;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using Moq;
@@ -10,7 +9,6 @@ using NHSD.GPITF.BuyingCatalog.Tests;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 {
