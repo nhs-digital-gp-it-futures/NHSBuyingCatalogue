@@ -25,5 +25,4 @@ test('Clicking logo returns to supplier homepage', async t => {
 test('Solutions that are currently onboarding are listed', async t => {
   await asSupplier(t)
     .expect(supplierDashboardPage.firstOnboardingSolutionName.textContent).eql('Really Kool Document Manager | 1')
-    .expect(supplierDashboardPage.firstOnboardingSolutionStatus.textContent).eql('Draft')
 })
