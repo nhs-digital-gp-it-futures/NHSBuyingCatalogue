@@ -21,8 +21,7 @@ namespace Gif.Service.Services
 
       var filterAttributes = new List<CrmFilterAttribute>
             {
-                new CrmFilterAttribute("Framework") {FilterName = "cc_frameworkid", FilterValue = frameworkId},
-                new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
+                new CrmFilterAttribute("Framework") {FilterName = "cc_frameworkid", FilterValue = frameworkId}
             };
 
       var appJson = Repository.RetrieveMultiple(new Framework().GetQueryString(null, filterAttributes, true, true), out Count);
