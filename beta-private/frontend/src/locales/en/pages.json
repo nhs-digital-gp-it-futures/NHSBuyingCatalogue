@@ -499,7 +499,7 @@
         "Title":"Summary",
         "Nav Title": "Summary",
         "Text": [
-          "This is a guide for {Marketplace} Suppliers. We recommend all Suppliers read this before they start their {application}."
+          "This is a guide for $t(Catalogue.Title) Suppliers. We recommend all Suppliers read this before they start the on-boarding process."
         ]
       },
       {
