@@ -191,7 +191,7 @@ async function solutionCapabilityPagePost (req, res) {
   })
 
   // only show validation errors if the user elected to continue, not just save
-  if (systemError || (context.errors.items.length && req.body.action.continue)) {
+  if (systemError || context.errors.items.length) {
     // regenerate the full context (preserving errors)
     req.solution = await dataProvider.solutionForAssessment(req.params.solution_id)
     const fullContext = await capabilityPageContext(req)
