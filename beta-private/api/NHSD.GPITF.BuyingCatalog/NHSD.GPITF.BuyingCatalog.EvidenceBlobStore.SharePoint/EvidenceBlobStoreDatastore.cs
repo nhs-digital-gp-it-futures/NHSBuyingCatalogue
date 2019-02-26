@@ -343,7 +343,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         foreach (var qual in quals)
         {
           // specific claim folder eg 'Standards Evidence/Patient Management'
-          var qualFolder = allBlobInfos.SingleOrDefault(bi => bi.Name == qual.Name && bi.IsFolder);
+          var qualFolder = allBlobInfos.SingleOrDefault(bi => bi.Name == CleanupFileName(qual.Name) && bi.IsFolder);
           if (qualFolder == null)
           {
             continue;
