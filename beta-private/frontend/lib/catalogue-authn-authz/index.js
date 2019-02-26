@@ -38,12 +38,21 @@ function authentication (app) {
 
       client.CLOCK_TOLERANCE = 60
 
+
+      // So we're not setting a session key here, so the Strategy is defaulting to using
+      // information found with the Issuer. Is it possible that when horizontally scaling
+      // this application that the strategy _key ends up different for each instance of
+      // the front-end container?
       passport.use('oidc', new Strategy({
         client,
         params: {
           scope: 'openid email',
           redirect_uri: `${process.env.BASE_URL}${OIDC_CALLBACK_PATH}/`
         }
+        // Should we retrieve store and retrieve a session key from redis???
+        // ,
+        // false
+        // getKeyFromRedisIfItExistsAndIsStillValid
       }, authCallback))
 
       passport.serializeUser((user, done) => {
