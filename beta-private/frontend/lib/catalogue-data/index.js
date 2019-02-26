@@ -106,7 +106,9 @@ class DataProvider {
       notifications: []
     })
 
-    const solutions = (await this.solutionsByOrganisation(supplierOrgId)).items
+    const solutionsBlob = (await this.solutionsByOrganisation(supplierOrgId))
+
+    let solutions = _.has(solutionsBlob, 'items') ? solutionsBlob.items : []
 
     const onboardingSolutions = solutions
       .filter(isOnboarding)
