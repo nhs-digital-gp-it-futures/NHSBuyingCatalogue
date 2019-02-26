@@ -433,6 +433,9 @@
           "Additional": "$t(NHSD.Name) will contact your $t(Lead Contact) to schedule the live witness demonstration."
         }
       },
+      "Save": {
+        "Notice":"By clicking save, all information you've added to this page will be stored by NHS Digital. If you change any information later this version will continue to be stored, but only the latest version will be reviewed by NHS Digital as part your submission."
+      },
       "Submission": {
         "Notice":"By Submitting this information to $t(NHSD.Name) for Assessment, you are confirming you are able, to the best of your knowledge, to meet all $t(Capability_Assessment) and $t(Standards Compliance) requirements and to display the $t(Solution) named on the $t(Catalogue.Title)."
       },
@@ -487,5 +490,109 @@
     "Information": "We are currently monitoring any issues that may arise during the lifetime of the system",
     "Help": "If you want to provide extra information about what has gone wrong, then please send the GP IT Futures Team an email at: <a target='_blank' href='mailto:$(Error.Email)'>$t(Error.Email)</a>",
     "Email": "GPITFutures@nhs.net"
+  },
+  "Support": {
+    "Title": "Supplier's Guide",
+    "Nav Title": "Page Contents",
+    "Sections": [
+      {
+        "Title":"Summary",
+        "Nav Title": "Summary",
+        "Text": [
+          "This is a guide for $t(Catalogue.Title) Suppliers. We recommend all Suppliers read this before they start the on-boarding process."
+        ]
+      },
+      {
+        "Title":"Introduction",
+        "Nav Title": "Introduction",
+        "Text": [
+          "The NHS Digital Buying Catalogue is an online procurement platform that allows suppliers of digital services to introduce their solutions to the NHS market and have them recognised as assured solutions.",
+          "NHS users will have the ability to find, evaluate and purchase assured digital services creating a more vibrant market for digital solutions within the NHS."
+        ],
+        "Subsections": [
+          {
+            "Title": "About the GP IT Futures Framework",
+            "Text": [
+              "The GP IT Futures Framework is the first to be facilitated through the Catalogue. This Framework is open to all suppliers wishing to introduce their digital solution into the NHS GP IT market by delivering the Capabilities specified the Framework.",
+              "The primary goals of the GP IT Futures Framework are:",
+              "•  To develop the GP IT market to meet growing needs in new models of care and in federated GP practices.",
+              "•  Use technology and data to transform patient care in general practice.",
+              "•  To improve the quality, safety and efficiency of GP systems, as defined in the GP Forward View.",
+              "This is part of Personalised Health and Care 2020, with the aim to transform health and care technology."
+            ]
+          }
+          ]
+        },
+        {
+          "Title":"Capabilities and Standards Model",
+          "Nav Title": "Capabilities and Standards Model",
+          "Text": [
+            "The requirements to deliver General Practice Solutions are grouped into capabilities. Each capability describes a business need at the highest level. For example, 'Recording Consultations' describes the need for General Practice staff to be able to make a digital record of any consultation with a patient. The introduction of capabilities for GP IT is intended to allow suppliers to innovate by being less prescriptive and to segment the requirements in a way to allow more flexibility and choice for buyers."
+          ],
+          "Subsections": [
+            {
+              "Title": "How are Capabilities structured?",
+              "Text": [
+                "The Capabilities and Standards are structured in the model below.",
+                "• There are a set of overarching standards that are applicable to all supplier products e.g. Information Governance",
+                "• There are capabilities to support business continuity from GPSoC and new capabilities to support new ways of working",
+                "• There are capability specific standards which sit under a Capability i.e. Prescribing",
+                "• There are context specific standards that only apply to certain Capabilities or in certain situations (e.g. Common Reporting and Mobile Working (Archived))",
+                "• There is also an Interoperability standard which contains entries specific to one or many Capabilities"
+              ]
+            },
+          {
+            "Title": "Do I have to build a system that delivers all Capabilities?",
+            "Text": [
+              "Suppliers do not have to provide a solution that delivers all Capabilities and are free to design and build solutions that meet one or more of the Capabilities. By looking at the Capabilities suppliers can see where their product portfolio fits, either by making tweaks to existing solutions where required or building new solutions to expand the Capabilities that they provide for. For example, Supplier 'A' may build a solution that delivers 'Document Management', 'Workflow' and 'Patient Information Maintenance' Capabilities, whereas Supplier 'B' may choose to build a system that delivers all of the Citizen Capabilities.",
+              "A set of core capabilities have been identified which will form the foundations for a clinical system and support the commitments in the GMS contract.  These core capabilities are identified on the model.  Suppliers do not have to supply any of the core capabilities and can provide one or more. Buyers will have to take all of core capabilities in order to access central funding. ",
+              "Further information can be found in an Introduction to Capabilities and the Capability and Standard Model",
+              "To see an example of how to implement the model refer to Appendix B – Implementing the Capability and Standards Model."
+            ]
+          },
+          {
+            "Title": "How will this work for existing GPSoC suppliers?",
+            "Text": [
+              "To ensure a smooth transition from GPSoC, all eligible suppliers will have their existing compliance transferred to help reduce the level of assurance required to migrate from GPSoC to the GP IT Futures framework.",
+              "Suppliers that are already compliant with GPSoC requirements will be provided with pre-populated Traceability Matrices (TM) during the Standards Compliance stage of Onboarding. These files will show in detail the amount of compliance already achieved and the quantity of compliance required as a result of the new Capabilities & Standard Model.",
+              "Please ensure you are confident in your understanding of the Capabilities & Standards Model before proceeding to Adding your Solution."
+            ]
+          }
+        ]
+      },
+      {
+        "Title": "How do Capabilities drive the call-off process?",
+        "Nav Title": "Capability-driven call-offs",
+        "Text": [
+          "The Capabilities & Standards your Solution has been assured against will determine how buyers find, compare and select your Solution for call-off.",
+          "Buyers can find Solutions by either browsing or searching through all Solutions listed on the Catalogue."
+        ],
+        "Subsections": [
+          {
+            "Title": "Finding Solutions by Browsing",
+            "Text": [
+              "When a buyer selects ‘Browse all Solutions’ the Catalogue will return all Solutions available for call-off. Buyers can then use Capability & other filters to build their requirements.",
+              "For example, if you provide a Document Management solution, a buyer could browse all solutions then filter to show only Solutions with the Document Management Capability. They would begin comparing."
+            ]
+          },
+          {
+            "Title": "Finding Solutions by Searching",
+            "Text": [
+              "Buyers can also enter keywords into search. Keywords entered are then matched to Capabilities, the Solutions returned by the search results will be sorted based on how precisely they meet the requirements the buyer has defined by their choice of keyword.",
+              "If a buyer searches for a specific Solution name, the Catalogue will return all Solutions that meet some or all the Capabilities met by the individual Solution entered.",
+              "If a buyer searches for a specific Supplier name, the Catalogue will return all Solutions that meet some or all the Capabilities met by all Solutions provided by that supplier. "
+            ]
+          },
+          {
+            "Title": "How are search results prioritised?",
+            "Text": [
+              "Search results are always ordered according to how precisely they meet the requirements stated by the user.",
+              "If a buyer enters an existing Solution name, the Catalogue will search for the Capabilities met by that Solution, rather than the Solution itself.",
+              "For example, if a buyer searched for a Solution that meets 3 Capabilities, the first search results returned would be any Solution meeting only those 3 Capabilities. The remaining results would be any Solutions meeting one or more of those Capabilities, ordered by the number of additional Capabilities the Solution delivers that were not included in the buyers requirements."
+            ]
+          }
+        ]
+      }
+    ]
   }
 }

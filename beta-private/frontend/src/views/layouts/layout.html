@@ -40,7 +40,7 @@
           </div>
         </nav>
       </div>
-      <div class="bottom {{#if onHomePage}}white-control-bar{{/if}}">
+      <div class="bottom {{#unless user.is_authenticated}}white-control-bar{{/unless}}">
         {{#if activeForm}}
         <nav class="active-form" aria-label="Save controls">
           <div class="left-nav-divide">

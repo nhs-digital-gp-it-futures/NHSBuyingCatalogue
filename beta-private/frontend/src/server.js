@@ -80,8 +80,14 @@ authentication(app).then(() => {
   })
 
   app.get('/about', (req, res) => {
+    const context = {
+      breadcrumbs: [
+        { label: 'HomePage.Breadcrumb', url: '/' },
+        { label: 'Support.Title' }
+      ]
+    }
     res.locals.meta.title = 'About'
-    res.render('about')
+    res.render('about', context)
   })
 
   app.use('/suppliers/', authorisation.suppliersOnly, require('./routes/supplier'))

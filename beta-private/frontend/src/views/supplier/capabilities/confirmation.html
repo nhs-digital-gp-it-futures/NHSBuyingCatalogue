@@ -13,6 +13,9 @@
 
     {{> solution-summary-details}}
 
+    <p>
+        {{t 'CapAssPages.Assessment.Submission.Notice'}}
+    </p>
     {{#> form form_id=activeForm.id}}
         <button type="submit" name="action[continue]" value="{{t 'Buttons.Save and continue'}}" {{#if notEditable}}disabled{{/if}}>Submit to NHS Digital &#8250;</button>
     {{/form}}

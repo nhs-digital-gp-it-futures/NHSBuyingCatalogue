@@ -18,16 +18,16 @@ function authentication (app) {
   const makeIssuer = process.env.OIDC_ISSUER_URL
     ? Issuer.discover(process.env.OIDC_ISSUER_URL)
     : Promise.resolve(
-        new Issuer({
-          issuer: 'http://oidc-provider:9000',
-          authorization_endpoint: 'http://localhost:9000/auth',
-          token_endpoint: 'http://oidc-provider:9000/token',
-          userinfo_endpoint: 'http://oidc-provider:9000/me',
-          jwks_uri: 'http://oidc-provider:9000/certs',
-          check_session_iframe: 'http://localhost:9000/session/check',
-          end_session_endpoint: 'http://localhost:9000/session/end'
-        })
-      )
+      new Issuer({
+        issuer: 'http://oidc-provider:9000',
+        authorization_endpoint: 'http://localhost:9000/auth',
+        token_endpoint: 'http://oidc-provider:9000/token',
+        userinfo_endpoint: 'http://oidc-provider:9000/me',
+        jwks_uri: 'http://oidc-provider:9000/certs',
+        check_session_iframe: 'http://localhost:9000/session/check',
+        end_session_endpoint: 'http://localhost:9000/session/end'
+      })
+    )
 
   return makeIssuer
     .then(issuer => {
@@ -38,12 +38,21 @@ function authentication (app) {
 
       client.CLOCK_TOLERANCE = 60
 
+
+      // So we're not setting a session key here, so the Strategy is defaulting to using
+      // information found with the Issuer. Is it possible that when horizontally scaling
+      // this application that the strategy _key ends up different for each instance of
+      // the front-end container?
       passport.use('oidc', new Strategy({
         client,
         params: {
           scope: 'openid email',
           redirect_uri: `${process.env.BASE_URL}${OIDC_CALLBACK_PATH}/`
         }
+        // Should we retrieve store and retrieve a session key from redis???
+        // ,
+        // false
+        // getKeyFromRedisIfItExistsAndIsStillValid
       }, authCallback))
 
       passport.serializeUser((user, done) => {
