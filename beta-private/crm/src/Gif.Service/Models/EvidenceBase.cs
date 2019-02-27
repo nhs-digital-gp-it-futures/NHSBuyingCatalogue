@@ -60,6 +60,10 @@ namespace Gif.Service.Models
         [CrmFieldName("modifiedon")]
         public new DateTime ModifiedOn { get; set; }
 
+        [DataMember]
+        [CrmFieldName("cc_originaldate")]
+        public new DateTime OriginalDate { get; set; }
+
         public EvidenceBase() { }
 
         public EvidenceBase(JToken token) : base(token)
