@@ -103,16 +103,22 @@ async function solutionComplianceDashboard (req, res) {
       }
     }
 
-    context.solution.standards = _(context.solution.standards)
-      .map(std => ({
-        ...context.standards[std.standardId],
-        ...std,
-        continueUrl: `evidence/${std.id}/`,
-        ...!_.isEmpty(evidenceFiles[std.id]) || +std.status !== 0
-          ? {}
-          : notReadyStatus
-      }))
-      .value()
+    if (!evidenceFiles) {
+      context.solution.standards = _(context.solution.standards)
+        .map(std => ({
+          ...context.standards[std.standardId],
+          ...std,
+          continueUrl: `evidence/${std.id}/`,
+          ...!_.isEmpty(evidenceFiles[std.id]) || +std.status !== 0
+            ? {}
+            : notReadyStatus
+        }))
+        .value()
+    } else {
+      // no evidence files object was obtained.
+      context.solution.standards = []
+      context.errors = { items: [{ msg: 'Unable to retrieve information about standards' }] }
+    }
 
     if ('submitted' in req.query) {
       const submittedStandard = context.solution.standards.find((std) => std.standardId === req.query.submitted)
