@@ -117,7 +117,7 @@ async function solutionComplianceDashboard (req, res) {
     } else {
       // no evidence files object was obtained.
       context.solution.standards = []
-      context.errors = { items: [{ msg: 'Unable to retrieve information about standards' }] }
+      context.errors = { items: [{ msg: 'CompliancePages.Dashboard.Error.NoEnumeration' }] }
     }
 
     if ('submitted' in req.query) {
