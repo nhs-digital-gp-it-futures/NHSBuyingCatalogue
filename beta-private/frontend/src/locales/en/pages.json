@@ -211,7 +211,7 @@
         },
         "OtherContact": {
           "Legend": "Add another contact (optional)",
-          "Information": [
+          "Preamble": [
             "Additional contacts might include, for example, a Clinical Safety Officer or other key Contacts for this Solution",
             "This Contact will not be shared outside $t(NHSD.Name)"
           ],
