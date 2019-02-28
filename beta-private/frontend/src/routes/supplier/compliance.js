@@ -278,7 +278,7 @@ async function solutionComplianceEvidencePagePost (req, res) {
   if (action.submit) redirectUrl = './confirmation'
   else if (action.exit) redirectUrl = '/'
 
-  if (!req.files.length && action.submit !== 'direct') {
+  if (!req.files.length && action.submit !== 'direct' && !action.save && !action.exit) {
     req.body.errors = { items: [{ msg: 'No file to upload.' }] }
   } else if (req.files.length) {
     const fileToUpload = req.files[0]
