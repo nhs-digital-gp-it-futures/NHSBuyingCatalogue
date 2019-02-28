@@ -159,6 +159,13 @@ function onboardingStatusPage (req, res) {
         context.stages[1].status = 'Awaiting outcome'
         context.stages[1].link = 'View'
       }
+
+      // if all capabilities have passed, then display complete
+      if (req.solution._raw.claimedStandard.every((std) => +std.status === 4)) {
+        context.stages[2].status = 'Complete'
+        context.stages[2].class = 'complete'
+        context.stages[2].link = 'View'
+      }
     }
   } else {
     context.stages[0].status = 'Not started'
