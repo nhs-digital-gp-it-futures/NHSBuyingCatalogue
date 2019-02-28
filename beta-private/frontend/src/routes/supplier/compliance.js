@@ -103,16 +103,22 @@ async function solutionComplianceDashboard (req, res) {
       }
     }
 
-    context.solution.standards = _(context.solution.standards)
-      .map(std => ({
-        ...context.standards[std.standardId],
-        ...std,
-        continueUrl: `evidence/${std.id}/`,
-        ...!_.isEmpty(evidenceFiles[std.id]) || +std.status !== 0
-          ? {}
-          : notReadyStatus
-      }))
-      .value()
+    if (evidenceFiles) {
+      context.solution.standards = _(context.solution.standards)
+        .map(std => ({
+          ...context.standards[std.standardId],
+          ...std,
+          continueUrl: `evidence/${std.id}/`,
+          ...!_.isEmpty(evidenceFiles[std.id]) || +std.status !== 0
+            ? {}
+            : notReadyStatus
+        }))
+        .value()
+    } else {
+      // no evidence files object was obtained.
+      context.solution.standards = []
+      context.errors = { items: [{ msg: 'CompliancePages.Dashboard.Error.NoEnumeration' }] }
+    }
 
     if ('submitted' in req.query) {
       const submittedStandard = context.solution.standards.find((std) => std.standardId === req.query.submitted)
@@ -278,7 +284,7 @@ async function solutionComplianceEvidencePagePost (req, res) {
   if (action.submit) redirectUrl = './confirmation'
   else if (action.exit) redirectUrl = '/'
 
-  if (!req.files.length && action.submit !== 'direct') {
+  if (!req.files.length && action.submit !== 'direct' && !action.save && !action.exit) {
     req.body.errors = { items: [{ msg: 'No file to upload.' }] }
   } else if (req.files.length) {
     const fileToUpload = req.files[0]

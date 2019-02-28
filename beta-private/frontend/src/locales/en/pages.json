@@ -33,7 +33,6 @@
       "Title": "Introducing the $t(NHS.Name) $t(Catalogue.Title)",
       "Subtitle": "More choices, better patient outcomes",
       "Information": "IT Suppliers may now apply to add their Solutions to the Catalogue.",
-      
       "Button": {
         "Text":"Learn More",
         "Href":"/about#content"
@@ -327,6 +326,9 @@
             "Your evidence for {{name}} has been submitted. During private beta, we will aim to notify your lead contact of the initial outcome of our evaluation within 5 Working Days of starting our review. See 'Supplier Onboarding Process' (link to come) for full detail around timescales."
           ]
         }
+      },
+      "Error": {
+        "NoEnumeration": "Unable to retrieve information about standards"
       }
     },
     "Evidence": {
