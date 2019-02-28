@@ -103,7 +103,7 @@ async function solutionComplianceDashboard (req, res) {
       }
     }
 
-    if (!evidenceFiles) {
+    if (evidenceFiles) {
       context.solution.standards = _(context.solution.standards)
         .map(std => ({
           ...context.standards[std.standardId],
