@@ -150,6 +150,10 @@
           name="solution[contacts][{{contactIndex}}][id]"
           value="{{contact.id}}">
 
+        {{#each (tt 'Onboarding.Details.Fieldsets.OtherContact.Information')}}
+          <p>{{.}}</p>
+        {{/each}}
+
         {{#> control invalid=(lookup ../../errors.controls fieldNames.contactType)}}
           <label for="solution.contacts[{{contactIndex}}].contactType">{{t 'Onboarding.Details.Fieldsets.OtherContact.Fields.ContactType.Label'}}</label>
           {{#if invalid}}
