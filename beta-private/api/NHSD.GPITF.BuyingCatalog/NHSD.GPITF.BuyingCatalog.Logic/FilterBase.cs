@@ -17,11 +17,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     private T FilterInternal(T input)
     {
-      if (input == null)
-      {
-        return input;
-      }
-
       Verifier.Verify(input);
 
       return Filter(input);
