@@ -5,7 +5,7 @@ using NHSD.GPITF.BuyingCatalog.Models;
 
 namespace NHSD.GPITF.BuyingCatalog.Tests
 {
-  public class DummyClaimsFilterBase : ClaimsFilterBase<ClaimsBase>
+  public sealed class DummyClaimsFilterBase : ClaimsFilterBase<ClaimsBase>
   {
     public DummyClaimsFilterBase(
       IHttpContextAccessor context,
