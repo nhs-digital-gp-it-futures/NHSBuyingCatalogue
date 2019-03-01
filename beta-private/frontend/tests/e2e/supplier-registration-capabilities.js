@@ -138,7 +138,14 @@ test('Registering the solution shows a confirmation message and status change on
 test('A registered solution cannot have its name edited', async t => {
   await t
     .click('#content a.back-link')
-    .expect(Selector('#content [readonly]').count).eql(1)
+    .expect(Selector('#content [readonly]').count).eql(2)
     .expect(registrationPage.solutionNameInput.hasAttribute('readonly')).ok()
     .expect(registrationPage.solutionNameCounter.exists).notOk()
+})
+
+test('A registered solution cannot have its version edited', async t => {
+  await t
+    .click('#content a.back-link')
+    .expect(Selector('#content [readonly]').count).eql(2)
+    .expect(registrationPage.solutionVersionInput.hasAttribute('readonly')).ok()
 })

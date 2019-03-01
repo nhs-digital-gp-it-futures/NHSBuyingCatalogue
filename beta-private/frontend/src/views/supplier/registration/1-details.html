@@ -44,7 +44,7 @@
     <p class="info">{{t 'Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Information'}}</p>
     <input id="solution.version" type="text" name="solution[version]" value="{{solution.version}}" class="narrow"
       autocomplete="off" maxlength="10"
-      {{#if @root.readOnly}}readonly{{/if}}
+      {{#if @root.versionReadOnly}}readonly{{/if}}
       {{#if errors.controls.[solution.version]}}aria-invalid="true" aria-errormessage="error-solution.version"{{/if}}>
     {{#> help-reveal
       title='Onboarding.Details.Fieldsets.NameDescVersion.Fields.Version.Help.Title'}}
