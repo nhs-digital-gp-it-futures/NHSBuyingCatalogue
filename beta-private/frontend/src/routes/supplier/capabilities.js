@@ -149,9 +149,13 @@ function validRequest (req) {
   const descriptionMissing = '$t(Validation.Capability.Evidence.Description.Missing)'
   const optionNotSelected = '$t(Validation.Capability.Evidence.Not Selected)'
 
-  const claimsNotSelected = _.has(req.body, 'uploading-video-evidence')
+  const claimsNotSelected = !_.has(req.body, 'uploading-video-evidence')
     ? _.keys(claimedCapabilities)
     : _.filter(_.keys(claimedCapabilities), (claim) => !_.has(req.body['uploading-video-evidence'], claim))
+
+  console.log(req.body)
+  console.log(claimedCapabilities)
+  console.log(claimsNotSelected)
 
   // filter all claims that don't require files, and don't have a file uploaded
   const previousUploads = req.body['evidence-file'] || {}
@@ -177,11 +181,12 @@ function validRequest (req) {
     errors = errors.concat(claimsNotSelected.map((claim) => ({ claim, error: optionNotSelected })))
   }
 
-  errors = errors.map((err) => ({
+  errors = _.sortBy(errors.map((err) => ({
     error: err.error,
     claim: err.claim,
     name: claimedCapabilities[err.claim]
-  }))
+  })), 'name')
+
   return errors
 }
 

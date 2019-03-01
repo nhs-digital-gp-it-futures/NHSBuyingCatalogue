@@ -56,6 +56,7 @@
     },
     "Capability": {
       "Evidence": {
+        "Not Selected": "requires an option to be selected",
         "File":{
           "Missing": " is missing a video",
           "MissingAction": "Please ensure all $t(Capability_plural) requiring evidence have a video uploaded."
