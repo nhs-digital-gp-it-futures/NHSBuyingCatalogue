@@ -131,6 +131,13 @@ spec:
           value: "http://api:5100"
         - name: CACHE_HOST
           value: "cache"
+        - name: DEPLOYED_ENV_LABEL
+          value: "#{Build.BuildId}#"
+        - name: SESSION_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: bcsessionsecret
+              key: SESSION_SECRET                    
         - name: OIDC_ISSUER_URL
           value: "https://nhsstore-preprod.eu.auth0.com"
         - name: OIDC_CLIENT_ID
