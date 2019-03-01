@@ -167,7 +167,44 @@ test.skip('Files and messages can be saved against multiple capabilities at once
     .expect(capSection2.find('textarea').value).eql('Automated test message for C1')
 })
 
-test('Clicking Continue with incomplete evidence should trigger a validation message', async t => {
+/**
+ * SKIPPING, NEED TO TOTALLY RE-IMPLEMENT THIS TEST.
+ */
+test.skip('Clicking Continue with incomplete evidence should trigger a validation message', async t => {
+  // submitting with no selections should trigger an error for all capabilities along side the message.
+  await t
+    .click(capabilityEvidencePage.continueButton)
+    .expect(Selector('#errors').exists).ok()
+    .expect(Selector('#error-uploading-video-evidence li:nth(1)' /* first Cap */).textContent).contains('requires an option to be selected')
+    .expect(Selector('#error-uploading-video-evidence li:nth(2)' /* second Cap */).textContent).contains('requires an option to be selected')
+    .expect(Selector('#error-uploading-video-evidence li:nth(3)' /* third Cap */).textContent).contains('requires an option to be selected')
+
+  // submitting with only one selection made sand nothing else done should trigger some error messages...
+  await t
+    .click('fieldset.collapsible#C1').find('input[type=radio][value=yes]')
+    .click(capabilityEvidencePage.continueButton)
+    .expect(Selector('#errors').exists).ok()
+    .expect(Selector('#error-uploading-video-evidence li:nth(1)' /* first Cap first error */).textContent).contains('is missing a video')
+    .expect(Selector('#error-uploading-video-evidence li:nth(2)' /* first Cap  second error */).textContent).contains('SOMETHING SOMETHING SOMETHING')
+    .expect(Selector('#error-uploading-video-evidence li:nth(3)' /* second Cap */).textContent).contains('requires an option to be selected')
+    .expect(Selector('#error-uploading-video-evidence li:nth(4)' /* third Cap */).textContent).contains('requires an option to be selected')
+
+  // when all have indicated they want videos, then each capability should have a video missing and description missing error
+  await t
+    .click('fieldset.collapsible#C1').find('input[type=radio][value=yes]')
+    .click('fieldset.collapsible#C2').find('input[type=radio][value=yes]')
+    .click('fieldset.collapsible#C3').find('input[type=radio][value=yes]')
+    .click(capabilityEvidencePage.continueButton)
+    .expect(Selector('#errors').exists).ok()
+    .expect(Selector('#error-uploading-video-evidence li:nth(1)' /* first Cap first error */).textContent).contains('is missing a video')
+    .expect(Selector('#error-uploading-video-evidence li:nth(2)' /* first Cap  second error */).textContent).contains('SOMETHING SOMETHING SOMETHING')
+    .expect(Selector('#error-uploading-video-evidence li:nth(3)' /* second Cap first error */).textContent).contains('is missing a video')
+    .expect(Selector('#error-uploading-video-evidence li:nth(4)' /* second Cap second error */).textContent).contains('SOMETHING SOMETHING SOMETHING')
+    .expect(Selector('#error-uploading-video-evidence li:nth(5)' /* third Cap first error */).textContent).contains('is missing a video')
+    .expect(Selector('#error-uploading-video-evidence li:nth(6)' /* third Cap second error */).textContent).contains('SOMETHING SOMETHING SOMETHING')
+
+  // Uploading a file for a capability should remove it's missing video evidence error
+
   // ensure first capability is requesting a video upload
   await t.click(
     Selector('fieldset.collapsible#C1').find('input[type=radio][value=yes]')
@@ -180,7 +217,16 @@ test('Clicking Continue with incomplete evidence should trigger a validation mes
   await t
     .click(capabilityEvidencePage.continueButton)
     .expect(Selector('#errors').exists).ok()
-    .expect(Selector('#error-uploading-video-evidence').textContent).contains('requiring evidence is missing a video')
+    .expect(Selector('#error-uploading-video-evidence li:nth(1)' /* first Cap first error */).textContent).contains('SOMETHING SOMETHING SOMETHING')
+    .expect(Selector('#error-uploading-video-evidence li:nth(2)' /* first Cap  second error */).textContent).contains('SOMETHING SOMETHING SOMETHING')
+    .expect(Selector('#error-uploading-video-evidence li:nth(3)' /* second Cap first error */).textContent).contains('SOMETHING SOMETHING SOMETHING')
+    .expect(Selector('#error-uploading-video-evidence li:nth(4)' /* third Cap first error */).textContent).contains('SOMETHING SOMETHING SOMETHING')
+    .expect(Selector('#error-uploading-video-evidence li:nth(5)' /* third Cap second error */).textContent).contains('SOMETHING SOMETHING SOMETHING')
+
+  // clicking save should not trigger any validation errors if options are clicked, but only one file is uploaded
+  await t
+    .click(capabilityEvidencePage.globalSaveButton)
+    .expect(Selector('#errors').exists).notOk()
 
   // as the first capability has no file or message, the missing file validation error should trigger
   // even with a validation message, the submitted file and message should hold
