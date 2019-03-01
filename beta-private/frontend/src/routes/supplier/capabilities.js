@@ -266,7 +266,9 @@ async function solutionCapabilityPagePost (req, res) {
   } else if (req.body.action.exit) {
     res.redirect('/')
   } else if (req.body.action.save) {
-    res.redirect(path.join(req.baseUrl, `${req.url}?saved`))
+    let url = req.url.replace('?saved', '')
+    let redirectUrl = path.join(req.baseUrl, `${url}?saved`)
+    res.redirect(redirectUrl)
   } else {
     res.redirect(path.join(req.baseUrl, req.url))
   }
