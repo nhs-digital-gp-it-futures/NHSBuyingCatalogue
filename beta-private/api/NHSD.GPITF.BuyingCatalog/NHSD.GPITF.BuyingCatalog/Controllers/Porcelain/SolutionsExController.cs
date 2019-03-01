@@ -51,7 +51,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
     {
       var solnEx = _logic.BySolution(solutionId);
 
-      return solnEx.Solution != null ? (IActionResult)new OkObjectResult(solnEx) : new NotFoundResult();
+      return solnEx?.Solution != null ? (IActionResult)new OkObjectResult(solnEx) : new NotFoundResult();
     }
 
     /// <summary>

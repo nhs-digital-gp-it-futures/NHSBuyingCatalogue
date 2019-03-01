@@ -17,7 +17,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
 
     public override SolutionEx Filter(SolutionEx input)
     {
-      return _solutionsFilter.Filter(new[] { input.Solution }) != null ? input : null;
+      return _solutionsFilter.Filter(new[] { input?.Solution }) != null ? input : null;
     }
   }
 }
