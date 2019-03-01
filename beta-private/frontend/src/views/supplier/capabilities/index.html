@@ -11,7 +11,7 @@
 
   {{#> form encoding="multipart/form-data" form_id=activeForm.id}}
     {{#each solution.capabilities}}
-    {{#>collapsible-fieldset heading=name}}
+    {{#>collapsible-fieldset heading=name invalid=hasError}}
       <div class="instructions">
         <p>
           {{t 'CapAssPages.Assessment.Evidence.Instructions'}}
