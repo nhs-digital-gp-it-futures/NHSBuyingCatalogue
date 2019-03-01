@@ -140,11 +140,18 @@ function validRequest (req) {
     }
   })
 
+  const claimedCapabilities = req.solution.capabilities.reduce((prev, cap) => ({ ...prev, [cap.claimID]: cap.name }), { })
+
   let errors = []
 
   const tooLong = '$t(Validation.Capability.Evidence.Description.Too Long)'
   const videoMissing = '$t(Validation.Capability.Evidence.File.Missing)'
   const descriptionMissing = '$t(Validation.Capability.Evidence.Description.Missing)'
+  const optionNotSelected = '$t(Validation.Capability.Evidence.Not Selected)'
+
+  const claimsNotSelected = _.has(req.body, 'uploading-video-evidence')
+    ? _.keys(claimedCapabilities)
+    : _.filter(_.keys(claimedCapabilities), (claim) => !_.has(req.body['uploading-video-evidence'], claim))
 
   // filter all claims that don't require files, and don't have a file uploaded
   const previousUploads = req.body['evidence-file'] || {}
@@ -167,13 +174,13 @@ function validRequest (req) {
   if (_.has(req, 'body.action.submit') || _.has(req, 'body.action.continue')) {
     errors = errors.concat(claimsMissingFiles.map((claim) => ({ claim, error: videoMissing })))
     errors = errors.concat(claimsMissingDescriptions.map((claim) => ({ claim, error: descriptionMissing })))
+    errors = errors.concat(claimsNotSelected.map((claim) => ({ claim, error: optionNotSelected })))
   }
 
-  const claimedCapabilities = req.solution.capabilities.reduce((prev, cap) => ({ ...prev, [cap.claim]: cap.name }), { })
   errors = errors.map((err) => ({
     error: err.error,
     claim: err.claim,
-    name: claimedCapabilities[err.claimID]
+    name: claimedCapabilities[err.claim]
   }))
   return errors
 }

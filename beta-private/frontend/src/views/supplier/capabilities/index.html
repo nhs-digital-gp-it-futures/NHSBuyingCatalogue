@@ -69,7 +69,7 @@
               {{t 'CapAssPages.Assessment.Evidence.Video.Additional'}}
             </p>
             <div>
-              {{#>control}}
+              {{#>control invalid=false}}
                 <textarea name="evidence-description[{{claimID}}]"
                   aria-required="true" maxlength="400" rows="5"
                   {{#if ../../notEditable}}disabled{{/if}}
