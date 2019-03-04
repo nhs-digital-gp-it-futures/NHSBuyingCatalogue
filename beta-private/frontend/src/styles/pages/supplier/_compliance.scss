@@ -160,7 +160,7 @@
 
     &.collapsed {
       .collapse-history,
-      .message:not(:last-child) {
+      .message {
         display: none;
       }
 

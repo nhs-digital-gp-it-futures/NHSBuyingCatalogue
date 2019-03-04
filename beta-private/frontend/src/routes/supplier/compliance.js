@@ -392,6 +392,16 @@ async function solutionComplianceEvidenceConfirmationPost (req, res) {
   if (action.submit) {
     claim.status = '2' /* submitted */
     redirectUrl += `?submitted=${claim.standardId}`
+
+    req.solution.evidence.push({
+      id: require('node-uuid-generator').generate(),
+      claimId: req.params.claim_id,
+      createdOn: new Date(),
+      createdById: req.user.contact.id,
+      evidence: 'Evidence Submitted',
+      blobId: '' // ID of the file that was just uploaded, this relates a message to a file.
+    })
+
     await dataProvider.updateSolutionForCompliance(req.solution)
   }
   if (action.save) {
