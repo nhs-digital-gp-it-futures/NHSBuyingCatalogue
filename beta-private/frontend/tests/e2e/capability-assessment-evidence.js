@@ -168,19 +168,70 @@ test.skip('Files and messages can be saved against multiple capabilities at once
 })
 
 test('Clicking Continue with incomplete evidence should trigger a validation message', async t => {
+  // submitting with no selections should trigger an error for all capabilities along side the message.
+  await t
+    .click(capabilityEvidencePage.continueButton)
+    .expect(Selector('#errors').exists).ok()
+    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Appointments Management - GP requires an option to be selected')
+    .expect(Selector('#errors li:nth-child(2)').textContent).contains('GP Referral Management requires an option to be selected')
+
+  // submitting with only one selection made sand nothing else done should trigger some error messages...
+  await t
+    .click(Selector('fieldset.collapsible#C1').find('input[type=radio][value=yes]'))
+    .click(capabilityEvidencePage.continueButton)
+    .expect(Selector('#errors').exists).ok()
+    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Appointments Management - GP is missing a video')
+    .expect(Selector('#errors li:nth-child(2)').textContent).contains('Appointments Management - GP is missing a description')
+    .expect(Selector('#errors li:nth-child(3)').textContent).contains('GP Referral Management requires an option to be selected')
+
+  // clicking save should not trigger any validation errors if one option is selected, but no all.
+  await t
+    .click(capabilityEvidencePage.globalSaveButton)
+    .expect(Selector('#errors').exists).notOk()
+
+  const firstCapSection = Selector('fieldset.collapsible#C1')
+  const secondCapSection = Selector('fieldset.collapsible#C2')
+
+  // when all have indicated they want videos, then each capability should have a video missing and description missing error
+  await t
+    .click(firstCapSection).click(firstCapSection.find('input[type=radio][value=yes]'))
+    .click(secondCapSection).click(secondCapSection.find('input[type=radio][value=yes]'))
+    .click(capabilityEvidencePage.continueButton)
+    .expect(Selector('#errors').exists).ok()
+    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Appointments Management - GP is missing a video')
+    .expect(Selector('#errors li:nth-child(2)').textContent).contains('Appointments Management - GP is missing a description')
+    .expect(Selector('#errors li:nth-child(3)').textContent).contains('GP Referral Management is missing a video')
+    .expect(Selector('#errors li:nth-child(4)').textContent).contains('GP Referral Management is missing a description')
+
+  // Uploading a file for a capability should remove it's missing video evidence error
   // ensure first capability is requesting a video upload
   await t.click(
     Selector('fieldset.collapsible#C1').find('input[type=radio][value=yes]')
   )
+
+  // collapse the open invalid collapsible sections
+  const capSection1 = Selector('fieldset.collapsible#C2')
+  const capSection2 = Selector('fieldset.collapsible#C1')
+  await t.click(capSection1.child('legend'))
+  await t.click(capSection2.child('legend'))
+
   // note that the second capability is done first so that the accordion click doesn't
   // close the first capability's fieldset
-  const capSection1 = Selector('fieldset.collapsible#C2')
   await uploadFileWithMessage(t, capSection1, 'Dummy TraceabilityMatrix 2.xlsx', 'Automated test message for C2')
 
   await t
     .click(capabilityEvidencePage.continueButton)
     .expect(Selector('#errors').exists).ok()
-    .expect(Selector('#error-uploading-video-evidence').textContent).contains('requiring evidence is missing a video')
+    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Appointments Management - GP is missing a video')
+    .expect(Selector('#errors li:nth-child(2)').textContent).contains('Appointments Management - GP is missing a description')
+
+  // collapse the open invalid collapsible section
+  await t.click(capSection2.child('legend'))
+3
+  // clicking save should not trigger any validation errors if options are clicked, but only one file is uploaded
+  await t
+    .click(capabilityEvidencePage.globalSaveButton)
+    .expect(Selector('#errors').exists).notOk()
 
   // as the first capability has no file or message, the missing file validation error should trigger
   // even with a validation message, the submitted file and message should hold
@@ -189,13 +240,11 @@ test('Clicking Continue with incomplete evidence should trigger a validation mes
 
   // uploading a file for the first capability without setting a message should
   // trigger a missing description validation error
-  const capSection2 = Selector('fieldset.collapsible#C1')
   await uploadFile(t, capSection2, 'Dummy TraceabilityMatrix 3.xlsx')
 
   await t
     .click(capabilityEvidencePage.continueButton)
     .expect(Selector('#errors').exists).ok()
-    .expect(Selector('#error-uploading-video-evidence').textContent).contains('an uploaded video is missing a description')
 
   // even with a validation message, the submitted file and message should hold
   await t.click(capSection2.child('legend')) // close the section because the next call opens it

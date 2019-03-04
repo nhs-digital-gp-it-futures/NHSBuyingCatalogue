@@ -5,9 +5,6 @@ const path = require('path')
 const { dataProvider } = require('catalogue-data')
 const { sharePointProvider } = require('catalogue-sharepoint')
 
-const { checkSchema, validationResult } = require('express-validator/check')
-const capabilitiesPageValidation = checkSchema(require('./capabilities-validation').capabilities)
-
 const multer = require('multer')
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage }).any()
@@ -37,7 +34,7 @@ router.param('solution_id', async (req, res, next, solutionId) => {
 router
   .route('/:solution_id/')
   .get(solutionCapabilityPageGet)
-  .post(capabilitiesPageValidation, solutionCapabilityPagePost)
+  .post(solutionCapabilityPagePost)
 
 router
   .route('/:solution_id/:claim_id/:file_name')
@@ -131,6 +128,64 @@ async function solutionCapabilityPageGet (req, res) {
   res.render('supplier/capabilities/index', context)
 }
 
+function validRequest (req) {
+  const files = {}
+
+  req.files.forEach((file) => {
+    // Parsing the file fieldnames not parsed by multer
+    const claimID = file.fieldname.replace('evidence-file[', '').replace(']', '')
+    files[claimID] = {
+      ...file,
+      fieldname: claimID
+    }
+  })
+
+  const claimedCapabilities = req.solution.capabilities.reduce((prev, cap) => ({ ...prev, [cap.claimID]: cap.name }), { })
+
+  let errors = []
+
+  const tooLong = '$t(Validation.Capability.Evidence.Description.Too Long)'
+  const videoMissing = '$t(Validation.Capability.Evidence.File.Missing)'
+  const descriptionMissing = '$t(Validation.Capability.Evidence.Description.Missing)'
+  const optionNotSelected = '$t(Validation.Capability.Evidence.Not Selected)'
+
+  const claimsNotSelected = !_.has(req.body, 'uploading-video-evidence')
+    ? _.keys(claimedCapabilities)
+    : _.filter(_.keys(claimedCapabilities), (claim) => !_.has(req.body['uploading-video-evidence'], claim))
+
+  // filter all claims that don't require files, and don't have a file uploaded
+  const previousUploads = req.body['evidence-file'] || {}
+  const claimsRequiringFiles = _.keys(_.omitBy(req.body['uploading-video-evidence'], (val) => val !== 'yes'))
+
+  const claimsMissingFiles = _.filter(claimsRequiringFiles, (claim) => _.isEmpty(files[claim]) && _.isEmpty(previousUploads[claim]))
+
+  // Check that all claims requiring a file have a none false description
+  const evidenceDescriptions = req.body['evidence-description']
+
+  const claimsWithDescriptions = _.filter(claimsRequiringFiles, (claim) => !_.isEmpty(evidenceDescriptions[claim]))
+  const claimsMissingDescriptions = _.filter(claimsRequiringFiles, (claim) => _.isEmpty(evidenceDescriptions[claim]))
+
+  // we want to check description length regardless of the action.
+  const claimsWithTooLongDescriptions = claimsWithDescriptions.filter((claim) => evidenceDescriptions[claim].length > 400)
+
+  errors = errors.concat(claimsWithTooLongDescriptions.map((claim) => ({ claim, error: tooLong })))
+
+  // if we're submitting, we want to check that everything is present.
+  if (_.has(req, 'body.action.submit') || _.has(req, 'body.action.continue')) {
+    errors = errors.concat(claimsMissingFiles.map((claim) => ({ claim, error: videoMissing })))
+    errors = errors.concat(claimsMissingDescriptions.map((claim) => ({ claim, error: descriptionMissing })))
+    errors = errors.concat(claimsNotSelected.map((claim) => ({ claim, error: optionNotSelected })))
+  }
+
+  errors = _.sortBy(errors.map((err) => ({
+    error: err.error,
+    claim: err.claim,
+    name: claimedCapabilities[err.claim]
+  })), 'name')
+
+  return errors
+}
+
 async function solutionCapabilityPagePost (req, res) {
   const context = {
     errors: {
@@ -138,15 +193,14 @@ async function solutionCapabilityPagePost (req, res) {
     }
   }
 
-  const valRes = validationResult(req)
+  const valRes = validRequest(req)
 
   // Check if any validation Erors occured
-  if (!valRes.isEmpty()) {
+  if (!_.isEmpty(valRes)) {
     const validationErrors = {
-      items: valRes.array({ onlyFirstError: true }),
-      controls: _.mapValues(valRes.mapped(), res => ({
-        ...res,
-        action: res.msg + 'Action'
+      items: valRes.map((err) => ({
+        ...err,
+        msg: `${err.name} ${err.error}`
       }))
     }
     context.errors = validationErrors
@@ -196,6 +250,11 @@ async function solutionCapabilityPagePost (req, res) {
     req.solution = await dataProvider.solutionForAssessment(req.params.solution_id)
     const fullContext = await capabilityPageContext(req)
     fullContext.errors = context.errors
+
+    fullContext.solution.capabilities = fullContext.solution.capabilities.map((cap) => ({
+      ...cap,
+      hasError: !_.isEmpty(context.errors.items.find((err) => err.claim === cap.claimID))
+    }))
     res.render('supplier/capabilities/index', fullContext)
   } else if (req.body.action.continue) {
     const url = req.url.split('?')[0]
@@ -203,7 +262,9 @@ async function solutionCapabilityPagePost (req, res) {
   } else if (req.body.action.exit) {
     res.redirect('/')
   } else if (req.body.action.save) {
-    res.redirect(path.join(req.baseUrl, `${req.url}?saved`))
+    let url = req.url.replace('?saved', '')
+    let redirectUrl = path.join(req.baseUrl, `${url}?saved`)
+    res.redirect(redirectUrl)
   } else {
     res.redirect(path.join(req.baseUrl, req.url))
   }
