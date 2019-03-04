@@ -50,8 +50,8 @@ router
   .route('/:solution_id/evidence/:claim_id/confirmation')
   .post(solutionComplianceEvidenceConfirmationPost)
 
-function solutionInAssessment (solution) {
-  return +solution.status === 2
+function solutionInRegistrationComplete (solution) {
+  return +solution.status === 1
 }
 
 function solutionInCompliance (solution) {
@@ -256,7 +256,7 @@ async function solutionComplianceEvidencePageGet (req, res, next) {
     latestFile.downloadURL = path.join(req.baseUrl, req.path, latestFile.name)
 
     context.latestFile = latestFile
-    context.assessmentIncomplete = solutionInAssessment(context.solution)
+    context.assessmentIncomplete = solutionInRegistrationComplete(context.solution)
 
     // only allow a submission if a file exists and;
     // a) evidence has not already been submitted, or
