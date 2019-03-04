@@ -58,11 +58,11 @@
       "Evidence": {
         "Not Selected": "requires an option to be selected",
         "File":{
-          "Missing": " is missing a video",
+          "Missing": "is missing a video",
           "MissingAction": "Please ensure all $t(Capability_plural) requiring evidence have a video uploaded."
         },
         "Description": {
-          "Missing":" is missing a description",
+          "Missing":"is missing a description",
           "MissingAction":"Please ensure all uploaded videos have been sufficiently described.",
           "Too Long": "has a description that exceeds 400 characters.",
           "Too LongAction": "Please ensure all descriptions do not exceed 400 characters."

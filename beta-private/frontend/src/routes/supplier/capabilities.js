@@ -153,10 +153,6 @@ function validRequest (req) {
     ? _.keys(claimedCapabilities)
     : _.filter(_.keys(claimedCapabilities), (claim) => !_.has(req.body['uploading-video-evidence'], claim))
 
-  console.log(req.body)
-  console.log(claimedCapabilities)
-  console.log(claimsNotSelected)
-
   // filter all claims that don't require files, and don't have a file uploaded
   const previousUploads = req.body['evidence-file'] || {}
   const claimsRequiringFiles = _.keys(_.omitBy(req.body['uploading-video-evidence'], (val) => val !== 'yes'))
