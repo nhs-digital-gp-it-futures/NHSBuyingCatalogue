@@ -192,10 +192,12 @@ function registrationPageContext (req) {
     switch (+context.solution.status) {
       case 0: // draft - all fields editable
         break
-      case 1: // registered - name is not editable
+      case 1: // registered - name and version is not editable
         context.nameReadOnly = true
+        context.versionReadOnly = true
         break
       default: // any other status - no fields editable
+        context.versionReadOnly = true
         context.nameReadOnly = true
         context.readOnly = true
     }
