@@ -2,6 +2,28 @@
 
 This python script can be used to convert the data file used to generate Kumu into the tsv's and csv's used in the Buying catalogue and the CRM.
 
+you can run this program using python:
+
+```
+    python kumu_converter.py
+```
+
+though it expects at least one command line argument providing the file to be used during conversion.
+
+## Command Line Arguments
+
+The script supports a couple of command line arguments.
+
+```
+kumu_converter.py -i <input-file-path> -c <capability-output-file> -s <standards-output-file> -m <mapping-output-file> -d <delimiter>
+
+-i, --input              is required and specifies what file is being input to the program.
+-c, --capability-output  can be used to name the file that capabilities are output to.
+-s, --standard-output    can be used to name the file that standards are output to.
+-m, --mapping-output     can be used to name the file that capability-standard mappings are output to.
+-d, --delimiter          can be used to customise the delimiter used in output files.
+```
+
 ## Dependencies.
 
 ### Kumu File
@@ -44,3 +66,4 @@ This could be installed using `pip3`
 ```
     pip3 install openpyxl
 ```
+

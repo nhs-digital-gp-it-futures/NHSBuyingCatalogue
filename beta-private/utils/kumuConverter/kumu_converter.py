@@ -142,19 +142,29 @@ def valid_sheet_names (wb):
     return get_sheet_names(wb) == sheet_names
 
 
-def valid_elements_sheet_headings (wb):
+def valid_elements_sheet_headings (ws):
     '''checks that the headings of the "Elements" sheet are as expected'''
-    ws = wb.get_sheet_by_name(elements_sheet_name)
-    return get_sheet_headings(ws) == elements_sheet_headings
+    return list(filter(lambda x: x is not None, get_sheet_headings(ws))) == elements_sheet_headings
+
+
+def valid_connections_sheet_headings (ws):
+    '''checks that the headings of the "Elements" sheet are as expected'''
+    return list(filter(lambda x: x is not None, get_sheet_headings(ws))) == connections_sheet_headings
 
 
 def validate_work_book (wb):
     '''validates that the workbook is in an expected format'''
+    elements_ws = wb.get_sheet_by_name(elements_sheet_name)
+    connections_ws = wb.get_sheet_by_name(connections_sheet_name)
+    
     if not valid_sheet_names(wb):
         print('Invalid Sheet names. Expected:', sheet_names, 'Recieved:', get_sheet_names(wb))
         return False
-    if not valid_elements_sheet_headings(wb):
-        print('Invalid Sheet Headings for', elements_sheet_name, 'Sheet.\nExpected:', elements_sheet_headings, '\nRecieved:', get_sheet_headings(ws))
+    if not valid_elements_sheet_headings(elements_ws):
+        print('Invalid Sheet Headings for', elements_sheet_name, 'Sheet.\nExpected:', elements_sheet_headings, '\nRecieved:', get_sheet_headings(elements_ws))
+        return False
+    if not valid_connections_sheet_headings(connections_ws):
+        print('Invalid Sheet Headings for', connections_sheet_name, 'Sheet.\nExpected:', connections_sheet_headings, '\nRecieved:', get_sheet_headings(connections_ws))
         return False
     return True
 
@@ -274,15 +284,16 @@ def main (argv):
     try:
         opts, args = getopt.getopt(argv, 'hi:csd', ['input=', 'capability-output=', 'standard-output=', 'delimiter='])
     except getopt.GetoptError:
-        print('kumu_converter.py -i <input-file-path> -c <capability-output-file> -s <standards-output-file> -d <delimiter>')
+        print('kumu_converter.py -i <input-file-path> -c <capability-output-file> -s <standards-output-file> -m <mapping-output-file> -d <delimiter>')
         sys.exit(2)
 
     for opt, arg in opts:
         if opt == '-h':
-            print('kumu_converter.py -i <input-file-path> -c <capability-output-file> -s <standards-output-file> -d <delimiter>')
+            print('kumu_converter.py -i <input-file-path> -c <capability-output-file> -s <standards-output-file> -m <mapping-output-file> -d <delimiter>')
             print('-i, --input\t\t is required and specifies what file is being input to the program.')
             print('-c, --capability-output\t can be used to name the file that capabilities are output to.')
             print('-s, --standard-output\t can be used to name the file that standards are output to.')
+            print('-m, --mapping-output\t can be used to name the file that capability-standard mappings are output to.')
             print('-d, --delimiter\t\t can be used to customise the delimiter used in output files.')
             sys.exit()
         elif opt in ('-i', '--input'):
@@ -291,6 +302,8 @@ def main (argv):
             out_cap_fp = arg
         elif opt in ('-s', '--standards-output'):
             out_std_fp = arg
+        elif opt in ('-m', '--mapping-output'):
+            mapping_std_fp = arg
         elif opt in ('-d', '--delimiter'):
             delimiter = arg
 
