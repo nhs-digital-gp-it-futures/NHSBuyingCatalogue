@@ -21,6 +21,28 @@ elements_sheet_headings = [
     'Capability Specific Standard URL 2'
 ]
 
+connections_sheet_headings = [
+    'From',
+    'To',
+    'FromID',
+    'ToID',
+    'Connection Type',
+    'Type'
+]
+
+mappings_output_headings = [
+    'CapabilityId',
+    'StandardId',
+    'IsOptional'
+]
+
+mappings_headings_map = {
+    'CapabilityId': 'FromID',
+    'StandardId': 'ToID',
+    'IsOptional': None,
+}
+
+# These are the output headings for the 'standards.csv' file
 standard_output_headings = [
     'Id',
     'PreviousId',
@@ -31,6 +53,7 @@ standard_output_headings = [
     'Type',
 ]
 
+# these are the mappings of output headings to kumu input headings for the 'standards.csv' file
 standard_headings_map = {
     'Id': 'ID',
     'PreviousId': None,
@@ -85,8 +108,16 @@ def map_standard_type (row):
 
 
 def map_standard_is_overarching (row):
+    '''Based on the standard type, set the isOverarching flag.'''
     idx = standard_output_headings.index('IsOverarching')
     row[idx] = 1 if 'Overarching' in row[idx] else 0
+    return row
+
+
+def map_mapping_is_optional (row):
+    '''none of these are optional, so just map to 0'''
+    idx = mappings_output_headings.index('IsOptional')
+    row[idx] = 0
     return row
 
 
@@ -193,6 +224,34 @@ def build_standards_output (wb):
     return csv_rows
 
 
+def extract_capability_standard_rows (ws):
+    from_col_idx = get_col_of_heading(ws, 'FromID')
+    to_col_idx = get_col_of_heading(ws, 'ToID')
+
+    capability_standard_rows = []
+    for row in ws:
+        from_val =  list(row)[from_col_idx].value
+        to_val = list(row)[to_col_idx].value
+        not_none = (from_val != None) and (to_val != None)
+        if not_none and from_val.startswith('C') and to_val.startswith('S'):
+            capability_standard_rows.append(row)
+    return capability_standard_rows
+
+def build_mappings_output (wb):
+    ws = wb.get_sheet_by_name(connections_sheet_name)
+
+    capability_standards_rows = extract_capability_standard_rows(ws)
+    heading_indices = get_col_of_mapped_headings(ws, mappings_headings_map)
+
+    csv_rows = [
+        [list(row)[idx].value if idx is not None else '' for idx in heading_indices] for row in capability_standards_rows
+    ]
+
+    csv_rows = [map_mapping_is_optional(row) for row in csv_rows]
+    csv_rows.insert(0, mappings_output_headings)
+    return csv_rows
+
+
 def output_to_csv(contents, fp, seperator = '\t'):
     f = open(fp, 'w')
     for row in contents:
@@ -203,11 +262,13 @@ def output_to_csv(contents, fp, seperator = '\t'):
 def print_help ():
     '''Prints the command line options'''
 
+
 def main (argv):
 
     in_fp = '../Kumu-gp-it-futures-capability-map v5.xlsx'
-    out_cap_fp = 'capabilities.csv'
-    out_std_fp = 'standards.csv'
+    out_cap_fp = 'Capabilities.csv'
+    out_std_fp = 'Standards.csv'
+    mapping_std_fp = 'CapabilityStandard.csv'
     delimiter = ', '
 
     try:
@@ -241,11 +302,12 @@ def main (argv):
         return
 
     capability_output = build_capabilities_output(wb)
-    output_to_csv(capability_output, out_cap_fp, delimiter)
-
     standards_output = build_standards_output(wb)
-    output_to_csv(standards_output, out_std_fp, delimiter)
+    mappings_output = build_mappings_output(wb)
 
+    output_to_csv(capability_output, out_cap_fp, delimiter)
+    output_to_csv(standards_output, out_std_fp, delimiter)
+    output_to_csv(mappings_output, mapping_std_fp, delimiter)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
