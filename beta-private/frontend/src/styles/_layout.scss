@@ -90,12 +90,9 @@ body {
 #deployed-environment-label {
   background-color: $color-nhs-blue;
   border: 1px solid $color-nhs-blue;
-  border-radius: 4px;
   color: $color-nhs-white;
-  left: 20%;
-  padding: .2em;
-  position: absolute;
-  top: 0;
+  padding: 0em 0.5em;
+  margin-left: auto;
 }
 
 body > header {

@@ -23,6 +23,11 @@
       <div class="beta-banner">
         <div class="beta-icon">{{t 'Beta Banner.Title'}}</div>
         <div>{{t 'Beta Banner.Message'}}</div>
+        {{#meta.deployedEnvironment}}
+          <div id="deployed-environment-label">
+              {{.}}
+          </div>
+        {{/meta.deployedEnvironment}}
       </div>
       <div class="top">
         <a href="#content" class="sr" id="skip-to-main-content-link">Skip to main content</a>
@@ -30,11 +35,7 @@
           <a id="home-link" href="/#content" aria-label="Home">
             {{> nhs-digital-logo }}
           </a>
-          {{#meta.deployedEnvironment}}
-            <div>
-              <p id="deployed-environment-label">{{.}}</p>
-            </div>
-          {{/meta.deployedEnvironment}}
+          
           <div id="account" aria-label="Account">
             {{> user-authentication-nav }}
           </div>
