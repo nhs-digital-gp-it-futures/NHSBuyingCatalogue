@@ -15,7 +15,9 @@ using Gif.Service.Filters;
 using Gif.Service.Interfaces;
 using Gif.Service.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -26,6 +28,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.IO;
+using System.Net;
 using ZNetCS.AspNetCore.Authentication.Basic;
 using ZNetCS.AspNetCore.Authentication.Basic.Events;
 
@@ -181,6 +184,26 @@ namespace Gif.Service
     {
       ServiceProvider = app.ApplicationServices;
 
+      app.UseExceptionHandler(options =>
+      {
+        options.Run(async context =>
+        {
+          context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+          context.Response.ContentType = "text/html";
+          var ex = context.Features.Get<IExceptionHandlerFeature>();
+          if (ex != null)
+          {
+            var logger = ServiceProvider.GetService<ILogger<Startup>>();
+            var err = $"Error: {ex.Error.Message}{Environment.NewLine}{ex.Error.StackTrace }";
+            logger.LogError(err);
+            if (env.IsDevelopment())
+            {
+              await context.Response.WriteAsync(err).ConfigureAwait(false);
+            }
+          }
+        });
+      });
+
       app.UseIdentityServer();
       app.UseAuthentication();
 
@@ -188,6 +211,7 @@ namespace Gif.Service
         .UseStaticFiles()
         .UseMvc()
         .UseDefaultFiles();
+
 
       if (env.IsDevelopment())
       {
