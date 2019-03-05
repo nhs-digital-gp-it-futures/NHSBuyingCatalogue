@@ -19,10 +19,6 @@ namespace Gif.Service.Models
         [DataMember]
         public string Name { get; set; }
 
-        [CrmFieldName("cps_orgcode")]
-        [DataMember]
-        public string OdsCode { get; set; }
-
         [CrmFieldName("description")]
         [DataMember]
         public string Description { get; set; }
