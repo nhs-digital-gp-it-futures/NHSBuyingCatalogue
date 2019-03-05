@@ -203,7 +203,7 @@ namespace NHSD.GPITF.BuyingCatalog
         .RegisterAssemblyTypes(assys.ToArray())
         .PublicOnly()
         .AsImplementedInterfaces()
-        .SingleInstance();
+        .InstancePerDependency();
 
       builder.Register(cc => Configuration).As<IConfiguration>();
 
