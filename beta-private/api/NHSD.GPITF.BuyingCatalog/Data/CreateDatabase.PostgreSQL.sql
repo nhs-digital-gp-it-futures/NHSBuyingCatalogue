@@ -39,7 +39,6 @@ CREATE TABLE Organisations
 (
   "Id" CHAR(36) NOT NULL UNIQUE,
   "Name" VARCHAR(512) NOT NULL UNIQUE,
-  "OdsCode" TEXT NOT NULL,
   "PrimaryRoleId" TEXT NOT NULL DEFAULT 'RO92', 
   "Status" TEXT NOT NULL DEFAULT 'Active',
   "Description" TEXT,

@@ -94,15 +94,13 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
 
     public static Organisations GetOrganisation(
       string id = "NHS Digital",
-      string primaryRoleId = PrimaryRole.GovernmentDepartment,
-      string odsCode = "NHS Digital ODS Code")
+      string primaryRoleId = PrimaryRole.GovernmentDepartment)
     {
       var retval = new Organisations
       {
         Id = id,
         Name = id,
-        PrimaryRoleId = primaryRoleId,
-        OdsCode = odsCode
+        PrimaryRoleId = primaryRoleId
       };
       Verifier.Verify(retval);
       return retval;
