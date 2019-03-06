@@ -354,6 +354,13 @@
           "You can submit your completed file to $t(NHSD.Name) once you have submitted your evidence for $t(Capability_plural) in stage 2."
         ]
       },
+      "FileAvailable": {
+        "Heading": "File available",
+        "Text": [
+          "The $t(Standards Compliance) team has provided you with a $t(Traceability Matrix), which you may download and work on.",
+          "You can now submit your completed file to $t(NHSD.Name)."
+        ]
+      },
       "CurrentFile": {
         "Heading": "Download current file"
       },

@@ -247,7 +247,7 @@ async function evidencePageContext (req, next) {
 
     context.latestFile = latestFile
     context.assessmentIncomplete = solutionInRegistrationComplete(context.solution)
-
+    context.standardNotStarted = +context.claim.status === 0
     // only allow a submission if a file exists and;
     // a) evidence has not already been submitted, or
     // b) the latest submission is feedback from NHS Digital
