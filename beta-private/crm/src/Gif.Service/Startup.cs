@@ -70,24 +70,24 @@ namespace Gif.Service
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddSingleton(sp => Configuration);
-      services.AddTransient<IBasicAuthentication, BasicAuthentication>();
-      services.AddTransient<IRepository, Repository>();
-      services.AddTransient<ICapabilityDatastore, CapabilitiesService>();
-      services.AddTransient<ICapabilitiesImplementedDatastore, CapabilitiesImplementedService>();
-      services.AddTransient<ICapabilitiesImplementedEvidenceDatastore, CapabilitiesImplementedEvidenceService>();
-      services.AddTransient<ICapabilitiesImplementedReviewsDatastore, CapabilitiesImplementedReviewsService>();
-      services.AddTransient<ICapabilityStandardDatastore, CapabilityStandardService>();
-      services.AddTransient<IContactsDatastore, ContactsService>();
-      services.AddTransient<IFrameworksDatastore, FrameworksService>();
-      services.AddTransient<ILinkManagerDatastore, LinkManagerService>();
-      services.AddTransient<IOrganisationsDatastore, OrganisationsService>();
-      services.AddTransient<ISolutionsDatastore, SolutionsService>();
-      services.AddTransient<ISolutionsExDatastore, SolutionExService>();
-      services.AddTransient<IStandardsDatastore, StandardsService>();
-      services.AddTransient<IStandardsApplicableDatastore, StandardsApplicableService>();
-      services.AddTransient<IStandardsApplicableEvidenceDatastore, StandardsApplicableEvidenceService>();
-      services.AddTransient<IStandardsApplicableReviewsDatastore, StandardsApplicableReviewsService>();
-      services.AddTransient<ITechnicalContactsDatastore, TechnicalContactService>();
+      services.AddSingleton<IBasicAuthentication, BasicAuthentication>();
+      services.AddSingleton<IRepository, Repository>();
+      services.AddSingleton<ICapabilityDatastore, CapabilitiesService>();
+      services.AddSingleton<ICapabilitiesImplementedDatastore, CapabilitiesImplementedService>();
+      services.AddSingleton<ICapabilitiesImplementedEvidenceDatastore, CapabilitiesImplementedEvidenceService>();
+      services.AddSingleton<ICapabilitiesImplementedReviewsDatastore, CapabilitiesImplementedReviewsService>();
+      services.AddSingleton<ICapabilityStandardDatastore, CapabilityStandardService>();
+      services.AddSingleton<IContactsDatastore, ContactsService>();
+      services.AddSingleton<IFrameworksDatastore, FrameworksService>();
+      services.AddSingleton<ILinkManagerDatastore, LinkManagerService>();
+      services.AddSingleton<IOrganisationsDatastore, OrganisationsService>();
+      services.AddSingleton<ISolutionsDatastore, SolutionsService>();
+      services.AddSingleton<ISolutionsExDatastore, SolutionExService>();
+      services.AddSingleton<IStandardsDatastore, StandardsService>();
+      services.AddSingleton<IStandardsApplicableDatastore, StandardsApplicableService>();
+      services.AddSingleton<IStandardsApplicableEvidenceDatastore, StandardsApplicableEvidenceService>();
+      services.AddSingleton<IStandardsApplicableReviewsDatastore, StandardsApplicableReviewsService>();
+      services.AddSingleton<ITechnicalContactsDatastore, TechnicalContactService>();
 
       // Add framework services.
       services
