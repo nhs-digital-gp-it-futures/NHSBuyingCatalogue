@@ -226,25 +226,15 @@ async function evidencePageContext (req, next) {
     context.errors.push(err)
   }
 
-  return context
-}
-
-async function solutionComplianceEvidencePageGet (req, res, next) {
-  const context = {
-    ...await evidencePageContext(req, next),
-    errors: req.body.errors || [],
-    breadcrumbs: [
-      { label: 'Onboarding.Title', url: `../../../../solutions/${req.solution.id}` },
-      { label: 'CompliancePages.Dashboard.Breadcrumb', url: `../../` }
-    ]
-  }
-
   if ('saved' in req.query) {
     context.solutionSaved = true
   }
 
-  // last breadcrumb is the name of the current standard
-  context.breadcrumbs.push({ label: context.claim.standard.name })
+  context.breadcrumbs = [
+    { label: 'Onboarding.Title', url: `../../../../solutions/${req.solution.id}` },
+    { label: 'CompliancePages.Dashboard.Breadcrumb', url: `../../` },
+    { label: context.claim.standard.name }
+  ]
 
   let latestFile
 
@@ -269,57 +259,95 @@ async function solutionComplianceEvidencePageGet (req, res, next) {
     }
   }
 
+  return context
+}
+
+async function solutionComplianceEvidencePageGet (req, res, next) {
+  const context = {
+    ...await evidencePageContext(req, next),
+    errors: req.body.errors || []
+  }
+
   res.render('supplier/compliance/evidence', context)
 }
 
-async function solutionComplianceEvidencePagePost (req, res) {
+async function solutionComplianceEvidencePagePost (req, res, next) {
+  const context = {
+    ...await evidencePageContext(req, next),
+    errors: req.body.errors || { items: [] },
+    breadcrumbs: [
+      { label: 'Onboarding.Title', url: `../../../../solutions/${req.solution.id}` },
+      { label: 'CompliancePages.Dashboard.Breadcrumb', url: `../../` }
+    ]
+  }
+
   const action = req.body.action || {}
 
   if (!solutionInCompliance(req.solution)) {
     return res.redirect('../../')
   }
 
-  let redirectUrl = './'
-  if (action.save) redirectUrl += '?saved'
-  if (action.submit) redirectUrl = './confirmation'
-  else if (action.exit) redirectUrl = '/'
+  const evidenceRecord = {
+    id: require('node-uuid-generator').generate(),
+    claimId: req.params.claim_id,
+    createdOn: new Date(),
+    createdById: req.user.contact.id,
+    evidence: '',
+    blobId: '' // ID of the file that was just uploaded, this relates a message to a file.
+  }
+
+  // check if the message is too long
+  if (req.body.message && req.body.message.length > 300) {
+    context.errors.items.push({ msg: 'Validation.Standard.Evidence.Message.TooLong' })
+  } else {
+    evidenceRecord.message = req.body.message
+  }
 
   if (!req.files.length && action.submit !== 'direct' && !action.save && !action.exit) {
-    req.body.errors = { items: [{ msg: 'No file to upload.' }] }
-  } else if (req.files.length) {
+    context.errors.items.push({ msg: 'Validation.Standard.Evidence.File.Missing' })
+  }
+
+  // If there is a file, upload it and get the blobId.
+  if (req.files.length) {
     const fileToUpload = req.files[0]
-
     try {
-      const blobId = await uploadFile(req.params.claim_id, fileToUpload.buffer, fileToUpload.originalname)
-
-      // update the status of the claim based on the file uploading successfully (not started -> draft)
-      // and if the user requested submission to NHS Digital (* -> submitted)
-      const claim = _.find(req.solution.standards, { id: req.params.claim_id })
-
-      claim.status = '1' /* draft */
-      claim.ownerId = req.body.ownerId || null
-
-      // always write an evidence record
-      // TODO: link previousId when appropriate
-      req.solution.evidence.push({
-        id: require('node-uuid-generator').generate(),
-        claimId: req.params.claim_id,
-        createdOn: new Date(),
-        createdById: req.user.contact.id,
-        evidence: req.body.message,
-        blobId // ID of the file that was just uploaded, this relates a message to a file.
-      })
-
-      await dataProvider.updateSolutionForCompliance(req.solution)
+      evidenceRecord.blobId = await uploadFile(req.params.claim_id, fileToUpload.buffer, fileToUpload.originalname)
     } catch (err) {
-      req.body.errors = { items: [{ msg: String(err) }] }
+      context.errorsitems.push({
+        err,
+        msg: 'Validation.Standard.Evidence.File.Failed.Upload'
+      })
     }
   }
 
+  // update the claim details
+  const claim = _.find(req.solution.standards, { id: req.params.claim_id })
+
+  claim.status = '1' /* draft */
+  claim.ownerId = req.body.ownerId || null
+
+  // Generate a new evidence record.
+  req.solution.evidence.push(evidenceRecord)
+
+  // update the solution with the new evidence record.
+  try {
+    await dataProvider.updateSolutionForCompliance(req.solution)
+  } catch (err) {
+    context.errors.items.push({
+      err,
+      msg: 'Validation.Standard.Evidence.Failed.Update'
+    })
+  }
+
   // re-render if an error occurred
-  if (req.body.errors) {
-    solutionComplianceEvidencePageGet(req, res)
+  if (context.errors.items.length) {
+    res.render('supplier/compliance/evidence', context)
   } else {
+    let redirectUrl = './'
+    if (action.save) redirectUrl += '?saved'
+    if (action.submit) redirectUrl = './confirmation'
+    else if (action.exit) redirectUrl = '/'
+
     res.redirect(redirectUrl)
   }
 }
