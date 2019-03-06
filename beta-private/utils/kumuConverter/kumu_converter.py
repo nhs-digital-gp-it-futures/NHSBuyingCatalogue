@@ -276,10 +276,10 @@ def print_help ():
 def main (argv):
 
     in_fp = '../Kumu-gp-it-futures-capability-map v5.xlsx'
-    out_cap_fp = 'Capabilities.csv'
-    out_std_fp = 'Standards.csv'
-    mapping_std_fp = 'CapabilityStandard.csv'
-    delimiter = ', '
+    out_cap_fp = 'Capabilities.tsv'
+    out_std_fp = 'Standards.tsv'
+    mapping_std_fp = 'CapabilityStandard.tsv'
+    delimiter = '\t'
 
     try:
         opts, args = getopt.getopt(argv, 'hi:csd', ['input=', 'capability-output=', 'standard-output=', 'delimiter='])
