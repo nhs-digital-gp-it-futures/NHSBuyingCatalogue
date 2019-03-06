@@ -19,7 +19,7 @@
         "TooLong": "$t(Solution) version exceeds maximum length of 10 characters",
         "TooLongAction": "Please shorten. $t(Validation.Solution.Version.TooLong)"
       },
-      "Contacts": {        
+      "Contacts": {
         "ContactType": {
           "Missing": "Contact type is missing",
           "MissingAction": "Please enter the contact type",
@@ -82,6 +82,19 @@
         "Retrieval": {
           "Failed": "Evidence for the $t(Solution) was not successfully retrieved.",
           "FailedAction": "Please Refresh the page."
+        }
+      }
+    },
+    "Standard": {
+      "Evidence": {
+        "Message": {
+          "TooLong": "The message you have entered must be less than 300 characters."
+        },
+        "File": {
+          "Missing": "Please upload your Traceability Matrix."
+        },
+        "Failed": {
+          "Update": "Failed to update your solution."
         }
       }
     }
