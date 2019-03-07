@@ -133,7 +133,7 @@
     "Help": {
       "Title": "Help - Where can I find guidance on $t(Onboarding.Title)?",
       "Text": [
-        "Follow the links below for guidance on each stage of <a href='#'>$t(Onboarding.Title)</a>.",
+        "Follow the links below for guidance on each stage of <a href='#' target='_blank'>$t(Onboarding.Title)</a>.",
         "<ul><li><a href='#'>Stage 1 - $t(Onboarding.Stages.0.Name)</a><li><a href='#'>Stage 2 - $t(Onboarding.Stages.1.Name)</a><li><a href='#'>Stage 3 - $t(Onboarding.Stages.2.Name)</a><li><a href='#'>Stage 4 - $t(Solution) page (what buyers will see)</a></ul>"
       ]
     },
@@ -249,7 +249,7 @@
       "Preamble": [
         "As you select $t(Capability_plural), a summary of required Standards will form below. You may return here to change these selections until you submit $t(Capability) evidence for assessment in the next stage. The $t(Capability_plural) selected will be visible to buyers on your $t(Solution) page when all assurance activities have been successfully completed.",
         "For queries, <a target='_blank' href='mailto:gpitfutures@nhs.net'>email us</a>.",
-        "To check the requirements for each, including which epics are required, see all <a href='#'>Capabilities & Standards in Confluence</a>. (* indicates required field)."
+        "To check the requirements for each, including which epics are required, see all <a href='#' target='_blank'>Capabilities & Standards in Confluence</a>. (* indicates required field)."
       ],
       "Help": {
         "Title": "Help - What if my Solution only matches some of a $t(Capability_plural)'s epics?",
@@ -335,7 +335,7 @@
       "Subtitle": "Download the $t(Traceability Matrix) file below. Detailed instructions are included in the file. When you have finished addressing the requirements in the file, upload it. Review on the next page before submitting the file to $t(NHSD.Name).",
       "Preamble": [
         "For support, see <a href='#'>guidance</a>. Buyers will be able to request the final version of your completed $t(Traceability Matrix) file for this $t(Standard).",
-        "For queries, email us <a href='#'>email us</a>. (* indicates required field)"
+        "For queries, email us <a href='#' target='_blank'>email us</a>. (* indicates required field)"
       ],
       "QuickLinks": {
         "Heading": "Quick Links — $t(Standard) & Related $t(Capability_plural)"
@@ -424,7 +424,7 @@
       "Title": "Provide $t(Capability) evidence for your $t(Solution).",
       "Instructions": "Select evidence method and follow the instructions for each of your selected $t(Capability_plural) below. On the next page, you can review your answers and submit them to $t(NHSD.Name).",
       "Guidance": [
-        "For what to put in each video, and how to plan for live demonstrations, see the <a href='#'>guidance</a>. You can also watch an <a href='#'>example video demonstration</a>.",
+        "For what to put in each video, and how to plan for live demonstrations, see the <a href='#'>guidance</a>. You can also watch an <a href='#' target='_blank'>example video demonstration</a>.",
         "For queries, <a target='_blank' href='mailto:gpitfutures@nhs.net'>email us</a>. (* indicates required field)"
       ],
       "Evidence": {
@@ -509,103 +509,946 @@
     "Nav Title": "Page Contents",
     "Sections": [
       {
-        "Title":"Summary",
-        "Nav Title": "Summary",
-        "Text": [
-          "This is a guide for $t(Catalogue.Title) Suppliers. We recommend all Suppliers read this before they start the on-boarding process."
-        ]
-      },
-      {
         "Title":"Introduction",
         "Nav Title": "Introduction",
-        "Text": [
-          "The NHS Digital Buying Catalogue is an online procurement platform that allows suppliers of digital services to introduce their solutions to the NHS market and have them recognised as assured solutions.",
-          "NHS users will have the ability to find, evaluate and purchase assured digital services creating a more vibrant market for digital solutions within the NHS."
-        ],
+        "Text": [],
         "Subsections": [
           {
-            "Title": "About the GP IT Futures Framework",
+            "Title": "Summary",
             "Text": [
-              "The GP IT Futures Framework is the first to be facilitated through the Catalogue. This Framework is open to all suppliers wishing to introduce their digital solution into the NHS GP IT market by delivering the Capabilities specified the Framework.",
-              "The primary goals of the GP IT Futures Framework are:",
-              "•  To develop the GP IT market to meet growing needs in new models of care and in federated GP practices.",
-              "•  Use technology and data to transform patient care in general practice.",
-              "•  To improve the quality, safety and efficiency of GP systems, as defined in the GP Forward View.",
-              "This is part of Personalised Health and Care 2020, with the aim to transform health and care technology."
-            ]
-          }
-          ]
-        },
-        {
-          "Title":"Capabilities and Standards Model",
-          "Nav Title": "Capabilities and Standards Model",
-          "Text": [
-            "The requirements to deliver General Practice Solutions are grouped into capabilities. Each capability describes a business need at the highest level. For example, 'Recording Consultations' describes the need for General Practice staff to be able to make a digital record of any consultation with a patient. The introduction of capabilities for GP IT is intended to allow suppliers to innovate by being less prescriptive and to segment the requirements in a way to allow more flexibility and choice for buyers."
-          ],
-          "Subsections": [
-            {
-              "Title": "How are Capabilities structured?",
-              "Text": [
-                "The Capabilities and Standards are structured in the model below.",
-                "• There are a set of overarching standards that are applicable to all supplier products e.g. Information Governance",
-                "• There are capabilities to support business continuity from GPSoC and new capabilities to support new ways of working",
-                "• There are capability specific standards which sit under a Capability i.e. Prescribing",
-                "• There are context specific standards that only apply to certain Capabilities or in certain situations (e.g. Common Reporting and Mobile Working (Archived))",
-                "• There is also an Interoperability standard which contains entries specific to one or many Capabilities"
-              ]
-            },
-          {
-            "Title": "Do I have to build a system that delivers all Capabilities?",
-            "Text": [
-              "Suppliers do not have to provide a solution that delivers all Capabilities and are free to design and build solutions that meet one or more of the Capabilities. By looking at the Capabilities suppliers can see where their product portfolio fits, either by making tweaks to existing solutions where required or building new solutions to expand the Capabilities that they provide for. For example, Supplier 'A' may build a solution that delivers 'Document Management', 'Workflow' and 'Patient Information Maintenance' Capabilities, whereas Supplier 'B' may choose to build a system that delivers all of the Citizen Capabilities.",
-              "A set of core capabilities have been identified which will form the foundations for a clinical system and support the commitments in the GMS contract.  These core capabilities are identified on the model.  Suppliers do not have to supply any of the core capabilities and can provide one or more. Buyers will have to take all of core capabilities in order to access central funding. ",
-              "Further information can be found in an Introduction to Capabilities and the Capability and Standard Model",
-              "To see an example of how to implement the model refer to Appendix B – Implementing the Capability and Standards Model."
+              "This guidance details how to sell your digital Solutions to the NHS market in the UK, specifically with regards to the Buying Catalogue, but including related framework information and Supplier obligations. As of 2019, the Buying Catalogue will include services for primary care, but in the future its scope will expand to cover other care settings. We recommend you read this guide in its entirety before submitting your Solution to the Buying Catalogue."
             ]
           },
           {
-            "Title": "How will this work for existing GPSoC suppliers?",
+            "Title": "Introduction",
             "Text": [
-              "To ensure a smooth transition from GPSoC, all eligible suppliers will have their existing compliance transferred to help reduce the level of assurance required to migrate from GPSoC to the GP IT Futures framework.",
-              "Suppliers that are already compliant with GPSoC requirements will be provided with pre-populated Traceability Matrices (TM) during the Standards Compliance stage of Onboarding. These files will show in detail the amount of compliance already achieved and the quantity of compliance required as a result of the new Capabilities & Standard Model.",
-              "Please ensure you are confident in your understanding of the Capabilities & Standards Model before proceeding to Adding your Solution."
+              "The Buying Catalogue is a procurement platform where clinical commissioners and other public sector buyers can find, evaluate and purchase digital products and services (Solution­s) intended to support GP IT. To be listed on the Buying Catalogue, all Solutions must successfully demonstrate compliance with relevant NHS requirements and standards. In order to sell from the Buying Catalogue, Solutions also must have been awarded to a framework."
+            ]
+          },
+          {
+            "Title": "Frameworks supported",
+            "Text": [
+              "Although GP IT Futures Framework 1 is the first to be facilitated through the Buying Catalogue, the site is open to any other public sector bodies wishing to introduce new frameworks to the healthcare market."
+            ]
+          },
+          {
+            "Title": "GP IT Futures Framework 1",
+            "Text": [
+              "GP IT Futures Framework 1 is the first framework to be facilitated through the Catalogue. This framework is open to all Suppliers that provide one or more Capabilities specified in the framework.",
+              "The invitation to tender for GP IT Futures Framework 1 will be advertised in the Official Journal of the European Union (OJEU). Once the invitation goes live, it will be published on Bravo (click ‘View our live opportunities’)."
+            ]
+          },
+          {
+            "Title": "Benefits of adding your Solution to the Buying Catalogue",
+            "Text": [
+              "Visibility - The Buying Catalogue will be accessed frequently by digital service buyers within the NHS and many other organisations.",
+              "Catalogue assured - By achieving compliance with NHS Standards you can provide confidence to buyers that your Solution is reliable and safe for use in the NHS.",
+              "Interoperability - GP IT Futures Framework 1 contains the Interoperability Standard. Achieving compliance with this allows your Solution to work with any other Solutions that also comply with this Standard. Buyers have overwhelmingly expressed a preference for systems that work together."
+            ]
+          },
+          {
+            "Title": "Is my Solution appropriate for the Buying Catalogue?",
+            "Text": [
+              "GP IT Futures Framework 1 is open to any Solution that can meet at least one of the Capabilities, and the applicable Standards. We strongly recommend that you review the <a href='#' target='_blank'>Capabilities & Standards Model</a> to check that your Solution would be appropriate for this framework.",
+              "Please note that all Solutions must meet the overarching Standards, regardless of the Capabilities chosen. See Introduction to the Capabilities & Standards Model below. "
+            ]
+          },
+          {
+            "Title": "How long until I can start selling?",
+            "Text": [
+              "In order to sell you need to meet two requirements: (1) have your Solution accepted on the Catalogue as compliant (see the ‘Supplier Onboarding Process’ for more detail ); and (2) be awarded to a framework. The order of these two things may vary, but you must have submitted your Solution to the Catalogue and have it accepted into the assessment process in order to qualify for a framework award. ",
+              "You may register to come onto the Catalogue and start the Capability assessment and Standards compliance stages at any time. See Supplier Registration below for how to get access to the Catalogue. ",
+              "The time it takes for a Solution to be accepted on the Catalogue will vary depending upon the number of Capabilities and Standards involved, and the quality of the initial submission. The aim is for acceptance for a good quality submission to take no longer than 19 weeks, following Supplier registration in Bravo. See a break-down of the timescale targets by stage in ‘Process overview’ below. ",
+              "The framework timescales will be clear at the time each framework is published. "
             ]
           }
         ]
       },
       {
-        "Title": "How do Capabilities drive the call-off process?",
-        "Nav Title": "Capability-driven call-offs",
+        "Title":"Process Overview",
+        "Nav Title": "Process Overview",
         "Text": [
-          "The Capabilities & Standards your Solution has been assured against will determine how buyers find, compare and select your Solution for call-off.",
-          "Buyers can find Solutions by either browsing or searching through all Solutions listed on the Catalogue."
+          "All companies need to register one time in Bravo to gain access to the Catalogue. After this, there are four stages to adding each Solution on the Catalogue. The table below provides a brief overview of each stage."
         ],
         "Subsections": [
           {
-            "Title": "Finding Solutions by Browsing",
+            "Custom": "process-overview"
+          }
+        ]
+      },
+      {
+        "Title": "Registering your company and Catalogue access",
+        "Nav Title": "Supplier Registreation",
+        "Text": [
+          "Before you can begin adding your Solution to the Catalogue, you must register your company and request a user account as follows:",
+          "Log in to <a href='#' target='_blank'>Bravo</a>. You will see multiple opportunities listed. Click on the ‘Buying Catalogue’ opportunity. ",
+          "From there, you can download, review and sign the Catalogue Agreement which sets out the terms of use for using the Catalogue. When you’ve reviewed and gotten the necessary signature, you can upload the signed agreement to Bravo.",
+          "Bravo will also ask you to provide company information (see the Supplier checklist for details), and the names and email addresses of anyone who will need access to the Buying Catalogue under your company account. ",
+          "Once we have signed the Catalogue Agreement, we will issue log-in details for each of the users requested.",
+          "When you receive the log-in details, you can navigate to the Buying Catalogue and click ‘Log in/Sign up.’ From there, select the ‘Sign up’ tab, enter the email address provided during Supplier registration, and create a secure password. "
+        ],
+        "Subsections": []
+      },
+      {
+        "Title": "Introduction to the Capabilities & Standards model",
+        "Nav Title": "Capabilities & Standards",
+        "Text": [
+          "The scope of services supported by the Buying Catalogue is defined by the Capabilities."
+        ],
+        "Subsections": [
+          {
+            "Title": "What are Capabilities?",
             "Text": [
-              "When a buyer selects ‘Browse all Solutions’ the Catalogue will return all Solutions available for call-off. Buyers can then use Capability & other filters to build their requirements.",
-              "For example, if you provide a Document Management solution, a buyer could browse all solutions then filter to show only Solutions with the Document Management Capability. They would begin comparing."
+              "The requirements to deliver Solutions are grouped into Capabilities. Each Capability describes a business need at the highest level. For example, 'Recording Consultations' describes the need for staff to be able to make a digital record of any consultation with a patient. The introduction of Capabilities is intended to allow Suppliers to innovate by being less prescriptive and to segment the requirements in a way to allow more flexibility and choice for buyers."
             ]
           },
           {
-            "Title": "Finding Solutions by Searching",
+            "Title": "How are is the model structured?",
             "Text": [
-              "Buyers can also enter keywords into search. Keywords entered are then matched to Capabilities, the Solutions returned by the search results will be sorted based on how precisely they meet the requirements the buyer has defined by their choice of keyword.",
-              "If a buyer searches for a specific Solution name, the Catalogue will return all Solutions that meet some or all the Capabilities met by the individual Solution entered.",
-              "If a buyer searches for a specific Supplier name, the Catalogue will return all Solutions that meet some or all the Capabilities met by all Solutions provided by that supplier. "
+              "Requirements are grouped into Capabilities. There are different types of Capabilities. There are Capabilities to support business continuity from the previous framework, GPSoC, and new Capabilities to support new ways of working. Six of the business continuity Capabilities have been designated as Foundation Capabilities (see below).",
+              "There are Overarching Standards, which are applicable to all Solutions (for example, Information Governance).",
+              "There are two types of Standards associated with Capabilities:",
+              "• Capability-Specific Standards  are specific to a Capability and usually have the same name (for example, Prescribing); ",
+              "• Context-Specific Standards sit under and apply to certain Capabilities (for example, Common Reporting).",
+              "There is also an Interoperability Standard. Some elements of the Interoperability Standard apply to all Solutions, while other elements are associated with specific Capabilities.",
+              "For more detail, see the <a href='#' target='_blank'>Capabilities and Standards Model</a>."
             ]
           },
           {
-            "Title": "How are search results prioritised?",
+            "Title": "Do I have to build a Solution that delivers all Capabilities?",
             "Text": [
-              "Search results are always ordered according to how precisely they meet the requirements stated by the user.",
-              "If a buyer enters an existing Solution name, the Catalogue will search for the Capabilities met by that Solution, rather than the Solution itself.",
-              "For example, if a buyer searched for a Solution that meets 3 Capabilities, the first search results returned would be any Solution meeting only those 3 Capabilities. The remaining results would be any Solutions meeting one or more of those Capabilities, ordered by the number of additional Capabilities the Solution delivers that were not included in the buyers requirements."
+              "You do not have to provide a Solution that delivers all Capabilities. You may submit a Solution that meets just one Capability, or many. By looking at the Capabilities, you can see where your product portfolio fits. You may want to make tweaks to your existing products so that as a Solution will fully match related Capabilities. Or you may wish to create new Solutions to deliver a broader set of Capabilities. "
+            ]
+          },
+          {
+            "Title": "Do I have to build a Solution that delivers all Capabilities?",
+            "Text": [
+              "You do not have to provide a Solution that delivers all Capabilities. You may submit a Solution that meets just one Capability, or many. By looking at the Capabilities, you can see where your product portfolio fits. You may want to make tweaks to your existing products so that as a Solution will fully match related Capabilities. Or you may wish to create new Solutions to deliver a broader set of Capabilities. "
+            ]
+          },
+          {
+            "Title": "How do buyers fund their purchases?",
+            "Text": [
+              "Buyers fund their purchases through a variety of funds. For buyers to access GP IT Central funding they must first take the six Foundation Capabilities (see model), which are intended to form the foundation for a clinical system Solution and start to support the commitments in the General Medical Services contract. ",
+              "Your Solution will be assessed to determine whether it (or a group of your Solutions) forms a Foundation Solution Set. If your Solution is recognised as a Foundation Solution, or part of a Foundation Solution Set, it can be bought using central funding. If a buyer has purchased all the Foundation Capabilities, they can use any remaining central funding to buy other Solutions that fulfil other Capabilities. Otherwise, buyers will use their own funds to pay for their purchase.",
+              "Please review our <a href='#' target='_blank'>Capabilities and Standards</a> Confluence site for more information."
+            ]
+          }
+        ]
+      },
+      {
+        "Title": "Solution Details",
+        "Nav Title": "Solution Registration",
+        "Text": [
+          "To register your Solution, you must provide basic details and select the applicable Capabilities. For specific information required in this stage, see Supplier checklist. ",
+          "Please be aware that during private beta, once you complete stage 1, your Solution name and Solution version cannot be changed. If you’ve made an error, please email us.",
+          "Before you select applicable Capabilities, we recommend that you review the full <a href='#' target='_blank'>Capabilities & Standards Model</a> to understand the relationship between Capabilities and Standards, as well as the requirements under each Capability and Standard."
+        ]
+      },
+      {
+        "Title": "Capability Submission",
+        "Nav Title": "Capability Submission",
+        "Text": [
+          "You must submit evidence demonstrating how your Solution meets the Capabilities you have selected. Your evidence will be reviewed to determine if each Capability has been successfully met.",
+          "Please note that successful completion of Capability assessment does not mean your Solution has been assured against NHS Standards. Solutions will not receive Compliant Status (the ability to market your Solution, and once you are awarded to a framework, the ability to sell your Solution) until successful completion of both the Capability assessment and Standards compliance stages, and acceptance of your Solution page."
+        ],
+        "Subsections": [
+          {
+            "Title": "Submitting Capability Evidence",
+            "Text": [
+              "Within each Capability, there are Epic-level user stories that describe business activities which are facilitated by a digital Solution. For some Capabilities, all Epics are required for the Solution to pass the assessment for that Capability—these are Must Epics. For others, only one or more Epics are required (see Capability assessment below). ",
+              "In order to pass a Must Epic, all of the acceptance criteria under that Epic will need to be demonstrated in the evidence submission. Before you prepare and submit your evidence, you may wish to read Capability assessment. ",
+              "There are also May Epics. May Epics are not required, but if you wish to submit evidence of them we will assess them, and if all the acceptance criteria are passed for an Epic, the fact that the Solution has passed the May Epics will be available to buyers. ",
+              "For each Capability, the Supplier can choose whether to provide:",
+              "• A recorded video demonstration (with optional voiceover describing what is happening and where each acceptance criteria is met); or ",
+              "• Request a live witness demonstration. During the live witness demonstration, the Supplier will present the Capability. The video will be recorded, and then assessed."
+            ]
+          },
+          {
+            "Title": "Recorded video demonstrations",
+            "Text": [
+              "The production quality of the video files provided will not be assessed. The videos can be recorded simply, for example, using a software such as Web-ex, and recording a shared screen. The important thing is that the video provided is clear and easy to view. To this end, including the Epic or Epics included in each video file name will be appreciated. ",
+              "Narration—either verbal via voiceover or embedded via words on-screen—should be included in each video to indicate where each acceptance criterion is evidenced in each video. ",
+              "For each Capability, Suppliers are required on the Catalogue to indicate where in each video each Epic is evidenced. There is a free text field for each Capability where Suppliers can enter, for example, Epic 1 at 2:34. ",
+              "Please be aware that once your evidence has been submitted it cannot be changed. If you have submitted evidence in error, please email us."
+            ]
+          },
+          {
+            "Title": "Can I submit one video that displays all of my Solution's Capabilities?",
+            "Text": [
+              "Your videos can display as many Capabilities as you wish, as long as you clearly demonstrate that your Solution meets the acceptance criteria for each Must Epic within each Capability."
+            ]
+          },
+          {
+            "Title": "My Solution meets a large number of Capabilities, can I submit multiple videos?",
+            "Text": [
+              "Each Capability video should be no larger than 2 gigabytes in size, which would be around 30 minutes in length, depending on the video resolution used. If the quantity of Capabilities you've selected requires multiple videos you can combine these together in a zipped file before uploading."
+            ]
+          },
+          {
+            "Title": "What if I don't have any video recording software?",
+            "Text": [
+              "If you are not able to create videos, you can request a live witness demonstration with us. "
+            ]
+          },
+          {
+            "Title": "Will my videos be shown to the public?",
+            "Text": [
+              "Your video evidence will only be used for assessment and will not be published publicly on the Catalogue or elsewhere. However, all information submitted to the Buying Catalogue is subject to <a href=''>FOI requests</a>. "
+            ]
+          }
+        ]
+      },
+      {
+        "Title": "Capability Assessment",
+        "Nav Title": "Capability Assessment",
+        "Text": [
+          "Once you have submitted your Solution details and Capability evidence, we will review your submission, including mapping information provided and the applicability of the Associated Services. Once we have approved your submission, we will notify your lead contact that your Solution has attained the status of Catalogue Solution Submission Accepted.",
+          "At this point, we will assess your Capability Evidence. During this time, we may need to ask clarification questions and request more information to complete our assessment. These clarifications will happen via email to your lead contact, during private beta.  ",
+          "Each Capability has Epics, and each Epic has acceptance criteria. Each of these acceptance criteria will be reviewed and scored as passed or failed. To pass an Epic, all acceptance criteria for that Epic must be passed. ",
+          "Some epics are labelled as ‘Must’ Epics. If the Capability is identified as a Core and Mandated Capability on the model [link], all the Must Epics must be passed. ",
+          "If the Capability is identified as a Discretionary Capability on the model [link], at least one Must Epic must be passed. If all of the Must Epics are met, this will be considered a Full Capability. If at least one, but not all, of the Must Epics are met, the Capability will be considered to be a Partial Capability. This will be visible to buyers.",
+          "It is possible for a Solution to have a combination of Full Capabilities and Partial Capabilities. ",
+          "Some Capabilities also have ‘May’ Epics, which are optional and not required to pass a Capability. Suppliers have the option of including these Epics as part of their evidence submission. If a May Epic is included, it will be assessed in the same way as a Must Epic. ",
+          "Once we’ve completed our assessment, your lead contact will notified of the outcome with a status against each Epic—either passed or failed."
+        ]
+      },
+      {
+        "Title": "Standards Submission",
+        "Nav Title": "Standards Submission",
+        "Text": [
+          "After you’ve submitted evidence for Capabilities (stage 2), you can submit evidence for Standards (stage 3). This stage will involve a detailed analysis of your Solution against each relevant Standard—the overarching Standards, which apply to all Solutions, and the Standards associated with the Capabilities selected."
+        ],
+        "Subsections": [
+          {
+            "Title": "How to submit evidence - Traceability Matrices",
+            "Text": [
+              "Each Standard has a separate Traceability Matrix (TM), which is an Excel file that lists each piece of required evidence for that Standard as an individual line item (see example). Based on the risk-based approach outlined in the next section below, each line item has been classified as either ‘Must’ (mandatory to implement) or ‘May’ (optional to implement), as defined in Capabilities and Standards glossary. ",
+              "You can submit all evidence for a Standard via its TM. The TMs for each Standard applicable to your Solution can be accessed via your Standards Dashboard in stage 3. Each standard will open on its own page. Click on each Standard to download the TM for that Standard. Once you’ve finishing filling in the required information, you can upload the completed TM on the same page. You can submit TMs for each Standard one at time. ",
+              "Each Standard can be assigned a ‘Standard owner.’ By default, Standard owner will be your lead contact. You can change the owner to any other authenticated user at your company. (Authenticated users are those for whom you requested access in Bravo when registering your company). Standard owners are typically the ones submitting evidence for that Standard, and will receive all email notifications, along with the lead contact.  "
+            ]
+          },
+          {
+            "Title": "Compliance memory",
+            "Text": [
+              "Some Solutions will not start with blank Traceability Matrices on the Catalogue. All eligible Catalogue Solutions will have their existing compliance memory transferred by the Catalogue Authority into the Traceability Matrices to which their Solution maps. Any gaps between previous requirements and the current requirements will be highlighted as a compliance gap for the Supplier to address in its submission.",
+              "Eligible Solutions may include, for example, Solutions previously on the GPSoC framework or Solutions compliant with NHS Spine requirements.  ",
+              "It is intended that any evidence submitted on the Catalogue for compliance will be used for future compliance, and that previous compliance evidence will be inherited wherever possible."
+            ]
+          }
+        ]
+      },
+      {
+        "Title": "Standards Evaluation",
+        "Nav Title": "Standards Submission",
+        "Text": [
+          "The evidence you submit within your Traceability Matrices (TMs) will be evaluated for compliance, according to the risk-based approach outlined below. ",
+          "Once we’ve evaluated each line item in a Standard, we will send a notification to the lead contact and Standard owner, linking to our feedback within the TM on the Catalogue. The feedback is intended to support the Supplier in providing additional evidence. Suppliers can re-submit TMs as many times as needed until all line items meet the minimum level required to pass compliance for that Standard. "
+        ],
+        "Subsections": [
+          {
+            "Title": "Compliance approach - risk based",
+            "Text": [
+              "In order to establish our compliance criteria for each Standard, a risk-based approach has been applied to all aspects of each Standard, to determine what evidence will be assessed by us, and which areas will be assessed by the buyer.",
+              "In general, central compliance will be applied when risks exist around the following areas:",
+              "• Clinical safety",
+              "• Information governance (including information security)",
+              "• Central NHS Spine Services and national programmes",
+              "• Interoperability",
+              "Where central risk mitigations have been identified, a risk level has been applied and mapped to mitigating actions. Examples of standards’ risks/mitigations are shown below:",
+              "• No Risk: yes/no self-certified response",
+              "• Low Risk: a self-certified* statement with a brief description of how you have met the line item",
+              "• Medium Risk: self-certified* statement with an implementation description plus physical evidence which may include screenshot/video, API response message, evidence of external compliance/certification (for example, ISO)",
+              "• High Risk: witnessed tests, design documents",
+              "The compliance evaluation of your overarching Standards will also seek a proportionate risk-based approach. However, given the nature and variability within the overarching standards, the approach will be dependent on an understanding of the Solution being provided."
+            ]
+          },
+          {
+            "Title": "Compliance approach – ongoing",
+            "Text": [
+              "Ensuring that Solutions remain compliant to Standards post-evaluation is critical to provide buyers with assurance that Solutions continue to function as intended and do not present safety risks. All Catalogue-assured Solutions must follow the requirements in the Service Management Standard, which will explain how Suppliers should manage change to their Solution, including any related compliance activities, for example, change and regression testing.",
+              "Suppliers will have a responsibility to cooperate with any feedback activities or direct audits. The goal of both activities is to help identify and address any non-compliance and support the continued delivery of compliant Solutions to end users."
+            ]
+          },
+          {
+            "Title": "Solution Page – This stage is not yet available. All lead contacts that have Solutions in progress on the Catalogue will be notified as soon as it is available.",
+            "Text": [
+              "Having successfully passed both the Capabilities assessment and the Standards compliance stages, you can progress to populating your Catalogue Solution listing, which will form your Solution page. In this final stage, you will be asked to provide additional information relevant to potential buyers. For specific information, see the Supplier checklist.",
+              "Some aspects of the Solution page may vary by framework, for example prices and performance levels.",
+              "We will moderate the Solution page to ensure it appears factually correct, isn’t misleading, and is presented within the spirit of the Commercial Standard before you can publish it."
+            ]
+          }
+        ]
+      },
+      {
+        "Title": "Contact us",
+        "Nav Title": "Contact us",
+        "Text": [
+          "If you have any queries or require our support while using the Catalogue, please feel free to contact us via the methods below:",
+          " Phone 0300 303 4034",
+          " Email <a href='#' target='_blank'>Exeter help desk</a>",
+          " Website <a href='#' target='_blank'>Self Service Portal</a>"
+        ]
+      },
+      {
+        "Title": "Supplier checklist",
+        "Nav Title": "Supplier checklist",
+        "Text": [
+          "To help Suppliers to prepare for Catalogue submissions, this section lists each piece of information required or requested by the Catalogue at each stage. All information is added by the Supplier, with the exception of certain Solution page information. In the Solution page section, we will pull across or copy over information entered previously on the Catalogue or on other platforms, such as framework information and pricing. See detail below. ",
+          "All fields mandatory unless otherwise indicated."
+        ],
+        "Subsections": [
+          {
+            "Custom": "supplier-checklist"
+          }
+        ]
+      }
+    ],
+    "Custom Sections": {
+      "Process Overview": {
+        "Sections": [
+          {
+            "Title": "0. Supplier Registration",
+            "Left": {
+              "Title": "What you do",
+              "Text": [
+                "On Bravo",
+                "First, register for Bravo if you have not already done so.",
+                "Provide your company information.",
+                "Sign Catalogue Agreement.",
+                "Provide list of staff to be given log-in access under your company account."
+              ]
+            },
+            "Right": {
+              "Title": "What we do.",
+              "Text": [
+                "On Bravo",
+                "Review your submitted Catalogue agreement.",
+                "Notify you when we have accepted your Buying Catalogue Agreement and send you the counter-signed copy of the Agreement.",
+                "Upon accepting the Agreement, create user accounts and provide log-in details for staff requiring a Buying Catalogue account."
+              ]
+            },
+            "PostText": [
+              "The aim is that you will have your user logins no longer than 9 Working Days after submission of your Catalogue Agreement, company information and user log-in request."
+            ]
+          },
+          {
+            "Title": "1. Provide basic details and select Capabilities*",
+            "Left": {
+              "Title": "What you do",
+              "Text": [
+                "On the Catalogue",
+                "Provide Solution’s basic details and key contacts.",
+                "Select the applicable Capabilities. Your Solution will be assessed against these in the next stage.",
+                "Via email",
+                "Submit Associated Services and Additional Services. Submit service levels now or at Stage 3."
+              ]
+            },
+            "Right": {
+              "Title": "What we do.",
+              "Text": [
+              ]
+            },
+            "PostText": [
+              "* If your Catalogue Solution includes the Productivity Capability, you will follow a different process. See Annex 1 of the ‘Supplier Onboarding Process.’ ",
+              "You can progress to the next stages. "
+            ]
+          },
+          {
+            "Title": "2. Provide evidence of Capabilities*",
+            "Left": {
+              "Title": "What you do",
+              "Text": [
+                "On the Catalogue",
+                "Evidence how your Solution meets the Capabilities by submitting video or request to present to us via a live witness demonstration.",
+                "Via email",
+                "Respond to any clarifications if we send them.",
+                "Submit service levels if not already provided.",
+                "Receive outcome of Capability Assessment."
+              ]
+            },
+            "Right": {
+              "Title": "What we do.",
+              "Text": [
+                "FIRST",
+                "On the Catalogue",
+                "Review your Solution details.",
+                "Review your Capability selection.",
+                "Off the Catalogue",
+                "Review your Associated Services and Additional Services.",
+                "Review your Service Levels, if provided.",
+                "Via email",
+                "Notify you when your submission has been accepted.",
+                "THEN",
+                "On the Catalogue and/or via live witness demo, as requested",
+                "Assess your Capability evidence.",
+                "Assess your Associated Services and Additional Services.",
+                "On the Catalogue",
+                "Update Catalogue with outcome status following our assessment.",
+                "Via email",
+                "Ask any clarification questions if we have them.",
+                "Notify lead contact of Capability assessment outcome."
+              ]
+            },
+            "PostText": [
+              "* If your Catalogue Solution includes the Productivity Capability, you will follow a different process. See Annex 1 of the ‘Supplier Onboarding Process.’",
+              "The aim is that this will take no longer than 20 Working Days from awarding status of Catalogue Solution Submission Accepted, or completion of your live witness demonstration. You can progress to the next stage and submit evidence for Standards while you wait for the outcome of your Capability assessment."
+            ]
+          },
+          {
+            "Title": "3. Provide evidence of Standards*",
+            "Left": {
+              "Title": "What you do",
+              "Text": [
+                "On the Catalogue",
+                "Download, complete and submit Traceability Matrices for your Standards.",
+                "Respond to feedback from us. This may include providing more information where required and working with us as we test each Standard against the requirements."
+              ]
+            },
+            "Right": {
+              "Title": "What we do.",
+              "Text": [
+                "On the Catalogue",
+                "Review and provide feedback on evidence for each Standard submitted for compliance.",
+                "Via email",
+                "Send notification for each Standard when feedback is available.",
+                "Send notification for each Standard when compliance is achieved.",
+                "Send notification for Solution when compliance with all Standards is achieved."
+
+              ]
+            },
+            "PostText": [
+              "* If your Catalogue Solution includes the Productivity Capability, you will follow a different process. See Annex 1 of the ‘Supplier Onboarding Process.’",
+              "Once we begin reviewing your Traceability Matrices, the aim is for each Standard to take no longer than 12 weeks including dialogue. This assumes an initial good quality submission. See ‘Supplier Onboarding Process’ for more detail on this stage. "
+            ]
+          },
+          {
+            "Title": "4. Build Solution page (what buyers will see)",
+            "Left": {
+              "Title": "What you do",
+              "Text": [
+                "On Bravo",
+                "For your first accepted Solution, complete and submit the Supplier specific schedules associated with the Catalogue Agreement.",
+                "For each Solution, complete and submit the Solution specific aspects of the Catalogue Agreement. ",
+                "On the Buying Catalogue",
+                "Answer questions required to populate this page.",
+                "Preview and send page for moderation.",
+                "Publish page once moderation, and any necessary changes, are complete."
+              ]
+            },
+            "Right": {
+              "Title": "What we do.",
+              "Text": [
+                "On the Buying Catalogue",
+                "Moderate the detail provided.",
+                "Via email",
+                "Send outcome of moderation to lead contact."
+              ]
+            },
+            "PostText": [
+              "The aim is you will hear from us within 5 Working Days from submission of your Solution page.",
+              "Please review the <a href='#' target='_blank'> Buying Catalogue Onboarding Process document</a> for further detail."
+            ]
+          }
+        ]
+      },
+      "Supplier Checklist": {
+        "Tables": [
+          {
+            "Headings": [
+              "Stage",
+              "Field name",
+              "Description",
+              "Visibility"
+            ],
+            "Rows":[
+              [
+                [
+                  "Supplier registration"
+                ],
+                [
+                  "Signed Catalogue agreement"
+                ],
+                [
+                  "This is in Bravo. Someone from your company will need sign the Catalogue agreement, and it will need to be accepted by the Catalogue Authority, before anyone from your company can access the Catalogue."
+                ],
+                [
+                  "Catalogue Authority"
+                ]
+              ],
+              [
+                [
+                  "Supplier registration"
+                ],
+                [
+                  "Company name"
+                ],
+                [
+                  "This is in Bravo. We will use company name to identify your organisation along with its DUNS number. We will also register individuals for whom you’ve requested access under the company name. ",
+                  "Your company name will show along with your Solution name on your Solution page to potential buyers."
+                ],
+                [
+                  "Catalogue Authority/later Public"
+                ]
+              ],
+              [
+                [
+                  "Supplier registration"
+                ],
+                [
+                  "Company DUNS"
+                ],
+                [
+                  "This is in Bravo. This will be used to validate your organisation. "
+                ],
+                [
+                  "Catalogue Authority"
+                ]
+              ],
+              [
+                [
+                  "Supplier registration"
+                ],
+                [
+                  "List of names & emails to authenticate"
+                ],
+                [
+                  "This is in Bravo. You will be asked to include the names and emails of individuals at your organisation who should have access to the Buying Catalogue under your Supplier organisation account."
+                ],
+                [
+                  "Catalogue Authority"
+                ]
+              ],
+              [
+                [
+                  "Solution details"
+                ],
+                [
+                  "Solution name"
+                ],
+                [
+                  "The official name of your Solution. This is not editable once you submit evidence for Capability Assessment in the next stage. It should be unique for each Solution. (60 characters max)"
+                ],
+                [
+                  "Catalogue Authority/later public"
+                ]
+              ],
+              [
+                [
+                  "Solution details"
+                ],
+                [
+                  "Solution description"
+                ],
+                [
+                  "A brief description of your Solution. This information will only be visible to the Catalogue Authority, at this stage. You can edit it in stage 4 before making your Solution page visible to buyers. When it is visible to buyers, it may be shown in search results but will not affect search ranking. (300 characters max"
+                ],
+                [
+                  "Catalogue Authority/later public"
+                ]
+              ],
+              [
+                [
+                  "Solution details"
+                ],
+                [
+                  "Version (optional)"
+                ],
+                [
+                  "The current major version number of your Solution if applicable. This is not editable once you submit Capability evidence for assessment in the next stage. "
+                ],
+                [
+                  "Catalogue Authority/later public"
+                ]
+              ],
+              [
+                [
+                  "Solution details"
+                ],
+                [
+                  "Lead contact"
+                ],
+                [
+                  "The lead contact is responsible for ensuring the accuracy of information provided and is the Catalogue Authority’s primary point of contact at your organisation as relates to the particular Solution. This contact should be able to resolve or coordinate the resolution of any issues that arise regarding your submission.",
+                  "This contact will receive all the email notifications relating to the Solution. (You may use a generic email address if notifications should be accessible by multiple users)."
+                ],
+                [
+                  "Catalogue Authority"
+                ]
+              ],
+              [
+                [
+                  "Solution details"
+                ],
+                [
+                  "Additional contacts (optional)"
+                ],
+                [
+                  "You may add additional contacts as relevant to the Solution. For example, you may wish to provide an additional contact in case your lead contact cannot be reached; Or, you may wish to name a Clinical Safety Officer, or other key contact, for the Solution. These contacts will not be shared outside NHS Digital."
+                ],
+                [
+                  "Catalogue Authority"
+                ]
+              ],
+              [
+                [
+                  "Solution details"
+                ],
+                [
+                  "Capabilities"
+                ],
+                [
+                  "You will select the Capabilities that your Solution provides. You can also review the Standards that will be required based on your selections. In selecting each Capability, you will be acknowledging the set of Standards your Solution must meet to attain compliance. You can also review the Overarching Standards, with which all Solutions must comply.",
+                  "In the next stage, your Solution will be assessed against the Capabilities selected."
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Capability assessment"
+                ],
+                [
+                  "Capability assessment evidence method"
+                ],
+                [
+                  "For each Capability, you can choose to provide evidence either by:",
+                  "• Providing a recorded video demonstration",
+                  "• Scheduling a live witness demo",
+                  "Either way, you will need to demonstrate how each Capability meets its required Epics. (See Confluence for Capabilities and Epics.)"
+                ],
+                [
+                  "Catalogue Authority"
+                ]
+              ],
+              [
+                [
+                  "Capability assessment"
+                ],
+                [
+                  "Video file (conditionally required)"
+                ],
+                [
+                  "When you provide a recorded video demonstration as evidence, you will need to upload the video file. Video files can be in any video format. If you wish to provide multiple files for each Capability, you must zip them into one file."
+                ],
+                [
+                  "Catalogue Authority"
+                ]
+              ],
+              [
+                [
+                  "Capability assessment"
+                ],
+                [
+                  "Video file (conditionally required)"
+                ],
+                [
+                  "For each Capability where you chose to provide a recorded video demonstration, you will need to provide a timestamp indicating where in each video each epic is demonstrated."
+                ],
+                [
+                  "Catalogue Authority"
+                ]
+              ],
+              [
+                [
+                  "Standards compliance"
+                ],
+                [
+                  "Completed TM files"
+                ],
+                [
+                  "A Traceability Matrix (TM) will need to be completed for each Standard. TMs are presented as Excel files with a line for each requirement. If you’ve submitted evidence previously for this Solution and Standard, your previously submitted information will be pre-populated, so you’ll just need to fill the gaps. You may include screenshots and other supporting evidence directly in the file.",
+                  "There are further instructions in the TM File. "
+                ],
+                [
+                  "Catalogue Authority "
+                ]
+              ],
+              [
+                [
+                  "Standards compliance"
+                ],
+                [
+                  "Message (optional)"
+                ],
+                [
+                  "When you submit a TM, you may include a message to the Catalogue Authority if you wish."
+                ],
+                [
+                  "Catalogue Authority"
+                ]
+              ]
+            ]
+          },
+          {
+            "Preamble": [
+              "The following Build Solution page fields and sections are not confirmed. This stage of the Catalogue is still in development. Therefore, these are subject to change. We will update this table as needed."
+            ],
+            "Headings": [
+              "Stage",
+              "Field or Section",
+              "Description",
+              "Visibility"
+            ],
+            "Rows":[
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Solution name"
+                ],
+                [
+                  "The official name of your Solution. This will be brought through from stage 1. It will not be editable. "
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Solution version (if provided)"
+                ],
+                [
+                  "The current major version number of your Solution. This will be brought through from stage 1. It will not be editable.  "
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Supplier name"
+                ],
+                [
+                  "Name of the Supplier organisation you are registered to. It will not be editable."
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Solution description"
+                ],
+                [
+                  "A brief description of your Solution, which has been pulled through from stage 1. You can edit this field before submitting the page for moderation. (300 characters max)"
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Features (optional)"
+                ],
+                [
+                  "This is a bulleted list. Suppliers can add up to 10 bullets to describe the Solutions’ features. "
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "List of Capabilities met"
+                ],
+                [
+                  "List of Capabilities met including epics matched. This will be brought through from Capability Assessment. This list is not editable."
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "List of Standards met"
+                ],
+                [
+                  "List of Standards met. This will be brought through from Standards compliance. This list is not editable."
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Catalogue Solution price"
+                ],
+                [
+                  "This will be based on the relevant framework. It will be populated by the Catalogue Authority and will not be editable."
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Framework "
+                ],
+                [
+                  "Once your Solution has qualified to be on a framework, it will be able to be purchased under that framework. The name of the eligible active framework(s) will display. This field is not editable."
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Service level information "
+                ],
+                [
+                  "For certain types of Solutions, this is either the default minimum or Supplier-specified performance in excess of the minimum.",
+                  "For other types of Solutions, this will be the minimum proposed by the Supplier. (More information on the two types to come)"
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Additional Services with prices (optional)"
+                ],
+                [
+                  "These are optional services that augment a Solution and are optional for purchase. The prices will be based on the relevant framework. The Catalogue Authority will add the relevant information and this will not be editable."
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Associated Services with prices (optional)"
+                ],
+                [
+                  "These are services that must or may be purchased with the Solution. The prices will be based on the relevant framework. The Catalogue Authority will add the relevant information and this will not be editable."
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Integrations"
+                ],
+                [
+                  "The Catalogue Authority will populate proven integrations, such as IM1 and GPConnect, and the Supplier may add their own proprietary integrations."
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Minimum system requirements "
+                ],
+                [
+                  "Guidelines for buyers as to what is required to operate the Solution."
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Deployment model and specifications "
+                ],
+                [
+                  "Guidelines for buyers as to how the Solution is hosted and deployed, including any configurations or requirements to support local deployments."
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "About the Solution"
+                ],
+                [
+                  "You may add more information about your Solution, including contextual links to your website."
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "About the Supplier "
+                ],
+                [
+                  "Free text field about your company, including link to your website. "
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Contact details"
+                ],
+                [
+                  "You may include a name, email and phone number for potential buyers to contact you directly. "
+                ],
+                [
+                  "Public"
+                ]
+              ]
             ]
           }
         ]
       }
-    ]
+    }
   }
 }
