@@ -812,7 +812,7 @@
             "Left": {
               "Title": "What you do",
               "Text": [
-                "On Bravo",
+                "<b>On Bravo</b>",
                 "First, register for Bravo if you have not already done so.",
                 "Provide your company information.",
                 "Sign Catalogue Agreement.",
@@ -822,7 +822,7 @@
             "Right": {
               "Title": "What we do.",
               "Text": [
-                "On Bravo",
+                "<b>On Bravo</b>",
                 "Review your submitted Catalogue agreement.",
                 "Notify you when we have accepted your Buying Catalogue Agreement and send you the counter-signed copy of the Agreement.",
                 "Upon accepting the Agreement, create user accounts and provide log-in details for staff requiring a Buying Catalogue account."
@@ -837,10 +837,10 @@
             "Left": {
               "Title": "What you do",
               "Text": [
-                "On the Catalogue",
+                "<b>On the Catalogue</b>",
                 "Provide Solution’s basic details and key contacts.",
                 "Select the applicable Capabilities. Your Solution will be assessed against these in the next stage.",
-                "Via email",
+                "<b>Via email</b>",
                 "Submit Associated Services and Additional Services. Submit service levels now or at Stage 3."
               ]
             },
@@ -859,9 +859,9 @@
             "Left": {
               "Title": "What you do",
               "Text": [
-                "On the Catalogue",
+                "<b>On the Catalogue</b>",
                 "Evidence how your Solution meets the Capabilities by submitting video or request to present to us via a live witness demonstration.",
-                "Via email",
+                "<b>Via email</b>",
                 "Respond to any clarifications if we send them.",
                 "Submit service levels if not already provided.",
                 "Receive outcome of Capability Assessment."
@@ -870,22 +870,22 @@
             "Right": {
               "Title": "What we do.",
               "Text": [
-                "FIRST",
-                "On the Catalogue",
+                "<h4>FIRST</h4>",
+                "<b>On the Catalogue</b>",
                 "Review your Solution details.",
                 "Review your Capability selection.",
-                "Off the Catalogue",
+                "<b>Off the Catalogue</b>",
                 "Review your Associated Services and Additional Services.",
                 "Review your Service Levels, if provided.",
-                "Via email",
+                "<b>Via email</b>",
                 "Notify you when your submission has been accepted.",
-                "THEN",
-                "On the Catalogue and/or via live witness demo, as requested",
+                "<h4>THEN</h4>",
+                "<b>On the Catalogue and/or via live witness demo, as requested</b>",
                 "Assess your Capability evidence.",
                 "Assess your Associated Services and Additional Services.",
-                "On the Catalogue",
+                "<b>On the Catalogue</b>",
                 "Update Catalogue with outcome status following our assessment.",
-                "Via email",
+                "<b>Via email</b>",
                 "Ask any clarification questions if we have them.",
                 "Notify lead contact of Capability assessment outcome."
               ]
@@ -900,7 +900,7 @@
             "Left": {
               "Title": "What you do",
               "Text": [
-                "On the Catalogue",
+                "<b>On the Catalogue</b>",
                 "Download, complete and submit Traceability Matrices for your Standards.",
                 "Respond to feedback from us. This may include providing more information where required and working with us as we test each Standard against the requirements."
               ]
@@ -908,9 +908,9 @@
             "Right": {
               "Title": "What we do.",
               "Text": [
-                "On the Catalogue",
+                "<b>On the Catalogue</b>",
                 "Review and provide feedback on evidence for each Standard submitted for compliance.",
-                "Via email",
+                "<b>Via email</b>",
                 "Send notification for each Standard when feedback is available.",
                 "Send notification for each Standard when compliance is achieved.",
                 "Send notification for Solution when compliance with all Standards is achieved."
@@ -927,10 +927,10 @@
             "Left": {
               "Title": "What you do",
               "Text": [
-                "On Bravo",
+                "<b>On Bravo</b>",
                 "For your first accepted Solution, complete and submit the Supplier specific schedules associated with the Catalogue Agreement.",
                 "For each Solution, complete and submit the Solution specific aspects of the Catalogue Agreement. ",
-                "On the Buying Catalogue",
+                "<b>On the Buying Catalogue</b>",
                 "Answer questions required to populate this page.",
                 "Preview and send page for moderation.",
                 "Publish page once moderation, and any necessary changes, are complete."
@@ -939,9 +939,9 @@
             "Right": {
               "Title": "What we do.",
               "Text": [
-                "On the Buying Catalogue",
+                "<b>On the Buying Catalogue</b>",
                 "Moderate the detail provided.",
-                "Via email",
+                "<b>Via email</b>",
                 "Send outcome of moderation to lead contact."
               ]
             },
