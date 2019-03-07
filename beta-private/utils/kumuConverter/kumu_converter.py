@@ -13,8 +13,8 @@ elements_sheet_headings = [
     'Type',
     'URL',
     'Description',
-    'Capability Type',
     'Tags',
+    'Capability Type',
     'Capability Specific Standard 1',
     'Capability Specific Standard URL 1',
     'Capability Specific Standard 2',
@@ -26,7 +26,6 @@ connections_sheet_headings = [
     'To',
     'FromID',
     'ToID',
-    'Connection Type',
     'Type'
 ]
 
@@ -81,7 +80,7 @@ capability_headings_map = {
     'Name': 'Label',
     'Description': 'Description',
     'URL': 'URL',
-    'Type': 'Capability Type',
+    'Type': 'Type',
 }
 
 def map_capability_type (row):
@@ -156,7 +155,7 @@ def validate_work_book (wb):
     '''validates that the workbook is in an expected format'''
     elements_ws = wb.get_sheet_by_name(elements_sheet_name)
     connections_ws = wb.get_sheet_by_name(connections_sheet_name)
-    
+
     if not valid_sheet_names(wb):
         print('Invalid Sheet names. Expected:', sheet_names, 'Recieved:', get_sheet_names(wb))
         return False
@@ -237,15 +236,19 @@ def build_standards_output (wb):
 def extract_capability_standard_rows (ws):
     from_col_idx = get_col_of_heading(ws, 'FromID')
     to_col_idx = get_col_of_heading(ws, 'ToID')
+    type_col_idx = get_col_of_heading(ws, 'Type')
 
     capability_standard_rows = []
     for row in ws:
         from_val =  list(row)[from_col_idx].value
         to_val = list(row)[to_col_idx].value
-        not_none = (from_val != None) and (to_val != None)
+        type_val = list(row)[type_col_idx].value
+
+        not_none = (from_val != None) and (to_val != None) and (type_val != 'Inherited')
         if not_none and from_val.startswith('C') and to_val.startswith('S'):
             capability_standard_rows.append(row)
     return capability_standard_rows
+
 
 def build_mappings_output (wb):
     ws = wb.get_sheet_by_name(connections_sheet_name)
@@ -313,6 +316,7 @@ def main (argv):
     if not valid_workbook:
         print('Invalid workbook provided. Exiting.')
         return
+
 
     capability_output = build_capabilities_output(wb)
     standards_output = build_standards_output(wb)
