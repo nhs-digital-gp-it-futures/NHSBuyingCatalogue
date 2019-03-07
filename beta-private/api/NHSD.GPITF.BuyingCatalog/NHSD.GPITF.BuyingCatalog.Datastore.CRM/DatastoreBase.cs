@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Runtime.CompilerServices;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
@@ -130,7 +131,14 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 
       // log here as may fail deserialisation
       var body = request.Parameters.SingleOrDefault(x => x.Type == ParameterType.RequestBody)?.Value?.ToString();
-      LogInformation($"[{request.Resource}] {body} --> [{resp.StatusCode}] {resp.Content}");
+      var msg = $"[{request.Resource}] {body} --> [{resp.StatusCode}] {resp.Content}";
+      LogInformation(msg);
+
+      // relog errors explicitly so they are more prominent
+      if (resp.StatusCode >= HttpStatusCode.BadRequest)
+      {
+        _logger.LogError(msg);
+      }
 
       return resp;
     }
