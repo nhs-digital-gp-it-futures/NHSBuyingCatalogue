@@ -107,7 +107,9 @@ namespace Gif.Service.Crm
       var jretrieveJObject = JObject.Parse(retrieveResponse.Content.ReadAsStringAsync().Result);
 
       if (jretrieveJObject == null)
+      {
         return jretrieveToken;
+      }
 
       jretrieveToken = jretrieveJObject["value"];
 
@@ -134,7 +136,11 @@ namespace Gif.Service.Crm
       resp = _httpClient.PostAsync(address, content).Result;
 
       if (resp.StatusCode != HttpStatusCode.OK && resp.StatusCode != HttpStatusCode.NoContent)
-        throw new CrmApiException(resp.ReasonPhrase, resp.StatusCode);
+      {
+        var ex = new CrmApiException(resp.ReasonPhrase, resp.StatusCode);
+        _logger.LogError(ex, $"[{ex.HttpStatus}] + [{ex.Message}]");
+        throw ex;
+      }
     }
 
     public Guid CreateEntity(string entityName, string entityData, bool update = false)
@@ -153,13 +159,19 @@ namespace Gif.Service.Crm
 
 
       if (updateResponse.StatusCode != HttpStatusCode.OK && updateResponse.StatusCode != HttpStatusCode.NoContent)
-        throw new CrmApiException(updateResponse.ReasonPhrase, updateResponse.StatusCode);
+      {
+        var ex = new CrmApiException(updateResponse.ReasonPhrase, updateResponse.StatusCode);
+        _logger.LogError(ex, $"[{ex.HttpStatus}] + [{ex.Message}]");
+        throw ex;
+      }
 
       IEnumerable<string> headerVals;
 
       if (!updateResponse.Headers.TryGetValues("OData-EntityId", out headerVals))
       {
-        throw new FormatException("Response Entity ID header is empty");
+        var ex = new FormatException("Response Entity ID header is empty");
+        _logger.LogError(ex, $"[FormatException] + [{ex.Message}]");
+        throw ex;
       }
 
       var idString = new List<string>(headerVals)[0].Replace(targetUri + entityName, "");
@@ -188,8 +200,11 @@ namespace Gif.Service.Crm
 
 
       if (response.StatusCode != HttpStatusCode.NoContent)
-        throw new CrmApiException(response.ReasonPhrase, response.StatusCode);
-
+      {
+        var ex = new CrmApiException(response.ReasonPhrase, response.StatusCode);
+        _logger.LogError(ex, $"[{ex.HttpStatus}] + [{ex.Message}]");
+        throw ex;
+      }
     }
 
     public void Delete(string entityName, Guid id)
@@ -207,7 +222,11 @@ namespace Gif.Service.Crm
       response = _httpClient.SendAsync(request).Result;
 
       if (response.StatusCode != HttpStatusCode.NoContent)
-        throw new CrmApiException(response.ReasonPhrase, response.StatusCode);
+      {
+        var ex = new CrmApiException(response.ReasonPhrase, response.StatusCode);
+        _logger.LogError(ex, $"[{ex.HttpStatus}] + [{ex.Message}]");
+        throw ex;
+      }
     }
 
     public void CreateBatch(List<BatchData> batchData)
@@ -247,8 +266,11 @@ namespace Gif.Service.Crm
       response = _httpClient.SendAsync(batchRequest).Result;
 
       if (response.StatusCode != HttpStatusCode.OK)
-        throw new CrmApiException(response.ReasonPhrase, response.StatusCode);
-
+      {
+        var ex = new CrmApiException(response.ReasonPhrase, response.StatusCode);
+        _logger.LogError(ex, $"[{ex.HttpStatus}] + [{ex.Message}]");
+        throw ex;
+      }
     }
 
     private void AddChangeSet(IList<BatchData> batchData, HttpClient httpClient, ref MultipartContent changeSet)
@@ -314,7 +336,11 @@ namespace Gif.Service.Crm
       updateResponse = _httpClient.PutAsync(address, content).Result;
 
       if (updateResponse.StatusCode != HttpStatusCode.NoContent)
-        throw new CrmApiException(updateResponse.ReasonPhrase, updateResponse.StatusCode);
+      {
+        var ex = new CrmApiException(updateResponse.ReasonPhrase, updateResponse.StatusCode);
+        _logger.LogError(ex, $"[{ex.HttpStatus}] + [{ex.Message}]");
+        throw ex;
+      }
     }
 
     private void LogInformation(string msg)
@@ -324,7 +350,6 @@ namespace Gif.Service.Crm
         _logger.LogInformation(msg);
       }
     }
-
   }
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
