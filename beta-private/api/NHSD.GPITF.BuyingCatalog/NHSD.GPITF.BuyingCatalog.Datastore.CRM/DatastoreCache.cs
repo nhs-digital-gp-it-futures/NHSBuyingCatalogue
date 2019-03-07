@@ -9,8 +9,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
   public sealed class DatastoreCache : IDatastoreCache
   {
-    private static TimeSpan Expiry = TimeSpan.FromDays(7);
-
+    private readonly TimeSpan _expiry;
     private readonly IConfiguration _config;
     private readonly ILogger<DatastoreCache> _logger;
     private readonly ISyncPolicy _policy;
@@ -24,6 +23,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       _config = config;
       _logger = logger;
       _policy = policy.Build(_logger);
+
+      _expiry = TimeSpan.FromMinutes(Settings.CRM_CACHE_EXPIRY_MINS(_config));
 
       var cacheHost = Settings.CACHE_HOST(_config);
       var cfg = new ConfigurationOptions
@@ -42,7 +43,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       GetInternal(() =>
       {
-        _db.StringSet(path, jsonCachedResponse, Expiry);
+        _db.StringSet(path, jsonCachedResponse, _expiry);
         return 0;
       });
     }
