@@ -21,10 +21,14 @@
                     <p>{{.}}</p>
                 {{/Text}}
                 {{#Subsections}}
-                    <h3>{{Title}}</h3>
-                    {{#Text}}
-                        <p>{{.}}</p>
-                    {{/Text}}
+                    {{#if Custom}}
+                        {{> (lookup . 'Custom') }}
+                    {{else}}
+                        <h3>{{Title}}</h3>
+                        {{#Text}}
+                            <p>{{.}}</p>
+                        {{/Text}}
+                    {{/if}}
                 {{/Subsections}}
             {{/each}}
         </div>
