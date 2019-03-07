@@ -86,30 +86,6 @@ namespace Gif.Service.Crm
       return accessToken;
     }
 
-    public JObject Retrieve(string query)
-    {
-      LogInformation($"[{nameof(Retrieve)}] --> {query}");
-      ApplyAccessToken();
-
-      var httpResponse = _httpClient.GetAsync(query).Result;
-
-      JObject jretrieveJObject = null;
-
-      if (httpResponse.IsSuccessStatusCode)
-      {
-        jretrieveJObject = JObject.Parse(httpResponse.Content.ReadAsStringAsync().Result);
-      }
-      else
-      {
-        var ex = new CrmApiException(httpResponse.ReasonPhrase, httpResponse.StatusCode);
-        _logger.LogError(ex, $"[{ex.HttpStatus}] + [{ex.Message}]");
-        throw ex;
-      }
-
-      LogInformation($"  [{httpResponse.StatusCode}] --> {jretrieveJObject.ToString()}");
-      return jretrieveJObject;
-    }
-
     public JToken RetrieveMultiple(string query, out int? count)
     {
       LogInformation($"[{nameof(RetrieveMultiple)}] --> {query}");
