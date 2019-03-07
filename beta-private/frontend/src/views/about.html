@@ -16,15 +16,19 @@
         </div>
         <div class="page-content">
             {{#each (tt 'Support.Sections')}}
-                <h2 id="{{'Nav Title'}}">{{Title}}</h2>
+                <h2 id="{{'Nav Title'}}">{{t Title}}</h2>
                 {{#Text}}
-                    <p>{{.}}</p>
+                    <p>{{t .}}</p>
                 {{/Text}}
                 {{#Subsections}}
-                    <h3>{{Title}}</h3>
-                    {{#Text}}
-                        <p>{{.}}</p>
-                    {{/Text}}
+                    {{#if Custom}}
+                        {{> (lookup . 'Custom') }}
+                    {{else}}
+                        <h3>{{t Title}}</h3>
+                        {{#Text}}
+                            <p>{{t .}}</p>
+                        {{/Text}}
+                    {{/if}}
                 {{/Subsections}}
             {{/each}}
         </div>
