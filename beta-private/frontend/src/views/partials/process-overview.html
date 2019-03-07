@@ -1,32 +1,32 @@
 
 {{#each (tt 'Support.Custom Sections.Process Overview.Sections')}}
 <div class="support-process-overview">
-    <div><h3>{{Title}}</h3></div>
+    <div><h3>{{t Title}}</h3></div>
     <table class="two-columns">
         <thead>
             <th>
-                {{Left.Title}}
+                {{t Left.Title}}
             </th>
             <th>
-                {{Right.Title}}
+                {{t Right.Title}}
             </th>
         </thead>
         <tr>
             <td>
                 {{#Left.Text}}
-                    <p>{{.}}</p>
+                    <p>{{t .}}</p>
                 {{/Left.Text}}
             </td>
             <td>
                 {{#Right.Text}}
-                    <p>{{.}}</p>
+                    <p>{{t .}}</p>
                 {{/Right.Text}}
             </td>
         </tr>
     </table>
     <div class="post-text">
         {{#PostText}}
-            <p>{{.}}</p>
+            <p>{{t .}}</p>
         {{/PostText}}
     </div>
 </div>

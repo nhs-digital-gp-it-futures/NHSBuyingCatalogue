@@ -133,7 +133,7 @@
     "Help": {
       "Title": "Help - Where can I find guidance on $t(Onboarding.Title)?",
       "Text": [
-        "Follow the links below for guidance on each stage of <a href='#'>$t(Onboarding.Title)</a>.",
+        "Follow the links below for guidance on each stage of <a href='#' target='_blank'>$t(Onboarding.Title)</a>.",
         "<ul><li><a href='#'>Stage 1 - $t(Onboarding.Stages.0.Name)</a><li><a href='#'>Stage 2 - $t(Onboarding.Stages.1.Name)</a><li><a href='#'>Stage 3 - $t(Onboarding.Stages.2.Name)</a><li><a href='#'>Stage 4 - $t(Solution) page (what buyers will see)</a></ul>"
       ]
     },
@@ -249,7 +249,7 @@
       "Preamble": [
         "As you select $t(Capability_plural), a summary of required Standards will form below. You may return here to change these selections until you submit $t(Capability) evidence for assessment in the next stage. The $t(Capability_plural) selected will be visible to buyers on your $t(Solution) page when all assurance activities have been successfully completed.",
         "For queries, <a target='_blank' href='mailto:gpitfutures@nhs.net'>email us</a>.",
-        "To check the requirements for each, including which epics are required, see all <a href='#'>Capabilities & Standards in Confluence</a>. (* indicates required field)."
+        "To check the requirements for each, including which epics are required, see all <a href='#' target='_blank'>Capabilities & Standards in Confluence</a>. (* indicates required field)."
       ],
       "Help": {
         "Title": "Help - What if my Solution only matches some of a $t(Capability_plural)'s epics?",
@@ -335,7 +335,7 @@
       "Subtitle": "Download the $t(Traceability Matrix) file below. Detailed instructions are included in the file. When you have finished addressing the requirements in the file, upload it. Review on the next page before submitting the file to $t(NHSD.Name).",
       "Preamble": [
         "For support, see <a href='#'>guidance</a>. Buyers will be able to request the final version of your completed $t(Traceability Matrix) file for this $t(Standard).",
-        "For queries, email us <a href='#'>email us</a>. (* indicates required field)"
+        "For queries, email us <a href='#' target='_blank'>email us</a>. (* indicates required field)"
       ],
       "QuickLinks": {
         "Heading": "Quick Links — $t(Standard) & Related $t(Capability_plural)"
@@ -417,7 +417,7 @@
       "Title": "Provide $t(Capability) evidence for your $t(Solution).",
       "Instructions": "Select evidence method and follow the instructions for each of your selected $t(Capability_plural) below. On the next page, you can review your answers and submit them to $t(NHSD.Name).",
       "Guidance": [
-        "For what to put in each video, and how to plan for live demonstrations, see the <a href='#'>guidance</a>. You can also watch an <a href='#'>example video demonstration</a>.",
+        "For what to put in each video, and how to plan for live demonstrations, see the <a href='#'>guidance</a>. You can also watch an <a href='#' target='_blank'>example video demonstration</a>.",
         "For queries, <a target='_blank' href='mailto:gpitfutures@nhs.net'>email us</a>. (* indicates required field)"
       ],
       "Evidence": {
@@ -542,7 +542,7 @@
           {
             "Title": "Is my Solution appropriate for the Buying Catalogue?",
             "Text": [
-              "GP IT Futures Framework 1 is open to any Solution that can meet at least one of the Capabilities, and the applicable Standards. We strongly recommend that you review the <a href='#'>Capabilities & Standards Model</a> to check that your Solution would be appropriate for this framework.",
+              "GP IT Futures Framework 1 is open to any Solution that can meet at least one of the Capabilities, and the applicable Standards. We strongly recommend that you review the <a href='#' target='_blank'>Capabilities & Standards Model</a> to check that your Solution would be appropriate for this framework.",
               "Please note that all Solutions must meet the overarching Standards, regardless of the Capabilities chosen. See Introduction to the Capabilities & Standards Model below. "
             ]
           },
@@ -574,7 +574,7 @@
         "Nav Title": "Supplier Registreation",
         "Text": [
           "Before you can begin adding your Solution to the Catalogue, you must register your company and request a user account as follows:",
-          "Log in to <a href='#'>Bravo</a>. You will see multiple opportunities listed. Click on the ‘Buying Catalogue’ opportunity. ",
+          "Log in to <a href='#' target='_blank'>Bravo</a>. You will see multiple opportunities listed. Click on the ‘Buying Catalogue’ opportunity. ",
           "From there, you can download, review and sign the Catalogue Agreement which sets out the terms of use for using the Catalogue. When you’ve reviewed and gotten the necessary signature, you can upload the signed agreement to Bravo.",
           "Bravo will also ask you to provide company information (see the Supplier checklist for details), and the names and email addresses of anyone who will need access to the Buying Catalogue under your company account. ",
           "Once we have signed the Catalogue Agreement, we will issue log-in details for each of the users requested.",
@@ -604,7 +604,7 @@
               "• Capability-Specific Standards  are specific to a Capability and usually have the same name (for example, Prescribing); ",
               "• Context-Specific Standards sit under and apply to certain Capabilities (for example, Common Reporting).",
               "There is also an Interoperability Standard. Some elements of the Interoperability Standard apply to all Solutions, while other elements are associated with specific Capabilities.",
-              "For more detail, see the <a href='#'>Capabilities and Standards Model</a>."
+              "For more detail, see the <a href='#' target='_blank'>Capabilities and Standards Model</a>."
             ]
           },
           {
@@ -624,7 +624,7 @@
             "Text": [
               "Buyers fund their purchases through a variety of funds. For buyers to access GP IT Central funding they must first take the six Foundation Capabilities (see model), which are intended to form the foundation for a clinical system Solution and start to support the commitments in the General Medical Services contract. ",
               "Your Solution will be assessed to determine whether it (or a group of your Solutions) forms a Foundation Solution Set. If your Solution is recognised as a Foundation Solution, or part of a Foundation Solution Set, it can be bought using central funding. If a buyer has purchased all the Foundation Capabilities, they can use any remaining central funding to buy other Solutions that fulfil other Capabilities. Otherwise, buyers will use their own funds to pay for their purchase.",
-              "Please review our <a href='#'>Capabilities and Standards</a> Confluence site for more information."
+              "Please review our <a href='#' target='_blank'>Capabilities and Standards</a> Confluence site for more information."
             ]
           }
         ]
@@ -635,7 +635,7 @@
         "Text": [
           "To register your Solution, you must provide basic details and select the applicable Capabilities. For specific information required in this stage, see Supplier checklist. ",
           "Please be aware that during private beta, once you complete stage 1, your Solution name and Solution version cannot be changed. If you’ve made an error, please email us.",
-          "Before you select applicable Capabilities, we recommend that you review the full <a href='#'>Capabilities & Standards Model</a> to understand the relationship between Capabilities and Standards, as well as the requirements under each Capability and Standard."
+          "Before you select applicable Capabilities, we recommend that you review the full <a href='#' target='_blank'>Capabilities & Standards Model</a> to understand the relationship between Capabilities and Standards, as well as the requirements under each Capability and Standard."
         ]
       },
       {
@@ -778,9 +778,9 @@
         "Nav Title": "Contact us",
         "Text": [
           "If you have any queries or require our support while using the Catalogue, please feel free to contact us via the methods below:",
-          "Phone: 0300 303 4034",
-          "Email: <a href='#' target='_blank'>Exeter help desk</a>",
-          "Website: <a href='#' target='_blank'>Self Service Portal</a>"
+          " Phone 0300 303 4034",
+          " Email <a href='#' target='_blank'>Exeter help desk</a>",
+          " Website <a href='#' target='_blank'>Self Service Portal</a>"
         ]
       },
       {
@@ -1170,6 +1170,272 @@
                 ],
                 [
                   "Catalogue Authority"
+                ]
+              ]
+            ]
+          },
+          {
+            "Preamble": [
+              "The following Build Solution page fields and sections are not confirmed. This stage of the Catalogue is still in development. Therefore, these are subject to change. We will update this table as needed."
+            ],
+            "Headings": [
+              "Stage",
+              "Field or Section",
+              "Description",
+              "Visibility"
+            ],
+            "Rows":[
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Solution name"
+                ],
+                [
+                  "The official name of your Solution. This will be brought through from stage 1. It will not be editable. "
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Solution version (if provided)"
+                ],
+                [
+                  "The current major version number of your Solution. This will be brought through from stage 1. It will not be editable.  "
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Supplier name"
+                ],
+                [
+                  "Name of the Supplier organisation you are registered to. It will not be editable."
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Solution description"
+                ],
+                [
+                  "A brief description of your Solution, which has been pulled through from stage 1. You can edit this field before submitting the page for moderation. (300 characters max)"
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Features (optional)"
+                ],
+                [
+                  "This is a bulleted list. Suppliers can add up to 10 bullets to describe the Solutions’ features. "
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "List of Capabilities met"
+                ],
+                [
+                  "List of Capabilities met including epics matched. This will be brought through from Capability Assessment. This list is not editable."
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "List of Standards met"
+                ],
+                [
+                  "List of Standards met. This will be brought through from Standards compliance. This list is not editable."
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Catalogue Solution price"
+                ],
+                [
+                  "This will be based on the relevant framework. It will be populated by the Catalogue Authority and will not be editable."
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Framework "
+                ],
+                [
+                  "Once your Solution has qualified to be on a framework, it will be able to be purchased under that framework. The name of the eligible active framework(s) will display. This field is not editable."
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Service level information "
+                ],
+                [
+                  "For certain types of Solutions, this is either the default minimum or Supplier-specified performance in excess of the minimum.",
+                  "For other types of Solutions, this will be the minimum proposed by the Supplier. (More information on the two types to come)"
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Additional Services with prices (optional)"
+                ],
+                [
+                  "These are optional services that augment a Solution and are optional for purchase. The prices will be based on the relevant framework. The Catalogue Authority will add the relevant information and this will not be editable."
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Associated Services with prices (optional)"
+                ],
+                [
+                  "These are services that must or may be purchased with the Solution. The prices will be based on the relevant framework. The Catalogue Authority will add the relevant information and this will not be editable."
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Integrations"
+                ],
+                [
+                  "The Catalogue Authority will populate proven integrations, such as IM1 and GPConnect, and the Supplier may add their own proprietary integrations."
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Minimum system requirements "
+                ],
+                [
+                  "Guidelines for buyers as to what is required to operate the Solution."
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Deployment model and specifications "
+                ],
+                [
+                  "Guidelines for buyers as to how the Solution is hosted and deployed, including any configurations or requirements to support local deployments."
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "About the Solution"
+                ],
+                [
+                  "You may add more information about your Solution, including contextual links to your website."
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "About the Supplier "
+                ],
+                [
+                  "Free text field about your company, including link to your website. "
+                ],
+                [
+                  "Public"
+                ]
+              ],
+              [
+                [
+                  "Build Solution page"
+                ],
+                [
+                  "Contact details"
+                ],
+                [
+                  "You may include a name, email and phone number for potential buyers to contact you directly. "
+                ],
+                [
+                  "Public"
                 ]
               ]
             ]
