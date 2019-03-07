@@ -224,6 +224,8 @@ namespace Gif.Service
 
           //TODO: Or alternatively use the original Swagger contract that's included in the static files
           // c.SwaggerEndpoint("/swagger-original.json", "Buying Catalog API Original");
+
+          c.DocExpansion(DocExpansion.None);
         })
         .UseDeveloperExceptionPage();
       }
