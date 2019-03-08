@@ -11,9 +11,7 @@ namespace Gif.Service.Models
     [DataContract]
     public class EvidenceBase : EntityBase, IHasPreviousId
     {
-
         private string _evidence = string.Empty;
-
 
         [DataMember]
         [CrmIdField]
@@ -62,7 +60,7 @@ namespace Gif.Service.Models
 
         [DataMember]
         [CrmFieldName("cc_originaldate")]
-        public new DateTime OriginalDate { get; set; }
+        public DateTime OriginalDate { get; set; }
 
         public EvidenceBase() { }
 
