@@ -26,15 +26,15 @@ test('Capabilities page shows correct information accessibly', async t => {
   await t
 
     .expect(Selector('#capabilities-core .capability').count).eql(6)
-    .expect(Selector('#capabilities-non-core .capability').count).eql(31)
+    .expect(Selector('#capabilities-non-core .capability').count).eql(35)
 
     .expect(allCoreCapNames.nth(0).innerText).eql('Appointments Management - GP')
-    .expect(allCoreCapNames.nth(3).innerText).eql('Patient Information Maintenance')
-    .expect(allCoreCapNames.nth(5).innerText).eql('Recording Consultations')
+    .expect(allCoreCapNames.nth(3).innerText).eql('Recording Consultations')
+    .expect(allCoreCapNames.nth(5).innerText).eql('Resource Management')
 
     .expect(allNonCoreCapNames.nth(0).innerText).eql('Appointments Management - Citizen')
-    .expect(allNonCoreCapNames.nth(13).innerText).eql('e-Consultations (Patient/Service User to Professional)')
-    .expect(allNonCoreCapNames.nth(30).innerText).eql('Workflow')
+    .expect(allNonCoreCapNames.nth(13).innerText).eql('Domiciliary Care')
+    .expect(allNonCoreCapNames.nth(35).innerText).eql('Workflow')
 
     .expect(Selector('#capability-selector .capability[data-cap-id="C4"].selected')).ok()
 })
@@ -131,7 +131,7 @@ test('Capabilities can be changed, summary updates and data save correctly', asy
 test('Registering the solution shows a confirmation message and status change on dashboard', async t => {
   await t
     .click(page.continueButton)
-    .expect(Selector('#onboarding.dashboard.page .callout .title').textContent).eql('Solution registration complete.')
+    .expect(Selector('#onboarding.dashboard.page .callout .title').textContent).eql('Solution details entered.')
     .expect(Selector('.onboarding-stages :first-child.complete').exists).ok()
 })
 

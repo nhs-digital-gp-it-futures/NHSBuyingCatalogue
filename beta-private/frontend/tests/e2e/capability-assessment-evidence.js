@@ -20,13 +20,13 @@ function navigateToCapabilityAssessment (t) {
 
 test('All capabilities registered against the solution are present in the alphabetic order', async t => {
   await t
-    .expect(Selector('fieldset.collapsible#C1 > legend').textContent).eql('Appointments Management - GP')
-    .expect(Selector('fieldset.collapsible#C2 > legend').textContent).eql('GP Referral Management')
-    .expect(Selector('fieldset.collapsible#C3 > legend').textContent).eql('GP Resource Management')
+    .expect(Selector('fieldset.collapsible#C5 > legend').textContent).eql('Appointments Management - GP')
+    .expect(Selector('fieldset.collapsible#C11 > legend').textContent).eql('Referral Management')
+    .expect(Selector('fieldset.collapsible#C12 > legend').textContent).eql('Resource Management')
 
-    .expect(Selector('form#capability-assessment-form > fieldset.collapsible:nth-of-type(1)').id).eql('C1')
-    .expect(Selector('form#capability-assessment-form > fieldset.collapsible:nth-of-type(2)').id).eql('C2')
-    .expect(Selector('form#capability-assessment-form > fieldset.collapsible:nth-of-type(3)').id).eql('C3')
+    .expect(Selector('form#capability-assessment-form > fieldset.collapsible:nth-of-type(1)').id).eql('C5')
+    .expect(Selector('form#capability-assessment-form > fieldset.collapsible:nth-of-type(2)').id).eql('C11')
+    .expect(Selector('form#capability-assessment-form > fieldset.collapsible:nth-of-type(3)').id).eql('C12')
 })
 
 test('Collapsible fieldsets behave as an accordion', async t => {
@@ -92,7 +92,7 @@ function verifyFileUploaded (t, sel, filename) {
 
 test('After uploading a file, the supplier dashboard and onboarding dashboard should show updated status', async t => {
   // we'll add evidence for "GP Resource Management"
-  const capSection = Selector('fieldset.collapsible#C3')
+  const capSection = Selector('fieldset.collapsible#C12')
 
   await uploadFileWithMessage(t, capSection, 'Dummy TraceabilityMatrix.xlsx', 'Automation testing message sent with uploaded file')
     .click(capabilityEvidencePage.globalSaveAndExitButton)
@@ -103,7 +103,7 @@ test('After uploading a file, the supplier dashboard and onboarding dashboard sh
 })
 
 test('After uploading a file, the name of the file should show against the capability', async t => {
-  const capSection = Selector('fieldset.collapsible#C3')
+  const capSection = Selector('fieldset.collapsible#C12')
 
   await verifyFileUploaded(t, capSection, 'Dummy TraceabilityMatrix.xlsx')
 })
@@ -116,7 +116,7 @@ const requestLogger = RequestLogger(
 test
   .requestHooks(requestLogger)(
     'On download, the previously uploaded file should be identical', async t => {
-      const capSection = Selector('fieldset.collapsible#C3')
+      const capSection = Selector('fieldset.collapsible#C12')
 
       requestLogger.clear()
 
@@ -139,7 +139,7 @@ test
   )
 
 test('Messages sent along with the uploaded file should be preserved', async t => {
-  const capSection = Selector('fieldset.collapsible#C3')
+  const capSection = Selector('fieldset.collapsible#C12')
 
   await verifyFileUploaded(t, capSection, 'Dummy TraceabilityMatrix.xlsx')
     .expect(capSection.find('textarea').value).eql('Automation testing message sent with uploaded file')
@@ -150,11 +150,11 @@ test('Messages sent along with the uploaded file should be preserved', async t =
 test.skip('Files and messages can be saved against multiple capabilities at once', async t => {
   // note that the second capability is done first so that the accordion click doesn't
   // close the first capability's fieldset
-  const capSection1 = Selector('fieldset.collapsible#C2')
-  await uploadFileWithMessage(t, capSection1, 'Dummy TraceabilityMatrix 2.xlsx', 'Automated test message for C2')
+  const capSection1 = Selector('fieldset.collapsible#C11')
+  await uploadFileWithMessage(t, capSection1, 'Dummy TraceabilityMatrix 2.xlsx', 'Automated test message for C11')
 
-  const capSection2 = Selector('fieldset.collapsible#C1')
-  await uploadFileWithMessage(t, capSection2, 'Dummy TraceabilityMatrix 3.xlsx', 'Automated test message for C1')
+  const capSection2 = Selector('fieldset.collapsible#C5')
+  await uploadFileWithMessage(t, capSection2, 'Dummy TraceabilityMatrix 3.xlsx', 'Automated test message for C5')
 
   await t
     .click(capabilityEvidencePage.globalSaveButton)
@@ -162,9 +162,9 @@ test.skip('Files and messages can be saved against multiple capabilities at once
   await t.expect(capabilityEvidencePage.savedNoticeTitle.innerText).contains('Saved')
 
   await verifyFileUploaded(t, capSection1, 'Dummy TraceabilityMatrix 2.xlsx')
-    .expect(capSection1.find('textarea').value).eql('Automated test message for C2')
+    .expect(capSection1.find('textarea').value).eql('Automated test message for C11')
   await verifyFileUploaded(t, capSection2, 'Dummy TraceabilityMatrix 3.xlsx')
-    .expect(capSection2.find('textarea').value).eql('Automated test message for C1')
+    .expect(capSection2.find('textarea').value).eql('Automated test message for C5')
 })
 
 test('Clicking Continue with incomplete evidence should trigger a validation message', async t => {
@@ -173,24 +173,24 @@ test('Clicking Continue with incomplete evidence should trigger a validation mes
     .click(capabilityEvidencePage.continueButton)
     .expect(Selector('#errors').exists).ok()
     .expect(Selector('#errors li:nth-child(1)').textContent).contains('Appointments Management - GP requires an option to be selected')
-    .expect(Selector('#errors li:nth-child(2)').textContent).contains('GP Referral Management requires an option to be selected')
+    .expect(Selector('#errors li:nth-child(2)').textContent).contains('Referral Management requires an option to be selected')
 
   // submitting with only one selection made sand nothing else done should trigger some error messages...
   await t
-    .click(Selector('fieldset.collapsible#C1').find('input[type=radio][value=yes]'))
+    .click(Selector('fieldset.collapsible#C5').find('input[type=radio][value=yes]'))
     .click(capabilityEvidencePage.continueButton)
     .expect(Selector('#errors').exists).ok()
     .expect(Selector('#errors li:nth-child(1)').textContent).contains('Appointments Management - GP is missing a video')
     .expect(Selector('#errors li:nth-child(2)').textContent).contains('Appointments Management - GP is missing a description')
-    .expect(Selector('#errors li:nth-child(3)').textContent).contains('GP Referral Management requires an option to be selected')
+    .expect(Selector('#errors li:nth-child(3)').textContent).contains('Referral Management requires an option to be selected')
 
   // clicking save should not trigger any validation errors if one option is selected, but no all.
   await t
     .click(capabilityEvidencePage.globalSaveButton)
     .expect(Selector('#errors').exists).notOk()
 
-  const firstCapSection = Selector('fieldset.collapsible#C1')
-  const secondCapSection = Selector('fieldset.collapsible#C2')
+  const firstCapSection = Selector('fieldset.collapsible#C5')
+  const secondCapSection = Selector('fieldset.collapsible#C11')
 
   // when all have indicated they want videos, then each capability should have a video missing and description missing error
   await t
@@ -200,24 +200,24 @@ test('Clicking Continue with incomplete evidence should trigger a validation mes
     .expect(Selector('#errors').exists).ok()
     .expect(Selector('#errors li:nth-child(1)').textContent).contains('Appointments Management - GP is missing a video')
     .expect(Selector('#errors li:nth-child(2)').textContent).contains('Appointments Management - GP is missing a description')
-    .expect(Selector('#errors li:nth-child(3)').textContent).contains('GP Referral Management is missing a video')
-    .expect(Selector('#errors li:nth-child(4)').textContent).contains('GP Referral Management is missing a description')
+    .expect(Selector('#errors li:nth-child(3)').textContent).contains('Referral Management is missing a video')
+    .expect(Selector('#errors li:nth-child(4)').textContent).contains('Referral Management is missing a description')
 
   // Uploading a file for a capability should remove it's missing video evidence error
   // ensure first capability is requesting a video upload
   await t.click(
-    Selector('fieldset.collapsible#C1').find('input[type=radio][value=yes]')
+    Selector('fieldset.collapsible#C5').find('input[type=radio][value=yes]')
   )
 
   // collapse the open invalid collapsible sections
-  const capSection1 = Selector('fieldset.collapsible#C2')
-  const capSection2 = Selector('fieldset.collapsible#C1')
+  const capSection1 = Selector('fieldset.collapsible#C11')
+  const capSection2 = Selector('fieldset.collapsible#C5')
   await t.click(capSection1.child('legend'))
   await t.click(capSection2.child('legend'))
 
   // note that the second capability is done first so that the accordion click doesn't
   // close the first capability's fieldset
-  await uploadFileWithMessage(t, capSection1, 'Dummy TraceabilityMatrix 2.xlsx', 'Automated test message for C2')
+  await uploadFileWithMessage(t, capSection1, 'Dummy TraceabilityMatrix 2.xlsx', 'Automated test message for C11')
 
   await t
     .click(capabilityEvidencePage.continueButton)
@@ -236,7 +236,7 @@ test('Clicking Continue with incomplete evidence should trigger a validation mes
   // as the first capability has no file or message, the missing file validation error should trigger
   // even with a validation message, the submitted file and message should hold
   await verifyFileUploaded(t, capSection1, 'Dummy TraceabilityMatrix 2.xlsx')
-    .expect(capSection1.find('textarea').value).eql('Automated test message for C2')
+    .expect(capSection1.find('textarea').value).eql('Automated test message for C11')
 
   // uploading a file for the first capability without setting a message should
   // trigger a missing description validation error
@@ -252,7 +252,7 @@ test('Clicking Continue with incomplete evidence should trigger a validation mes
 })
 
 test('Clicking Continue with complete evidence should lead to summary page with correct details', async t => {
-  const capSection1 = Selector('fieldset.collapsible#C1')
+  const capSection1 = Selector('fieldset.collapsible#C5')
 
   // Set one capability to request a live demo
   await t
@@ -274,7 +274,7 @@ test('Clicking Continue with complete evidence should lead to summary page with 
 })
 
 test('Submitting from the summary page should update the status on the dashboard and onboarding page', async t => {
-  const capSection1 = Selector('fieldset.collapsible#C1')
+  const capSection1 = Selector('fieldset.collapsible#C5')
 
   await t
     .click(capSection1.find('input[type=radio][value=no]'))
