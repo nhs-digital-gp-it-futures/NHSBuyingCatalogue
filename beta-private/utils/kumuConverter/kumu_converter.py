@@ -80,12 +80,13 @@ capability_headings_map = {
     'Name': 'Label',
     'Description': 'Description',
     'URL': 'URL',
-    'Type': 'Type',
+    'Type': 'Capability Type',
 }
 
 def map_capability_type (row):
     '''Based on the capability output headings, convert the type from "Foundation" to "C" or "N".'''
     idx = capability_output_headings.index('Type')
+    print(row[idx])
     row[idx] = 'C' if row[idx] == 'Foundation' else 'N'
     return row
 
