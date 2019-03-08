@@ -52,7 +52,7 @@ namespace Gif.Service.Services
       var appJson = Repository.RetrieveMultiple(new Solution().GetQueryString(null, filterAttributes), out int? count);
       var solutionJson = appJson?.FirstOrDefault();
 
-      return new Solution(solutionJson);
+      return (solutionJson == null) ? null : new Solution(solutionJson);
     }
 
     public IEnumerable<Solution> ByOrganisation(string organisationId)

@@ -84,7 +84,7 @@ namespace Gif.Service.Services
       var appJson = Repository.RetrieveMultiple(new Standard().GetQueryString(null, filterAttributes), out int? count);
       var standard = appJson?.FirstOrDefault();
 
-      return new Standard(standard);
+      return (standard == null) ? null : new Standard(standard);
     }
 
     public IEnumerable<Standard> ByIds(IEnumerable<string> ids)
@@ -105,7 +105,6 @@ namespace Gif.Service.Services
 
         if (standard != null)
           standardList.Add(new Standard(standard));
-
       }
 
       Count = standardList.Count();
