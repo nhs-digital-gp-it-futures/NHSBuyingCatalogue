@@ -32,10 +32,6 @@ namespace Gif.Service.Models
         [CrmFieldEntityDataBind("accounts")]
         public Guid? OrganisationId { get; set; }
 
-        [DataMember]
-        [CrmFieldName("cc_buyingcataloguecontact")]
-        public bool BuyingCatalogueContact { get; set; }
-
         public Contact() { }
 
         public Contact(JToken token) : base(token)
