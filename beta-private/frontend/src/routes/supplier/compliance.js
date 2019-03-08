@@ -178,9 +178,9 @@ async function evidencePageContext (req, next) {
         .filter(context.solution.reviews, { evidenceId: ev.id })
         .map((re) => ({ ...re, isFeedback: true })) // Flag all Reviews as being Feedback
     ])
-    .map(({ id, createdOn, createdById, message, evidence, isFeedback }) => ({
+    .map(({ id, originalDate, createdById, message, evidence, isFeedback }) => ({
       id,
-      createdOn,
+      createdOn: originalDate,
       createdById,
       message: message || evidence,
       isFeedback
@@ -328,6 +328,7 @@ async function solutionComplianceEvidencePagePost (req, res, next) {
 
   // Generate a new evidence record.
   req.solution.evidence.push(evidenceRecord)
+        originalDate: new Date(),
 
   // update the solution with the new evidence record.
   try {

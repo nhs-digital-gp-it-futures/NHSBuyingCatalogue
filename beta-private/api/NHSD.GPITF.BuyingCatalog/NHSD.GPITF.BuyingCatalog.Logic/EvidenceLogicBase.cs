@@ -39,7 +39,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
       var email = Context.Email();
       evidence.CreatedById = _contacts.ByEmail(email).Id;
-      evidence.CreatedOn = DateTime.UtcNow;
+      evidence.CreatedOn = evidence.OriginalDate = DateTime.UtcNow;
       return _datastore.Create(evidence);
     }
   }

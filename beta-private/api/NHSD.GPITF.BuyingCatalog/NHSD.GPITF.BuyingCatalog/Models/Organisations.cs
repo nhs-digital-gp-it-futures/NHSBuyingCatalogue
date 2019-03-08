@@ -28,12 +28,6 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     public string Name { get; set; }
 
     /// <summary>
-    /// ODS code for company
-    /// </summary>
-    [Required]
-    public string OdsCode { get; set; }
-
-    /// <summary>
     /// Primary ODS role code for company
     /// Suppliers have a primary role of "RO92"
     /// </summary>

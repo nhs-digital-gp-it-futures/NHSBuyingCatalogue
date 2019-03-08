@@ -94,15 +94,13 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
 
     public static Organisations GetOrganisation(
       string id = "NHS Digital",
-      string primaryRoleId = PrimaryRole.GovernmentDepartment,
-      string odsCode = "NHS Digital ODS Code")
+      string primaryRoleId = PrimaryRole.GovernmentDepartment)
     {
       var retval = new Organisations
       {
         Id = id,
         Name = id,
-        PrimaryRoleId = primaryRoleId,
-        OdsCode = odsCode
+        PrimaryRoleId = primaryRoleId
       };
       Verifier.Verify(retval);
       return retval;
@@ -290,7 +288,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       string prevId = null,
       string claimId = null,
       string createdById = null,
-      DateTime? createdOn = null)
+      DateTime? createdOn = null,
+      DateTime? originalDate = null)
     {
       var retval = new DummyEvidenceBase
       {
@@ -298,7 +297,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
         PreviousId = prevId,
         ClaimId = claimId ?? Guid.NewGuid().ToString(),
         CreatedById = createdById ?? Guid.NewGuid().ToString(),
-        CreatedOn = createdOn ?? DateTime.Now
+        CreatedOn = createdOn ?? DateTime.Now,
+        OriginalDate = originalDate ?? DateTime.UtcNow
       };
       Verifier.Verify(retval);
       return retval;
@@ -309,7 +309,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       string prevId = null,
       string claimId = null,
       string createdById = null,
-      DateTime? createdOn = null)
+      DateTime? createdOn = null,
+      DateTime? originalDate = null)
     {
       var retval = new CapabilitiesImplementedEvidence
       {
@@ -317,7 +318,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
         PreviousId = prevId,
         ClaimId = claimId ?? Guid.NewGuid().ToString(),
         CreatedById = createdById ?? Guid.NewGuid().ToString(),
-        CreatedOn = createdOn ?? DateTime.UtcNow
+        CreatedOn = createdOn ?? DateTime.UtcNow,
+        OriginalDate = originalDate ?? DateTime.UtcNow
       };
       Verifier.Verify(retval);
       return retval;
@@ -328,7 +330,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       string prevId = null,
       string claimId = null,
       string createdById = null,
-      DateTime? createdOn = null)
+      DateTime? createdOn = null,
+      DateTime? originalDate = null)
     {
       var retval = new StandardsApplicableEvidence
       {
@@ -336,7 +339,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
         PreviousId = prevId,
         ClaimId = claimId ?? Guid.NewGuid().ToString(),
         CreatedById = createdById ?? Guid.NewGuid().ToString(),
-        CreatedOn = createdOn ?? DateTime.UtcNow
+        CreatedOn = createdOn ?? DateTime.UtcNow,
+        OriginalDate = originalDate ?? DateTime.UtcNow
       };
       Verifier.Verify(retval);
       return retval;
@@ -347,7 +351,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       string prevId = null,
       string evidenceId = null,
       string createdById = null,
-      DateTime? createdOn = null)
+      DateTime? createdOn = null,
+      DateTime? originalDate = null)
     {
       var retval = new DummyReviewsBase
       {
@@ -355,7 +360,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
         PreviousId = prevId,
         EvidenceId = evidenceId ?? Guid.NewGuid().ToString(),
         CreatedById = createdById ?? Guid.NewGuid().ToString(),
-        CreatedOn = createdOn ?? DateTime.Now
+        CreatedOn = createdOn ?? DateTime.Now,
+        OriginalDate = originalDate ?? DateTime.UtcNow
       };
       Verifier.Verify(retval);
       return retval;
@@ -366,7 +372,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       string prevId = null,
       string evidenceId = null,
       string createdById = null,
-      DateTime? createdOn = null)
+      DateTime? createdOn = null,
+      DateTime? originalDate = null)
     {
       var retval = new CapabilitiesImplementedReviews
       {
@@ -374,7 +381,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
         PreviousId = prevId,
         EvidenceId = evidenceId ?? Guid.NewGuid().ToString(),
         CreatedById = createdById ?? Guid.NewGuid().ToString(),
-        CreatedOn = createdOn ?? DateTime.UtcNow
+        CreatedOn = createdOn ?? DateTime.UtcNow,
+        OriginalDate = originalDate ?? DateTime.UtcNow
       };
       Verifier.Verify(retval);
       return retval;
@@ -385,7 +393,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       string prevId = null,
       string evidenceId = null,
       string createdById = null,
-      DateTime? createdOn = null)
+      DateTime? createdOn = null,
+      DateTime? originalDate = null)
     {
       var retval = new StandardsApplicableReviews
       {
@@ -393,11 +402,11 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
         PreviousId = prevId,
         EvidenceId = evidenceId ?? Guid.NewGuid().ToString(),
         CreatedById = createdById ?? Guid.NewGuid().ToString(),
-        CreatedOn = createdOn ?? DateTime.UtcNow
+        CreatedOn = createdOn ?? DateTime.UtcNow,
+        OriginalDate = originalDate ?? DateTime.UtcNow
       };
       Verifier.Verify(retval);
       return retval;
     }
-
   }
 }

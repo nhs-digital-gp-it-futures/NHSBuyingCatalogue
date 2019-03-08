@@ -8,63 +8,63 @@ using Contact = Gif.Service.Models.Contact;
 
 namespace Gif.Service.Services
 {
-  public class ContactsService : ServiceBase<Contact>, IContactsDatastore
-  {
-    public ContactsService(IRepository repository) : base(repository)
+    public class ContactsService : ServiceBase<Contact>, IContactsDatastore
     {
-    }
+        public ContactsService(IRepository repository) : base(repository)
+        {
+        }
 
-    public Contact ByEmail(string email)
-    {
-      email = $"'{email}'";
+        public Contact ByEmail(string email)
+        {
+            email = $"'{email}'";
 
-      var filterAttributes = new List<CrmFilterAttribute>
+            var filterAttributes = new List<CrmFilterAttribute>
             {
                 new CrmFilterAttribute("Email") {FilterName = "emailaddress1", FilterValue = email},
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-      var appJson = Repository.RetrieveMultiple(new Contact().GetQueryString(null, filterAttributes), out Count);
-      var contactJson = appJson?.FirstOrDefault();
+            var appJson = Repository.RetrieveMultiple(new Contact().GetQueryString(null, filterAttributes), out Count);
+            var contactJson = appJson?.FirstOrDefault();
 
-      return new Contact(contactJson);
-    }
+            return new Contact(contactJson);
+        }
 
-    public Contact ById(string id)
-    {
-      var filterAttributes = new List<CrmFilterAttribute>
+        public Contact ById(string id)
+        {
+            var filterAttributes = new List<CrmFilterAttribute>
             {
                 new CrmFilterAttribute("ContactId") {FilterName = "contactid", FilterValue = id},
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-      var appJson = Repository.RetrieveMultiple(new Contact().GetQueryString(null, filterAttributes), out Count);
-      var contactJson = appJson?.FirstOrDefault();
+            var appJson = Repository.RetrieveMultiple(new Contact().GetQueryString(null, filterAttributes), out Count);
+            var contactJson = appJson?.FirstOrDefault();
 
-      return new Contact(contactJson);
-    }
+            return new Contact(contactJson);
+        }
 
-    public IEnumerable<Contact> ByOrganisation(string organisationId)
-    {
-      var contacts = new List<Contact>();
+        public IEnumerable<Contact> ByOrganisation(string organisationId)
+        {
+            var contacts = new List<Contact>();
 
-      var filterAttributes = new List<CrmFilterAttribute>
+            var filterAttributes = new List<CrmFilterAttribute>
             {
                 new CrmFilterAttribute("Organisation") {FilterName = "_parentcustomerid_value", FilterValue = organisationId},
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-      var appJson = Repository.RetrieveMultiple(new Contact().GetQueryString(null, filterAttributes, true, true), out Count);
+            var appJson = Repository.RetrieveMultiple(new Contact().GetQueryString(null, filterAttributes, true, true), out Count);
 
-      foreach (var contact in appJson.Children())
-      {
-        contacts.Add(new Contact(contact));
-      }
+            foreach (var contact in appJson.Children())
+            {
+                contacts.Add(new Contact(contact));
+            }
 
-      Count = contacts.Count();
+            Count = contacts.Count();
 
-      return contacts;
+            return contacts;
+        }
     }
-  }
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

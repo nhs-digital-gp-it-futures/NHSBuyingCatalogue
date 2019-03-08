@@ -46,6 +46,9 @@ namespace Gif.Service.Models
         public Guid? PreviousId { get; set; }
 
         public int Order { get; set; }
+        [DataMember]
+        [CrmFieldName("cc_originaldate")]
+        public new DateTime OriginalDate { get; set; }
 
         public Review() { }
 
