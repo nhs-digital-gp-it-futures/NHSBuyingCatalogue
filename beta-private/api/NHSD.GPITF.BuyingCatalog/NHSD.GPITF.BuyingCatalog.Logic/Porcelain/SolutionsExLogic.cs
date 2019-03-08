@@ -46,6 +46,26 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       solnEx.Solution.ModifiedById = _contacts.ByEmail(email).Id;
       solnEx.Solution.ModifiedOn = DateTime.UtcNow;
 
+
+      solnEx.ClaimedCapabilityReview.ForEach(review =>
+      {
+         review.OriginalDate = (review.OriginalDate == default(DateTime)) ? DateTime.UtcNow : review.OriginalDate;
+      });
+      solnEx.ClaimedStandardReview.ForEach(review =>
+      {
+         review.OriginalDate = (review.OriginalDate == default(DateTime)) ? DateTime.UtcNow : review.OriginalDate;
+      });
+
+      solnEx.ClaimedCapabilityEvidence.ForEach(evidence =>
+      {
+         evidence.OriginalDate = (evidence.OriginalDate == default(DateTime)) ? DateTime.UtcNow : evidence.OriginalDate;
+      });
+      solnEx.ClaimedStandardEvidence.ForEach(evidence =>
+      {
+         evidence.OriginalDate = (evidence.OriginalDate == default(DateTime)) ? DateTime.UtcNow : evidence.OriginalDate;
+      });
+
+
       _datastore.Update(solnEx);
 
       // create SharePoint folder structure
@@ -57,7 +77,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
 
     public IEnumerable<SolutionEx> ByOrganisation(string organisationId)
     {
-      return _filter.Filter( _datastore.ByOrganisation(organisationId) );
+      return _filter.Filter(_datastore.ByOrganisation(organisationId));
     }
   }
 }
