@@ -20,9 +20,9 @@ function navigateToCapabilityAssessment (t) {
 
 test('All capabilities registered against the solution are present in the alphabetic order', async t => {
   await t
-    .expect(Selector('fieldset.collapsible#C1 > legend').textContent).eql('Appointments Management - GP')
-    .expect(Selector('fieldset.collapsible#C2 > legend').textContent).eql('GP Referral Management')
-    .expect(Selector('fieldset.collapsible#C3 > legend').textContent).eql('GP Resource Management')
+    .expect(Selector('fieldset.collapsible#C1 > legend').textContent).eql('Appointments Management - Citizen')
+    .expect(Selector('fieldset.collapsible#C2 > legend').textContent).eql('Communicate With Practice - Citizen')
+    .expect(Selector('fieldset.collapsible#C3 > legend').textContent).eql('Prescription Ordering - Citizen')
 
     .expect(Selector('form#capability-assessment-form > fieldset.collapsible:nth-of-type(1)').id).eql('C1')
     .expect(Selector('form#capability-assessment-form > fieldset.collapsible:nth-of-type(2)').id).eql('C2')
@@ -172,17 +172,17 @@ test('Clicking Continue with incomplete evidence should trigger a validation mes
   await t
     .click(capabilityEvidencePage.continueButton)
     .expect(Selector('#errors').exists).ok()
-    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Appointments Management - GP requires an option to be selected')
-    .expect(Selector('#errors li:nth-child(2)').textContent).contains('GP Referral Management requires an option to be selected')
+    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Appointments Management - Citizen requires an option to be selected')
+    .expect(Selector('#errors li:nth-child(2)').textContent).contains('Communicate With Practice - Citizen requires an option to be selected')
 
   // submitting with only one selection made sand nothing else done should trigger some error messages...
   await t
     .click(Selector('fieldset.collapsible#C1').find('input[type=radio][value=yes]'))
     .click(capabilityEvidencePage.continueButton)
     .expect(Selector('#errors').exists).ok()
-    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Appointments Management - GP is missing a video')
-    .expect(Selector('#errors li:nth-child(2)').textContent).contains('Appointments Management - GP is missing a description')
-    .expect(Selector('#errors li:nth-child(3)').textContent).contains('GP Referral Management requires an option to be selected')
+    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Appointments Management - Citizen is missing a video')
+    .expect(Selector('#errors li:nth-child(2)').textContent).contains('Appointments Management - Citizen is missing a description')
+    .expect(Selector('#errors li:nth-child(3)').textContent).contains('Communicate With Practice - Citizen requires an option to be selected')
 
   // clicking save should not trigger any validation errors if one option is selected, but no all.
   await t
@@ -198,10 +198,10 @@ test('Clicking Continue with incomplete evidence should trigger a validation mes
     .click(secondCapSection).click(secondCapSection.find('input[type=radio][value=yes]'))
     .click(capabilityEvidencePage.continueButton)
     .expect(Selector('#errors').exists).ok()
-    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Appointments Management - GP is missing a video')
-    .expect(Selector('#errors li:nth-child(2)').textContent).contains('Appointments Management - GP is missing a description')
-    .expect(Selector('#errors li:nth-child(3)').textContent).contains('GP Referral Management is missing a video')
-    .expect(Selector('#errors li:nth-child(4)').textContent).contains('GP Referral Management is missing a description')
+    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Appointments Management - Citizen is missing a video')
+    .expect(Selector('#errors li:nth-child(2)').textContent).contains('Appointments Management - Citizen is missing a description')
+    .expect(Selector('#errors li:nth-child(3)').textContent).contains('Communicate With Practice - Citizen is missing a video')
+    .expect(Selector('#errors li:nth-child(4)').textContent).contains('Communicate With Practice - Citizen is missing a description')
 
   // Uploading a file for a capability should remove it's missing video evidence error
   // ensure first capability is requesting a video upload
@@ -222,8 +222,8 @@ test('Clicking Continue with incomplete evidence should trigger a validation mes
   await t
     .click(capabilityEvidencePage.continueButton)
     .expect(Selector('#errors').exists).ok()
-    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Appointments Management - GP is missing a video')
-    .expect(Selector('#errors li:nth-child(2)').textContent).contains('Appointments Management - GP is missing a description')
+    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Appointments Management - Citizen is missing a video')
+    .expect(Selector('#errors li:nth-child(2)').textContent).contains('Appointments Management - Citizen is missing a description')
 
   // collapse the open invalid collapsible section
   await t.click(capSection2.child('legend'))
@@ -280,7 +280,8 @@ test('Submitting from the summary page should update the status on the dashboard
     .click(capSection1.find('input[type=radio][value=no]'))
     .click(capabilityEvidencePage.continueButton)
     .click('button[name="action\\[continue\\]"]')
-    .expect(Selector('.callout .title').innerText).contains('Solution submitted')
+    .expect(Selector('.callout .title').innerText).contains('Solution')
+    .expect(Selector('.callout .title').innerText).contains('submitted')
     .expect(Selector('a[href^="../../compliance/"]')).ok()
 })
 

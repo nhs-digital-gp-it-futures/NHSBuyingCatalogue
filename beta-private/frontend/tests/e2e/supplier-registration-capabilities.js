@@ -26,15 +26,15 @@ test('Capabilities page shows correct information accessibly', async t => {
   await t
 
     .expect(Selector('#capabilities-core .capability').count).eql(6)
-    .expect(Selector('#capabilities-non-core .capability').count).eql(31)
+    .expect(Selector('#capabilities-non-core .capability').count).eql(35)
 
     .expect(allCoreCapNames.nth(0).innerText).eql('Appointments Management - GP')
-    .expect(allCoreCapNames.nth(3).innerText).eql('Patient Information Maintenance')
-    .expect(allCoreCapNames.nth(5).innerText).eql('Recording Consultations')
+    .expect(allCoreCapNames.nth(3).innerText).eql('Recording Consultations')
+    .expect(allCoreCapNames.nth(5).innerText).eql('Resource Management')
 
     .expect(allNonCoreCapNames.nth(0).innerText).eql('Appointments Management - Citizen')
-    .expect(allNonCoreCapNames.nth(13).innerText).eql('e-Consultations (Patient/Service User to Professional)')
-    .expect(allNonCoreCapNames.nth(30).innerText).eql('Workflow')
+    .expect(allNonCoreCapNames.nth(13).innerText).eql('Domiciliary Care')
+    .expect(allNonCoreCapNames.nth(34).innerText).eql('Workflow')
 
     .expect(Selector('#capability-selector .capability[data-cap-id="C4"].selected')).ok()
 })
@@ -81,18 +81,18 @@ test('Capabilities can be changed, summary updates and data save correctly', asy
     .click('[type=checkbox][data-id="C20"]')
 
     .expect(capabilityCount).eql('3 Capabilities selected')
-    .expect(standardCount).eql('14 Standards will be required')
+    .expect(standardCount).eql('20 Standards will be required')
     .expect(Selector('#capability-summary .standards .associated').visible).ok()
 
-    .expect(selSelectedCapabilities.nth(0).textContent).eql('Appointments Management - GP')
-    .expect(selSelectedCapabilities.nth(1).textContent).eql('Unified Care Record')
+    .expect(selSelectedCapabilities.nth(0).textContent).eql('Appointments Management - Citizen')
+    .expect(selSelectedCapabilities.nth(1).textContent).eql('Social Prescribing')
     .expect(selSelectedCapabilities.nth(2).textContent).eql('Workflow')
 
-    .expect(selSelectedStandards.nth(0).textContent).eql('Appointments Management - GP - Standard')
-    .expect(selSelectedStandards.nth(1).textContent).eql('General Practice Appointments Data Reporting')
-    .expect(selSelectedStandards.nth(2).textContent).eql('Workflow - Standard')
-    .expect(selSelectedStandards.nth(4).textContent).eql('Clinical Safety')
-    .expect(selSelectedStandards.nth(13).textContent).eql('Testing')
+    .expect(selSelectedStandards.nth(0).textContent).eql('Appointments Management - Citizen - Standard')
+    .expect(selSelectedStandards.nth(1).textContent).eql('Citizen Access')
+    .expect(selSelectedStandards.nth(2).textContent).eql('Common Reporting')
+    .expect(selSelectedStandards.nth(4).textContent).eql('Interoperability Standard')
+    .expect(selSelectedStandards.nth(16).textContent).eql('Testing')
 
     .click(page.globalSaveButton)
 
@@ -101,7 +101,7 @@ test('Capabilities can be changed, summary updates and data save correctly', asy
   await t
     .expect(Selector('#errors').exists).notOk()
     .expect(capabilityCount).eql('3 Capabilities selected')
-    .expect(standardCount).eql('14 Standards will be required')
+    .expect(standardCount).eql('20 Standards will be required')
 
     .click('#capability-selector .capability[data-cap-id="C1"].selected')
     .click('[type=checkbox][data-id="C1"]')
@@ -120,7 +120,7 @@ test('Capabilities can be changed, summary updates and data save correctly', asy
     .click('[type=checkbox][data-id="C4"]')
 
     .expect(capabilityCount).eql('1 Capability selected')
-    .expect(standardCount).eql('14 Standards will be required')
+    .expect(standardCount).eql('16 Standards will be required')
     .expect(Selector('#capability-summary .standards .associated').visible).ok()
 
     .click(page.globalSaveAndExitButton)
@@ -131,7 +131,7 @@ test('Capabilities can be changed, summary updates and data save correctly', asy
 test('Registering the solution shows a confirmation message and status change on dashboard', async t => {
   await t
     .click(page.continueButton)
-    .expect(Selector('#onboarding.dashboard.page .callout .title').textContent).eql('Solution registration complete.')
+    .expect(Selector('#onboarding.dashboard.page .callout .title').textContent).eql('Solution details entered.')
     .expect(Selector('.onboarding-stages :first-child.complete').exists).ok()
 })
 
