@@ -22,7 +22,7 @@ namespace Gif.Service.Services
             {
                 new CrmFilterAttribute("Email") {FilterName = "emailaddress1", FilterValue = email},
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"},
-                new CrmFilterAttribute("BuyingCatalogueContact") {FilterName = "cc_buyingcataloguecontact", FilterValue = "1"}
+                new CrmFilterAttribute("BuyingCatalogueContact") {FilterName = "cc_buyingcataloguecontact", FilterValue = "true"}
             };
 
             var appJson = Repository.RetrieveMultiple(new Contact().GetQueryString(null, filterAttributes), out Count);
@@ -37,7 +37,7 @@ namespace Gif.Service.Services
             {
                 new CrmFilterAttribute("ContactId") {FilterName = "contactid", FilterValue = id},
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"},
-                new CrmFilterAttribute("BuyingCatalogueContact") {FilterName = "cc_buyingcataloguecontact", FilterValue = "1"}
+                new CrmFilterAttribute("BuyingCatalogueContact") {FilterName = "cc_buyingcataloguecontact", FilterValue = "true"}
             };
 
             var appJson = Repository.RetrieveMultiple(new Contact().GetQueryString(null, filterAttributes), out Count);
@@ -54,7 +54,7 @@ namespace Gif.Service.Services
             {
                 new CrmFilterAttribute("Organisation") {FilterName = "_parentcustomerid_value", FilterValue = organisationId},
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"},
-                new CrmFilterAttribute("BuyingCatalogueContact") {FilterName = "cc_buyingcataloguecontact", FilterValue = "1"}
+                new CrmFilterAttribute("BuyingCatalogueContact") {FilterName = "cc_buyingcataloguecontact", FilterValue = "true"}
             };
 
             var appJson = Repository.RetrieveMultiple(new Contact().GetQueryString(null, filterAttributes, true, true), out Count);
