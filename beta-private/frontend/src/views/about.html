@@ -54,7 +54,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
     function stickyFunction() {
-        console.log(window.pageYOffset, sticky, headerHeight)
         if (window.pageYOffset + headerHeight >= sticky) {
             navbar.classList.add("sticky")
         } else {
