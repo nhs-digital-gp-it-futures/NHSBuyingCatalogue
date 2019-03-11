@@ -4,15 +4,17 @@
         <h1>{{t 'Support.Title'}}</h1>
     </div>
     <div class="about-content">
-        <div class="nav-panel">
-            <div class="nav-title">
-                <h2>{{t 'Support.Nav Title'}}</h2>
-            </div>
-            {{#each (tt 'Support.Sections')}}
-                <div class="nav-item">
-                    <a href="#{{'Nav Title'}}">{{'Nav Title'}}</a>
+        <div class="nav-container">
+            <div class="nav-panel">
+                <div class="nav-title">
+                    <h2>{{t 'Support.Nav Title'}}</h2>
                 </div>
-            {{/each}}
+                {{#each (tt 'Support.Sections')}}
+                    <div class="nav-item">
+                        <a href="#{{'Nav Title'}}">{{'Nav Title'}}</a>
+                    </div>
+                {{/each}}
+            </div>
         </div>
         <div class="page-content">
             {{#each (tt 'Support.Sections')}}
@@ -34,3 +36,30 @@
         </div>
     </div>
 </div>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+    // When the user scrolls the page, execute myFunction
+    window.onscroll = function() {stickyFunction()};
+
+    // Get the navbar
+    const navbar = $('div.about-content div.nav-panel')
+    const header = $('body > header')
+
+    // Get the offset position of the navbar
+    var sticky = navbar.offsetTop;
+
+    var headerHeight = header.clientHeight;
+
+    // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
+    function stickyFunction() {
+        console.log(window.pageYOffset, sticky, headerHeight)
+        if (window.pageYOffset + headerHeight >= sticky) {
+            navbar.classList.add("sticky")
+        } else {
+            navbar.classList.remove("sticky");
+        }
+    }
+})
+</script>

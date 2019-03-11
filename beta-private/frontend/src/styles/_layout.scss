@@ -36,6 +36,11 @@ a {
   }
 }
 
+.sticky {
+  position: fixed;
+  top: $header-total-height;
+}
+
 @mixin reversed {
   background-color: $color-reversed-bg;
   color: $color-reversed-fg;
