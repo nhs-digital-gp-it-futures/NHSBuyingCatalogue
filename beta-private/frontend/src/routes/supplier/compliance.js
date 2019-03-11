@@ -287,12 +287,14 @@ async function solutionComplianceEvidencePagePost (req, res, next) {
     return res.redirect('../../')
   }
 
+  // Generate a new evidence record.
   const evidenceRecord = {
     id: require('node-uuid-generator').generate(),
     claimId: req.params.claim_id,
     createdOn: new Date(),
     createdById: req.user.contact.id,
     evidence: '',
+    originalDate: new Date(),
     blobId: '' // ID of the file that was just uploaded, this relates a message to a file.
   }
 
@@ -300,7 +302,7 @@ async function solutionComplianceEvidencePagePost (req, res, next) {
   if (req.body.message && req.body.message.length > 300) {
     context.errors.items.push({ msg: 'Validation.Standard.Evidence.Message.TooLong' })
   } else {
-    evidenceRecord.message = req.body.message
+    evidenceRecord.evidence = req.body.message
   }
 
   if (!req.files.length && action.submit !== 'direct' && !action.save && !action.exit) {
@@ -326,9 +328,8 @@ async function solutionComplianceEvidencePagePost (req, res, next) {
   claim.status = '1' /* draft */
   claim.ownerId = req.body.ownerId || null
 
-  // Generate a new evidence record.
+  // Add the evidence record to the solution.
   req.solution.evidence.push(evidenceRecord)
-        originalDate: new Date(),
 
   // update the solution with the new evidence record.
   try {
