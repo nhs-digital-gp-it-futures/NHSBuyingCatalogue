@@ -130,10 +130,10 @@
       }
     ],
     "Help": {
-      "Title": "Help - Where can I find guidance on $t(Onboarding.Title)?",
+      "Title": "Help - Where can I find guidance on adding a $t(Solution)?",
       "Text": [
-        "Follow the links below for guidance on each stage of <a href='#' target='_blank'>$t(Onboarding.Title)</a>.",
-        "<ul><li><a href='#'>Stage 1 - $t(Onboarding.Stages.0.Name)</a><li><a href='#'>Stage 2 - $t(Onboarding.Stages.1.Name)</a><li><a href='#'>Stage 3 - $t(Onboarding.Stages.2.Name)</a><li><a href='#'>Stage 4 - $t(Solution) page (what buyers will see)</a></ul>"
+        "Follow the links below for guidance on each stage of <a href='/about#Process overview' target='_blank'>adding a $t(Solution</a>.",
+        "<ul><li><a href='/about#Solution details'>Stage 1 - $t(Onboarding.Stages.0.Name)</a><li><a href='/about#Capability submission'>Stage 2 - $t(Onboarding.Stages.1.Name)</a><li><a href='/about#Standards submission'>Stage 3 - $t(Onboarding.Stages.2.Name)</a><li><a href='/about#Solution page'>Stage 4 - $t(Solution) page (what buyers will see)</a></ul>"
       ]
     },
     "RegistrationCompleteCallout": {
@@ -498,8 +498,8 @@
     "Email": "GPITFutures@nhs.net"
   },
   "Support": {
-    "Title": "Supplier's Guide",
-    "Nav Title": "Page Contents",
+    "Title": "Suppliers' Guide",
+    "Nav Title": "Page contents",
     "Sections": [
       {
         "Title":"About the Catalogue",
@@ -543,7 +543,7 @@
             "Title": "Is my Solution appropriate for the Buying Catalogue?",
             "Text": [
               "GP IT Futures Framework 1 is open to any Solution that can meet at least one of the Capabilities, and the applicable Standards. We strongly recommend that you review the <a href='#' target='_blank'>Capabilities & Standards Model</a> to check that your Solution would be appropriate for this framework.",
-              "Please note that all Solutions must meet the overarching Standards, regardless of the Capabilities chosen. See Introduction to the Capabilities & Standards Model below. "
+              "Please note that all Solutions must meet the overarching Standards, regardless of the Capabilities chosen. See <a href='#Capabilities & Standards'>Introduction to the Capabilities & Standards Model</a>  below."
             ]
           },
           {
@@ -551,15 +551,15 @@
             "Text": [
               "In order to sell you need to meet two requirements: (1) have your Solution accepted on the Catalogue as compliant (see the ‘Supplier Onboarding Process’ for more detail ); and (2) be awarded to a framework. The order of these two things may vary, but you must have submitted your Solution to the Catalogue and have it accepted into the assessment process in order to qualify for a framework award. ",
               "You may register to come onto the Catalogue and start the Capability assessment and Standards compliance stages at any time. See Supplier Registration below for how to get access to the Catalogue. ",
-              "ckes for a Solution to be accepted on the Catalogue will vary depending upon the number of Capabilities and Standards involved, and the quality of the initial submission. If all the Standards evidence is submitted by the time the Capability assessment is complete, the aim is that a good quality submission will take no longer than 19 weeks. See a break-down of the timescale targets by stage in ‘Process overview’ below. ",
+              "The time it takes for a Solution to be accepted on the Catalogue will vary depending upon the number of Capabilities and Standards involved, and the quality of the initial submission. If all the Standards evidence is submitted by the time the Capability assessment is complete, the aim is that a good quality submission will take no longer than 19 weeks. See a break-down of the timescale targets by stage in <a href='#Process overview'>‘Process overview’</a> below. ",
               "The framework timescales will be clear at the time each framework is published. "
             ]
           }
         ]
       },
       {
-        "Title":"Process Overview",
-        "Nav Title": "Process Overview",
+        "Title":"Process overview",
+        "Nav Title": "Process overview",
         "Text": [
           "All companies need to register one time in Bravo to gain access to the Catalogue. After this, there are four stages to adding each Solution on the Catalogue. The table below provides a brief overview of each stage."
         ],
@@ -571,12 +571,12 @@
       },
       {
         "Title": "Registering your company and Catalogue access",
-        "Nav Title": "Supplier Registreation",
+        "Nav Title": "Supplier registration",
         "Text": [
           "Before you can begin adding your Solution to the Catalogue, you must register your company and request a user account as follows:",
-          "Log in to <a href='#' target='_blank'>Bravo</a>. You will see multiple opportunities listed. Click on the ‘Buying Catalogue’ opportunity. ",
+          "Log in to <a href='https://nhsdigital.bravosolution.co.uk/' target='_blank'>Bravo</a>. You will see multiple opportunities listed. Click on the ‘Buying Catalogue’ opportunity. ",
           "From there, you can download, review and sign the Catalogue Agreement which sets out the terms of use for using the Catalogue. When you’ve reviewed and gotten the necessary signature, you can upload the signed agreement to Bravo.",
-          "Bravo will also ask you to provide company information (see the Supplier checklist for details), and the names and email addresses of anyone who will need access to the Buying Catalogue under your company account. ",
+          "Bravo will also ask you to provide company information (see the <a href='#Supplier checklist'>'Supplier checklist'</a> for details), and the names and email addresses of anyone who will need access to the Buying Catalogue under your company account. ",
           "Once we have signed the Catalogue Agreement, we will issue log-in details for each of the users requested.",
           "When you receive the log-in details, you can navigate to the Buying Catalogue and click ‘Log in/Sign up.’ From there, select the ‘Sign up’ tab, enter the email address provided during Supplier registration, and create a secure password. "
         ],
@@ -614,12 +614,6 @@
             ]
           },
           {
-            "Title": "Do I have to build a Solution that delivers all Capabilities?",
-            "Text": [
-              "You do not have to provide a Solution that delivers all Capabilities. You may submit a Solution that meets just one Capability, or many. By looking at the Capabilities, you can see where your product portfolio fits. You may want to make tweaks to your existing products so that as a Solution will fully match related Capabilities. Or you may wish to create new Solutions to deliver a broader set of Capabilities. "
-            ]
-          },
-          {
             "Title": "How do buyers fund their purchases?",
             "Text": [
               "Buyers can fund their purchases using central or local funding, or a combination of the two. For buyers to access GP IT central funding, they must first agree a contract for a Solution, or set of Solutions, which provide all of the Foundation Capabilities (see model). The Foundation Capabilities form the foundation for a clinical system Solution and are the basis of support for the commitments in the General Medical Services contract. ",
@@ -633,23 +627,23 @@
         "Title": "Solution details",
         "Nav Title": "Solution details",
         "Text": [
-          "You must provide basic details and select the applicable Capabilities. For specific information required in this stage, see Supplier checklist. ",
+          "You must provide basic details and select the applicable Capabilities. For specific information required in this stage, see <a href='#Supplier checklist'>Supplier checklist.</a> ",
           "Please be aware that during private beta, once you complete stage 1, your Solution name and Solution version cannot be changed. If you’ve made an error, please email us.",
           "Before you select applicable Capabilities, we recommend that you review the full <a href='#' target='_blank'>Capabilities & Standards Model</a> to understand the relationship between Capabilities and Standards, as well as the requirements under each Capability and Standard."
         ]
       },
       {
-        "Title": "Capability Submission",
-        "Nav Title": "Capability Submission",
+        "Title": "Capability submission",
+        "Nav Title": "Capability submission",
         "Text": [
           "You must submit evidence demonstrating how your Solution meets the Capabilities you have selected. Your evidence will be reviewed to determine if each Capability has been successfully met.",
           "Please note that successful completion of Capability assessment does not mean your Solution has been assured against NHS Standards. Solutions will not receive Compliant Status (the ability to market your Solution, and once you are awarded to a framework, the ability to sell your Solution) until successful completion of both the Capability assessment and Standards compliance stages, and acceptance of your Solution page."
         ],
         "Subsections": [
           {
-            "Title": "Submitting Capability Evidence",
+            "Title": "Submitting Capability evidence",
             "Text": [
-              "Within each Capability, there are Epic-level user stories that describe business activities which are facilitated by a digital Solution. For some Capabilities, all Epics are required for the Solution to pass the assessment for that Capability. For others, only one or more Epics are required (see 'Capability assessment' below). ",
+              "Within each Capability, there are Epic-level user stories that describe business activities which are facilitated by a digital Solution. For some Capabilities, all Epics are required for the Solution to pass the assessment for that Capability. For others, only one or more Epics are required (see <a href='#Capability assessment'>'Capability assessment'</a> below). ",
               "In order to pass an Epic, all of the acceptance criteria under that Epic will need to be demonstrated in the evidence submission. Before you prepare and submit your evidence, you may wish to read 'Capability assessment'. ",
               "",
               "For each Capability, the Supplier can choose whether to provide:",
@@ -694,8 +688,8 @@
         ]
       },
       {
-        "Title": "Capability Assessment",
-        "Nav Title": "Capability Assessment",
+        "Title": "Capability assessment",
+        "Nav Title": "Capability assessment",
         "Text": [
           "Once you have submitted your Solution details and Capability evidence, we will review your submission, including mapping information provided and the applicability of the Associated Services. Once we have reviewed, we will notify your lead contact whether or not your Solution has been accepted, and attained the status of Catalogue Solution Submission Accepted. If your Solution is not accepted… ??",
           "At this point, we will assess your Capability Evidence. During this time, we may need to ask clarification questions and request more information to complete our assessment. These clarifications will happen via email to your lead contact, during private beta.    ",
@@ -709,8 +703,8 @@
         ]
       },
       {
-        "Title": "Standards Submission",
-        "Nav Title": "Standards Submission",
+        "Title": "Standards submission",
+        "Nav Title": "Standards submission",
         "Text": [
           "After you’ve submitted evidence for Capabilities (stage 2), you can submit evidence for Standards (stage 3). This stage will involve a detailed analysis of your Solution against each relevant Standard—the overarching Standards, which apply to all Solutions, and the Standards associated with the Capabilities selected."
         ],
@@ -734,8 +728,8 @@
         ]
       },
       {
-        "Title": "Standards Evaluation",
-        "Nav Title": "Standards Evaluations",
+        "Title": "Standards evaluation",
+        "Nav Title": "Standards evaluation",
         "Text": [
           "The evidence you submit within your Traceability Matrices (TMs) will be evaluated for compliance, according to the risk-based approach outlined below. ",
           "Once we’ve evaluated each line item in a Standard, we will send a notification to the lead contact and Standard owner, linking to our feedback within the TM on the Catalogue. The feedback is intended to support the Supplier in providing additional evidence. Suppliers can re-submit TMs as many times as needed until all line items meet the minimum level required to pass compliance for that Standard. "
@@ -809,7 +803,7 @@
               "Title": "What you do",
               "Text": [
                 "<b>On Bravo</b>",
-                "First, register for Bravo if you have not already done so.",
+                "First, register for <a href='https://nhsdigital.bravosolution.co.uk/' target='_blank'>Bravo</a> if you have not already done so.",
                 "Provide your company information.",
                 "Sign Catalogue Agreement.",
                 "Provide list of staff to be given log-in access under your company account."

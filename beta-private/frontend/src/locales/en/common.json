@@ -118,11 +118,11 @@
       }
     ],
     "Legal": {
-      "Heading": "Legal",
-      "Text": "See Terms of Use, Cookie Policy, and Commercial Policies on",
+      "Heading": "",
+      "Text": "",
       "Link": {
-        "Text": "Bravo",
-        "Url": "http://example.com/bravo"
+        "Text": "",
+        "Url": ""
       }
     }
   },
