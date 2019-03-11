@@ -72,7 +72,7 @@ test('a \'Not Started\' With a traceability Matrix present, the page shows a for
 test('A submitted standard does not allow further uploads but does allow download', async t => {
   await t
     .click(`a[href*="${commercialStdID}"]`)
-    .expect(Selector('.has-feedback').innerText).contains('Awaiting Compliance Outcome')
+    .expect(Selector('.has-feedback').innerText).contains('Awaiting compliance Outcome')
     .expect(Selector('.current-file').exists).ok()
 })
 
