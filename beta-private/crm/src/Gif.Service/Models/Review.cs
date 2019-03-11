@@ -13,7 +13,6 @@ namespace Gif.Service.Models
     [DataContract]
     public class Review : EntityBase, IHasPreviousId
     {
-
         [DataMember]
         [CrmIdField]
         [CrmFieldName("cc_reviewid")]
@@ -27,13 +26,13 @@ namespace Gif.Service.Models
         [CrmFieldName("_cc_evidence_value")]
         [CrmFieldNameDataBind("cc_Evidence@odata.bind")]
         [CrmFieldEntityDataBind("cc_evidences")]
-        public Guid? EvidenceId { get; set; }
+        public Guid EvidenceId { get; set; }
 
         [DataMember]
         [CrmFieldName("_createdby_value")]
         [CrmFieldNameDataBind("CreatedBy@odata.bind")]
         [CrmFieldEntityDataBind("contacts")]
-        public Guid? CreatedById { get; set; }
+        public Guid CreatedById { get; set; }
 
         [DataMember]
         [CrmFieldName("cc_commenthistory")]
@@ -48,7 +47,7 @@ namespace Gif.Service.Models
         public int Order { get; set; }
         [DataMember]
         [CrmFieldName("cc_originaldate")]
-        public new DateTime OriginalDate { get; set; }
+        public DateTime OriginalDate { get; set; }
 
         public Review() { }
 
@@ -79,8 +78,6 @@ namespace Gif.Service.Models
             var orderedReviews = enumReviews.OrderBy(x => x.Order);
             return orderedReviews;
         }
-
-
     }
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
