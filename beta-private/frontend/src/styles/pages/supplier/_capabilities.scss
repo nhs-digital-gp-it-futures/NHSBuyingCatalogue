@@ -112,8 +112,8 @@
         &.recording-consultations.selected { background-image: url('/img/capabilities/recording-consultations-y.png'); }
         &.patient-information-maintenance { background-image: url('/img/capabilities/patient-information-maintenance.png'); }
         &.patient-information-maintenance.selected { background-image: url('/img/capabilities/patient-information-maintenance-y.png'); }
-        &.gp-resource-management { background-image: url('/img/capabilities/gp-resource-management.png'); }
-        &.gp-resource-management.selected { background-image: url('/img/capabilities/gp-resource-management-y.png'); }
+        &.resource-management { background-image: url('/img/capabilities/resource-management.png'); }
+        &.resource-management.selected { background-image: url('/img/capabilities/resource-management-y.png'); }
         &.appointments-management-gp { background-image: url('/img/capabilities/appointments-management-gp.png'); }
         &.appointments-management-gp.selected { background-image: url('/img/capabilities/appointments-management-gp-y.png'); }
         &.prescription-ordering-citizen { background-image: url('/img/capabilities/prescribing-ordering-citizen.png'); }
@@ -124,6 +124,16 @@
         &.view-record-citizen.selected { background-image: url('/img/capabilities/view-record-citizen-y.png'); }
         &.communicate-with-practice-citizen { background-image: url('/img/capabilities/communicate-with-practice-citizen.png'); }
         &.communicate-with-practice-citizen.selected { background-image: url('/img/capabilities/communicate-with-practice-citizen-y.png'); }
+        &.productivity { background-image: url('/img/capabilities/productivity.png'); }
+        &.productivity.selected { background-image: url('/img/capabilities/productivity-y.png'); }
+        &.telecare { background-image: url('/img/capabilities/telecare.png'); }
+        &.telecare.selected { background-image: url('/img/capabilities/telecare-y.png'); }
+        &.medicines-verification { background-image: url('/img/capabilities/medicines-verification.png'); }
+        &.medicines-verification.selected { background-image: url('/img/capabilities/medicines-verification-y.png'); }
+        &.dispensing { background-image: url('/img/capabilities/dispensing.png'); }
+        &.dispensing.selected { background-image: url('/img/capabilities/dispensing-y.png'); }                
+        &.telecare { background-image: url('/img/capabilities/telecare.png'); }
+        &.telecare.selected { background-image: url('/img/capabilities/telecare-y.png'); }        
         &.telehealth { background-image: url('/img/capabilities/telehealth.png'); }
         &.telehealth.selected { background-image: url('/img/capabilities/telehealth-y.png'); }
         &.clinical-decision-support { background-image: url('/img/capabilities/clinical-decision-support.png'); }
@@ -183,8 +193,8 @@
         &.care-homes.selected { background-image: url('/img/capabilities/care-homes-y.png'); }
         &.digital-diagnostics { background-image: url('/img/capabilities/digital-diagnostics.png'); }
         &.digital-diagnostics.selected { background-image: url('/img/capabilities/digital-diagnostics-y.png'); }
-        &.gp-referral-management { background-image: url('/img/capabilities/gp-referral-management.png'); }
-        &.gp-referral-management.selected { background-image: url('/img/capabilities/gp-referral-management-y.png'); }
+        &.referral-management { background-image: url('/img/capabilities/referral-management.png'); }
+        &.referral-management.selected { background-image: url('/img/capabilities/referral-management-y.png'); }
         &.social-prescribing { background-image: url('/img/capabilities/social-prescribing.png'); }
         &.social-prescribing.selected { background-image: url('/img/capabilities/social-prescribing-y.png'); }
 
