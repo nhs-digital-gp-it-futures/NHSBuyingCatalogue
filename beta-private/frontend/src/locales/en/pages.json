@@ -101,7 +101,6 @@
       "Title": "Before you start",
       "Text": [
         "Note that when you click ‘save’ on any page, the information you’ve provided will be stored by the Catalogue Authority. If you change this information later, the original version will continue to be stored, but only the latest version will be reviewed by the Catalogue Authority as part your submission.",
-        
         "We also recommend reading the Supplier Guide before you start. It contains details to help you prepare for and complete each stage."
       ]
     },
@@ -442,6 +441,7 @@
           "Additional": "We will contact your $t(Lead Contact) to schedule the live witness demonstration."
         }
       },
+      
       "Submission": {
         "Notice":"By submitting this information to the Catalogue Authority, you are confirming that this submission is accurate and completed in good faith in accordance with the Catalogue Agreement and guidance."
       },
@@ -452,6 +452,7 @@
     "Confirmation": {
       "Title":"Review and submit your responses.",
       "Information": "Review your answers and edit as needed. This is your last chance to make changes before submitting your $t(Solution) to the $t(Catalogue.Shortname) Authority for acceptance and assessment.",
+      
       "Registration": {
         "Title": "Enter $t(Solution) details and key contacts.",
         "Subtitle": {
@@ -498,8 +499,8 @@
     "Nav Title": "Page Contents",
     "Sections": [
       {
-        "Title":"Introduction",
-        "Nav Title": "Introduction",
+        "Title":"About the Catalogue",
+        "Nav Title": "About the Catalogue",
         "Text": [],
         "Subsections": [
           {
@@ -509,9 +510,9 @@
             ]
           },
           {
-            "Title": "Introduction",
+            "Title": "About the Catalogue",
             "Text": [
-              "The Buying Catalogue is a procurement platform where clinical commissioners and other public sector buyers can find, evaluate and purchase digital products and services (Solution­s) intended to support GP IT. To be listed on the Buying Catalogue, all Solutions must successfully demonstrate compliance with relevant NHS requirements and standards. In order to sell from the Buying Catalogue, Solutions also must have been awarded to a framework."
+              "The Buying Catalogue is a procurement platform where clinical commissioners and other NHS buyers can find, evaluate and purchase digital products and services (Solution­s) intended to support GP IT. To be listed on the Buying Catalogue, all Solutions must successfully demonstrate compliance with relevant NHS requirements and standards. In order to sell from the Buying Catalogue, Solutions also must have been awarded to a framework."
             ]
           },
           {
@@ -547,7 +548,7 @@
             "Text": [
               "In order to sell you need to meet two requirements: (1) have your Solution accepted on the Catalogue as compliant (see the ‘Supplier Onboarding Process’ for more detail ); and (2) be awarded to a framework. The order of these two things may vary, but you must have submitted your Solution to the Catalogue and have it accepted into the assessment process in order to qualify for a framework award. ",
               "You may register to come onto the Catalogue and start the Capability assessment and Standards compliance stages at any time. See Supplier Registration below for how to get access to the Catalogue. ",
-              "The time it takes for a Solution to be accepted on the Catalogue will vary depending upon the number of Capabilities and Standards involved, and the quality of the initial submission. The aim is for acceptance for a good quality submission to take no longer than 19 weeks, following Supplier registration in Bravo. See a break-down of the timescale targets by stage in ‘Process overview’ below. ",
+              "ckes for a Solution to be accepted on the Catalogue will vary depending upon the number of Capabilities and Standards involved, and the quality of the initial submission. If all the Standards evidence is submitted by the time the Capability assessment is complete, the aim is that a good quality submission will take no longer than 19 weeks. See a break-down of the timescale targets by stage in ‘Process overview’ below. ",
               "The framework timescales will be clear at the time each framework is published. "
             ]
           }
@@ -592,10 +593,10 @@
             ]
           },
           {
-            "Title": "How are is the model structured?",
+            "Title": "How is the model structured?",
             "Text": [
               "Requirements are grouped into Capabilities. There are different types of Capabilities. There are Capabilities to support business continuity from the previous framework, GPSoC, and new Capabilities to support new ways of working. Six of the business continuity Capabilities have been designated as Foundation Capabilities (see below).",
-              "There are Overarching Standards, which are applicable to all Solutions (for example, Information Governance).",
+              "There are overarching Standards, which are applicable to all Solutions (for example, Information Governance).",
               "There are two types of Standards associated with Capabilities:",
               "• Capability-Specific Standards  are specific to a Capability and usually have the same name (for example, Prescribing); ",
               "• Context-Specific Standards sit under and apply to certain Capabilities (for example, Common Reporting).",
@@ -606,7 +607,7 @@
           {
             "Title": "Do I have to build a Solution that delivers all Capabilities?",
             "Text": [
-              "You do not have to provide a Solution that delivers all Capabilities. You may submit a Solution that meets just one Capability, or many. By looking at the Capabilities, you can see where your product portfolio fits. You may want to make tweaks to your existing products so that as a Solution will fully match related Capabilities. Or you may wish to create new Solutions to deliver a broader set of Capabilities. "
+              "You do not have to provide a Solution that delivers all Capabilities. You may submit a Solution that meets just one Capability, or many. By looking at the Capabilities, you can see where your product portfolio fits. You may want to make tweaks to your existing products so that a Solution will fully match one Capability or a set of Capabilities. Or you may wish to create new Solutions to deliver a broader set of Capabilities. "
             ]
           },
           {
@@ -618,18 +619,18 @@
           {
             "Title": "How do buyers fund their purchases?",
             "Text": [
-              "Buyers fund their purchases through a variety of funds. For buyers to access GP IT Central funding they must first take the six Foundation Capabilities (see model), which are intended to form the foundation for a clinical system Solution and start to support the commitments in the General Medical Services contract. ",
-              "Your Solution will be assessed to determine whether it (or a group of your Solutions) forms a Foundation Solution Set. If your Solution is recognised as a Foundation Solution, or part of a Foundation Solution Set, it can be bought using central funding. If a buyer has purchased all the Foundation Capabilities, they can use any remaining central funding to buy other Solutions that fulfil other Capabilities. Otherwise, buyers will use their own funds to pay for their purchase.",
+              "Buyers can fund their purchases using central or local funding, or a combination of the two. For buyers to access GP IT central funding, they must first agree a contract for a Solution, or set of Solutions, which provide all of the Foundation Capabilities (see model). The Foundation Capabilities form the foundation for a clinical system Solution and are the basis of support for the commitments in the General Medical Services contract. ",
+              "Your Solution will be assessed to determine whether it (or a group of your Solutions) forms a Foundation Solution Set. If your Solution is recognised as a Foundation Solution, it will be subject to a maximum list price. If a buyer has purchased all of the Foundation Capabilities, they can use any remaining central funding to buy other Solutions that fulfil other Capabilities. Otherwise, buyers will use local funds to pay for their purchase. ",
               "Please review our <a href='#' target='_blank'>Capabilities and Standards</a> Confluence site for more information."
             ]
           }
         ]
       },
       {
-        "Title": "Solution Details",
-        "Nav Title": "Solution Registration",
+        "Title": "Solution details",
+        "Nav Title": "Solution details",
         "Text": [
-          "To register your Solution, you must provide basic details and select the applicable Capabilities. For specific information required in this stage, see Supplier checklist. ",
+          "You must provide basic details and select the applicable Capabilities. For specific information required in this stage, see Supplier checklist. ",
           "Please be aware that during private beta, once you complete stage 1, your Solution name and Solution version cannot be changed. If you’ve made an error, please email us.",
           "Before you select applicable Capabilities, we recommend that you review the full <a href='#' target='_blank'>Capabilities & Standards Model</a> to understand the relationship between Capabilities and Standards, as well as the requirements under each Capability and Standard."
         ]
@@ -645,12 +646,12 @@
           {
             "Title": "Submitting Capability Evidence",
             "Text": [
-              "Within each Capability, there are Epic-level user stories that describe business activities which are facilitated by a digital Solution. For some Capabilities, all Epics are required for the Solution to pass the assessment for that Capability—these are Must Epics. For others, only one or more Epics are required (see Capability assessment below). ",
-              "In order to pass a Must Epic, all of the acceptance criteria under that Epic will need to be demonstrated in the evidence submission. Before you prepare and submit your evidence, you may wish to read Capability assessment. ",
-              "There are also May Epics. May Epics are not required, but if you wish to submit evidence of them we will assess them, and if all the acceptance criteria are passed for an Epic, the fact that the Solution has passed the May Epics will be available to buyers. ",
+              "Within each Capability, there are Epic-level user stories that describe business activities which are facilitated by a digital Solution. For some Capabilities, all Epics are required for the Solution to pass the assessment for that Capability. For others, only one or more Epics are required (see 'Capability assessment' below). ",
+              "In order to pass an Epic, all of the acceptance criteria under that Epic will need to be demonstrated in the evidence submission. Before you prepare and submit your evidence, you may wish to read 'Capability assessment'. ",
+              "",
               "For each Capability, the Supplier can choose whether to provide:",
               "• A recorded video demonstration (with optional voiceover describing what is happening and where each acceptance criteria is met); or ",
-              "• Request a live witness demonstration. During the live witness demonstration, the Supplier will present the Capability. The video will be recorded, and then assessed."
+              "• Schedule a live witness demonstration. During the live witness demonstration, the Supplier will present the Capability. The video will be recorded, and then assessed."
             ]
           },
           {
@@ -658,26 +659,27 @@
             "Text": [
               "The production quality of the video files provided will not be assessed. The videos can be recorded simply, for example, using a software such as Web-ex, and recording a shared screen. The important thing is that the video provided is clear and easy to view. To this end, including the Epic or Epics included in each video file name will be appreciated. ",
               "Narration—either verbal via voiceover or embedded via words on-screen—should be included in each video to indicate where each acceptance criterion is evidenced in each video. ",
-              "For each Capability, Suppliers are required on the Catalogue to indicate where in each video each Epic is evidenced. There is a free text field for each Capability where Suppliers can enter, for example, Epic 1 at 2:34. ",
-              "Please be aware that once your evidence has been submitted it cannot be changed. If you have submitted evidence in error, please email us."
+              "When you submit your videos on the Catalogue, you are required to tell us where in each video each Epic is evidenced. There is a free text field for each Capability where Suppliers can enter, for example, Epic 1 at 2:34. ",
+              "Please be aware that once you submit your evidence, you cannot change it. If you have submitted evidence in error, please email us."
             ]
           },
           {
             "Title": "Can I submit one video that displays all of my Solution's Capabilities?",
             "Text": [
-              "Your videos can display as many Capabilities as you wish, as long as you clearly demonstrate that your Solution meets the acceptance criteria for each Must Epic within each Capability."
+              "Your videos can display as many Capabilities as you wish, as long as you clearly demonstrate that your Solution meets the acceptance criteria for each Epic you are demonstrating."
             ]
           },
           {
             "Title": "My Solution meets a large number of Capabilities, can I submit multiple videos?",
             "Text": [
-              "Each Capability video should be no larger than 2 gigabytes in size, which would be around 30 minutes in length, depending on the video resolution used. If the quantity of Capabilities you've selected requires multiple videos you can combine these together in a zipped file before uploading."
+              "You can submit one or multiple video files for each Capability. If you wish to submit multiple videos for a Capability, you can combine these together in a zipped file before uploading. We recommend making the file(s) as small as possible as upload times may be slow during private beta. "
             ]
           },
           {
             "Title": "What if I don't have any video recording software?",
             "Text": [
-              "If you are not able to create videos, you can request a live witness demonstration with us. "
+              "You don’t need specialised recording software. For example, you can create and record a screencast using Web-ex or other meeting application or software. ",
+              "If you are not able to create videos, you can schedule a live witness demonstration with us."
             ]
           },
           {
@@ -692,13 +694,14 @@
         "Title": "Capability Assessment",
         "Nav Title": "Capability Assessment",
         "Text": [
-          "Once you have submitted your Solution details and Capability evidence, we will review your submission, including mapping information provided and the applicability of the Associated Services. Once we have approved your submission, we will notify your lead contact that your Solution has attained the status of Catalogue Solution Submission Accepted.",
-          "At this point, we will assess your Capability Evidence. During this time, we may need to ask clarification questions and request more information to complete our assessment. These clarifications will happen via email to your lead contact, during private beta.  ",
-          "Each Capability has Epics, and each Epic has acceptance criteria. Each of these acceptance criteria will be reviewed and scored as passed or failed. To pass an Epic, all acceptance criteria for that Epic must be passed. ",
-          "Some epics are labelled as ‘Must’ Epics. If the Capability is identified as a Core and Mandated Capability on the model [link], all the Must Epics must be passed. ",
-          "If the Capability is identified as a Discretionary Capability on the model [link], at least one Must Epic must be passed. If all of the Must Epics are met, this will be considered a Full Capability. If at least one, but not all, of the Must Epics are met, the Capability will be considered to be a Partial Capability. This will be visible to buyers.",
+          "Once you have submitted your Solution details and Capability evidence, we will review your submission, including mapping information provided and the applicability of the Associated Services. Once we have reviewed, we will notify your lead contact whether or not your Solution has been accepted, and attained the status of Catalogue Solution Submission Accepted. If your Solution is not accepted… ??",
+          "At this point, we will assess your Capability Evidence. During this time, we may need to ask clarification questions and request more information to complete our assessment. These clarifications will happen via email to your lead contact, during private beta.    ",
+          "Each Capability has Epics, and each Epic has acceptance criteria. Each of these acceptance criteria will be reviewed and scored as passed or failed. To pass an Epic, all acceptance criteria for that Epic must be passed.  ",
+          "Epics are labelled as ‘May’ or ‘Must’. For some Capabilities, we will allow and assess partial delivery (one or more but not all Must Epics met) of a Capability, while others have to be delivered in full (all Must Epics met). ",
+          "Each Capability is clearly marked in Confluence to show if partial delivery is accepted. For these, assessment against a subset of the Epics (and their associated acceptance criteria) is allowed. If the Solution passes with a subset if Epics, these will be marked with a status of Partial Capability.",
+          "For those where Partial Capability is not accepted, all Epics and acceptance criteria will be required to pass the Capability. If the Solution passes, these will be marked with a status of Full Capability. ",
           "It is possible for a Solution to have a combination of Full Capabilities and Partial Capabilities. ",
-          "Some Capabilities also have ‘May’ Epics, which are optional and not required to pass a Capability. Suppliers have the option of including these Epics as part of their evidence submission. If a May Epic is included, it will be assessed in the same way as a Must Epic. ",
+          "Some Capabilities also have May Epics, which are optional and not required to pass a Capability. Suppliers have the option of including these Epics as part of their evidence submission. If a May Epic is included, it will be assessed in the same way as a Must Epic.",
           "Once we’ve completed our assessment, your lead contact will notified of the outcome with a status against each Epic—either passed or failed."
         ]
       },
@@ -713,7 +716,7 @@
             "Title": "How to submit evidence - Traceability Matrices",
             "Text": [
               "Each Standard has a separate Traceability Matrix (TM), which is an Excel file that lists each piece of required evidence for that Standard as an individual line item (see example). Based on the risk-based approach outlined in the next section below, each line item has been classified as either ‘Must’ (mandatory to implement) or ‘May’ (optional to implement), as defined in Capabilities and Standards glossary. ",
-              "You can submit all evidence for a Standard via its TM. The TMs for each Standard applicable to your Solution can be accessed via your Standards Dashboard in stage 3. Each standard will open on its own page. Click on each Standard to download the TM for that Standard. Once you’ve finishing filling in the required information, you can upload the completed TM on the same page. You can submit TMs for each Standard one at time. ",
+              "You can submit most evidence for a Standard via its TM. Additional files such as screen shots or supporting documents can be included with your TM submission. The TMs for each Standard applicable to your Solution can be accessed via your Standards Dashboard in stage 3. Each standard will open on its own page. Click on each Standard to download the TM for that Standard. Once you’ve finishing filling in the required information, you can upload the completed TM on the same page. You can submit TMs for each Standard one at time. If you have multiple files to submit, you can zip them into a single compressed file, and upload the zipped files to the Catalogue. ",
               "Each Standard can be assigned a ‘Standard owner.’ By default, Standard owner will be your lead contact. You can change the owner to any other authenticated user at your company. (Authenticated users are those for whom you requested access in Bravo when registering your company). Standard owners are typically the ones submitting evidence for that Standard, and will receive all email notifications, along with the lead contact.  "
             ]
           },
@@ -738,17 +741,17 @@
           {
             "Title": "Compliance approach - risk based",
             "Text": [
-              "In order to establish our compliance criteria for each Standard, a risk-based approach has been applied to all aspects of each Standard, to determine what evidence will be assessed by us, and which areas will be assessed by the buyer.",
+              "In order to establish our compliance criteria for each Standard, a risk-based approach has been applied to all aspects of each Standard, to determine what level of compliance evidence will be assessed by us, and which areas will be assessed by the buyer.",
               "In general, central compliance will be applied when risks exist around the following areas:",
               "• Clinical safety",
               "• Information governance (including information security)",
-              "• Central NHS Spine Services and national programmes",
+              "• Central Spine Services and associated services",
               "• Interoperability",
-              "Where central risk mitigations have been identified, a risk level has been applied and mapped to mitigating actions. Examples of standards’ risks/mitigations are shown below:",
-              "• No Risk: yes/no self-certified response",
-              "• Low Risk: a self-certified* statement with a brief description of how you have met the line item",
-              "• Medium Risk: self-certified* statement with an implementation description plus physical evidence which may include screenshot/video, API response message, evidence of external compliance/certification (for example, ISO)",
-              "• High Risk: witnessed tests, design documents",
+              "Where central risk mitigations have been identified, a risk level impact has been applied and mapped to mitigating actions. Examples of Standards’ risks/mitigations are shown below:",
+              "• No risk impact: yes/no self-certified response",
+              "• Low risk impact: a self-certified* statement with a brief description of how you have met the line item",
+              "• Medium risk impact: self-certified* statement with an implementation description plus physical evidence which may include screenshot/video, API response message, evidence of external compliance/certification (for example, ISO)",
+              "• High risk impact: witnessed tests, design documents",
               "The compliance evaluation of your overarching Standards will also seek a proportionate risk-based approach. However, given the nature and variability within the overarching standards, the approach will be dependent on an understanding of the Solution being provided."
             ]
           },
@@ -760,8 +763,9 @@
             ]
           },
           {
-            "Title": "Solution Page – This stage is not yet available. All lead contacts that have Solutions in progress on the Catalogue will be notified as soon as it is available.",
+            "Title": "Solution Page ",
             "Text": [
+              "This stage is not yet available to start. All lead contacts that have Solutions in progress on the Catalogue will be notified as soon as it is available.",
               "Having successfully passed both the Capabilities assessment and the Standards compliance stages, you can progress to populating your Catalogue Solution listing, which will form your Solution page. In this final stage, you will be asked to provide additional information relevant to potential buyers. For specific information, see the Supplier checklist.",
               "Some aspects of the Solution page may vary by framework, for example prices and performance levels.",
               "We will moderate the Solution page to ensure it appears factually correct, isn’t misleading, and is presented within the spirit of the Commercial Standard before you can publish it."
@@ -809,7 +813,7 @@
               ]
             },
             "Right": {
-              "Title": "What we do.",
+              "Title": "What we do",
               "Text": [
                 "<b>On Bravo</b>",
                 "Review your submitted Catalogue agreement.",
@@ -834,12 +838,12 @@
               ]
             },
             "Right": {
-              "Title": "What we do.",
+              "Title": "What we do",
               "Text": [
               ]
             },
             "PostText": [
-              "* If your Catalogue Solution includes the Productivity Capability, you will follow a different process. See Annex 1 of the ‘Supplier Onboarding Process.’ ",
+              "* If your Catalogue Solution includes the Productivity Capability, you will need to follow an additional process. See Annex 1 of the ‘Supplier Onboarding Process.’ ",
               "You can progress to the next stages. "
             ]
           },
@@ -857,7 +861,7 @@
               ]
             },
             "Right": {
-              "Title": "What we do.",
+              "Title": "What we do",
               "Text": [
                 "<h4>FIRST</h4>",
                 "<b>On the Catalogue</b>",
@@ -867,7 +871,7 @@
                 "Review your Associated Services and Additional Services.",
                 "Review your Service Levels, if provided.",
                 "<b>Via email</b>",
-                "Notify you when your submission has been accepted.",
+                "Notify you if your submission has been accepted.",
                 "<h4>THEN</h4>",
                 "<b>On the Catalogue and/or via live witness demo, as requested</b>",
                 "Assess your Capability evidence.",
@@ -880,8 +884,8 @@
               ]
             },
             "PostText": [
-              "* If your Catalogue Solution includes the Productivity Capability, you will follow a different process. See Annex 1 of the ‘Supplier Onboarding Process.’",
-              "The aim is that this will take no longer than 20 Working Days from awarding status of Catalogue Solution Submission Accepted, or completion of your live witness demonstration. You can progress to the next stage and submit evidence for Standards while you wait for the outcome of your Capability assessment."
+              "* If your Catalogue Solution includes the Productivity Capability, you will follow an additional process. See Annex 1 of the ‘Supplier Onboarding Process.’",
+              "The aim is that this will take no longer than 20 Working Days from notifying you that you have achieved Catalogue Solution Submission Accepted status. You can progress to the next stage and submit evidence for Standards while you wait for the outcome of your Capability assessment."
             ]
           },
           {
@@ -895,7 +899,7 @@
               ]
             },
             "Right": {
-              "Title": "What we do.",
+              "Title": "What we do",
               "Text": [
                 "<b>On the Catalogue</b>",
                 "Review and provide feedback on evidence for each Standard submitted for compliance.",
@@ -926,7 +930,7 @@
               ]
             },
             "Right": {
-              "Title": "What we do.",
+              "Title": "What we do",
               "Text": [
                 "<b>On the Buying Catalogue</b>",
                 "Moderate the detail provided.",
@@ -1315,7 +1319,7 @@
                   "Service level information "
                 ],
                 [
-                  "For certain types of Solutions, this is either the default minimum or Supplier-specified performance in excess of the minimum.",
+                  "You will have proposed these service levels as part of the Solution submission. The Catalogue Authority will add the relevant information and this will not be editable.",
                   "For other types of Solutions, this will be the minimum proposed by the Supplier. (More information on the two types to come)"
                 ],
                 [
