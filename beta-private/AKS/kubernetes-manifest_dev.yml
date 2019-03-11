@@ -130,9 +130,9 @@ spec:
         - name: API_BASE_URL
           value: "http://api:5100"
         - name: CACHE_HOST
+          value: "cache"        
         - name: DEPLOYED_ENV_LABEL
-          value: "#{Build.BuildId}#"          
-          value: "cache"
+          value: "#{Build.BuildId}#"         
         - name: OIDC_ISSUER_URL
           value: "https://buying-catalogue-beta-prototype.eu.auth0.com"
         - name: OIDC_CLIENT_ID
