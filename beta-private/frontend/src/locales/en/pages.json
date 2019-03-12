@@ -1,4 +1,4 @@
- {
+{
   "MySolutions": {
     "Title": "My $t(Solution_plural)",
     "WelcomeMessage": "$t(Authentication.Greeting). Here you can add a $t(Solution) and manage all of your company's $t(Solution_plural).",
@@ -255,8 +255,13 @@
         "Text": [
           "To pass some $t(Capability_plural), your $t(Solution) must show how it meets all Epics within that $t(Capability). For other $t(Capability_plural), your $t(Solution) must show how it meets only one or more Epics. If it passes the assessment, your $t(Solution) will receive a status of Full Capability or Partial Capability, depending on the Epics met. See Confluence [link to come] to check the Epics required to pass each $t(Capability)."
         ]
-
-
+      },
+      "Submission": {
+        "Notice": {
+          "Text": [
+            "Once you click ‘$t(Buttons.Save and complete)’, you will not be able to edit Solution name or Solution version. Please check for any errors and confirm this name and version are what you want to take onto the Catalogue before completing this stage. "
+          ]
+        }
       },
       "Fieldsets": {
         "Core": {

@@ -80,11 +80,17 @@
     </section>
   </div>
 
+  <div>
+    {{#each (tt 'Onboarding.Capabilities.Submission.Notice')}}
+      <p>{{.}}</p>
+    {{/each}}
+  </div>
+
   <div id="submit-controls">
     <input type="submit"
       class="button primary"
       name="action[continue]"
-      value="{{t 'Buttons.Save and continue'}}">
+      value="{{t 'Buttons.Save and complete'}}">
   </div>
 {{/form}}
 <a class="back-link" href="../register">{{t 'Onboarding.Capabilities.Backlink.Title'}}</a>
