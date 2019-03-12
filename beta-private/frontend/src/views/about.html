@@ -20,7 +20,7 @@
             {{#each (tt 'Support.Sections')}}
                 <h2 id="{{'Nav Title'}}">{{t Title}}</h2>
                 {{#Text}}
-                    <p>{{t .}}</p>
+                    <p>{{{t .}}}</p>
                 {{/Text}}
                 {{#Subsections}}
                     {{#if Custom}}
@@ -28,7 +28,7 @@
                     {{else}}
                         <h3>{{t Title}}</h3>
                         {{#Text}}
-                            <p>{{t .}}</p>
+                            <p>{{{t .}}}</p>
                         {{/Text}}
                     {{/if}}
                 {{/Subsections}}
