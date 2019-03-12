@@ -38,7 +38,7 @@
         "Href":"/about#content"
       }
     },
-    "AboutSection" : {
+    "AboutSection": {
       "Title": "About Us",
       "Information": "The $t(NHS.Name) $t(Catalogue.Title) is a procurement platform where clinical commissioners and other $t(NHS.Name) buyers can find, evaluate and purchase Catalogue-assured IT $t(Solution_plural). To be on the Catalogue, all $t(Solution_plural) must successfully demonstrate compliance with relevant $t(NHS.Name) $t(Standard_plural).",
       "Cards": [
@@ -436,7 +436,7 @@
         "Video" : {
           "Title": "1. Add video file and describe Epics (required)*",
           "Information": "To include multiple video files, compress them into a single zip file. During private beta, file upload times may be slow. Thank you for your patience.",
-          "Previous": "The last file you uploaded was:",
+          "Previous": "The last file you uploaded was ",
           "Additional": "State the time where each Epic is demonstrated in each file, using the file name. For example, In DocumentManagement.mp4, see Epic 3 at 4:56."
         },
         "Notice": {
@@ -573,8 +573,8 @@
         "Title": "Registering your company and Catalogue access",
         "Nav Title": "Supplier registration",
         "Text": [
-          "Before you can begin adding your Solution to the Catalogue, you must register your company and request a user account as follows:",
-          "Log in to <a href='https://nhsdigital.bravosolution.co.uk/' target='_blank'>Bravo</a>. You will see multiple opportunities listed. Click on the ‘Buying Catalogue’ opportunity. ",
+          "Before you can begin adding your Solution to the Catalogue, you must register your company and request a user account as follows",
+          "Log in to <a href='//nhsdigital.bravosolution.co.uk/' target='_blank'>Bravo</a>. You will see multiple opportunities listed. Click on the ‘Buying Catalogue’ opportunity. ",
           "From there, you can download, review and sign the Catalogue Agreement which sets out the terms of use for using the Catalogue. When you’ve reviewed and gotten the necessary signature, you can upload the signed agreement to Bravo.",
           "Bravo will also ask you to provide company information (see the <a href='#Supplier checklist'>'Supplier checklist'</a> for details), and the names and email addresses of anyone who will need access to the Buying Catalogue under your company account. ",
           "Once we have signed the Catalogue Agreement, we will issue log-in details for each of the users requested.",
@@ -803,7 +803,7 @@
               "Title": "What you do",
               "Text": [
                 "<b>On Bravo</b>",
-                "First, register for <a href='https://nhsdigital.bravosolution.co.uk/' target='_blank'>Bravo</a> if you have not already done so.",
+                "First, register for <a href='//nhsdigital.bravosolution.co.uk/' target='_blank'>Bravo</a> if you have not already done so.",
                 "Provide your company information.",
                 "Sign Catalogue Agreement.",
                 "Provide list of staff to be given log-in access under your company account."
