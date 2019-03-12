@@ -111,21 +111,25 @@
       {
         "Name": "$t(Solution) details",
         "Title": "Provide basic details and select $t(Capability_plural)",
+        "Subtitle": "",
         "Narrative": "Provide $t(Solution) name, description, and contacts. Then select your $t(Solution_possessive) $t(Capability_plural) to progress to the next steps."
       },
       {
         "Name": "$t(Capabilities Assessment)",
         "Title": "Provide evidence for your $t(Solution_possessive) $t(Capability_plural)",
+        "Subtitle": "",
         "Narrative": "Provide evidence that shows how your $t(Solution) meets each of the $t(Capability_plural) selected. We will assess whether or not your $t(Solution) meets the $t(Capability_plural)."
       },
       {
         "Name": "$t(Standards Compliance)",
         "Title": "Provide evidence for your $t(Solution_possessive) $t(Standard_plural)",
+        "Subtitle": "",
         "Narrative": "Provide evidence that shows how your $t(Solution) meets the requirements in each $t(Standard). We will evaluate your $t(Solution) for $t(Compliance) with each $t(Standard)."
       },
       {
         "Name": "$t(Solution) detail",
         "Title": "Build your $t(Solution) page",
+        "Subtitle": "",
         "Narrative": "Provide information to help buyers evaluate your $t(Solution). We will moderate the information added. Then publish your $t(Solution) page."
       }
     ],
@@ -147,7 +151,7 @@
       "Title": "$t(Solution) information submitted.",
       "Text": [
         "Your responses have been submitted. We will review the content of your submission and notify you when it has been accepted and you have achieved Catalogue $t(Solution) Submission Accepted status. We will then proceed with assessment of your evidence.",
-      
+
         "While you wait, you may now submit evidence for stage 3 $t(Standard_plural) Compliance."
       ]
     },
@@ -763,16 +767,17 @@
               "Ensuring that Solutions remain compliant to Standards post-evaluation is critical to provide buyers with assurance that Solutions continue to function as intended and do not present safety risks. All Catalogue-assured Solutions must follow the requirements in the Service Management Standard, which will explain how Suppliers should manage change to their Solution, including any related compliance activities, for example, change and regression testing.",
               "Suppliers will have a responsibility to cooperate with any feedback activities or direct audits. The goal of both activities is to help identify and address any non-compliance and support the continued delivery of compliant Solutions to end users."
             ]
-          },
-          {
-            "Title": "Solution Page ",
-            "Text": [
-              "This stage is not yet available to start. All lead contacts that have Solutions in progress on the Catalogue will be notified as soon as it is available.",
-              "Having successfully passed both the Capabilities assessment and the Standards compliance stages, you can progress to populating your Catalogue Solution listing, which will form your Solution page. In this final stage, you will be asked to provide additional information relevant to potential buyers. For specific information, see the Supplier checklist.",
-              "Some aspects of the Solution page may vary by framework, for example prices and performance levels.",
-              "We will moderate the Solution page to ensure it appears factually correct, isn’t misleading, and is presented within the spirit of the Commercial Standard before you can publish it."
-            ]
           }
+        ]
+      },
+      {
+        "Title": "Solution page",
+        "Nav Title": "Solution page",
+        "Text": [
+          "This stage is not yet available to start. All lead contacts that have Solutions in progress on the Catalogue will be notified as soon as it is available.",
+          "Having successfully passed both the Capabilities assessment and the Standards compliance stages, you can progress to populating your Catalogue Solution listing, which will form your Solution page. In this final stage, you will be asked to provide additional information relevant to potential buyers. For specific information, see the Supplier checklist.",
+          "Some aspects of the Solution page may vary by framework, for example prices and performance levels.",
+          "We will moderate the Solution page to ensure it appears factually correct, isn’t misleading, and is presented within the spirit of the Commercial Standard before you can publish it."
         ]
       },
       {

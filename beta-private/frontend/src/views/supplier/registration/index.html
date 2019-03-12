@@ -53,6 +53,9 @@
     {{#if url}}
     <p class="action">Status: {{status}}. {{#if link}}<a href="{{url}}">{{link}}</a>{{/if}}</p>
     {{/if}}
+    {{#if ../Subtitle}}
+    <p>{{../Subtitle}}</p>
+    {{/if}}
     <p class="narrative">
       <span class="name">{{../Name}}.</span>
       {{../Narrative}}
