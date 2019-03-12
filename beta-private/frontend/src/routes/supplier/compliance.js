@@ -121,7 +121,6 @@ async function solutionComplianceDashboard (req, res) {
       context.solution.standards = []
       context.errors = { items: [{ msg: 'CompliancePages.Dashboard.Error.NoEnumeration' }] }
     }
-    console.log(context.solution.standards.map((std) => ({ type: std.type, isInterop: std.isInterop })))
     if ('submitted' in req.query) {
       const submittedStandard = context.solution.standards.find((std) => std.standardId === req.query.submitted)
       if (submittedStandard && +submittedStandard.status === 2) {
