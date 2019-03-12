@@ -24,7 +24,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     Roles = Roles.Admin + "," + Roles.Buyer + "," + Roles.Supplier,
     AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
   [Produces("application/json")]
-  public sealed class StandardsApplicableEvidenceController : BaseController
+  public sealed class StandardsApplicableEvidenceController : Controller
   {
     private readonly IStandardsApplicableEvidenceLogic _logic;
 
@@ -55,13 +55,10 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "StandardsApplicable not found")]
     public IActionResult ByClaim([FromRoute][Required]string claimId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      lock (_syncRoot)
-      {
-        var capEvidenc = _logic.ByClaim(claimId);
-        var retval = PaginatedList<IEnumerable<StandardsApplicableEvidence>>.Create(capEvidenc, pageIndex, pageSize);
+      var capEvidenc = _logic.ByClaim(claimId);
+      var retval = PaginatedList<IEnumerable<StandardsApplicableEvidence>>.Create(capEvidenc, pageIndex, pageSize);
 
-        return new OkObjectResult(capEvidenc);
-      }
+      return new OkObjectResult(capEvidenc);
     }
 
     /// <summary>
@@ -76,21 +73,18 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Claim not found")]
     public IActionResult Create([FromBody]StandardsApplicableEvidence evidence)
     {
-      lock (_syncRoot)
+      try
       {
-        try
-        {
-          var newEvidence = _logic.Create(evidence);
-          return new OkObjectResult(newEvidence);
-        }
-        catch (FluentValidation.ValidationException ex)
-        {
-          return new InternalServerErrorObjectResult(ex);
-        }
-        catch (Exception ex)
-        {
-          return new NotFoundObjectResult(ex);
-        }
+        var newEvidence = _logic.Create(evidence);
+        return new OkObjectResult(newEvidence);
+      }
+      catch (FluentValidation.ValidationException ex)
+      {
+        return new InternalServerErrorObjectResult(ex);
+      }
+      catch (Exception ex)
+      {
+        return new NotFoundObjectResult(ex);
       }
     }
   }

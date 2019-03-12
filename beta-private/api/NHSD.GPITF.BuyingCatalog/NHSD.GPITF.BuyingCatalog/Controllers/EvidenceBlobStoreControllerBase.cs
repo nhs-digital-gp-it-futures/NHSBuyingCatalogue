@@ -9,7 +9,7 @@ using System.IO;
 namespace NHSD.GPITF.BuyingCatalog.Controllers
 {
 #pragma warning disable CS1591
-  public abstract class EvidenceBlobStoreControllerBase : BaseController
+  public abstract class EvidenceBlobStoreControllerBase : Controller
   {
     protected readonly IEvidenceBlobStoreLogic _logic;
 

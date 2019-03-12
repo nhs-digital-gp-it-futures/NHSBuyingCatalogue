@@ -21,7 +21,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     Roles = Roles.Admin + "," + Roles.Buyer + "," + Roles.Supplier,
     AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
   [Produces("application/json")]
-  public sealed class OrganisationsController : BaseController
+  public sealed class OrganisationsController : Controller
   {
     private readonly IOrganisationsLogic _logic;
 
@@ -47,11 +47,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Organisation not found")]
     public IActionResult ByContact([FromRoute][Required]string contactId)
     {
-      lock (_syncRoot)
-      {
-        var org = _logic.ByContact(contactId);
-        return org != null ? (IActionResult)new OkObjectResult(org) : new NotFoundResult();
-      }
+      var org = _logic.ByContact(contactId);
+      return org != null ? (IActionResult)new OkObjectResult(org) : new NotFoundResult();
     }
   }
 }

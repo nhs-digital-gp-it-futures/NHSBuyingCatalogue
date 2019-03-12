@@ -22,7 +22,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     Roles = Roles.Admin + "," + Roles.Buyer + "," + Roles.Supplier,
     AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
   [Produces("application/json")]
-  public sealed class KeywordSearchHistoryController : BaseController
+  public sealed class KeywordSearchHistoryController : Controller
   {
     private readonly IKeywordSearchHistoryLogic _logic;
 
@@ -51,18 +51,15 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "No keywords found")]
     public IActionResult Get([FromQuery]DateTime? startDate, [FromQuery]DateTime? endDate, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      lock (_syncRoot)
+      try
       {
-        try
-        {
-          var logs = _logic.Get(startDate ?? DateTime.Now.AddYears(-10), endDate ?? DateTime.Now.AddYears(10));
-          var retval = PaginatedList<KeywordCount>.Create(logs, pageIndex, pageSize);
-          return logs.Count() > 0 ? (IActionResult)new OkObjectResult(retval) : new NotFoundResult();
-        }
-        catch (Exception)
-        {
-          return new ForbidResult();
-        }
+      var logs = _logic.Get(startDate ?? DateTime.Now.AddYears(-10), endDate ?? DateTime.Now.AddYears(10));
+      var retval = PaginatedList<KeywordCount>.Create(logs, pageIndex, pageSize);
+      return logs.Count() > 0 ? (IActionResult)new OkObjectResult(retval) : new NotFoundResult();
+      }
+      catch (Exception)
+      {
+        return new ForbidResult();
       }
     }
   }

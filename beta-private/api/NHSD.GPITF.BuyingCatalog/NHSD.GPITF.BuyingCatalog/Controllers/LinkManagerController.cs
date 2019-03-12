@@ -21,7 +21,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     Roles = Roles.Admin + "," + Roles.Buyer + "," + Roles.Supplier,
     AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
   [Produces("application/json")]
-  public sealed class LinkManagerController : BaseController
+  public sealed class LinkManagerController : Controller
   {
     private readonly ILinkManagerLogic _logic;
 
@@ -48,17 +48,14 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "One entity not found or link already exists")]
     public IActionResult FrameworkSolutionCreate([FromRoute][Required]string frameworkId, [FromRoute][Required]string solutionId)
     {
-      lock (_syncRoot)
+      try
       {
-        try
-        {
-          _logic.FrameworkSolutionCreate(frameworkId, solutionId);
-          return new OkResult();
-        }
-        catch (Exception ex)
-        {
-          return new NotFoundObjectResult(ex);
-        }
+        _logic.FrameworkSolutionCreate(frameworkId, solutionId);
+        return new OkResult();
+      }
+      catch (Exception ex)
+      {
+        return new NotFoundObjectResult(ex);
       }
     }
   }

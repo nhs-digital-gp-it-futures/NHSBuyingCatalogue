@@ -24,7 +24,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
     Roles = Roles.Admin + "," + Roles.Buyer + "," + Roles.Supplier,
     AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
   [Produces("application/json")]
-  public sealed class SolutionsExController : BaseController
+  public sealed class SolutionsExController : Controller
   {
     private readonly ISolutionsExLogic _logic;
 
@@ -49,12 +49,9 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Solution not found in CRM")]
     public IActionResult BySolution([FromRoute][Required]string solutionId)
     {
-      lock (_syncRoot)
-      {
-        var solnEx = _logic.BySolution(solutionId);
+      var solnEx = _logic.BySolution(solutionId);
 
-        return solnEx?.Solution != null ? (IActionResult)new OkObjectResult(solnEx) : new NotFoundResult();
-      }
+      return solnEx?.Solution != null ? (IActionResult)new OkObjectResult(solnEx) : new NotFoundResult();
     }
 
     /// <summary>
@@ -72,25 +69,22 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
     [SwaggerResponse(statusCode: (int)HttpStatusCode.InternalServerError, description: "Datastore exception")]
     public IActionResult Update([FromBody]SolutionEx solnEx)
     {
-      lock (_syncRoot)
+      try
       {
-        try
-        {
-          _logic.Update(solnEx);
-          return new OkResult();
-        }
-        catch (ArgumentOutOfRangeException ex)
-        {
-          return new NotFoundObjectResult(ex);
-        }
-        catch (InvalidOperationException ex)
-        {
-          return new InternalServerErrorObjectResult(ex);
-        }
-        catch (Exception ex)
-        {
-          return new InternalServerErrorObjectResult(ex);
-        }
+        _logic.Update(solnEx);
+        return new OkResult();
+      }
+      catch (ArgumentOutOfRangeException ex)
+      {
+        return new NotFoundObjectResult(ex);
+      }
+      catch (InvalidOperationException ex)
+      {
+        return new InternalServerErrorObjectResult(ex);
+      }
+      catch (Exception ex)
+      {
+        return new InternalServerErrorObjectResult(ex);
       }
     }
 
@@ -105,12 +99,9 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(IEnumerable<SolutionEx>), description: "Success")]
     public IActionResult ByOrganisation([FromRoute][Required]string organisationId)
     {
-      lock (_syncRoot)
-      {
-        var solnExs = _logic.ByOrganisation(organisationId);
+      var solnExs = _logic.ByOrganisation(organisationId);
 
-        return new OkObjectResult(solnExs);
-      }
+      return new OkObjectResult(solnExs);
     }
   }
 }

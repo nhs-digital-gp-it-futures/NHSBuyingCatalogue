@@ -13,8 +13,6 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
 #pragma warning disable CS1591
   public sealed class BasicAuthentication : IBasicAuthentication
   {
-    private static object _syncRoot = new object();
-
     private readonly IContactsDatastore _contactDatastore;
     private readonly IOrganisationsDatastore _organisationDatastore;
     private readonly IHostingEnvironment _env;
@@ -32,45 +30,43 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
 
     public Task Authenticate(ValidatePrincipalContext context)
     {
-      lock (_syncRoot)
+      if (!_env.IsDevelopment())
       {
-        if (!_env.IsDevelopment())
-        {
-          context.AuthenticationFailMessage = "Basic authentication only available in Development environment";
+        context.AuthenticationFailMessage = "Basic authentication only available in Development environment";
 
-          return Task.CompletedTask;
-        }
+        return Task.CompletedTask;
+      }
 
-        // use basic authentication to support Swagger
-        if (context.UserName != context.Password)
-        {
-          context.AuthenticationFailMessage = "Authentication failed.";
+      // use basic authentication to support Swagger
+      if (context.UserName != context.Password)
+      {
+        context.AuthenticationFailMessage = "Authentication failed.";
 
-          return Task.CompletedTask;
-        }
+        return Task.CompletedTask;
+      }
 
-        var primaryRoleId = string.Empty;
-        var email = string.Empty;
-        switch (context.UserName)
-        {
-          case Roles.Admin:
-          case Roles.Buyer:
-            primaryRoleId = PrimaryRole.GovernmentDepartment;
-            email = "buying.catalogue.assessment@gmail.com";
-            break;
+      var primaryRoleId = string.Empty;
+      var email = string.Empty;
+      switch (context.UserName)
+      {
+        case Roles.Admin:
+        case Roles.Buyer:
+          primaryRoleId = PrimaryRole.GovernmentDepartment;
+          email = "buying.catalogue.assessment@gmail.com";
+          break;
 
-          case Roles.Supplier:
-            primaryRoleId = PrimaryRole.ApplicationServiceProvider;
-            email = "buying.catalogue.supplier@gmail.com";
-            break;
+        case Roles.Supplier:
+          primaryRoleId = PrimaryRole.ApplicationServiceProvider;
+          email = "buying.catalogue.supplier@gmail.com";
+          break;
 
-          default:
-            break;
-        }
+        default:
+          break;
+      }
 
-        var contact = _contactDatastore.ByEmail(email);
-        var org = _organisationDatastore.ByContact(contact?.Id ?? string.Empty);
-        var claims = new List<Claim>
+      var contact = _contactDatastore.ByEmail(email);
+      var org = _organisationDatastore.ByContact(contact?.Id ?? string.Empty);
+      var claims = new List<Claim>
       {
         new Claim(ClaimTypes.Email, email, context.Options.ClaimsIssuer),
         new Claim(ClaimTypes.Name, context.UserName, context.Options.ClaimsIssuer),
@@ -82,10 +78,9 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
         new Claim(nameof(Organisations), org?.Id ?? Guid.NewGuid().ToString())
       };
 
-        context.Principal = new ClaimsPrincipal(new ClaimsIdentity(claims, BasicAuthenticationDefaults.AuthenticationScheme));
+      context.Principal = new ClaimsPrincipal(new ClaimsIdentity(claims, BasicAuthenticationDefaults.AuthenticationScheme));
 
-        return Task.CompletedTask;
-      }
+      return Task.CompletedTask;
     }
   }
 #pragma warning restore CS1591

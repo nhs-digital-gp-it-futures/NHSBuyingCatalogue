@@ -26,7 +26,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     Roles = Roles.Admin + "," + Roles.Buyer + "," + Roles.Supplier,
     AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
   [Produces("application/json")]
-  public sealed class TechnicalContactsController : BaseController
+  public sealed class TechnicalContactsController : Controller
   {
     private readonly ITechnicalContactsLogic _logic;
 
@@ -55,13 +55,10 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Solution not found in CRM")]
     public IActionResult BySolution([FromRoute][Required]string solutionId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      lock (_syncRoot)
-      {
-        var techConts = _logic.BySolution(solutionId);
-        var retval = PaginatedList<TechnicalContacts>.Create(techConts, pageIndex, pageSize);
+      var techConts = _logic.BySolution(solutionId);
+      var retval = PaginatedList<TechnicalContacts>.Create(techConts, pageIndex, pageSize);
 
-        return new OkObjectResult(retval);
-      }
+      return new OkObjectResult(retval);
     }
 
     /// <summary>
@@ -77,17 +74,14 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerRequestExample(typeof(TechnicalContacts), typeof(TechnicalContactsExample), jsonConverter: typeof(StringEnumConverter))]
     public IActionResult Create([FromBody]TechnicalContacts techCont)
     {
-      lock (_syncRoot)
+      try
       {
-        try
-        {
-          var newTechCont = _logic.Create(techCont);
-          return new OkObjectResult(newTechCont);
-        }
-        catch (Exception ex)
-        {
-          return new NotFoundObjectResult(ex);
-        }
+        var newTechCont = _logic.Create(techCont);
+        return new OkObjectResult(newTechCont);
+      }
+      catch (Exception ex)
+      {
+        return new NotFoundObjectResult(ex);
       }
     }
 
@@ -104,17 +98,14 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerRequestExample(typeof(TechnicalContacts), typeof(TechnicalContactsExample), jsonConverter: typeof(StringEnumConverter))]
     public IActionResult Update([FromBody]TechnicalContacts techCont)
     {
-      lock (_syncRoot)
+      try
       {
-        try
-        {
-          _logic.Update(techCont);
-          return new OkResult();
-        }
-        catch (Exception ex)
-        {
-          return new NotFoundObjectResult(ex);
-        }
+        _logic.Update(techCont);
+        return new OkResult();
+      }
+      catch (Exception ex)
+      {
+        return new NotFoundObjectResult(ex);
       }
     }
 
@@ -131,17 +122,14 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerRequestExample(typeof(TechnicalContacts), typeof(TechnicalContactsExample), jsonConverter: typeof(StringEnumConverter))]
     public IActionResult Delete([FromBody]TechnicalContacts techCont)
     {
-      lock (_syncRoot)
+      try
       {
-        try
-        {
-          _logic.Delete(techCont);
-          return new OkResult();
-        }
-        catch (Exception ex)
-        {
-          return new NotFoundObjectResult(ex);
-        }
+        _logic.Delete(techCont);
+        return new OkResult();
+      }
+      catch (Exception ex)
+      {
+        return new NotFoundObjectResult(ex);
       }
     }
   }

@@ -26,7 +26,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     Roles = Roles.Admin + "," + Roles.Buyer + "," + Roles.Supplier,
     AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
   [Produces("application/json")]
-  public sealed class CapabilitiesImplementedController : BaseController
+  public sealed class CapabilitiesImplementedController : Controller
   {
     private readonly ICapabilitiesImplementedLogic _logic;
 
@@ -52,11 +52,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Claim not found in CRM")]
     public IActionResult ById([FromRoute][Required]string id)
     {
-      lock (_syncRoot)
-      {
-        var claim = _logic.ById(id);
-        return claim != null ? (IActionResult)new OkObjectResult(claim) : new NotFoundResult();
-      }
+      var claim = _logic.ById(id);
+      return claim != null ? (IActionResult)new OkObjectResult(claim) : new NotFoundResult();
     }
 
     /// <summary>
@@ -75,13 +72,10 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Solution not found in CRM")]
     public IActionResult BySolution([FromRoute][Required]string solutionId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      lock (_syncRoot)
-      {
-        var caps = _logic.BySolution(solutionId);
-        var retval = PaginatedList<CapabilitiesImplemented>.Create(caps, pageIndex, pageSize);
+      var caps = _logic.BySolution(solutionId);
+      var retval = PaginatedList<CapabilitiesImplemented>.Create(caps, pageIndex, pageSize);
 
-        return new OkObjectResult(retval);
-      }
+      return new OkObjectResult(retval);
     }
 
     /// <summary>
@@ -97,17 +91,14 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerRequestExample(typeof(CapabilitiesImplemented), typeof(CapabilitiesImplementedExample), jsonConverter: typeof(StringEnumConverter))]
     public IActionResult Create([FromBody]CapabilitiesImplemented claimedcapability)
     {
-      lock (_syncRoot)
+      try
       {
-        try
-        {
-          var newStd = _logic.Create(claimedcapability);
-          return new OkObjectResult(newStd);
-        }
-        catch (Exception ex)
-        {
-          return new NotFoundObjectResult(ex);
-        }
+        var newStd = _logic.Create(claimedcapability);
+        return new OkObjectResult(newStd);
+      }
+      catch (Exception ex)
+      {
+        return new NotFoundObjectResult(ex);
       }
     }
 
@@ -124,17 +115,14 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerRequestExample(typeof(CapabilitiesImplemented), typeof(CapabilitiesImplementedExample), jsonConverter: typeof(StringEnumConverter))]
     public IActionResult Update([FromBody]CapabilitiesImplemented claimedcapability)
     {
-      lock (_syncRoot)
+      try
       {
-        try
-        {
-          _logic.Update(claimedcapability);
-          return new OkResult();
-        }
-        catch (Exception ex)
-        {
-          return new NotFoundObjectResult(ex);
-        }
+        _logic.Update(claimedcapability);
+        return new OkResult();
+      }
+      catch (Exception ex)
+      {
+        return new NotFoundObjectResult(ex);
       }
     }
 
@@ -151,17 +139,14 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerRequestExample(typeof(CapabilitiesImplemented), typeof(CapabilitiesImplementedExample), jsonConverter: typeof(StringEnumConverter))]
     public IActionResult Delete([FromBody]CapabilitiesImplemented claimedcapability)
     {
-      lock (_syncRoot)
+      try
       {
-        try
-        {
-          _logic.Delete(claimedcapability);
-          return new OkResult();
-        }
-        catch (Exception ex)
-        {
-          return new NotFoundObjectResult(ex);
-        }
+        _logic.Delete(claimedcapability);
+        return new OkResult();
+      }
+      catch (Exception ex)
+      {
+        return new NotFoundObjectResult(ex);
       }
     }
   }
