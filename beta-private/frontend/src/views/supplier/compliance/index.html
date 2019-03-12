@@ -24,7 +24,7 @@
 
 {{#*inline "standard-row"}}
 <tr class="standard {{statusClass}}">
-  <td class="name">{{#if continueUrl}}<a href="{{continueUrl}}">{{name}}</a>{{else}}{{name}}{{/if}}</td>
+  <td class="name">{{#if isInterop}}<i>interop</i>{{/if}} {{#if continueUrl}}<a href="{{continueUrl}}">{{name}}</a>{{else}}{{name}}{{/if}}</td>
   <td class="status">{{t statusTransKey when=statusChangeDate}}</td>
   <td class="owner">{{t 'CompliancePages.Dashboard.Standard.With' name=withContact.displayName}}</td>
 </tr>
@@ -33,10 +33,21 @@
 <table class="standards">
   <tbody>
     {{#solution.standards}}
-    {{#unless isOverarching}}
-    {{> standard-row}}
-    {{/unless}}
+      {{#unless isOverarching}}
+      {{#unless isInterop}}
+        {{> standard-row}}
+      {{/unless}}
+      {{/unless}}
     {{/solution.standards}}
+    
+    {{#solution.standards}}
+      {{#unless isOverarching}}
+      {{#if isInterop}}
+        {{> standard-row}}
+      {{/if}}
+      {{/unless}}
+    {{/solution.standards}}
+
   </tbody>
 </table>
 
