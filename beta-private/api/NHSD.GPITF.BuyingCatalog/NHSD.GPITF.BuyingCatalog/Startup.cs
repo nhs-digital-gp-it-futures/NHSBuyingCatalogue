@@ -263,14 +263,6 @@ namespace NHSD.GPITF.BuyingCatalog
 
       app.UseStaticFiles();
       app.UseMvc();
-
-      if (CurrentEnvironment.IsDevelopment())
-      {
-        var logConfig = Configuration.GetSection("Logging");
-        logging.AddConsole(logConfig); //log levels set in your configuration
-        logging.AddDebug(); //does all log levels
-        logging.AddFile(logConfig.GetValue<string>("PathFormat"));
-      }
     }
 
     private void DumpSettings()
