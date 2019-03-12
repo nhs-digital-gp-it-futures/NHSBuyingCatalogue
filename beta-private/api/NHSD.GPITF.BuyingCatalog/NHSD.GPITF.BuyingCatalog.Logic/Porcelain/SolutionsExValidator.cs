@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
+using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 using System.Linq;
 
@@ -10,14 +11,17 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
 {
   public sealed class SolutionsExValidator : ValidatorBase<SolutionEx>, ISolutionsExValidator
   {
+    private readonly ISolutionsExDatastore _datastore;
     private readonly ISolutionsValidator _solutionsValidator;
 
     public SolutionsExValidator(
       IHttpContextAccessor context,
       ILogger<SolutionsExValidator> logger,
+      ISolutionsExDatastore datastore,
       ISolutionsValidator solutionsValidator) :
       base(context, logger)
     {
+      _datastore = datastore;
       _solutionsValidator = solutionsValidator;
 
       RuleSet(nameof(ISolutionsExLogic.Update), () =>
@@ -42,6 +46,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
 
         ClaimedCapabilityReviewPreviousVersionMustBelongToSolution();
         ClaimedStandardReviewPreviousVersionMustBelongToSolution();
+
+
+        // One Rule to rule them all,
+        // One Rule to find them,
+        // One Rule to bring them all,
+        // and in the darkness bind them
+        CheckUpdateAllowed();
       });
     }
 
@@ -176,5 +187,75 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
         })
         .WithMessage("ClaimedStandardReview previous version must belong to solution");
     }
+
+    public void CheckUpdateAllowed()
+    {
+      RuleFor(x => x)
+        .Must(newSolnEx =>
+        {
+          var oldSolnEx = _datastore.BySolution(newSolnEx.Solution.Id);
+
+          return
+            MustBePendingToChangeClaimedCapability(oldSolnEx, newSolnEx) &&
+            MustBePendingToChangeClaimedStandard(oldSolnEx, newSolnEx);
+        });
+    }
+
+    // can only add/remove ClaimedCapability in Draft
+    public bool MustBePendingToChangeClaimedCapability(SolutionEx oldSolnEx, SolutionEx newSolnEx)
+    {
+      var newNotOld = newSolnEx.ClaimedCapability.Except(oldSolnEx.ClaimedCapability).ToList();
+      var oldNotNew = oldSolnEx.ClaimedCapability.Except(newSolnEx.ClaimedCapability).ToList();
+      var same = !newNotOld.Any() && !oldNotNew.Any();
+
+      if (same)
+      {
+        // no add/remove
+        return true;
+      }
+
+      if ((oldNotNew.Any() || newNotOld.Any()) &&
+        newSolnEx.Solution.Status != SolutionStatus.Draft)
+      {
+        // Can only add/remove ClaimedCapability in Draft
+        return false;
+      }
+
+      return true;
+    }
+
+    // can only add/remove ClaimedStandard in Draft
+    public bool MustBePendingToChangeClaimedStandard(SolutionEx oldSolnEx, SolutionEx newSolnEx)
+    {
+      var newNotOld = newSolnEx.ClaimedStandard.Except(oldSolnEx.ClaimedStandard).ToList();
+      var oldNotNew = oldSolnEx.ClaimedStandard.Except(newSolnEx.ClaimedStandard).ToList();
+      var same = !newNotOld.Any() && !oldNotNew.Any();
+
+      if (same)
+      {
+        // no add/remove
+        return true;
+      }
+
+      if ((oldNotNew.Any() || newNotOld.Any()) &&
+        newSolnEx.Solution.Status != SolutionStatus.Draft)
+      {
+        // Can only add/remove ClaimedStandard in Draft
+        return false;
+      }
+
+      return true;
+    }
+
+
+    // cannot remove Evidence
+    // cannot edit Evidence
+    // can only add Evidence before FinalApproval
+    // can only add Evidence to end
+
+    // cannot remove Review
+    // cannot edit Review
+    // can only add Review before FinalApproval
+    // can only add Review to end
   }
 }
