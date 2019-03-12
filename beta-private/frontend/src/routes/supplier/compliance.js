@@ -236,6 +236,11 @@ async function evidencePageContext (req, next) {
     { label: context.claim.standard.name }
   ]
 
+  context.latestReview = _.orderBy(context.solution.reviews, 'originalDate')[0]
+  if (context.latestReview) {
+    context.latestReview.createdOn = context.latestReview.originalDate
+  }
+
   let latestFile
 
   if (context.files) {
