@@ -26,7 +26,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     Roles = Roles.Admin + "," + Roles.Buyer + "," + Roles.Supplier,
     AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
   [Produces("application/json")]
-  public sealed class SolutionsController : Controller
+  public sealed class SolutionsController : BaseController
   {
     private readonly ISolutionsLogic _logic;
 
@@ -55,10 +55,13 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Framework not found in CRM")]
     public IActionResult ByFramework([FromRoute][Required]string frameworkId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      var solutions = _logic.ByFramework(frameworkId);
-      var retval = PaginatedList<Solutions>.Create(solutions, pageIndex, pageSize);
+      lock (_syncRoot)
+      {
+        var solutions = _logic.ByFramework(frameworkId);
+        var retval = PaginatedList<Solutions>.Create(solutions, pageIndex, pageSize);
 
-      return new OkObjectResult(retval);
+        return new OkObjectResult(retval);
+      }
     }
 
     /// <summary>
@@ -75,8 +78,11 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Solution not found in CRM")]
     public IActionResult ById([FromRoute][Required]string id)
     {
-      var solution = _logic.ById(id);
-      return solution != null ? (IActionResult)new OkObjectResult(solution) : new NotFoundResult();
+      lock (_syncRoot)
+      {
+        var solution = _logic.ById(id);
+        return solution != null ? (IActionResult)new OkObjectResult(solution) : new NotFoundResult();
+      }
     }
 
     /// <summary>
@@ -94,9 +100,12 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Solutions>), description: "Success")]
     public IActionResult ByOrganisation([FromRoute][Required]string organisationId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      var solutions = _logic.ByOrganisation(organisationId);
-      var retval = PaginatedList<Solutions>.Create(solutions, pageIndex, pageSize);
-      return new OkObjectResult(retval);
+      lock (_syncRoot)
+      {
+        var solutions = _logic.ByOrganisation(organisationId);
+        var retval = PaginatedList<Solutions>.Create(solutions, pageIndex, pageSize);
+        return new OkObjectResult(retval);
+      }
     }
 
     /// <summary>
@@ -114,18 +123,21 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerRequestExample(typeof(Solutions), typeof(SolutionsExample), jsonConverter: typeof(StringEnumConverter))]
     public IActionResult Create([FromBody]Solutions solution)
     {
-      try
+      lock (_syncRoot)
       {
-        var newSolution = _logic.Create(solution);
-        return new OkObjectResult(newSolution);
-      }
-      catch (FluentValidation.ValidationException ex)
-      {
-        return new InternalServerErrorObjectResult(ex);
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
+        try
+        {
+          var newSolution = _logic.Create(solution);
+          return new OkObjectResult(newSolution);
+        }
+        catch (FluentValidation.ValidationException ex)
+        {
+          return new InternalServerErrorObjectResult(ex);
+        }
+        catch (Exception ex)
+        {
+          return new NotFoundObjectResult(ex);
+        }
       }
     }
 
@@ -142,18 +154,21 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerRequestExample(typeof(Solutions), typeof(SolutionsExample), jsonConverter: typeof(StringEnumConverter))]
     public IActionResult Update([FromBody]Solutions solution)
     {
-      try
+      lock (_syncRoot)
       {
-        _logic.Update(solution);
-        return new OkResult();
-      }
-      catch (FluentValidation.ValidationException ex)
-      {
-        return new InternalServerErrorObjectResult(ex);
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
+        try
+        {
+          _logic.Update(solution);
+          return new OkResult();
+        }
+        catch (FluentValidation.ValidationException ex)
+        {
+          return new InternalServerErrorObjectResult(ex);
+        }
+        catch (Exception ex)
+        {
+          return new NotFoundObjectResult(ex);
+        }
       }
     }
 
@@ -171,18 +186,21 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerRequestExample(typeof(Solutions), typeof(SolutionsExample), jsonConverter: typeof(StringEnumConverter))]
     public IActionResult Delete([FromBody]Solutions solution)
     {
-      try
+      lock (_syncRoot)
       {
-        _logic.Delete(solution);
-        return new OkResult();
-      }
-      catch (FluentValidation.ValidationException ex)
-      {
-        return new InternalServerErrorObjectResult(ex);
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
+        try
+        {
+          _logic.Delete(solution);
+          return new OkResult();
+        }
+        catch (FluentValidation.ValidationException ex)
+        {
+          return new InternalServerErrorObjectResult(ex);
+        }
+        catch (Exception ex)
+        {
+          return new NotFoundObjectResult(ex);
+        }
       }
     }
   }

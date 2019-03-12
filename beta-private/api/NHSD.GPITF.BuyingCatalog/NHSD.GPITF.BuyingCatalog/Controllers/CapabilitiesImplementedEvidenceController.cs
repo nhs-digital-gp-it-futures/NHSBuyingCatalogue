@@ -24,7 +24,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     Roles = Roles.Admin + "," + Roles.Buyer + "," + Roles.Supplier,
     AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
   [Produces("application/json")]
-  public sealed class CapabilitiesImplementedEvidenceController : Controller
+  public sealed class CapabilitiesImplementedEvidenceController : BaseController
   {
     private readonly ICapabilitiesImplementedEvidenceLogic _logic;
 
@@ -55,9 +55,12 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Claim not found")]
     public IActionResult ByClaim([FromRoute][Required]string claimId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      var evidence = _logic.ByClaim(claimId);
-      var retval = PaginatedList<IEnumerable<CapabilitiesImplementedEvidence>>.Create(evidence, pageIndex, pageSize);
-      return evidence.Count() > 0 ? (IActionResult)new OkObjectResult(evidence) : new NotFoundResult();
+      lock (_syncRoot)
+      {
+        var evidence = _logic.ByClaim(claimId);
+        var retval = PaginatedList<IEnumerable<CapabilitiesImplementedEvidence>>.Create(evidence, pageIndex, pageSize);
+        return evidence.Count() > 0 ? (IActionResult)new OkObjectResult(evidence) : new NotFoundResult();
+      }
     }
 
     /// <summary>
@@ -72,18 +75,21 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Claim not found")]
     public IActionResult Create([FromBody]CapabilitiesImplementedEvidence evidence)
     {
-      try
+      lock (_syncRoot)
       {
-        var newEvidence = _logic.Create(evidence);
-        return new OkObjectResult(newEvidence);
-      }
-      catch (FluentValidation.ValidationException ex)
-      {
-        return new InternalServerErrorObjectResult(ex);
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
+        try
+        {
+          var newEvidence = _logic.Create(evidence);
+          return new OkObjectResult(newEvidence);
+        }
+        catch (FluentValidation.ValidationException ex)
+        {
+          return new InternalServerErrorObjectResult(ex);
+        }
+        catch (Exception ex)
+        {
+          return new NotFoundObjectResult(ex);
+        }
       }
     }
   }

@@ -24,7 +24,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     Roles = Roles.Admin + "," + Roles.Buyer + "," + Roles.Supplier,
     AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
   [Produces("application/json")]
-  public sealed class StandardsApplicableReviewsController : Controller
+  public sealed class StandardsApplicableReviewsController : BaseController
   {
     private readonly IStandardsApplicableReviewsLogic _logic;
 
@@ -55,10 +55,13 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Evidence not found")]
     public IActionResult ByEvidence([FromRoute][Required]string evidenceId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      var reviews = _logic.ByEvidence(evidenceId);
-      var retval = PaginatedList<IEnumerable<StandardsApplicableReviews>>.Create(reviews, pageIndex, pageSize);
+      lock (_syncRoot)
+      {
+        var reviews = _logic.ByEvidence(evidenceId);
+        var retval = PaginatedList<IEnumerable<StandardsApplicableReviews>>.Create(reviews, pageIndex, pageSize);
 
-      return new OkObjectResult(retval);
+        return new OkObjectResult(retval);
+      }
     }
 
     /// <summary>
@@ -73,18 +76,21 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "StandardsApplicable not found")]
     public IActionResult Create([FromBody]StandardsApplicableReviews review)
     {
-      try
+      lock (_syncRoot)
       {
-        var newReview = _logic.Create(review);
-        return new OkObjectResult(newReview);
-      }
-      catch (FluentValidation.ValidationException ex)
-      {
-        return new InternalServerErrorObjectResult(ex);
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
+        try
+        {
+          var newReview = _logic.Create(review);
+          return new OkObjectResult(newReview);
+        }
+        catch (FluentValidation.ValidationException ex)
+        {
+          return new InternalServerErrorObjectResult(ex);
+        }
+        catch (Exception ex)
+        {
+          return new NotFoundObjectResult(ex);
+        }
       }
     }
   }

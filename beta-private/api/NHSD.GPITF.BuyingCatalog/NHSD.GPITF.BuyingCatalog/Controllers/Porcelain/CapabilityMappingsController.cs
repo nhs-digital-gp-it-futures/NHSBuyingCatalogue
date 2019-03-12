@@ -20,7 +20,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
     Roles = Roles.Admin + "," + Roles.Buyer + "," + Roles.Supplier,
     AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
   [Produces("application/json")]
-  public sealed class CapabilityMappingsController : Controller
+  public sealed class CapabilityMappingsController : BaseController
   {
     private readonly ICapabilityMappingsLogic _logic;
 
@@ -42,8 +42,11 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(CapabilityMappings), description: "Success")]
     public IActionResult Get()
     {
-      var capMaps = _logic.GetAll();
-      return new OkObjectResult(capMaps);
+      lock (_syncRoot)
+      {
+        var capMaps = _logic.GetAll();
+        return new OkObjectResult(capMaps);
+      }
     }
   }
 }

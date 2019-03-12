@@ -26,7 +26,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     Roles = Roles.Admin + "," + Roles.Buyer + "," + Roles.Supplier,
     AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
   [Produces("application/json")]
-  public sealed class StandardsApplicableController : Controller
+  public sealed class StandardsApplicableController : BaseController
   {
     private readonly IStandardsApplicableLogic _logic;
 
@@ -52,8 +52,11 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Claim not found in CRM")]
     public IActionResult ById([FromRoute][Required]string id)
     {
-      var claim = _logic.ById(id);
-      return claim != null ? (IActionResult)new OkObjectResult(claim) : new NotFoundResult();
+      lock (_syncRoot)
+      {
+        var claim = _logic.ById(id);
+        return claim != null ? (IActionResult)new OkObjectResult(claim) : new NotFoundResult();
+      }
     }
 
     /// <summary>
@@ -72,10 +75,13 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Solution not found in CRM")]
     public IActionResult BySolution([FromRoute][Required]string solutionId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      var stds = _logic.BySolution(solutionId);
-      var retval = PaginatedList<StandardsApplicable>.Create(stds, pageIndex, pageSize);
+      lock (_syncRoot)
+      {
+        var stds = _logic.BySolution(solutionId);
+        var retval = PaginatedList<StandardsApplicable>.Create(stds, pageIndex, pageSize);
 
-      return new OkObjectResult(retval);
+        return new OkObjectResult(retval);
+      }
     }
 
     /// <summary>
@@ -91,14 +97,17 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerRequestExample(typeof(StandardsApplicable), typeof(StandardsApplicableExample), jsonConverter: typeof(StringEnumConverter))]
     public IActionResult Create([FromBody]StandardsApplicable claimedstandard)
     {
-      try
+      lock (_syncRoot)
       {
-        var newStd = _logic.Create(claimedstandard);
-        return new OkObjectResult(newStd);
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
+        try
+        {
+          var newStd = _logic.Create(claimedstandard);
+          return new OkObjectResult(newStd);
+        }
+        catch (Exception ex)
+        {
+          return new NotFoundObjectResult(ex);
+        }
       }
     }
 
@@ -115,14 +124,17 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerRequestExample(typeof(StandardsApplicable), typeof(StandardsApplicableExample), jsonConverter: typeof(StringEnumConverter))]
     public IActionResult Update([FromBody]StandardsApplicable claimedstandard)
     {
-      try
+      lock (_syncRoot)
       {
-        _logic.Update(claimedstandard);
-        return new OkResult();
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
+        try
+        {
+          _logic.Update(claimedstandard);
+          return new OkResult();
+        }
+        catch (Exception ex)
+        {
+          return new NotFoundObjectResult(ex);
+        }
       }
     }
 
@@ -139,14 +151,17 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerRequestExample(typeof(StandardsApplicable), typeof(StandardsApplicableExample), jsonConverter: typeof(StringEnumConverter))]
     public IActionResult Delete([FromBody]StandardsApplicable claimedstandard)
     {
-      try
+      lock (_syncRoot)
       {
-        _logic.Delete(claimedstandard);
-        return new OkResult();
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
+        try
+        {
+          _logic.Delete(claimedstandard);
+          return new OkResult();
+        }
+        catch (Exception ex)
+        {
+          return new NotFoundObjectResult(ex);
+        }
       }
     }
   }
