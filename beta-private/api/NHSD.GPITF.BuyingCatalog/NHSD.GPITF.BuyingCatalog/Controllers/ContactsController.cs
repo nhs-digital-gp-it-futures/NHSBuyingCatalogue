@@ -23,7 +23,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     Roles = Roles.Admin + "," + Roles.Buyer + "," + Roles.Supplier,
     AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
   [Produces("application/json")]
-  public sealed class ContactsController : Controller
+  public sealed class ContactsController : BaseController
   {
     private readonly IContactsLogic _logic;
 
@@ -51,10 +51,13 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Organisation not found in ODS")]
     public IActionResult ByOrganisation([FromRoute][Required]string organisationId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      var contacts = _logic.ByOrganisation(organisationId);
-      var retval = PaginatedList<Contacts>.Create(contacts, pageIndex, pageSize);
+      lock (_syncRoot)
+      {
+        var contacts = _logic.ByOrganisation(organisationId);
+        var retval = PaginatedList<Contacts>.Create(contacts, pageIndex, pageSize);
 
-      return new OkObjectResult(retval);
+        return new OkObjectResult(retval);
+      }
     }
 
     /// <summary>
@@ -71,9 +74,12 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Contact not found")]
     public IActionResult ByEmail([FromRoute][Required]string email)
     {
-      var convertedEmail = HttpUtility.UrlDecode(email);
-      var contact = _logic.ByEmail(convertedEmail);
-      return contact != null ? (IActionResult)new OkObjectResult(contact) : new NotFoundResult();
+      lock (_syncRoot)
+      {
+        var convertedEmail = HttpUtility.UrlDecode(email);
+        var contact = _logic.ByEmail(convertedEmail);
+        return contact != null ? (IActionResult)new OkObjectResult(contact) : new NotFoundResult();
+      }
     }
 
     /// <summary>
@@ -89,8 +95,11 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Contact not found")]
     public IActionResult ById([FromRoute][Required]string id)
     {
-      var contact = _logic.ById(id);
-      return contact != null ? (IActionResult)new OkObjectResult(contact) : new NotFoundResult();
+      lock (_syncRoot)
+      {
+        var contact = _logic.ById(id);
+        return contact != null ? (IActionResult)new OkObjectResult(contact) : new NotFoundResult();
+      }
     }
   }
 }

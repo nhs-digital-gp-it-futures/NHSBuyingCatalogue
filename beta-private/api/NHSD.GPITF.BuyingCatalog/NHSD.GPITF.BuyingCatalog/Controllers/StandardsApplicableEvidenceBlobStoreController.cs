@@ -69,7 +69,10 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Claim not found in CRM")]
     public IActionResult AddEvidenceForClaim([Required]string claimId, [Required]IFormFile file, [Required]string filename, string subFolder = null)
     {
-      return AddEvidenceForClaimInternal(claimId, file, filename, subFolder);
+      lock (_syncRoot)
+      {
+        return AddEvidenceForClaimInternal(claimId, file, filename, subFolder);
+      }
     }
 
     /// <summary>
@@ -86,7 +89,10 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Claim not found in CRM")]
     public FileResult Download([FromRoute][Required]string claimId, [FromQuery]string uniqueId)
     {
-      return DownloadInternal(claimId, uniqueId);
+      lock (_syncRoot)
+      {
+        return DownloadInternal(claimId, uniqueId);
+      }
     }
 
     /// <summary>
@@ -104,7 +110,10 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Claim not found in CRM")]
     public IActionResult EnumerateFolder([FromRoute][Required]string claimId, [FromQuery]string subFolder, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      return EnumerateFolderInternal(claimId, subFolder, pageIndex, pageSize);
+      lock (_syncRoot)
+      {
+        return EnumerateFolderInternal(claimId, subFolder, pageIndex, pageSize);
+      }
     }
 
     /// <summary>
@@ -121,7 +130,10 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Solution not found in CRM")]
     public IActionResult EnumerateClaimFolderTree([FromRoute][Required]string solutionId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      return EnumerateClaimFolderTreeInternal(solutionId, pageIndex, pageSize);
+      lock (_syncRoot)
+      {
+        return EnumerateClaimFolderTreeInternal(solutionId, pageIndex, pageSize);
+      }
     }
   }
 }

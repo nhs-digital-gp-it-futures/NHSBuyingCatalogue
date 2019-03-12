@@ -22,7 +22,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     Roles = Roles.Admin + "," + Roles.Buyer + "," + Roles.Supplier,
     AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
   [Produces("application/json")]
-  public sealed class EvidenceBlobStoreController : Controller
+  public sealed class EvidenceBlobStoreController : BaseController
   {
     private readonly IEvidenceBlobStoreLogic _logic;
 
@@ -60,18 +60,21 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Solution not found in CRM")]
     public IActionResult PrepareForSolution([FromRoute][Required]string solutionId)
     {
-      try
+      lock (_syncRoot)
       {
-        _logic.PrepareForSolution(solutionId);
-        return new OkResult();
-      }
-      catch (FluentValidation.ValidationException ex)
-      {
-        return new InternalServerErrorObjectResult(ex);
-      }
-      catch (KeyNotFoundException ex)
-      {
-        return new NotFoundObjectResult(ex);
+        try
+        {
+          _logic.PrepareForSolution(solutionId);
+          return new OkResult();
+        }
+        catch (FluentValidation.ValidationException ex)
+        {
+          return new InternalServerErrorObjectResult(ex);
+        }
+        catch (KeyNotFoundException ex)
+        {
+          return new NotFoundObjectResult(ex);
+        }
       }
     }
   }

@@ -24,7 +24,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     Roles = Roles.Admin + "," + Roles.Buyer + "," + Roles.Supplier,
     AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
   [Produces("application/json")]
-  public sealed class CapabilitiesImplementedReviewsController : Controller
+  public sealed class CapabilitiesImplementedReviewsController : BaseController
   {
     private readonly ICapabilitiesImplementedReviewsLogic _logic;
 
@@ -55,9 +55,12 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Evidence not found")]
     public IActionResult ByEvidence([FromRoute][Required]string evidenceId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      var reviews = _logic.ByEvidence(evidenceId);
-      var retval = PaginatedList<IEnumerable<CapabilitiesImplementedReviews>>.Create(reviews, pageIndex, pageSize);
-      return reviews.Count() > 0 ? (IActionResult)new OkObjectResult(reviews) : new NotFoundResult();
+      lock (_syncRoot)
+      {
+        var reviews = _logic.ByEvidence(evidenceId);
+        var retval = PaginatedList<IEnumerable<CapabilitiesImplementedReviews>>.Create(reviews, pageIndex, pageSize);
+        return reviews.Count() > 0 ? (IActionResult)new OkObjectResult(reviews) : new NotFoundResult();
+      }
     }
 
     /// <summary>
@@ -72,18 +75,21 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "CapabilitiesImplemented not found")]
     public IActionResult Create([FromBody]CapabilitiesImplementedReviews review)
     {
-      try
+      lock (_syncRoot)
       {
-        var newReview = _logic.Create(review);
-        return new OkObjectResult(newReview);
-      }
-      catch (FluentValidation.ValidationException ex)
-      {
-        return new InternalServerErrorObjectResult(ex);
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
+        try
+        {
+          var newReview = _logic.Create(review);
+          return new OkObjectResult(newReview);
+        }
+        catch (FluentValidation.ValidationException ex)
+        {
+          return new InternalServerErrorObjectResult(ex);
+        }
+        catch (Exception ex)
+        {
+          return new NotFoundObjectResult(ex);
+        }
       }
     }
   }

@@ -26,7 +26,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     Roles = Roles.Admin + "," + Roles.Buyer + "," + Roles.Supplier,
     AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
   [Produces("application/json")]
-  public sealed class CapabilitiesController : Controller
+  public sealed class CapabilitiesController : BaseController
   {
     private readonly ICapabilitiesLogic _logic;
 
@@ -54,10 +54,13 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Framework not found in CRM")]
     public IActionResult ByFramework([FromRoute][Required]string frameworkId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      var caps = _logic.ByFramework(frameworkId);
-      var retval = PaginatedList<Capabilities>.Create(caps, pageIndex, pageSize);
+      lock (_syncRoot)
+      {
+        var caps = _logic.ByFramework(frameworkId);
+        var retval = PaginatedList<Capabilities>.Create(caps, pageIndex, pageSize);
 
-      return new OkObjectResult(retval);
+        return new OkObjectResult(retval);
+      }
     }
 
     /// <summary>
@@ -74,8 +77,11 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "No capabilities not found in CRM")]
     public IActionResult ById([FromRoute][Required]string id)
     {
-      var cap = _logic.ById(id);
-      return cap != null ? (IActionResult)new OkObjectResult(cap) : new NotFoundResult();
+      lock (_syncRoot)
+      {
+        var cap = _logic.ById(id);
+        return cap != null ? (IActionResult)new OkObjectResult(cap) : new NotFoundResult();
+      }
     }
 
     /// <summary>
@@ -92,9 +98,12 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerRequestExample(typeof(IEnumerable<string>), typeof(CapabilityIdsExample), jsonConverter: typeof(StringEnumConverter))]
     public IActionResult ByIds([FromBody][Required]IEnumerable<string> ids)
     {
-      var caps = _logic.ByIds(ids);
+      lock (_syncRoot)
+      {
+        var caps = _logic.ByIds(ids);
 
-      return new OkObjectResult(caps);
+        return new OkObjectResult(caps);
+      }
     }
 
     /// <summary>
@@ -113,10 +122,13 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Capability not found in CRM")]
     public IActionResult ByStandard([FromRoute][Required]string standardId, [FromQuery][Required]bool isOptional, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      var caps = _logic.ByStandard(standardId, isOptional);
-      var retval = PaginatedList<Capabilities>.Create(caps, pageIndex, pageSize);
+      lock (_syncRoot)
+      {
+        var caps = _logic.ByStandard(standardId, isOptional);
+        var retval = PaginatedList<Capabilities>.Create(caps, pageIndex, pageSize);
 
-      return new OkObjectResult(retval);
+        return new OkObjectResult(retval);
+      }
     }
 
     /// <summary>
@@ -130,9 +142,12 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Capabilities>), description: "Success - if no capabilities found, return empty list")]
     public IActionResult Get([FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      var allCaps = _logic.GetAll();
-      var retval = PaginatedList<Capabilities>.Create(allCaps, pageIndex, pageSize);
-      return new OkObjectResult(retval);
+      lock (_syncRoot)
+      {
+        var allCaps = _logic.GetAll();
+        var retval = PaginatedList<Capabilities>.Create(allCaps, pageIndex, pageSize);
+        return new OkObjectResult(retval);
+      }
     }
   }
 }

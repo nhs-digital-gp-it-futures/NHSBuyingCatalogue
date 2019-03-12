@@ -24,7 +24,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
     Roles = Roles.Admin + "," + Roles.Buyer + "," + Roles.Supplier,
     AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
   [Produces("application/json")]
-  public sealed class SearchController : Controller
+  public sealed class SearchController : BaseController
   {
     private readonly ISearchLogic _logic;
 
@@ -65,9 +65,12 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<SearchResult>), description: "Success")]
     public IActionResult ByKeyword([FromRoute][Required]string keyword, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
-      var solutions = _logic.ByKeyword(keyword);
-      var retval = PaginatedList<SearchResult>.Create(solutions, pageIndex, pageSize);
-      return new OkObjectResult(retval);
+      lock (_syncRoot)
+      {
+        var solutions = _logic.ByKeyword(keyword);
+        var retval = PaginatedList<SearchResult>.Create(solutions, pageIndex, pageSize);
+        return new OkObjectResult(retval);
+      }
     }
   }
 }
