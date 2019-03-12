@@ -42,7 +42,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       GetInternal(() =>
       {
-        _redis.GetDatabase().StringSet(path, jsonCachedResponse, Expiry);
+        _redis.GetDatabase().StringSet(path, jsonCachedResponse, _expiry);
         return 0;
       });
     }
