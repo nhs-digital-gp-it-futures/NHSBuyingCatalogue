@@ -292,6 +292,7 @@ async function solutionComplianceEvidencePagePost (req, res, next) {
     id: require('node-uuid-generator').generate(),
     claimId: req.params.claim_id,
     createdOn: new Date(),
+    originalDate: new Date(),
     createdById: req.user.contact.id,
     evidence: '',
     originalDate: new Date(),

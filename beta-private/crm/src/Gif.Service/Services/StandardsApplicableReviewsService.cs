@@ -114,7 +114,7 @@ namespace Gif.Service.Services
       var appJson = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterAttributes), out Count);
       var review = appJson?.FirstOrDefault();
 
-      return new Review(review);
+      return (review == null) ? null : new Review(review);
     }
 
     public Review Create(Review review)

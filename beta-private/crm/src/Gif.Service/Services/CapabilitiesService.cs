@@ -56,9 +56,7 @@ namespace Gif.Service.Services
       var appJson = Repository.RetrieveMultiple(new Capability().GetQueryString(null, filterAttributes), out Count);
       var capabilityJson = appJson?.FirstOrDefault();
 
-      capability = new Capability(capabilityJson);
-
-      return capability;
+      return (capabilityJson == null) ? null : new Capability(capabilityJson);
     }
 
     public IEnumerable<Capability> ByIds(IEnumerable<string> ids)
@@ -79,7 +77,6 @@ namespace Gif.Service.Services
 
         if (capability != null)
           capabilityList.Add(new Capability(capability));
-
       }
 
       Count = capabilityList.Count();

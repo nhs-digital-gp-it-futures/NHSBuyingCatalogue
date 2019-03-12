@@ -25,7 +25,7 @@ namespace Gif.Service.Services
       var appJson = Repository.RetrieveMultiple(new StandardApplicable().GetQueryString(null, filterAttributes), out Count);
       var standardApplicable = appJson?.FirstOrDefault();
 
-      return new StandardApplicable(standardApplicable);
+      return (standardApplicable == null) ? null : new StandardApplicable(standardApplicable);
     }
 
     public IEnumerable<StandardApplicable> BySolution(string solutionId)

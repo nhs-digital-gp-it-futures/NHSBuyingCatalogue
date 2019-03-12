@@ -116,7 +116,7 @@ namespace Gif.Service.Services
       var appJson = Repository.RetrieveMultiple(new StandardApplicableEvidence().GetQueryString(null, filterAttributes), out Count);
       var evidence = appJson?.FirstOrDefault();
 
-      return new StandardApplicableEvidence(evidence);
+      return (evidence == null) ? null : new StandardApplicableEvidence(evidence);
     }
 
     public StandardApplicableEvidence Create(StandardApplicableEvidence evidenceEntity)

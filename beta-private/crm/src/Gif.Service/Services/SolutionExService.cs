@@ -53,6 +53,11 @@ namespace Gif.Service.Services
       var appJson = Repository.RetrieveMultiple(new SolutionExFullRetrieve().GetQueryString(null, filterAttributes, true, true), out int? count);
       var solutionJson = appJson?.FirstOrDefault();
 
+      if (solutionJson == null)
+      {
+        return null;
+      }
+
       var technicalContacts = new List<TechnicalContact>();
       var claimedCapabilities = new List<CapabilityImplemented>();
       var claimedStandard = new List<StandardApplicable>();

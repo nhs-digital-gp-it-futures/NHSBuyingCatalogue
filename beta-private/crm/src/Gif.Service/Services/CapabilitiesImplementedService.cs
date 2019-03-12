@@ -30,7 +30,7 @@ namespace Gif.Service.Services
 
       capabilityImplemented = new CapabilityImplemented(capabilityImplementedJson);
 
-      return capabilityImplemented;
+      return (capabilityImplementedJson == null) ? null : new CapabilityImplemented(capabilityImplementedJson);
     }
 
     public IEnumerable<CapabilityImplemented> BySolution(string solutionId)
