@@ -126,7 +126,7 @@ spec:
             cpu: 500m
         env:
         - name: BASE_URL
-          value: "https://preprod.store.digital.nhs.uk"
+          value: "https://preprod.buyingcatalogue.digital.nhs.uk"
         - name: API_BASE_URL
           value: "http://api:5100"
         - name: CACHE_HOST
