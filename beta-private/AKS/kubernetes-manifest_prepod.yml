@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: bc-pb-deployment-api
 spec:
-  replicas: 2
+  replicas: 1
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -98,7 +98,7 @@ kind: Deployment
 metadata:
   name: bc-pb-deployment-frontend
 spec:
-  replicas: 2
+  replicas: 1
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -156,7 +156,7 @@ kind: Deployment
 metadata:
   name: bc-pb-deployment-crm
 spec:
-  replicas: 2
+  replicas: 1
   strategy:
     rollingUpdate:
       maxSurge: 1
