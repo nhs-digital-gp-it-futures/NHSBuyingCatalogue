@@ -333,9 +333,8 @@ class DataProvider {
     await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
 
     const capAssSolnEx = await this.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet(solutionID)
-
     capAssSolnEx.solution.status = this.getStandardsComplianceStatusCode() // ✨🧙 magic 🧙✨
-    await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ capAssSolnEx })
+    await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx: capAssSolnEx })
 
     return this.solutionForAssessment(solutionID)
   }

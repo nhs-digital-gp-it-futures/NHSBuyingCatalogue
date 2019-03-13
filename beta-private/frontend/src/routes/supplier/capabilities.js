@@ -390,7 +390,7 @@ async function confirmationPagePost (req, res) {
   }
 }
 
-async function submitCapabilityAssessment (solutionID) {
+function submitCapabilityAssessment (solutionID) {
   return dataProvider.submitSolutionForCapabilityAssessment(solutionID)
 }
 
