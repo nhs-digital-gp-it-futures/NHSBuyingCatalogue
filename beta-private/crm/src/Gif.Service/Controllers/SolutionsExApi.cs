@@ -62,7 +62,7 @@ namespace Gif.Service.Controllers
     public IActionResult BySolution([FromRoute][Required]string solutionId)
     {
       var solutionClaims = _datastore.BySolution(solutionId);
-      return solutionClaims.Solution != null ? (IActionResult)new OkObjectResult(solutionClaims) : new NotFoundResult();
+      return solutionClaims?.Solution != null ? (IActionResult)new OkObjectResult(solutionClaims) : new NotFoundResult();
     }
 
 
