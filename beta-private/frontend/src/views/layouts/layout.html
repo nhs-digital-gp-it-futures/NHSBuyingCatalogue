@@ -115,7 +115,9 @@
         <p class="legal">
           <span class="heading">{{t 'Footer.Legal.Heading'}}</span>
           <span class="text">{{t 'Footer.Legal.Text'}}</span>
-          <a href="{{t 'Footer.Legal.Link.Url'}}">{{t 'Footer.Legal.Link.Text'}}</a>
+          {{#if (t 'Footer.Legal.Link.Text')}}
+            <a href="{{t 'Footer.Legal.Link.Url'}}">{{t 'Footer.Legal.Link.Text'}}</a>
+          {{/if}}
         </p>
       </div>
     </footer>
