@@ -33,6 +33,7 @@
   "Standards and Capabilities": "$t(Capability_plural) and $t(Standard_plural)",
   "Traceability Matrix": "Traceability Matrix",
   "Assessment team": "$t(Assessment) team",
+  "Catalogue Authority": "Catalogue Authority",
   "Lead Contact": "lead contact",
   "GPITFutures": {
     "Name": "GP IT Futures",

@@ -204,6 +204,7 @@ async function evidencePageContext (req, next) {
   // load the contacts associated with the message history
   context.claim.historyContacts = _.keyBy(await Promise.all(
     _(context.claim.submissionHistory)
+      .filter((msg) => !msg.isFeedback)
       .uniqBy('createdById')
       .map('createdById')
       .map(id => dataProvider.contactById(id))
@@ -239,7 +240,7 @@ async function evidencePageContext (req, next) {
 
   context.latestReview = _.orderBy(context.solution.reviews, 'originalDate')[0]
   if (context.latestReview) {
-    context.latestReview.createdOn = context.latestReview.originalDate
+    context.latestReview.createdOn = formatTimestampForDisplay(context.latestReview.originalDate)
   }
 
   let latestFile
@@ -301,7 +302,6 @@ async function solutionComplianceEvidencePagePost (req, res, next) {
     originalDate: new Date(),
     createdById: req.user.contact.id,
     evidence: '',
-    originalDate: new Date(),
     blobId: '' // ID of the file that was just uploaded, this relates a message to a file.
   }
 
