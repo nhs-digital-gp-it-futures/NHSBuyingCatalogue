@@ -514,7 +514,7 @@
   "Error": {
     "Greeting": "Unfortunately an Error has occured within our system.",
     "Information": "We are currently monitoring any issues that may arise during the lifetime of the system",
-    "Help": "If you want to provide extra information about what has gone wrong, then please send the GP IT Futures Team an email at: <a target='_blank' href='mailto&#58;$(Error.Email)' target='_blank'>$t(Error.Email)</a>",
+    "Help": "If you want to provide extra information about what has gone wrong, then please send the GP IT Futures Team an email at&#58; <a target='_blank' href='mailto&#58;$(Error.Email)' target='_blank'>$t(Error.Email)</a>",
     "Email": "GPITFutures@nhs.net"
   },
   "Support": {
