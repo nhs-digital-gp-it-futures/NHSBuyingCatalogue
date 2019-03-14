@@ -71,9 +71,7 @@
   "Notice": {
     "Saved": {
       "Title": "Solution Saved",
-      "Text": [
-        "Your solution was successfully saved."
-      ]
+      "Text": ["Your solution was successfully saved."]
     }
   },
   "Footer": {
@@ -103,8 +101,8 @@
             "Url": "/about#Contact us"
           },
           {
-          "Text": "NHS Digital service desk",
-          "Url": "/about#Contact us"
+            "Text": "NHS Digital service desk",
+            "Url": "/about#Contact us"
           }
         ]
       },
@@ -124,10 +122,10 @@
     ],
     "Legal": {
       "Heading": "",
-      "Text": "",
+      "Text": "This is a beta service. You can read guidance about this service in the support page.",
       "Link": {
-        "Text": "",
-        "Url": ""
+        "Text": "Support",
+        "Url": "/support"
       }
     }
   },

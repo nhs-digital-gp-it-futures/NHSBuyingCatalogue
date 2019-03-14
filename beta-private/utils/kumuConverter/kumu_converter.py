@@ -86,7 +86,6 @@ capability_headings_map = {
 def map_capability_type (row):
     '''Based on the capability output headings, convert the type from "Foundation" to "C" or "N".'''
     idx = capability_output_headings.index('Type')
-    print(row[idx])
     row[idx] = 'C' if row[idx] == 'Foundation' else 'N'
     return row
 
@@ -245,7 +244,7 @@ def extract_capability_standard_rows (ws):
         to_val = list(row)[to_col_idx].value
         type_val = list(row)[type_col_idx].value
 
-        not_none = (from_val != None) and (to_val != None) and (type_val != 'Inherited')
+        not_none = (from_val != None) and (to_val != None)
         if not_none and from_val.startswith('C') and to_val.startswith('S'):
             capability_standard_rows.append(row)
     return capability_standard_rows

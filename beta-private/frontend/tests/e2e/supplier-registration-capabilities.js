@@ -81,7 +81,7 @@ test('Capabilities can be changed, summary updates and data save correctly', asy
     .click('[type=checkbox][data-id="C20"]')
 
     .expect(capabilityCount).eql('3 Capabilities selected')
-    .expect(standardCount).eql('18 Standards will be required')
+    .expect(standardCount).eql('19 Standards will be required')
     .expect(Selector('#capability-summary .standards .associated').visible).ok()
 
     .expect(selSelectedCapabilities.nth(0).textContent).eql('Appointments Management - Citizen')
@@ -92,7 +92,7 @@ test('Capabilities can be changed, summary updates and data save correctly', asy
     .expect(selSelectedStandards.nth(1).textContent).eql('Citizen Access')
     .expect(selSelectedStandards.nth(2).textContent).eql('Common Reporting')
     .expect(selSelectedStandards.nth(4).textContent).eql('Interoperability Standard')
-    .expect(selSelectedStandards.nth(16).textContent).eql('Testing')
+    .expect(selSelectedStandards.nth(17).textContent).eql('Testing')
 
     .click(page.globalSaveButton)
 
@@ -101,7 +101,7 @@ test('Capabilities can be changed, summary updates and data save correctly', asy
   await t
     .expect(Selector('#errors').exists).notOk()
     .expect(capabilityCount).eql('3 Capabilities selected')
-    .expect(standardCount).eql('18 Standards will be required')
+    .expect(standardCount).eql('19 Standards will be required')
 
     .click('#capability-selector .capability[data-cap-id="C1"].selected')
     .click('[type=checkbox][data-id="C1"]')
@@ -120,7 +120,7 @@ test('Capabilities can be changed, summary updates and data save correctly', asy
     .click('[type=checkbox][data-id="C4"]')
 
     .expect(capabilityCount).eql('1 Capability selected')
-    .expect(standardCount).eql('16 Standards will be required')
+    .expect(standardCount).eql('17 Standards will be required')
     .expect(Selector('#capability-summary .standards .associated').visible).ok()
 
     .click(page.globalSaveAndExitButton)
