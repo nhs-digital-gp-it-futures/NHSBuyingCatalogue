@@ -3,6 +3,8 @@ const router = require('express').Router({ strict: true, mergeParams: true })
 const { dataProvider } = require('catalogue-data')
 const { catchHandler } = require('catalogue-authn-authz')
 
+console.info('ENV VARIABLES:', _.omitBy(process.env, (val, key) => _.startsWith(key, 'npm')))
+
 // work-around for Express bug 2281, open since 2014
 // https://github.com/expressjs/express/issues/2281
 function strictRouting (req, res, next) {
