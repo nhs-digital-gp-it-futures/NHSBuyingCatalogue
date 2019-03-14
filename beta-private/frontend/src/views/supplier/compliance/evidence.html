@@ -61,16 +61,16 @@
   </details>
 
   {{#if latestFile}}
-
     <section class="current-file">
       <h2>{{t 'CompliancePages.Evidence.CurrentFile.Heading'}}</h2>
-      <p class="has-feedback">
+      <section class="has-feedback">
         {{#latestReview}}
           <p>{{message}}</p>
+          <p>{{t 'Catalogue Authority'}}</p>
           <p>{{createdOn}}</p>
         {{/latestReview}}
         <a class="file-download-link" download target="_blank" href="{{latestFile.downloadURL}}">{{latestFile.name}}</a>
-      </p>
+      </section>
     </section>
 
     {{#if allowSubmission}}
@@ -140,14 +140,18 @@
     {{/if}}
 
     {{#claim.submissionHistory}}
-    <div id="{{id}}" class="message{{#isFeedback}} feedback{{/isFeedback}}">
+    <div id="{{id}}" class="message">
       <p class="text">{{message}}</p>
       <p class="meta">
         <span class="when">{{createdOn}}</span>
         <span class="from">
-        {{#with (lookup ../claim.historyContacts createdById)}}
-          {{firstName}} {{lastName}}
-        {{/with}}
+        {{#if isFeedback}}
+          {{t 'Catalogue Authority'}}
+        {{else}}
+          {{#with (lookup ../claim.historyContacts createdById)}}
+            {{firstName}} {{lastName}}
+          {{/with}}
+        {{/if}}
         </span>
         <span class="what">
           {{#if isFeedback}}
