@@ -81,7 +81,7 @@ test('Capabilities can be changed, summary updates and data save correctly', asy
     .click('[type=checkbox][data-id="C20"]')
 
     .expect(capabilityCount).eql('3 Capabilities selected')
-    .expect(standardCount).eql('20 Standards will be required')
+    .expect(standardCount).eql('18 Standards will be required')
     .expect(Selector('#capability-summary .standards .associated').visible).ok()
 
     .expect(selSelectedCapabilities.nth(0).textContent).eql('Appointments Management - Citizen')
@@ -101,7 +101,7 @@ test('Capabilities can be changed, summary updates and data save correctly', asy
   await t
     .expect(Selector('#errors').exists).notOk()
     .expect(capabilityCount).eql('3 Capabilities selected')
-    .expect(standardCount).eql('20 Standards will be required')
+    .expect(standardCount).eql('18 Standards will be required')
 
     .click('#capability-selector .capability[data-cap-id="C1"].selected')
     .click('[type=checkbox][data-id="C1"]')

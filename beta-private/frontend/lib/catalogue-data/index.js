@@ -331,9 +331,10 @@ class DataProvider {
     // Skip through to the Statuses
     solnEx.solution.status = this.getCapabilityAssessmentStatusCode() // ✨🧙 magic 🧙✨
     await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
-    
-    solnEx.solution.status = this.getStandardsComplianceStatusCode()
-    await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
+
+    const capAssSolnEx = await this.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet(solutionID)
+    capAssSolnEx.solution.status = this.getStandardsComplianceStatusCode() // ✨🧙 magic 🧙✨
+    await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx: capAssSolnEx })
 
     return this.solutionForAssessment(solutionID)
   }

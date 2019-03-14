@@ -11,12 +11,15 @@
       td {
         &.name {
           width: 50%;
+          i {
+            color: $color-nhs-black;
+          }
         }
 
         &.status {
           font-size: smaller;
           width: 30%;
-        }
+        } 
 
         &.owner {
           font-size: smaller;

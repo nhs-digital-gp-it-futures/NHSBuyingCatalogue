@@ -154,6 +154,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const elStandardsSection = $('#capability-summary .standards')
     const baseStdCount = +elStandardsSection.dataset.baseStdCount
     let assocStdCount = 0
+    let assocStds = []
     const stdIdToAssocStdEl = {}
 
     $$('.associated, .associated [data-id]', elStandardsSection).forEach(function (el) {
@@ -166,7 +167,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // show only the standards associated with the selected capabilities
     assocStdIds.forEach(function (stdId) {
       stdIdToAssocStdEl[stdId].classList.add('selected')
-      assocStdCount++
+      if(!assocStds.filter((std) => std === stdId).length) {
+        assocStdCount++
+        assocStds.push(stdId)
+      }
     })
 
     // update the standards required count, taking the overarching standards into account

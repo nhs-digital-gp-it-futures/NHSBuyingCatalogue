@@ -104,22 +104,23 @@ async function solutionComplianceDashboard (req, res) {
     }
 
     if (evidenceFiles) {
-      context.solution.standards = _(context.solution.standards)
+      context.solution.standards = _.sortBy(_(context.solution.standards)
         .map(std => ({
           ...context.standards[std.standardId],
           ...std,
           continueUrl: `evidence/${std.id}/`,
+          isInterop: context.standards[std.standardId].type === 'I',
           ...!_.isEmpty(evidenceFiles[std.id]) || +std.status !== 0
             ? {}
             : notReadyStatus
         }))
         .value()
+      , 'name')
     } else {
       // no evidence files object was obtained.
       context.solution.standards = []
       context.errors = { items: [{ msg: 'CompliancePages.Dashboard.Error.NoEnumeration' }] }
     }
-
     if ('submitted' in req.query) {
       const submittedStandard = context.solution.standards.find((std) => std.standardId === req.query.submitted)
       if (submittedStandard && +submittedStandard.status === 2) {
@@ -235,6 +236,11 @@ async function evidencePageContext (req, next) {
     { label: 'CompliancePages.Dashboard.Breadcrumb', url: `../../` },
     { label: context.claim.standard.name }
   ]
+
+  context.latestReview = _.orderBy(context.solution.reviews, 'originalDate')[0]
+  if (context.latestReview) {
+    context.latestReview.createdOn = context.latestReview.originalDate
+  }
 
   let latestFile
 
