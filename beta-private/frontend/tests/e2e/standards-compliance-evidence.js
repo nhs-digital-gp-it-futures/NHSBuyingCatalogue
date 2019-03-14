@@ -129,7 +129,7 @@ test('a \'Not Started\' With a traceability Matrix present, the page shows a for
 
 test('A submitted standard does not allow further uploads but does allow download', async t => {
   await t
-    .click(`a[href*="${standardNameMap['Clinical Safety'].id}"]`)
+    .click(`a[href*="${standardNameMap['Information Governance'].id}"]`)
   await t
     .expect(Selector('header.page-main-heading h1').innerText).contains('Evidence Submitted')
     .expect(Selector('.has-feedback a.file-download-link').exists).ok()
