@@ -888,7 +888,7 @@
                 "Evidence how your Solution meets the Capabilities by submitting video or request to present to us via a live witness demonstration.",
                 "<b>Via email</b>",
                 "Respond to any clarifications if we send them.",
-                "Submit service levels to <a href='mailto: buying.catalogue@nhs.net'>buying.catalogue@nhs.net</a> if not already provided.",
+                "Submit service levels to <a href='mailto(colon) buying.catalogue@nhs.net'>buying.catalogue@nhs.net</a> if not already provided.",
                 "Receive outcome of Capability assessment."
               ]
             },
@@ -929,7 +929,7 @@
                 "Download, complete and submit Traceability Matrices for your Standards.",
                 "Respond to feedback from us. This may include providing more information where required and working with us as we test each Standard against the requirements.",
                 "<b>Via email</b>",
-                "Submit service levels to <a href='mailto: buying.catalogue@nhs.net'>buying.catalogue@nhs.net</a> if not already provided."
+                "Submit service levels to <a href='mailto(colon) buying.catalogue@nhs.net'>buying.catalogue@nhs.net</a> if not already provided."
               ]
             },
             "Right": {
