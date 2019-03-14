@@ -112,13 +112,14 @@ const expectedStatusStandards = {
     standardNameMap['Business Continuity & Disaster Recovery'].id,
     standardNameMap['Clinical Safety'].id,
     standardNameMap['Data Migration'].id,
-    standardNameMap['Testing'].id
-
+    standardNameMap['Testing'].id,
+    standardNameMap['Commercial Standard'].id
   ]),
   'Submitted': new Set([
     standardNameMap['Information Governance'].id
   ]),
   'Feedback': new Set([
+    standardNameMap['Data Migration'].id,
     standardNameMap['Training'].id
   ]),
   'Approved': new Set([
@@ -146,7 +147,7 @@ test('Applicable standards are present and displayed in the correct sections', a
   const ovrchStd = await standardsComplianceDashboardPage.overarchingStandards.find('.standard')
 
   await t
-    .expect(assocStd.count).eql(12)
+    .expect(assocStd.count).eql(5)
     .expect(ovrchStd.count).eql(11)
 })
 
@@ -160,7 +161,6 @@ test('Displayed Applicable Standards match expected standard\'s status descripti
       await currentStandard.find('a').getAttribute('href')
     ).match('evidence/([^/]+)/')[1] // I know Kung Fu (Thanks Paul!)
     const currentStatus = await currentStandard.find('.status').innerText
-    // console.log(expectedStatusStandards[currentStatus], currentLinkUUID)
     await t.expect(expectedStatusStandards[currentStatus].has(currentLinkUUID)).ok()
   }
 })

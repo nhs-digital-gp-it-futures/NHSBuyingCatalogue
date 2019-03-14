@@ -49,7 +49,8 @@ class FakeFileStoreAPI {
       '719722d0-2354-437e-acdc-4625989bbca8', // Testing
       '23446cf9-d461-4907-b099-41f35b65de62', // Interoperability Standard
       'e70fd085-ec42-4901-a7ba-a0d6f61fbbe1', // Business Continuity & Disaster Recovery
-      '7b62b29a-62a7-4b4a-bcc8-dfa65fb7e35c' // Service Management
+      '7b62b29a-62a7-4b4a-bcc8-dfa65fb7e35c', // Service Management
+      'f49f91de-64fc-4cca-88bf-3238fb1de69b' // Training
     ]
 
     // Claims for solution ID 9A74133F-A437-4B2C-A57C-0F8B4EDDEA31, used to test

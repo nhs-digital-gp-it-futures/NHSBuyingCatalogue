@@ -129,9 +129,10 @@ test('a \'Not Started\' With a traceability Matrix present, the page shows a for
 
 test('A submitted standard does not allow further uploads but does allow download', async t => {
   await t
-    .click(`a[href*="${standardNameMap['Information Governance'].id}"]`)
-    .expect(Selector('.has-feedback').innerText).contains('Awaiting compliance Outcome')
-    .expect(Selector('.current-file').exists).ok()
+    .click(`a[href*="${standardNameMap['Clinical Safety'].id}"]`)
+  await t
+    .expect(Selector('header.page-main-heading h1').innerText).contains('Evidence Submitted')
+    .expect(Selector('.has-feedback a.file-download-link').exists).ok()
 })
 
 // Skipped as the acceptance criteria did not clearly specify this as being required,
@@ -225,9 +226,9 @@ test('A standard should change to Submitted if evidence is submitted.', async t 
 
 test('A standard sent back to the supplier should allow the supplier to resubmit', async t => {
   // navigate to 'business continuity...' standard evidence upload page.
-  const dataMigrationSelector = Selector(`a[href*="${standardNameMap['Training'].id}"]`)
+  const trainingSelector = Selector(`a[href*="${standardNameMap['Training'].id}"]`)
 
-  await t.click(dataMigrationSelector)
+  await t.click(trainingSelector)
 
   await setFileToUpload(t, downloadFileName)
     .click('#submit-for-compliance')
@@ -237,5 +238,5 @@ test('A standard sent back to the supplier should allow the supplier to resubmit
     .click('#compliance-submission-confirmation-button')
 
     // Selecting the Row that is the parent of the link, so that the sibling cell with containing status can be checked
-    .expect(dataMigrationSelector.parent().nth(1).find('.status').innerText).eql('Submitted')
+    .expect(trainingSelector.parent().nth(1).find('.status').innerText).eql('Submitted')
 })

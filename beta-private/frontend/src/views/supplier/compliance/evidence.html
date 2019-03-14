@@ -36,9 +36,8 @@
       <h2>{{ claim.standard.name }}</h2>
       <h3>File</h3>
       {{#if latestFile}}
-        <a download target="_blank" href="{{latestFile.downloadURL}}">{{latestFile.name}}</a>
+        <a class="file-download-link" download target="_blank" href="{{latestFile.downloadURL}}">{{latestFile.name}}</a>
       {{/if}}
-      <h3>Message (Optional)</h3>
     </div>
   {{else}}
   <header class="page-main-heading">
@@ -70,7 +69,7 @@
           <p>{{message}}</p>
           <p>{{createdOn}}</p>
         {{/latestReview}}
-        <a download target="_blank" href="{{latestFile.downloadURL}}">{{latestFile.name}}</a>
+        <a class="file-download-link" download target="_blank" href="{{latestFile.downloadURL}}">{{latestFile.name}}</a>
       </p>
     </section>
 
