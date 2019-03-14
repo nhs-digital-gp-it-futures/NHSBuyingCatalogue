@@ -514,7 +514,7 @@
   "Error": {
     "Greeting": "Unfortunately an Error has occured within our system.",
     "Information": "We are currently monitoring any issues that may arise during the lifetime of the system",
-    "Help": "If you want to provide extra information about what has gone wrong, then please send the GP IT Futures Team an email at: <a target='_blank' href='mailto:$(Error.Email)'>$t(Error.Email)</a>",
+    "Help": "If you want to provide extra information about what has gone wrong, then please send the GP IT Futures Team an email at: <a target='_blank' href='mailto&#58;$(Error.Email)' target='_blank'>$t(Error.Email)</a>",
     "Email": "GPITFutures@nhs.net"
   },
   "Support": {
@@ -620,7 +620,7 @@
             "Text": [
               "Requirements are grouped into Capabilities. There are different types of Capabilities. There are Capabilities to support business continuity from the previous framework, GPSoC, and new Capabilities to support new ways of working. Six of the business continuity Capabilities have been designated as Foundation Capabilities. Foundation Capabilities have funding implications (see <a href='#How do buyers fund their purchases?'>below</a>.",
               "There are overarching Standards, which are applicable to all Solutions (for example, Information Governance).",
-              "There are two types of Standards associated with Capabilities(colon)",
+              "There are two types of Standards associated with Capabilities&#58;",
               "• Capability-Specific Standards  are specific to a Capability and usually have the same name (for example, Prescribing); ",
               "• Context-Specific Standards sit under and apply to certain Capabilities (for example, Common Reporting).",
               "There is also an Interoperability Standard. Some elements of the Interoperability Standard apply to all Solutions, while other elements are associated with specific Capabilities.",
@@ -680,7 +680,7 @@
             "Text": [
               "The production quality of the video files provided will not be assessed. Your videos can be recorded simply, for example, using a software such as Web-ex, and recording a shared screen. The important thing is that the video provided is clear and easy to view. To this end, including the Epic or Epics included in each video file name will be appreciated. ",
               "Narration—either verbal via voiceover or embedded via words on-screen—should be included in each video to indicate where each acceptance criterion is evidenced in each video. ",
-              "When you submit your videos on the Catalogue, you are required to tell us where in each video each Epic is evidenced. There is a free text field for each Capability where Suppliers can enter, for example, Epic 1 at 2(colon)34. ",
+              "When you submit your videos on the Catalogue, you are required to tell us where in each video each Epic is evidenced. There is a free text field for each Capability where Suppliers can enter, for example, Epic 1 at 2&#58;34. ",
               "Please be aware that once you submit your evidence, you cannot change it. If you have submitted evidence in error, please email us."
             ]
           },
@@ -758,7 +758,7 @@
           "Title": "Compliance approach - risk based",
           "Text": [
             "In order to establish our compliance criteria for each Standard, a risk-based approach has been applied to all aspects of each Standard, to determine what level of compliance evidence will be assessed by us, and which areas will be assessed by the buyer.",
-            "In general, central compliance will be applied when risks exist around the following areas(colon)",
+            "In general, central compliance will be applied when risks exist around the following areas&#58;",
             "• Clinical safety",
             "• Information governance (including information security)",
             "• Central Spine Services and associated services",
@@ -866,7 +866,7 @@
                 "Provide basic details and key contacts for your Solution.",
                 "Select the applicable Capabilities. Your Solution will be assessed against these in the next stage.",
                 "<b>Via email</b>",
-                "Submit Associated Services and Additional Services. Submit service levels now or at stage 3. Email all submissions to <a href='mailto(colon)buying.catalogue@nhs.net'>buying.catalogue@nhs.net</a>. "
+                "Submit Associated Services and Additional Services. Submit service levels now or at stage 3. Email all submissions to <a href='mailto&#58;buying.catalogue@nhs.net' target='_blank'>buying.catalogue@nhs.net</a>. "
               ]
             },
             "Right": {
@@ -888,7 +888,7 @@
                 "Evidence how your Solution meets the Capabilities by submitting video or request to present to us via a live witness demonstration.",
                 "<b>Via email</b>",
                 "Respond to any clarifications if we send them.",
-                "Submit service levels to <a href='mailto(colon) buying.catalogue@nhs.net'>buying.catalogue@nhs.net</a> if not already provided.",
+                "Submit service levels to <a href='mailto&#58;buying.catalogue@nhs.net' target='_blank'>buying.catalogue@nhs.net</a> if not already provided.",
                 "Receive outcome of Capability assessment."
               ]
             },
@@ -929,7 +929,7 @@
                 "Download, complete and submit Traceability Matrices for your Standards.",
                 "Respond to feedback from us. This may include providing more information where required and working with us as we test each Standard against the requirements.",
                 "<b>Via email</b>",
-                "Submit service levels to <a href='mailto(colon) buying.catalogue@nhs.net'>buying.catalogue@nhs.net</a> if not already provided."
+                "Submit service levels to <a href='mailto&#58; buying.catalogue@nhs.net' target='_blank'>buying.catalogue@nhs.net</a> if not already provided."
               ]
             },
             "Right": {
@@ -1140,7 +1140,7 @@
                   "Capability assessment evidence method"
                 ],
                 [
-                  "For each Capability, you can choose to provide evidence either by(colon)",
+                  "For each Capability, you can choose to provide evidence either by&#58;",
                   "• Providing a recorded video demonstration",
                   "• Scheduling a live witness demo",
                   "Either way, you will need to demonstrate how each Capability meets its required Epics. (See Confluence for Capabilities and Epics.)"
