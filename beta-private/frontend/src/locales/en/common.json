@@ -21,10 +21,10 @@
   "Standard_plural": "Standards",
   "Standard_possessive": "Standard's",
   "Standard_plural_possessive": "Standards'",
-  "Associated Standard": "Associated $t(Standard)",
-  "Associated Standards": "Associated $t(Standard_plural)",
-  "Overarching Standard": "Overarching $t(Standard)",
-  "Overarching Standards": "Overarching $t(Standard_plural)",
+  "Associated Standard": "associated $t(Standard)",
+  "Associated Standards": "associated $t(Standard_plural)",
+  "Overarching Standard": "overarching $t(Standard)",
+  "Overarching Standards": "overarching $t(Standard_plural)",
   "Assessment": "assessment",
   "Compliance": "compliance",
   "Capability_Assessment": "$t(Capability) $t(Assessment)",
@@ -78,7 +78,7 @@
   "Footer": {
     "Sections": [
       {
-        "Heading": "Support",
+        "Heading": "Suppliers' Guide",
         "Links": [
           {
             "Text": "About the $t(Catalogue.Title)",
@@ -86,11 +86,11 @@
           },
           {
             "Text": "Process overview",
-            "Url": ""
+            "Url": "/about#Process overview"
           },
           {
-            "Text": "Catalogue checklist",
-            "Url": ""
+            "Text": "Supplier checklist",
+            "Url": "/about#Supplier checklist"
           }
         ]
       },
@@ -98,8 +98,12 @@
         "Heading": "Contact us",
         "Links": [
           {
-            "Text": "[helpdeskemail]@nhs.net",
-            "Url": "mailto:helpdeskemail@nhs.net"
+            "Text": "Catalogue submissions",
+            "Url": "/about#Contact us"
+          },
+          {
+          "Text": "NHS Digital service desk",
+          "Url": "/about#Contact us"
           }
         ]
       },
@@ -121,13 +125,13 @@
       "Heading": "",
       "Text": "",
       "Link": {
-        "Text": "Support",
-        "Url": "/support"
+        "Text": "",
+        "Url": ""
       }
     }
   },
   "Beta Banner": {
     "Title": "BETA",
-    "Message": "This is a new service –  your <a target='_blank' href='mailto:gpitfutures@nhs.net'>feedback</a> will help us to improve it. "
+    "Message": "This is a new service –  your <a target='_blank' href='mailto:buying.catalogue@nhs.net'>feedback</a> will help us to improve it. "
   }
 }

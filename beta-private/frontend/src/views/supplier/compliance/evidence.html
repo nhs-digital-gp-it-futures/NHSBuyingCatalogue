@@ -30,11 +30,11 @@
 
 {{#if isSubmitted}}
   <header class="page-main-heading">
-    <h1>Evidence Submitted</h1>
+    <h1>{{t 'CompliancePages.Evidence.Submitted.Title'}}</h1>
   </header>
     <div class="has-feedback">
       <h2>{{ claim.standard.name }}</h2>
-      <h3>File</h3>
+      <h3>{{t 'CompliancePages.Evidence.Submitted.Previous File.Title'}}</h3>
       {{#if latestFile}}
         <a class="file-download-link" download target="_blank" href="{{latestFile.downloadURL}}">{{latestFile.name}}</a>
       {{/if}}
