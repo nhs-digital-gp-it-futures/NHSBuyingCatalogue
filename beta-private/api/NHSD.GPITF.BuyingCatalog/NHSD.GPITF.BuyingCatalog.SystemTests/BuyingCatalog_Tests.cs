@@ -89,10 +89,20 @@ namespace NHSD.GPITF.BuyingCatalog.SystemTests
 
     private void AddSolution(IWebDriver driver, UserInfo userInfo)
     {
-      var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+      try
+      {
+        var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
 
-      // BC
-      wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(By.Id("add-new-solution")));
+        // BC
+        wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(By.Id("add-new-solution")));
+      }
+      catch (WebDriverTimeoutException)
+      {
+        var user = _users.Single(u => u.Id == userInfo.GetId());
+        TestContext.WriteLine($"Failed for user: {user.Email}");
+
+        throw;
+      }
     }
 
     private sealed class UserInfo
