@@ -51,8 +51,7 @@ namespace NHSD.GPITF.BuyingCatalog.SystemTests
         {
           allTasks.Add(Task.Factory.StartNew(userInfoObj =>
           {
-            // chromedriver.exe must be on path
-            using (var driver = new ChromeDriver())
+            using (var driver = new ChromeDriver(_config["ChromeDriverDirectory"]))
             {
               var userInfo = (UserInfo)userInfoObj;
               Login(driver, userInfo);
