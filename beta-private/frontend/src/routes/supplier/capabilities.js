@@ -119,6 +119,7 @@ async function solutionCapabilityPageGet (req, res) {
 
   if (context.notEditable) {
     delete context.activeForm.id
+    return res.redirect('./summary')
   }
 
   if ('saved' in req.query) {

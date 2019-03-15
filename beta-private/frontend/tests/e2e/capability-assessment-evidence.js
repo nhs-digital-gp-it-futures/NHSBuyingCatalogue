@@ -15,7 +15,7 @@ function navigateToCapabilityAssessment (t) {
     .click(supplierDashboardPage.homeLink)
     .click(supplierDashboardPage.secondOnboardingSolutionName)
     .click(onboardingDashboardPage.capabilityAssessmentButton)
-    .expect(Selector('#capability-assessment-page').exists).ok()
+    .expect(Selector('#capability-assessment-page, #capability-submission-confirmation').exists).ok()
 }
 
 test('All capabilities registered against the solution are present in the alphabetic order', async t => {
@@ -292,6 +292,18 @@ test('After Submitting Evidence for Capability Assessment, the Registration Page
 
   await t
     .click(onboardingDashboardPage.continueRegistrationButton)
+    .expect(Selector('#summary-details h2').innerText).contains('Enter Solution details')
+    .expect(Selector('#summary-capabilities h2').innerText).contains('Which Capabilities')
+    .expect(Selector('#summary-evidence h2').innerText).contains('Provide evidence')
+})
+
+test('After Submitting Evidence for Capability Assessment, the Standards compliance page should redirect to a summary page.', async t => {
+  await asSupplier(t)
+    .click(supplierDashboardPage.homeLink)
+    .click(supplierDashboardPage.secondOnboardingSolutionName)
+
+  await t
+    .click(onboardingDashboardPage.capabilityAssessmentButton)
     .expect(Selector('#summary-details h2').innerText).contains('Enter Solution details')
     .expect(Selector('#summary-capabilities h2').innerText).contains('Which Capabilities')
     .expect(Selector('#summary-evidence h2').innerText).contains('Provide evidence')
