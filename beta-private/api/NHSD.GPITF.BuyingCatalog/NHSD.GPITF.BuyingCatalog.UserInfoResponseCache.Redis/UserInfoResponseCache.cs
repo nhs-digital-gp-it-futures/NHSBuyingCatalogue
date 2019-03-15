@@ -18,7 +18,7 @@ namespace NHSD.GPITF.BuyingCatalog.UserInfoResponseCache.Redis
     private readonly IConfiguration _config;
     private readonly ILogger<UserInfoResponseCache> _logger;
     private readonly ISyncPolicy _policy;
-    private readonly IDatabase _db;
+    private readonly ConnectionMultiplexer _redis;
 
     public UserInfoResponseCache(
       IConfiguration config,
@@ -38,15 +38,14 @@ namespace NHSD.GPITF.BuyingCatalog.UserInfoResponseCache.Redis
         },
         SyncTimeout = int.MaxValue
       };
-      var redis = ConnectionMultiplexer.Connect(cfg);
-      _db = redis.GetDatabase();
+      _redis = ConnectionMultiplexer.Connect(cfg);
     }
 
     public void Remove(string bearerToken)
     {
       GetInternal(() =>
       {
-        _db.KeyDelete(bearerToken);
+        _redis.GetDatabase().KeyDelete(bearerToken);
         return 0;
       });
     }
@@ -55,7 +54,7 @@ namespace NHSD.GPITF.BuyingCatalog.UserInfoResponseCache.Redis
     {
       GetInternal(() =>
       {
-        _db.StringSet(bearerToken, jsonCachedResponse, Expiry);
+        _redis.GetDatabase().StringSet(bearerToken, jsonCachedResponse, Expiry);
         return 0;
       });
     }
@@ -64,7 +63,7 @@ namespace NHSD.GPITF.BuyingCatalog.UserInfoResponseCache.Redis
     {
       var cacheVal = GetInternal(() =>
       {
-        return _db.StringGet(bearerToken);
+        return _redis.GetDatabase().StringGet(bearerToken);
       });
       jsonCachedResponse = cacheVal;
       return cacheVal.HasValue;
