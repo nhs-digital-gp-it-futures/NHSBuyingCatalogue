@@ -26,9 +26,14 @@ class SharePointProvider {
     )
   }
 
-  async enumerateCapFolderFiles (solutionId) {
+  async enumerateCapFolderFiles (solutionId, pageIndex = 1, pageSize = 9999) {
+    const options = {
+      pageIndex,
+      pageSize
+    }
     const enumeration = await this.capBlobStoreApi.apiCapabilitiesImplementedEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGet(
-      solutionId
+      solutionId,
+      options
     )
 
     const claimMap = {}
@@ -76,9 +81,15 @@ class SharePointProvider {
     )
   }
 
-  async enumerateStdFolderFiles (solutionId) {
+  async enumerateStdFolderFiles (solutionId, pageIndex = 1, pageSize = 9999) {
+    const options = {
+      pageIndex,
+      pageSize
+    }
+
     const enumeration = await this.stdBlobStoreApi.apiStandardsApplicableEvidenceBlobStoreEnumerateClaimFolderTreeBySolutionIdGet(
-      solutionId
+      solutionId,
+      options
     )
 
     const claimMap = {}
