@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -38,6 +39,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     public T Create(T claim)
     {
       _validator.ValidateAndThrowEx(claim, ruleSet: nameof(IClaimsLogic<T>.Create));
+
+      claim.OriginalDate = DateTime.UtcNow;
 
       return _datastore.Create(claim);
     }

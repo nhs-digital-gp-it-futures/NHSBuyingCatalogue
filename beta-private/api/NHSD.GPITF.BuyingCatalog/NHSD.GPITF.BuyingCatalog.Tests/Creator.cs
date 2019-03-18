@@ -233,13 +233,15 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
     public static ClaimsBase GetClaimsBase(
       string id = null,
       string solnId = null,
-      string ownerId = null)
+      string ownerId = null,
+      DateTime? originalDate = null)
     {
       var retval = new DummyClaimsBase
       {
         Id = id ?? Guid.NewGuid().ToString(),
         SolutionId = solnId ?? Guid.NewGuid().ToString(),
-        OwnerId = ownerId ?? Guid.NewGuid().ToString()
+        OwnerId = ownerId ?? Guid.NewGuid().ToString(),
+        OriginalDate = originalDate ?? DateTime.UtcNow
       };
       Verifier.Verify(retval);
       return retval;

@@ -6,10 +6,10 @@ using System.Runtime.Serialization;
 
 namespace Gif.Service.Models
 {
-    [CrmEntity("cc_standardapplicables")]
+  [CrmEntity("cc_standardapplicables")]
     [DataContract]
-    public class StandardApplicable : EntityBase
-    {
+    public class StandardApplicable : ClaimsBase
+  {
         [DataMember]
         [CrmIdField]
         [CrmFieldName("cc_standardapplicableid")]
