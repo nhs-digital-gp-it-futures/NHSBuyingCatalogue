@@ -301,8 +301,8 @@ async function confirmationPageContext (req) {
   },
   { associated: {}, overarching: {} })
 
-  context.solution.standardsByGroup.associated = _.map(context.solution.standardsByGroup.associated)
-  context.solution.standardsByGroup.overarching = _.map(context.solution.standardsByGroup.overarching)
+  context.solution.standardsByGroup.associated = _.sortBy(_.map(context.solution.standardsByGroup.associated), 'name')
+  context.solution.standardsByGroup.overarching = _.sortBy(_.map(context.solution.standardsByGroup.overarching), 'name')
 
   context.solution.capabilities = context.solution.capabilities.map((cap) => {
     let isLiveDemo = false
@@ -314,21 +314,22 @@ async function confirmationPageContext (req) {
     } else if (cap.latestEvidence && cap.latestFile) {
       missingEvidence = false
     }
-
-    context.editUrls = {
-      registration: `/suppliers/solutions/${req.params.solution_id}/register`,
-      capabilities: {
-        selection: `/suppliers/solutions/${req.params.solution_id}/capabilities`,
-        evidence: `/suppliers/capabilities/${req.params.solution_id}`
-      }
-    }
-
     return {
       ...cap,
       isLiveDemo,
       missingEvidence
     }
   })
+
+  context.solution.capabilities = _.sortBy(context.solution.capabilities, 'name')
+
+  context.editUrls = {
+    registration: `/suppliers/solutions/${req.params.solution_id}/register`,
+    capabilities: {
+      selection: `/suppliers/solutions/${req.params.solution_id}/capabilities`,
+      evidence: `/suppliers/capabilities/${req.params.solution_id}`
+    }
+  }
   return context
 }
 

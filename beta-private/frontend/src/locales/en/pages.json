@@ -401,13 +401,13 @@
         }
       },
       "History": {
-        "Heading": "Submission History",
+        "Heading": "Upload History",
         "Hide": "Hide history",
         "Show": "Show history",
         "HasFeedback": "Status: Feedback available. See response <a href='#{{id}}'>below</a>.",
         "IsSubmitted": "Status: Submitted. Awaiting $t(Compliance) Outcome",
         "FeedbackSent": "Feedback sent",
-        "FileSent": "File sent"
+        "FileSent": "File uploaded"
       },
       "Backlink": {
         "Title": "$t(CompliancePages.Dashboard.Title)"

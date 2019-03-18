@@ -227,7 +227,7 @@ test('Clicking Continue with incomplete evidence should trigger a validation mes
 
   // collapse the open invalid collapsible section
   await t.click(capSection2.child('legend'))
-3
+
   // clicking save should not trigger any validation errors if options are clicked, but only one file is uploaded
   await t
     .click(capabilityEvidencePage.globalSaveButton)
@@ -307,4 +307,55 @@ test('After Submitting Evidence for Capability Assessment, the Standards complia
     .expect(Selector('#summary-details h2').innerText).contains('Enter Solution details')
     .expect(Selector('#summary-capabilities h2').innerText).contains('Which Capabilities')
     .expect(Selector('#summary-evidence h2').innerText).contains('Provide evidence')
+})
+
+test('The Capability Assessment Summary page should display capabilities alphabetically.', async t => {
+  await asSupplier(t)
+    .click(supplierDashboardPage.homeLink)
+    .click(supplierDashboardPage.secondOnboardingSolutionName)
+
+  const allCapabilities = Selector('#summary-capabilities div.capabilities p a')
+
+  await t
+    .expect(allCapabilities.nth(0).innerText).contains('Appointments Management')
+    .expect(allCapabilities.nth(1).innerText).contains('Appointments Management')
+    .expect(allCapabilities.nth(2).innerText).contains('Communicate With Practice')
+})
+
+test('The Capability Assessment Summary page should display the number of applicable standards.', async t => {
+  await asSupplier(t)
+    .click(supplierDashboardPage.homeLink)
+    .click(supplierDashboardPage.secondOnboardingSolutionName)
+
+  // should be 26 standards in totals. 15 Associated and 11 Overarching.
+  await t.expect(Selector('#summary-capabilities > details > summary > span').innerText).contains('26 Standards')
+})
+
+test('The Capability Assessment Summary page should display Associated Standards alphabetically.', async t => {
+  await asSupplier(t)
+    .click(supplierDashboardPage.homeLink)
+    .click(supplierDashboardPage.secondOnboardingSolutionName)
+
+  const allStandards = Selector('#summary-capabilities details div p a')
+
+  await t
+    .expect(allStandards.nth(0).innerText).contains('Appointments Management - GP - Standard')
+    .expect(allStandards.nth(1).innerText).contains('Citizen Access')
+    .expect(allStandards.nth(2).innerText).contains('Common Reporting')
+    .expect(allStandards.nth(3).innerText).contains('Communicate with Practice - Citizen - Standard')
+})
+
+test('The Capability Assessment Summary page should display Associated Standards alphabetically.', async t => {
+  await asSupplier(t)
+    .click(supplierDashboardPage.homeLink)
+    .click(supplierDashboardPage.secondOnboardingSolutionName)
+
+  const allStandards = Selector('#summary-capabilities details div p a')
+
+  // first 15 (0 - 14 inclusive) are Associated, next 11 (15 - 25 inclusive) are overarching
+  await t
+    .expect(allStandards.nth(15).innerText).contains('Business Continuity & Disaster Recovery')
+    .expect(allStandards.nth(16).innerText).contains('Clinical Safety')
+    .expect(allStandards.nth(17).innerText).contains('Commercial Standard')
+    .expect(allStandards.nth(18).innerText).contains('Data Migration')
 })
