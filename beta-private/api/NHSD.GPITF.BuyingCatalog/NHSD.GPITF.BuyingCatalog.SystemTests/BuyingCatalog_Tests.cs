@@ -53,20 +53,19 @@ namespace NHSD.GPITF.BuyingCatalog.SystemTests
     */
 
     private string BASE_URL;
+    private string _chromeDriverDirectory;
     private List<User> _users;
-
-    IConfiguration _config { get; set; }
 
     [SetUp]
     public void Setup()
     {
       var builder = new ConfigurationBuilder()
                 .AddUserSecrets<BuyingCatalog_Tests>();
+      var config = builder.Build();
 
-      _config = builder.Build();
-
-      BASE_URL = Settings.BASE_URL(_config);
-      _users = _config.GetSection("Users").Get<List<User>>();
+      BASE_URL = Settings.BASE_URL(config);
+      _chromeDriverDirectory = config["ChromeDriverDirectory"];
+      _users = config.GetSection("Users").Get<List<User>>();
     }
 
     [Test]
@@ -90,7 +89,7 @@ namespace NHSD.GPITF.BuyingCatalog.SystemTests
         {
           allTasks.Add(Task.Factory.StartNew(userInfoObj =>
           {
-            using (var driver = new ChromeDriver(_config["ChromeDriverDirectory"]))
+            using (var driver = new ChromeDriver(_chromeDriverDirectory))
             {
               var userInfo = (UserInfo)userInfoObj;
               Login(driver, userInfo);
