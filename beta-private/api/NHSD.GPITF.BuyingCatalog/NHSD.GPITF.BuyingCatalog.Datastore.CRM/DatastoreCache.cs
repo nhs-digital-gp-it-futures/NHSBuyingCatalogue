@@ -13,7 +13,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     private readonly IConfiguration _config;
     private readonly ILogger<DatastoreCache> _logger;
     private readonly ISyncPolicy _policy;
-    private readonly IDatabase _db;
+    private readonly ConnectionMultiplexer _redis;
 
     public DatastoreCache(
       IConfiguration config,
@@ -35,15 +35,14 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
         },
         SyncTimeout = int.MaxValue
       };
-      var redis = ConnectionMultiplexer.Connect(cfg);
-      _db = redis.GetDatabase();
+      _redis = ConnectionMultiplexer.Connect(cfg);
     }
 
     public void SafeAdd(string path, string jsonCachedResponse)
     {
       GetInternal(() =>
       {
-        _db.StringSet(path, jsonCachedResponse, _expiry);
+        _redis.GetDatabase().StringSet(path, jsonCachedResponse, _expiry);
         return 0;
       });
     }
@@ -52,7 +51,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       var cacheVal = GetInternal(() =>
       {
-        return _db.StringGet(path);
+        return _redis.GetDatabase().StringGet(path);
       });
       jsonCachedResponse = cacheVal;
       return cacheVal.HasValue;
