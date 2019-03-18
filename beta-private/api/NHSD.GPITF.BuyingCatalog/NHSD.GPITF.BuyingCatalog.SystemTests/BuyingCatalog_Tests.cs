@@ -13,6 +13,45 @@ namespace NHSD.GPITF.BuyingCatalog.SystemTests
   [TestFixture]
   public sealed class BuyingCatalog_Tests
   {
+    /*
+     * structure of Users section in secrets.json
+
+    "Users":
+    [
+      {
+        "Id": "1-1",
+        "Email": "user1@organisation1.com",
+        "Password": "user1Password"
+      },
+      {
+        "Id": "1-2",
+        "Email": "user2@organisation1.com",
+        "Password": "user2Password"
+      },
+      {
+        "Id": "1-3",
+        "Email": "user3@organisation1.com",
+        "Password": "user3Password"
+      },
+      {
+        "Id": "1-4",
+        "Email": "user4@organisation1.com",
+        "Password": "user4Password"
+      },
+      {
+        "Id": "2-1",
+        "Email": "user1@organisation2.com",
+        "Password": "user1Password"
+      },
+      {
+        "Id": "2-2",
+        "Email": "user2@organisation2.com",
+        "Password": "user2Password"
+      }
+    ]
+  }
+    */
+
     private string BASE_URL;
     private List<User> _users;
 
