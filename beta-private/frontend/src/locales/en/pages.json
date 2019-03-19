@@ -316,6 +316,9 @@
     "Dashboard": {
       "Title": "$t(Standard_plural) Dashboard",
       "Breadcrumb": "All $t(Standard_plural)",
+      "Backlink": {
+        "Title": "Onboarding Dashboard"
+      },
       "Subtitle": "These are the $t(Standard_plural) relevant to your $t(Solution) based on the $t(Capability_plural) selected. Click on each $t(Standard) to access and submit evidence for that $t(Standard).",
       "Associated": {
         "Heading": "Associated $t(Standard_plural)",
@@ -343,6 +346,17 @@
       },
       "Error": {
         "NoEnumeration": "Unable to retrieve information about standards"
+      },
+      "Table": {
+        "Standard":{
+          "Title": "Standard"
+        },
+        "Status": {
+          "Title": "Status"
+        },
+        "Who Its With": {
+          "Title": "Who It's With"
+        }
       }
     },
     "Evidence": {
@@ -569,7 +583,7 @@
           {
             "Title": "How long until I can start selling?",
             "Text": [
-              "In order to sell you need to meet two requirements[COLON] (1) have your Solution accepted on the Catalogue as compliant (see the ‘Supplier Onboarding Process’ for more detail); and (2) be awarded to a framework. The order of these two things may vary, but you must have submitted your Solution to the Catalogue and have it accepted into the assessment process in order to qualify for a framework award. ",
+              "In order to sell you need to meet two requirements&#58; (1) have your Solution accepted on the Catalogue as compliant (see the ‘Supplier Onboarding Process’ for more detail); and (2) be awarded to a framework. The order of these two things may vary, but you must have submitted your Solution to the Catalogue and have it accepted into the assessment process in order to qualify for a framework award. ",
               "You may start adding a Solution to the Catalogue at any time. See <a href='#Supplier registration'>Supplier registration</a> below for how to get access to the Catalogue. ",
               "The time it takes for a Solution to be accepted on the Catalogue will vary depending upon the number of Capabilities and Standards involved, and the quality of the initial submission. If all the Standards evidence is submitted by the time the Capability assessment is complete, the aim is that a good quality submission will take no longer than 19 weeks. See a break-down of the timescale targets by stage in <a href='#Process overview'>Process overview</a> below. ",
               "The framework timescales will be clear at the time each framework is published. "
@@ -763,11 +777,11 @@
             "• Information governance (including information security)",
             "• Central Spine Services and associated services",
             "• Interoperability",
-            "Where central risk mitigations have been identified, a risk level impact has been applied and mapped to mitigating actions. Examples of Standards’ risks/mitigations are shown below:",
-            "• No risk impact: yes/no self-certified response",
-            "• Low risk impact: a self-certified* statement with a brief description of how you have met the line item",
-            "• Medium risk impact: self-certified* statement with an implementation description plus physical evidence which may include screenshot/video, API response message, evidence of external compliance/certification (for example, ISO)",
-            "• High risk impact: witnessed tests, design documents",
+            "Where central risk mitigations have been identified, a risk level impact has been applied and mapped to mitigating actions. Examples of Standards’ risks/mitigations are shown below&#58;",
+            "• No risk impact&#58; yes/no self-certified response",
+            "• Low risk impact&#58; a self-certified* statement with a brief description of how you have met the line item",
+            "• Medium risk impact&#58; self-certified* statement with an implementation description plus physical evidence which may include screenshot/video, API response message, evidence of external compliance/certification (for example, ISO)",
+            "• High risk impact&#58; witnessed tests, design documents",
             "The compliance evaluation of your overarching Standards will also seek a proportionate risk-based approach. However, given the nature and variability within the overarching standards, the approach will be dependent on an understanding of the Solution being provided."
           ]
         },
@@ -798,7 +812,7 @@
           {
             "Title":"Catalogue submissions",
             "Text": [
-              "To submit Additional Services, Associated Services and service levels for your Catalogue Solutions, or to ask questions about your submissions, email the Catalogue support team at buying.catalogue@nhs.net."
+              "To submit Additional Services, Associated Services and service levels for your Catalogue Solutions, or to ask questions about your submissions, email the Catalogue support team at <a href='mailto&#58;buying.catalogue@nhs.net' target='_blank'>buying.catalogue@nhs.net</a>."
             ]
           },
           {

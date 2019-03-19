@@ -81,7 +81,8 @@ async function solutionComplianceDashboard (req, res) {
       { label: 'Onboarding.Title', url: `../../solutions/${req.solution.id}` },
       { label: 'CompliancePages.Dashboard.Title' }
     ],
-    errors: {}
+    errors: {},
+    backlink: `../../solutions/${req.solution.id}`
   }
 
   try {
