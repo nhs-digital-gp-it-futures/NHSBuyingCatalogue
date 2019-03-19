@@ -187,7 +187,12 @@ spec:
           valueFrom:
             secretKeyRef:
               name: bccrmazuresecret
-              key: GIF_CRM_URL    
+              key: GIF_CRM_URL
+        - name: GIF_CRM_AUTHORITY
+          valueFrom:
+            secretKeyRef:
+              name: bccrmazuresecret
+              key: GIF_CRM_AUTHORITY                  
         - name: GIF_AZURE_CLIENT_ID
           valueFrom:
             secretKeyRef:
