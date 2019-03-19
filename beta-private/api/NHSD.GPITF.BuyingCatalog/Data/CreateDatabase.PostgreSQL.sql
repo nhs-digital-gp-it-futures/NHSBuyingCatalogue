@@ -168,6 +168,8 @@ CREATE TABLE StandardsApplicable
   "Status" INTEGER DEFAULT 0,
   "OwnerId" CHAR(36),
   "CreatedOn" TEXT NOT NULL,
+  "SubmittedOn" TEXT NOT NULL,
+  "AssignedOn" TEXT NOT NULL,
   FOREIGN KEY ("SolutionId") REFERENCES Solutions("Id") ON DELETE CASCADE,
   FOREIGN KEY ("StandardId") REFERENCES Standards("Id") ON DELETE CASCADE,
   FOREIGN KEY ("OwnerId") REFERENCES Contacts("Id") ON DELETE CASCADE,
