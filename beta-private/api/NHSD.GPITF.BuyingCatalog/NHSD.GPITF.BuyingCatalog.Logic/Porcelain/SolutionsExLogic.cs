@@ -76,33 +76,14 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
 
       _solutionsModifier.ForUpdate(solnEx.Solution);
 
-      solnEx.ClaimedCapability.ForEach(claim =>
-      {
-        _capabilitiesImplementedModifier.ForUpdate(claim);
-      });
-      solnEx.ClaimedStandard.ForEach(claim =>
-      {
-        _standardsApplicableModifier.ForUpdate(claim);
-      });
+      solnEx.ClaimedCapability.ForEach(claim => _capabilitiesImplementedModifier.ForUpdate(claim));
+      solnEx.ClaimedStandard.ForEach(claim => _standardsApplicableModifier.ForUpdate(claim));
 
-      solnEx.ClaimedCapabilityEvidence.ForEach(evidence =>
-      {
-        _capabilitiesImplementedEvidenceModifier.ForUpdate(evidence);
-      });
-      solnEx.ClaimedStandardEvidence.ForEach(evidence =>
-      {
-        _standardsApplicableEvidenceModifier.ForUpdate(evidence);
-      });
+      solnEx.ClaimedCapabilityEvidence.ForEach(evidence => _capabilitiesImplementedEvidenceModifier.ForUpdate(evidence));
+      solnEx.ClaimedStandardEvidence.ForEach(evidence => _standardsApplicableEvidenceModifier.ForUpdate(evidence));
 
-      solnEx.ClaimedCapabilityReview.ForEach(review =>
-      {
-        _capabilitiesImplementedReviewsModifier.ForUpdate(review);
-      });
-      solnEx.ClaimedStandardReview.ForEach(review =>
-      {
-        _standardsApplicableReviewsModifier.ForUpdate(review);
-      });
-
+      solnEx.ClaimedCapabilityReview.ForEach(review =>_capabilitiesImplementedReviewsModifier.ForUpdate(review));
+      solnEx.ClaimedStandardReview.ForEach(review =>_standardsApplicableReviewsModifier.ForUpdate(review));
 
       _datastore.Update(solnEx);
 
