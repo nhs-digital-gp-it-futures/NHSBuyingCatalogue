@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using FluentValidation;
+﻿using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using Moq;
@@ -10,7 +9,6 @@ using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Tests;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
@@ -163,218 +161,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
     }
 
     [Test]
-    public void Update_Sets_ClaimedCapabilityReview_OriginalDate_WhenNotSet()
-    {
-      var logic = new SolutionsExLogic(
-        _solutionsModifier.Object,
-        _capabilitiesImplementedEvidenceModifier.Object,
-        _standardsApplicableEvidenceModifier.Object,
-        _capabilitiesImplementedReviewsModifier.Object,
-        _standardsApplicableReviewsModifier.Object,
-        _datastore.Object, _context.Object, _validator.Object, _filter.Object,
-        _contacts.Object, _evidenceBlobStoreLogic.Object);
-      var review = Creator.GetCapabilitiesImplementedReviews();
-      var soln = Creator.GetSolution();
-      var solnEx = Creator.GetSolutionEx(soln: soln, claimedCapRev: new List<CapabilitiesImplementedReviews>(new[] { review }));
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
-      var contact = Creator.GetContact();
-      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(contact);
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Update(solnEx);
-
-      review.OriginalDate.Should().BeCloseTo(DateTime.UtcNow);
-    }
-
-    [Test]
-    public void Update_DoesNotSet_ClaimedCapabilityReview_OriginalDate_WhenSet()
-    {
-      var logic = new SolutionsExLogic(
-        _solutionsModifier.Object,
-        _capabilitiesImplementedEvidenceModifier.Object,
-        _standardsApplicableEvidenceModifier.Object,
-        _capabilitiesImplementedReviewsModifier.Object,
-        _standardsApplicableReviewsModifier.Object,
-        _datastore.Object, _context.Object, _validator.Object, _filter.Object,
-        _contacts.Object, _evidenceBlobStoreLogic.Object);
-      var originalDate = new DateTime(2006, 2, 20);
-      var review = Creator.GetCapabilitiesImplementedReviews(originalDate: originalDate);
-      var soln = Creator.GetSolution();
-      var solnEx = Creator.GetSolutionEx(soln: soln, claimedCapRev: new List<CapabilitiesImplementedReviews>(new[] { review }));
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
-      var contact = Creator.GetContact();
-      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(contact);
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Update(solnEx);
-
-      review.OriginalDate.Should().BeCloseTo(originalDate);
-    }
-
-    [Test]
-    public void Update_Sets_ClaimedStandardReview_OriginalDate_WhenNotSet()
-    {
-      var logic = new SolutionsExLogic(
-        _solutionsModifier.Object,
-        _capabilitiesImplementedEvidenceModifier.Object,
-        _standardsApplicableEvidenceModifier.Object,
-        _capabilitiesImplementedReviewsModifier.Object,
-        _standardsApplicableReviewsModifier.Object,
-        _datastore.Object, _context.Object, _validator.Object, _filter.Object,
-        _contacts.Object, _evidenceBlobStoreLogic.Object);
-      var review = Creator.GetStandardsApplicableReviews();
-      var soln = Creator.GetSolution();
-      var solnEx = Creator.GetSolutionEx(soln: soln, claimedStdRev: new List<StandardsApplicableReviews>(new[] { review }));
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
-      var contact = Creator.GetContact();
-      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(contact);
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Update(solnEx);
-
-      review.OriginalDate.Should().BeCloseTo(DateTime.UtcNow);
-    }
-
-    [Test]
-    public void Update_DoesNotSet_ClaimedStandardReview_OriginalDate_WhenSet()
-    {
-      var logic = new SolutionsExLogic(
-        _solutionsModifier.Object,
-        _capabilitiesImplementedEvidenceModifier.Object,
-        _standardsApplicableEvidenceModifier.Object,
-        _capabilitiesImplementedReviewsModifier.Object,
-        _standardsApplicableReviewsModifier.Object,
-        _datastore.Object, _context.Object, _validator.Object, _filter.Object,
-        _contacts.Object, _evidenceBlobStoreLogic.Object);
-      var originalDate = new DateTime(2006, 2, 20);
-      var review = Creator.GetStandardsApplicableReviews(originalDate: originalDate);
-      var soln = Creator.GetSolution();
-      var solnEx = Creator.GetSolutionEx(soln: soln, claimedStdRev: new List<StandardsApplicableReviews>(new[] { review }));
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
-      var contact = Creator.GetContact();
-      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(contact);
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Update(solnEx);
-
-      review.OriginalDate.Should().BeCloseTo(originalDate);
-    }
-
-    [Test]
-    public void Update_Sets_ClaimedCapabilityEvidence_OriginalDate_WhenNotSet()
-    {
-      var logic = new SolutionsExLogic(
-        _solutionsModifier.Object,
-        _capabilitiesImplementedEvidenceModifier.Object,
-        _standardsApplicableEvidenceModifier.Object,
-        _capabilitiesImplementedReviewsModifier.Object,
-        _standardsApplicableReviewsModifier.Object,
-        _datastore.Object, _context.Object, _validator.Object, _filter.Object,
-        _contacts.Object, _evidenceBlobStoreLogic.Object);
-      var evidence = Creator.GetCapabilitiesImplementedEvidence();
-      var soln = Creator.GetSolution();
-      var solnEx = Creator.GetSolutionEx(soln: soln, claimedCapEv: new List<CapabilitiesImplementedEvidence>(new[] { evidence }));
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
-      var contact = Creator.GetContact();
-      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(contact);
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Update(solnEx);
-
-      evidence.OriginalDate.Should().BeCloseTo(DateTime.UtcNow);
-    }
-
-    [Test]
-    public void Update_DoesNotSet_ClaimedCapabilityEvidence_OriginalDate_WhenSet()
-    {
-      var logic = new SolutionsExLogic(
-        _solutionsModifier.Object,
-        _capabilitiesImplementedEvidenceModifier.Object,
-        _standardsApplicableEvidenceModifier.Object,
-        _capabilitiesImplementedReviewsModifier.Object,
-        _standardsApplicableReviewsModifier.Object,
-        _datastore.Object, _context.Object, _validator.Object, _filter.Object,
-        _contacts.Object, _evidenceBlobStoreLogic.Object);
-      var originalDate = new DateTime(2006, 2, 20);
-      var evidence = Creator.GetCapabilitiesImplementedEvidence(originalDate: originalDate);
-      var soln = Creator.GetSolution();
-      var solnEx = Creator.GetSolutionEx(soln: soln, claimedCapEv: new List<CapabilitiesImplementedEvidence>(new[] { evidence }));
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
-      var contact = Creator.GetContact();
-      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(contact);
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Update(solnEx);
-
-      evidence.OriginalDate.Should().BeCloseTo(originalDate);
-    }
-
-    [Test]
-    public void Update_Sets_ClaimedStandardEvidence_OriginalDate_WhenNotSet()
-    {
-      var logic = new SolutionsExLogic(
-        _solutionsModifier.Object,
-        _capabilitiesImplementedEvidenceModifier.Object,
-        _standardsApplicableEvidenceModifier.Object,
-        _capabilitiesImplementedReviewsModifier.Object,
-        _standardsApplicableReviewsModifier.Object,
-        _datastore.Object, _context.Object, _validator.Object, _filter.Object,
-        _contacts.Object, _evidenceBlobStoreLogic.Object);
-      var evidence = Creator.GetStandardsApplicableEvidence();
-      var soln = Creator.GetSolution();
-      var solnEx = Creator.GetSolutionEx(soln: soln, claimedStdEv: new List<StandardsApplicableEvidence>(new[] { evidence }));
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
-      var contact = Creator.GetContact();
-      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(contact);
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Update(solnEx);
-
-      evidence.OriginalDate.Should().BeCloseTo(DateTime.UtcNow);
-    }
-
-    [Test]
-    public void Update_DoesNotSet_ClaimedStandardEvidence_OriginalDate_WhenSet()
-    {
-      var logic = new SolutionsExLogic(
-        _solutionsModifier.Object,
-        _capabilitiesImplementedEvidenceModifier.Object,
-        _standardsApplicableEvidenceModifier.Object,
-        _capabilitiesImplementedReviewsModifier.Object,
-        _standardsApplicableReviewsModifier.Object,
-        _datastore.Object, _context.Object, _validator.Object, _filter.Object,
-        _contacts.Object, _evidenceBlobStoreLogic.Object);
-      var originalDate = new DateTime(2006, 2, 20);
-      var evidence = Creator.GetStandardsApplicableEvidence(originalDate: originalDate);
-      var soln = Creator.GetSolution();
-      var solnEx = Creator.GetSolutionEx(soln: soln, claimedStdEv: new List<StandardsApplicableEvidence>(new[] { evidence }));
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
-      var contact = Creator.GetContact();
-      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(contact);
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Update(solnEx);
-
-      evidence.OriginalDate.Should().BeCloseTo(originalDate);
-    }
-
-    [Test]
     public void Update_Calls_Modifier_For_ClaimedCapabilityEvidence()
     {
       var logic = new SolutionsExLogic(
@@ -419,8 +205,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
 
       _standardsApplicableEvidenceModifier.Verify(x => x.ForUpdate(evidence), Times.Once);
     }
-
-
 
     [Test]
     public void Update_Calls_Modifier_For_ClaimedCapabilityReview()

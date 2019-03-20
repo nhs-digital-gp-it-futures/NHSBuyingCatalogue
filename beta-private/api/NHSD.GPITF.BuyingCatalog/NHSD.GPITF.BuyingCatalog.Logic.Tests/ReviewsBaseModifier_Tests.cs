@@ -80,5 +80,19 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       review.OriginalDate.Should().BeCloseTo(DateTime.UtcNow);
     }
+
+    [Test]
+    public void ForUpdate_OriginalDate_DoesNotSet_OriginalDate()
+    {
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
+      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(Creator.GetContact());
+      var modifier = new DummyReviewsBaseModifier(_context.Object, _contacts.Object);
+      var originalDate = new DateTime(2006, 2, 20, 6, 3, 0);
+      var review = Creator.GetReviewsBase(originalDate: originalDate);
+
+      modifier.ForUpdate(review);
+
+      review.OriginalDate.Should().BeCloseTo(originalDate);
+    }
   }
 }
