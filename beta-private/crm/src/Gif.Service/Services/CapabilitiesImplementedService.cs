@@ -17,8 +17,6 @@ namespace Gif.Service.Services
 
     public CapabilityImplemented ById(string id)
     {
-      CapabilityImplemented capabilityImplemented = null;
-
       var filterAttributes = new List<CrmFilterAttribute>
             {
                 new CrmFilterAttribute("CapabilityImplementedId") {FilterName = "cc_capabilityimplementedid", FilterValue = id},
@@ -27,8 +25,6 @@ namespace Gif.Service.Services
 
       var appJson = Repository.RetrieveMultiple(new CapabilityImplemented().GetQueryString(null, filterAttributes), out Count);
       var capabilityImplementedJson = appJson?.FirstOrDefault();
-
-      capabilityImplemented = new CapabilityImplemented(capabilityImplementedJson);
 
       return (capabilityImplementedJson == null) ? null : new CapabilityImplemented(capabilityImplementedJson);
     }
