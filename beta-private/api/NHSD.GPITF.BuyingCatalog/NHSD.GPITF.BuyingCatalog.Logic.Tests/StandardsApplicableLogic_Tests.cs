@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using FluentValidation;
+﻿using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using Moq;
@@ -15,6 +14,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
   [TestFixture]
   public sealed class StandardsApplicableLogic_Tests
   {
+    private Mock<IStandardsApplicableModifier> _modifier;
     private Mock<IHttpContextAccessor> _context;
     private Mock<IStandardsApplicableDatastore> _datastore;
     private Mock<IStandardsApplicableValidator> _validator;
@@ -23,6 +23,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [SetUp]
     public void SetUp()
     {
+      _modifier = new Mock<IStandardsApplicableModifier>();
       _context = new Mock<IHttpContextAccessor>();
       _datastore = new Mock<IStandardsApplicableDatastore>();
       _validator = new Mock<IStandardsApplicableValidator>();
@@ -32,13 +33,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new StandardsApplicableLogic(_datastore.Object, _validator.Object, _filter.Object, _context.Object));
+      Assert.DoesNotThrow(() => new StandardsApplicableLogic(_modifier.Object, _datastore.Object, _validator.Object, _filter.Object, _context.Object));
     }
 
     [Test]
     public void Update_CallsValidator_WithRuleset()
     {
-      var logic = new StandardsApplicableLogic(_datastore.Object, _validator.Object, _filter.Object, _context.Object);
+      var logic = new StandardsApplicableLogic(_modifier.Object, _datastore.Object, _validator.Object, _filter.Object, _context.Object);
       var claim = Creator.GetStandardsApplicable();
 
       var valres = new ValidationResult();
@@ -51,40 +52,23 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         It.Is<string>(rs => rs == nameof(IClaimsLogic<StandardsApplicable>.Update))), Times.Once());
     }
 
-    [Test]
-    public void Update_ToSubmitted_Sets_SubmittedOn_ToUtcNow()
+
+    public static IEnumerable<StandardsApplicableStatus> Statuses()
     {
-      var logic = new StandardsApplicableLogic(_datastore.Object, _validator.Object, _filter.Object, _context.Object);
-      var submittedOn = new DateTime(2006, 2, 20, 6, 3, 0);
-      var claim = Creator.GetStandardsApplicable(status: StandardsApplicableStatus.Submitted, submittedOn: submittedOn);
-      _datastore.Setup(x => x.Create(claim)).Returns(claim);
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Update(claim);
-
-      claim.SubmittedOn.Should().BeCloseTo(DateTime.UtcNow);
+      return (StandardsApplicableStatus[])Enum.GetValues(typeof(StandardsApplicableStatus));
     }
 
-    [TestCase(StandardsApplicableStatus.NotStarted)]
-    [TestCase(StandardsApplicableStatus.Draft)]
-    [TestCase(StandardsApplicableStatus.Remediation)]
-    [TestCase(StandardsApplicableStatus.Approved)]
-    [TestCase(StandardsApplicableStatus.ApprovedFirstOfType)]
-    [TestCase(StandardsApplicableStatus.ApprovedPartial)]
-    [TestCase(StandardsApplicableStatus.Rejected)]
-    public void Update_NotSubmitted_DoesNotSet_SubmittedOn(StandardsApplicableStatus status)
+    [Test]
+    public void Update_Calls_Modifier([ValueSource(nameof(Statuses))]StandardsApplicableStatus status)
     {
-      var logic = new StandardsApplicableLogic(_datastore.Object, _validator.Object, _filter.Object, _context.Object);
-      var submittedOn = new DateTime(2006, 2, 20, 6, 3, 0);
-      var claim = Creator.GetStandardsApplicable(status: status, submittedOn: submittedOn);
-      _datastore.Setup(x => x.Create(claim)).Returns(claim);
+      var logic = new StandardsApplicableLogic(_modifier.Object, _datastore.Object, _validator.Object, _filter.Object, _context.Object);
+      var claim = Creator.GetStandardsApplicable(status: status);
       var valres = new ValidationResult();
       _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
 
       logic.Update(claim);
 
-      claim.SubmittedOn.Should().BeCloseTo(submittedOn);
+      _modifier.Verify(x => x.ForUpdate(claim), Times.Once);
     }
   }
 }

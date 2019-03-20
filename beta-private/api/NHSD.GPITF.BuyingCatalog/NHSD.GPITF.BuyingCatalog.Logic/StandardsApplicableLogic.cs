@@ -1,18 +1,18 @@
 ﻿using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using System;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
   public sealed class StandardsApplicableLogic : ClaimsLogicBase<StandardsApplicable>, IStandardsApplicableLogic
   {
     public StandardsApplicableLogic(
+      IStandardsApplicableModifier modifier,
       IStandardsApplicableDatastore datastore,
       IStandardsApplicableValidator validator,
       IStandardsApplicableFilter filter,
       IHttpContextAccessor context) :
-      base(datastore, validator, filter, context)
+      base(modifier, datastore, validator, filter, context)
     {
     }
 
@@ -20,10 +20,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     {
       _validator.ValidateAndThrowEx(claim, ruleSet: nameof(IClaimsLogic<StandardsApplicable>.Update));
 
-      if (claim.Status == StandardsApplicableStatus.Submitted)
-      {
-        claim.SubmittedOn = DateTime.UtcNow;
-      }
+      ((IStandardsApplicableModifier)_modifier).ForUpdate(claim);
 
       _datastore.Update(claim);
     }

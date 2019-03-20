@@ -7,12 +7,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   public sealed class CapabilitiesImplementedLogic : ClaimsLogicBase<CapabilitiesImplemented>, ICapabilitiesImplementedLogic
   {
     public CapabilitiesImplementedLogic(
+      ICapabilitiesImplementedModifier modifier,
       ICapabilitiesImplementedDatastore datastore,
       ICapabilitiesImplementedValidator validator,
       ICapabilitiesImplementedFilter filter,
       IHttpContextAccessor context
       ) :
-      base(datastore, validator, filter, context)
+      base(modifier, datastore, validator, filter, context)
     {
     }
   }
