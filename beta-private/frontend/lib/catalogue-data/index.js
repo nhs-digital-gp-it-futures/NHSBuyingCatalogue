@@ -215,18 +215,23 @@ class DataProvider {
   }
 
   async capabilityMappings () {
-    return dataCache.wrap('capabilityMappings', async () => {
+    // return dataCache.wrap('capabilityMappings', async () => {
       const {
         capabilityMapping,
         standard
       } = await this.capabilityMappingsApi.apiPorcelainCapabilityMappingsGet()
 
-      const standards = _.keyBy(standard, 'id')
-
+      const standards = _.keyBy(
+        standard.map((std) => ({ ...std, isOptional: false })),
+        'id'
+      )
       return {
         capabilities: _(capabilityMapping)
           .map(({ capability, optionalStandard }) => {
-            const capStds = _.map(optionalStandard, ({ standardId }) => standards[standardId])
+            const capStds = _.map(optionalStandard, ({ standardId, isOptional }) => {
+              if (isOptional) standards[standardId].isOptional = true
+              return { ...standards[standardId], isOptional }
+            })
             return {
               ...capability,
               standards: capStds,
@@ -234,14 +239,15 @@ class DataProvider {
                 ['overarching', 'associated'],
                 _.partition(capStds, std => std.isOverarching)
               ),
-              types: _.kebabCase(capability.name)
+              types: _.kebabCase(capability.name),
+              hasOptionals: optionalStandard.some((std) => std.isOptional)
             }
           })
           .keyBy('id')
           .value(),
         standards
       }
-    })
+    // })
   }
 
   async solutionForAssessment (solutionId) {

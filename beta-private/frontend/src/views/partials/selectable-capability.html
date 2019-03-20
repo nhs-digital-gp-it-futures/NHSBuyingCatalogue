@@ -1,6 +1,6 @@
 <li tabindex="0" data-cap-id="{{id}}" class="capability {{types}}"{{#if isFirst}} id="{{firstId}}"{{/if}}>
   <h3 class="name">{{name}}</h3>
-  
+
   <section class="reveal">
     <p class="description">
       {{description}}
@@ -9,12 +9,24 @@
       {{/url}}
     </p>
     <p>{{t 'Onboarding.Capabilities.Reveal.CompliancePreamble'}}</p>
-    
+
     <div>
     <section class="standards">
       <ul>
         {{#standardsByGroup.associated}}
-        <li><a href="{{url}}" target="_blank">{{name}}</a></li>
+          {{#unless isOptional}}
+          <li><a href="{{url}}" target="_blank">{{name}}</a></li>
+          {{/unless}}
+        {{/standardsByGroup.associated}}
+        </ul>
+        {{#hasOptionals}}
+          <p>You may also be required to comply with at least one of these associated standards. Some of these may be optional depending on the implementation of your solution. Please see confluence for further understanding.</p>
+        {{/hasOptionals}}
+        <ul>
+          {{#standardsByGroup.associated}}
+          {{#if isOptional}}
+          <li><a href="{{url}}" target="_blank">{{name}}</a></li>
+          {{/if}}
         {{/standardsByGroup.associated}}
       </ul>
     </section>

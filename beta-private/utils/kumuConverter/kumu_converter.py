@@ -26,7 +26,8 @@ connections_sheet_headings = [
     'To',
     'FromID',
     'ToID',
-    'Type'
+    'Type',
+    'IsOptional'
 ]
 
 mappings_output_headings = [
@@ -38,7 +39,7 @@ mappings_output_headings = [
 mappings_headings_map = {
     'CapabilityId': 'FromID',
     'StandardId': 'ToID',
-    'IsOptional': None,
+    'IsOptional': 'IsOptional',
 }
 
 # These are the output headings for the 'standards.csv' file
@@ -110,13 +111,6 @@ def map_standard_is_overarching (row):
     '''Based on the standard type, set the isOverarching flag.'''
     idx = standard_output_headings.index('IsOverarching')
     row[idx] = 1 if 'Overarching' in row[idx] else 0
-    return row
-
-
-def map_mapping_is_optional (row):
-    '''none of these are optional, so just map to 0'''
-    idx = mappings_output_headings.index('IsOptional')
-    row[idx] = 0
     return row
 
 
@@ -260,7 +254,6 @@ def build_mappings_output (wb):
         [list(row)[idx].value if idx is not None else '' for idx in heading_indices] for row in capability_standards_rows
     ]
 
-    csv_rows = [map_mapping_is_optional(row) for row in csv_rows]
     csv_rows.insert(0, mappings_output_headings)
     return csv_rows
 
