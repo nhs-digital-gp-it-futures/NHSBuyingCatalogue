@@ -3,7 +3,6 @@ using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,6 +11,11 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
   public sealed class SolutionsExLogic : LogicBase, ISolutionsExLogic
   {
     private readonly ISolutionsModifier _solutionsModifier;
+    private readonly ICapabilitiesImplementedEvidenceModifier _capabilitiesImplementedEvidenceModifier;
+    private readonly IStandardsApplicableEvidenceModifier _standardsApplicableEvidenceModifier;
+    private readonly ICapabilitiesImplementedReviewsModifier _capabilitiesImplementedReviewsModifier;
+    private readonly IStandardsApplicableReviewsModifier _standardsApplicableReviewsModifier;
+
     private readonly ISolutionsExDatastore _datastore;
     private readonly ISolutionsExValidator _validator;
     private readonly ISolutionsExFilter _filter;
@@ -20,6 +24,11 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
 
     public SolutionsExLogic(
       ISolutionsModifier solutionsModifier,
+      ICapabilitiesImplementedEvidenceModifier capabilitiesImplementedEvidenceModifier,
+      IStandardsApplicableEvidenceModifier standardsApplicableEvidenceModifier,
+      ICapabilitiesImplementedReviewsModifier capabilitiesImplementedReviewsModifier,
+      IStandardsApplicableReviewsModifier standardsApplicableReviewsModifier,
+
       ISolutionsExDatastore datastore,
       IHttpContextAccessor context,
       ISolutionsExValidator validator,
@@ -29,6 +38,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       base(context)
     {
       _solutionsModifier = solutionsModifier;
+      _capabilitiesImplementedReviewsModifier = capabilitiesImplementedReviewsModifier;
+      _standardsApplicableReviewsModifier = standardsApplicableReviewsModifier;
+      _capabilitiesImplementedEvidenceModifier = capabilitiesImplementedEvidenceModifier;
+      _standardsApplicableEvidenceModifier = standardsApplicableEvidenceModifier;
       _datastore = datastore;
       _validator = validator;
       _filter = filter;
@@ -48,26 +61,22 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       _solutionsModifier.ForUpdate(solnEx.Solution);
 
 
-      // TODO   refactor into ICapabilitiesImplementedReviewsModifier
-      solnEx.ClaimedCapabilityReview.ForEach(review =>
-      {
-         review.OriginalDate = (review.OriginalDate == default(DateTime)) ? DateTime.UtcNow : review.OriginalDate;
-      });
-      // TODO   refactor into IStandardsApplicableReviewsModifier
-      solnEx.ClaimedStandardReview.ForEach(review =>
-      {
-         review.OriginalDate = (review.OriginalDate == default(DateTime)) ? DateTime.UtcNow : review.OriginalDate;
-      });
-
-      // TODO   refactor into ICapabilitiesImplementedEvidenceModifier
       solnEx.ClaimedCapabilityEvidence.ForEach(evidence =>
       {
-         evidence.OriginalDate = (evidence.OriginalDate == default(DateTime)) ? DateTime.UtcNow : evidence.OriginalDate;
+        _capabilitiesImplementedEvidenceModifier.ForUpdate(evidence);
       });
-      // TODO   refactor into IStandardsApplicableEvidenceModifier
       solnEx.ClaimedStandardEvidence.ForEach(evidence =>
       {
-         evidence.OriginalDate = (evidence.OriginalDate == default(DateTime)) ? DateTime.UtcNow : evidence.OriginalDate;
+        _standardsApplicableEvidenceModifier.ForUpdate(evidence);
+      });
+
+      solnEx.ClaimedCapabilityReview.ForEach(review =>
+      {
+        _capabilitiesImplementedReviewsModifier.ForUpdate(review);
+      });
+      solnEx.ClaimedStandardReview.ForEach(review =>
+      {
+        _standardsApplicableReviewsModifier.ForUpdate(review);
       });
 
 

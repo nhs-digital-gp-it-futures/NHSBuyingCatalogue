@@ -67,5 +67,18 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       evidence.CreatedById.Should().Be(contactId);
     }
+
+    [Test]
+    public void ForUpdate_DefaultOriginalDate_SetsOriginalDate_ToUtcNow()
+    {
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
+      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(Creator.GetContact());
+      var modifier = new DummyEvidenceBaseModifier(_context.Object, _contacts.Object);
+      var evidence = Creator.GetEvidenceBase(originalDate: default(DateTime));
+
+      modifier.ForUpdate(evidence);
+
+      evidence.OriginalDate.Should().BeCloseTo(DateTime.UtcNow);
+    }
   }
 }

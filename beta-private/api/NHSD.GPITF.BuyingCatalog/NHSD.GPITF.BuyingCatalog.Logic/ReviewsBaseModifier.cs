@@ -24,5 +24,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       input.CreatedById = _contacts.ByEmail(email).Id;
       input.CreatedOn = input.OriginalDate = DateTime.UtcNow;
     }
+
+    public void ForUpdate(T input)
+    {
+      input.OriginalDate = (input.OriginalDate == default(DateTime)) ? DateTime.UtcNow : input.OriginalDate;
+    }
   }
 }

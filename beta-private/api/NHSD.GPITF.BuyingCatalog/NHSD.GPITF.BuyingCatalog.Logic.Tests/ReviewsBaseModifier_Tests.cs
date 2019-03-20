@@ -67,5 +67,18 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       review.CreatedById.Should().Be(contactId);
     }
+
+    [Test]
+    public void ForUpdate_DefaultOriginalDate_SetsOriginalDate_ToUtcNow()
+    {
+      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
+      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(Creator.GetContact());
+      var modifier = new DummyReviewsBaseModifier(_context.Object, _contacts.Object);
+      var review = Creator.GetReviewsBase(originalDate: default(DateTime));
+
+      modifier.ForUpdate(review);
+
+      review.OriginalDate.Should().BeCloseTo(DateTime.UtcNow);
+    }
   }
 }
