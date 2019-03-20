@@ -9,5 +9,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     {
       input.OriginalDate = DateTime.UtcNow;
     }
+
+    public virtual void ForUpdate(T input)
+    {
+      input.OriginalDate = (input.OriginalDate == default(DateTime)) ? DateTime.UtcNow : input.OriginalDate;
+    }
   }
 }

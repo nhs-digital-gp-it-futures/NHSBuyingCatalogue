@@ -44,5 +44,53 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 
       claim.SubmittedOn.Should().BeCloseTo(submittedOn);
     }
+
+    [Test]
+    public void ForUpdate_DefaultSubmittedOn_Sets_SubmittedOn_ToUnixEpoch()
+    {
+      var modifier = new StandardsApplicableModifier();
+      var submittedOn = default(DateTime);
+      var claim = Creator.GetStandardsApplicable(submittedOn: submittedOn);
+
+      modifier.ForUpdate(claim);
+
+      claim.SubmittedOn.Should().BeCloseTo(DateTime.UnixEpoch);
+    }
+
+    [Test]
+    public void ForUpdate_SubmittedOn_DoesNotSet_SubmittedOn()
+    {
+      var modifier = new StandardsApplicableModifier();
+      var submittedOn = new DateTime(2006, 2, 20, 6, 3, 0);
+      var claim = Creator.GetStandardsApplicable(submittedOn: submittedOn);
+
+      modifier.ForUpdate(claim);
+
+      claim.SubmittedOn.Should().BeCloseTo(submittedOn);
+    }
+
+    [Test]
+    public void ForUpdate_DefaultAssignedOn_Sets_SubmittedOn_ToUnixEpoch()
+    {
+      var modifier = new StandardsApplicableModifier();
+      var assignedOn = default(DateTime);
+      var claim = Creator.GetStandardsApplicable(assignedOn: assignedOn);
+
+      modifier.ForUpdate(claim);
+
+      claim.AssignedOn.Should().BeCloseTo(DateTime.UnixEpoch);
+    }
+
+    [Test]
+    public void ForUpdate_AssignedOn_DoesNotSet_SubmittedOn()
+    {
+      var modifier = new StandardsApplicableModifier();
+      var assignedOn = new DateTime(2006, 2, 20, 6, 3, 0);
+      var claim = Creator.GetStandardsApplicable(assignedOn: assignedOn);
+
+      modifier.ForUpdate(claim);
+
+      claim.AssignedOn.Should().BeCloseTo(assignedOn);
+    }
   }
 }
