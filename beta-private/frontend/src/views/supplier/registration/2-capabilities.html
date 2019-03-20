@@ -71,11 +71,11 @@
           {{/standardsByGroup.associated}}
         </ul>
 
-        <h3>Optional</h3>
         <ul>
           {{#standardsByGroup.associated}}
-            {{#if isOptional}}
-              <li data-id="{{id}}" class="selected">Optional <a href="{{url}}" target="_blank">{{name}}</a></li>
+          {{#if isOptional}}
+              <p>Depending on the implementation of your solution, you may be required to comply with one or more of these standards. Please see confluence for further understanding.</p>
+              <li data-id="{{id}}" class="selected"><a href="{{url}}" target="_blank">{{name}}</a></li>
             {{/if}}
           {{/standardsByGroup.associated}}
         </ul>

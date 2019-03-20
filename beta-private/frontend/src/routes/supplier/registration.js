@@ -358,7 +358,6 @@ async function capabilitiesPageContext (req) {
     ),
     stds => _.orderBy(stds, a => a.name.toLowerCase())
   )
-  console.log(context.standards)
   // console.log(context.standardsByGroup.associated)
 
   return context

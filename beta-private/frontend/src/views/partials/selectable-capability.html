@@ -14,7 +14,17 @@
     <section class="standards">
       <ul>
         {{#standardsByGroup.associated}}
-        <li><a href="{{url}}" target="_blank">{{name}}</a></li>
+          {{#unless isOptional}}
+          <li><a href="{{url}}" target="_blank">{{name}}</a></li>
+          {{/unless}}
+        {{/standardsByGroup.associated}}
+        </ul>
+        <ul>
+        {{#standardsByGroup.associated}}
+          {{#if isOptional}}
+          <p>You may also be required to comply with at least one of these associated standards. Some of these may be optional depending on the implementation of your solution. Please see confluence for further understanding.</p>
+          <li><a href="{{url}}" target="_blank">{{name}}</a></li>
+          {{/if}}
         {{/standardsByGroup.associated}}
       </ul>
     </section>
