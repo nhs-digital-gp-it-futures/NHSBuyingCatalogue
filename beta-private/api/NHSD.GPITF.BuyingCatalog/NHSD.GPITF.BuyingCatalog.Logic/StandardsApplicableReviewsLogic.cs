@@ -7,12 +7,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   public sealed class StandardsApplicableReviewsLogic : ReviewsLogicBase<StandardsApplicableReviews>, IStandardsApplicableReviewsLogic
   {
     public StandardsApplicableReviewsLogic(
+      IStandardsApplicableReviewsModifier modifier,
       IStandardsApplicableReviewsDatastore datastore,
       IContactsDatastore contacts,
       IStandardsApplicableReviewsValidator validator,
       IStandardsApplicableReviewsFilter filter,
       IHttpContextAccessor context) :
-      base(datastore, contacts, validator, filter, context)
+      base(modifier, datastore, contacts, validator, filter, context)
     {
     }
   }
