@@ -215,7 +215,7 @@ class DataProvider {
   }
 
   async capabilityMappings () {
-    //return dataCache.wrap('capabilityMappings', async () => {
+    // return dataCache.wrap('capabilityMappings', async () => {
       const {
         capabilityMapping,
         standard
@@ -233,21 +233,21 @@ class DataProvider {
               return { ...standards[standardId], isOptional }
             })
             return {
-              optionalStandard: optionalStandard || 'NONE',
               ...capability,
               standards: capStds,
               standardsByGroup: _.zipObject(
                 ['overarching', 'associated'],
                 _.partition(capStds, std => std.isOverarching)
               ),
-              types: _.kebabCase(capability.name)
+              types: _.kebabCase(capability.name),
+              hasOptionals: optionalStandard.some((std) => std.isOptional)
             }
           })
           .keyBy('id')
           .value(),
         standards
       }
-    //})
+    // })
   }
 
   async solutionForAssessment (solutionId) {

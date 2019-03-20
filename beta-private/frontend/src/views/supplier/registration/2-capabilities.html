@@ -66,25 +66,26 @@
         <ul>
           {{#standardsByGroup.associated}}
             {{#unless isOptional}}
-              <li data-id="{{id}}" class="selected"><a href="{{url}}" target="_blank">{{name}}</a></li>
+              <li data-id="{{id}}" class="selected mandatory"><a href="{{url}}" target="_blank">{{name}}</a></li>
             {{/unless}}
           {{/standardsByGroup.associated}}
         </ul>
-
+      </section>
+      <section class="optionals">
         <ul>
-          {{#standardsByGroup.associated}}
-          {{#if isOptional}}
-              <p>Depending on the implementation of your solution, you may be required to comply with one or more of these standards. Please see confluence for further understanding.</p>
-              <li data-id="{{id}}" class="selected"><a href="{{url}}" target="_blank">{{name}}</a></li>
-            {{/if}}
-          {{/standardsByGroup.associated}}
-        </ul>
+            <p>Depending on the implementation of your solution, you may be required to comply with one or more of these standards. Please see confluence for further understanding.</p>
+            {{#standardsByGroup.associated}}
+            {{#if isOptional}}
+                <li data-id="{{id}}" class="selected optional"><a href="{{url}}" target="_blank">{{name}}</a></li>
+              {{/if}}
+            {{/standardsByGroup.associated}}
+          </ul>
       </section>
       <section class="overarching">
         <h3>{{t 'Onboarding.Capabilities.Summary.Standards.Overarching.Heading'}}</h3>
         <ul>
           {{#standardsByGroup.overarching}}
-          <li data-id="{{id}}" class="selected"><a href="{{url}}" target="_blank">{{name}}</a></li>
+          <li data-id="{{id}}" class="selected "><a href="{{url}}" target="_blank">{{name}}</a></li>
           {{/standardsByGroup.overarching}}
         </ul>
       </section>
@@ -165,10 +166,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const elStandardsSection = $('#capability-summary .standards')
     const baseStdCount = +elStandardsSection.dataset.baseStdCount
     let assocStdCount = 0
+    let optionalCount = 0
     let assocStds = []
     const stdIdToAssocStdEl = {}
 
-    $$('.associated, .associated [data-id]', elStandardsSection).forEach(function (el) {
+    $$('.associated, .associated [data-id], .optionals, .optionals [data-id]', elStandardsSection).forEach(function (el) {
       el.classList.remove('selected')
       if (el.dataset.id) {
         stdIdToAssocStdEl[el.dataset.id] = el
@@ -182,11 +184,17 @@ document.addEventListener('DOMContentLoaded', function () {
         assocStdCount++
         assocStds.push(stdId)
       }
+      if(stdIdToAssocStdEl[stdId].classList.contains('optional')) {
+        optionalCount++
+      }
     })
 
     // update the standards required count, taking the overarching standards into account
     if (assocStdCount) {
       $('.associated', elStandardsSection).classList.add('selected')
+    }
+    if (optionalCount) {
+      $('.optionals', elStandardsSection).classList.add('selected')
     }
     updateCounter($('#capability-summary .standard-count'), baseStdCount + assocStdCount)
     hideAllReveals()
