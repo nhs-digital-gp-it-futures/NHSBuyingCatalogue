@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using FluentValidation;
+﻿using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using Moq;
@@ -15,6 +14,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
   [TestFixture]
   public sealed class EvidenceLogicBase_Tests
   {
+    private Mock<IEvidenceBaseModifier<EvidenceBase>> _modifier;
     private Mock<IEvidenceDatastore<EvidenceBase>> _datastore;
     private Mock<IContactsDatastore> _contacts;
     private Mock<IEvidenceValidator<EvidenceBase>> _validator;
@@ -24,6 +24,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [SetUp]
     public void SetUp()
     {
+      _modifier = new Mock<IEvidenceBaseModifier<EvidenceBase>>();
       _datastore = new Mock<IEvidenceDatastore<EvidenceBase>>();
       _contacts = new Mock<IContactsDatastore>();
       _validator = new Mock<IEvidenceValidator<EvidenceBase>>();
@@ -34,13 +35,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new DummyEvidenceLogicBase(_datastore.Object, _contacts.Object, _validator.Object, _filter.Object, _context.Object));
+      Assert.DoesNotThrow(() => new DummyEvidenceLogicBase(_modifier.Object, _datastore.Object, _contacts.Object, _validator.Object, _filter.Object, _context.Object));
     }
 
     [Test]
     public void ByClaim_CallsFilter()
     {
-      var logic = new DummyEvidenceLogicBase(_datastore.Object, _contacts.Object, _validator.Object, _filter.Object, _context.Object);
+      var logic = new DummyEvidenceLogicBase(_modifier.Object, _datastore.Object, _contacts.Object, _validator.Object, _filter.Object, _context.Object);
 
       logic.ByClaim("some Id");
 
@@ -52,7 +53,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
       _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(Creator.GetContact());
-      var logic = new DummyEvidenceLogicBase(_datastore.Object, _contacts.Object, _validator.Object, _filter.Object, _context.Object);
+      var logic = new DummyEvidenceLogicBase(_modifier.Object, _datastore.Object, _contacts.Object, _validator.Object, _filter.Object, _context.Object);
       var evidence = Creator.GetEvidenceBase();
 
       var valres = new ValidationResult();
@@ -66,17 +67,14 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Create_SetsOriginalDate_ToUtcNow()
+    public void Create_Calls_Modifier()
     {
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
-      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(Creator.GetContact());
-      var logic = new DummyEvidenceLogicBase(_datastore.Object, _contacts.Object, _validator.Object, _filter.Object, _context.Object);
+      var logic = new DummyEvidenceLogicBase(_modifier.Object, _datastore.Object, _contacts.Object, _validator.Object, _filter.Object, _context.Object);
       var evidence = Creator.GetEvidenceBase(originalDate: DateTime.MinValue);
-      _datastore.Setup(x => x.Create(evidence)).Returns(evidence);
 
-      var result = logic.Create(evidence);
+      logic.Create(evidence);
 
-      result.OriginalDate.Should().BeCloseTo(DateTime.UtcNow);
+      _modifier.Verify(x => x.ForCreate(evidence), Times.Once);
     }
   }
 }
