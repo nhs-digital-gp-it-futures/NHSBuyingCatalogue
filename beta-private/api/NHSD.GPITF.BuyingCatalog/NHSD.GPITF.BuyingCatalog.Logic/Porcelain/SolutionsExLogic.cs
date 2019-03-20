@@ -11,6 +11,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
 {
   public sealed class SolutionsExLogic : LogicBase, ISolutionsExLogic
   {
+    private readonly ISolutionsModifier _solutionsModifier;
     private readonly ISolutionsExDatastore _datastore;
     private readonly ISolutionsExValidator _validator;
     private readonly ISolutionsExFilter _filter;
@@ -18,6 +19,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
     private readonly IEvidenceBlobStoreLogic _evidenceBlobStoreLogic;
 
     public SolutionsExLogic(
+      ISolutionsModifier solutionsModifier,
       ISolutionsExDatastore datastore,
       IHttpContextAccessor context,
       ISolutionsExValidator validator,
@@ -26,6 +28,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       IEvidenceBlobStoreLogic evidenceBlobStoreLogic) :
       base(context)
     {
+      _solutionsModifier = solutionsModifier;
       _datastore = datastore;
       _validator = validator;
       _filter = filter;
@@ -42,24 +45,26 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
     {
       _validator.ValidateAndThrowEx(solnEx, ruleSet: nameof(ISolutionsExLogic.Update));
 
-      var email = Context.Email();
-      solnEx.Solution.ModifiedById = _contacts.ByEmail(email).Id;
-      solnEx.Solution.ModifiedOn = DateTime.UtcNow;
+      _solutionsModifier.ForUpdate(solnEx.Solution);
 
 
+      // TODO   refactor into ICapabilitiesImplementedReviewsModifier
       solnEx.ClaimedCapabilityReview.ForEach(review =>
       {
          review.OriginalDate = (review.OriginalDate == default(DateTime)) ? DateTime.UtcNow : review.OriginalDate;
       });
+      // TODO   refactor into IStandardsApplicableReviewsModifier
       solnEx.ClaimedStandardReview.ForEach(review =>
       {
          review.OriginalDate = (review.OriginalDate == default(DateTime)) ? DateTime.UtcNow : review.OriginalDate;
       });
 
+      // TODO   refactor into ICapabilitiesImplementedEvidenceModifier
       solnEx.ClaimedCapabilityEvidence.ForEach(evidence =>
       {
          evidence.OriginalDate = (evidence.OriginalDate == default(DateTime)) ? DateTime.UtcNow : evidence.OriginalDate;
       });
+      // TODO   refactor into IStandardsApplicableEvidenceModifier
       solnEx.ClaimedStandardEvidence.ForEach(evidence =>
       {
          evidence.OriginalDate = (evidence.OriginalDate == default(DateTime)) ? DateTime.UtcNow : evidence.OriginalDate;

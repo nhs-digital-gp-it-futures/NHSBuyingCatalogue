@@ -18,6 +18,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
   [TestFixture]
   public sealed class SolutionsExLogic_Tests
   {
+    private Mock<ISolutionsModifier> _solutionsModifier;
     private Mock<ISolutionsExDatastore> _datastore;
     private Mock<IContactsDatastore> _contacts;
     private Mock<IHttpContextAccessor> _context;
@@ -28,6 +29,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
     [SetUp]
     public void SetUp()
     {
+      _solutionsModifier = new Mock<ISolutionsModifier>();
       _datastore = new Mock<ISolutionsExDatastore>();
       _contacts = new Mock<IContactsDatastore>();
       _context = new Mock<IHttpContextAccessor>();
@@ -39,13 +41,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new SolutionsExLogic(_datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object));
+      Assert.DoesNotThrow(() => new SolutionsExLogic(_solutionsModifier.Object, _datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object));
     }
 
     [Test]
     public void Update_CallsValidator_WithRuleset()
     {
-      var logic = new SolutionsExLogic(_datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
+      var logic = new SolutionsExLogic(_solutionsModifier.Object, _datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
       var solnEx = Creator.GetSolutionEx();
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
       _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(Creator.GetContact());
@@ -63,7 +65,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
     [TestCase(SolutionStatus.Registered)]
     public void Update_CallsPrepareForSolution_WhenRegistered(SolutionStatus status)
     {
-      var logic = new SolutionsExLogic(_datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
+      var logic = new SolutionsExLogic(_solutionsModifier.Object, _datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
       var soln = Creator.GetSolution(status: status);
       var solnEx = Creator.GetSolutionEx(soln: soln);
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
@@ -86,7 +88,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
     [TestCase(SolutionStatus.Approved)]
     public void Update_DoesNotCallPrepareForSolution_WhenNotRegistered(SolutionStatus status)
     {
-      var logic = new SolutionsExLogic(_datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
+      var logic = new SolutionsExLogic(_solutionsModifier.Object, _datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
       var soln = Creator.GetSolution(status: status);
       var solnEx = Creator.GetSolutionEx(soln: soln);
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
@@ -101,46 +103,24 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
     }
 
     [Test]
-    public void Update_Sets_Solution_ModifiedById()
+    public void Update_Calls_SolutionModifier()
     {
-      var logic = new SolutionsExLogic(_datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
+      var logic = new SolutionsExLogic(_solutionsModifier.Object, _datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
       var soln = Creator.GetSolution();
       var solnEx = Creator.GetSolutionEx(soln: soln);
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
-      var contact = Creator.GetContact();
-      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(contact);
 
       var valres = new ValidationResult();
       _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
 
       logic.Update(solnEx);
 
-      soln.ModifiedById.Should().Be(contact.Id);
-    }
-
-    [Test]
-    public void Update_Sets_Solution_ModifiedByOn()
-    {
-      var logic = new SolutionsExLogic(_datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
-      var soln = Creator.GetSolution();
-      soln.ModifiedOn = new DateTime(2006, 2, 20);
-      var solnEx = Creator.GetSolutionEx(soln: soln);
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
-      var contact = Creator.GetContact();
-      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(contact);
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Update(solnEx);
-
-      soln.ModifiedOn.Should().BeCloseTo(DateTime.UtcNow);
+      _solutionsModifier.Verify(x => x.ForUpdate(soln), Times.Once);
     }
 
     [Test]
     public void Update_Sets_ClaimedCapabilityReview_OriginalDate_WhenNotSet()
     {
-      var logic = new SolutionsExLogic(_datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
+      var logic = new SolutionsExLogic(_solutionsModifier.Object, _datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
       var review = Creator.GetCapabilitiesImplementedReviews();
       var soln = Creator.GetSolution();
       var solnEx = Creator.GetSolutionEx(soln: soln, claimedCapRev: new List<CapabilitiesImplementedReviews>(new[] { review }));
@@ -159,7 +139,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
     [Test]
     public void Update_DoesNotSet_ClaimedCapabilityReview_OriginalDate_WhenSet()
     {
-      var logic = new SolutionsExLogic(_datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
+      var logic = new SolutionsExLogic(_solutionsModifier.Object, _datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
       var originalDate = new DateTime(2006, 2, 20);
       var review = Creator.GetCapabilitiesImplementedReviews(originalDate: originalDate);
       var soln = Creator.GetSolution();
@@ -179,7 +159,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
     [Test]
     public void Update_Sets_ClaimedStandardReview_OriginalDate_WhenNotSet()
     {
-      var logic = new SolutionsExLogic(_datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
+      var logic = new SolutionsExLogic(_solutionsModifier.Object, _datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
       var review = Creator.GetStandardsApplicableReviews();
       var soln = Creator.GetSolution();
       var solnEx = Creator.GetSolutionEx(soln: soln, claimedStdRev: new List<StandardsApplicableReviews>(new[] { review }));
@@ -198,7 +178,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
     [Test]
     public void Update_DoesNotSet_ClaimedStandardReview_OriginalDate_WhenSet()
     {
-      var logic = new SolutionsExLogic(_datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
+      var logic = new SolutionsExLogic(_solutionsModifier.Object, _datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
       var originalDate = new DateTime(2006, 2, 20);
       var review = Creator.GetStandardsApplicableReviews(originalDate: originalDate);
       var soln = Creator.GetSolution();
@@ -218,7 +198,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
     [Test]
     public void Update_Sets_ClaimedCapabilityEvidence_OriginalDate_WhenNotSet()
     {
-      var logic = new SolutionsExLogic(_datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
+      var logic = new SolutionsExLogic(_solutionsModifier.Object, _datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
       var evidence = Creator.GetCapabilitiesImplementedEvidence();
       var soln = Creator.GetSolution();
       var solnEx = Creator.GetSolutionEx(soln: soln, claimedCapEv: new List<CapabilitiesImplementedEvidence>(new[] { evidence }));
@@ -237,7 +217,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
     [Test]
     public void Update_DoesNotSet_ClaimedCapabilityEvidence_OriginalDate_WhenSet()
     {
-      var logic = new SolutionsExLogic(_datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
+      var logic = new SolutionsExLogic(_solutionsModifier.Object, _datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
       var originalDate = new DateTime(2006, 2, 20);
       var evidence = Creator.GetCapabilitiesImplementedEvidence(originalDate: originalDate);
       var soln = Creator.GetSolution();
@@ -257,7 +237,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
     [Test]
     public void Update_Sets_ClaimedStandardEvidence_OriginalDate_WhenNotSet()
     {
-      var logic = new SolutionsExLogic(_datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
+      var logic = new SolutionsExLogic(_solutionsModifier.Object, _datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
       var evidence = Creator.GetStandardsApplicableEvidence();
       var soln = Creator.GetSolution();
       var solnEx = Creator.GetSolutionEx(soln: soln, claimedStdEv: new List<StandardsApplicableEvidence>(new[] { evidence }));
@@ -276,7 +256,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
     [Test]
     public void Update_DoesNotSet_ClaimedStandardEvidence_OriginalDate_WhenSet()
     {
-      var logic = new SolutionsExLogic(_datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
+      var logic = new SolutionsExLogic(_solutionsModifier.Object, _datastore.Object, _context.Object, _validator.Object, _filter.Object, _contacts.Object, _evidenceBlobStoreLogic.Object);
       var originalDate = new DateTime(2006, 2, 20);
       var evidence = Creator.GetStandardsApplicableEvidence(originalDate: originalDate);
       var soln = Creator.GetSolution();
