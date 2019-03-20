@@ -65,7 +65,18 @@
         <h3>{{t 'Onboarding.Capabilities.Summary.Standards.Associated.Heading'}}</h3>
         <ul>
           {{#standardsByGroup.associated}}
-          <li data-id="{{id}}" class="selected"><a href="{{url}}" target="_blank">{{name}}</a></li>
+            {{#unless isOptional}}
+              <li data-id="{{id}}" class="selected"><a href="{{url}}" target="_blank">{{name}}</a></li>
+            {{/unless}}
+          {{/standardsByGroup.associated}}
+        </ul>
+
+        <h3>Optional</h3>
+        <ul>
+          {{#standardsByGroup.associated}}
+            {{#if isOptional}}
+              <li data-id="{{id}}" class="selected">Optional <a href="{{url}}" target="_blank">{{name}}</a></li>
+            {{/if}}
           {{/standardsByGroup.associated}}
         </ul>
       </section>

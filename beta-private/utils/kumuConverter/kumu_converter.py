@@ -38,7 +38,7 @@ mappings_output_headings = [
 mappings_headings_map = {
     'CapabilityId': 'FromID',
     'StandardId': 'ToID',
-    'IsOptional': None,
+    'IsOptional': 'Type',
 }
 
 # These are the output headings for the 'standards.csv' file
@@ -116,7 +116,10 @@ def map_standard_is_overarching (row):
 def map_mapping_is_optional (row):
     '''none of these are optional, so just map to 0'''
     idx = mappings_output_headings.index('IsOptional')
-    row[idx] = 0
+    if 'Inherited' in row[idx]:
+        row[idx] = 1
+    else:
+        row[idx] = 0
     return row
 
 
