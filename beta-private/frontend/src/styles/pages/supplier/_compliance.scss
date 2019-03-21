@@ -80,6 +80,8 @@
     a[target="_blank"]:after {
       content: none;
     }
+    width:inherit;
+    max-width: 55em;
   }
 
   .standard-submitted {
@@ -109,15 +111,20 @@
     background-color: $color-nhs-blue;
     color: $color-nhs-white;
     margin-top: 1.5em;
-    max-width: 770px;
+    max-width: 55em;
     padding: 1em;
 
     h1 {
       margin: 0;
     }
   }
+  .current-file {
+    max-width: 55em;
+  }
 
+  
   .has-feedback {
+    max-width: 55em;
     background-color: $color-nhs-light-grey;
     border: 2px solid $color-nhs-blue;
     color: $color-fg;
@@ -134,7 +141,7 @@
       font-size: smaller;
       font-weight: normal;
       margin: .5em 0;
-      max-width: 770px;
+      max-width: 55em;
       padding: .75em 1em;
 
       .text {
