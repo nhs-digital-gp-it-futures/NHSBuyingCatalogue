@@ -73,9 +73,11 @@
       </section>
       <section class="optionals">
         <ul>
-            <p>Depending on the implementation of your solution, you may be required to comply with one or more of these standards. Please see confluence for further understanding.</p>
+            {{#each (tt 'Optional Standards.Notice Text')}}
+              <p>{{.}}</p>
+            {{/each}}
             {{#standardsByGroup.associated}}
-            {{#if isOptional}}
+              {{#if isOptional}}
                 <li data-id="{{id}}" class="selected optional"><a href="{{url}}" target="_blank">{{name}}</a></li>
               {{/if}}
             {{/standardsByGroup.associated}}

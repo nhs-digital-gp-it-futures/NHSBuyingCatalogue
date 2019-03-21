@@ -343,6 +343,9 @@ async function summaryPageGet (req, res) {
   ]
   context.editUrls = {}
   context.backlink = `../../solutions/${req.solution.id}`
+
+  context.solution.hasOptionalStandards = context.solution.standardsByGroup.associated.some((std) => std.isOptional)
+
   res.render('supplier/capabilities/summary', context)
 }
 
