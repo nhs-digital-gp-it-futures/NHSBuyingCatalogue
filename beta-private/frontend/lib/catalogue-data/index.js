@@ -215,7 +215,7 @@ class DataProvider {
   }
 
   async capabilityMappings () {
-    // return dataCache.wrap('capabilityMappings', async () => {
+    return dataCache.wrap('capabilityMappings', async () => {
       const {
         capabilityMapping,
         standard
@@ -247,7 +247,7 @@ class DataProvider {
           .value(),
         standards
       }
-    // })
+    })
   }
 
   async solutionForAssessment (solutionId) {
