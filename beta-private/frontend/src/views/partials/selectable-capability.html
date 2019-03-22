@@ -20,7 +20,9 @@
         {{/standardsByGroup.associated}}
         </ul>
         {{#hasOptionals}}
-          <p>You may also be required to comply with at least one of these associated standards. Some of these may be optional depending on the implementation of your solution. Please see confluence for further understanding.</p>
+          {{#each (tt 'Optional Standards.Notice Text')}}
+              <p>{{.}}</p>
+          {{/each}}
         {{/hasOptionals}}
         <ul>
           {{#standardsByGroup.associated}}
