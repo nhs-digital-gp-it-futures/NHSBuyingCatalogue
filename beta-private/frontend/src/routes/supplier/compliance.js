@@ -196,7 +196,6 @@ async function evidencePageContext (req, next) {
   // set flags based on who sent the last message
   if (context.claim.submissionHistory.length) {
     const latestEntry = _.last(context.claim.submissionHistory)
-    context.collapseHistory = context.claim.submissionHistory.length > 1
     context.hasFeedback = latestEntry.isFeedback
     context.feedbackId = context.hasFeedback && latestEntry.id
   }
@@ -207,7 +206,7 @@ async function evidencePageContext (req, next) {
   context.claim.historyContacts = _.keyBy(await Promise.all(
     _(context.claim.submissionHistory)
       .filter((msg) => !msg.isFeedback)
-      .uniqBy('createdById')
+      .uniqBy('createdById') 
       .map('createdById')
       .map(id => dataProvider.contactById(id))
   ), 'id')
@@ -240,10 +239,9 @@ async function evidencePageContext (req, next) {
     { label: context.claim.standard.name }
   ]
 
-  context.latestReview = _.orderBy(context.solution.reviews, 'originalDate')[0]
-  if (context.latestReview) {
-    context.latestReview.createdOn = formatTimestampForDisplay(context.latestReview.originalDate)
-  }
+  context.latestReview = _(context.claim.submissionHistory)
+  .filter((msg) => msg.isFeedback)
+  .last()
 
   let latestFile
 
@@ -328,6 +326,7 @@ async function solutionComplianceEvidencePagePost (req, res, next) {
         err,
         msg: 'Validation.Standard.Evidence.File.Failed.Upload'
       })
+      console.err(err)
     }
   }
 

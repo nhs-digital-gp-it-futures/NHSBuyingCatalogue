@@ -13,4 +13,4 @@ Not Setting the environment variable `SHAREPOINT_PROVIDER_ENV` will cause the mo
 
 ## Important Note.
 
-This Abstraction layer is only really for use with the dotnet backend API. The current state of that API is that SharePoint directories are only generated 
+This Abstraction layer is only really for use with the dotnet backend API.

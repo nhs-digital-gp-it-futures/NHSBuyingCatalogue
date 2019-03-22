@@ -47,7 +47,7 @@
     "Save and complete": "Save & complete"
   },
   "Authentication": {
-    "Login": "Log in/Sign up",
+    "Login": "Log in",
     "Logout": "Log Out",
     "Greeting": "Welcome, {{user.contact.firstName}}"
   },
