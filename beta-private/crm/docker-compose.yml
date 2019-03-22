@@ -17,6 +17,8 @@ services:
       - GIF_CRM_URL
       - GIF_AZURE_CLIENT_ID
       - GIF_ENCRYPTED_CLIENT_SECRET
+      - CRM_CLIENTID
+      - CRM_CLIENTSECRET
       - LOG_CRM
       - LOG_CONNECTIONSTRING
 
