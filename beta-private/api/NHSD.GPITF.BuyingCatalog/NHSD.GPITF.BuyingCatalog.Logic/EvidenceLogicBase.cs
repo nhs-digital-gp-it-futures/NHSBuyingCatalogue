@@ -2,19 +2,20 @@
 using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using System;
 using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
   public abstract class EvidenceLogicBase<T> : LogicBase where T : EvidenceBase
   {
+    private readonly IEvidenceBaseModifier<T> _modifier;
     private readonly IEvidenceDatastore<T> _datastore;
     private readonly IContactsDatastore _contacts;
     private readonly IEvidenceValidator<T> _validator;
     private readonly IEvidenceFilter<IEnumerable<T>> _filter;
 
     public EvidenceLogicBase(
+      IEvidenceBaseModifier<T> modifier,
       IEvidenceDatastore<T> datastore,
       IContactsDatastore contacts,
       IEvidenceValidator<T> validator,
@@ -22,6 +23,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       IHttpContextAccessor context) :
       base(context)
     {
+      _modifier = modifier;
       _datastore = datastore;
       _contacts = contacts;
       _validator = validator;
@@ -37,9 +39,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     {
       _validator.ValidateAndThrowEx(evidence, ruleSet: nameof(IEvidenceLogic<T>.Create));
 
-      var email = Context.Email();
-      evidence.CreatedById = _contacts.ByEmail(email).Id;
-      evidence.CreatedOn = evidence.OriginalDate = DateTime.UtcNow;
+      _modifier.ForCreate(evidence);
+
       return _datastore.Create(evidence);
     }
   }

@@ -31,6 +31,11 @@
 {{/inline}}
 
 <table class="standards">
+  <thead>
+    <th>{{t 'CompliancePages.Dashboard.Table.Standard.Title'}}</th>
+    <th>{{t 'CompliancePages.Dashboard.Table.Status.Title'}}</th>
+    <th>{{t 'CompliancePages.Dashboard.Table.Who Its With.Title'}}</th>
+  </thead>
   <tbody>
     {{#solution.standards}}
       {{#unless isOverarching}}
@@ -39,7 +44,7 @@
       {{/unless}}
       {{/unless}}
     {{/solution.standards}}
-    
+
     {{#solution.standards}}
       {{#unless isOverarching}}
       {{#if isInterop}}
@@ -58,13 +63,20 @@
 {{/help-reveal}}
 
 <table class="standards">
+    <thead>
+      <th>{{t 'CompliancePages.Dashboard.Table.Standard.Title'}}</th>
+      <th>{{t 'CompliancePages.Dashboard.Table.Status.Title'}}</th>
+      <th>{{t 'CompliancePages.Dashboard.Table.Who Its With.Title'}}</th>
+    </thead>
   <tbody>
   {{#solution.standards}}
-  {{#if isOverarching}}
-  {{> standard-row}}
-  {{/if}}
+    {{#if isOverarching}}
+      {{> standard-row}}
+    {{/if}}
   {{/solution.standards}}
   </tbody>
 </table>
+
+<a class="back-link" href="{{backlink}}">{{t 'CompliancePages.Dashboard.Backlink.Title'}}</a>
 
 </div>

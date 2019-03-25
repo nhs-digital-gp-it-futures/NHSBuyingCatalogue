@@ -177,7 +177,17 @@ spec:
             cpu: 500m
           limits:
             cpu: 1
-        env:            
+        env: 
+        - name: CRM_CLIENTID
+          valueFrom:
+            secretKeyRef:
+              name: bccrmsecret
+              key: CRM_CLIENTID
+        - name: CRM_CLIENTSECRET
+          valueFrom:
+            secretKeyRef:
+              name: bccrmsecret
+              key: CRM_CLIENTSECRET                   
         - name: GIF_CRM_URL
           valueFrom:
             secretKeyRef:

@@ -119,6 +119,7 @@ async function solutionCapabilityPageGet (req, res) {
 
   if (context.notEditable) {
     delete context.activeForm.id
+    return res.redirect('./summary')
   }
 
   if ('saved' in req.query) {
@@ -219,6 +220,7 @@ async function solutionCapabilityPagePost (req, res) {
     if (fileToUpload) {
       blobId = await uploadFile(claimID, fileToUpload.buffer, fileToUpload.originalname).catch((err) => {
         context.errors.items.push({ msg: 'Validation.Capability.Evidence.Upload.FailedAction' })
+        console.err(err)
         systemError = err
       })
     }
@@ -241,6 +243,7 @@ async function solutionCapabilityPagePost (req, res) {
   // Update solution evidence, communicate the error if there isn't any already.
   await updateSolutionCapabilityEvidence(req.solution.id, evidenceDescriptions).catch((err) => {
     context.errors.items.push({ msg: 'Validation.Capability.Evidence.Update.FailedAction' })
+    console.err(err)
     systemError = err
   })
 
@@ -300,8 +303,8 @@ async function confirmationPageContext (req) {
   },
   { associated: {}, overarching: {} })
 
-  context.solution.standardsByGroup.associated = _.map(context.solution.standardsByGroup.associated)
-  context.solution.standardsByGroup.overarching = _.map(context.solution.standardsByGroup.overarching)
+  context.solution.standardsByGroup.associated = _.sortBy(_.map(context.solution.standardsByGroup.associated), 'name')
+  context.solution.standardsByGroup.overarching = _.sortBy(_.map(context.solution.standardsByGroup.overarching), 'name')
 
   context.solution.capabilities = context.solution.capabilities.map((cap) => {
     let isLiveDemo = false
@@ -313,21 +316,22 @@ async function confirmationPageContext (req) {
     } else if (cap.latestEvidence && cap.latestFile) {
       missingEvidence = false
     }
-
-    context.editUrls = {
-      registration: `/suppliers/solutions/${req.params.solution_id}/register`,
-      capabilities: {
-        selection: `/suppliers/solutions/${req.params.solution_id}/capabilities`,
-        evidence: `/suppliers/capabilities/${req.params.solution_id}`
-      }
-    }
-
     return {
       ...cap,
       isLiveDemo,
       missingEvidence
     }
   })
+
+  context.solution.capabilities = _.sortBy(context.solution.capabilities, 'name')
+
+  context.editUrls = {
+    registration: `/suppliers/solutions/${req.params.solution_id}/register`,
+    capabilities: {
+      selection: `/suppliers/solutions/${req.params.solution_id}/capabilities`,
+      evidence: `/suppliers/capabilities/${req.params.solution_id}`
+    }
+  }
   return context
 }
 
@@ -341,6 +345,9 @@ async function summaryPageGet (req, res) {
   ]
   context.editUrls = {}
   context.backlink = `../../solutions/${req.solution.id}`
+
+  context.solution.hasOptionalStandards = context.solution.standardsByGroup.associated.some((std) => std.isOptional)
+
   res.render('supplier/capabilities/summary', context)
 }
 

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,6 +8,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 {
   public sealed class SolutionsLogic : LogicBase, ISolutionsLogic
   {
+    private readonly ISolutionsModifier _modifier;
     private readonly ISolutionsDatastore _datastore;
     private readonly IContactsDatastore _contacts;
     private readonly ISolutionsValidator _validator;
@@ -16,6 +16,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     private readonly IEvidenceBlobStoreLogic _evidenceBlobStoreLogic;
 
     public SolutionsLogic(
+      ISolutionsModifier modifier,
       ISolutionsDatastore datastore,
       IContactsDatastore contacts,
       IHttpContextAccessor context,
@@ -24,6 +25,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       IEvidenceBlobStoreLogic evidenceBlobStoreLogic) :
       base(context)
     {
+      _modifier = modifier;
       _datastore = datastore;
       _contacts = contacts;
       _validator = validator;
@@ -50,9 +52,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     {
       _validator.ValidateAndThrowEx(solution, ruleSet: nameof(ISolutionsLogic.Create));
 
-      var email = Context.Email();
-      solution.CreatedById = solution.ModifiedById = _contacts.ByEmail(email).Id;
-      solution.CreatedOn = solution.ModifiedOn = DateTime.UtcNow;
+      _modifier.ForCreate(solution);
 
       return _datastore.Create(solution);
     }
@@ -61,9 +61,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     {
       _validator.ValidateAndThrowEx(solution, ruleSet: nameof(ISolutionsLogic.Update));
 
-      var email = Context.Email();
-      solution.ModifiedById = _contacts.ByEmail(email).Id;
-      solution.ModifiedOn = DateTime.UtcNow;
+      _modifier.ForUpdate(solution);
 
       _datastore.Update(solution);
 

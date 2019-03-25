@@ -142,7 +142,7 @@ namespace Gif.Service
         // https://stackoverflow.com/questions/41572900/addtemporarysigningcredential-vs-addsigningcredential-in-identityserver4
         .AddDeveloperSigningCredential()
         .AddInMemoryApiResources(AuthConfig.GetApiResources())
-        .AddInMemoryClients(AuthConfig.GetClients());
+        .AddInMemoryClients(AuthConfig.GetClients(Configuration));
 
       services.AddMvcCore()
         .AddAuthorization()
@@ -244,6 +244,10 @@ namespace Gif.Service
       Console.WriteLine($"  LOG:");
       Console.WriteLine($"    LOG_CONNECTIONSTRING : {Settings.LOG_CONNECTIONSTRING(Configuration)}");
       Console.WriteLine($"    LOG_CRM              : {Settings.LOG_CRM(Configuration)}");
+
+      Console.WriteLine($"  CRM:");
+      Console.WriteLine($"    CRM_CLIENTID            : {Settings.CRM_CLIENTID(Configuration)}");
+      Console.WriteLine($"    CRM_CLIENTSECRET        : {Settings.CRM_CLIENTSECRET(Configuration)}");
     }
   }
 }

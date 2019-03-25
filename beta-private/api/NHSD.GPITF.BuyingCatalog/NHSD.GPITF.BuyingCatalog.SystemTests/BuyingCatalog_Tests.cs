@@ -115,8 +115,8 @@ namespace NHSD.GPITF.BuyingCatalog.SystemTests
       driver.Navigate().GoToUrl(BASE_URL);
 
       // BC
-      wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(By.LinkText("Log in/Sign up")));
-      driver.Click(By.LinkText("Log in/Sign up"));
+      wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(By.LinkText("Log in")));
+      driver.Click(By.LinkText("Log in"));
 
       // Auth0
       wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.TitleContains("Sign In"));

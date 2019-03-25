@@ -328,7 +328,7 @@ main > .breadcrumb {
   padding: 1em 4em;
   display: none;
   margin: 1em 0em;
-  
+  max-width: 55em;
   a {
     &:visited,
     &:active,

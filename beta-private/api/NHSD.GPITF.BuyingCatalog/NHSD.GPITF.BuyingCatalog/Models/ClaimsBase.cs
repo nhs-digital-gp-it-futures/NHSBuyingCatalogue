@@ -1,4 +1,5 @@
 ﻿using Dapper.Contrib.Extensions;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace NHSD.GPITF.BuyingCatalog.Models
@@ -29,6 +30,14 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     /// </summary>
     [Computed]
     public abstract string QualityId { get; }
+
+    /// <summary>
+    /// UTC date and time at which record was originally created
+    /// Set by server when first creating record
+    /// SET ON SERVER
+    /// </summary>
+    [Required]
+    public DateTime OriginalDate { get; set; }
   }
 #pragma warning restore CS1591
 }

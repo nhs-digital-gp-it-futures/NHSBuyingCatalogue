@@ -33,7 +33,7 @@ spec:
         - name: CACHE_HOST
           value: "cache"
         - name: ASPNETCORE_ENVIRONMENT 
-          value: "Development"     
+          value: "Production"     
         - name: USE_CRM
           value: "true"
         - name: CRM_APIURI
@@ -192,7 +192,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: bccrmazuresecret
-              key: GIF_CRM_AUTHORITY       
+              key: GIF_CRM_AUTHORITY                  
         - name: GIF_AZURE_CLIENT_ID
           valueFrom:
             secretKeyRef:

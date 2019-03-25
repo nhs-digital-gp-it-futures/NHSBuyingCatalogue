@@ -22,7 +22,7 @@
   .capabilities,
   .standards {
     [data-id],
-    .associated {
+    .associated, .optionals {
       display: none;
 
       &.selected {

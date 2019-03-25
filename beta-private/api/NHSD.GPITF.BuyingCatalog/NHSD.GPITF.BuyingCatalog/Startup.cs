@@ -197,6 +197,9 @@ namespace NHSD.GPITF.BuyingCatalog
         assyPaths = assyPaths.Where(x => !x.Contains("CRM"));
       }
 
+      // exclude test assys which are placed here by Docker build
+      assyPaths = assyPaths.Where(x => !x.Contains("Test"));
+
       var assys = assyPaths.Select(filePath => Assembly.LoadFile(filePath)).ToList();
       assys.Add(exeAssy);
       builder

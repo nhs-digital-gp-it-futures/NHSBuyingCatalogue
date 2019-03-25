@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Get the navbar
     const navbar = $('div.about-content div.nav-panel')
     const header = $('body > header')
+    const footer = $('body > footer')
 
     // Get the offset position of the navbar
     var sticky = navbar.offsetTop;
@@ -54,7 +55,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
     function stickyFunction() {
-        if (window.pageYOffset + headerHeight >= sticky) {
+        var browserZoomLevel = window.devicePixelRatio;
+
+        const nHeight =  navbar.getBoundingClientRect().height * browserZoomLevel
+        const hHeight =  header.getBoundingClientRect().height * browserZoomLevel
+        const fHeight =  footer.getBoundingClientRect().height * browserZoomLevel
+
+        const wHeight = window.screen.height;
+        const sHeight = nHeight + hHeight + fHeight
+
+        const isSpace = sHeight / wHeight < 0.900000
+
+        if (isSpace && window.pageYOffset + headerHeight >= sticky) {
             navbar.classList.add("sticky")
         } else {
             navbar.classList.remove("sticky");

@@ -1,4 +1,5 @@
 using Dapper.Contrib.Extensions;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace NHSD.GPITF.BuyingCatalog.Models
@@ -26,5 +27,21 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     /// </summary>
     [Computed]
     public override string QualityId => StandardId;
+
+    /// <summary>
+    /// UTC date and time at which Status is changed to Submitted
+    /// Set by server when updating record
+    /// SET ON SERVER
+    /// </summary>
+    [Required]
+    public DateTime SubmittedOn { get; set; }
+
+    /// <summary>
+    /// UTC date and time at which record was assigned to a TechnicalContact
+    /// Set by server when updating record
+    /// SET ON SERVER
+    /// </summary>
+    [Required]
+    public DateTime AssignedOn { get; set; }
   }
 }

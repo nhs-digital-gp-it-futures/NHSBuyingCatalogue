@@ -47,9 +47,14 @@
     "Save and complete": "Save & complete"
   },
   "Authentication": {
-    "Login": "Log in/Sign up",
+    "Login": "Log in",
     "Logout": "Log Out",
     "Greeting": "Welcome, {{user.contact.firstName}}"
+  },
+  "Optional Standards":{
+    "Notice Text": [
+      "You may also be required to comply with at least one of these associated standards. Some of these may be optional depending on the implementation of your solution. Please see confluence for further understanding."
+    ]
   },
   "Statuses": {
     "Standard": {
