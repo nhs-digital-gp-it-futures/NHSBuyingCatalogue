@@ -256,7 +256,7 @@
       "Subtitle": "Select all that apply and review the required Standards.",
       "Preamble": [
         "As you select $t(Capability_plural), a summary of required Standards will form below. You may return here to change these selections until you submit $t(Capability) evidence for assessment in the next stage.",
-        "Once all assurance activities have been successfully completed, the $t(Capability_plural), and partial $t(Capability_plural) (Epics), passed will be visible to buyers on your $t(Solution) page. To review the Epics required to pass each $t(Capability), see Capabilities & Standards in <a href='https://gpitbjss.atlassian.net/wiki/spaces/GPITF/overview' target='_blank'> Confluence</a>.",
+        "Once all assurance activities have been successfully completed, the $t(Capability_plural), and partial $t(Capability_plural) (Epics), passed will be visible to buyers on your $t(Solution) page. To review the Epics required to pass each $t(Capability), see Capabilities & Standards in <a href='https&#58;//gpitbjss.atlassian.net/wiki/spaces/GPITF/overview' target='_blank'> Confluence</a>.",
         "*indicates required field"
       ],
       "Help": {
@@ -1149,7 +1149,7 @@
                   "For each Capability, you can choose to provide evidence either by&#58;",
                   "• Providing a recorded video demonstration",
                   "• Scheduling a live witness demo",
-                  "Either way, you will need to demonstrate how each Capability meets its required Epics. (See <a href='https://gpitbjss.atlassian.net/wiki/spaces/GPITF/overview' target='_blank'> Confluence</a> for Capabilities and Epics.)"
+                  "Either way, you will need to demonstrate how each Capability meets its required Epics. (See <a href='https&#58;//gpitbjss.atlassian.net/wiki/spaces/GPITF/overview' target='_blank'> Confluence</a> for Capabilities and Epics.)"
                 ],
                 [
                   "Catalogue Authority"
