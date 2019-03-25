@@ -326,7 +326,7 @@ async function solutionComplianceEvidencePagePost (req, res, next) {
         err,
         msg: 'Validation.Standard.Evidence.File.Failed.Upload'
       })
-      console.err(err)
+      console.log(err)
     }
   }
 

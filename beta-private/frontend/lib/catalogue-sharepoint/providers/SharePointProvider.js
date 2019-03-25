@@ -5,6 +5,44 @@ const os = require('os')
 const uuidGenerator = require('node-uuid-generator')
 const INTERMEDIATE_STORAGE = process.env.UPLOAD_TEMP_FILE_STORE || os.tmpdir()
 
+
+const clamav=require('clamav.js');
+
+
+function testPing () {
+  clamav.ping(3310, 'http://clamav/', 60000, (err) => {
+    if (err) {
+      console.log('\n\n\n\n\nhttp://clamav:3310 is not available['+err+']\n\n\n\n\n\n\n\n');
+    }
+    else {
+      console.log('\n\n\n\n\n\n\n\nhttp://clamav:3310 is alive\n\n\n\n\n\n\n\n');
+    }
+  });
+
+  clamav.ping(3310, 'http://localhost/', 60000, (err) => {
+    if (err) {
+      console.log('\n\n\n\n\nhttp://localhost:3310 is not available['+err+']\n\n\n\n\n\n\n\n');
+    }
+    else {
+      console.log('\n\n\n\n\n\n\n\nhttp://localhost:3310 is alive\n\n\n\n\n\n\n\n');
+    }
+  });
+
+  clamav.ping(3310, '127.0.0.1', 60000, (err) => {
+    if (err) {
+      console.log('\n\n\n\n\n127.0.0.1:3310 is not available['+err+']\n\n\n\n\n\n\n\n');
+    }
+    else {
+      console.log('\n\n\n\n\n\n\n\n127.0.0.1:3310 is alive\n\n\n\n\n\n\n\n');
+    }
+  });
+}
+
+testPing()
+
+
+
+
 class SharePointProvider {
   constructor (CatalogueApi, intermediateStoragePath) {
     this.CatalogueApi = CatalogueApi
@@ -132,6 +170,10 @@ class SharePointProvider {
     const fileUUID = `${filename}-${this.uuidGenerator.generate()}`
     await this.saveBuffer(buffer, fileUUID)
     try {
+      
+      const isVirus = await this.scanFile(fileUUID)
+      await console.log(await isVirus)
+      
       const readStream = this.createFileReadStream(fileUUID)
       const uploadRes = await method(claimID, readStream, filename, options)
       await this.deleteFile(fileUUID)
@@ -141,6 +183,26 @@ class SharePointProvider {
       throw err
     }
   }
+
+  async scanFile (fileName) {
+    const stream = this.createFileReadStream(fileName)
+    await console.log('\n\n\n\n\nSCANNING FILE\n\n\n\n\n\n')
+    return new Promise((resolve, reject) => {
+      clamav.createScanner(3310, 'http://localhost').scan(stream, (err, object, malicious) => {
+        if (err) {
+          console.log(object.path+': '+err);
+          return Promise.reject(err)
+        } else if (malicious) {
+          console.log(object.path+': '+malicious+' FOUND');
+          return Promise.resolve(malicious)        
+        } else {
+          console.log(object.path+': OK');
+          return Promise.resolve()        
+        }
+      })
+    })
+  }
+
   async saveBuffer (buffer, filename) {
     const storagePath = this.createFileStoragePath(filename)
     return new Promise((resolve, reject) => {

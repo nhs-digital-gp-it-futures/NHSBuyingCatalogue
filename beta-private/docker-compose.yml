@@ -21,6 +21,15 @@ services:
     restart: always
     depends_on:
       - cache
+      - clamav
+
+  clamav:
+    image: mkodockx/docker-clamav:latest
+    ports:
+      - "3310:3310"
+    networks:
+      - beta_network
+    restart: always
 
   api:
     image: gpitf/catalogue-api:private-beta

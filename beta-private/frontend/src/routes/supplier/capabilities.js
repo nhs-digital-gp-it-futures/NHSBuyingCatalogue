@@ -220,7 +220,7 @@ async function solutionCapabilityPagePost (req, res) {
     if (fileToUpload) {
       blobId = await uploadFile(claimID, fileToUpload.buffer, fileToUpload.originalname).catch((err) => {
         context.errors.items.push({ msg: 'Validation.Capability.Evidence.Upload.FailedAction' })
-        console.err(err)
+        console.log(err)
         systemError = err
       })
     }
@@ -243,7 +243,7 @@ async function solutionCapabilityPagePost (req, res) {
   // Update solution evidence, communicate the error if there isn't any already.
   await updateSolutionCapabilityEvidence(req.solution.id, evidenceDescriptions).catch((err) => {
     context.errors.items.push({ msg: 'Validation.Capability.Evidence.Update.FailedAction' })
-    console.err(err)
+    console.log(err)
     systemError = err
   })
 
