@@ -215,14 +215,20 @@ async function solutionCapabilityPagePost (req, res) {
 
   const evidenceDescriptions = await Promise.all(_.map(uploadingVideoEvidence, async (isUploading, claimID) => {
     let fileToUpload = files[claimID]
-    let blobId = null
+    let uploadResponse = null
 
     if (fileToUpload) {
-      blobId = await uploadFile(claimID, fileToUpload.buffer, fileToUpload.originalname).catch((err) => {
+      uploadResponse = await uploadFile(claimID, fileToUpload.buffer, fileToUpload.originalname).catch((err) => {
         context.errors.items.push({ msg: 'Validation.Capability.Evidence.Upload.FailedAction' })
         console.log(err)
         systemError = err
       })
+    }
+
+    if (!uploadResponse.err) {
+      systemError = uploadResponse.err
+      context.errors.items.push({ msg: `${claimID} ${uploadResponse.err} ${uploadResponse.msg}` })
+
     }
 
     const currentEvidence = _.filter(req.solution.evidence, { claimId: claimID })
@@ -236,7 +242,7 @@ async function solutionCapabilityPagePost (req, res) {
       createdOn: new Date().toISOString(),
       evidence: isUploading === 'yes' ? req.body['evidence-description'][claimID] : LIVE_DEMO_MESSSAGE_INDICATOR,
       hasRequestedLiveDemo: isUploading !== 'yes',
-      blobId: blobId
+      blobId: uploadResponse.blobId
     }
   }))
 

@@ -19,7 +19,7 @@ async function scanFile (filepath) {
   })
 }
 
-const fp = './package.json'
+const fp = './eicar.com'
 
 scanFile(fp)
 .then((res) => {
