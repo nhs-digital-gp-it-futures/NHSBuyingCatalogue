@@ -69,6 +69,12 @@ namespace NHSD.GPITF.BuyingCatalog.SystemTests
     }
 
     [Test]
+    public void SingleUser_Login_Succeeds()
+    {
+      RunLogin(1, 1);
+    }
+
+    [Test]
     public void MultiUser_SameOrganisation_Login_Succeeds()
     {
       RunLogin(2, 1);
@@ -123,6 +129,16 @@ namespace NHSD.GPITF.BuyingCatalog.SystemTests
 
       // BC
       wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.TitleContains("NHS Digital Buying Catalogue"));
+      try
+      {
+        wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.TextToBePresentInElementLocated(By.Id("welcome_text"), "Welcome, Firstname" + user.Id));
+      }
+      catch (WebDriverTimeoutException)
+      {
+        TestContext.WriteLine($"Welcome message failed for user: {user.Email}");
+
+        throw;
+      }
     }
 
     private void AddSolution(IWebDriver driver, UserInfo userInfo)
