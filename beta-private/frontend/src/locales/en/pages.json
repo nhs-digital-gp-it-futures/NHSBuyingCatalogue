@@ -256,13 +256,13 @@
       "Subtitle": "Select all that apply and review the required Standards.",
       "Preamble": [
         "As you select $t(Capability_plural), a summary of required Standards will form below. You may return here to change these selections until you submit $t(Capability) evidence for assessment in the next stage.",
-        "Once all assurance activities have been successfully completed, the $t(Capability_plural), and partial $t(Capability_plural) (Epics), passed will be visible to buyers on your $t(Solution) page. To review the Epics required to pass each $t(Capability), see Capabilities & Standards in <a href='https&#58;//gpitbjss.atlassian.net/wiki/spaces/GPITF/overview' target='_blank'> Confluence</a>.",
+        "Once all assurance activities have been successfully completed, the $t(Capability_plural), and partial $t(Capability_plural) (Epics), passed will be visible to buyers on your $t(Solution) page. To review the Epics required to pass each $t(Capability), see Capabilities & Standards in <a href='https&#58;//gpitbjss.atlassian.net/wiki/spaces/GPITF/overview' target='_blank'>Confluence</a>.",
         "*indicates required field"
       ],
       "Help": {
         "Title": "Help - What if my $t(Solution) only matches some of a $t(Capability)'s epics?",
         "Text": [
-          "To pass some $t(Capability_plural), your $t(Solution) must show how it meets all Epics within that $t(Capability). For other $t(Capability_plural), your $t(Solution) must show how it meets only one or more Epics. If it passes the assessment, your $t(Solution) will receive a status of Full Capability or Partial Capability, depending on the Epics met. See Confluence [link to come] to check the Epics required to pass each $t(Capability)."
+          "To pass some $t(Capability_plural), your $t(Solution) must show how it meets all Epics within that $t(Capability). For other $t(Capability_plural), your $t(Solution) must show how it meets only one or more Epics. If it passes the assessment, your $t(Solution) will receive a status of Full Capability or Partial Capability, depending on the Epics met. See <a href='https&#58;//gpitbjss.atlassian.net/wiki/spaces/GPITF/overview' target='_blank'>Confluence</a> to check the Epics required to pass each $t(Capability)."
         ]
       },
       "Submission": {
