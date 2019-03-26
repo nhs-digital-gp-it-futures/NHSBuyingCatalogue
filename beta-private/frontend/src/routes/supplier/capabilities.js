@@ -221,7 +221,7 @@ async function solutionCapabilityPagePost (req, res) {
 
   const evidenceDescriptions = await Promise.all(_.map(uploadingVideoEvidence, async (isUploading, claimID) => {
     let fileToUpload = files[claimID]
-    let uploadResponse = null
+    let uploadResponse = {}
 
     if (fileToUpload) {
       uploadResponse = await uploadFile(claimID, fileToUpload.buffer, fileToUpload.originalname).catch((err) => {

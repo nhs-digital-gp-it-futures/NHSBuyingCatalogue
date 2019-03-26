@@ -320,11 +320,20 @@ async function solutionComplianceEvidencePagePost (req, res, next) {
   if (req.files.length) {
     const fileToUpload = req.files[0]
     try {
-      evidenceRecord.blobId = await uploadFile(req.params.claim_id, fileToUpload.buffer, fileToUpload.originalname)
+      const uploadResponse = await uploadFile(req.params.claim_id, fileToUpload.buffer, fileToUpload.originalname)
+
+      if (uploadResponse.blobId) {
+        evidenceRecord.blobId = uploadResponse.blobId
+      } else if (uploadResponse.err) {
+        context.errors.items.push({
+          error: uploadResponse.err,
+          msg: 'Validation.Standard.Evidence.File.Virus Scan.Failed'
+        })
+      }
     } catch (err) {
-      context.errorsitems.push({
+      context.errors.items.push({
         err,
-        msg: 'Validation.Standard.Evidence.File.Failed.Upload'
+        msg: 'Validation.Standard.Evidence.File.Upload.Failed'
       })
       console.log(err)
     }
