@@ -415,7 +415,7 @@
         }
       },
       "History": {
-        "Heading": "Upload History",
+        "Heading": "Evidence History",
         "Hide": "Hide history",
         "Show": "Show history",
         "HasFeedback": "Status: Feedback available. See response <a href='#{{id}}'>below</a>.",

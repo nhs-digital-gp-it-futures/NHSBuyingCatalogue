@@ -225,8 +225,8 @@ async function solutionCapabilityPagePost (req, res) {
 
     if (fileToUpload) {
       uploadResponse = await uploadFile(claimID, fileToUpload.buffer, fileToUpload.originalname).catch((err) => {
-        context.errors.items.push({ msg: 'Validation.Capability.Evidence.Upload.FailedAction' })
-        console.log(err)
+        context.errors.items.push({ msg: `${err} $t(Validation.Capability.Evidence.Upload.FailedAction)` })
+        console.error(err)
         systemError = err
       })
     }
