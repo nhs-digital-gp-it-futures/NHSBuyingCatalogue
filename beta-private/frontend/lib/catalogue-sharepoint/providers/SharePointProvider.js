@@ -5,7 +5,7 @@ const os = require('os')
 const uuidGenerator = require('node-uuid-generator')
 const INTERMEDIATE_STORAGE = process.env.UPLOAD_TEMP_FILE_STORE || os.tmpdir()
 
-const clamav=require('clamav.js');
+const clamav = require('clamav.js')
 
 class SharePointProvider {
   constructor (CatalogueApi, intermediateStoragePath) {
@@ -135,7 +135,7 @@ class SharePointProvider {
     await this.saveBuffer(buffer, fileUUID)
 
     console.log('\n\nScanning File\n\n')
-    const scanResults = await this.scanFile(fileUUID).catch(err => console.log)
+    const scanResults = await this.scanFile(fileUUID).catch(err => console.log(err))
     if (scanResults) {
       return { err: scanResults, msg: 'Uploaded file failed Virus Scanning Validation' }
     }
@@ -157,8 +157,8 @@ class SharePointProvider {
     return new Promise((resolve, reject) => {
       clamav.createScanner(3310, 'clamav').scan(stream, (err, object, malicious) => {
         if (err) return reject(err)
-        else if (malicious) return resolve(malicious)        
-        else return resolve()        
+        else if (malicious) return resolve(malicious)
+        else return resolve()
       })
     })
   }

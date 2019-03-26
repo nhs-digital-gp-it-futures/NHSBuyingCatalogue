@@ -225,10 +225,9 @@ async function solutionCapabilityPagePost (req, res) {
       })
     }
 
-    if (!uploadResponse.err) {
+    if (uploadResponse.err) {
       systemError = uploadResponse.err
       context.errors.items.push({ msg: `${claimID} ${uploadResponse.err} ${uploadResponse.msg}` })
-
     }
 
     const currentEvidence = _.filter(req.solution.evidence, { claimId: claimID })

@@ -6,14 +6,14 @@ async function scanFile (filepath) {
   return new Promise((resolve, reject) => {
     clamav.createScanner(3310, '127.0.0.1').scan(stream, (err, object, malicious) => {
       if (err) {
-        console.log(object.path+': '+err);
+        console.log(object.path + ': ' + err)
         return Promise.reject(err)
       } else if (malicious) {
-        console.log(object.path+': '+malicious+' FOUND');
-        return Promise.resolve(malicious)        
+        console.log(object.path + ': ' + malicious + ' FOUND')
+        return Promise.resolve(malicious)
       } else {
-        console.log(object.path+': OK');
-        return Promise.resolve()        
+        console.log(object.path + ': OK')
+        return Promise.resolve()
       }
     })
   })
@@ -22,14 +22,14 @@ async function scanFile (filepath) {
 const fp = './eicar.com'
 
 scanFile(fp)
-.then((res) => {
-  if(res) {
-    console.log('VIRUS:', res)
-  } else {
-    console.log('NO VIRUS')
-  }
-})
-.catch((err) => {
-  console.log(err)
-})
+  .then((res) => {
+    if (res) {
+      console.log('VIRUS:', res)
+    } else {
+      console.log('NO VIRUS')
+    }
+  })
+  .catch((err) => {
+    console.log(err)
+  })
 
