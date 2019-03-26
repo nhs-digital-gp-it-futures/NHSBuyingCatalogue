@@ -130,5 +130,6 @@ authentication(app).then(() => {
   console.info('NODE_ENV:', process.env.NODE_ENV)
   console.info('Listening on port', PORT)
 
-  app.listen(PORT)
+  const server = app.listen(PORT)
+  server.setTimeout(12000000)
 })

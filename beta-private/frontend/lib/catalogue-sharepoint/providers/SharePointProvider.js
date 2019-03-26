@@ -15,6 +15,8 @@ class SharePointProvider {
     this.intermediateStoragePath = intermediateStoragePath || INTERMEDIATE_STORAGE
     this.uuidGenerator = uuidGenerator
     this.av = antivirusProvider
+
+    this.CatalogueApi.timeout = 12000000
   }
 
   async getCapEvidence (claimID, subFolder, pageIndex = 1) {

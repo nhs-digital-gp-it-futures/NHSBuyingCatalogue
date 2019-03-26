@@ -192,6 +192,8 @@ function validRequest (req) {
 }
 
 async function solutionCapabilityPagePost (req, res) {
+  req.connection.setTimeout(12000000)
+
   const context = {
     errors: {
       items: []
