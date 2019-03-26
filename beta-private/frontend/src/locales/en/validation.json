@@ -75,6 +75,10 @@
           "Failed": "The $t(Solution) evidence was not successfully updated",
           "FailedAction": "Please try and update the evidence again."
         },
+        "Virus Scan": {
+          "Failed": ": Uploaded file failed our safety checks and has been rejected.",
+          "FailedAction": "Please ensure that you have up to date Antivirus installed and do a full scan on your machine."
+        },
         "Upload": {
           "Failed": "The $t(Solution) evidence Files were not successfully uploaded.",
           "FailedAction": "Please try and submit the $t(Solution) evidence files again."
@@ -91,7 +95,15 @@
           "TooLong": "The message you have entered must be less than 300 characters."
         },
         "File": {
-          "Missing": "Please upload your Traceability Matrix."
+          "Missing": "Please upload your Traceability Matrix.",
+          "Upload": {
+            "Failed": "",
+            "FailedAction": ""
+          },
+          "Virus Scan": {
+            "Failed": "Uploaded file failed our safety checks and has been rejected.",
+          "FailedAction": "Please ensure that you have up to date Antivirus installed and do a full scan on your machine."
+          }
         },
         "Failed": {
           "Update": "Failed to update your solution."

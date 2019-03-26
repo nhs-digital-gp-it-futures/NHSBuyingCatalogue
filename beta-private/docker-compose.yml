@@ -17,10 +17,22 @@ services:
       - OIDC_CLIENT_SECRET
       - SESSION_SECRET
       - SHAREPOINT_PROVIDER_ENV
+      - ANTIVIRUS_PROVIDER_ENV
       - DEPLOYED_ENV_LABEL
     restart: always
     depends_on:
       - cache
+      - clamav
+    links:
+      - clamav
+
+  clamav:
+    image: mkodockx/docker-clamav:latest
+    ports:
+      - "3310:3310"
+    networks:
+      - beta_network
+    restart: always
 
   api:
     image: gpitf/catalogue-api:private-beta
@@ -57,7 +69,7 @@ services:
 
   crm:
     build: 
-     context: ./crm
+      context: ./crm
     image: gpitf/catalogue-crm:private-beta
     ports:
       - "5001:5001"

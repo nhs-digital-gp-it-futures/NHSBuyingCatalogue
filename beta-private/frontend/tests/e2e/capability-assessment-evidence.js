@@ -108,6 +108,16 @@ test('After uploading a file, the name of the file should show against the capab
   await verifyFileUploaded(t, capSection, 'Dummy TraceabilityMatrix.xlsx')
 })
 
+test('Uploading a virus should be flagged and communicated via the standard error messages', async t => {
+  // we'll add evidence for "GP Resource Management"
+  const capSection = Selector('fieldset.collapsible#C3')
+
+  await uploadFileWithMessage(t, capSection, 'eicar.com', 'Automation testing message sent with uploaded file')
+    .click(capabilityEvidencePage.globalSaveButton)
+    .expect(Selector('#errors').exists).ok()
+    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Prescription Ordering - Citizen : Uploaded file failed our safety checks')
+})
+
 const requestLogger = RequestLogger(
   request => request.url.startsWith(capabilityEvidencePage.baseUrl),
   { logResponseBody: true }

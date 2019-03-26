@@ -5,6 +5,8 @@ const os = require('os')
 const uuidGenerator = require('node-uuid-generator')
 const INTERMEDIATE_STORAGE = process.env.UPLOAD_TEMP_FILE_STORE || os.tmpdir()
 
+const { antivirusProvider } = require('catalogue-antivirus')
+
 class SharePointProvider {
   constructor (CatalogueApi, intermediateStoragePath) {
     this.CatalogueApi = CatalogueApi
@@ -12,6 +14,7 @@ class SharePointProvider {
     this.capBlobStoreApi = new CatalogueApi.CapabilitiesImplementedEvidenceBlobStoreApi()
     this.intermediateStoragePath = intermediateStoragePath || INTERMEDIATE_STORAGE
     this.uuidGenerator = uuidGenerator
+    this.av = antivirusProvider
   }
 
   async getCapEvidence (claimID, subFolder, pageIndex = 1) {
@@ -131,16 +134,28 @@ class SharePointProvider {
     }
     const fileUUID = `${filename}-${this.uuidGenerator.generate()}`
     await this.saveBuffer(buffer, fileUUID)
+
     try {
+      const scanResults = await this.scanFile(fileUUID).catch(err => console.log(err))
+      if (scanResults) {
+        await this.deleteFile(fileUUID)
+        return { err: scanResults }
+      }
       const readStream = this.createFileReadStream(fileUUID)
       const uploadRes = await method(claimID, readStream, filename, options)
       await this.deleteFile(fileUUID)
-      return uploadRes
+      return { blobId: uploadRes }
     } catch (err) {
       await this.deleteFile(fileUUID)
       throw err
     }
   }
+
+  scanFile (fileName) {
+    const stream = this.createFileReadStream(fileName)
+    return this.av.scanFile(stream)
+  }
+
   async saveBuffer (buffer, filename) {
     const storagePath = this.createFileStoragePath(filename)
     return new Promise((resolve, reject) => {

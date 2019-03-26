@@ -6,7 +6,7 @@
 <div class="notification" role="alert">
   <h1>{{t 'CompliancePages.Evidence.NoCurrentFileNotification.Heading'}}</h1>
   {{#each (tt 'CompliancePages.Evidence.NoCurrentFileNotification.Text')}}
-  <p>{{{.}}}</p>
+    <p>{{{.}}}</p>
   {{/each}}
 </div>
 {{else}}
@@ -14,15 +14,7 @@
   <div class="notification" role="alert">
     <h1>{{t 'CompliancePages.Evidence.CapAssIncompleteNotification.Heading'}}</h1>
     {{#each (tt 'CompliancePages.Evidence.CapAssIncompleteNotification.Text')}}
-    <p>{{{.}}}</p>
-    {{/each}}
-  </div>
-  {{/if}}
-  {{#if standardNotStarted}}
-  <div class="notification" role="alert">
-    <h1>{{t 'CompliancePages.Evidence.FileAvailable.Heading'}}</h1>
-    {{#each (tt 'CompliancePages.Evidence.FileAvailable.Text')}}
-    <p>{{{.}}}</p>
+      <p>{{{.}}}</p>
     {{/each}}
   </div>
   {{/if}}
