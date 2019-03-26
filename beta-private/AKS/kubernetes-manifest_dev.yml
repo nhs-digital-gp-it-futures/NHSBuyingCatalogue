@@ -125,6 +125,12 @@ spec:
           limits:
             cpu: 500m
         env:
+        - name: ANTIVIRUS_PROVIDER_ENV
+          value: "CLAMAV"
+        - name: MAX_SCAN_SIZE
+          value: "1024M"
+        - name: MAX_FILE_SIZE
+          value: "1024M"                            
         - name: BASE_URL
           value: "http://dev.buyingcatalogue.digital.nhs.uk"
         - name: API_BASE_URL
