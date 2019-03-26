@@ -18,6 +18,7 @@ beforeAll(() => {
     StandardsApplicableEvidenceBlobStoreApi: MockStdBlobStoreApi
   })
   subject.uuidGenerator = { generate: () => { return 'UUID-1234-ABCD' } }
+  subject.av = { scanFile: () => { return new Promise((resolve, reject) => resolve()) } }
 })
 
 describe('deleteFile', () => {
@@ -228,7 +229,7 @@ describe('uploadEvidence', () => {
     mockMethod.mockImplementation(() => {
       return fn
     })
-    await expect(subject.uploadEvidence(mockMethod, cm, bf, fn, sb)).resolves.toBe(fn)
+    await expect(subject.uploadEvidence(mockMethod, cm, bf, fn, sb)).resolves.toEqual({ 'blobId': fn })
   })
 })
 

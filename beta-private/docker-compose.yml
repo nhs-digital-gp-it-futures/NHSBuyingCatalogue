@@ -17,6 +17,7 @@ services:
       - OIDC_CLIENT_SECRET
       - SESSION_SECRET
       - SHAREPOINT_PROVIDER_ENV
+      - ANTIVIRUS_PROVIDER_ENV
       - DEPLOYED_ENV_LABEL
     restart: always
     depends_on:
