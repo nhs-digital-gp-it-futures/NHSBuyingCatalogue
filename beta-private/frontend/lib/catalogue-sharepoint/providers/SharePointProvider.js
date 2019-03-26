@@ -137,7 +137,7 @@ class SharePointProvider {
     console.log('\n\nScanning File\n\n')
     const scanResults = await this.scanFile(fileUUID).catch(err => console.log(err))
     if (scanResults) {
-      return { err: scanResults, msg: 'Uploaded file failed Virus Scanning Validation' }
+      return { err: scanResults }
     }
     console.log('\n\nFile Scanned\n\n')
 

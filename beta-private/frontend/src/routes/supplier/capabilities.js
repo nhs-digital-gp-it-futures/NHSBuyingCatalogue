@@ -129,6 +129,10 @@ async function solutionCapabilityPageGet (req, res) {
   res.render('supplier/capabilities/index', context)
 }
 
+function requestClaimNameMap (req) {
+  return req.solution.capabilities.reduce((prev, cap) => ({ ...prev, [cap.claimID]: cap.name }), { })
+}
+
 function validRequest (req) {
   const files = {}
 
@@ -141,7 +145,7 @@ function validRequest (req) {
     }
   })
 
-  const claimedCapabilities = req.solution.capabilities.reduce((prev, cap) => ({ ...prev, [cap.claimID]: cap.name }), { })
+  const claimedCapabilities = requestClaimNameMap(req)
 
   let errors = []
 
@@ -194,6 +198,8 @@ async function solutionCapabilityPagePost (req, res) {
     }
   }
 
+  const claimNameMap = requestClaimNameMap(req)
+
   const valRes = validRequest(req)
 
   // Check if any validation Erors occured
@@ -227,7 +233,13 @@ async function solutionCapabilityPagePost (req, res) {
 
     if (uploadResponse.err) {
       systemError = uploadResponse.err
-      context.errors.items.push({ msg: `${claimID} ${uploadResponse.err} ${uploadResponse.msg}` })
+      const guiltyClaimName = claimNameMap[claimID]
+      context.errors.items.push({
+        error: uploadResponse.err,
+        name: guiltyClaimName,
+        claim: claimID,
+        msg: `${guiltyClaimName} ${'$t(Validation.Capability.Evidence.Virus Scan.Failed)'}`
+      })
     }
 
     const currentEvidence = _.filter(req.solution.evidence, { claimId: claimID })
