@@ -5,7 +5,7 @@ const os = require('os')
 const uuidGenerator = require('node-uuid-generator')
 const INTERMEDIATE_STORAGE = process.env.UPLOAD_TEMP_FILE_STORE || os.tmpdir()
 
-const clamav = require('clamav.js')
+const { antivirusProvider } = require('catalogue-antivirus')
 
 class SharePointProvider {
   constructor (CatalogueApi, intermediateStoragePath) {
@@ -14,6 +14,7 @@ class SharePointProvider {
     this.capBlobStoreApi = new CatalogueApi.CapabilitiesImplementedEvidenceBlobStoreApi()
     this.intermediateStoragePath = intermediateStoragePath || INTERMEDIATE_STORAGE
     this.uuidGenerator = uuidGenerator
+    this.av = antivirusProvider
   }
 
   async getCapEvidence (claimID, subFolder, pageIndex = 1) {
@@ -134,14 +135,12 @@ class SharePointProvider {
     const fileUUID = `${filename}-${this.uuidGenerator.generate()}`
     await this.saveBuffer(buffer, fileUUID)
 
-    console.log('\n\nScanning File\n\n')
-    const scanResults = await this.scanFile(fileUUID).catch(err => console.log(err))
-    if (scanResults) {
-      return { err: scanResults }
-    }
-    console.log('\n\nFile Scanned\n\n')
-
-    try {      
+    try {
+      const scanResults = await this.scanFile(fileUUID).catch(err => console.log(err))
+      if (scanResults) {
+        await this.deleteFile(fileUUID)
+        return { err: scanResults }
+      }
       const readStream = this.createFileReadStream(fileUUID)
       const uploadRes = await method(claimID, readStream, filename, options)
       await this.deleteFile(fileUUID)
@@ -154,13 +153,7 @@ class SharePointProvider {
 
   scanFile (fileName) {
     const stream = this.createFileReadStream(fileName)
-    return new Promise((resolve, reject) => {
-      clamav.createScanner(3310, 'clamav').scan(stream, (err, object, malicious) => {
-        if (err) return reject(err)
-        else if (malicious) return resolve(malicious)
-        else return resolve()
-      })
-    })
+    return this.av.scanFile(stream)
   }
 
   async saveBuffer (buffer, filename) {
