@@ -52,7 +52,7 @@
         <h3>{{t 'CapAssPages.Confirmation.Capabilities.Subtitle.Associated'}}</h3>
         {{#solution.standardsByGroup.associated}}
             {{#unless isOptional}}
-                <p><a href="">{{name}}</a></p>
+                <p><a target="_blank" href="{{url}}">{{name}}</a></p>
             {{/unless}}
         {{/solution.standardsByGroup.associated}}
 
@@ -64,7 +64,7 @@
 
         {{#solution.standardsByGroup.associated}}
             {{#if isOptional}}
-                <p><a href="">{{name}}</a></p>
+                <p><a target="_blank" href="{{url}}">{{name}}</a></p>
             {{/if}}
         {{/solution.standardsByGroup.associated}}
 

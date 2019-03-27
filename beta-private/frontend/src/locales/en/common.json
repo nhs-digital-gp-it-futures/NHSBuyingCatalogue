@@ -120,17 +120,17 @@
           },
           {
             "Text": "$t(Standards and Capabilities) Model",
-            "Url": ""
+            "Url": "https://gpitbjss.atlassian.net/wiki/spaces/GPITF/overview"
           }
         ]
       }
     ],
     "Legal": {
       "Heading": "",
-      "Text": "This is a beta service. You can read guidance about this service in the support page.",
+      "Text": "This is a beta service. You can read guidance about this service under ",
       "Link": {
-        "Text": "Support",
-        "Url": "/support"
+        "Text": "Support.",
+        "Url": "/about"
       }
     }
   },

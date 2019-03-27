@@ -129,6 +129,10 @@ async function solutionCapabilityPageGet (req, res) {
   res.render('supplier/capabilities/index', context)
 }
 
+function requestClaimNameMap (req) {
+  return req.solution.capabilities.reduce((prev, cap) => ({ ...prev, [cap.claimID]: cap.name }), { })
+}
+
 function validRequest (req) {
   const files = {}
 
@@ -141,7 +145,7 @@ function validRequest (req) {
     }
   })
 
-  const claimedCapabilities = req.solution.capabilities.reduce((prev, cap) => ({ ...prev, [cap.claimID]: cap.name }), { })
+  const claimedCapabilities = requestClaimNameMap(req)
 
   let errors = []
 
@@ -188,11 +192,15 @@ function validRequest (req) {
 }
 
 async function solutionCapabilityPagePost (req, res) {
+  req.connection.setTimeout(12000000)
+
   const context = {
     errors: {
       items: []
     }
   }
+
+  const claimNameMap = requestClaimNameMap(req)
 
   const valRes = validRequest(req)
 
@@ -215,13 +223,26 @@ async function solutionCapabilityPagePost (req, res) {
 
   const evidenceDescriptions = await Promise.all(_.map(uploadingVideoEvidence, async (isUploading, claimID) => {
     let fileToUpload = files[claimID]
-    let blobId = null
+    let uploadResponse = {}
 
     if (fileToUpload) {
-      blobId = await uploadFile(claimID, fileToUpload.buffer, fileToUpload.originalname).catch((err) => {
-        context.errors.items.push({ msg: 'Validation.Capability.Evidence.Upload.FailedAction' })
-        console.err(err)
+      try {
+        uploadResponse = await uploadFile(claimID, fileToUpload.buffer, fileToUpload.originalname)
+      } catch (err) {
+        context.errors.items.push({ msg: `${err} $t(Validation.Capability.Evidence.Upload.FailedAction)` })
+        console.error(err)
         systemError = err
+      }
+    }
+
+    if (uploadResponse.err) {
+      systemError = uploadResponse.err
+      const guiltyClaimName = claimNameMap[claimID]
+      context.errors.items.push({
+        error: uploadResponse.err,
+        name: guiltyClaimName,
+        claim: claimID,
+        msg: `${guiltyClaimName} ${'$t(Validation.Capability.Evidence.Virus Scan.Failed)'}`
       })
     }
 
@@ -236,14 +257,14 @@ async function solutionCapabilityPagePost (req, res) {
       createdOn: new Date().toISOString(),
       evidence: isUploading === 'yes' ? req.body['evidence-description'][claimID] : LIVE_DEMO_MESSSAGE_INDICATOR,
       hasRequestedLiveDemo: isUploading !== 'yes',
-      blobId: blobId
+      blobId: uploadResponse.blobId
     }
   }))
 
   // Update solution evidence, communicate the error if there isn't any already.
   await updateSolutionCapabilityEvidence(req.solution.id, evidenceDescriptions).catch((err) => {
     context.errors.items.push({ msg: 'Validation.Capability.Evidence.Update.FailedAction' })
-    console.err(err)
+    console.log(err)
     systemError = err
   })
 

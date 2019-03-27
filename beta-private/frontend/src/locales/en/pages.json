@@ -44,7 +44,7 @@
       "Cards": [
         {
           "title": "$t(GPITFutures.Fullname)",
-          "href": "#content",
+          "href": "https://nhsdigital.bravosolution.co.uk/web/login.html",
           "image": "/img/home-page/bullseye.png",
           "alt": "Bullseye Icon",
           "info": "View terms and details in Bravo.",
@@ -52,7 +52,7 @@
         },
         {
           "title":"$t(Capability_plural) & $t(Standard_plural)",
-          "href":"#content",
+          "href":"https://gpitbjss.atlassian.net/wiki/spaces/GPITF/overview",
           "image":"/img/home-page/checklist.png",
           "alt": "Checklist Icon",
           "info":"View the model and new requirements.",
@@ -106,7 +106,7 @@
       "Title": "Before you start",
       "Text": [
         "Note that when you click ‘save’ on any page, the information you’ve provided will be stored by the Catalogue Authority. If you change this information later, the original version will continue to be stored, but only the latest version will be reviewed by the Catalogue Authority as part your submission.",
-        "We also recommend reading the Supplier Guide before you start. It contains details to help you prepare for and complete each stage."
+        "We also recommend reading the <a href='/about'>Supplier Guide</a> before you start. It contains details to help you prepare for and complete each stage."
       ]
     },
     "Status": {
@@ -256,13 +256,13 @@
       "Subtitle": "Select all that apply and review the required Standards.",
       "Preamble": [
         "As you select $t(Capability_plural), a summary of required Standards will form below. You may return here to change these selections until you submit $t(Capability) evidence for assessment in the next stage.",
-        "Once all assurance activities have been successfully completed, the $t(Capability_plural), and partial $t(Capability_plural) (Epics), passed will be visible to buyers on your $t(Solution) page. To review the Epics required to pass each $t(Capability), see Capabilities & Standards [link to come] in Confluence.",
+        "Once all assurance activities have been successfully completed, the $t(Capability_plural), and partial $t(Capability_plural) (Epics), passed will be visible to buyers on your $t(Solution) page. To review the Epics required to pass each $t(Capability), see Capabilities & Standards in <a href='https&#58;//gpitbjss.atlassian.net/wiki/spaces/GPITF/overview' target='_blank'>Confluence</a>.",
         "*indicates required field"
       ],
       "Help": {
         "Title": "Help - What if my $t(Solution) only matches some of a $t(Capability)'s epics?",
         "Text": [
-          "To pass some $t(Capability_plural), your $t(Solution) must show how it meets all Epics within that $t(Capability). For other $t(Capability_plural), your $t(Solution) must show how it meets only one or more Epics. If it passes the assessment, your $t(Solution) will receive a status of Full Capability or Partial Capability, depending on the Epics met. See Confluence [link to come] to check the Epics required to pass each $t(Capability)."
+          "To pass some $t(Capability_plural), your $t(Solution) must show how it meets all Epics within that $t(Capability). For other $t(Capability_plural), your $t(Solution) must show how it meets only one or more Epics. If it passes the assessment, your $t(Solution) will receive a status of Full Capability or Partial Capability, depending on the Epics met. See <a href='https&#58;//gpitbjss.atlassian.net/wiki/spaces/GPITF/overview' target='_blank'>Confluence</a> to check the Epics required to pass each $t(Capability)."
         ]
       },
       "Submission": {
@@ -415,7 +415,7 @@
         }
       },
       "History": {
-        "Heading": "Upload History",
+        "Heading": "Evidence History",
         "Hide": "Hide history",
         "Show": "Show history",
         "HasFeedback": "Status: Feedback available. See response <a href='#{{id}}'>below</a>.",
@@ -453,7 +453,6 @@
       "Title": "Provide evidence for your $t(Solution)'s $t(Capability_plural).",
       "Instructions": "Select evidence method and follow the instructions for each of your selected $t(Capability_plural) below. On the next page, you can review your answers and submit them.",
       "Guidance": [
-        "For guidance on what to include, see our example recorded video demonstration [link to come].",
         "*indicates required field"
       ],
       "Save": {
@@ -576,7 +575,7 @@
           {
             "Title": "Is my Solution appropriate for the Buying Catalogue?",
             "Text": [
-              "GP IT Futures Framework 1 is open to any Solution that can meet at least one of the Capabilities, and the applicable Standards. We strongly recommend that you review the <a href='#' target='_blank'>Capabilities & Standards Model</a> to check that your Solution would be appropriate for this framework.",
+              "GP IT Futures Framework 1 is open to any Solution that can meet at least one of the Capabilities, and the applicable Standards. We strongly recommend that you review the <a href='https&#58;//gpitbjss.atlassian.net/wiki/spaces/GPITF/overview' target='_blank'>Capabilities & Standards Model</a> to check that your Solution would be appropriate for this framework.",
               "Please note that all Solutions must meet the overarching Standards, regardless of the Capabilities chosen. See <a href='#Capabilities & Standards'>Introduction to the Capabilities & Standards Model</a>  below."
             ]
           },
@@ -638,7 +637,7 @@
               "• Capability-Specific Standards  are specific to a Capability and usually have the same name (for example, Prescribing); ",
               "• Context-Specific Standards sit under and apply to certain Capabilities (for example, Common Reporting).",
               "There is also an Interoperability Standard. Some elements of the Interoperability Standard apply to all Solutions, while other elements are associated with specific Capabilities.",
-              "For more detail, see the <a href='#' target='_blank'>Capabilities and Standards Model</a>."
+              "For more detail, see the <a href='https&#58;//gpitbjss.atlassian.net/wiki/spaces/GPITF/overview' target='_blank'>Capabilities and Standards Model</a>."
             ]
           },
           {
@@ -650,9 +649,9 @@
           {
             "Title": "How do buyers fund their purchases?",
             "Text": [
-              "Buyers can fund their purchases using central or local funding, or a combination of the two. For buyers to access GP IT central funding, they must first agree a contract for a Solution, or set of Solutions, which provide all of the Foundation Capabilities (see model). The Foundation Capabilities form the foundation for a clinical system Solution and are the basis of support for the commitments in the General Medical Services contract. ",
+              "Buyers can fund their purchases using central or local funding, or a combination of the two. For buyers to access GP IT central funding, they must first agree a contract for a Solution, or set of Solutions, which provide all of the Foundation Capabilities (<a href='https&#58;//gpitbjss.atlassian.net/wiki/spaces/GPITF/overview' target='_blank'>model</a>). The Foundation Capabilities form the foundation for a clinical system Solution and are the basis of support for the commitments in the General Medical Services contract. ",
               "Your Solution will be assessed to determine whether it (or a group of your Solutions) forms a Foundation Solution Set. If your Solution is recognised as a Foundation Solution, it will be subject to a maximum list price. If a buyer has purchased all of the Foundation Capabilities, they can use any remaining central funding to buy other Solutions that fulfil other Capabilities. Otherwise, buyers will use local funds to pay for their purchase. ",
-              "Please review our <a href='#' target='_blank'>Capabilities and Standards</a> Confluence site for more information."
+              "Please review our <a href='https&#58;//gpitbjss.atlassian.net/wiki/spaces/GPITF/overview' target='_blank'>Capabilities and Standards</a> Confluence site for more information."
             ]
           }
         ]
@@ -663,7 +662,7 @@
         "Text": [
           "You must provide basic details and select the applicable Capabilities. For specific information required in this stage, see <a href='#Supplier checklist'>Supplier checklist.</a> ",
           "Please be aware that during private beta, once you complete stage 1, your Solution name and Solution version cannot be changed. If you’ve made an error, please email us.",
-          "Before you select applicable Capabilities, we recommend that you review the full <a href='#' target='_blank'>Capabilities & Standards Model</a> to understand the relationship between Capabilities and Standards, as well as the requirements under each Capability and Standard."
+          "Before you select applicable Capabilities, we recommend that you review the full <a href='https&#58;//gpitbjss.atlassian.net/wiki/spaces/GPITF/overview' target='_blank'>Capabilities & Standards Model</a> to understand the relationship between Capabilities and Standards, as well as the requirements under each Capability and Standard."
         ]
       },
       {
@@ -681,10 +680,10 @@
           {
             "Title": "",
             "Text": [
-              "Within each Capability, there are Epic-level user stories that describe business activities which are facilitated by a digital Solution. For some Capabilities, all Epics are required for the Solution to pass the assessment for that Capability. For others, only one or more Epics are required (see <a href='#Assessing your Capabilities'>Assessing your Capabilities</a> below). ",
-              "In order to pass an Epic, all of the acceptance criteria under that Epic will need to be demonstrated in the evidence submission. Before you prepare and submit your evidence, you may wish to read <a href='#'>Capability assessment</a> below. ",
+              "Within each Capability, there are Epic-level user stories that describe business activities which are facilitated by a digital Solution. For some Capabilities, all Epics are required for the Solution to pass the assessment for that Capability. For others, only one or more Epics are required",
+              "In order to pass an Epic, all of the acceptance criteria under that Epic will need to be demonstrated in the evidence submission. Before you prepare and submit your evidence, you may wish to read <a href='#Assessing your Capabilities'>Assessing your Capabilities</a> below. ",
               "",
-              "For each Capability, the Supplier can choose whether to provide:",
+              "For each Capability, the Supplier can choose whether to provide&#58;",
               "• A recorded video demonstration (with optional voiceover describing what is happening and where each acceptance criteria is met); or ",
               "• Schedule a live witness demonstration. During the live witness demonstration, the Supplier will present the Capability. The video will be recorded, and then assessed."
             ]
@@ -748,7 +747,7 @@
             "Title": "How to submit evidence - Traceability Matrices",
             "Text": [
               "After you’ve submitted evidence for Capabilities (stage 2), you can submit evidence for Standards (stage 3). This stage will involve a detailed analysis of your Solution against each relevant Standard—the overarching Standards, which apply to all Solutions, and the Standards associated with the Capabilities selected.",
-              "Each Standard has a separate Traceability Matrix (TM), which is an Excel file that lists each piece of required evidence for that Standard as an individual line item (see example). Based on the risk-based approach outlined in the next section below, each line item has been classified as either ‘Must’ (mandatory to implement) or ‘May’ (optional to implement), as defined in the Capabilities and Standards glossary. ",
+              "Each Standard has a separate Traceability Matrix (TM), which is an Excel file that lists each piece of required evidence for that Standard as an individual line item. Based on the risk-based approach outlined in the next section below, each line item has been classified as either ‘Must’ (mandatory to implement) or ‘May’ (optional to implement), as defined in the Capabilities and Standards glossary. ",
               "You can submit most evidence for a Standard via its TM. Additional files such as screen shots or supporting documents can be included with your TM submission. The TMs for each Standard applicable to your Solution can be accessed via your Standards Dashboard. Each standard will open on its own page. Click on each Standard to download the TM for that Standard. Once you’ve finishing filling in the required information, you can upload the completed TM on the same page. You can submit TMs for each Standard one at time. If you have multiple files to submit, you can zip them into a single compressed file, and upload the zipped files to the Catalogue. ",
               "Each Standard can be assigned a ‘Standard owner.’ By default, Standard owner will be your lead contact. You can change the owner to any other authenticated user at your company. (Authenticated users are those for whom you requested access in <a href='//nhsdigital.bravosolution.co.uk/' target='_blank'>Bravo</a> when registering your company). Standard owners are typically the ones submitting evidence for that Standard, and will receive all email notifications, along with the lead contact.  "
             ]
@@ -818,16 +817,11 @@
           {
             "Title":"All other questions",
             "Text": [
-              "For any other Catalogue questions, errors or issues experienced when using this website, email the NHS Digital service desk at exeter.helpdesk@nhs.net, or call at 0300 303 4034."
+              "For any other Catalogue questions, errors or issues experienced when using this website, email the NHS Digital service desk at <a href='mailto&#58;exeter.helpdesk@nhs.net' target='_blank'>exeter.helpdesk@nhs.net</a>, or call at 0300 303 4034."
             ]
           }
         ],
-        "Text": [
-          "",
-          "",
-          "",
-          ""
-        ]
+        "Text": []
       },
       {
         "Title": "Supplier checklist",
@@ -902,7 +896,6 @@
                 "Evidence how your Solution meets the Capabilities by submitting video or request to present to us via a live witness demonstration.",
                 "<b>Via email</b>",
                 "Respond to any clarifications if we send them.",
-                "Submit service levels to <a href='mailto&#58;buying.catalogue@nhs.net' target='_blank'>buying.catalogue@nhs.net</a> if not already provided.",
                 "Receive outcome of Capability assessment."
               ]
             },
@@ -987,8 +980,7 @@
               ]
             },
             "PostText": [
-              "The aim is you will hear from us within 5 Working Days from submission of your Solution page.",
-              "See the Supplier Onboarding Process for more detail."
+              "The aim is you will hear from us within 5 Working Days from submission of your Solution page."
             ]
           }
         ]
@@ -1157,7 +1149,7 @@
                   "For each Capability, you can choose to provide evidence either by&#58;",
                   "• Providing a recorded video demonstration",
                   "• Scheduling a live witness demo",
-                  "Either way, you will need to demonstrate how each Capability meets its required Epics. (See Confluence for Capabilities and Epics.)"
+                  "Either way, you will need to demonstrate how each Capability meets its required Epics. (See <a href='https&#58;//gpitbjss.atlassian.net/wiki/spaces/GPITF/overview' target='_blank'> Confluence</a> for Capabilities and Epics.)"
                 ],
                 [
                   "Catalogue Authority"

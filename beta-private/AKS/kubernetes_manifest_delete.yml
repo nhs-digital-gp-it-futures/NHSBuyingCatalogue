@@ -270,7 +270,7 @@ spec:
   ports:
   - port: 6379
   selector:
-    app: bc-pb-app-cache
+    app: bc-pb-app-cache    
 ---
 apiVersion: v1
 kind: Service
