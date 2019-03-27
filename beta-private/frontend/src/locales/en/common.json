@@ -10,6 +10,8 @@
     "Fullname": "$t(NHSD.Name) $t(Catalogue.Title)",
     "Shortname": "Catalogue"
   },
+  "Preliminary Private Beta Notice": "(Please note that during preliminary private beta, timescale targets may vary.)",
+  "Onboarding Process Document": "'Catalogue On-boarding Process'",
   "Solution": "Solution",
   "Solution_plural": "Solutions",
   "Solution_possessive": "Solution's",
