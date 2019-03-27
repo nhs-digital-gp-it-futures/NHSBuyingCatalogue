@@ -139,8 +139,13 @@ namespace NHSD.GPITF.BuyingCatalog
             {
               OnValidatePrincipal = context =>
               {
-                var auth = ServiceProvider.GetService<IBasicAuthentication>();
-                return auth.Authenticate(context);
+                //var auth = context.HttpContext.RequestServices.GetRequiredService<IBasicAuthentication>();
+                //return auth.Authenticate(context);
+                using (var scope = ApplicationContainer.BeginLifetimeScope())
+                {
+                  var auth = scope.Resolve<IBasicAuthentication>();
+                  return auth.Authenticate(context);
+                }
               }
             };
           });
@@ -160,8 +165,13 @@ namespace NHSD.GPITF.BuyingCatalog
           {
             OnTokenValidated = async context =>
             {
-              var auth = ServiceProvider.GetService<IBearerAuthentication>();
-              await auth.Authenticate(context);
+              //var auth = context.HttpContext.RequestServices.GetRequiredService<IBearerAuthentication>();
+              //await auth.Authenticate(context);
+              using (var scope = ApplicationContainer.BeginLifetimeScope())
+              {
+                var auth = scope.Resolve<IBearerAuthentication>();
+                await auth.Authenticate(context);
+              }
             }
           };
         });
@@ -200,13 +210,17 @@ namespace NHSD.GPITF.BuyingCatalog
       // exclude test assys which are placed here by Docker build
       assyPaths = assyPaths.Where(x => !x.Contains("Test"));
 
+      var scopetag = Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag;
       var assys = assyPaths.Select(filePath => Assembly.LoadFile(filePath)).ToList();
       assys.Add(exeAssy);
       builder
         .RegisterAssemblyTypes(assys.ToArray())
         .PublicOnly()
         .AsImplementedInterfaces()
-        .SingleInstance();
+      //.InstancePerRequest();
+      .InstancePerLifetimeScope();
+      //.InstancePerMatchingLifetimeScope(scopetag);
+      //.SingleInstance();
 
       builder.Register(cc => Configuration).As<IConfiguration>();
 
