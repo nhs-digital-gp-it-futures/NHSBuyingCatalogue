@@ -76,6 +76,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         CapabilitiesImplementedStatus.Submitted,
         CapabilitiesImplementedStatus.Remediation,
         CapabilitiesImplementedStatus.Approved,
+        CapabilitiesImplementedStatus.ApprovedPartial,
         CapabilitiesImplementedStatus.Rejected
         )]
         CapabilitiesImplementedStatus status)
@@ -98,6 +99,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Remediation, Roles.Admin)]
     [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Submitted, Roles.Supplier)]
     [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Approved, Roles.Admin)]
+    [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.ApprovedPartial, Roles.Admin)]
     [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Rejected, Roles.Admin)]
     public void MustBeValidStatusTransition_Valid_Succeeds(CapabilitiesImplementedStatus oldStatus, CapabilitiesImplementedStatus newStatus, string role)
     {
@@ -122,7 +124,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.Remediation, Roles.Supplier)]
     [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.Approved, Roles.Admin)]
     [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.Approved, Roles.Buyer)]
+    [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.ApprovedPartial, Roles.Admin)]
+    [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.ApprovedPartial, Roles.Buyer)]
     [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.Approved, Roles.Supplier)]
+    [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.ApprovedPartial, Roles.Supplier)]
     [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.Rejected, Roles.Admin)]
     [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.Rejected, Roles.Buyer)]
     [TestCase(CapabilitiesImplementedStatus.Draft, CapabilitiesImplementedStatus.Rejected, Roles.Supplier)]
@@ -137,6 +142,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Submitted, Roles.Supplier)]
     [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Approved, Roles.Buyer)]
     [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Approved, Roles.Supplier)]
+    [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.ApprovedPartial, Roles.Buyer)]
+    [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.ApprovedPartial, Roles.Supplier)]
     [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Rejected, Roles.Buyer)]
     [TestCase(CapabilitiesImplementedStatus.Submitted, CapabilitiesImplementedStatus.Rejected, Roles.Supplier)]
 
@@ -151,6 +158,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Approved, Roles.Admin)]
     [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Approved, Roles.Buyer)]
     [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Approved, Roles.Supplier)]
+    [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.ApprovedPartial, Roles.Admin)]
+    [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.ApprovedPartial, Roles.Buyer)]
+    [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.ApprovedPartial, Roles.Supplier)]
     [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Rejected, Roles.Admin)]
     [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Rejected, Roles.Buyer)]
     [TestCase(CapabilitiesImplementedStatus.Remediation, CapabilitiesImplementedStatus.Rejected, Roles.Supplier)]
@@ -175,6 +185,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     public void Validate_Update_FinalState_ReturnsError(
       [Values(
         CapabilitiesImplementedStatus.Approved,
+        CapabilitiesImplementedStatus.ApprovedPartial,
         CapabilitiesImplementedStatus.Rejected)]
           CapabilitiesImplementedStatus oldStatus,
       [Values(
@@ -182,6 +193,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         CapabilitiesImplementedStatus.Submitted,
         CapabilitiesImplementedStatus.Remediation,
         CapabilitiesImplementedStatus.Approved,
+        CapabilitiesImplementedStatus.ApprovedPartial,
         CapabilitiesImplementedStatus.Rejected)]
           CapabilitiesImplementedStatus newStatus,
       [Values(

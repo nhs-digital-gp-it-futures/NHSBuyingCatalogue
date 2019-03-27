@@ -35,6 +35,13 @@
     /// An <see cref="Organisations"/> may NOT remove the <see cref="CapabilitiesImplemented"/>;
     /// they have to start a new submission ie create a new Solution.
     /// </summary>
-    Rejected = 4
+    Rejected = 4,
+
+    /// <summary>
+    /// The Evidence has reviewed by NHSD and the <see cref="CapabilitiesImplemented"/> fulfills enough
+    /// of the requirements of the <see cref="Capabilities"/>
+    /// This is a positive end point in the life cycle.
+    /// </summary>
+    ApprovedPartial = 5
   }
 }
