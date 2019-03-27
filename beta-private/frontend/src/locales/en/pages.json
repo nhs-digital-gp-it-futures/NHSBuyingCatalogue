@@ -173,7 +173,10 @@
       },
       "Title": "Enter $t(Solution) details and key contacts.",
       "Subtitle": "Provide basic information and key contacts for your $t(Catalogue.Shortname) $t(Solution).",
-      "Preamble": "We will use this information to identify your $t(Solution) and communicate with you. With the exception of $t(Solution) name and version, you can edit this information until you submit $t(Capability) evidence for assessment in stage 2. $t(Solution) name and version cannot be edited once you complete this stage. *indicates required field",
+      "Preamble": [
+        "We will use this information to identify your $t(Solution) and communicate with you. With the exception of $t(Solution) name and version, you can edit this information until you submit $t(Capability) evidence for assessment in stage 2. $t(Solution) name and version cannot be edited once you complete this stage.",
+        "*indicates required field"
+      ],
       "Fieldsets": {
         "NameDescVersion": {
           "Legend": "Enter $t(Solution) name, description, version *",
