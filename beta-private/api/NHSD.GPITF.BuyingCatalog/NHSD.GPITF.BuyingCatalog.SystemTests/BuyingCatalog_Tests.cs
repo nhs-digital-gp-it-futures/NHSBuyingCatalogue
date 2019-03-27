@@ -5,6 +5,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,32 +22,44 @@ namespace NHSD.GPITF.BuyingCatalog.SystemTests
       {
         "Id": "1-1",
         "Email": "user1@organisation1.com",
-        "Password": "user1Password"
+        "Password": "user1Password",
+        "FirstName": "Firstname1-1",
+        "LastName": "Surname1-1"
       },
       {
         "Id": "1-2",
         "Email": "user2@organisation1.com",
-        "Password": "user2Password"
+        "Password": "user2Password",
+        "FirstName": "Firstname1-2",
+        "LastName": "Surname1-2"
       },
       {
         "Id": "1-3",
         "Email": "user3@organisation1.com",
-        "Password": "user3Password"
+        "Password": "user3Password",
+        "FirstName": "Firstname1-3",
+        "LastName": "Surname1-3"
       },
       {
         "Id": "1-4",
         "Email": "user4@organisation1.com",
-        "Password": "user4Password"
+        "Password": "user4Password",
+        "FirstName": "Firstname1-4",
+        "LastName": "Surname1-4"
       },
       {
         "Id": "2-1",
         "Email": "user1@organisation2.com",
-        "Password": "user1Password"
+        "Password": "user1Password",
+        "FirstName": "Firstname2-1",
+        "LastName": "Surname2-1"
       },
       {
         "Id": "2-2",
         "Email": "user2@organisation2.com",
-        "Password": "user2Password"
+        "Password": "user2Password",
+        "FirstName": "Firstname2-2",
+        "LastName": "Surname2-2"
       }
     ]
   }
@@ -95,9 +108,9 @@ namespace NHSD.GPITF.BuyingCatalog.SystemTests
         {
           allTasks.Add(Task.Factory.StartNew(userInfoObj =>
           {
-            using (var driver = new ChromeDriver(_chromeDriverDirectory))
+            var userInfo = (UserInfo)userInfoObj;
+            using (var driver = GetDriver(userInfo))
             {
-              var userInfo = (UserInfo)userInfoObj;
               Login(driver, userInfo);
               AddSolution(driver, userInfo);
             }
@@ -131,7 +144,7 @@ namespace NHSD.GPITF.BuyingCatalog.SystemTests
       wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.TitleContains("NHS Digital Buying Catalogue"));
       try
       {
-        wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.TextToBePresentInElementLocated(By.Id("welcome_text"), "Welcome, Firstname" + user.Id));
+        wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.TextToBePresentInElementLocated(By.Id("welcome_text"), $"Welcome, {user.FirstName}"));
       }
       catch (WebDriverTimeoutException)
       {
@@ -159,20 +172,30 @@ namespace NHSD.GPITF.BuyingCatalog.SystemTests
       }
     }
 
+    private IWebDriver GetDriver(UserInfo userInfo)
+    {
+      var tempDir = Path.Combine(Path.GetTempPath(), userInfo.GetId());
+      var chromeOpts = new ChromeOptions();
+      chromeOpts.AddArgument("incognito");
+      chromeOpts.AddArgument($@"-user-data-dir={tempDir}");
+
+      return new ChromeDriver(_chromeDriverDirectory, chromeOpts);
+    }
+
     private sealed class UserInfo
     {
-      private readonly int _userNumber;
-      private readonly int _orgNumber;
+      public int UserNumber { get; }
+      public int OrgNumber { get; }
 
       public UserInfo(int userNumber, int orgNumber)
       {
-        _userNumber = userNumber;
-        _orgNumber = orgNumber;
+        UserNumber = userNumber;
+        OrgNumber = orgNumber;
       }
 
       public string GetId()
       {
-        var retVal = $"{_orgNumber}-{_userNumber}";
+        var retVal = $"{OrgNumber}-{UserNumber}";
         return retVal;
       }
     }
@@ -182,6 +205,8 @@ namespace NHSD.GPITF.BuyingCatalog.SystemTests
       public string Id { get; set; }
       public string Email { get; set; }
       public string Password { get; set; }
+      public string FirstName { get; set; }
+      public string LastName { get; set; }
     }
   }
 }
