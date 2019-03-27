@@ -127,7 +127,7 @@ data:
 
     # license key
     #license = QkdOSVMxVEVHT1BIUzoyMDoxNTQ5MTg3ODQ3OjE.GyW7XY6Lr6hP3poeMyzGc/D6xz0RAk4imMaZMw.RxVeO7ScqWbMZ+sVEBL6te8hyil8hH5DLq6RxQ
-    license = Qkg0U0JCTEY0RzVRMDo1OjE1NjM3MTc4MDY6MQ.OkMNKPJAhwH4NIBuEMU7Z303Gq7BcF6GWG+6mg.GiND6aHJ9HTAuTeTFaZCNoMLvovQdqVVRN7nug
+    license = QkkzSjM2TjZHQ0RWQTo1OjE1ODM5ODYzMzA6MQ.C9WnvNcOk6+3prrjNYcs3anx4zlSQGMWE7DDZg.R4dXhMnI0ZASbwEj6wJQs8h+h5dvLVTgLdVvEw
 
     # Environment variable $KUBERNETES_NODENAME is used by default to setup hostname
     # Use value below to override specific name
