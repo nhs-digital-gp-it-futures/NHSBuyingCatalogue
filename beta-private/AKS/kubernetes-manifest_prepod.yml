@@ -369,6 +369,16 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  name: clamav
+spec:
+  ports:
+  - port: 3310
+  selector:
+    app: bc-pb-app-clamav    
+---
+apiVersion: v1
+kind: Service
+metadata:
   name: crm
 spec:
   ports:
