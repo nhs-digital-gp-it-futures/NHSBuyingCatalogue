@@ -343,7 +343,7 @@
           "Heading": "Evidence submitted.",
           "Narrative": [
             "Your file has been submitted. We will begin reviewing your submission when we believe assessment of your $t(Solution)'s $t(Capability_plural) is progressing satisfactorily and we have confirmed your submission is in the spirit of the Commercial Standard.",
-            "See 'Supplier Onboarding Process' for full detail around timescales."
+            "See $t(Onboarding Process Document) for full detail around timescales."
           ]
         }
       },
@@ -585,9 +585,10 @@
           {
             "Title": "How long until I can start selling?",
             "Text": [
-              "In order to sell you need to meet two requirements&#58; (1) have your Solution accepted on the Catalogue as compliant (see the ‘Supplier Onboarding Process’ for more detail); and (2) be awarded to a framework. The order of these two things may vary, but you must have submitted your Solution to the Catalogue and have it accepted into the assessment process in order to qualify for a framework award. ",
+              "In order to sell you need to meet two requirements&#58; (1) have your Solution accepted on the Catalogue as compliant see the‘Catalogue On-boarding Process’ in Bravo (click ‘View our live opportunities’ and ‘Digital Buying Catalogue Registration’opportunity); and (2) be awarded to a framework. The order of these two things may vary, but you must have submitted your Solution to the Catalogue and have it accepted into the assessment process in order to qualify for a framework award. ",
               "You may start adding a Solution to the Catalogue at any time. See <a href='#Supplier registration'>Supplier registration</a> below for how to get access to the Catalogue. ",
-              "The time it takes for a Solution to be accepted on the Catalogue will vary depending upon the number of Capabilities and Standards involved, and the quality of the initial submission. If all the Standards evidence is submitted by the time the Capability assessment is complete, the aim is that a good quality submission will take no longer than 19 weeks. See a break-down of the timescale targets by stage in <a href='#Process overview'>Process overview</a> below. ",
+              "The time it takes for a Solution to be accepted on the Catalogue will vary depending upon the number of Capabilities and Standards involved, and the quality of the initial submission. If all the Standards evidence is submitted by the time the Capability assessment is complete, the aim is that a good quality submission will take no longer than 19 weeks. See a break-down of the Catalogue timescale targets by stage in <a href='#Process overview'>Process overview</a> below. ",
+              "(Please note that during preliminary private beta, timescale targets may vary, and the Traceability Matrices for submitting Standards evidence will be made available as soon as they are ready.)",
               "The framework timescales will be clear at the time each framework is published. "
             ]
           }
@@ -597,7 +598,8 @@
         "Title":"Process overview",
         "Nav Title": "Process overview",
         "Text": [
-          "All companies need to register one time in <a href='//nhsdigital.bravosolution.co.uk/' target='_blank'>Bravo</a> to gain access to the Catalogue. After this, there are four stages to adding each Solution to the Catalogue. The table below provides a brief overview of each stage."
+          "All companies need to register one time in <a href='//nhsdigital.bravosolution.co.uk/' target='_blank'>Bravo</a> to gain access to the Catalogue. After this, there are four stages to adding each Solution to the Catalogue. The table below provides a brief overview of each stage.",
+          "$t(Preliminary Private Beta Notice)."
         ],
         "Subsections": [
           {
@@ -610,7 +612,7 @@
         "Nav Title": "Supplier registration",
         "Text": [
           "Before you can begin adding your Solution to the Catalogue, you must register your company and request a user account as follows",
-          "Log in to <a href='//nhsdigital.bravosolution.co.uk/' target='_blank'>Bravo</a>. You will see multiple opportunities listed. Click on the ‘Buying Catalogue’ opportunity. ",
+          "Log in to <a href='//nhsdigital.bravosolution.co.uk/' target='_blank'>Bravo</a>. You will see multiple opportunities listed. Click on the ‘Digital Buying Catalogue Registration’ opportunity. ",
           "From there, you can download, review and sign the Catalogue Agreement which sets out the terms of use for using the Catalogue. When you’ve reviewed and gotten the necessary signature, you can upload the signed Agreement to Bravo.",
           "Bravo will also ask you to provide company information (see the <a href='#Supplier checklist'>'Supplier checklist'</a> for details), and the names and email addresses of anyone who will need access to the Buying Catalogue under your company account. ",
           "Once we have signed the Catalogue Agreement, we will issue log-in details for each of the users requested.",
@@ -865,7 +867,8 @@
               ]
             },
             "PostText": [
-              "The aim is that you will have your user logins no longer than 9 Working Days after submission of your Catalogue Agreement, company information and user log-in request."
+              "The aim is that you will have your user logins no longer than 9 Working Days after submission of your Catalogue Agreement, company information and user log-in request.",
+              "$t(Preliminary Private Beta Notice)."
             ]
           },
           {
@@ -886,7 +889,7 @@
               ]
             },
             "PostText": [
-              "* If your Catalogue Solution includes the Productivity Capability, you will need to follow an additional process. See Annex 1 of the ‘Supplier Onboarding Process.’ ",
+              "* If your Catalogue Solution includes the Productivity Capability, you will need to follow an additional process. See Annex 1 of the $t(Onboarding Process Document) in <a href='//nhsdigital.bravosolution.co.uk/' target='_blank'>Bravo</a> (click ‘View our live opportunities’ and 'Digital Buying Registration' opportunity). ",
               "When you complete stage 1, you can progress to the next stages as soon as you're ready. "
             ]
           },
@@ -926,8 +929,9 @@
               ]
             },
             "PostText": [
-              "* If your Catalogue Solution includes the Productivity Capability, you will follow an additional process. See Annex 1 of the ‘Supplier Onboarding Process.’",
-              "The aim is that stage 2 will take no longer than 20 Working Days from receiving your evidence or completion of the live witness demo. You can progress to the next stage and submit evidence for Standards while you wait for the outcome of your Capability assessment."
+              "* If your Catalogue Solution includes the Productivity Capability, you will follow an additional process. See Annex 1 of the $t(Onboarding Process Document) in <a href='//nhsdigital.bravosolution.co.uk/' target='_blank'>Bravo</a> (click ‘View our live opportunities’).",
+              "The aim is that stage 2 will take no longer than 20 Working Days from receiving your evidence or completion of the live witness demo. You can progress to the next stage and submit evidence for Standards while you wait for the outcome of your Capability assessment.",
+              "$t(Preliminary Private Beta Notice)."
             ]
           },
           {
@@ -955,8 +959,9 @@
               ]
             },
             "PostText": [
-              "* If your Catalogue Solution includes the Productivity Capability, you will follow an additional process. See Annex 1 of the ‘Supplier Onboarding Process.’",
-              "Once we begin reviewing your Traceability Matrices, the aim is for each Standard to take no longer than 12 weeks including dialogue. This assumes an initial good quality submission. See ‘Supplier Onboarding Process’ for more detail on this stage. "
+              "* If your Catalogue Solution includes the Productivity Capability, you will follow an additional process. See Annex 1 of the $t(Onboarding Process Document) in <a href='//nhsdigital.bravosolution.co.uk/' target='_blank'>Bravo</a> (click ‘View our live opportunities’).",
+              "Once we begin reviewing your Traceability Matrices, the aim is for each Standard to take no longer than 12 weeks including dialogue. This assumes an initial good quality submission. See Annex 1 of the $t(Onboarding Process Document) in <a href='//nhsdigital.bravosolution.co.uk/' target='_blank'>Bravo</a> (click ‘View our live opportunities’ and 'Digital Buying Registration' opportunity) for more detail on this stage.",
+              "$t(Preliminary Private Beta Notice)."
             ]
           },
           {
