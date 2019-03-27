@@ -125,6 +125,8 @@ spec:
           limits:
             cpu: 500m
         env:
+        - name: ANTIVIRUS_PROVIDER_ENV
+          value: "CLAMAV"        
         - name: BASE_URL
           value: "https://test.buyingcatalogue.digital.nhs.uk"
         - name: API_BASE_URL
