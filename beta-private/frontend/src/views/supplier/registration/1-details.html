@@ -3,7 +3,11 @@
 <header class="page-main-heading">
   <h1>{{t 'Onboarding.Details.Title' }}</h1>
   <h2>{{t 'Onboarding.Details.Subtitle'}}</h2>
-  <p>{{t 'Onboarding.Details.Preamble'}}</p>
+  {{#each (tt 'Onboarding.Details.Preamble')}}
+    <p>
+      {{.}}
+    </p>
+  {{/each}}
 </header>
 
 {{#> form form_id=activeForm.id}}
