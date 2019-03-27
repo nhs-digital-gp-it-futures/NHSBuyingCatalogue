@@ -307,7 +307,17 @@ spec:
   ports:
   - port: 6379
   selector:
-    app: bc-pb-app-cache    
+    app: bc-pb-app-cache
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: clamav
+spec:
+  ports:
+  - port: 3310
+  selector:
+    app: bc-pb-app-clamav         
 ---
 apiVersion: v1
 kind: Service
