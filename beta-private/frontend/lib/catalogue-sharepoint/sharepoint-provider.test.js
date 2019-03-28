@@ -4,10 +4,12 @@ const { SharePointProvider } = require('./index')
 
 function MockCapBlobStoreApi () {
   this.getCapEvidence = jest.fn()
+  this.apiClient = {}
 }
 
 function MockStdBlobStoreApi () {
   this.getStdEvidence = jest.fn()
+  this.apiClient = {}
 }
 
 let subject
