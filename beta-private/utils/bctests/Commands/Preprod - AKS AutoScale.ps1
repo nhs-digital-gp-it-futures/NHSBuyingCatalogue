@@ -1,0 +1,1 @@
+kubectl autoscale deployment.v1.apps/bc-pb-deployment-frontend --min=1 --max=3 --cpu-percent=80
