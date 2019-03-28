@@ -16,7 +16,9 @@ class SharePointProvider {
     this.uuidGenerator = uuidGenerator
     this.av = antivirusProvider
 
-    this.CatalogueApi.timeout = 12000000
+    this.TIMEOUT = 1200000
+    this.capBlobStoreApi.timeout = this.TIMEOUT
+    this.stdBlobStoreApi.timeout = this.TIMEOUT
   }
 
   async getCapEvidence (claimID, subFolder, pageIndex = 1) {
