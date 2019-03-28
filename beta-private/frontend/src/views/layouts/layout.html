@@ -113,11 +113,9 @@
       </div>
       <div class="bottom">
         <p class="legal">
-          <span class="heading">{{t 'Footer.Legal.Heading'}}</span>
-          <span class="text">{{t 'Footer.Legal.Text'}}</span>
-          {{#if (t 'Footer.Legal.Link.Text')}}
-            <a href="{{t 'Footer.Legal.Link.Url'}}">{{t 'Footer.Legal.Link.Text'}}</a>
-          {{/if}}
+          {{#each (tt 'Footer.Legal.Text')}}
+            {{{.}}}
+          {{/each}}
         </p>
       </div>
     </footer>

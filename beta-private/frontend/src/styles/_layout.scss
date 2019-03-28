@@ -254,6 +254,10 @@ body > footer {
 
       a {
         text-decoration: underline;
+        
+      }
+      a[target="_blank"]:after {
+        content: none;
       }
     }
   }
