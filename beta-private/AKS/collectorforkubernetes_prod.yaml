@@ -480,8 +480,8 @@ data:
     [input.files]
 
     # disable container logs monitoring
-    disabled = true
-    #disabled = false
+    #disabled = true
+    disabled = false
 
     # root location of docker log files
     # logs are expected in standard docker format like {containerID}/{containerID}-json.log
