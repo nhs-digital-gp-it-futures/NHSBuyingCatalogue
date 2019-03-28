@@ -66,6 +66,14 @@ class DataProvider {
     this.solutionsExApi = new CatalogueApi.SolutionsExApi()
     this.capabilityMappingsApi = new CatalogueApi.CapabilityMappingsApi()
     this.capabilityEvidenceAPI = new CatalogueApi.CapabilitiesImplementedEvidenceApi()
+
+    this.TIMEOUT = 1200000
+    this.contactsApi.apiClient.timeout = this.TIMEOUT
+    this.orgsApi.apiClient.timeout = this.TIMEOUT
+    this.solutionsApi.apiClient.timeout = this.TIMEOUT
+    this.solutionsExApi.apiClient.timeout = this.TIMEOUT
+    this.capabilityMappingsApi.apiClient.timeout = this.TIMEOUT
+    this.capabilityEvidenceAPI.apiClient.timeout = this.TIMEOUT
   }
 
   async contactById (contactId) {
