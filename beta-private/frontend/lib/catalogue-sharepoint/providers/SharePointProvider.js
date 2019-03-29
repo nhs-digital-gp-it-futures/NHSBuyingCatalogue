@@ -5,6 +5,9 @@ const os = require('os')
 const uuidGenerator = require('node-uuid-generator')
 const INTERMEDIATE_STORAGE = process.env.UPLOAD_TEMP_FILE_STORE || os.tmpdir()
 
+const mmm = require('mmmagic')
+const Magic = mmm.Magic
+
 const { antivirusProvider } = require('catalogue-antivirus')
 
 class SharePointProvider {
@@ -73,7 +76,8 @@ class SharePointProvider {
 
   async uploadCapEvidence (claimID, buffer, filename, subFolder) {
     const uploadMethod = this.capBlobStoreApi.apiCapabilitiesImplementedEvidenceBlobStoreAddEvidenceForClaimPost.bind(this.capBlobStoreApi)
-    return this.uploadEvidence(uploadMethod, claimID, buffer, filename, subFolder)
+    const validMimeType = this.capValidMimeType.bind(this)
+    return this.uploadEvidence(uploadMethod, validMimeType, claimID, buffer, filename, subFolder)
   }
 
   async getStdEvidence (claimID, subFolder, pageIndex = 1) {
@@ -129,10 +133,36 @@ class SharePointProvider {
 
   async uploadStdEvidence (claimID, buffer, filename, subFolder) {
     const uploadMethod = this.stdBlobStoreApi.apiStandardsApplicableEvidenceBlobStoreAddEvidenceForClaimPost.bind(this.stdBlobStoreApi)
-    return this.uploadEvidence(uploadMethod, claimID, buffer, filename, subFolder)
+    const validMimeType = this.stdValidMimeType.bind(this)
+    return this.uploadEvidence(uploadMethod, validMimeType, claimID, buffer, filename, subFolder)
   }
 
-  async uploadEvidence (method, claimID, buffer, filename, subFolder) {
+  async stdValidMimeType (fileName) {
+    const res = this.detectMimeType(fileName)
+    console.log('STANDARDS:', res)
+    return true
+  }
+
+  async capValidMimeType (fileName) {
+    const res = this.detectMimeType(fileName)
+    console.log('CAPABILITY:', res)
+    return true
+  }
+
+  detectMimeType (fileName) {
+    const storagePath = this.createFileStoragePath(fileName)
+    const magic = new Magic(mmm.MAGIC_MIME_TYPE)
+
+    return new Promise((resolve, reject) => {
+      magic.detectFile(storagePath, (err, result) => {
+        if (err) return reject(err)
+        console.log(result)
+        return resolve(result)
+      })
+    })
+  }
+
+  async uploadEvidence (uploadMethod, mimeTypeChecker, claimID, buffer, filename, subFolder) {
     const options = {
       subFolder: subFolder
     }
@@ -140,13 +170,19 @@ class SharePointProvider {
     await this.saveBuffer(buffer, fileUUID)
 
     try {
+      const isValidMimeType = mimeTypeChecker(fileUUID)
+
+      if (!isValidMimeType) {
+        return { err: 'Invalid File Type', isVirus: false, badMime: true }
+      }
+
       const scanResults = await this.scanFile(fileUUID).catch(err => console.log(err))
       if (scanResults) {
         await this.deleteFile(fileUUID)
-        return { err: scanResults }
+        return { err: scanResults, isVirus: true, badMime: false }
       }
       const readStream = this.createFileReadStream(fileUUID)
-      const uploadRes = await method(claimID, readStream, filename, options)
+      const uploadRes = await uploadMethod(claimID, readStream, filename, options)
       await this.deleteFile(fileUUID)
       return { blobId: uploadRes }
     } catch (err) {
