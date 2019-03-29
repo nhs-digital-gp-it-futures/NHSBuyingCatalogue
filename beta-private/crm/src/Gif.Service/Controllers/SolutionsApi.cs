@@ -98,7 +98,7 @@ namespace Gif.Service.Controllers
       {
         var solution = _datastore.ById(id);
 
-        if (solution.Id == Guid.Empty)
+        if (solution == null || solution?.Id == Guid.Empty)
           return StatusCode(404);
 
         return new ObjectResult(solution);
@@ -219,7 +219,7 @@ namespace Gif.Service.Controllers
       {
         var solutionGet = _datastore.ById(solution.Id.ToString());
 
-        if (solutionGet.Id == Guid.Empty)
+        if (solutionGet == null || solutionGet?.Id == Guid.Empty)
           return StatusCode(404);
 
         _datastore.Delete(solution);

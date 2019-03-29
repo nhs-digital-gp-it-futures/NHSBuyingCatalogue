@@ -94,7 +94,7 @@ namespace Gif.Service.Controllers
       {
         var capabilityImplemented = _datastore.ById(id);
 
-        if (capabilityImplemented.Id == Guid.Empty)
+        if (capabilityImplemented == null || capabilityImplemented?.Id == Guid.Empty)
           return StatusCode(404);
 
         return new ObjectResult(capabilityImplemented);
@@ -125,7 +125,7 @@ namespace Gif.Service.Controllers
       {
         evidenceEntity = _datastore.Create(evidenceEntity);
 
-        if (evidenceEntity.Id == Guid.Empty)
+        if (evidenceEntity == null || evidenceEntity?.Id == Guid.Empty)
           return StatusCode(404);
 
         return new ObjectResult(evidenceEntity);

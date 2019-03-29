@@ -96,7 +96,7 @@ namespace Gif.Service.Controllers
       {
         var techContGet = _datastore.ById(techCont.Id.ToString());
 
-        if (techContGet.Id == Guid.Empty)
+        if (techContGet == null || techContGet?.Id == Guid.Empty)
           return StatusCode(404);
 
         _datastore.Delete(techCont);

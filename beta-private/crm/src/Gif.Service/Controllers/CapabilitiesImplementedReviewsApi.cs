@@ -58,7 +58,7 @@ namespace Gif.Service.Controllers
       {
         var review = _datastore.ById(id);
 
-        if (review.Id == Guid.Empty)
+        if (review == null || review?.Id == Guid.Empty)
           return StatusCode(404);
 
         return new ObjectResult(review);

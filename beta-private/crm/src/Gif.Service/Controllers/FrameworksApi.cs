@@ -97,7 +97,7 @@ namespace Gif.Service.Controllers
       {
         var framework = _datastore.ById(id);
 
-        if (framework.Id == Guid.Empty)
+        if (framework == null || framework?.Id == Guid.Empty)
           return StatusCode(404);
 
         return new ObjectResult(framework);

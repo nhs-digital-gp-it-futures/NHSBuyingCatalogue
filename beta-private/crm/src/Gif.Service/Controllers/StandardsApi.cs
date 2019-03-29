@@ -137,7 +137,7 @@ namespace Gif.Service.Controllers
       {
         var standard = _datastore.ById(id);
 
-        if (standard.Id == Guid.Empty)
+        if (standard == null || standard?.Id == Guid.Empty)
           return StatusCode(404);
 
         return new ObjectResult(standard);

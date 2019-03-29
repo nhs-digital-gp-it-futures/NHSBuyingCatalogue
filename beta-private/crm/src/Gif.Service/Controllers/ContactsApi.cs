@@ -58,7 +58,7 @@ namespace Gif.Service.Controllers
       {
         var contact = _datastore.ByEmail(email);
 
-        if (contact?.Id == Guid.Empty || contact?.Id == null)
+        if (contact == null || contact?.Id == Guid.Empty || contact?.Id == null)
           return StatusCode(404);
 
         return new ObjectResult(contact);
