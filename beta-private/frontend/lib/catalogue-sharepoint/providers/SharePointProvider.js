@@ -138,15 +138,27 @@ class SharePointProvider {
   }
 
   async stdValidMimeType (fileName) {
-    const res = this.detectMimeType(fileName)
-    console.log('STANDARDS:', res)
-    return true
+    const res = [await this.detectMimeType(fileName)]
+    const whiteList = new Set([
+      'application/vnd.oasis.opendocument.spreadsheet',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'application/vnd.ms-excel',
+      'application/zip'
+    ]) // await this.stdBlobStoreApi.apiStandardsApplicableEvidenceBlobStoreGetAllowedFileTypes()
+
+    return res.every((type) => whiteList.has(type))
   }
 
   async capValidMimeType (fileName) {
-    const res = this.detectMimeType(fileName)
-    console.log('CAPABILITY:', res)
-    return true
+    const res = [await this.detectMimeType(fileName)]
+    const whiteList = new Set([
+      'image/jpeg',
+      'video/mpeg',
+      'video/ogg',
+      'application/zip'
+    ]) // await this.stdBlobStoreApi.apiStandardsApplicableEvidenceBlobStoreGetAllowedFileTypes()
+
+    return res.every((type) => whiteList.has(type))
   }
 
   detectMimeType (fileName) {
@@ -156,7 +168,7 @@ class SharePointProvider {
     return new Promise((resolve, reject) => {
       magic.detectFile(storagePath, (err, result) => {
         if (err) return reject(err)
-        console.log(result)
+        console.log('\n\n\n', result, '\n\n\n')
         return resolve(result)
       })
     })
@@ -170,7 +182,7 @@ class SharePointProvider {
     await this.saveBuffer(buffer, fileUUID)
 
     try {
-      const isValidMimeType = mimeTypeChecker(fileUUID)
+      const isValidMimeType = await mimeTypeChecker(fileUUID)
 
       if (!isValidMimeType) {
         return { err: 'Invalid File Type', isVirus: false, badMime: true }

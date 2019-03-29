@@ -79,6 +79,10 @@
           "Failed": ": The file uploaded for this Capability has failed our antivirus scan",
           "FailedAction": "Please ensure that you have up to date Antivirus installed and do a full scan on your machine."
         },
+        "Mime Check": {
+          "Failed": ": Invalid File type uploaded.",
+          "FailedAction": "Please ensure that you have up to date Antivirus installed and do a full scan on your machine."
+        },
         "Upload": {
           "Failed": "The $t(Solution) evidence Files were not successfully uploaded.",
           "FailedAction": "Please try and submit the $t(Solution) evidence files again."

@@ -238,12 +238,20 @@ async function solutionCapabilityPagePost (req, res) {
     if (uploadResponse.err) {
       systemError = uploadResponse.err
       const guiltyClaimName = claimNameMap[claimID]
-      context.errors.items.push({
+      const err = {
         error: uploadResponse.err,
         name: guiltyClaimName,
         claim: claimID,
-        msg: `${guiltyClaimName} ${'$t(Validation.Capability.Evidence.Virus Scan.Failed)'}`
-      })
+        msg: ''
+      }
+      if (uploadResponse.isVirus) {
+        err.msg = `${guiltyClaimName} ${'$t(Validation.Capability.Evidence.Virus Scan.Failed)'}`
+      } else if (uploadResponse.badMime) {
+        err.msg = `${guiltyClaimName} ${'$t(Validation.Capability.Evidence.Mime Check.Failed)'}`
+      } else {
+        err.msg = `${guiltyClaimName}`
+      }
+      context.errors.items.push(err)
     }
 
     const currentEvidence = _.filter(req.solution.evidence, { claimId: claimID })
