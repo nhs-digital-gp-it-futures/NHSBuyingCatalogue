@@ -207,7 +207,8 @@ document.addEventListener('DOMContentLoaded', function () {
     if (
       !clickedAnchor ||
       !DIRTY_PAGE ||
-      clickedAnchor.getAttribute('href').startsWith('#')
+      clickedAnchor.getAttribute('href').startsWith('#') ||
+      clickedAnchor.getAttribute('target') === '_blank'
     ) return
 
     const continueButton = $('#unsaved-changes a.button')
