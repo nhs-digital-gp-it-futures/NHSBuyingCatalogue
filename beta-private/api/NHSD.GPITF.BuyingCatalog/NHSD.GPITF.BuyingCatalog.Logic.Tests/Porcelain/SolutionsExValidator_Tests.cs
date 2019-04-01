@@ -10,7 +10,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 
-namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
+namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
 {
   [TestFixture]
   public sealed class SolutionsExValidator_Tests
