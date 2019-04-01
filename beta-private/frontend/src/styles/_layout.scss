@@ -357,3 +357,16 @@ main > .breadcrumb {
     display: block;
   }
 }
+
+#error-page {
+  padding: 2em 2em 10em 2em;
+  background: $color-nhs-light-grey;
+  margin:0;
+  h1 {
+    color: $color-nhs-black;
+  }
+  p {
+    color: $color-nhs-black;
+    font-size: x-large;
+  }
+}

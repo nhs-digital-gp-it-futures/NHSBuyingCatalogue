@@ -528,10 +528,12 @@
     }
   },
   "Error": {
-    "Greeting": "Unfortunately an Error has occured within our system.",
-    "Information": "We are currently monitoring any issues that may arise during the lifetime of the system",
-    "Help": "If you want to provide extra information about what has gone wrong, then please send the GP IT Futures Team an email at&#58; <a target='_blank' href='mailto&#58;$(Error.Email)' target='_blank'>$t(Error.Email)</a>",
-    "Email": "GPITFutures@nhs.net"
+    "Title":"System error occurred",
+    "Text": [
+      "We’re very sorry that something has gone wrong.",
+      "We are currently monitoring any issues that may arise, and aiming to fix them as soon we can.",
+      "If you want to provide extra information about what has gone wrong, please contact our service desk at <a href='mailto&#58;exeter.helpdesk@nhs.net' target='_blank'>exeter.helpdesk@nhs.net</a>, or call at <a href='tel&#58;03003034034' target='_blank'>0300 303 4034</a>."
+    ]
   },
   "Support": {
     "Title": "Suppliers' Guide",
