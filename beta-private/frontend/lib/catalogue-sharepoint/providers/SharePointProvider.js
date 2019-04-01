@@ -36,6 +36,34 @@ const MIME_WHITELIST = [
   'text/xml'
 ]
 
+const MIME_EXTENSIONS = [
+  '.docx',
+  '.doc',
+  '.odt',
+  '.xlsx',
+  '.xls',
+  '.xlt',
+  '.csv',
+  '.ods',
+  '.pptx',
+  '.ppsx',
+  '.pptx',
+  '.odp',
+  '.pdf',
+  '.msg',
+  '.txt',
+  '.rtf',
+  '.jpg',
+  '.bmp',
+  '.png',
+  '.gif',
+  '.mp4',
+  '.wmv',
+  '.avi',
+  '.json',
+  '.xml'
+]
+
 const { antivirusProvider } = require('catalogue-antivirus')
 
 class SharePointProvider {
@@ -50,6 +78,22 @@ class SharePointProvider {
     this.TIMEOUT = 1200000
     this.capBlobStoreApi.timeout = this.TIMEOUT
     this.stdBlobStoreApi.timeout = this.TIMEOUT
+  }
+
+  getMimeArray () {
+    return MIME_WHITELIST
+  }
+
+  getMimeCommaString () {
+    return MIME_WHITELIST.join(', ')
+  }
+
+  getMimeExtensions () {
+    return MIME_EXTENSIONS
+  }
+
+  getMimeExtensionsCommaString () {
+    return MIME_EXTENSIONS.join(', ')
   }
 
   async getCapEvidence (claimID, subFolder, pageIndex = 1) {

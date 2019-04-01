@@ -154,7 +154,8 @@ function formatTimestampForDisplay (ts) {
 async function evidencePageContext (req, next) {
   const context = {
     ...commonComplianceContext(req),
-    ...await dataProvider.capabilityMappings()
+    ...await dataProvider.capabilityMappings(),
+    mimes: [sharePointProvider.getMimeCommaString(), sharePointProvider.getMimeExtensionsCommaString()].join(', ')
   }
 
   context.claim = _.find(context.solution.standards, { id: req.params.claim_id })

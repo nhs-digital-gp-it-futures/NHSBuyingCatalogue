@@ -69,7 +69,8 @@ async function capabilityPageContext (req) {
     breadcrumbs: [
       { label: 'Onboarding.Title', url: `../../solutions/${req.solution.id}` },
       { label: 'CapAssPages.Breadcrumb' }
-    ]
+    ],
+    mimes: [sharePointProvider.getMimeCommaString(), sharePointProvider.getMimeExtensionsCommaString()].join(', ')
   }
 
   context.activeForm.id = 'capability-assessment-form'
