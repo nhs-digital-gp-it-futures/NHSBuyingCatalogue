@@ -76,7 +76,7 @@
           "FailedAction": "Please try and update the evidence again."
         },
         "Virus Scan": {
-          "Failed": ": Uploaded file failed our safety checks and has been rejected.",
+          "Failed": ": The file uploaded for this Capability has failed our antivirus scan",
           "FailedAction": "Please ensure that you have up to date Antivirus installed and do a full scan on your machine."
         },
         "Upload": {
@@ -101,7 +101,7 @@
             "FailedAction": ""
           },
           "Virus Scan": {
-            "Failed": "Uploaded file failed our safety checks and has been rejected.",
+            "Failed": "The file uploaded for this Standard has failed our antivirus scan",
           "FailedAction": "Please ensure that you have up to date Antivirus installed and do a full scan on your machine."
           }
         },
