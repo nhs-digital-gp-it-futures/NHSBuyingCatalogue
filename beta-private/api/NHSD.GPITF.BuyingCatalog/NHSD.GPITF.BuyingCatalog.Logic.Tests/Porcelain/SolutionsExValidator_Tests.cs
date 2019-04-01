@@ -9,6 +9,7 @@ using NHSD.GPITF.BuyingCatalog.Tests;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
 {
@@ -42,7 +43,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
       var soln = Creator.GetSolutionEx();
       soln.ClaimedCapability = new List<CapabilitiesImplemented>
       (
-        new []
+        new[]
         {
           Creator.GetCapabilitiesImplemented(solnId: soln.Solution.Id),
           Creator.GetCapabilitiesImplemented(solnId: soln.Solution.Id),
@@ -63,7 +64,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
       var soln = Creator.GetSolutionEx();
       soln.ClaimedCapability = new List<CapabilitiesImplemented>
       (
-        new []
+        new[]
         {
           Creator.GetCapabilitiesImplemented(),
           Creator.GetCapabilitiesImplemented(),
@@ -87,7 +88,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
       var soln = Creator.GetSolutionEx();
       soln.ClaimedStandard = new List<StandardsApplicable>
       (
-        new []
+        new[]
         {
           Creator.GetStandardsApplicable(solnId: soln.Solution.Id),
           Creator.GetStandardsApplicable(solnId: soln.Solution.Id),
@@ -108,7 +109,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
       var soln = Creator.GetSolutionEx();
       soln.ClaimedStandard = new List<StandardsApplicable>
       (
-        new []
+        new[]
         {
           Creator.GetStandardsApplicable(),
           Creator.GetStandardsApplicable(),
@@ -132,7 +133,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
       var soln = Creator.GetSolutionEx();
       var claim = Creator.GetCapabilitiesImplemented();
       var claimEv = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
-      soln.ClaimedCapability = new List<CapabilitiesImplemented>(new [] { claim });
+      soln.ClaimedCapability = new List<CapabilitiesImplemented>(new[] { claim });
       soln.ClaimedCapabilityEvidence = new List<CapabilitiesImplementedEvidence>(new[] { claimEv });
 
       validator.ClaimedCapabilityEvidenceMustBelongToClaim();
@@ -148,7 +149,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
       var soln = Creator.GetSolutionEx();
       var claim = Creator.GetCapabilitiesImplemented();
       var claimEv = Creator.GetCapabilitiesImplementedEvidence();
-      soln.ClaimedCapability = new List<CapabilitiesImplemented>(new [] { claim });
+      soln.ClaimedCapability = new List<CapabilitiesImplemented>(new[] { claim });
       soln.ClaimedCapabilityEvidence = new List<CapabilitiesImplementedEvidence>(new[] { claimEv });
 
       validator.ClaimedCapabilityEvidenceMustBelongToClaim();
@@ -167,7 +168,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
       var soln = Creator.GetSolutionEx();
       var claim = Creator.GetStandardsApplicable();
       var claimEv = Creator.GetStandardsApplicableEvidence(claimId: claim.Id);
-      soln.ClaimedStandard = new List<StandardsApplicable>(new [] { claim });
+      soln.ClaimedStandard = new List<StandardsApplicable>(new[] { claim });
       soln.ClaimedStandardEvidence = new List<StandardsApplicableEvidence>(new[] { claimEv });
 
       validator.ClaimedStandardEvidenceMustBelongToClaim();
@@ -183,7 +184,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
       var soln = Creator.GetSolutionEx();
       var claim = Creator.GetStandardsApplicable();
       var claimEv = Creator.GetStandardsApplicableEvidence();
-      soln.ClaimedStandard = new List<StandardsApplicable>(new [] { claim });
+      soln.ClaimedStandard = new List<StandardsApplicable>(new[] { claim });
       soln.ClaimedStandardEvidence = new List<StandardsApplicableEvidence>(new[] { claimEv });
 
       validator.ClaimedStandardEvidenceMustBelongToClaim();
@@ -426,6 +427,376 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
         .Contain(x => x.ErrorMessage == "ClaimedStandardReview previous version must belong to solution")
         .And
         .HaveCount(1);
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedCapability_SameCapability_Succeeds(
+      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
+    {
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldQual1 = Creator.GetCapabilitiesImplemented();
+      var oldQual2 = Creator.GetCapabilitiesImplemented();
+      oldSolnEx.ClaimedCapability = new List<CapabilitiesImplemented>(new[] { oldQual1, oldQual2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      newSolnEx.ClaimedCapability = new List<CapabilitiesImplemented>(new[] { oldQual1, oldQual2 });
+
+
+      var res = validator.MustBePendingToChangeClaimedCapability(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeTrue();
+    }
+
+
+    public static IEnumerable<SolutionStatus> SolutionStatusesPendingForClaims()
+    {
+      yield return SolutionStatus.Draft;
+    }
+
+    public static IEnumerable<SolutionStatus> SolutionStatusesNotPendingForClaims()
+    {
+      return Creator.SolutionStatuses().Except(SolutionStatusesPendingForClaims());
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedCapability_NotPending_DifferentCapability_Fails(
+      [ValueSource(nameof(SolutionStatusesNotPendingForClaims))]SolutionStatus status)
+    {
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldQual1 = Creator.GetCapabilitiesImplemented();
+      var oldQual2 = Creator.GetCapabilitiesImplemented();
+      oldSolnEx.ClaimedCapability = new List<CapabilitiesImplemented>(new[] { oldQual1, oldQual2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      var newQual1 = Creator.GetCapabilitiesImplemented();
+      var newQual2 = Creator.GetCapabilitiesImplemented();
+      newSolnEx.ClaimedCapability = new List<CapabilitiesImplemented>(new[] { newQual1, newQual2 });
+
+
+      var res = validator.MustBePendingToChangeClaimedCapability(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeFalse();
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedCapability_Pending_DifferentCapability_Succeeds(
+      [ValueSource(nameof(SolutionStatusesPendingForClaims))]SolutionStatus status)
+    {
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldQual1 = Creator.GetCapabilitiesImplemented();
+      var oldQual2 = Creator.GetCapabilitiesImplemented();
+      oldSolnEx.ClaimedCapability = new List<CapabilitiesImplemented>(new[] { oldQual1, oldQual2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      var newQual1 = Creator.GetCapabilitiesImplemented();
+      var newQual2 = Creator.GetCapabilitiesImplemented();
+      newSolnEx.ClaimedCapability = new List<CapabilitiesImplemented>(new[] { newQual1, newQual2 });
+
+
+      var res = validator.MustBePendingToChangeClaimedCapability(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeTrue();
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedStandard_NotPending_DifferentStandard_Fails(
+      [ValueSource(nameof(SolutionStatusesNotPendingForClaims))]SolutionStatus status)
+    {
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldQual1 = Creator.GetStandardsApplicable();
+      var oldQual2 = Creator.GetStandardsApplicable();
+      oldSolnEx.ClaimedStandard = new List<StandardsApplicable>(new[] { oldQual1, oldQual2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      var newQual1 = Creator.GetStandardsApplicable();
+      var newQual2 = Creator.GetStandardsApplicable();
+      newSolnEx.ClaimedStandard = new List<StandardsApplicable>(new[] { newQual1, newQual2 });
+
+
+      var res = validator.MustBePendingToChangeClaimedStandard(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeFalse();
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedStandard_Pending_DifferentStandard_Succeeds(
+      [ValueSource(nameof(SolutionStatusesPendingForClaims))]SolutionStatus status)
+    {
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldQual1 = Creator.GetStandardsApplicable();
+      var oldQual2 = Creator.GetStandardsApplicable();
+      oldSolnEx.ClaimedStandard = new List<StandardsApplicable>(new[] { oldQual1, oldQual2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      var newQual1 = Creator.GetStandardsApplicable();
+      var newQual2 = Creator.GetStandardsApplicable();
+      newSolnEx.ClaimedStandard = new List<StandardsApplicable>(new[] { newQual1, newQual2 });
+
+
+      var res = validator.MustBePendingToChangeClaimedStandard(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeTrue();
+    }
+
+
+    public static IEnumerable<SolutionStatus> SolutionStatusesPendingForQuality()
+    {
+      yield return SolutionStatus.CapabilitiesAssessment;
+      yield return SolutionStatus.StandardsCompliance;
+    }
+
+    public static IEnumerable<SolutionStatus> SolutionStatusesNotPendingForQuality()
+    {
+      return Creator.SolutionStatuses().Except(SolutionStatusesPendingForQuality());
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedCapabilityEvidence_SameEvidence_Succeeds(
+      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
+    {
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldEv1 = Creator.GetCapabilitiesImplementedEvidence();
+      var oldEv2 = Creator.GetCapabilitiesImplementedEvidence();
+      oldSolnEx.ClaimedCapabilityEvidence = new List<CapabilitiesImplementedEvidence>(new[] { oldEv1, oldEv2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      newSolnEx.ClaimedCapabilityEvidence = new List<CapabilitiesImplementedEvidence>(new[] { oldEv1, oldEv2 });
+
+
+      var res = validator.MustBePendingToChangeClaimedCapabilityEvidence(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeTrue();
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedCapabilityEvidence_Pending_AddEvidence_Succeeds(
+      [ValueSource(nameof(SolutionStatusesPendingForQuality))]SolutionStatus status)
+    {
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldEv1 = Creator.GetCapabilitiesImplementedEvidence();
+      var oldEv2 = Creator.GetCapabilitiesImplementedEvidence();
+      oldSolnEx.ClaimedCapabilityEvidence = new List<CapabilitiesImplementedEvidence>(new[] { oldEv1, oldEv2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      var newEv3 = Creator.GetCapabilitiesImplementedEvidence();
+      newSolnEx.ClaimedCapabilityEvidence = new List<CapabilitiesImplementedEvidence>(new[] { oldEv1, oldEv2, newEv3 });
+
+
+      var res = validator.MustBePendingToChangeClaimedCapabilityEvidence(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeTrue();
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedCapabilityEvidence_NotPending_AddEvidence_Fails(
+      [ValueSource(nameof(SolutionStatusesNotPendingForQuality))]SolutionStatus status)
+    {
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldEv1 = Creator.GetCapabilitiesImplementedEvidence();
+      var oldEv2 = Creator.GetCapabilitiesImplementedEvidence();
+      oldSolnEx.ClaimedCapabilityEvidence = new List<CapabilitiesImplementedEvidence>(new[] { oldEv1, oldEv2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      var newEv3 = Creator.GetCapabilitiesImplementedEvidence();
+      newSolnEx.ClaimedCapabilityEvidence = new List<CapabilitiesImplementedEvidence>(new[] { oldEv1, oldEv2, newEv3 });
+
+
+      var res = validator.MustBePendingToChangeClaimedCapabilityEvidence(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeFalse();
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedCapabilityEvidence_DifferentEvidence_Fails(
+      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
+    {
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldEv1 = Creator.GetCapabilitiesImplementedEvidence();
+      var oldEv2 = Creator.GetCapabilitiesImplementedEvidence();
+      oldSolnEx.ClaimedCapabilityEvidence = new List<CapabilitiesImplementedEvidence>(new[] { oldEv1, oldEv2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      var newEv1 = Creator.GetCapabilitiesImplementedEvidence();
+      var newEv2 = Creator.GetCapabilitiesImplementedEvidence();
+      newSolnEx.ClaimedCapabilityEvidence = new List<CapabilitiesImplementedEvidence>(new[] { newEv1, newEv2 });
+
+
+      var res = validator.MustBePendingToChangeClaimedCapabilityEvidence(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeFalse();
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedCapabilityEvidence_RemoveEvidence_Fails(
+      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
+    {
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldEv1 = Creator.GetCapabilitiesImplementedEvidence();
+      var oldEv2 = Creator.GetCapabilitiesImplementedEvidence();
+      oldSolnEx.ClaimedCapabilityEvidence = new List<CapabilitiesImplementedEvidence>(new[] { oldEv1, oldEv2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      newSolnEx.ClaimedCapabilityEvidence = new List<CapabilitiesImplementedEvidence>(new[] { oldEv1 });
+
+
+      var res = validator.MustBePendingToChangeClaimedCapabilityEvidence(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeFalse();
+    }
+
+
+    [Test]
+    public void MustBePendingToChangeClaimedStandardEvidence_SameEvidence_Succeeds(
+      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
+    {
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldEv1 = Creator.GetStandardsApplicableEvidence();
+      var oldEv2 = Creator.GetStandardsApplicableEvidence();
+      oldSolnEx.ClaimedStandardEvidence = new List<StandardsApplicableEvidence>(new[] { oldEv1, oldEv2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      newSolnEx.ClaimedStandardEvidence = new List<StandardsApplicableEvidence>(new[] { oldEv1, oldEv2 });
+
+
+      var res = validator.MustBePendingToChangeClaimedStandardEvidence(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeTrue();
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedStandardEvidence_Pending_AddEvidence_Succeeds(
+      [ValueSource(nameof(SolutionStatusesPendingForQuality))]SolutionStatus status)
+    {
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldEv1 = Creator.GetStandardsApplicableEvidence();
+      var oldEv2 = Creator.GetStandardsApplicableEvidence();
+      oldSolnEx.ClaimedStandardEvidence = new List<StandardsApplicableEvidence>(new[] { oldEv1, oldEv2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      var newEv3 = Creator.GetStandardsApplicableEvidence();
+      newSolnEx.ClaimedStandardEvidence = new List<StandardsApplicableEvidence>(new[] { oldEv1, oldEv2, newEv3 });
+
+
+      var res = validator.MustBePendingToChangeClaimedStandardEvidence(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeTrue();
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedStandardEvidence_NotPending_AddEvidence_Fails(
+      [ValueSource(nameof(SolutionStatusesNotPendingForQuality))]SolutionStatus status)
+    {
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldEv1 = Creator.GetStandardsApplicableEvidence();
+      var oldEv2 = Creator.GetStandardsApplicableEvidence();
+      oldSolnEx.ClaimedStandardEvidence = new List<StandardsApplicableEvidence>(new[] { oldEv1, oldEv2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      var newEv3 = Creator.GetStandardsApplicableEvidence();
+      newSolnEx.ClaimedStandardEvidence = new List<StandardsApplicableEvidence>(new[] { oldEv1, oldEv2, newEv3 });
+
+
+      var res = validator.MustBePendingToChangeClaimedStandardEvidence(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeFalse();
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedStandardEvidence_DifferentEvidence_Fails(
+      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
+    {
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldEv1 = Creator.GetStandardsApplicableEvidence();
+      var oldEv2 = Creator.GetStandardsApplicableEvidence();
+      oldSolnEx.ClaimedStandardEvidence = new List<StandardsApplicableEvidence>(new[] { oldEv1, oldEv2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      var newEv1 = Creator.GetStandardsApplicableEvidence();
+      var newEv2 = Creator.GetStandardsApplicableEvidence();
+      newSolnEx.ClaimedStandardEvidence = new List<StandardsApplicableEvidence>(new[] { newEv1, newEv2 });
+
+
+      var res = validator.MustBePendingToChangeClaimedStandardEvidence(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeFalse();
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedStandardEvidence_RemoveEvidence_Fails(
+      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
+    {
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldEv1 = Creator.GetStandardsApplicableEvidence();
+      var oldEv2 = Creator.GetStandardsApplicableEvidence();
+      oldSolnEx.ClaimedStandardEvidence = new List<StandardsApplicableEvidence>(new[] { oldEv1, oldEv2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      newSolnEx.ClaimedStandardEvidence = new List<StandardsApplicableEvidence>(new[] { oldEv1 });
+
+
+      var res = validator.MustBePendingToChangeClaimedStandardEvidence(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeFalse();
     }
   }
 }

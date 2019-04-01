@@ -197,7 +197,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
 
           return
             MustBePendingToChangeClaimedCapability(oldSolnEx, newSolnEx) &&
-            MustBePendingToChangeClaimedStandard(oldSolnEx, newSolnEx);
+            MustBePendingToChangeClaimedStandard(oldSolnEx, newSolnEx) &&
+            MustBePendingToChangeClaimedCapabilityEvidence(oldSolnEx, newSolnEx) &&
+            MustBePendingToChangeClaimedStandardEvidence(oldSolnEx, newSolnEx);
         });
     }
 
@@ -215,7 +217,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       }
 
       if ((oldNotNew.Any() || newNotOld.Any()) &&
-        newSolnEx.Solution.Status != SolutionStatus.Draft)
+        IsPendingForClaims(newSolnEx.Solution.Status))
       {
         // Can only add/remove ClaimedCapability in Draft
         return false;
@@ -238,7 +240,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       }
 
       if ((oldNotNew.Any() || newNotOld.Any()) &&
-        newSolnEx.Solution.Status != SolutionStatus.Draft)
+        IsPendingForClaims(newSolnEx.Solution.Status))
       {
         // Can only add/remove ClaimedStandard in Draft
         return false;
@@ -247,15 +249,60 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       return true;
     }
 
+    // cannot change/remove ClaimedCapabilityEvidence but can add while pending
+    public bool MustBePendingToChangeClaimedCapabilityEvidence(SolutionEx oldSolnEx, SolutionEx newSolnEx)
+    {
+      var newNotOld = newSolnEx.ClaimedCapabilityEvidence.Except(oldSolnEx.ClaimedCapabilityEvidence).ToList();
+      var oldNotNew = oldSolnEx.ClaimedCapabilityEvidence.Except(newSolnEx.ClaimedCapabilityEvidence).ToList();
 
-    // cannot remove Evidence
-    // cannot edit Evidence
-    // can only add Evidence before FinalApproval
+      if (newNotOld.Any() &&
+        newSolnEx.ClaimedCapabilityEvidence.Count() > oldSolnEx.ClaimedCapabilityEvidence.Count() &&
+        IsPendingForEvidence(newSolnEx.Solution.Status))
+      {
+        // added
+        return true;
+      }
+
+      var same = !newNotOld.Any() && !oldNotNew.Any();
+
+      return same;
+    }
+
+    // cannot change/remove ClaimedStandardEvidence but can add while pending
+    public bool MustBePendingToChangeClaimedStandardEvidence(SolutionEx oldSolnEx, SolutionEx newSolnEx)
+    {
+      var newNotOld = newSolnEx.ClaimedStandardEvidence.Except(oldSolnEx.ClaimedStandardEvidence).ToList();
+      var oldNotNew = oldSolnEx.ClaimedStandardEvidence.Except(newSolnEx.ClaimedStandardEvidence).ToList();
+
+      if (newNotOld.Any() &&
+        newSolnEx.ClaimedStandardEvidence.Count() > oldSolnEx.ClaimedStandardEvidence.Count() &&
+        IsPendingForEvidence(newSolnEx.Solution.Status))
+      {
+        // added
+        return true;
+      }
+
+      var same = !newNotOld.Any() && !oldNotNew.Any();
+
+      return same;
+    }
+
+
     // can only add Evidence to end
 
-    // cannot remove Review
-    // cannot edit Review
+    // cannot change/remove Review but can add
     // can only add Review before FinalApproval
     // can only add Review to end
+
+    private bool IsPendingForClaims(SolutionStatus status)
+    {
+      return status != SolutionStatus.Draft;
+    }
+
+    private bool IsPendingForEvidence(SolutionStatus status)
+    {
+      return status == SolutionStatus.CapabilitiesAssessment ||
+        status == SolutionStatus.StandardsCompliance;
+    }
   }
 }
