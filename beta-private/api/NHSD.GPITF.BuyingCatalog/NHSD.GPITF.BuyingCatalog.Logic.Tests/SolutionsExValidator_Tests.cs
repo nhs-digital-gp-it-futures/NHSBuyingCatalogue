@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Moq;
+using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Logic.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Tests;
@@ -16,6 +17,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
   {
     private Mock<IHttpContextAccessor> _context;
     private Mock<ILogger<SolutionsExValidator>> _logger;
+    private Mock<ISolutionsExDatastore> _datastore;
     private Mock<ISolutionsValidator> _solutionsValidator;
 
     [SetUp]
@@ -23,19 +25,20 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       _context = new Mock<IHttpContextAccessor>();
       _logger = new Mock<ILogger<SolutionsExValidator>>();
+      _datastore = new Mock<ISolutionsExDatastore>();
       _solutionsValidator = new Mock<ISolutionsValidator>();
     }
 
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new SolutionsExValidator(_context.Object, _logger.Object, _solutionsValidator.Object));
+      Assert.DoesNotThrow(() => new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object));
     }
 
     [Test]
     public void ClaimedCapabilityMustBelongToSolution_Valid_Succeeds()
     {
-      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _solutionsValidator.Object);
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
       var soln = Creator.GetSolutionEx();
       soln.ClaimedCapability = new List<CapabilitiesImplemented>
       (
@@ -56,7 +59,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void ClaimedCapabilityMustBelongToSolution_Invalid_ReturnsError()
     {
-      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _solutionsValidator.Object);
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
       var soln = Creator.GetSolutionEx();
       soln.ClaimedCapability = new List<CapabilitiesImplemented>
       (
@@ -80,7 +83,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void ClaimedStandardMustBelongToSolution_Valid_Succeeds()
     {
-      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _solutionsValidator.Object);
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
       var soln = Creator.GetSolutionEx();
       soln.ClaimedStandard = new List<StandardsApplicable>
       (
@@ -101,7 +104,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void ClaimedStandardMustBelongToSolution_Invalid_ReturnsError()
     {
-      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _solutionsValidator.Object);
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
       var soln = Creator.GetSolutionEx();
       soln.ClaimedStandard = new List<StandardsApplicable>
       (
@@ -125,7 +128,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void ClaimedCapabilityEvidenceMustBelongToClaim_Valid_Succeeds()
     {
-      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _solutionsValidator.Object);
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
       var soln = Creator.GetSolutionEx();
       var claim = Creator.GetCapabilitiesImplemented();
       var claimEv = Creator.GetCapabilitiesImplementedEvidence(claimId: claim.Id);
@@ -141,7 +144,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void ClaimedCapabilityEvidenceMustBelongToClaim_Invalid_ReturnsError()
     {
-      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _solutionsValidator.Object);
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
       var soln = Creator.GetSolutionEx();
       var claim = Creator.GetCapabilitiesImplemented();
       var claimEv = Creator.GetCapabilitiesImplementedEvidence();
@@ -160,7 +163,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void ClaimedStandardEvidenceMustBelongToClaim_Valid_Succeeds()
     {
-      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _solutionsValidator.Object);
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
       var soln = Creator.GetSolutionEx();
       var claim = Creator.GetStandardsApplicable();
       var claimEv = Creator.GetStandardsApplicableEvidence(claimId: claim.Id);
@@ -176,7 +179,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void ClaimedStandardEvidenceMustBelongToClaim_Invalid_ReturnsError()
     {
-      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _solutionsValidator.Object);
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
       var soln = Creator.GetSolutionEx();
       var claim = Creator.GetStandardsApplicable();
       var claimEv = Creator.GetStandardsApplicableEvidence();
@@ -195,7 +198,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void ClaimedCapabilityReviewMustBelongToEvidence_Valid_Succeeds()
     {
-      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _solutionsValidator.Object);
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
       var soln = Creator.GetSolutionEx();
       var claimEv = Creator.GetCapabilitiesImplementedEvidence();
       var review = Creator.GetCapabilitiesImplementedReviews(evidenceId: claimEv.Id);
@@ -211,7 +214,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void ClaimedCapabilityReviewMustBelongToEvidence_Invalid_ReturnsError()
     {
-      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _solutionsValidator.Object);
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
       var soln = Creator.GetSolutionEx();
       var claimEv = Creator.GetCapabilitiesImplementedEvidence();
       var review = Creator.GetCapabilitiesImplementedReviews();
@@ -230,7 +233,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void ClaimedStandardReviewMustBelongToEvidence_Valid_Succeeds()
     {
-      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _solutionsValidator.Object);
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
       var soln = Creator.GetSolutionEx();
       var claimEv = Creator.GetStandardsApplicableEvidence();
       var review = Creator.GetStandardsApplicableReviews(evidenceId: claimEv.Id);
@@ -246,7 +249,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void ClaimedStandardReviewMustBelongToEvidence_Invalid_ReturnsError()
     {
-      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _solutionsValidator.Object);
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
       var soln = Creator.GetSolutionEx();
       var claimEv = Creator.GetStandardsApplicableEvidence();
       var review = Creator.GetStandardsApplicableReviews();
@@ -265,7 +268,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void TechnicalContactMustBelongToSolution_Valid_Succeeds()
     {
-      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _solutionsValidator.Object);
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
       var soln = Creator.GetSolutionEx();
       var techCont = Creator.GetTechnicalContact(solutionId: soln.Solution.Id);
       soln.TechnicalContact = new List<TechnicalContacts>(new[] { techCont });
@@ -279,7 +282,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void TechnicalContactMustBelongToSolution_Invalid_ReturnsError()
     {
-      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _solutionsValidator.Object);
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
       var soln = Creator.GetSolutionEx();
       var techCont = Creator.GetTechnicalContact();
       soln.TechnicalContact = new List<TechnicalContacts>(new[] { techCont });
@@ -296,7 +299,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void ClaimedCapabilityEvidencePreviousVersionMustBelongToSolution_Valid_Succeeds()
     {
-      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _solutionsValidator.Object);
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
       var soln = Creator.GetSolutionEx();
       var claimEv1 = Creator.GetCapabilitiesImplementedEvidence();
       var claimEv2 = Creator.GetCapabilitiesImplementedEvidence(prevId: claimEv1.Id);
@@ -311,7 +314,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void ClaimedCapabilityEvidencePreviousVersionMustBelongToSolution_Invalid_ReturnsError()
     {
-      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _solutionsValidator.Object);
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
       var soln = Creator.GetSolutionEx();
       var claimEv1 = Creator.GetCapabilitiesImplementedEvidence();
       var claimEv2 = Creator.GetCapabilitiesImplementedEvidence(prevId: Guid.NewGuid().ToString());
@@ -329,7 +332,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void ClaimedStandardEvidencePreviousVersionMustBelongToSolution_Valid_Succeeds()
     {
-      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _solutionsValidator.Object);
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
       var soln = Creator.GetSolutionEx();
       var claimEv1 = Creator.GetStandardsApplicableEvidence();
       var claimEv2 = Creator.GetStandardsApplicableEvidence(prevId: claimEv1.Id);
@@ -344,7 +347,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void ClaimedStandardEvidencePreviousVersionMustBelongToSolution_Invalid_ReturnsError()
     {
-      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _solutionsValidator.Object);
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
       var soln = Creator.GetSolutionEx();
       var claimEv1 = Creator.GetStandardsApplicableEvidence();
       var claimEv2 = Creator.GetStandardsApplicableEvidence(prevId: Guid.NewGuid().ToString());
@@ -362,7 +365,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void ClaimedCapabilityReviewPreviousVersionMustBelongToSolution_Valid_Succeeds()
     {
-      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _solutionsValidator.Object);
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
       var soln = Creator.GetSolutionEx();
       var review1 = Creator.GetCapabilitiesImplementedReviews();
       var review2 = Creator.GetCapabilitiesImplementedReviews(prevId: review1.Id);
@@ -377,7 +380,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void ClaimedCapabilityReviewPreviousVersionMustBelongToSolution_Invalid_ReturnsError()
     {
-      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _solutionsValidator.Object);
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
       var soln = Creator.GetSolutionEx();
       var review1 = Creator.GetCapabilitiesImplementedReviews();
       var review2 = Creator.GetCapabilitiesImplementedReviews(prevId: Guid.NewGuid().ToString());
@@ -395,7 +398,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void ClaimedStandardReviewPreviousVersionMustBelongToSolution_Valid_Succeeds()
     {
-      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _solutionsValidator.Object);
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
       var soln = Creator.GetSolutionEx();
       var review1 = Creator.GetStandardsApplicableReviews();
       var review2 = Creator.GetStandardsApplicableReviews(prevId: review1.Id);
@@ -410,7 +413,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void ClaimedStandardReviewPreviousVersionMustBelongToSolution_Invalid_ReturnsError()
     {
-      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _solutionsValidator.Object);
+      var validator = new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);
       var soln = Creator.GetSolutionEx();
       var review1 = Creator.GetStandardsApplicableReviews();
       var review2 = Creator.GetStandardsApplicableReviews(prevId: Guid.NewGuid().ToString());
