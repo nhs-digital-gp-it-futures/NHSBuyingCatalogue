@@ -76,7 +76,8 @@
         {{/if}}
       </div>
     </header>
-    <main id="content" class="{{#if onHomePage}}no-padding{{/if}}">
+    <main id="content"
+      class="{{#if onHomePage}}no-padding{{/if}} {{#if error.isErrorPage}}no-padding{{/if}} {{#if error.stack}}no-padding{{/if}}">
       {{> breadcrumbs}}
       <div id="unsaved-changes"
             role="alertdialog"

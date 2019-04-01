@@ -120,8 +120,12 @@ authentication(app).then(() => {
   app.use('*', (req, res) => {
     const context = {
       error: {
-        message: 'Error 404: Page Not Found',
-        stack: `A request was made for a resource that could not be found:${req.originalUrl}\n\nPlease check you entered the correct URL.`
+        isErrorPage: true,
+        title: 'Page Not Found',
+        text: [
+          'If you typed the web address, check it is correct. If you pasted the web address, check you copied the entire address.',
+          'If the address is correct and you want to report the error, or if you need support, please contact our service desk at <a href="mailto&#58;exeter.helpdesk@nhs.net" target="_blank">exeter.helpdesk@nhs.net</a>, or call at <a href="tel&#58;03003034034" target="_blank">0300 303 4034</a>.'
+        ]
       }
     }
     res.render('error', context)
