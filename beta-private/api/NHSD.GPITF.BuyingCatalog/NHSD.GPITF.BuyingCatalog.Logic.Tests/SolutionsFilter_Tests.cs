@@ -28,7 +28,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Filter_Admin_Returns_All([ValueSource(nameof(Statuses))]SolutionStatus status)
+    public void Filter_Admin_Returns_All(
+      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
     {
       var ctx = Creator.GetContext(role: Roles.Admin);
       _context.Setup(c => c.HttpContext).Returns(ctx);
@@ -46,7 +47,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Filter_Buyer_Returns_NonFailedDraft([ValueSource(nameof(Statuses))]SolutionStatus status)
+    public void Filter_Buyer_Returns_NonFailedDraft(
+      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
     {
       var ctx = Creator.GetContext(role: Roles.Buyer);
       _context.Setup(c => c.HttpContext).Returns(ctx);
@@ -67,7 +69,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Filter_None_Returns_NonFailedDraft([ValueSource(nameof(Statuses))]SolutionStatus status)
+    public void Filter_None_Returns_NonFailedDraft(
+      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
     {
       var ctx = Creator.GetContext(role: "None");
       _context.Setup(c => c.HttpContext).Returns(ctx);
@@ -88,7 +91,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Filter_Supplier_Returns_Own([ValueSource(nameof(Statuses))]SolutionStatus status)
+    public void Filter_Supplier_Returns_Own(
+      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
     {
       var orgId = Guid.NewGuid().ToString();
       var ctx = Creator.GetContext(orgId: orgId, role: Roles.Supplier);
@@ -102,11 +106,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var res = filter.Filter(solns);
 
       res.Should().BeEquivalentTo(soln1);
-    }
-
-    public static IEnumerable<SolutionStatus> Statuses()
-    {
-      return (SolutionStatus[])Enum.GetValues(typeof(SolutionStatus));
     }
   }
 }

@@ -408,5 +408,10 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       Verifier.Verify(retval);
       return retval;
     }
+
+    public static IEnumerable<SolutionStatus> SolutionStatuses()
+    {
+      return (SolutionStatus[])Enum.GetValues(typeof(SolutionStatus));
+    }
   }
 }
