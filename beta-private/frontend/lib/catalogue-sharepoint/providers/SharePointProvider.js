@@ -8,6 +8,34 @@ const INTERMEDIATE_STORAGE = process.env.UPLOAD_TEMP_FILE_STORE || os.tmpdir()
 const mmm = require('mmmagic')
 const Magic = mmm.Magic
 
+const MIME_WHITELIST = [
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/msword',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'application/vnd.ms-excel',
+  'application/vnd.ms-excel',
+  'text/csv',
+  'application/vnd.oasis.opendocument.spreadsheet',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  'application/vnd.oasis.opendocument.presentation',
+  'application/pdf',
+  'application/vnd.ms-outlook',
+  'text/plain',
+  'application/rtf',
+  'image/jpeg',
+  'image/bmp',
+  'image/png',
+  'image/gif',
+  'video/mp4',
+  'video/x-ms-wmv',
+  'video/x-msvideo',
+  'application/json',
+  'text/xml'
+]
+
 const { antivirusProvider } = require('catalogue-antivirus')
 
 class SharePointProvider {
@@ -139,24 +167,14 @@ class SharePointProvider {
 
   async stdValidMimeType (fileName) {
     const res = [await this.detectMimeType(fileName)]
-    const whiteList = new Set([
-      'application/vnd.oasis.opendocument.spreadsheet',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      'application/vnd.ms-excel',
-      'application/zip'
-    ]) // await this.stdBlobStoreApi.apiStandardsApplicableEvidenceBlobStoreGetAllowedFileTypes()
+    const whiteList = new Set(MIME_WHITELIST) // await this.stdBlobStoreApi.apiStandardsApplicableEvidenceBlobStoreGetAllowedFileTypes()
 
     return res.every((type) => whiteList.has(type))
   }
 
   async capValidMimeType (fileName) {
     const res = [await this.detectMimeType(fileName)]
-    const whiteList = new Set([
-      'image/jpeg',
-      'video/mpeg',
-      'video/ogg',
-      'application/zip'
-    ]) // await this.stdBlobStoreApi.apiStandardsApplicableEvidenceBlobStoreGetAllowedFileTypes()
+    const whiteList = new Set(MIME_WHITELIST) // await this.stdBlobStoreApi.apiStandardsApplicableEvidenceBlobStoreGetAllowedFileTypes()
 
     return res.every((type) => whiteList.has(type))
   }
