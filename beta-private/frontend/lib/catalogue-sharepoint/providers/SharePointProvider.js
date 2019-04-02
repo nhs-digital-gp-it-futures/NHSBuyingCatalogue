@@ -33,7 +33,8 @@ const MIME_WHITELIST = [
   'video/x-ms-wmv',
   'video/x-msvideo',
   'application/json',
-  'text/xml'
+  'text/xml',
+  'application/zip'
 ]
 
 const MIME_EXTENSIONS = [
@@ -61,7 +62,8 @@ const MIME_EXTENSIONS = [
   '.wmv',
   '.avi',
   '.json',
-  '.xml'
+  '.xml',
+  '.zip'
 ]
 
 const { antivirusProvider } = require('catalogue-antivirus')
