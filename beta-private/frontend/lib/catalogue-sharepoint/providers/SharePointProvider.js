@@ -5,6 +5,67 @@ const os = require('os')
 const uuidGenerator = require('node-uuid-generator')
 const INTERMEDIATE_STORAGE = process.env.UPLOAD_TEMP_FILE_STORE || os.tmpdir()
 
+const mmm = require('mmmagic')
+const Magic = mmm.Magic
+
+const MIME_WHITELIST = [
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/msword',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'application/vnd.ms-excel',
+  'application/vnd.ms-excel',
+  'text/csv',
+  'application/vnd.oasis.opendocument.spreadsheet',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  'application/vnd.oasis.opendocument.presentation',
+  'application/pdf',
+  'application/vnd.ms-outlook',
+  'text/plain',
+  'application/rtf',
+  'image/jpeg',
+  'image/bmp',
+  'image/png',
+  'image/gif',
+  'video/mp4',
+  'video/x-ms-wmv',
+  'video/x-msvideo',
+  'application/json',
+  'text/xml',
+  'application/zip'
+]
+
+const MIME_EXTENSIONS = [
+  '.docx',
+  '.doc',
+  '.odt',
+  '.xlsx',
+  '.xls',
+  '.xlt',
+  '.csv',
+  '.ods',
+  '.pptx',
+  '.ppsx',
+  '.pptx',
+  '.odp',
+  '.pdf',
+  '.msg',
+  '.txt',
+  '.rtf',
+  '.jpg',
+  '.bmp',
+  '.png',
+  '.gif',
+  '.mp4',
+  '.wmv',
+  '.avi',
+  '.json',
+  '.xml',
+  '.zip'
+]
+
 const { antivirusProvider } = require('catalogue-antivirus')
 
 class SharePointProvider {
@@ -19,6 +80,22 @@ class SharePointProvider {
     this.TIMEOUT = 1200000
     this.capBlobStoreApi.timeout = this.TIMEOUT
     this.stdBlobStoreApi.timeout = this.TIMEOUT
+  }
+
+  getMimeArray () {
+    return MIME_WHITELIST
+  }
+
+  getMimeCommaString () {
+    return MIME_WHITELIST.join(', ')
+  }
+
+  getMimeExtensions () {
+    return MIME_EXTENSIONS
+  }
+
+  getMimeExtensionsCommaString () {
+    return MIME_EXTENSIONS.join(', ')
   }
 
   async getCapEvidence (claimID, subFolder, pageIndex = 1) {
@@ -73,7 +150,8 @@ class SharePointProvider {
 
   async uploadCapEvidence (claimID, buffer, filename, subFolder) {
     const uploadMethod = this.capBlobStoreApi.apiCapabilitiesImplementedEvidenceBlobStoreAddEvidenceForClaimPost.bind(this.capBlobStoreApi)
-    return this.uploadEvidence(uploadMethod, claimID, buffer, filename, subFolder)
+    const validMimeType = this.capValidMimeType.bind(this)
+    return this.uploadEvidence(uploadMethod, validMimeType, claimID, buffer, filename, subFolder)
   }
 
   async getStdEvidence (claimID, subFolder, pageIndex = 1) {
@@ -129,10 +207,37 @@ class SharePointProvider {
 
   async uploadStdEvidence (claimID, buffer, filename, subFolder) {
     const uploadMethod = this.stdBlobStoreApi.apiStandardsApplicableEvidenceBlobStoreAddEvidenceForClaimPost.bind(this.stdBlobStoreApi)
-    return this.uploadEvidence(uploadMethod, claimID, buffer, filename, subFolder)
+    const validMimeType = this.stdValidMimeType.bind(this)
+    return this.uploadEvidence(uploadMethod, validMimeType, claimID, buffer, filename, subFolder)
   }
 
-  async uploadEvidence (method, claimID, buffer, filename, subFolder) {
+  async stdValidMimeType (fileName) {
+    const res = [await this.detectMimeType(fileName)]
+    const whiteList = new Set(MIME_WHITELIST) // await this.stdBlobStoreApi.apiStandardsApplicableEvidenceBlobStoreGetAllowedFileTypes()
+
+    return res.every((type) => whiteList.has(type))
+  }
+
+  async capValidMimeType (fileName) {
+    const res = [await this.detectMimeType(fileName)]
+    const whiteList = new Set(MIME_WHITELIST) // await this.stdBlobStoreApi.apiStandardsApplicableEvidenceBlobStoreGetAllowedFileTypes()
+
+    return res.every((type) => whiteList.has(type))
+  }
+
+  detectMimeType (fileName) {
+    const storagePath = this.createFileStoragePath(fileName)
+    const magic = new Magic(mmm.MAGIC_MIME_TYPE)
+
+    return new Promise((resolve, reject) => {
+      magic.detectFile(storagePath, (err, result) => {
+        if (err) return reject(err)
+        return resolve(result)
+      })
+    })
+  }
+
+  async uploadEvidence (uploadMethod, mimeTypeChecker, claimID, buffer, filename, subFolder) {
     const options = {
       subFolder: subFolder
     }
@@ -140,13 +245,20 @@ class SharePointProvider {
     await this.saveBuffer(buffer, fileUUID)
 
     try {
-      const scanResults = await this.scanFile(fileUUID).catch(err => console.log(err))
+      const isValidMimeType = await mimeTypeChecker(fileUUID)
+
+      if (!isValidMimeType) {
+        return { err: 'Invalid File Type', isVirus: false, badMime: true }
+      }
+
+      const scanResults = await this.scanFile(fileUUID)
+
       if (scanResults) {
         await this.deleteFile(fileUUID)
-        return { err: scanResults }
+        return { err: scanResults, isVirus: true, badMime: false }
       }
       const readStream = this.createFileReadStream(fileUUID)
-      const uploadRes = await method(claimID, readStream, filename, options)
+      const uploadRes = await uploadMethod(claimID, readStream, filename, options)
       await this.deleteFile(fileUUID)
       return { blobId: uploadRes }
     } catch (err) {

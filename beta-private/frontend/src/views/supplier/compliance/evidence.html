@@ -71,7 +71,7 @@
       {{#>form encoding="multipart/form-data" form_id=activeForm.id}}
         <fieldset class="callout">
           <div class="file-input">
-            <input type="file" name="matrix-file" aria-label="File Upload">
+            <input type="file" name="matrix-file" aria-label="File Upload" accept="{{mimes}}">
             <a href="#" class="remove">{{t 'CompliancePages.Evidence.Reply.Remove'}}</a>
           </div>
           <p class="sub-info">{{t 'CompliancePages.Evidence.Reply.Information'}}</p>
@@ -92,9 +92,9 @@
                 {{#each candidateOwners}}
                 <option value="{{id}}"{{#current}} selected{{/current}}>
                   {{#if contactType}}
-                  {{contactType}} ({{firstName}} {{lastName}})
+                    {{contactType}} ({{firstName}} {{lastName}})
                   {{else}}
-                  {{firstName}} {{lastName}}
+                    {{firstName}} {{lastName}}
                   {{/if}}
                 </option>
                 {{/each}}

@@ -154,7 +154,8 @@ function formatTimestampForDisplay (ts) {
 async function evidencePageContext (req, next) {
   const context = {
     ...commonComplianceContext(req),
-    ...await dataProvider.capabilityMappings()
+    ...await dataProvider.capabilityMappings(),
+    mimes: [sharePointProvider.getMimeCommaString(), sharePointProvider.getMimeExtensionsCommaString()].join(', ')
   }
 
   context.claim = _.find(context.solution.standards, { id: req.params.claim_id })
@@ -324,11 +325,21 @@ async function solutionComplianceEvidencePagePost (req, res, next) {
 
       if (uploadResponse.blobId) {
         evidenceRecord.blobId = uploadResponse.blobId
-      } else if (uploadResponse.err) {
-        context.errors.items.push({
+      }
+
+      if (uploadResponse.err) {
+        const err = {
           error: uploadResponse.err,
-          msg: 'Validation.Standard.Evidence.File.Virus Scan.Failed'
-        })
+          msg: ''
+        }
+
+        if (uploadResponse.isVirus) {
+          err.msg = `${'$t(Validation.Standard.Evidence.File.Virus Scan.Failed)'}`
+        } else if (uploadResponse.badMime) {
+          err.msg = `${'$t(Validation.Standard.Evidence.File.Mime Check.Failed)'}`
+        }
+
+        context.errors.items.push(err)
       }
     } catch (err) {
       context.errors.items.push({

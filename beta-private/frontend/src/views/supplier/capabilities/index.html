@@ -54,7 +54,11 @@
           {{/if}}
 
           <div>
-            <p><input type="file" name="evidence-file[{{claimID}}]" {{#if ../../notEditable}}disabled{{/if}} aria-label="Choose evidence file to upload"/></p>
+            <p><input
+              type="file"
+              name="evidence-file[{{claimID}}]"
+              accept="{{../../mimes}}"
+              {{#if ../../notEditable}}disabled{{/if}} aria-label="Choose evidence file to upload"/></p>
           </div>
           <p class="sub-info">{{t 'CapAssPages.Assessment.Evidence.Video.Information'}}</p>
 
