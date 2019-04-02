@@ -29,7 +29,7 @@ services:
   clamav:
     image: tiredofit/clamav:latest
     environment:
-      MAX_SCAN_SIZE: "1024M" 
+      MAX_SCAN_SIZE: "1024M"
       MAX_FILE_SIZE: "1024M"
     ports:
       - "3310:3310"
