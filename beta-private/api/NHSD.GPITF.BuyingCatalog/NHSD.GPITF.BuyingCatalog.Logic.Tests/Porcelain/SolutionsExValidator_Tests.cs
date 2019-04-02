@@ -826,6 +826,251 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
     #endregion
     #endregion
 
+    #region Reviews
+    public static IEnumerable<SolutionStatus> SolutionStatusesPendingForReview()
+    {
+      yield return SolutionStatus.CapabilitiesAssessment;
+      yield return SolutionStatus.StandardsCompliance;
+    }
+
+    public static IEnumerable<SolutionStatus> SolutionStatusesNotPendingForReview()
+    {
+      return Creator.SolutionStatuses().Except(SolutionStatusesPendingForReview());
+    }
+
+    #region ClaimedCapabilityReview
+    [Test]
+    public void MustBePendingToChangeClaimedCapabilityReview_SameReview_Succeeds(
+      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
+    {
+      var validator = GetValidator();
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldRev1 = Creator.GetCapabilitiesImplementedReviews();
+      var oldRev2 = Creator.GetCapabilitiesImplementedReviews();
+      oldSolnEx.ClaimedCapabilityReview = new List<CapabilitiesImplementedReviews>(new[] { oldRev1, oldRev2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      newSolnEx.ClaimedCapabilityReview = new List<CapabilitiesImplementedReviews>(new[] { oldRev1, oldRev2 });
+
+
+      var res = validator.MustBePendingToChangeClaimedCapabilityReview(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeTrue();
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedCapabilityReview_Pending_AddReview_Succeeds(
+      [ValueSource(nameof(SolutionStatusesPendingForReview))]SolutionStatus status)
+    {
+      var validator = GetValidator();
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldRev1 = Creator.GetCapabilitiesImplementedReviews();
+      var oldRev2 = Creator.GetCapabilitiesImplementedReviews();
+      oldSolnEx.ClaimedCapabilityReview = new List<CapabilitiesImplementedReviews>(new[] { oldRev1, oldRev2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      var newRev3 = Creator.GetCapabilitiesImplementedReviews();
+      newSolnEx.ClaimedCapabilityReview = new List<CapabilitiesImplementedReviews>(new[] { oldRev1, oldRev2, newRev3 });
+
+
+      var res = validator.MustBePendingToChangeClaimedCapabilityReview(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeTrue();
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedCapabilityReview_NotPending_AddReview_Fails(
+      [ValueSource(nameof(SolutionStatusesNotPendingForReview))]SolutionStatus status)
+    {
+      var validator = GetValidator();
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldRev1 = Creator.GetCapabilitiesImplementedReviews();
+      var oldRev2 = Creator.GetCapabilitiesImplementedReviews();
+      oldSolnEx.ClaimedCapabilityReview = new List<CapabilitiesImplementedReviews>(new[] { oldRev1, oldRev2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      var newRev3 = Creator.GetCapabilitiesImplementedReviews();
+      newSolnEx.ClaimedCapabilityReview = new List<CapabilitiesImplementedReviews>(new[] { oldRev1, oldRev2, newRev3 });
+
+
+      var res = validator.MustBePendingToChangeClaimedCapabilityReview(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeFalse();
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedCapabilityReview_DifferentReview_Fails(
+      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
+    {
+      var validator = GetValidator();
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldRev1 = Creator.GetCapabilitiesImplementedReviews();
+      var oldRev2 = Creator.GetCapabilitiesImplementedReviews();
+      oldSolnEx.ClaimedCapabilityReview = new List<CapabilitiesImplementedReviews>(new[] { oldRev1, oldRev2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      var newRev1 = Creator.GetCapabilitiesImplementedReviews();
+      var newRev2 = Creator.GetCapabilitiesImplementedReviews();
+      newSolnEx.ClaimedCapabilityReview = new List<CapabilitiesImplementedReviews>(new[] { newRev1, newRev2 });
+
+
+      var res = validator.MustBePendingToChangeClaimedCapabilityReview(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeFalse();
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedCapabilityReview_RemoveReview_Fails(
+      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
+    {
+      var validator = GetValidator();
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldRev1 = Creator.GetCapabilitiesImplementedReviews();
+      var oldRev2 = Creator.GetCapabilitiesImplementedReviews();
+      oldSolnEx.ClaimedCapabilityReview = new List<CapabilitiesImplementedReviews>(new[] { oldRev1, oldRev2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      newSolnEx.ClaimedCapabilityReview = new List<CapabilitiesImplementedReviews>(new[] { oldRev1 });
+
+
+      var res = validator.MustBePendingToChangeClaimedCapabilityReview(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeFalse();
+    }
+    #endregion
+
+    #region ClaimedStandardReview
+    [Test]
+    public void MustBePendingToChangeClaimedStandardReview_SameReview_Succeeds(
+      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
+    {
+      var validator = GetValidator();
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldRev1 = Creator.GetStandardsApplicableReviews();
+      var oldRev2 = Creator.GetStandardsApplicableReviews();
+      oldSolnEx.ClaimedStandardReview = new List<StandardsApplicableReviews>(new[] { oldRev1, oldRev2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      newSolnEx.ClaimedStandardReview = new List<StandardsApplicableReviews>(new[] { oldRev1, oldRev2 });
+
+
+      var res = validator.MustBePendingToChangeClaimedStandardReview(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeTrue();
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedStandardReview_Pending_AddReview_Succeeds(
+      [ValueSource(nameof(SolutionStatusesPendingForReview))]SolutionStatus status)
+    {
+      var validator = GetValidator();
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldRev1 = Creator.GetStandardsApplicableReviews();
+      var oldRev2 = Creator.GetStandardsApplicableReviews();
+      oldSolnEx.ClaimedStandardReview = new List<StandardsApplicableReviews>(new[] { oldRev1, oldRev2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      var newRev3 = Creator.GetStandardsApplicableReviews();
+      newSolnEx.ClaimedStandardReview = new List<StandardsApplicableReviews>(new[] { oldRev1, oldRev2, newRev3 });
+
+
+      var res = validator.MustBePendingToChangeClaimedStandardReview(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeTrue();
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedStandardReview_NotPending_AddReview_Fails(
+      [ValueSource(nameof(SolutionStatusesNotPendingForReview))]SolutionStatus status)
+    {
+      var validator = GetValidator();
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldRev1 = Creator.GetStandardsApplicableReviews();
+      var oldRev2 = Creator.GetStandardsApplicableReviews();
+      oldSolnEx.ClaimedStandardReview = new List<StandardsApplicableReviews>(new[] { oldRev1, oldRev2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      var newRev3 = Creator.GetStandardsApplicableReviews();
+      newSolnEx.ClaimedStandardReview = new List<StandardsApplicableReviews>(new[] { oldRev1, oldRev2, newRev3 });
+
+
+      var res = validator.MustBePendingToChangeClaimedStandardReview(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeFalse();
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedStandardReview_DifferentReview_Fails(
+      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
+    {
+      var validator = GetValidator();
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldRev1 = Creator.GetStandardsApplicableReviews();
+      var oldRev2 = Creator.GetStandardsApplicableReviews();
+      oldSolnEx.ClaimedStandardReview = new List<StandardsApplicableReviews>(new[] { oldRev1, oldRev2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      var newRev1 = Creator.GetStandardsApplicableReviews();
+      var newRev2 = Creator.GetStandardsApplicableReviews();
+      newSolnEx.ClaimedStandardReview = new List<StandardsApplicableReviews>(new[] { newRev1, newRev2 });
+
+
+      var res = validator.MustBePendingToChangeClaimedStandardReview(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeFalse();
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedStandardReview_RemoveReview_Fails(
+      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
+    {
+      var validator = GetValidator();
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldRev1 = Creator.GetStandardsApplicableReviews();
+      var oldRev2 = Creator.GetStandardsApplicableReviews();
+      oldSolnEx.ClaimedStandardReview = new List<StandardsApplicableReviews>(new[] { oldRev1, oldRev2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      newSolnEx.ClaimedStandardReview = new List<StandardsApplicableReviews>(new[] { oldRev1 });
+
+
+      var res = validator.MustBePendingToChangeClaimedStandardReview(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeFalse();
+    }
+    #endregion
+    #endregion
+
     private SolutionsExValidator GetValidator()
     {
       return new SolutionsExValidator(_context.Object, _logger.Object, _datastore.Object, _solutionsValidator.Object);

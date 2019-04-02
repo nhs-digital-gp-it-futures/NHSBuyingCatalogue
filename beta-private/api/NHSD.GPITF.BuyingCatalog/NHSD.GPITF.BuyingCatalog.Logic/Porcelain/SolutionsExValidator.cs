@@ -291,11 +291,11 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
     // cannot change/remove ClaimedCapabilityReview but can add while pending
     public bool MustBePendingToChangeClaimedCapabilityReview(SolutionEx oldSolnEx, SolutionEx newSolnEx)
     {
-      var newNotOld = newSolnEx.ClaimedCapabilityEvidence.Except(oldSolnEx.ClaimedCapabilityEvidence).ToList();
-      var oldNotNew = oldSolnEx.ClaimedCapabilityEvidence.Except(newSolnEx.ClaimedCapabilityEvidence).ToList();
+      var newNotOld = newSolnEx.ClaimedCapabilityReview.Except(oldSolnEx.ClaimedCapabilityReview).ToList();
+      var oldNotNew = oldSolnEx.ClaimedCapabilityReview.Except(newSolnEx.ClaimedCapabilityReview).ToList();
 
       if (newNotOld.Any() &&
-        newSolnEx.ClaimedCapabilityEvidence.Count() > oldSolnEx.ClaimedCapabilityEvidence.Count() &&
+        newSolnEx.ClaimedCapabilityReview.Count() > oldSolnEx.ClaimedCapabilityReview.Count() &&
         IsPendingForReview(newSolnEx.Solution.Status))
       {
         // added
@@ -308,6 +308,24 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
     }
 
     // cannot change/remove ClaimedStandardReview but can add while pending
+    public bool MustBePendingToChangeClaimedStandardReview(SolutionEx oldSolnEx, SolutionEx newSolnEx)
+    {
+      var newNotOld = newSolnEx.ClaimedStandardReview.Except(oldSolnEx.ClaimedStandardReview).ToList();
+      var oldNotNew = oldSolnEx.ClaimedStandardReview.Except(newSolnEx.ClaimedStandardReview).ToList();
+
+      if (newNotOld.Any() &&
+        newSolnEx.ClaimedStandardReview.Count() > oldSolnEx.ClaimedStandardReview.Count() &&
+        IsPendingForReview(newSolnEx.Solution.Status))
+      {
+        // added
+        return true;
+      }
+
+      var same = !newNotOld.Any() && !oldNotNew.Any();
+
+      return same;
+    }
+
     //
     // check every ClaimedCapability
     // check every ClaimedStandard
