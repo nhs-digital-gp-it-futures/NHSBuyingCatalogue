@@ -429,6 +429,17 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
         .HaveCount(1);
     }
 
+    #region Claims
+    public static IEnumerable<SolutionStatus> SolutionStatusesPendingForClaims()
+    {
+      yield return SolutionStatus.Draft;
+    }
+
+    public static IEnumerable<SolutionStatus> SolutionStatusesNotPendingForClaims()
+    {
+      return Creator.SolutionStatuses().Except(SolutionStatusesPendingForClaims());
+    }
+
     [Test]
     public void MustBePendingToChangeClaimedCapability_SameCapability_Succeeds(
       [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
@@ -449,17 +460,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
 
 
       res.Should().BeTrue();
-    }
-
-
-    public static IEnumerable<SolutionStatus> SolutionStatusesPendingForClaims()
-    {
-      yield return SolutionStatus.Draft;
-    }
-
-    public static IEnumerable<SolutionStatus> SolutionStatusesNotPendingForClaims()
-    {
-      return Creator.SolutionStatuses().Except(SolutionStatusesPendingForClaims());
     }
 
     [Test]
@@ -505,6 +505,28 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
 
 
       var res = validator.MustBePendingToChangeClaimedCapability(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeTrue();
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedStandard_SameStandard_Succeeds(
+      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
+    {
+      var validator = GetValidator();
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldQual1 = Creator.GetStandardsApplicable();
+      var oldQual2 = Creator.GetStandardsApplicable();
+      oldSolnEx.ClaimedStandard = new List<StandardsApplicable>(new[] { oldQual1, oldQual2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      newSolnEx.ClaimedStandard = new List<StandardsApplicable>(new[] { oldQual1, oldQual2 });
+
+
+      var res = validator.MustBePendingToChangeClaimedStandard(oldSolnEx, newSolnEx);
 
 
       res.Should().BeTrue();
@@ -557,19 +579,21 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
 
       res.Should().BeTrue();
     }
+    #endregion
 
-
-    public static IEnumerable<SolutionStatus> SolutionStatusesPendingForQuality()
+    #region Evidence
+    public static IEnumerable<SolutionStatus> SolutionStatusesPendingForEvidence()
     {
       yield return SolutionStatus.CapabilitiesAssessment;
       yield return SolutionStatus.StandardsCompliance;
     }
 
-    public static IEnumerable<SolutionStatus> SolutionStatusesNotPendingForQuality()
+    public static IEnumerable<SolutionStatus> SolutionStatusesNotPendingForEvidence()
     {
-      return Creator.SolutionStatuses().Except(SolutionStatusesPendingForQuality());
+      return Creator.SolutionStatuses().Except(SolutionStatusesPendingForEvidence());
     }
 
+    #region ClaimedCapabilityEvidence
     [Test]
     public void MustBePendingToChangeClaimedCapabilityEvidence_SameEvidence_Succeeds(
       [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
@@ -594,7 +618,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
 
     [Test]
     public void MustBePendingToChangeClaimedCapabilityEvidence_Pending_AddEvidence_Succeeds(
-      [ValueSource(nameof(SolutionStatusesPendingForQuality))]SolutionStatus status)
+      [ValueSource(nameof(SolutionStatusesPendingForEvidence))]SolutionStatus status)
     {
       var validator = GetValidator();
 
@@ -617,7 +641,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
 
     [Test]
     public void MustBePendingToChangeClaimedCapabilityEvidence_NotPending_AddEvidence_Fails(
-      [ValueSource(nameof(SolutionStatusesNotPendingForQuality))]SolutionStatus status)
+      [ValueSource(nameof(SolutionStatusesNotPendingForEvidence))]SolutionStatus status)
     {
       var validator = GetValidator();
 
@@ -683,8 +707,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
 
       res.Should().BeFalse();
     }
+    #endregion
 
-
+    #region ClaimedStandardEvidence
     [Test]
     public void MustBePendingToChangeClaimedStandardEvidence_SameEvidence_Succeeds(
       [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
@@ -709,7 +734,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
 
     [Test]
     public void MustBePendingToChangeClaimedStandardEvidence_Pending_AddEvidence_Succeeds(
-      [ValueSource(nameof(SolutionStatusesPendingForQuality))]SolutionStatus status)
+      [ValueSource(nameof(SolutionStatusesPendingForEvidence))]SolutionStatus status)
     {
       var validator = GetValidator();
 
@@ -732,7 +757,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
 
     [Test]
     public void MustBePendingToChangeClaimedStandardEvidence_NotPending_AddEvidence_Fails(
-      [ValueSource(nameof(SolutionStatusesNotPendingForQuality))]SolutionStatus status)
+      [ValueSource(nameof(SolutionStatusesNotPendingForEvidence))]SolutionStatus status)
     {
       var validator = GetValidator();
 
@@ -798,6 +823,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
 
       res.Should().BeFalse();
     }
+    #endregion
+    #endregion
 
     private SolutionsExValidator GetValidator()
     {

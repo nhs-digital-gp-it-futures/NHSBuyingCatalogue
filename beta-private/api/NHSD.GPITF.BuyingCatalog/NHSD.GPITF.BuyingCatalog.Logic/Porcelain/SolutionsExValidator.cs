@@ -203,7 +203,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
         });
     }
 
-    // can only add/remove ClaimedCapability in Draft
+    // can only add/remove ClaimedCapability while pending
     public bool MustBePendingToChangeClaimedCapability(SolutionEx oldSolnEx, SolutionEx newSolnEx)
     {
       var newNotOld = newSolnEx.ClaimedCapability.Except(oldSolnEx.ClaimedCapability).ToList();
@@ -226,7 +226,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       return true;
     }
 
-    // can only add/remove ClaimedStandard in Draft
+    // can only add/remove ClaimedStandard while pending
     public bool MustBePendingToChangeClaimedStandard(SolutionEx oldSolnEx, SolutionEx newSolnEx)
     {
       var newNotOld = newSolnEx.ClaimedStandard.Except(oldSolnEx.ClaimedStandard).ToList();
@@ -288,11 +288,33 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
     }
 
 
-    // can only add Evidence to end
+    // cannot change/remove ClaimedCapabilityReview but can add while pending
+    public bool MustBePendingToChangeClaimedCapabilityReview(SolutionEx oldSolnEx, SolutionEx newSolnEx)
+    {
+      var newNotOld = newSolnEx.ClaimedCapabilityEvidence.Except(oldSolnEx.ClaimedCapabilityEvidence).ToList();
+      var oldNotNew = oldSolnEx.ClaimedCapabilityEvidence.Except(newSolnEx.ClaimedCapabilityEvidence).ToList();
 
-    // cannot change/remove Review but can add
-    // can only add Review before FinalApproval
-    // can only add Review to end
+      if (newNotOld.Any() &&
+        newSolnEx.ClaimedCapabilityEvidence.Count() > oldSolnEx.ClaimedCapabilityEvidence.Count() &&
+        IsPendingForReview(newSolnEx.Solution.Status))
+      {
+        // added
+        return true;
+      }
+
+      var same = !newNotOld.Any() && !oldNotNew.Any();
+
+      return same;
+    }
+
+    // cannot change/remove ClaimedStandardReview but can add while pending
+    //
+    // check every ClaimedCapability
+    // check every ClaimedStandard
+    // check every ClaimedCapabilityEvidence
+    // check every ClaimedStandardEvidence
+    // check every ClaimedCapabilityReview
+    // check every ClaimedStandardReview
 
     private bool IsPendingForClaims(SolutionStatus status)
     {
@@ -300,6 +322,12 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
     }
 
     private bool IsPendingForEvidence(SolutionStatus status)
+    {
+      return status == SolutionStatus.CapabilitiesAssessment ||
+        status == SolutionStatus.StandardsCompliance;
+    }
+
+    private bool IsPendingForReview(SolutionStatus status)
     {
       return status == SolutionStatus.CapabilitiesAssessment ||
         status == SolutionStatus.StandardsCompliance;
