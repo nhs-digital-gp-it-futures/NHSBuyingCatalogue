@@ -105,8 +105,12 @@
             "FailedAction": ""
           },
           "Virus Scan": {
-            "Failed": "Uploaded file failed our safety checks and has been rejected.",
+          "Failed": "Uploaded file failed our safety checks and has been rejected.",
           "FailedAction": "Please ensure that you have up to date Antivirus installed and do a full scan on your machine."
+          },
+          "Mime Check": {
+            "Failed": "Uploaded file has incorrect file-type.",
+            "FailedAction": "Please ensure that you have up to date Antivirus installed and do a full scan on your machine."
           }
         },
         "Failed": {

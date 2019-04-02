@@ -252,6 +252,7 @@ async function solutionCapabilityPagePost (req, res) {
       } else {
         err.msg = `${guiltyClaimName}`
       }
+
       context.errors.items.push(err)
     }
 

@@ -232,7 +232,6 @@ class SharePointProvider {
     return new Promise((resolve, reject) => {
       magic.detectFile(storagePath, (err, result) => {
         if (err) return reject(err)
-        console.log('\n\n\n', result, '\n\n\n')
         return resolve(result)
       })
     })
@@ -252,7 +251,8 @@ class SharePointProvider {
         return { err: 'Invalid File Type', isVirus: false, badMime: true }
       }
 
-      const scanResults = await this.scanFile(fileUUID).catch(err => console.log(err))
+      const scanResults = await this.scanFile(fileUUID)
+
       if (scanResults) {
         await this.deleteFile(fileUUID)
         return { err: scanResults, isVirus: true, badMime: false }
