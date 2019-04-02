@@ -108,14 +108,24 @@ test('After uploading a file, the name of the file should show against the capab
   await verifyFileUploaded(t, capSection, 'Dummy TraceabilityMatrix.xlsx')
 })
 
-test('Uploading a virus should be flagged and communicated via the standard error messages', async t => {
+test('Uploading an excluded file should be rejected and communicated via the standard error messages', async t => {
   // we'll add evidence for "GP Resource Management"
   const capSection = Selector('fieldset.collapsible#C3')
 
-  await uploadFileWithMessage(t, capSection, 'eicar.com', 'Automation testing message sent with uploaded file')
+  await uploadFileWithMessage(t, capSection, 'test_audio.mp3', 'Automation testing message sent with file of excluded type')
     .click(capabilityEvidencePage.globalSaveButton)
     .expect(Selector('#errors').exists).ok()
-    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Prescription Ordering - Citizen : Uploaded file failed our safety checks')
+    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Prescription Ordering - Citizen : Invalid File type uploaded.')
+})
+
+test('Uploading a virus should be rejected and communicated via the standard error messages', async t => {
+  // we'll add evidence for "GP Resource Management"
+  const capSection = Selector('fieldset.collapsible#C3')
+
+  await uploadFileWithMessage(t, capSection, 'eicar.com', 'Automation testing message sent with file containing test virus, file is not saved though..')
+    .click(capabilityEvidencePage.globalSaveButton)
+    .expect(Selector('#errors').exists).ok()
+    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Prescription Ordering - Citizen : Uploaded file failed our safety checks and has been rejected.')
 })
 
 const requestLogger = RequestLogger(
@@ -151,7 +161,7 @@ test
 test('Messages sent along with the uploaded file should be preserved', async t => {
   const capSection = Selector('fieldset.collapsible#C3')
 
-  await verifyFileUploaded(t, capSection, 'Dummy TraceabilityMatrix.xlsx')
+  await uploadFileWithMessage(t, capSection, 'Dummy TraceabilityMatrix.xlsx', 'Automation testing message sent with uploaded file')
     .expect(capSection.find('textarea').value).eql('Automation testing message sent with uploaded file')
 })
 

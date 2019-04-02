@@ -325,11 +325,21 @@ async function solutionComplianceEvidencePagePost (req, res, next) {
 
       if (uploadResponse.blobId) {
         evidenceRecord.blobId = uploadResponse.blobId
-      } else if (uploadResponse.err) {
-        context.errors.items.push({
+      }
+
+      if (uploadResponse.err) {
+        const err = {
           error: uploadResponse.err,
-          msg: 'Validation.Standard.Evidence.File.Virus Scan.Failed'
-        })
+          msg: ''
+        }
+
+        if (uploadResponse.isVirus) {
+          err.msg = `${'$t(Validation.Standard.Evidence.File.Virus Scan.Failed)'}`
+        } else if (uploadResponse.badMime) {
+          err.msg = `${'$t(Validation.Standard.Evidence.File.Mime Check.Failed)'}`
+        }
+
+        context.errors.items.push(err)
       }
     } catch (err) {
       context.errors.items.push({
