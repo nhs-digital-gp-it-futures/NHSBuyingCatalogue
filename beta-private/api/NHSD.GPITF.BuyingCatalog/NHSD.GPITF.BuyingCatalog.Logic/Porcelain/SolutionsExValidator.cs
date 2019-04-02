@@ -190,17 +190,39 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
 
     public void CheckUpdateAllowed()
     {
+      SolutionEx oldSolnEx = null;
+
       RuleFor(x => x)
         .Must(newSolnEx =>
         {
-          var oldSolnEx = _datastore.BySolution(newSolnEx.Solution.Id);
+          oldSolnEx = oldSolnEx ?? _datastore.BySolution(newSolnEx.Solution.Id);
+          return MustBePendingToChangeClaimedCapability(oldSolnEx, newSolnEx);
+        })
+        .WithMessage("Must Be Pending To Change Claimed Capability");
 
-          return
-            MustBePendingToChangeClaimedCapability(oldSolnEx, newSolnEx) &&
-            MustBePendingToChangeClaimedStandard(oldSolnEx, newSolnEx) &&
-            MustBePendingToChangeClaimedCapabilityEvidence(oldSolnEx, newSolnEx) &&
-            MustBePendingToChangeClaimedStandardEvidence(oldSolnEx, newSolnEx);
-        });
+      RuleFor(x => x)
+        .Must(newSolnEx =>
+        {
+          oldSolnEx = oldSolnEx ?? _datastore.BySolution(newSolnEx.Solution.Id);
+          return MustBePendingToChangeClaimedStandard(oldSolnEx, newSolnEx);
+        })
+        .WithMessage("Must Be Pending To Change Claimed Standard");
+
+      RuleFor(x => x)
+        .Must(newSolnEx =>
+        {
+          oldSolnEx = oldSolnEx ?? _datastore.BySolution(newSolnEx.Solution.Id);
+          return MustBePendingToChangeClaimedCapabilityEvidence(oldSolnEx, newSolnEx);
+        })
+        .WithMessage("Must Be Pending To Change Claimed Capability Evidence");
+
+      RuleFor(x => x)
+        .Must(newSolnEx =>
+        {
+          oldSolnEx = oldSolnEx ?? _datastore.BySolution(newSolnEx.Solution.Id);
+          return MustBePendingToChangeClaimedStandardEvidence(oldSolnEx, newSolnEx);
+        })
+        .WithMessage("Must Be Pending To Change Claimed Standard Evidence");
     }
 
     // can only add/remove ClaimedCapability while pending
@@ -326,7 +348,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       return same;
     }
 
-    //
     // check every ClaimedCapability
     // check every ClaimedStandard
     // check every ClaimedCapabilityEvidence
