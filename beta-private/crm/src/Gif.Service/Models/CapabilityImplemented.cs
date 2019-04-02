@@ -8,8 +8,8 @@ namespace Gif.Service.Models
 {
     [CrmEntity("cc_capabilityimplementeds")]
     [DataContract]
-    public class CapabilityImplemented : EntityBase
-    {
+    public class CapabilityImplemented : ClaimsBase
+  {
         [DataMember]
         [CrmIdField]
         [CrmFieldName("cc_capabilityimplementedid")]

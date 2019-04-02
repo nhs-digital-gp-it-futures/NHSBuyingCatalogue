@@ -17,10 +17,25 @@ services:
       - OIDC_CLIENT_SECRET
       - SESSION_SECRET
       - SHAREPOINT_PROVIDER_ENV
+      - ANTIVIRUS_PROVIDER_ENV
       - DEPLOYED_ENV_LABEL
     restart: always
     depends_on:
       - cache
+      - clamav
+    links:
+      - clamav
+
+  clamav:
+    image: tiredofit/clamav:latest
+    environment:
+      MAX_SCAN_SIZE: "1024M" 
+      MAX_FILE_SIZE: "1024M"
+    ports:
+      - "3310:3310"
+    networks:
+      - beta_network
+    restart: always
 
   api:
     image: gpitf/catalogue-api:private-beta
@@ -57,7 +72,7 @@ services:
 
   crm:
     build: 
-     context: ./crm
+      context: ./crm
     image: gpitf/catalogue-crm:private-beta
     ports:
       - "5001:5001"
@@ -70,6 +85,8 @@ services:
       - GIF_CRM_URL
       - GIF_AZURE_CLIENT_ID
       - GIF_ENCRYPTED_CLIENT_SECRET
+      - CRM_CLIENTID
+      - CRM_CLIENTSECRET
       - LOG_CRM
       - LOG_CONNECTIONSTRING
 

@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
@@ -9,17 +8,20 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 {
   public abstract class ClaimsLogicBase<T> : LogicBase, IClaimsLogic<T> where T : ClaimsBase
   {
-    private readonly IClaimsDatastore<T> _datastore;
-    private readonly IClaimsValidator<T> _validator;
-    private readonly IClaimsFilter<T> _filter;
+    protected readonly IClaimsBaseModifier<T> _modifier;
+    protected readonly IClaimsDatastore<T> _datastore;
+    protected readonly IClaimsValidator<T> _validator;
+    protected readonly IClaimsFilter<T> _filter;
 
     public ClaimsLogicBase(
+      IClaimsBaseModifier<T> modifier,
       IClaimsDatastore<T> datastore,
       IClaimsValidator<T> validator,
       IClaimsFilter<T> filter,
       IHttpContextAccessor context) :
       base(context)
     {
+      _modifier = modifier;
       _datastore = datastore;
       _validator = validator;
       _filter = filter;
@@ -39,10 +41,12 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     {
       _validator.ValidateAndThrowEx(claim, ruleSet: nameof(IClaimsLogic<T>.Create));
 
+      _modifier.ForCreate(claim);
+
       return _datastore.Create(claim);
     }
 
-    public void Update(T claim)
+    public virtual void Update(T claim)
     {
       _validator.ValidateAndThrowEx(claim, ruleSet: nameof(IClaimsLogic<T>.Update));
 

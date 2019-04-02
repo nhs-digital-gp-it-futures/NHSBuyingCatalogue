@@ -4,10 +4,12 @@ const { SharePointProvider } = require('./index')
 
 function MockCapBlobStoreApi () {
   this.getCapEvidence = jest.fn()
+  this.apiClient = {}
 }
 
 function MockStdBlobStoreApi () {
   this.getStdEvidence = jest.fn()
+  this.apiClient = {}
 }
 
 let subject
@@ -18,6 +20,7 @@ beforeAll(() => {
     StandardsApplicableEvidenceBlobStoreApi: MockStdBlobStoreApi
   })
   subject.uuidGenerator = { generate: () => { return 'UUID-1234-ABCD' } }
+  subject.av = { scanFile: () => { return new Promise((resolve, reject) => resolve()) } }
 })
 
 describe('deleteFile', () => {
@@ -151,7 +154,7 @@ describe('saveBuffer', () => {
 })
 
 describe('uploadEvidence', () => {
-  const mm = jest.fn()
+  const mm = jest.fn(() => true)
   const cm = '1234'
   const bf = Buffer.from('test_file')
   const fn = 'test_file.txt'
@@ -163,15 +166,16 @@ describe('uploadEvidence', () => {
     subject.saveBuffer = jest.fn()
     subject.deleteFile = jest.fn()
     subject.createFileReadStream = jest.fn()
+    subject.scanResults = jest.fn()
   })
 
   it('Should save buffer to file forwarding it on', async () => {
-    await subject.uploadEvidence(mm, cm, bf, fn, sb)
+    await subject.uploadEvidence(mm, mm, cm, bf, fn, sb)
     expect(subject.saveBuffer).toBeCalledWith(bf, uuidfn)
   })
 
   it('Should create a file read stream', async () => {
-    await subject.uploadEvidence(mm, cm, bf, fn, sb)
+    await subject.uploadEvidence(mm, mm, cm, bf, fn, sb)
     expect(subject.createFileReadStream).toBeCalledWith(uuidfn)
   })
 
@@ -185,12 +189,12 @@ describe('uploadEvidence', () => {
     })
     const options = { subFolder: sb }
 
-    await subject.uploadEvidence(mockMethod, cm, bf, fn, sb)
+    await subject.uploadEvidence(mockMethod, mm, cm, bf, fn, sb)
     expect(mockMethod).toBeCalledWith(cm, rs, fn, options)
   })
 
   it('should call the file delete method after it has uploaded a response', async () => {
-    await subject.uploadEvidence(mm, cm, bf, fn, sb)
+    await subject.uploadEvidence(mm, mm, cm, bf, fn, sb)
     expect(subject.deleteFile).toBeCalledWith(uuidfn)
   })
 
@@ -198,14 +202,14 @@ describe('uploadEvidence', () => {
     subject.saveBuffer.mockImplementation(() => {
       throw 'error'
     })
-    await expect(subject.uploadEvidence(mm, cm, bf, fn, sb)).rejects.toBe('error')
+    await expect(subject.uploadEvidence(mm, mm, cm, bf, fn, sb)).rejects.toBe('error')
   })
 
   it('should return a rejecting promise with error message if creating a readStream fails', async () => {
     subject.createFileReadStream.mockImplementation(() => {
       throw 'error'
     })
-    await expect(subject.uploadEvidence(mm, cm, bf, fn, sb)).rejects.toBe('error')
+    await expect(subject.uploadEvidence(mm, mm, cm, bf, fn, sb)).rejects.toBe('error')
   })
 
   it('should return a rejecting promise with error message if provided method fails', async () => {
@@ -213,14 +217,14 @@ describe('uploadEvidence', () => {
     mockMethod.mockImplementation(() => {
       throw 'error'
     })
-    await expect(subject.uploadEvidence(mockMethod, cm, bf, fn, sb)).rejects.toBe('error')
+    await expect(subject.uploadEvidence(mockMethod, mm, cm, bf, fn, sb)).rejects.toBe('error')
   })
 
   it('should return a rejecting Promise with error message if deleting file fails', async () => {
     subject.deleteFile.mockImplementation(() => {
       throw 'error'
     })
-    await expect(subject.uploadEvidence(mm, cm, bf, fn, sb)).rejects.toBe('error')
+    await expect(subject.uploadEvidence(mm, mm, cm, bf, fn, sb)).rejects.toBe('error')
   })
 
   it('Should return a resolving promise with the result from the provided method', async () => {
@@ -228,7 +232,7 @@ describe('uploadEvidence', () => {
     mockMethod.mockImplementation(() => {
       return fn
     })
-    await expect(subject.uploadEvidence(mockMethod, cm, bf, fn, sb)).resolves.toBe(fn)
+    await expect(subject.uploadEvidence(mockMethod, mm, cm, bf, fn, sb)).resolves.toEqual({ 'blobId': fn })
   })
 })
 
@@ -245,7 +249,7 @@ describe('uploadStdEvidence', () => {
 
   it('Should provide the standards upload method to the upload evidence method', async () => {
     await subject.uploadStdEvidence(cm, bf, fn, sb)
-    expect(subject.uploadEvidence).toBeCalledWith(expect.any(Function), cm, bf, fn, sb)
+    expect(subject.uploadEvidence).toBeCalledWith(expect.any(Function), expect.any(Function), cm, bf, fn, sb)
 
     // stringified for comparison
     const firstParam = JSON.stringify(subject.uploadEvidence.mock.calls[0][0])
@@ -308,7 +312,7 @@ describe('uploadCapEvidence', () => {
 
   it('Should provide the capability upload method to the upload evidence method', async () => {
     await subject.uploadCapEvidence(cm, bf, fn, sb)
-    expect(subject.uploadEvidence).toBeCalledWith(expect.any(Function), cm, bf, fn, sb)
+    expect(subject.uploadEvidence).toBeCalledWith(expect.any(Function), expect.any(Function), cm, bf, fn, sb)
 
     // stringified for comparison
     const firstParam = JSON.stringify(subject.uploadEvidence.mock.calls[0][0])

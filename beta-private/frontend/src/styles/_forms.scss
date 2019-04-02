@@ -37,6 +37,10 @@ textarea {
   }
 }
 
+div.dependant fieldset div.control {
+  margin: 1rem 1rem;
+}
+
 fieldset {
   &.collapsible {
     background-color: $color-collapsible-fieldset-bg;
@@ -102,10 +106,11 @@ fieldset {
       background-color: $color-collapsible-fieldset-preamble-bg;
       color: $color-collapsible-fieldset-preamble-fg;
       margin: 0;
+      padding: 0.5rem 3rem 0.5rem;
 
       p {
+        padding: 0.5rem 0rem 0.5rem;
         margin: 0;
-        padding: 1rem 3rem 1rem;
       }
     }
 

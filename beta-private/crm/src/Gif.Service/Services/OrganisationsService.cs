@@ -25,6 +25,11 @@ namespace Gif.Service.Services
       var appJson = Repository.RetrieveMultiple(new Contact().GetQueryString(null, filterAttributes), out Count);
       var contactJson = appJson?.FirstOrDefault();
 
+      if (contactJson == null)
+      {
+        return null;
+      }
+
       var contact = new Contact(contactJson);
 
       return ById(contact.OrganisationId.ToString());
@@ -41,7 +46,7 @@ namespace Gif.Service.Services
       var appJson = Repository.RetrieveMultiple(new Organisation().GetQueryString(null, filterAttributes), out Count);
       var organisation = appJson?.FirstOrDefault();
 
-      return new Organisation(organisation);
+      return (organisation == null) ? null : new Organisation(organisation);
     }
   }
 }

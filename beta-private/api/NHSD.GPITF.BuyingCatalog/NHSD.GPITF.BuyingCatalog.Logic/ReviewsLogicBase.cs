@@ -2,19 +2,20 @@
 using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using System;
 using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
   public abstract class ReviewsLogicBase<T> : LogicBase where T : ReviewsBase
   {
+    private readonly IReviewsBaseModifier<T> _modifier;
     private readonly IReviewsDatastore<T> _datastore;
     private readonly IContactsDatastore _contacts;
     private readonly IReviewsValidator<T> _validator;
     private readonly IReviewsFilter<IEnumerable<T>> _filter;
 
     public ReviewsLogicBase(
+      IReviewsBaseModifier<T> modifier,
       IReviewsDatastore<T> datastore,
       IContactsDatastore contacts,
       IReviewsValidator<T> validator,
@@ -22,6 +23,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       IHttpContextAccessor context) :
       base(context)
     {
+      _modifier = modifier;
       _datastore = datastore;
       _contacts = contacts;
       _validator = validator;
@@ -37,9 +39,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     {
       _validator.ValidateAndThrowEx(review, ruleSet: nameof(IReviewsLogic<T>.Create));
 
-      var email = Context.Email();
-      review.CreatedById = _contacts.ByEmail(email).Id;
-      review.CreatedOn = review.OriginalDate = DateTime.UtcNow;
+      _modifier.ForCreate(review);
+
       return _datastore.Create(review);
     }
   }

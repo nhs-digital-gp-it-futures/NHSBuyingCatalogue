@@ -125,8 +125,10 @@ spec:
           limits:
             cpu: 500m
         env:
+        - name: ANTIVIRUS_PROVIDER_ENV
+          value: "CLAMAV"        
         - name: BASE_URL
-          value: "https://store.digital.nhs.uk"
+          value: "https://buyingcatalogue.digital.nhs.uk"
         - name: API_BASE_URL
           value: "http://api:5100"
         - name: CACHE_HOST
@@ -175,7 +177,17 @@ spec:
             cpu: 500m
           limits:
             cpu: 1
-        env:            
+        env:
+        - name: CRM_CLIENTID
+          valueFrom:
+            secretKeyRef:
+              name: bccrmsecret
+              key: CRM_CLIENTID
+        - name: CRM_CLIENTSECRET
+          valueFrom:
+            secretKeyRef:
+              name: bccrmsecret
+              key: CRM_CLIENTSECRET                    
         - name: GIF_CRM_URL
           valueFrom:
             secretKeyRef:
@@ -268,6 +280,43 @@ spec:
           limits:
             cpu: 500m
 ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bc-pb-deployment-clamav
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  selector:
+    matchLabels:
+      app: bc-pb-app-clamav  
+  template:
+    metadata:
+      labels:
+        app: bc-pb-app-clamav
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: bc-private-beta-clamav
+        image: tiredofit/clamav:latest
+        ports:
+        - containerPort: 3310
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+        - name: MAX_SCAN_SIZE
+          value: "1024M"
+        - name: MAX_FILE_SIZE
+          value: "1024M" 
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -312,6 +361,16 @@ spec:
   selector:
     app: bc-pb-app-cache
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: clamav
+spec:
+  ports:
+  - port: 3310
+  selector:
+    app: bc-pb-app-clamav
+---      
 apiVersion: v1
 kind: Service
 metadata:

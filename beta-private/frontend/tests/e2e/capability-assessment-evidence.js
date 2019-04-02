@@ -15,14 +15,14 @@ function navigateToCapabilityAssessment (t) {
     .click(supplierDashboardPage.homeLink)
     .click(supplierDashboardPage.secondOnboardingSolutionName)
     .click(onboardingDashboardPage.capabilityAssessmentButton)
-    .expect(Selector('#capability-assessment-page').exists).ok()
+    .expect(Selector('#capability-assessment-page, #capability-submission-confirmation').exists).ok()
 }
 
 test('All capabilities registered against the solution are present in the alphabetic order', async t => {
   await t
-    .expect(Selector('fieldset.collapsible#C1 > legend').textContent).eql('Appointments Management - GP')
-    .expect(Selector('fieldset.collapsible#C2 > legend').textContent).eql('GP Referral Management')
-    .expect(Selector('fieldset.collapsible#C3 > legend').textContent).eql('GP Resource Management')
+    .expect(Selector('fieldset.collapsible#C1 > legend').textContent).eql('Appointments Management - Citizen')
+    .expect(Selector('fieldset.collapsible#C2 > legend').textContent).eql('Communicate With Practice - Citizen')
+    .expect(Selector('fieldset.collapsible#C3 > legend').textContent).eql('Prescription Ordering - Citizen')
 
     .expect(Selector('form#capability-assessment-form > fieldset.collapsible:nth-of-type(1)').id).eql('C1')
     .expect(Selector('form#capability-assessment-form > fieldset.collapsible:nth-of-type(2)').id).eql('C2')
@@ -108,6 +108,26 @@ test('After uploading a file, the name of the file should show against the capab
   await verifyFileUploaded(t, capSection, 'Dummy TraceabilityMatrix.xlsx')
 })
 
+test('Uploading an excluded file should be rejected and communicated via the standard error messages', async t => {
+  // we'll add evidence for "GP Resource Management"
+  const capSection = Selector('fieldset.collapsible#C3')
+
+  await uploadFileWithMessage(t, capSection, 'test_audio.mp3', 'Automation testing message sent with file of excluded type')
+    .click(capabilityEvidencePage.globalSaveButton)
+    .expect(Selector('#errors').exists).ok()
+    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Prescription Ordering - Citizen : Invalid File type uploaded.')
+})
+
+test('Uploading a virus should be rejected and communicated via the standard error messages', async t => {
+  // we'll add evidence for "GP Resource Management"
+  const capSection = Selector('fieldset.collapsible#C3')
+
+  await uploadFileWithMessage(t, capSection, 'eicar.com', 'Automation testing message sent with file containing test virus, file is not saved though..')
+    .click(capabilityEvidencePage.globalSaveButton)
+    .expect(Selector('#errors').exists).ok()
+    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Prescription Ordering - Citizen : Uploaded file failed our safety checks and has been rejected.')
+})
+
 const requestLogger = RequestLogger(
   request => request.url.startsWith(capabilityEvidencePage.baseUrl),
   { logResponseBody: true }
@@ -141,7 +161,7 @@ test
 test('Messages sent along with the uploaded file should be preserved', async t => {
   const capSection = Selector('fieldset.collapsible#C3')
 
-  await verifyFileUploaded(t, capSection, 'Dummy TraceabilityMatrix.xlsx')
+  await uploadFileWithMessage(t, capSection, 'Dummy TraceabilityMatrix.xlsx', 'Automation testing message sent with uploaded file')
     .expect(capSection.find('textarea').value).eql('Automation testing message sent with uploaded file')
 })
 
@@ -172,17 +192,17 @@ test('Clicking Continue with incomplete evidence should trigger a validation mes
   await t
     .click(capabilityEvidencePage.continueButton)
     .expect(Selector('#errors').exists).ok()
-    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Appointments Management - GP requires an option to be selected')
-    .expect(Selector('#errors li:nth-child(2)').textContent).contains('GP Referral Management requires an option to be selected')
+    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Appointments Management - Citizen requires an option to be selected')
+    .expect(Selector('#errors li:nth-child(2)').textContent).contains('Communicate With Practice - Citizen requires an option to be selected')
 
   // submitting with only one selection made sand nothing else done should trigger some error messages...
   await t
     .click(Selector('fieldset.collapsible#C1').find('input[type=radio][value=yes]'))
     .click(capabilityEvidencePage.continueButton)
     .expect(Selector('#errors').exists).ok()
-    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Appointments Management - GP is missing a video')
-    .expect(Selector('#errors li:nth-child(2)').textContent).contains('Appointments Management - GP is missing a description')
-    .expect(Selector('#errors li:nth-child(3)').textContent).contains('GP Referral Management requires an option to be selected')
+    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Appointments Management - Citizen is missing a video')
+    .expect(Selector('#errors li:nth-child(2)').textContent).contains('Appointments Management - Citizen is missing a description')
+    .expect(Selector('#errors li:nth-child(3)').textContent).contains('Communicate With Practice - Citizen requires an option to be selected')
 
   // clicking save should not trigger any validation errors if one option is selected, but no all.
   await t
@@ -198,10 +218,10 @@ test('Clicking Continue with incomplete evidence should trigger a validation mes
     .click(secondCapSection).click(secondCapSection.find('input[type=radio][value=yes]'))
     .click(capabilityEvidencePage.continueButton)
     .expect(Selector('#errors').exists).ok()
-    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Appointments Management - GP is missing a video')
-    .expect(Selector('#errors li:nth-child(2)').textContent).contains('Appointments Management - GP is missing a description')
-    .expect(Selector('#errors li:nth-child(3)').textContent).contains('GP Referral Management is missing a video')
-    .expect(Selector('#errors li:nth-child(4)').textContent).contains('GP Referral Management is missing a description')
+    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Appointments Management - Citizen is missing a video')
+    .expect(Selector('#errors li:nth-child(2)').textContent).contains('Appointments Management - Citizen is missing a description')
+    .expect(Selector('#errors li:nth-child(3)').textContent).contains('Communicate With Practice - Citizen is missing a video')
+    .expect(Selector('#errors li:nth-child(4)').textContent).contains('Communicate With Practice - Citizen is missing a description')
 
   // Uploading a file for a capability should remove it's missing video evidence error
   // ensure first capability is requesting a video upload
@@ -222,12 +242,12 @@ test('Clicking Continue with incomplete evidence should trigger a validation mes
   await t
     .click(capabilityEvidencePage.continueButton)
     .expect(Selector('#errors').exists).ok()
-    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Appointments Management - GP is missing a video')
-    .expect(Selector('#errors li:nth-child(2)').textContent).contains('Appointments Management - GP is missing a description')
+    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Appointments Management - Citizen is missing a video')
+    .expect(Selector('#errors li:nth-child(2)').textContent).contains('Appointments Management - Citizen is missing a description')
 
   // collapse the open invalid collapsible section
   await t.click(capSection2.child('legend'))
-3
+
   // clicking save should not trigger any validation errors if options are clicked, but only one file is uploaded
   await t
     .click(capabilityEvidencePage.globalSaveButton)
@@ -280,7 +300,8 @@ test('Submitting from the summary page should update the status on the dashboard
     .click(capSection1.find('input[type=radio][value=no]'))
     .click(capabilityEvidencePage.continueButton)
     .click('button[name="action\\[continue\\]"]')
-    .expect(Selector('.callout .title').innerText).contains('Solution submitted')
+    .expect(Selector('.callout .title').innerText).contains('Solution')
+    .expect(Selector('.callout .title').innerText).contains('submitted')
     .expect(Selector('a[href^="../../compliance/"]')).ok()
 })
 
@@ -294,4 +315,78 @@ test('After Submitting Evidence for Capability Assessment, the Registration Page
     .expect(Selector('#summary-details h2').innerText).contains('Enter Solution details')
     .expect(Selector('#summary-capabilities h2').innerText).contains('Which Capabilities')
     .expect(Selector('#summary-evidence h2').innerText).contains('Provide evidence')
+})
+
+test('After Submitting Evidence for Capability Assessment, the Capability Assessment page should redirect to a summary page.', async t => {
+  await asSupplier(t)
+    .click(supplierDashboardPage.homeLink)
+    .click(supplierDashboardPage.secondOnboardingSolutionName)
+    .click(onboardingDashboardPage.capabilityAssessmentButton)
+
+  await t
+    .click(Selector('#summary-capabilities > details > summary > span'))
+    .expect(Selector('#summary-details h2').innerText).contains('Enter Solution details')
+    .expect(Selector('#summary-capabilities h2').innerText).contains('Which Capabilities')
+    .expect(Selector('#summary-evidence h2').innerText).contains('Provide evidence')
+})
+
+test('The Capability Assessment Summary page should display capabilities alphabetically.', async t => {
+  await asSupplier(t)
+    .click(supplierDashboardPage.homeLink)
+    .click(supplierDashboardPage.secondOnboardingSolutionName)
+    .click(onboardingDashboardPage.capabilityAssessmentButton)
+
+  await t.click(Selector('#summary-capabilities > details > summary > span'))
+
+  const allCapabilities = Selector('#summary-capabilities div.capabilities p a')
+
+  await t
+    .expect(allCapabilities.nth(0).innerText).contains('Appointments Management')
+    .expect(allCapabilities.nth(1).innerText).contains('Communicate With Practice')
+    .expect(allCapabilities.nth(2).innerText).contains('Prescription Ordering')
+})
+
+test('The Capability Assessment Summary page should display the number of applicable standards.', async t => {
+  await asSupplier(t)
+    .click(supplierDashboardPage.homeLink)
+    .click(supplierDashboardPage.secondOnboardingSolutionName)
+    .click(onboardingDashboardPage.capabilityAssessmentButton)
+
+  // should be 19 standards in totals. 8 Associated and 11 Overarching.
+  await t.expect(Selector('#summary-capabilities > details > summary > span').innerText).contains('19 Standards')
+})
+
+test('The Capability Assessment Summary page should display Associated Standards alphabetically.', async t => {
+  await asSupplier(t)
+    .click(supplierDashboardPage.homeLink)
+    .click(supplierDashboardPage.secondOnboardingSolutionName)
+    .click(onboardingDashboardPage.capabilityAssessmentButton)
+
+  await t.click(Selector('#summary-capabilities > details > summary > span'))
+
+  const allStandards = Selector('#summary-capabilities details div p a')
+
+  await t
+    .expect(allStandards.nth(0).innerText).contains('Appointments Management - Citizen - Standard')
+    .expect(allStandards.nth(1).innerText).contains('Citizen Access')
+    .expect(allStandards.nth(2).innerText).contains('Communicate with Practice - Citizen - Standard')
+    .expect(allStandards.nth(3).innerText).contains('IM1 - Interface Mechanism')
+})
+
+test('The Capability Assessment Summary page should display Associated Standards alphabetically.', async t => {
+  await asSupplier(t)
+    .click(supplierDashboardPage.homeLink)
+    .click(supplierDashboardPage.secondOnboardingSolutionName)
+    .click(onboardingDashboardPage.capabilityAssessmentButton)
+
+  await t.click(Selector('#summary-capabilities > details > summary > span'))
+
+  const allStandards = Selector('#summary-capabilities details div p a')
+
+  // first 15 (0 - 14 inclusive) are Associated, next 11 (15 - 25 inclusive) are overarching
+  await t
+    .expect(allStandards.nth(8).innerText).contains('Business Continuity & Disaster Recovery')
+    .expect(allStandards.nth(9).innerText).contains('Clinical Safety')
+    .expect(allStandards.nth(10).innerText).contains('Commercial Standard')
+    .expect(allStandards.nth(11).innerText).contains('Data Migration')
 })

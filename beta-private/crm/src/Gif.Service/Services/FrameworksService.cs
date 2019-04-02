@@ -52,7 +52,7 @@ namespace Gif.Service.Services
       var appJson = Repository.RetrieveMultiple(new Framework().GetQueryString(null, filterAttributes), out Count);
       var frameworkJson = appJson?.FirstOrDefault();
 
-      return new Framework(frameworkJson);
+      return (frameworkJson == null) ? null : new Framework(frameworkJson);
     }
 
     public IEnumerable<Framework> BySolution(string solutionId)

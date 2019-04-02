@@ -21,13 +21,14 @@ namespace Gif.Service.Services
             var filterAttributes = new List<CrmFilterAttribute>
             {
                 new CrmFilterAttribute("Email") {FilterName = "emailaddress1", FilterValue = email},
-                new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
+                new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"},
+                new CrmFilterAttribute("BuyingCatalogueContact") {FilterName = "cc_buyingcataloguecontact", FilterValue = "true"}
             };
 
             var appJson = Repository.RetrieveMultiple(new Contact().GetQueryString(null, filterAttributes), out Count);
             var contactJson = appJson?.FirstOrDefault();
 
-            return new Contact(contactJson);
+            return (contactJson == null) ? null : new Contact(contactJson);
         }
 
         public Contact ById(string id)
@@ -35,13 +36,14 @@ namespace Gif.Service.Services
             var filterAttributes = new List<CrmFilterAttribute>
             {
                 new CrmFilterAttribute("ContactId") {FilterName = "contactid", FilterValue = id},
-                new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
+                new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"},
+                new CrmFilterAttribute("BuyingCatalogueContact") {FilterName = "cc_buyingcataloguecontact", FilterValue = "true"}
             };
 
             var appJson = Repository.RetrieveMultiple(new Contact().GetQueryString(null, filterAttributes), out Count);
             var contactJson = appJson?.FirstOrDefault();
 
-            return new Contact(contactJson);
+            return (contactJson == null) ? null : new Contact(contactJson);
         }
 
         public IEnumerable<Contact> ByOrganisation(string organisationId)
@@ -51,7 +53,8 @@ namespace Gif.Service.Services
             var filterAttributes = new List<CrmFilterAttribute>
             {
                 new CrmFilterAttribute("Organisation") {FilterName = "_parentcustomerid_value", FilterValue = organisationId},
-                new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
+                new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"},
+                new CrmFilterAttribute("BuyingCatalogueContact") {FilterName = "cc_buyingcataloguecontact", FilterValue = "true"}
             };
 
             var appJson = Repository.RetrieveMultiple(new Contact().GetQueryString(null, filterAttributes, true, true), out Count);

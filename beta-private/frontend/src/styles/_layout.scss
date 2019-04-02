@@ -36,6 +36,11 @@ a {
   }
 }
 
+.sticky {
+  position: fixed;
+  top: $header-total-height;
+}
+
 @mixin reversed {
   background-color: $color-reversed-bg;
   color: $color-reversed-fg;
@@ -249,6 +254,10 @@ body > footer {
 
       a {
         text-decoration: underline;
+        
+      }
+      a[target="_blank"]:after {
+        content: none;
       }
     }
   }
@@ -323,7 +332,7 @@ main > .breadcrumb {
   padding: 1em 4em;
   display: none;
   margin: 1em 0em;
-  
+  max-width: 55em;
   a {
     &:visited,
     &:active,
@@ -346,5 +355,18 @@ main > .breadcrumb {
 
   &.enabled {
     display: block;
+  }
+}
+
+#error-page {
+  padding: 2em 2em 10em 2em;
+  background: $color-nhs-light-grey;
+  margin:0;
+  h1 {
+    color: $color-nhs-black;
+  }
+  p {
+    color: $color-nhs-black;
+    font-size: x-large;
   }
 }

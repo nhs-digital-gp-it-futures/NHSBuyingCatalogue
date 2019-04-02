@@ -69,7 +69,8 @@ async function capabilityPageContext (req) {
     breadcrumbs: [
       { label: 'Onboarding.Title', url: `../../solutions/${req.solution.id}` },
       { label: 'CapAssPages.Breadcrumb' }
-    ]
+    ],
+    mimes: [sharePointProvider.getMimeCommaString(), sharePointProvider.getMimeExtensionsCommaString()].join(', ')
   }
 
   context.activeForm.id = 'capability-assessment-form'
@@ -119,6 +120,7 @@ async function solutionCapabilityPageGet (req, res) {
 
   if (context.notEditable) {
     delete context.activeForm.id
+    return res.redirect('./summary')
   }
 
   if ('saved' in req.query) {
@@ -126,6 +128,10 @@ async function solutionCapabilityPageGet (req, res) {
   }
 
   res.render('supplier/capabilities/index', context)
+}
+
+function requestClaimNameMap (req) {
+  return req.solution.capabilities.reduce((prev, cap) => ({ ...prev, [cap.claimID]: cap.name }), { })
 }
 
 function validRequest (req) {
@@ -140,7 +146,7 @@ function validRequest (req) {
     }
   })
 
-  const claimedCapabilities = req.solution.capabilities.reduce((prev, cap) => ({ ...prev, [cap.claimID]: cap.name }), { })
+  const claimedCapabilities = requestClaimNameMap(req)
 
   let errors = []
 
@@ -187,11 +193,15 @@ function validRequest (req) {
 }
 
 async function solutionCapabilityPagePost (req, res) {
+  req.connection.setTimeout(12000000)
+
   const context = {
     errors: {
       items: []
     }
   }
+
+  const claimNameMap = requestClaimNameMap(req)
 
   const valRes = validRequest(req)
 
@@ -214,13 +224,36 @@ async function solutionCapabilityPagePost (req, res) {
 
   const evidenceDescriptions = await Promise.all(_.map(uploadingVideoEvidence, async (isUploading, claimID) => {
     let fileToUpload = files[claimID]
-    let blobId = null
+    let uploadResponse = {}
 
     if (fileToUpload) {
-      blobId = await uploadFile(claimID, fileToUpload.buffer, fileToUpload.originalname).catch((err) => {
-        context.errors.items.push({ msg: 'Validation.Capability.Evidence.Upload.FailedAction' })
+      try {
+        uploadResponse = await uploadFile(claimID, fileToUpload.buffer, fileToUpload.originalname)
+      } catch (err) {
+        context.errors.items.push({ msg: `${err} $t(Validation.Capability.Evidence.Upload.FailedAction)` })
+        console.error(err)
         systemError = err
-      })
+      }
+    }
+
+    if (uploadResponse.err) {
+      systemError = uploadResponse.err
+      const guiltyClaimName = claimNameMap[claimID]
+      const err = {
+        error: uploadResponse.err,
+        name: guiltyClaimName,
+        claim: claimID,
+        msg: ''
+      }
+      if (uploadResponse.isVirus) {
+        err.msg = `${guiltyClaimName} ${'$t(Validation.Capability.Evidence.Virus Scan.Failed)'}`
+      } else if (uploadResponse.badMime) {
+        err.msg = `${guiltyClaimName} ${'$t(Validation.Capability.Evidence.Mime Check.Failed)'}`
+      } else {
+        err.msg = `${guiltyClaimName}`
+      }
+
+      context.errors.items.push(err)
     }
 
     const currentEvidence = _.filter(req.solution.evidence, { claimId: claimID })
@@ -234,13 +267,14 @@ async function solutionCapabilityPagePost (req, res) {
       createdOn: new Date().toISOString(),
       evidence: isUploading === 'yes' ? req.body['evidence-description'][claimID] : LIVE_DEMO_MESSSAGE_INDICATOR,
       hasRequestedLiveDemo: isUploading !== 'yes',
-      blobId: blobId
+      blobId: uploadResponse.blobId
     }
   }))
 
   // Update solution evidence, communicate the error if there isn't any already.
   await updateSolutionCapabilityEvidence(req.solution.id, evidenceDescriptions).catch((err) => {
     context.errors.items.push({ msg: 'Validation.Capability.Evidence.Update.FailedAction' })
+    console.log(err)
     systemError = err
   })
 
@@ -300,8 +334,8 @@ async function confirmationPageContext (req) {
   },
   { associated: {}, overarching: {} })
 
-  context.solution.standardsByGroup.associated = _.map(context.solution.standardsByGroup.associated)
-  context.solution.standardsByGroup.overarching = _.map(context.solution.standardsByGroup.overarching)
+  context.solution.standardsByGroup.associated = _.sortBy(_.map(context.solution.standardsByGroup.associated), 'name')
+  context.solution.standardsByGroup.overarching = _.sortBy(_.map(context.solution.standardsByGroup.overarching), 'name')
 
   context.solution.capabilities = context.solution.capabilities.map((cap) => {
     let isLiveDemo = false
@@ -313,21 +347,22 @@ async function confirmationPageContext (req) {
     } else if (cap.latestEvidence && cap.latestFile) {
       missingEvidence = false
     }
-
-    context.editUrls = {
-      registration: `/suppliers/solutions/${req.params.solution_id}/register`,
-      capabilities: {
-        selection: `/suppliers/solutions/${req.params.solution_id}/capabilities`,
-        evidence: `/suppliers/capabilities/${req.params.solution_id}`
-      }
-    }
-
     return {
       ...cap,
       isLiveDemo,
       missingEvidence
     }
   })
+
+  context.solution.capabilities = _.sortBy(context.solution.capabilities, 'name')
+
+  context.editUrls = {
+    registration: `/suppliers/solutions/${req.params.solution_id}/register`,
+    capabilities: {
+      selection: `/suppliers/solutions/${req.params.solution_id}/capabilities`,
+      evidence: `/suppliers/capabilities/${req.params.solution_id}`
+    }
+  }
   return context
 }
 
@@ -341,6 +376,9 @@ async function summaryPageGet (req, res) {
   ]
   context.editUrls = {}
   context.backlink = `../../solutions/${req.solution.id}`
+
+  context.solution.hasOptionalStandards = context.solution.standardsByGroup.associated.some((std) => std.isOptional)
+
   res.render('supplier/capabilities/summary', context)
 }
 
@@ -390,7 +428,7 @@ async function confirmationPagePost (req, res) {
   }
 }
 
-async function submitCapabilityAssessment (solutionID) {
+function submitCapabilityAssessment (solutionID) {
   return dataProvider.submitSolutionForCapabilityAssessment(solutionID)
 }
 

@@ -7,12 +7,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   public sealed class CapabilitiesImplementedEvidenceLogic : EvidenceLogicBase<CapabilitiesImplementedEvidence>, ICapabilitiesImplementedEvidenceLogic
   {
     public CapabilitiesImplementedEvidenceLogic(
+      ICapabilitiesImplementedEvidenceModifier modifier,
       ICapabilitiesImplementedEvidenceDatastore datastore,
       IContactsDatastore contacts,
       ICapabilitiesImplementedEvidenceValidator validator,
       ICapabilitiesImplementedEvidenceFilter filter,
       IHttpContextAccessor context) :
-      base(datastore, contacts, validator, filter, context)
+      base(modifier, datastore, contacts, validator, filter, context)
     {
     }
   }

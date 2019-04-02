@@ -3,7 +3,6 @@ using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,6 +10,17 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
 {
   public sealed class SolutionsExLogic : LogicBase, ISolutionsExLogic
   {
+    private readonly ISolutionsModifier _solutionsModifier;
+
+    private readonly ICapabilitiesImplementedModifier _capabilitiesImplementedModifier;
+    private readonly IStandardsApplicableModifier _standardsApplicableModifier;
+
+    private readonly ICapabilitiesImplementedEvidenceModifier _capabilitiesImplementedEvidenceModifier;
+    private readonly IStandardsApplicableEvidenceModifier _standardsApplicableEvidenceModifier;
+
+    private readonly ICapabilitiesImplementedReviewsModifier _capabilitiesImplementedReviewsModifier;
+    private readonly IStandardsApplicableReviewsModifier _standardsApplicableReviewsModifier;
+
     private readonly ISolutionsExDatastore _datastore;
     private readonly ISolutionsExValidator _validator;
     private readonly ISolutionsExFilter _filter;
@@ -18,6 +28,17 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
     private readonly IEvidenceBlobStoreLogic _evidenceBlobStoreLogic;
 
     public SolutionsExLogic(
+      ISolutionsModifier solutionsModifier,
+
+      ICapabilitiesImplementedModifier capabilitiesImplementedModifier,
+      IStandardsApplicableModifier standardsApplicableModifier,
+
+      ICapabilitiesImplementedEvidenceModifier capabilitiesImplementedEvidenceModifier,
+      IStandardsApplicableEvidenceModifier standardsApplicableEvidenceModifier,
+
+      ICapabilitiesImplementedReviewsModifier capabilitiesImplementedReviewsModifier,
+      IStandardsApplicableReviewsModifier standardsApplicableReviewsModifier,
+
       ISolutionsExDatastore datastore,
       IHttpContextAccessor context,
       ISolutionsExValidator validator,
@@ -26,6 +47,17 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       IEvidenceBlobStoreLogic evidenceBlobStoreLogic) :
       base(context)
     {
+      _solutionsModifier = solutionsModifier;
+
+      _capabilitiesImplementedModifier = capabilitiesImplementedModifier;
+      _standardsApplicableModifier = standardsApplicableModifier;
+
+      _capabilitiesImplementedReviewsModifier = capabilitiesImplementedReviewsModifier;
+      _standardsApplicableReviewsModifier = standardsApplicableReviewsModifier;
+
+      _capabilitiesImplementedEvidenceModifier = capabilitiesImplementedEvidenceModifier;
+      _standardsApplicableEvidenceModifier = standardsApplicableEvidenceModifier;
+
       _datastore = datastore;
       _validator = validator;
       _filter = filter;
@@ -42,29 +74,16 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
     {
       _validator.ValidateAndThrowEx(solnEx, ruleSet: nameof(ISolutionsExLogic.Update));
 
-      var email = Context.Email();
-      solnEx.Solution.ModifiedById = _contacts.ByEmail(email).Id;
-      solnEx.Solution.ModifiedOn = DateTime.UtcNow;
+      _solutionsModifier.ForUpdate(solnEx.Solution);
 
+      solnEx.ClaimedCapability.ForEach(claim => _capabilitiesImplementedModifier.ForUpdate(claim));
+      solnEx.ClaimedStandard.ForEach(claim => _standardsApplicableModifier.ForUpdate(claim));
 
-      solnEx.ClaimedCapabilityReview.ForEach(review =>
-      {
-         review.OriginalDate = (review.OriginalDate == default(DateTime)) ? DateTime.UtcNow : review.OriginalDate;
-      });
-      solnEx.ClaimedStandardReview.ForEach(review =>
-      {
-         review.OriginalDate = (review.OriginalDate == default(DateTime)) ? DateTime.UtcNow : review.OriginalDate;
-      });
+      solnEx.ClaimedCapabilityEvidence.ForEach(evidence => _capabilitiesImplementedEvidenceModifier.ForUpdate(evidence));
+      solnEx.ClaimedStandardEvidence.ForEach(evidence => _standardsApplicableEvidenceModifier.ForUpdate(evidence));
 
-      solnEx.ClaimedCapabilityEvidence.ForEach(evidence =>
-      {
-         evidence.OriginalDate = (evidence.OriginalDate == default(DateTime)) ? DateTime.UtcNow : evidence.OriginalDate;
-      });
-      solnEx.ClaimedStandardEvidence.ForEach(evidence =>
-      {
-         evidence.OriginalDate = (evidence.OriginalDate == default(DateTime)) ? DateTime.UtcNow : evidence.OriginalDate;
-      });
-
+      solnEx.ClaimedCapabilityReview.ForEach(review =>_capabilitiesImplementedReviewsModifier.ForUpdate(review));
+      solnEx.ClaimedStandardReview.ForEach(review =>_standardsApplicableReviewsModifier.ForUpdate(review));
 
       _datastore.Update(solnEx);
 

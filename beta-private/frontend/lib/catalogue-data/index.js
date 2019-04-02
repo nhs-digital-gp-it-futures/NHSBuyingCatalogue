@@ -66,6 +66,14 @@ class DataProvider {
     this.solutionsExApi = new CatalogueApi.SolutionsExApi()
     this.capabilityMappingsApi = new CatalogueApi.CapabilityMappingsApi()
     this.capabilityEvidenceAPI = new CatalogueApi.CapabilitiesImplementedEvidenceApi()
+
+    this.TIMEOUT = 1200000
+    this.contactsApi.apiClient.timeout = this.TIMEOUT
+    this.orgsApi.apiClient.timeout = this.TIMEOUT
+    this.solutionsApi.apiClient.timeout = this.TIMEOUT
+    this.solutionsExApi.apiClient.timeout = this.TIMEOUT
+    this.capabilityMappingsApi.apiClient.timeout = this.TIMEOUT
+    this.capabilityEvidenceAPI.apiClient.timeout = this.TIMEOUT
   }
 
   async contactById (contactId) {
@@ -221,12 +229,17 @@ class DataProvider {
         standard
       } = await this.capabilityMappingsApi.apiPorcelainCapabilityMappingsGet()
 
-      const standards = _.keyBy(standard, 'id')
-
+      const standards = _.keyBy(
+        standard.map((std) => ({ ...std, isOptional: false })),
+        'id'
+      )
       return {
         capabilities: _(capabilityMapping)
           .map(({ capability, optionalStandard }) => {
-            const capStds = _.map(optionalStandard, ({ standardId }) => standards[standardId])
+            const capStds = _.map(optionalStandard, ({ standardId, isOptional }) => {
+              if (isOptional) standards[standardId].isOptional = true
+              return { ...standards[standardId], isOptional }
+            })
             return {
               ...capability,
               standards: capStds,
@@ -234,7 +247,8 @@ class DataProvider {
                 ['overarching', 'associated'],
                 _.partition(capStds, std => std.isOverarching)
               ),
-              types: _.kebabCase(capability.name)
+              types: _.kebabCase(capability.name),
+              hasOptionals: optionalStandard.some((std) => std.isOptional)
             }
           })
           .keyBy('id')
@@ -331,9 +345,10 @@ class DataProvider {
     // Skip through to the Statuses
     solnEx.solution.status = this.getCapabilityAssessmentStatusCode() // ✨🧙 magic 🧙✨
     await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
-    
-    solnEx.solution.status = this.getStandardsComplianceStatusCode()
-    await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx })
+
+    const capAssSolnEx = await this.solutionsExApi.apiPorcelainSolutionsExBySolutionBySolutionIdGet(solutionID)
+    capAssSolnEx.solution.status = this.getStandardsComplianceStatusCode() // ✨🧙 magic 🧙✨
+    await this.solutionsExApi.apiPorcelainSolutionsExUpdatePut({ solnEx: capAssSolnEx })
 
     return this.solutionForAssessment(solutionID)
   }

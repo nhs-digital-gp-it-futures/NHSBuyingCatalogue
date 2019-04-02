@@ -100,7 +100,7 @@ namespace Gif.Service.Controllers
       {
         var capability = _datastore.ById(id);
 
-        if (capability.Id == Guid.Empty)
+        if (capability == null || capability?.Id == Guid.Empty)
           return StatusCode(404);
 
         return new ObjectResult(capability);

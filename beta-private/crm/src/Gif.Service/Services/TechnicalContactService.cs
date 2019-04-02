@@ -47,7 +47,7 @@ namespace Gif.Service.Services
       var appJson = Repository.RetrieveMultiple(new TechnicalContact().GetQueryString(null, filterAttributes), out int? count);
       var tcJson = appJson?.FirstOrDefault();
 
-      return new TechnicalContact(tcJson);
+      return (tcJson == null) ? null : new TechnicalContact(tcJson);
     }
 
     public TechnicalContact Create(TechnicalContact techCont)

@@ -81,7 +81,8 @@ async function solutionComplianceDashboard (req, res) {
       { label: 'Onboarding.Title', url: `../../solutions/${req.solution.id}` },
       { label: 'CompliancePages.Dashboard.Title' }
     ],
-    errors: {}
+    errors: {},
+    backlink: `../../solutions/${req.solution.id}`
   }
 
   try {
@@ -104,16 +105,18 @@ async function solutionComplianceDashboard (req, res) {
     }
 
     if (evidenceFiles) {
-      context.solution.standards = _(context.solution.standards)
+      context.solution.standards = _.sortBy(_(context.solution.standards)
         .map(std => ({
           ...context.standards[std.standardId],
           ...std,
           continueUrl: `evidence/${std.id}/`,
+          isInterop: context.standards[std.standardId].type === 'I',
           ...!_.isEmpty(evidenceFiles[std.id]) || +std.status !== 0
             ? {}
             : notReadyStatus
         }))
         .value()
+      , 'name')
     } else {
       // no evidence files object was obtained.
       context.solution.standards = []
@@ -151,7 +154,8 @@ function formatTimestampForDisplay (ts) {
 async function evidencePageContext (req, next) {
   const context = {
     ...commonComplianceContext(req),
-    ...await dataProvider.capabilityMappings()
+    ...await dataProvider.capabilityMappings(),
+    mimes: [sharePointProvider.getMimeCommaString(), sharePointProvider.getMimeExtensionsCommaString()].join(', ')
   }
 
   context.claim = _.find(context.solution.standards, { id: req.params.claim_id })
@@ -193,7 +197,6 @@ async function evidencePageContext (req, next) {
   // set flags based on who sent the last message
   if (context.claim.submissionHistory.length) {
     const latestEntry = _.last(context.claim.submissionHistory)
-    context.collapseHistory = context.claim.submissionHistory.length > 1
     context.hasFeedback = latestEntry.isFeedback
     context.feedbackId = context.hasFeedback && latestEntry.id
   }
@@ -203,7 +206,8 @@ async function evidencePageContext (req, next) {
   // load the contacts associated with the message history
   context.claim.historyContacts = _.keyBy(await Promise.all(
     _(context.claim.submissionHistory)
-      .uniqBy('createdById')
+      .filter((msg) => !msg.isFeedback)
+      .uniqBy('createdById') 
       .map('createdById')
       .map(id => dataProvider.contactById(id))
   ), 'id')
@@ -235,6 +239,10 @@ async function evidencePageContext (req, next) {
     { label: 'CompliancePages.Dashboard.Breadcrumb', url: `../../` },
     { label: context.claim.standard.name }
   ]
+
+  context.latestReview = _(context.claim.submissionHistory)
+  .filter((msg) => msg.isFeedback)
+  .last()
 
   let latestFile
 
@@ -287,10 +295,12 @@ async function solutionComplianceEvidencePagePost (req, res, next) {
     return res.redirect('../../')
   }
 
+  // Generate a new evidence record.
   const evidenceRecord = {
     id: require('node-uuid-generator').generate(),
     claimId: req.params.claim_id,
     createdOn: new Date(),
+    originalDate: new Date(),
     createdById: req.user.contact.id,
     evidence: '',
     blobId: '' // ID of the file that was just uploaded, this relates a message to a file.
@@ -300,7 +310,7 @@ async function solutionComplianceEvidencePagePost (req, res, next) {
   if (req.body.message && req.body.message.length > 300) {
     context.errors.items.push({ msg: 'Validation.Standard.Evidence.Message.TooLong' })
   } else {
-    evidenceRecord.message = req.body.message
+    evidenceRecord.evidence = req.body.message
   }
 
   if (!req.files.length && action.submit !== 'direct' && !action.save && !action.exit) {
@@ -311,12 +321,32 @@ async function solutionComplianceEvidencePagePost (req, res, next) {
   if (req.files.length) {
     const fileToUpload = req.files[0]
     try {
-      evidenceRecord.blobId = await uploadFile(req.params.claim_id, fileToUpload.buffer, fileToUpload.originalname)
+      const uploadResponse = await uploadFile(req.params.claim_id, fileToUpload.buffer, fileToUpload.originalname)
+
+      if (uploadResponse.blobId) {
+        evidenceRecord.blobId = uploadResponse.blobId
+      }
+
+      if (uploadResponse.err) {
+        const err = {
+          error: uploadResponse.err,
+          msg: ''
+        }
+
+        if (uploadResponse.isVirus) {
+          err.msg = `${'$t(Validation.Standard.Evidence.File.Virus Scan.Failed)'}`
+        } else if (uploadResponse.badMime) {
+          err.msg = `${'$t(Validation.Standard.Evidence.File.Mime Check.Failed)'}`
+        }
+
+        context.errors.items.push(err)
+      }
     } catch (err) {
-      context.errorsitems.push({
+      context.errors.items.push({
         err,
-        msg: 'Validation.Standard.Evidence.File.Failed.Upload'
+        msg: 'Validation.Standard.Evidence.File.Upload.Failed'
       })
+      console.log(err)
     }
   }
 
@@ -326,9 +356,8 @@ async function solutionComplianceEvidencePagePost (req, res, next) {
   claim.status = '1' /* draft */
   claim.ownerId = req.body.ownerId || null
 
-  // Generate a new evidence record.
+  // Add the evidence record to the solution.
   req.solution.evidence.push(evidenceRecord)
-        originalDate: new Date(),
 
   // update the solution with the new evidence record.
   try {

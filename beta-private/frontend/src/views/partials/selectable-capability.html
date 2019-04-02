@@ -1,6 +1,6 @@
 <li tabindex="0" data-cap-id="{{id}}" class="capability {{types}}"{{#if isFirst}} id="{{firstId}}"{{/if}}>
   <h3 class="name">{{name}}</h3>
-  
+
   <section class="reveal">
     <p class="description">
       {{description}}
@@ -9,12 +9,26 @@
       {{/url}}
     </p>
     <p>{{t 'Onboarding.Capabilities.Reveal.CompliancePreamble'}}</p>
-    
+
     <div>
     <section class="standards">
       <ul>
         {{#standardsByGroup.associated}}
-        <li><a href="{{url}}" target="_blank">{{name}}</a></li>
+          {{#unless isOptional}}
+          <li><a href="{{url}}" target="_blank">{{name}}</a></li>
+          {{/unless}}
+        {{/standardsByGroup.associated}}
+        </ul>
+        {{#hasOptionals}}
+          {{#each (tt 'Optional Standards.Notice Text')}}
+              <p>{{.}}</p>
+          {{/each}}
+        {{/hasOptionals}}
+        <ul>
+          {{#standardsByGroup.associated}}
+          {{#if isOptional}}
+          <li><a href="{{url}}" target="_blank">{{name}}</a></li>
+          {{/if}}
         {{/standardsByGroup.associated}}
       </ul>
     </section>

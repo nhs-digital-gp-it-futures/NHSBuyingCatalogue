@@ -97,7 +97,7 @@ namespace Gif.Service.Controllers
       {
         var standardApplicable = _datastore.ById(id);
 
-        if (standardApplicable.Id == Guid.Empty)
+        if (standardApplicable == null || standardApplicable?.Id == Guid.Empty)
           return StatusCode(404);
 
         return new ObjectResult(standardApplicable);
@@ -128,7 +128,7 @@ namespace Gif.Service.Controllers
       {
         evidenceEntity = _datastore.Create(evidenceEntity);
 
-        if (evidenceEntity.Id == Guid.Empty)
+        if (evidenceEntity == null || evidenceEntity?.Id == Guid.Empty)
           return StatusCode(404);
 
         return new ObjectResult(evidenceEntity);

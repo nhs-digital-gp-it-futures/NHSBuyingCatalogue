@@ -1,0 +1,1 @@
+java -jar "D:\Tools\Selenium\selenium-server-standalone-3.9.1.jar" -role node -hub http://localhost:4444/grid/register -port 9661 

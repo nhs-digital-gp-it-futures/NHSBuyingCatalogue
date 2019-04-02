@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using FluentValidation;
+﻿using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using Moq;
@@ -15,6 +14,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
   [TestFixture]
   public sealed class ReviewsLogicBase_Tests
   {
+    private Mock<IReviewsBaseModifier<ReviewsBase>> _modifier;
     private Mock<IReviewsDatastore<ReviewsBase>> _datastore;
     private Mock<IContactsDatastore> _contacts;
     private Mock<IReviewsValidator<ReviewsBase>> _validator;
@@ -24,6 +24,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [SetUp]
     public void SetUp()
     {
+      _modifier = new Mock<IReviewsBaseModifier<ReviewsBase>>();
       _datastore = new Mock<IReviewsDatastore<ReviewsBase>>();
       _contacts = new Mock<IContactsDatastore>();
       _validator = new Mock<IReviewsValidator<ReviewsBase>>();
@@ -34,13 +35,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new DummyReviewsLogicBase(_datastore.Object, _contacts.Object, _validator.Object, _filter.Object, _context.Object));
+      Assert.DoesNotThrow(() => new DummyReviewsLogicBase(_modifier.Object, _datastore.Object, _contacts.Object, _validator.Object, _filter.Object, _context.Object));
     }
 
     [Test]
     public void ByEvidence_CallsFilter()
     {
-      var logic = new DummyReviewsLogicBase(_datastore.Object, _contacts.Object, _validator.Object, _filter.Object, _context.Object);
+      var logic = new DummyReviewsLogicBase(_modifier.Object, _datastore.Object, _contacts.Object, _validator.Object, _filter.Object, _context.Object);
 
       logic.ByEvidence("some Id");
 
@@ -52,7 +53,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
       _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(Creator.GetContact());
-      var logic = new DummyReviewsLogicBase(_datastore.Object, _contacts.Object, _validator.Object, _filter.Object, _context.Object);
+      var logic = new DummyReviewsLogicBase(_modifier.Object, _datastore.Object, _contacts.Object, _validator.Object, _filter.Object, _context.Object);
       var review = Creator.GetReviewsBase();
 
       var valres = new ValidationResult();
@@ -66,17 +67,14 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Create_SetsOriginalDate_ToUtcNow()
+    public void Create_Calls_Modifier()
     {
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
-      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(Creator.GetContact());
-      var logic = new DummyReviewsLogicBase(_datastore.Object, _contacts.Object, _validator.Object, _filter.Object, _context.Object);
+      var logic = new DummyReviewsLogicBase(_modifier.Object, _datastore.Object, _contacts.Object, _validator.Object, _filter.Object, _context.Object);
       var review = Creator.GetReviewsBase(originalDate: DateTime.MinValue);
-      _datastore.Setup(x => x.Create(review)).Returns(review);
 
-      var result = logic.Create(review);
+      logic.Create(review);
 
-      result.OriginalDate.Should().BeCloseTo(DateTime.UtcNow);
+      _modifier.Verify(x => x.ForCreate(review), Times.Once);
     }
   }
 }

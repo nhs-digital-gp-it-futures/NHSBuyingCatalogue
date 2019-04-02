@@ -358,6 +358,7 @@ async function capabilitiesPageContext (req) {
     ),
     stds => _.orderBy(stds, a => a.name.toLowerCase())
   )
+  // console.log(context.standardsByGroup.associated)
 
   return context
 }
@@ -372,6 +373,7 @@ async function capabilitiesPageGet (req, res) {
   context.capabilities.forEach(cap => {
     cap.selected = _.get(_.find(req.solution.capabilities, { capabilityId: cap.id }), 'id')
   })
+
   /* If Solution has progressed further than registration. */
   if (+context.solution.status && +context.solution.status !== 0 && +context.solution.status !== 1) {
     res.redirect(`../../../capabilities/${req.solution.id}/summary`)

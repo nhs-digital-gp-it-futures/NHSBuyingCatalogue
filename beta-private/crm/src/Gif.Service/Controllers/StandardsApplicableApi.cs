@@ -55,7 +55,7 @@ namespace Gif.Service.Controllers
       {
         var standard = _datastore.ById(id);
 
-        if (standard.Id == Guid.Empty)
+        if (standard == null || standard?.Id == Guid.Empty)
           return StatusCode(404);
 
         return new ObjectResult(standard);
@@ -125,7 +125,7 @@ namespace Gif.Service.Controllers
       {
         var claimedstandardGet = _datastore.ById(claimedstandard.Id.ToString());
 
-        if (claimedstandardGet.Id == Guid.Empty)
+        if (claimedstandardGet == null || claimedstandardGet?.Id == Guid.Empty)
           return StatusCode(404);
 
         _datastore.Delete(claimedstandard);

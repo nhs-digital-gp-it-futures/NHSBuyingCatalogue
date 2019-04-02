@@ -8,7 +8,7 @@
 import { homePage } from './pages'
 
 const HOMEPAGE_TITLE = 'NHS Buying Catalogue'
-const LOGIN_TEXT = 'Log in/Sign up'
+const LOGIN_TEXT = 'Log in'
 const NUMBER_OF_CARDS = 3
 const NUMBER_OF_STEPS = 4
 const NUMBER_OF_CHILDREN_PER_CARD = 1

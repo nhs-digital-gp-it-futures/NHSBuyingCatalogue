@@ -197,6 +197,9 @@ namespace NHSD.GPITF.BuyingCatalog
         assyPaths = assyPaths.Where(x => !x.Contains("CRM"));
       }
 
+      // exclude test assys which are placed here by Docker build
+      assyPaths = assyPaths.Where(x => !x.Contains("Test"));
+
       var assys = assyPaths.Select(filePath => Assembly.LoadFile(filePath)).ToList();
       assys.Add(exeAssy);
       builder
@@ -263,14 +266,6 @@ namespace NHSD.GPITF.BuyingCatalog
 
       app.UseStaticFiles();
       app.UseMvc();
-
-      if (CurrentEnvironment.IsDevelopment())
-      {
-        var logConfig = Configuration.GetSection("Logging");
-        logging.AddConsole(logConfig); //log levels set in your configuration
-        logging.AddDebug(); //does all log levels
-        logging.AddFile(logConfig.GetValue<string>("PathFormat"));
-      }
     }
 
     private void DumpSettings()

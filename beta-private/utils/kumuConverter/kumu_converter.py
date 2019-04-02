@@ -26,7 +26,8 @@ connections_sheet_headings = [
     'To',
     'FromID',
     'ToID',
-    'Type'
+    'Type',
+    'IsOptional'
 ]
 
 mappings_output_headings = [
@@ -38,7 +39,7 @@ mappings_output_headings = [
 mappings_headings_map = {
     'CapabilityId': 'FromID',
     'StandardId': 'ToID',
-    'IsOptional': None,
+    'IsOptional': 'IsOptional',
 }
 
 # These are the output headings for the 'standards.csv' file
@@ -86,7 +87,6 @@ capability_headings_map = {
 def map_capability_type (row):
     '''Based on the capability output headings, convert the type from "Foundation" to "C" or "N".'''
     idx = capability_output_headings.index('Type')
-    print(row[idx])
     row[idx] = 'C' if row[idx] == 'Foundation' else 'N'
     return row
 
@@ -111,13 +111,6 @@ def map_standard_is_overarching (row):
     '''Based on the standard type, set the isOverarching flag.'''
     idx = standard_output_headings.index('IsOverarching')
     row[idx] = 1 if 'Overarching' in row[idx] else 0
-    return row
-
-
-def map_mapping_is_optional (row):
-    '''none of these are optional, so just map to 0'''
-    idx = mappings_output_headings.index('IsOptional')
-    row[idx] = 0
     return row
 
 
@@ -245,7 +238,7 @@ def extract_capability_standard_rows (ws):
         to_val = list(row)[to_col_idx].value
         type_val = list(row)[type_col_idx].value
 
-        not_none = (from_val != None) and (to_val != None) and (type_val != 'Inherited')
+        not_none = (from_val != None) and (to_val != None)
         if not_none and from_val.startswith('C') and to_val.startswith('S'):
             capability_standard_rows.append(row)
     return capability_standard_rows
@@ -261,7 +254,6 @@ def build_mappings_output (wb):
         [list(row)[idx].value if idx is not None else '' for idx in heading_indices] for row in capability_standards_rows
     ]
 
-    csv_rows = [map_mapping_is_optional(row) for row in csv_rows]
     csv_rows.insert(0, mappings_output_headings)
     return csv_rows
 

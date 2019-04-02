@@ -51,7 +51,21 @@
     {{#>help-reveal title="CapAssPages.Confirmation.Capabilities.Subtitle.Standards"}}
         <h3>{{t 'CapAssPages.Confirmation.Capabilities.Subtitle.Associated'}}</h3>
         {{#solution.standardsByGroup.associated}}
-            <p><a href="">{{name}}</a></p>
+            {{#unless isOptional}}
+                <p><a target="_blank" href="{{url}}">{{name}}</a></p>
+            {{/unless}}
+        {{/solution.standardsByGroup.associated}}
+
+        {{#if solution.hasOptionalStandards}}
+            {{#each (tt 'Optional Standards.Notice Text')}}
+                <p>{{.}}</p>
+            {{/each}}
+        {{/if}}
+
+        {{#solution.standardsByGroup.associated}}
+            {{#if isOptional}}
+                <p><a target="_blank" href="{{url}}">{{name}}</a></p>
+            {{/if}}
         {{/solution.standardsByGroup.associated}}
 
         <h3>{{t 'CapAssPages.Confirmation.Capabilities.Subtitle.Overarching'}}</h3>

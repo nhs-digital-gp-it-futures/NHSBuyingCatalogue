@@ -1,0 +1,1 @@
+start-process kubectl -argumentlist "port-forward selenium-hub-76649bb697-5lr58 4444:4444"

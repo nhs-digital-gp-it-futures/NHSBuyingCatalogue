@@ -11,6 +11,10 @@ class FakeFileStoreAPI {
     })
   }
 
+  /**
+    Regression Test Data
+   */
+
   async initialiseTestData () {
     /**
      * Regression Test Data
@@ -18,13 +22,37 @@ class FakeFileStoreAPI {
      * Since Fakepoint is intended to serve as a tool for use in regression test suites,
      * we are populating it with a little bit of test data for standards compliance.
      * This means that standards can have a traceability matrix present.
+     *
+     * Id                                     StandardId  Status  Name
+     * 23446cf9-d461-4907-b099-41f35b65de62	  S32	        -1	    Interoperability Standard
+     * 2c8c9cc8-141b-4d06-872a-8d5e5efb3641	  S47	        0	      IM1 - Interface Mechanism
+     * 3a7735f2-759d-4f49-bca0-0828f32cf86c	  S30	        2	      Information Governance
+     * 3d10430f-1748-44ad-8df3-5d5d11544f75	  S49	        6	      Management Information (MI) Reporting
+     * 522e58a7-6f14-4c28-9340-193482915401	  S21	        0	      Citizen Access
+     * 64c5d608-772f-4bc2-905b-4cee5d0b6f91	  S27	        0	      Data Standards
+     * 6cf61bc3-9714-4902-953f-76a238d5ffd5	  S4	        4	      View Record - Citizen - Standard
+     * 719722d0-2354-437e-acdc-4625989bbca8	  S69	        0	      Testing
+     * 7b62b29a-62a7-4b4a-bcc8-dfa65fb7e35c	  S65	        1	      Service Management
+     * 99619bdd-6452-4850-9244-a4ce9bec70ca	  S63	        0	      Non-Functional Questions
+     * 9e7780e9-7263-4ee4-a722-b3e1aaff4476	  S31	        0	      Commercial Standard
+     * a5774787-3ab3-48ff-9fa2-6db06be1b926	  S25	        0	      Clinical Safety
+     * cd07ffcf-822b-460a-9f94-be42ad9b995b	  S26	        0	      Data Migration
+     * cdfdebda-edde-4af4-aaf4-9d59fca7cdaa	  S29	        5	      Hosting & Infrastructure
+     * e70fd085-ec42-4901-a7ba-a0d6f61fbbe1	  S24	        0	      Business Continuity & Disaster Recovery
+     * f49f91de-64fc-4cca-88bf-3238fb1de69b	  S28	        3	      Training
      */
-    const dataMigrationClaimID = 'f49f91de-64fc-4cca-88bf-3238fb1de69b'
-    const commercialClaimID = '3a7735f2-759d-4f49-bca0-0828f32cf86c'
-    const clinicalSafetyClaimID = '7b62b29a-62a7-4b4a-bcc8-dfa65fb7e35c'
-    const testingClaimID = '99619bdd-6452-4850-9244-a4ce9bec70ca'
-    const interoperabilityStandard = '0e55d9ec-43e6-41b3-bcac-d8681384ea68'
-    const businessContinuityClaimID = '719722d0-2354-437e-acdc-4625989bbca8'
+
+    const claimsRequireingFiles = [
+      'cd07ffcf-822b-460a-9f94-be42ad9b995b', // Data Migration
+      '9e7780e9-7263-4ee4-a722-b3e1aaff4476', // Commercial Standard
+      'a5774787-3ab3-48ff-9fa2-6db06be1b926', // Clinical Safety
+      '719722d0-2354-437e-acdc-4625989bbca8', // Testing
+      '23446cf9-d461-4907-b099-41f35b65de62', // Interoperability Standard
+      'e70fd085-ec42-4901-a7ba-a0d6f61fbbe1', // Business Continuity & Disaster Recovery
+      '7b62b29a-62a7-4b4a-bcc8-dfa65fb7e35c', // Service Management
+      'f49f91de-64fc-4cca-88bf-3238fb1de69b', // Training
+      '3a7735f2-759d-4f49-bca0-0828f32cf86c' // Information Governance
+    ]
 
     // Claims for solution ID 9A74133F-A437-4B2C-A57C-0F8B4EDDEA31, used to test
     // Capability ID C1, claim ID 7C0D087F-445A-4D13-8B66-7749F004CFEB
@@ -36,12 +64,9 @@ class FakeFileStoreAPI {
     const fakeBuffer = Buffer.from('Content of the test "Dummy traceabilityMatrix.xlsx" file', 'utf8')
     const fakeName = 'Dummy TraceabilityMatrix.xlsx'
 
-    await this.addTestItem(dataMigrationClaimID, fakeBuffer, fakeName)
-    await this.addTestItem(commercialClaimID, fakeBuffer, fakeName)
-    await this.addTestItem(clinicalSafetyClaimID, fakeBuffer, fakeName)
-    await this.addTestItem(testingClaimID, fakeBuffer, fakeName)
-    await this.addTestItem(interoperabilityStandard, fakeBuffer, fakeName)
-    await this.addTestItem(businessContinuityClaimID, fakeBuffer, fakeName)
+    await Promise.all(
+      claimsRequireingFiles.map(async (claimId) => this.addTestItem(claimId, fakeBuffer, fakeName))
+    )
 
     await this.addTestItem(apptMgmtGpStdClaimID, fakeBuffer, fakeName)
   }

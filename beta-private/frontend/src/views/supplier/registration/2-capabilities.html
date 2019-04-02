@@ -65,26 +65,46 @@
         <h3>{{t 'Onboarding.Capabilities.Summary.Standards.Associated.Heading'}}</h3>
         <ul>
           {{#standardsByGroup.associated}}
-          <li data-id="{{id}}" class="selected"><a href="{{url}}" target="_blank">{{name}}</a></li>
+            {{#unless isOptional}}
+              <li data-id="{{id}}" class="selected mandatory"><a href="{{url}}" target="_blank">{{name}}</a></li>
+            {{/unless}}
           {{/standardsByGroup.associated}}
         </ul>
+      </section>
+      <section class="optionals">
+        <ul>
+            {{#each (tt 'Optional Standards.Notice Text')}}
+              <p>{{.}}</p>
+            {{/each}}
+            {{#standardsByGroup.associated}}
+              {{#if isOptional}}
+                <li data-id="{{id}}" class="selected optional"><a href="{{url}}" target="_blank">{{name}}</a></li>
+              {{/if}}
+            {{/standardsByGroup.associated}}
+          </ul>
       </section>
       <section class="overarching">
         <h3>{{t 'Onboarding.Capabilities.Summary.Standards.Overarching.Heading'}}</h3>
         <ul>
           {{#standardsByGroup.overarching}}
-          <li data-id="{{id}}" class="selected"><a href="{{url}}" target="_blank">{{name}}</a></li>
+          <li data-id="{{id}}" class="selected "><a href="{{url}}" target="_blank">{{name}}</a></li>
           {{/standardsByGroup.overarching}}
         </ul>
       </section>
     </section>
   </div>
 
+  <div>
+    {{#each (tt 'Onboarding.Capabilities.Submission.Notice')}}
+      <p>{{.}}</p>
+    {{/each}}
+  </div>
+
   <div id="submit-controls">
     <input type="submit"
       class="button primary"
       name="action[continue]"
-      value="{{t 'Buttons.Save and continue'}}">
+      value="{{t 'Buttons.Save and complete'}}">
   </div>
 {{/form}}
 <a class="back-link" href="../register">{{t 'Onboarding.Capabilities.Backlink.Title'}}</a>
@@ -148,9 +168,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const elStandardsSection = $('#capability-summary .standards')
     const baseStdCount = +elStandardsSection.dataset.baseStdCount
     let assocStdCount = 0
+    let optionalCount = 0
+    let assocStds = []
     const stdIdToAssocStdEl = {}
 
-    $$('.associated, .associated [data-id]', elStandardsSection).forEach(function (el) {
+    $$('.associated, .associated [data-id], .optionals, .optionals [data-id]', elStandardsSection).forEach(function (el) {
       el.classList.remove('selected')
       if (el.dataset.id) {
         stdIdToAssocStdEl[el.dataset.id] = el
@@ -160,12 +182,21 @@ document.addEventListener('DOMContentLoaded', function () {
     // show only the standards associated with the selected capabilities
     assocStdIds.forEach(function (stdId) {
       stdIdToAssocStdEl[stdId].classList.add('selected')
-      assocStdCount++
+      if(!assocStds.filter(function (std) { return std === stdId }).length) {
+        assocStdCount++
+        assocStds.push(stdId)
+      }
+      if(stdIdToAssocStdEl[stdId].classList.contains('optional')) {
+        optionalCount++
+      }
     })
 
     // update the standards required count, taking the overarching standards into account
     if (assocStdCount) {
       $('.associated', elStandardsSection).classList.add('selected')
+    }
+    if (optionalCount) {
+      $('.optionals', elStandardsSection).classList.add('selected')
     }
     updateCounter($('#capability-summary .standard-count'), baseStdCount + assocStdCount)
     hideAllReveals()

@@ -76,7 +76,8 @@
         {{/if}}
       </div>
     </header>
-    <main id="content" class="{{#if onHomePage}}no-padding{{/if}}">
+    <main id="content"
+      class="{{#if onHomePage}}no-padding{{/if}} {{#if error.isErrorPage}}no-padding{{/if}} {{#if error.stack}}no-padding{{/if}}">
       {{> breadcrumbs}}
       <div id="unsaved-changes"
             role="alertdialog"
@@ -113,9 +114,9 @@
       </div>
       <div class="bottom">
         <p class="legal">
-          <span class="heading">{{t 'Footer.Legal.Heading'}}</span>
-          <span class="text">{{t 'Footer.Legal.Text'}}</span>
-          <a href="{{t 'Footer.Legal.Link.Url'}}">{{t 'Footer.Legal.Link.Text'}}</a>
+          {{#each (tt 'Footer.Legal.Text')}}
+            {{{.}}}
+          {{/each}}
         </p>
       </div>
     </footer>

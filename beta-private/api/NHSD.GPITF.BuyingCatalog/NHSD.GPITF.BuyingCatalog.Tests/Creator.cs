@@ -233,13 +233,15 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
     public static ClaimsBase GetClaimsBase(
       string id = null,
       string solnId = null,
-      string ownerId = null)
+      string ownerId = null,
+      DateTime? originalDate = null)
     {
       var retval = new DummyClaimsBase
       {
         Id = id ?? Guid.NewGuid().ToString(),
         SolutionId = solnId ?? Guid.NewGuid().ToString(),
-        OwnerId = ownerId ?? Guid.NewGuid().ToString()
+        OwnerId = ownerId ?? Guid.NewGuid().ToString(),
+        OriginalDate = originalDate ?? DateTime.UtcNow
       };
       Verifier.Verify(retval);
       return retval;
@@ -250,7 +252,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       string solnId = null,
       string claimId = null,
       string ownerId = null,
-      CapabilitiesImplementedStatus status = CapabilitiesImplementedStatus.Draft)
+      CapabilitiesImplementedStatus status = CapabilitiesImplementedStatus.Draft,
+      DateTime? originalDate = null)
     {
       var retval = new CapabilitiesImplemented
       {
@@ -258,7 +261,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
         SolutionId = solnId ?? Guid.NewGuid().ToString(),
         CapabilityId = claimId ?? Guid.NewGuid().ToString(),
         OwnerId = ownerId ?? Guid.NewGuid().ToString(),
-        Status = status
+        Status = status,
+        OriginalDate = originalDate ?? DateTime.UtcNow
       };
       Verifier.Verify(retval);
       return retval;
@@ -269,7 +273,10 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       string solnId = null,
       string claimId = null,
       string ownerId = null,
-      StandardsApplicableStatus status = StandardsApplicableStatus.Draft)
+      StandardsApplicableStatus status = StandardsApplicableStatus.Draft,
+      DateTime? originalDate = null,
+      DateTime? submittedOn = null,
+      DateTime? assignedOn = null)
     {
       var retval = new StandardsApplicable
       {
@@ -277,7 +284,10 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
         SolutionId = solnId ?? Guid.NewGuid().ToString(),
         StandardId = claimId ?? Guid.NewGuid().ToString(),
         OwnerId = ownerId ?? Guid.NewGuid().ToString(),
-        Status = status
+        Status = status,
+        OriginalDate = originalDate ?? DateTime.UtcNow,
+        SubmittedOn = submittedOn ?? DateTime.UtcNow,
+        AssignedOn = assignedOn ?? DateTime.UtcNow
       };
       Verifier.Verify(retval);
       return retval;

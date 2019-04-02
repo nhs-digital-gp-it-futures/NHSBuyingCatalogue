@@ -113,7 +113,7 @@ namespace Gif.Service.Services
             var appJson = Repository.RetrieveMultiple(new CapabilityEvidence().GetQueryString(null, filterAttributes), out Count);
             var evidence = appJson?.FirstOrDefault();
 
-            return new CapabilityEvidence(evidence);
+            return (evidence == null) ? null : new CapabilityEvidence(evidence);
         }
 
         public CapabilityEvidence Create(CapabilityEvidence evidenceEntity)
@@ -139,7 +139,7 @@ namespace Gif.Service.Services
             var appJson = Repository.RetrieveMultiple(new CapabilityImplemented().GetQueryString(null, filterAttributes), out Count);
             var capabilityImplemented = appJson?.FirstOrDefault();
 
-            return new CapabilityImplemented(capabilityImplemented);
+            return (capabilityImplemented == null) ? null : new CapabilityImplemented(capabilityImplemented);
         }
 
         public CapabilityImplemented ByReviewId(string id)
