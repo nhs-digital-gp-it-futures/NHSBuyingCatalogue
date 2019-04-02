@@ -239,9 +239,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       }
 
       if ((oldNotNew.Any() || newNotOld.Any()) &&
-        IsPendingForClaims(newSolnEx.Solution.Status))
+        !IsPendingForClaims(newSolnEx.Solution.Status))
       {
-        // Can only add/remove ClaimedCapability in Draft
+        // Can only add/remove ClaimedCapability while pending
         return false;
       }
 
@@ -262,9 +262,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       }
 
       if ((oldNotNew.Any() || newNotOld.Any()) &&
-        IsPendingForClaims(newSolnEx.Solution.Status))
+        !IsPendingForClaims(newSolnEx.Solution.Status))
       {
-        // Can only add/remove ClaimedStandard in Draft
+        // Can only add/remove ClaimedStandard while pending
         return false;
       }
 
@@ -357,7 +357,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
 
     private bool IsPendingForClaims(SolutionStatus status)
     {
-      return status != SolutionStatus.Draft;
+      return status == SolutionStatus.Draft ||
+        status == SolutionStatus.Registered;
     }
 
     private bool IsPendingForEvidence(SolutionStatus status)
