@@ -228,8 +228,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
     // can only add/remove ClaimedCapability while pending
     public bool MustBePendingToChangeClaimedCapability(SolutionEx oldSolnEx, SolutionEx newSolnEx)
     {
-      var newNotOld = newSolnEx.ClaimedCapability.Except(oldSolnEx.ClaimedCapability).ToList();
-      var oldNotNew = oldSolnEx.ClaimedCapability.Except(newSolnEx.ClaimedCapability).ToList();
+      var comparer = new CapabilitiesImplementedComparer();
+      var newNotOld = newSolnEx.ClaimedCapability.Except(oldSolnEx.ClaimedCapability, comparer).ToList();
+      var oldNotNew = oldSolnEx.ClaimedCapability.Except(newSolnEx.ClaimedCapability, comparer).ToList();
       var same = !newNotOld.Any() && !oldNotNew.Any();
 
       if (same)
@@ -251,8 +252,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
     // can only add/remove ClaimedStandard while pending
     public bool MustBePendingToChangeClaimedStandard(SolutionEx oldSolnEx, SolutionEx newSolnEx)
     {
-      var newNotOld = newSolnEx.ClaimedStandard.Except(oldSolnEx.ClaimedStandard).ToList();
-      var oldNotNew = oldSolnEx.ClaimedStandard.Except(newSolnEx.ClaimedStandard).ToList();
+      var comparer = new StandardsApplicableComparer();
+      var newNotOld = newSolnEx.ClaimedStandard.Except(oldSolnEx.ClaimedStandard, comparer).ToList();
+      var oldNotNew = oldSolnEx.ClaimedStandard.Except(newSolnEx.ClaimedStandard, comparer).ToList();
       var same = !newNotOld.Any() && !oldNotNew.Any();
 
       if (same)
@@ -274,8 +276,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
     // cannot change/remove ClaimedCapabilityEvidence but can add while pending
     public bool MustBePendingToChangeClaimedCapabilityEvidence(SolutionEx oldSolnEx, SolutionEx newSolnEx)
     {
-      var newNotOld = newSolnEx.ClaimedCapabilityEvidence.Except(oldSolnEx.ClaimedCapabilityEvidence).ToList();
-      var oldNotNew = oldSolnEx.ClaimedCapabilityEvidence.Except(newSolnEx.ClaimedCapabilityEvidence).ToList();
+      var comparer = new CapabilitiesImplementedEvidenceComparer();
+      var newNotOld = newSolnEx.ClaimedCapabilityEvidence.Except(oldSolnEx.ClaimedCapabilityEvidence, comparer).ToList();
+      var oldNotNew = oldSolnEx.ClaimedCapabilityEvidence.Except(newSolnEx.ClaimedCapabilityEvidence, comparer).ToList();
 
       if (newNotOld.Any() &&
         newSolnEx.ClaimedCapabilityEvidence.Count() > oldSolnEx.ClaimedCapabilityEvidence.Count() &&
@@ -293,8 +296,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
     // cannot change/remove ClaimedStandardEvidence but can add while pending
     public bool MustBePendingToChangeClaimedStandardEvidence(SolutionEx oldSolnEx, SolutionEx newSolnEx)
     {
-      var newNotOld = newSolnEx.ClaimedStandardEvidence.Except(oldSolnEx.ClaimedStandardEvidence).ToList();
-      var oldNotNew = oldSolnEx.ClaimedStandardEvidence.Except(newSolnEx.ClaimedStandardEvidence).ToList();
+      var comparer = new StandardsApplicableEvidenceComparer();
+      var newNotOld = newSolnEx.ClaimedStandardEvidence.Except(oldSolnEx.ClaimedStandardEvidence, comparer).ToList();
+      var oldNotNew = oldSolnEx.ClaimedStandardEvidence.Except(newSolnEx.ClaimedStandardEvidence, comparer).ToList();
 
       if (newNotOld.Any() &&
         newSolnEx.ClaimedStandardEvidence.Count() > oldSolnEx.ClaimedStandardEvidence.Count() &&
@@ -313,8 +317,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
     // cannot change/remove ClaimedCapabilityReview but can add while pending
     public bool MustBePendingToChangeClaimedCapabilityReview(SolutionEx oldSolnEx, SolutionEx newSolnEx)
     {
-      var newNotOld = newSolnEx.ClaimedCapabilityReview.Except(oldSolnEx.ClaimedCapabilityReview).ToList();
-      var oldNotNew = oldSolnEx.ClaimedCapabilityReview.Except(newSolnEx.ClaimedCapabilityReview).ToList();
+      var comparer = new CapabilitiesImplementedReviewsComparer();
+      var newNotOld = newSolnEx.ClaimedCapabilityReview.Except(oldSolnEx.ClaimedCapabilityReview, comparer).ToList();
+      var oldNotNew = oldSolnEx.ClaimedCapabilityReview.Except(newSolnEx.ClaimedCapabilityReview, comparer).ToList();
 
       if (newNotOld.Any() &&
         newSolnEx.ClaimedCapabilityReview.Count() > oldSolnEx.ClaimedCapabilityReview.Count() &&
@@ -332,8 +337,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
     // cannot change/remove ClaimedStandardReview but can add while pending
     public bool MustBePendingToChangeClaimedStandardReview(SolutionEx oldSolnEx, SolutionEx newSolnEx)
     {
-      var newNotOld = newSolnEx.ClaimedStandardReview.Except(oldSolnEx.ClaimedStandardReview).ToList();
-      var oldNotNew = oldSolnEx.ClaimedStandardReview.Except(newSolnEx.ClaimedStandardReview).ToList();
+      var comparer = new StandardsApplicableReviewsComparer();
+      var newNotOld = newSolnEx.ClaimedStandardReview.Except(oldSolnEx.ClaimedStandardReview, comparer).ToList();
+      var oldNotNew = oldSolnEx.ClaimedStandardReview.Except(newSolnEx.ClaimedStandardReview, comparer).ToList();
 
       if (newNotOld.Any() &&
         newSolnEx.ClaimedStandardReview.Count() > oldSolnEx.ClaimedStandardReview.Count() &&

@@ -454,7 +454,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
 
       var newSoln = Creator.GetSolution(status: status);
       var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
-      newSolnEx.ClaimedCapability = new List<CapabilitiesImplemented>(new[] { oldQual1, oldQual2 });
+      newSolnEx.ClaimedCapability = new List<CapabilitiesImplemented>(new[] { oldQual1.Clone(), oldQual2.Clone() });
 
 
       var res = validator.MustBePendingToChangeClaimedCapability(oldSolnEx, newSolnEx);
@@ -524,7 +524,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
 
       var newSoln = Creator.GetSolution(status: status);
       var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
-      newSolnEx.ClaimedStandard = new List<StandardsApplicable>(new[] { oldQual1, oldQual2 });
+      newSolnEx.ClaimedStandard = new List<StandardsApplicable>(new[] { oldQual1.Clone(), oldQual2.Clone() });
 
 
       var res = validator.MustBePendingToChangeClaimedStandard(oldSolnEx, newSolnEx);
@@ -608,7 +608,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
 
       var newSoln = Creator.GetSolution(status: status);
       var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
-      newSolnEx.ClaimedCapabilityEvidence = new List<CapabilitiesImplementedEvidence>(new[] { oldEv1, oldEv2 });
+      newSolnEx.ClaimedCapabilityEvidence = new List<CapabilitiesImplementedEvidence>(new[] { oldEv1.Clone(), oldEv2.Clone() });
 
 
       var res = validator.MustBePendingToChangeClaimedCapabilityEvidence(oldSolnEx, newSolnEx);
@@ -631,7 +631,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
       var newSoln = Creator.GetSolution(status: status);
       var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
       var newEv3 = Creator.GetCapabilitiesImplementedEvidence();
-      newSolnEx.ClaimedCapabilityEvidence = new List<CapabilitiesImplementedEvidence>(new[] { oldEv1, oldEv2, newEv3 });
+      newSolnEx.ClaimedCapabilityEvidence = new List<CapabilitiesImplementedEvidence>(new[] { oldEv1.Clone(), oldEv2.Clone(), newEv3 });
 
 
       var res = validator.MustBePendingToChangeClaimedCapabilityEvidence(oldSolnEx, newSolnEx);
@@ -654,7 +654,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
       var newSoln = Creator.GetSolution(status: status);
       var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
       var newEv3 = Creator.GetCapabilitiesImplementedEvidence();
-      newSolnEx.ClaimedCapabilityEvidence = new List<CapabilitiesImplementedEvidence>(new[] { oldEv1, oldEv2, newEv3 });
+      newSolnEx.ClaimedCapabilityEvidence = new List<CapabilitiesImplementedEvidence>(new[] { oldEv1.Clone(), oldEv2.Clone(), newEv3 });
 
 
       var res = validator.MustBePendingToChangeClaimedCapabilityEvidence(oldSolnEx, newSolnEx);
@@ -700,7 +700,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
 
       var newSoln = Creator.GetSolution(status: status);
       var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
-      newSolnEx.ClaimedCapabilityEvidence = new List<CapabilitiesImplementedEvidence>(new[] { oldEv1 });
+      newSolnEx.ClaimedCapabilityEvidence = new List<CapabilitiesImplementedEvidence>(new[] { oldEv1.Clone() });
 
 
       var res = validator.MustBePendingToChangeClaimedCapabilityEvidence(oldSolnEx, newSolnEx);
@@ -724,7 +724,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
 
       var newSoln = Creator.GetSolution(status: status);
       var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
-      newSolnEx.ClaimedStandardEvidence = new List<StandardsApplicableEvidence>(new[] { oldEv1, oldEv2 });
+      newSolnEx.ClaimedStandardEvidence = new List<StandardsApplicableEvidence>(new[] { oldEv1.Clone(), oldEv2.Clone() });
 
 
       var res = validator.MustBePendingToChangeClaimedStandardEvidence(oldSolnEx, newSolnEx);
@@ -747,7 +747,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
       var newSoln = Creator.GetSolution(status: status);
       var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
       var newEv3 = Creator.GetStandardsApplicableEvidence();
-      newSolnEx.ClaimedStandardEvidence = new List<StandardsApplicableEvidence>(new[] { oldEv1, oldEv2, newEv3 });
+      newSolnEx.ClaimedStandardEvidence = new List<StandardsApplicableEvidence>(new[] { oldEv1.Clone(), oldEv2.Clone(), newEv3 });
 
 
       var res = validator.MustBePendingToChangeClaimedStandardEvidence(oldSolnEx, newSolnEx);
@@ -770,7 +770,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
       var newSoln = Creator.GetSolution(status: status);
       var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
       var newEv3 = Creator.GetStandardsApplicableEvidence();
-      newSolnEx.ClaimedStandardEvidence = new List<StandardsApplicableEvidence>(new[] { oldEv1, oldEv2, newEv3 });
+      newSolnEx.ClaimedStandardEvidence = new List<StandardsApplicableEvidence>(new[] { oldEv1.Clone(), oldEv2.Clone(), newEv3 });
 
 
       var res = validator.MustBePendingToChangeClaimedStandardEvidence(oldSolnEx, newSolnEx);
@@ -816,7 +816,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
 
       var newSoln = Creator.GetSolution(status: status);
       var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
-      newSolnEx.ClaimedStandardEvidence = new List<StandardsApplicableEvidence>(new[] { oldEv1 });
+      newSolnEx.ClaimedStandardEvidence = new List<StandardsApplicableEvidence>(new[] { oldEv1.Clone() });
 
 
       var res = validator.MustBePendingToChangeClaimedStandardEvidence(oldSolnEx, newSolnEx);
@@ -853,7 +853,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
 
       var newSoln = Creator.GetSolution(status: status);
       var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
-      newSolnEx.ClaimedCapabilityReview = new List<CapabilitiesImplementedReviews>(new[] { oldRev1, oldRev2 });
+      newSolnEx.ClaimedCapabilityReview = new List<CapabilitiesImplementedReviews>(new[] { oldRev1.Clone(), oldRev2.Clone() });
 
 
       var res = validator.MustBePendingToChangeClaimedCapabilityReview(oldSolnEx, newSolnEx);
@@ -876,7 +876,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
       var newSoln = Creator.GetSolution(status: status);
       var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
       var newRev3 = Creator.GetCapabilitiesImplementedReviews();
-      newSolnEx.ClaimedCapabilityReview = new List<CapabilitiesImplementedReviews>(new[] { oldRev1, oldRev2, newRev3 });
+      newSolnEx.ClaimedCapabilityReview = new List<CapabilitiesImplementedReviews>(new[] { oldRev1.Clone(), oldRev2.Clone(), newRev3 });
 
 
       var res = validator.MustBePendingToChangeClaimedCapabilityReview(oldSolnEx, newSolnEx);
@@ -899,7 +899,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
       var newSoln = Creator.GetSolution(status: status);
       var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
       var newRev3 = Creator.GetCapabilitiesImplementedReviews();
-      newSolnEx.ClaimedCapabilityReview = new List<CapabilitiesImplementedReviews>(new[] { oldRev1, oldRev2, newRev3 });
+      newSolnEx.ClaimedCapabilityReview = new List<CapabilitiesImplementedReviews>(new[] { oldRev1.Clone(), oldRev2.Clone(), newRev3 });
 
 
       var res = validator.MustBePendingToChangeClaimedCapabilityReview(oldSolnEx, newSolnEx);
@@ -945,7 +945,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
 
       var newSoln = Creator.GetSolution(status: status);
       var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
-      newSolnEx.ClaimedCapabilityReview = new List<CapabilitiesImplementedReviews>(new[] { oldRev1 });
+      newSolnEx.ClaimedCapabilityReview = new List<CapabilitiesImplementedReviews>(new[] { oldRev1.Clone() });
 
 
       var res = validator.MustBePendingToChangeClaimedCapabilityReview(oldSolnEx, newSolnEx);
@@ -969,7 +969,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
 
       var newSoln = Creator.GetSolution(status: status);
       var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
-      newSolnEx.ClaimedStandardReview = new List<StandardsApplicableReviews>(new[] { oldRev1, oldRev2 });
+      newSolnEx.ClaimedStandardReview = new List<StandardsApplicableReviews>(new[] { oldRev1.Clone(), oldRev2.Clone() });
 
 
       var res = validator.MustBePendingToChangeClaimedStandardReview(oldSolnEx, newSolnEx);
@@ -992,7 +992,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
       var newSoln = Creator.GetSolution(status: status);
       var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
       var newRev3 = Creator.GetStandardsApplicableReviews();
-      newSolnEx.ClaimedStandardReview = new List<StandardsApplicableReviews>(new[] { oldRev1, oldRev2, newRev3 });
+      newSolnEx.ClaimedStandardReview = new List<StandardsApplicableReviews>(new[] { oldRev1.Clone(), oldRev2.Clone(), newRev3 });
 
 
       var res = validator.MustBePendingToChangeClaimedStandardReview(oldSolnEx, newSolnEx);
@@ -1015,7 +1015,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
       var newSoln = Creator.GetSolution(status: status);
       var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
       var newRev3 = Creator.GetStandardsApplicableReviews();
-      newSolnEx.ClaimedStandardReview = new List<StandardsApplicableReviews>(new[] { oldRev1, oldRev2, newRev3 });
+      newSolnEx.ClaimedStandardReview = new List<StandardsApplicableReviews>(new[] { oldRev1.Clone(), oldRev2.Clone(), newRev3 });
 
 
       var res = validator.MustBePendingToChangeClaimedStandardReview(oldSolnEx, newSolnEx);
@@ -1061,7 +1061,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
 
       var newSoln = Creator.GetSolution(status: status);
       var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
-      newSolnEx.ClaimedStandardReview = new List<StandardsApplicableReviews>(new[] { oldRev1 });
+      newSolnEx.ClaimedStandardReview = new List<StandardsApplicableReviews>(new[] { oldRev1.Clone() });
 
 
       var res = validator.MustBePendingToChangeClaimedStandardReview(oldSolnEx, newSolnEx);
