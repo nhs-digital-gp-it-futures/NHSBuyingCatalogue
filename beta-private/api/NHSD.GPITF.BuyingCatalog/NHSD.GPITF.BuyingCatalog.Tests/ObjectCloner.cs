@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
+namespace NHSD.GPITF.BuyingCatalog.Tests
 {
   /// <summary>
   /// Reference Article http://www.codeproject.com/KB/tips/SerializedObjectCloner.aspx
