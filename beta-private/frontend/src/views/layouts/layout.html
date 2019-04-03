@@ -106,7 +106,7 @@
           <h2 id="footer-section-{{@index}}-label" role="none">{{section.Heading}}</h2>
           <ul>
           {{#each section.Links as |link|}}
-            <li><a href="{{link.Url}}">{{link.Text}}</a></li>
+            <li><a href="{{link.Url}}" target="{{link.Target}}">{{link.Text}}</a></li>
           {{/each}}
           </ul>
         </section>

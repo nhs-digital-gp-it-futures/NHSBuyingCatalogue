@@ -55,7 +55,7 @@
   },
   "Optional Standards":{
     "Notice Text": [
-      "You may also be required to comply with at least one of these associated standards. Some of these may be optional depending on the implementation of your solution. Please see confluence for further understanding."
+      "You may also be required to comply with at least one of these associated Standards. Some of these may be optional depending on the implementation of your Solution. Please see Confluence for further understanding."
     ]
   },
   "Statuses": {
@@ -118,10 +118,12 @@
         "Links": [
           {
             "Text": "$t(NHSD.Name)",
+            "Target": "_blank",
             "Url": "https://digital.nhs.uk/"
           },
           {
             "Text": "$t(Standards and Capabilities) Model",
+            "Target": "_blank",
             "Url": "https://gpitbjss.atlassian.net/wiki/spaces/GPITF/overview"
           }
         ]
