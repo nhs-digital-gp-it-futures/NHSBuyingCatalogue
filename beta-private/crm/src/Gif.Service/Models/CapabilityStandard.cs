@@ -5,6 +5,9 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Gif.Service.Contracts;
+using Gif.Service.Services;
+using Gif.Service.Services.Equality;
 
 namespace Gif.Service.Models
 {
