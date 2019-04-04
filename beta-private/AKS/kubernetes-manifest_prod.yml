@@ -303,7 +303,7 @@ spec:
       - name: regcred
       containers:
       - name: bc-private-beta-clamav
-        image: tiredofit/clamav:latest
+        image: bcprodacr.azurecr.io/gpitf/catalogue-frontend-clamav:#{Build.BuildId}#
         ports:
         - containerPort: 3310
         resources:
