@@ -252,45 +252,9 @@ namespace Gif.Service.Services
                 existingSolution.ClaimedStandard.Except(updatedSolution.ClaimedStandard, claimedStandardComparator);
             var technicalContactDeletes = existingSolution.TechnicalContact.Except(updatedSolution.TechnicalContact, techContactComparator);
 
-            foreach (var claimedCapability in claimedCapabilityDeletes)
-            {
-                batchData.Add(
-                    new BatchData
-                    {
-
-                        Id = claimedCapability.Id,
-                        Name = claimedCapability.EntityName,
-                        Type = BatchTypeEnum.Delete,
-                        EntityData = "{}"
-                    });
-            }
-
-
-            foreach (var claimedStandard in claimedStandardDeletes)
-            {
-                batchData.Add(
-                    new BatchData
-                    {
-
-                        Id = claimedStandard.Id,
-                        Name = claimedStandard.EntityName,
-                        Type = BatchTypeEnum.Delete,
-                        EntityData = "{}"
-                    });
-            }
-
-            foreach (var technicalContact in technicalContactDeletes)
-            {
-                batchData.Add(
-                    new BatchData
-                    {
-
-                        Id = technicalContact.Id,
-                        Name = technicalContact.EntityName,
-                        Type = BatchTypeEnum.Delete,
-                        EntityData = "{}"
-                    });
-            }
+            batchData.AddRange(claimedCapabilityDeletes.Select(claimedCapability => new BatchData {Id = claimedCapability.Id, Name = claimedCapability.EntityName, Type = BatchTypeEnum.Delete, EntityData = "{}"}));
+            batchData.AddRange(claimedStandardDeletes.Select(claimedStandard => new BatchData {Id = claimedStandard.Id, Name = claimedStandard.EntityName, Type = BatchTypeEnum.Delete, EntityData = "{}"}));
+            batchData.AddRange(technicalContactDeletes.Select(technicalContact => new BatchData {Id = technicalContact.Id, Name = technicalContact.EntityName, Type = BatchTypeEnum.Delete, EntityData = "{}"}));
 
             return batchData;
         }
