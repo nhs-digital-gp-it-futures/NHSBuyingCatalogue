@@ -9,7 +9,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   public abstract class ValidatorBase<T> : AbstractValidator<T>, IValidatorBase<T>
   {
     protected readonly IHttpContextAccessor _context;
-    private readonly ILogger<ValidatorBase<T>> _logger;
+    protected readonly ILogger<ValidatorBase<T>> _logger;
 
     public ValidatorBase(
       IHttpContextAccessor context,

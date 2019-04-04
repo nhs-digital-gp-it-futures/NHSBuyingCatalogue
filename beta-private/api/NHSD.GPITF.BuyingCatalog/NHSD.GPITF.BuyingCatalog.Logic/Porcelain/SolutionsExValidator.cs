@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Models;
@@ -243,6 +244,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
         !IsPendingForClaims(newSolnEx.Solution.Status))
       {
         // Can only add/remove ClaimedCapability while pending
+        var msg = new { ErrorMessage = nameof(MustBePendingToChangeClaimedCapability), ExistingValue = oldSolnEx };
+        _logger.LogError(JsonConvert.SerializeObject(msg));
         return false;
       }
 
@@ -267,6 +270,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
         !IsPendingForClaims(newSolnEx.Solution.Status))
       {
         // Can only add/remove ClaimedStandard while pending
+        var msg = new { ErrorMessage = nameof(MustBePendingToChangeClaimedStandard), ExistingValue = oldSolnEx };
+        _logger.LogError(JsonConvert.SerializeObject(msg));
         return false;
       }
 
@@ -289,6 +294,11 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       }
 
       var same = !newNotOld.Any() && !oldNotNew.Any();
+      if (!same)
+      {
+        var msg = new { ErrorMessage = nameof(MustBePendingToChangeClaimedCapabilityEvidence), ExistingValue = oldSolnEx };
+        _logger.LogError(JsonConvert.SerializeObject(msg));
+      }
 
       return same;
     }
@@ -309,6 +319,11 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       }
 
       var same = !newNotOld.Any() && !oldNotNew.Any();
+      if (!same)
+      {
+        var msg = new { ErrorMessage = nameof(MustBePendingToChangeClaimedStandardEvidence), ExistingValue = oldSolnEx };
+        _logger.LogError(JsonConvert.SerializeObject(msg));
+      }
 
       return same;
     }
@@ -330,6 +345,11 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       }
 
       var same = !newNotOld.Any() && !oldNotNew.Any();
+      if (!same)
+      {
+        var msg = new { ErrorMessage = nameof(MustBePendingToChangeClaimedCapabilityReview), ExistingValue = oldSolnEx };
+        _logger.LogError(JsonConvert.SerializeObject(msg));
+      }
 
       return same;
     }
@@ -350,6 +370,11 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       }
 
       var same = !newNotOld.Any() && !oldNotNew.Any();
+      if (!same)
+      {
+        var msg = new { ErrorMessage = nameof(MustBePendingToChangeClaimedStandardReview), ExistingValue = oldSolnEx };
+        _logger.LogError(JsonConvert.SerializeObject(msg));
+      }
 
       return same;
     }
