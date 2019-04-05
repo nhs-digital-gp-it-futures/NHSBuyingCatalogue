@@ -17,6 +17,45 @@
     <script type="text/javascript" src="/js/vendor/modernizr-custom.js"></script>
     <script type="text/javascript" src="/js/vendor/details-element-polyfill.js"></script>
     <script type="text/javascript" src="/js/app.js"></script>
+
+    <!-- Matomo -->
+    <script type="text/javascript">
+      var _paq = window._paq || [];
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function() {
+        var u="//localhost/";
+        _paq.push(['setTrackerUrl', u+'matomo.php']);
+        _paq.push(['setSiteId', '2']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+      })();
+    </script>
+    <!-- End Matomo Code -->
+
+				
+  <!-- Start Open Web Analytics Tracker -->
+  <script type="text/javascript">
+    //<![CDATA[
+    var owa_baseUrl = 'http://localhost:12345/';
+    var owa_cmds = owa_cmds || [];
+    owa_cmds.push(['setSiteId', '87a70ce46ea04de7c28dd1e4da31904c']);
+    owa_cmds.push(['trackPageView']);
+    owa_cmds.push(['trackClicks']);
+    
+    (function() {
+      var _owa = document.createElement('script'); _owa.type = 'text/javascript'; _owa.async = true;
+      owa_baseUrl = ('https:' == document.location.protocol ? window.owa_baseSecUrl || owa_baseUrl.replace(/http:/, 'https:') : owa_baseUrl );
+      _owa.src = owa_baseUrl + 'modules/base/js/owa.tracker-combined-min.js';
+      var _owa_s = document.getElementsByTagName('script')[0]; _owa_s.parentNode.insertBefore(_owa, _owa_s);
+    }());
+    //]]>
+  </script>
+  <!-- End Open Web Analytics Code -->
+          
+      
+
   </head>
   <body>
     <header role="banner" aria-label="Site header">
@@ -131,19 +170,5 @@
   </body>
 </html>
 
-<!-- Matomo -->
-<script type="text/javascript">
-  var _paq = window._paq || [];
-  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  (function() {
-    var u="http://localhost/";
-    _paq.push(['setTrackerUrl', u+'matomo.php']);
-    _paq.push(['setSiteId', '2']);
-    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-  })();
-</script>
-<!-- End Matomo Code -->
+
 

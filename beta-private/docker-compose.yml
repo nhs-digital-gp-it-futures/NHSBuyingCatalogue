@@ -141,6 +141,15 @@ services:
     depends_on:
       - mariadb
 
+  owa:
+    image: vladk1m0/docker-owa
+    ports:
+      - '12345:80'
+    depends_on:
+      - mariadb
+    networks:
+      - beta_network
+
 volumes:
   mariadb_data:
     driver: local
