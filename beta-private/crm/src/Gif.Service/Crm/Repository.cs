@@ -269,6 +269,7 @@ namespace Gif.Service.Crm
       {
         var ex = new CrmApiException(response.ReasonPhrase, response.StatusCode);
         _logger.LogError(ex, $"[{ex.HttpStatus}] + [{ex.Message}]");
+        _logger.LogError($"[{nameof(CreateBatch)}] --> {JsonConvert.SerializeObject(batchData)}");
         throw ex;
       }
     }
