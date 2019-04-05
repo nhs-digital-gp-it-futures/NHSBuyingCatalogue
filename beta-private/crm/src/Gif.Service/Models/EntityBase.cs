@@ -8,11 +8,12 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
+using Gif.Service.Contracts;
 
 namespace Gif.Service.Models
 {
   [DataContract]
-  public class EntityBase
+  public class EntityBase : IHasId
   {
     private const string regexIdMatch = "";
     private const string jsonSeparator = "\":\"";
@@ -407,6 +408,8 @@ namespace Gif.Service.Models
 
       return list.TrimEnd(comma);
     }
+
+    public Guid Id { get; set; }
   }
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
