@@ -585,6 +585,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
     #region Evidence
     public static IEnumerable<SolutionStatus> SolutionStatusesPendingForEvidence()
     {
+      yield return SolutionStatus.Registered;
       yield return SolutionStatus.CapabilitiesAssessment;
       yield return SolutionStatus.StandardsCompliance;
     }
