@@ -250,16 +250,26 @@ namespace Gif.Service.Crm
       var patchChange = new MultipartContent("mixed", "changeset_" + patchChangeId);
 
       //Add deletes first in their own changeset to avoid issues with upserts in following changesets
-      AddChangeSet(batchData.Where(x => x.Type == BatchTypeEnum.Delete).ToList(), _httpClient, ref deleteChange);
-      AddChangeSet(batchData.Where(x => x.Type != BatchTypeEnum.Delete).ToList(), _httpClient, ref patchChange);
+
+      var deleteRequests = batchData.Where(x => x.Type == BatchTypeEnum.Delete).ToList();
+      var patchRequests = batchData.Where(x => x.Type != BatchTypeEnum.Delete).ToList();
+
+      AddChangeSet(deleteRequests, _httpClient, ref deleteChange);
+      AddChangeSet(patchRequests, _httpClient, ref patchChange);
 
       //Add headers add changeset level
-      AddHeadersToChangeSets(ref deleteChange);
-      AddHeadersToChangeSets(ref patchChange);
+      if(deleteRequests.Any())
+        AddHeadersToChangeSets(ref deleteChange);
+
+      if(patchRequests.Any())
+        AddHeadersToChangeSets(ref patchChange);
 
       // Add the changesets to the batch content
-      batchContent.Add(deleteChange);
-      batchContent.Add(patchChange);
+      if(deleteRequests.Any())
+        batchContent.Add(deleteChange);
+
+      if (patchRequests.Any())
+        batchContent.Add(patchChange);
 
       // send batch
       batchRequest.Content = batchContent;
