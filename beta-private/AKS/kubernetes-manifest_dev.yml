@@ -506,4 +506,4 @@ spec:
   ports:
   - port: 80
   selector:
-    app: bc-pb-app-matmo	
+    app: bc-pb-app-matomo	
