@@ -26,17 +26,6 @@ services:
     links:
       - clamav
 
-  clamav:
-    image: tiredofit/clamav:latest
-    environment:
-      MAX_SCAN_SIZE: "1024M"
-      MAX_FILE_SIZE: "1024M"
-    ports:
-      - "3310:3310"
-    networks:
-      - beta_network
-    restart: always
-
   api:
     image: gpitf/catalogue-api:private-beta
     build: ./api/NHSD.GPITF.BuyingCatalog
@@ -89,6 +78,16 @@ services:
       - CRM_CLIENTSECRET
       - LOG_CRM
       - LOG_CONNECTIONSTRING
+
+  clamav:
+    build:
+      context: ./clamav
+    image: gpitf/catalogue-frontend-clamav:private-beta
+    ports:
+      - "3310:3310"
+    networks:
+      - beta_network
+    restart: always
 
   nginx:
     build: ./nginx

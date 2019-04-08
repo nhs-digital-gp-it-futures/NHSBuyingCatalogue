@@ -11,9 +11,8 @@ const Magic = mmm.Magic
 const MIME_WHITELIST = [
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   'application/msword',
-  'application/msword',
+  'application/vnd.oasis.opendocument.text',
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-  'application/vnd.ms-excel',
   'application/vnd.ms-excel',
   'text/csv',
   'application/vnd.oasis.opendocument.spreadsheet',
@@ -232,6 +231,7 @@ class SharePointProvider {
     return new Promise((resolve, reject) => {
       magic.detectFile(storagePath, (err, result) => {
         if (err) return reject(err)
+        console.log('\n\n\n\n', result, '\n\n\n\n')
         return resolve(result)
       })
     })

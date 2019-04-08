@@ -263,7 +263,7 @@
         "*indicates required field"
       ],
       "Help": {
-        "Title": "Help - What if my $t(Solution) only matches some of a $t(Capability)'s epics?",
+        "Title": "Help - What if my $t(Solution) only matches some of a $t(Capability)'s Epics?",
         "Text": [
           "To pass some $t(Capability_plural), your $t(Solution) must show how it meets all Epics within that $t(Capability). For other $t(Capability_plural), your $t(Solution) must show how it meets only one or more Epics. If it passes the assessment, your $t(Solution) will receive a status of Full Capability or Partial Capability, depending on the Epics met. See <a href='https&#58;//gpitbjss.atlassian.net/wiki/spaces/GPITF/overview' target='_blank'>Confluence</a> to check the Epics required to pass each $t(Capability)."
         ]
@@ -320,7 +320,7 @@
       "Title": "$t(Standard_plural) Dashboard",
       "Breadcrumb": "All $t(Standard_plural)",
       "Backlink": {
-        "Title": "Onboarding Dashboard"
+        "Title": "Adding a Solution"
       },
       "Subtitle": "These are the $t(Standard_plural) relevant to your $t(Solution) based on the $t(Capability_plural) selected. Click on each $t(Standard) to access and submit evidence for that $t(Standard).",
       "Associated": {
@@ -547,7 +547,7 @@
           {
             "Title": "Summary",
             "Text": [
-              "This guidance details how to sell your digital Solutions to the NHS market in the UK, specifically with regards to the Buying Catalogue, but including related framework information and Supplier obligations. As of 2019, the Buying Catalogue will include services for primary care, but in the future its scope will expand to cover other care settings. We recommend you read this guide in its entirety before submitting your Solution to the Buying Catalogue."
+              "his guidance details how to sell digital products (Solutions) to the NHS using the Buying Catalogue, including related framework information and Supplier obligations. As of 2019, the Buying Catalogue will include services for primary care, but in the future its scope will expand to cover other care settings. We recommend you read this guide in its entirety before submitting your Solution to the Buying Catalogue."
             ]
           },
           {
@@ -587,10 +587,10 @@
           {
             "Title": "How long until I can start selling?",
             "Text": [
-              "In order to sell you need to meet two requirements&#58; (1) have your Solution accepted on the Catalogue as compliant see the‘Catalogue On-boarding Process’ in Bravo (click ‘View our live opportunities’ and ‘Digital Buying Catalogue Registration’opportunity); and (2) be awarded to a framework. The order of these two things may vary, but you must have submitted your Solution to the Catalogue and have it accepted into the assessment process in order to qualify for a framework award. ",
+              "In order to sell you need to meet two requirements&#58; (1) have your Solution accepted on the Catalogue as compliant see the ‘Catalogue On-boarding Process’ in <a href='//nhsdigital.bravosolution.co.uk/' target='_blank'>Bravo</a> (click ‘View our live opportunities’ and ‘Digital Buying Catalogue Registration’ opportunity); and (2) be awarded to a framework. The order of these two things may vary, but you must have submitted your Solution to the Catalogue and have it accepted into the assessment process in order to qualify for a framework award. ",
               "You may start adding a Solution to the Catalogue at any time. See <a href='#Supplier registration'>Supplier registration</a> below for how to get access to the Catalogue. ",
               "The time it takes for a Solution to be accepted on the Catalogue will vary depending upon the number of Capabilities and Standards involved, and the quality of the initial submission. If all the Standards evidence is submitted by the time the Capability assessment is complete, the aim is that a good quality submission will take no longer than 19 weeks. See a break-down of the Catalogue timescale targets by stage in <a href='#Process overview'>Process overview</a> below. ",
-              "(Please note that during preliminary private beta, timescale targets may vary, and the Traceability Matrices for submitting Standards evidence will be made available as soon as they are ready.)",
+              "(Please note that during preliminary private beta, timescale targets may vary, and the Traceability Matrices for submitting evidence of Standards will be made available as soon as they are ready.)",
               "The framework timescales will be clear at the time each framework is published. "
             ]
           }
@@ -613,12 +613,12 @@
         "Title": "Supplier registration and Catalogue access",
         "Nav Title": "Supplier registration",
         "Text": [
-          "Before you can begin adding your Solution to the Catalogue, you must register your company and request a user account as follows",
+          "Before you can begin adding your Solution to the Catalogue, you must register your company and request a user account as follows&#58;",
           "Log in to <a href='//nhsdigital.bravosolution.co.uk/' target='_blank'>Bravo</a>. You will see multiple opportunities listed. Click on the ‘Digital Buying Catalogue Registration’ opportunity. ",
           "From there, you can download, review and sign the Catalogue Agreement which sets out the terms of use for using the Catalogue. When you’ve reviewed and gotten the necessary signature, you can upload the signed Agreement to Bravo.",
           "Bravo will also ask you to provide company information (see the <a href='#Supplier checklist'>'Supplier checklist'</a> for details), and the names and email addresses of anyone who will need access to the Buying Catalogue under your company account. ",
           "Once we have signed the Catalogue Agreement, we will issue log-in details for each of the users requested.",
-          "When you receive the log-in details, you can navigate to the Buying Catalogue and click ‘Log in/Sign up.’ From there, select the ‘Sign up’ tab, enter the email address provided during Supplier registration, and create a secure password. "
+          "When you receive the log-in details, you can navigate to the Buying Catalogue and click ‘Log in.’ From there, use password recovery and follow the instructions to create your password. You can then log in using this email and password."
         ],
         "Subsections": []
       },
@@ -638,7 +638,7 @@
           {
             "Title": "How is the model structured?",
             "Text": [
-              "Requirements are grouped into Capabilities. There are different types of Capabilities. There are Capabilities to support business continuity from the previous framework, GPSoC, and new Capabilities to support new ways of working. Six of the business continuity Capabilities have been designated as Foundation Capabilities. Foundation Capabilities have funding implications (see <a href='#How do buyers fund their purchases?'>below</a>.",
+              "Requirements are grouped into Capabilities. There are different types of Capabilities. There are Capabilities to support business continuity from the previous framework, GPSoC, and new Capabilities to support new ways of working. Six of the business continuity Capabilities have been designated as Foundation Capabilities. Foundation Capabilities have funding implications (see <a href='#How do buyers fund their purchases?'>below</a>.)",
               "There are overarching Standards, which are applicable to all Solutions (for example, Information Governance).",
               "There are two types of Standards associated with Capabilities&#58;",
               "• Capability-Specific Standards  are specific to a Capability and usually have the same name (for example, Prescribing); ",
@@ -687,7 +687,7 @@
           {
             "Title": "",
             "Text": [
-              "Within each Capability, there are Epic-level user stories that describe business activities which are facilitated by a digital Solution. For some Capabilities, all Epics are required for the Solution to pass the assessment for that Capability. For others, only one or more Epics are required",
+              "Within each Capability, there are Epic-level user stories that describe business activities which are facilitated by a digital Solution. For some Capabilities, all Epics are required for the Solution to pass the assessment for that Capability. For others, only one or more Epics are required.",
               "In order to pass an Epic, all of the acceptance criteria under that Epic will need to be demonstrated in the evidence submission. Before you prepare and submit your evidence, you may wish to read <a href='#Assessing your Capabilities'>Assessing your Capabilities</a> below. ",
               "",
               "For each Capability, the Supplier can choose whether to provide&#58;",
@@ -726,7 +726,7 @@
           {
             "Title": "Will my videos be shown to the public?",
             "Text": [
-              "Your video evidence will only be used for assessment and will not be published publicly on the Catalogue or elsewhere. However, all information submitted to the Buying Catalogue is subject to <a href='//ico.org.uk/for-organisations/guide-to-freedom-of-information/what-is-the-foi-act/  '>FOI requests</a>. "
+              "Your video evidence will only be used for assessment and will not be published publicly on the Catalogue or elsewhere. However, all information submitted to the Buying Catalogue is subject to <a href='//ico.org.uk/for-organisations/guide-to-freedom-of-information/what-is-the-foi-act/' target='_blank'>FOI requests</a>. "
             ]
           },
           {
@@ -754,7 +754,7 @@
             "Title": "How to submit evidence - Traceability Matrices",
             "Text": [
               "After you’ve submitted evidence for Capabilities (stage 2), you can submit evidence for Standards (stage 3). This stage will involve a detailed analysis of your Solution against each relevant Standard—the overarching Standards, which apply to all Solutions, and the Standards associated with the Capabilities selected.",
-              "Each Standard has a separate Traceability Matrix (TM), which is an Excel file that lists each piece of required evidence for that Standard as an individual line item. Based on the risk-based approach outlined in the next section below, each line item has been classified as either ‘Must’ (mandatory to implement) or ‘May’ (optional to implement), as defined in the Capabilities and Standards glossary. ",
+              "Each Standard has a separate Traceability Matrix (TM), which is an Excel file that lists each piece of required evidence for that Standard as an individual line item. Based on the risk-based approach outlined below, each line item has been classified as either ‘Must’ (mandatory to implement) or ‘May’ (optional to implement), as defined in the Capabilities and Standards glossary. ",
               "You can submit most evidence for a Standard via its TM. Additional files such as screen shots or supporting documents can be included with your TM submission. The TMs for each Standard applicable to your Solution can be accessed via your Standards Dashboard. Each standard will open on its own page. Click on each Standard to download the TM for that Standard. Once you’ve finishing filling in the required information, you can upload the completed TM on the same page. You can submit TMs for each Standard one at time. If you have multiple files to submit, you can zip them into a single compressed file, and upload the zipped files to the Catalogue. ",
               "Each Standard can be assigned a ‘Standard owner.’ By default, Standard owner will be your lead contact. You can change the owner to any other authenticated user at your company. (Authenticated users are those for whom you requested access in <a href='//nhsdigital.bravosolution.co.uk/' target='_blank'>Bravo</a> when registering your company). Standard owners are typically the ones submitting evidence for that Standard, and will receive all email notifications, along with the lead contact.  "
             ]
@@ -888,10 +888,11 @@
             "Right": {
               "Title": "What we do",
               "Text": [
+                "⏤"
               ]
             },
             "PostText": [
-              "* If your Catalogue Solution includes the Productivity Capability, you will need to follow an additional process. See Annex 1 of the $t(Onboarding Process Document) in <a href='//nhsdigital.bravosolution.co.uk/' target='_blank'>Bravo</a> (click ‘View our live opportunities’ and 'Digital Buying Registration' opportunity). ",
+              "* If your Catalogue Solution includes the Productivity Capability, you will need to follow an additional process. See Annex 1 of the $t(Onboarding Process Document) in <a href='//nhsdigital.bravosolution.co.uk/' target='_blank'>Bravo</a> (click ‘View our live opportunities’ and 'Digital Buying Catalogue Registration' opportunity). ",
               "When you complete stage 1, you can progress to the next stages as soon as you're ready. "
             ]
           },
@@ -962,7 +963,7 @@
             },
             "PostText": [
               "* If your Catalogue Solution includes the Productivity Capability, you will follow an additional process. See Annex 1 of the $t(Onboarding Process Document) in <a href='//nhsdigital.bravosolution.co.uk/' target='_blank'>Bravo</a> (click ‘View our live opportunities’).",
-              "Once we begin reviewing your Traceability Matrices, the aim is for each Standard to take no longer than 12 weeks including dialogue. This assumes an initial good quality submission. See Annex 1 of the $t(Onboarding Process Document) in <a href='//nhsdigital.bravosolution.co.uk/' target='_blank'>Bravo</a> (click ‘View our live opportunities’ and 'Digital Buying Registration' opportunity) for more detail on this stage.",
+              "Once we begin reviewing your Traceability Matrices, the aim is for each Standard to take no longer than 12 weeks including dialogue. This assumes an initial good quality submission. See Annex 1 of the $t(Onboarding Process Document) in <a href='//nhsdigital.bravosolution.co.uk/' target='_blank'>Bravo</a> (click ‘View our live opportunities’ and 'Digital Buying Catalogue Registration' opportunity) for more detail on this stage.",
               "$t(Preliminary Private Beta Notice)."
             ]
           },
@@ -1084,7 +1085,7 @@
                   "Solution description"
                 ],
                 [
-                  "A brief description of your Solution. This information will only be visible to the Catalogue Authority, at this stage. You can edit it in stage 4 before making your Solution page visible to buyers. When it is visible to buyers, it may be shown in search results but will not affect search ranking. (300 characters max"
+                  "A brief description of your Solution. This information will only be visible to the Catalogue Authority, at this stage. You can edit it in stage 4 before making your Solution page visible to buyers. When it is visible to buyers, it may be shown in search results but will not affect search ranking. (300 characters max)"
                 ],
                 [
                   "Catalogue Authority/later public"

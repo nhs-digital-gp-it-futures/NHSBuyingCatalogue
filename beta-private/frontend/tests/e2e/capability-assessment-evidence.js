@@ -125,7 +125,7 @@ test('Uploading a virus should be rejected and communicated via the standard err
   await uploadFileWithMessage(t, capSection, 'eicar.com', 'Automation testing message sent with file containing test virus, file is not saved though..')
     .click(capabilityEvidencePage.globalSaveButton)
     .expect(Selector('#errors').exists).ok()
-    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Prescription Ordering - Citizen : Uploaded file failed our safety checks and has been rejected.')
+    .expect(Selector('#errors li:nth-child(1)').textContent).contains('Prescription Ordering - Citizen : The file uploaded for this Capability has failed our antivirus scan.')
 })
 
 const requestLogger = RequestLogger(
