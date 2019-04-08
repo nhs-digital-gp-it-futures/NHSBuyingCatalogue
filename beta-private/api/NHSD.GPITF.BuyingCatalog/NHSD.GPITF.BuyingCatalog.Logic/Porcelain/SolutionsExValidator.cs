@@ -430,7 +430,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
     private static bool IsPendingForClaims(SolutionStatus status)
     {
       return status == SolutionStatus.Draft ||
-        status == SolutionStatus.Registered;
+        status == SolutionStatus.Registered ||
+        status == SolutionStatus.CapabilitiesAssessment ||
+        status == SolutionStatus.StandardsCompliance;
     }
 
     private static bool IsPendingForEvidence(SolutionStatus status)

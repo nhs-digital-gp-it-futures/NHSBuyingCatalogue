@@ -434,6 +434,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
     {
       yield return SolutionStatus.Draft;
       yield return SolutionStatus.Registered;
+      yield return SolutionStatus.CapabilitiesAssessment;
+      yield return SolutionStatus.StandardsCompliance;
     }
 
     public static IEnumerable<SolutionStatus> SolutionStatusesNotPendingForClaims()
