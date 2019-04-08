@@ -8,7 +8,7 @@ _paq.push(['enableLinkTracking'])
 _paq.push(['trackVisibleContentImpressions']);
 
 (function () {
-  var u = '//localhost:3000/analytics/'
+  var u = '//localhost/'
   _paq.push(['setTrackerUrl', u + 'matomo.php'])
   _paq.push(['setSiteId', '2'])
 
