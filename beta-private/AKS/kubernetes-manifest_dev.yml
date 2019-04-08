@@ -397,7 +397,7 @@ spec:
       - name: regcred
       containers:
       - name: bc-private-beta-matomo
-        image: bitnami/matomo:latest'
+        image: bitnami/matomo:latest
         ports:
         - containerPort: 80
         resources:
