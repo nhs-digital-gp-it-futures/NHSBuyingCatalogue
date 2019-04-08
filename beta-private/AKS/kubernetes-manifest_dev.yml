@@ -410,7 +410,7 @@ spec:
           value: "mariadb"
         - name: MARIADB_PORT_NUMBER
           value: "3306"
-         - name: MATOMO_DATABASE_USER
+        - name: MATOMO_DATABASE_USER
           valueFrom:
             secretKeyRef:
               name: bcmariadbsecret
