@@ -317,7 +317,112 @@ spec:
         - name: MAX_SCAN_SIZE
           value: "1024M"
         - name: MAX_FILE_SIZE
-          value: "1024M"                             
+          value: "1024M"
+---  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bc-pb-deployment-mariadb
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  selector:
+    matchLabels:
+      app: bc-pb-app-mariadb  
+  template:
+    metadata:
+      labels:
+        app: bc-pb-app-mariadb
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: bc-private-beta-mariadb
+        image: bitnami/mariadb:latest
+        ports:
+        - containerPort: 3306
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+        - name: MARIADB_USER
+          valueFrom:
+            secretKeyRef:
+              name: bcmariadbsecret
+              key: MARIADB_USER
+        - name: MARIADB_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: bcmariadbsecret
+              key: MARIADB_DATABASE
+        - name: MARIADB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: bcmariadbsecret
+              key: MARIADB_PASSWORD
+        - name: MARIADB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: bcmariadbsecret
+              key: MARIADB_ROOT_PASSWORD
+---  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bc-pb-deployment-matomo
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  selector:
+    matchLabels:
+      app: bc-pb-app-matomo  
+  template:
+    metadata:
+      labels:
+        app: bc-pb-app-matomo
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: bc-private-beta-matomo
+        image: bitnami/matomo:latest'
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+        - name: MARIADB_HOST
+          value: "mariadb"
+        - name: MARIADB_PORT_NUMBER
+          value: "3306"
+         - name: MATOMO_DATABASE_USER
+          valueFrom:
+            secretKeyRef:
+              name: bcmariadbsecret
+              key: MATOMO_DATABASE_USER
+        - name: MATOMO_DATABASE_NAME
+          valueFrom:
+            secretKeyRef:
+              name: bcmariadbsecret
+              key: MATOMO_DATABASE_NAME
+        - name: MATOMO_DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: bcmariadbsecret
+              key: MATOMO_DATABASE_PASSWORD			  
 ---
 apiVersion: v1
 kind: Service
@@ -379,4 +484,24 @@ spec:
   ports:
   - port: 5001
   selector:
-    app: bc-pb-app-crm 
+    app: bc-pb-app-crm
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mariadb
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: bc-pb-app-mariadb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: matomo
+spec:
+  ports:
+  - port: 80
+  selector:
+    app: bc-pb-app-matmo	
