@@ -16,7 +16,7 @@ namespace Gif.Service.Models
         [DataMember]
         [CrmIdField]
         [CrmFieldName("cc_evidenceid")]
-        public Guid Id { get; set; }
+        public override Guid Id { get; set; }
 
         [DataMember]
         [CrmFieldName("cc_name")]

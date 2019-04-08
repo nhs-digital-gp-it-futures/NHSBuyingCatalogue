@@ -21,7 +21,7 @@ namespace Gif.Service.Models
         [DataMember]
         [CrmIdField]
         [CrmFieldName("cc_capabilitystandardid")]
-        public Guid Id { get; set; }
+        public override Guid Id { get; set; }
 
         [DataMember]
         [CrmFieldName("_cc_capability_value")]

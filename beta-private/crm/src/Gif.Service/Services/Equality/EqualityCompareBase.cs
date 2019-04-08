@@ -6,7 +6,7 @@ namespace Gif.Service.Services.Equality
 {
     public abstract class EqualityCompareBase<T> : IEqualityComparer<T> where T : IHasId
     {
-        public Guid Id { get; set; }
+
         public bool Equals(T x, T y)
         {
             return x.Id == y.Id;

@@ -13,7 +13,7 @@ namespace Gif.Service.Models
         [CrmFieldName("accountid")]
         [CrmIdField]
         [DataMember]
-        public Guid Id { get; set; }
+        public override Guid Id { get; set; }
 
         [CrmFieldName("name")]
         [DataMember]

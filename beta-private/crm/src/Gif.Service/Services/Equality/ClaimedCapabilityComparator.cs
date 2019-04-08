@@ -3,7 +3,7 @@ using Gif.Service.Models;
 
 namespace Gif.Service.Services.Equality
 {
-    public class ClaimedCapabilityComparator :  EqualityCompareBase<CapabilityImplemented>, IHasId
+    public class ClaimedCapabilityComparator :  EqualityCompareBase<CapabilityImplemented>
     {
     }
 }

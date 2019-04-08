@@ -17,7 +17,7 @@ namespace Gif.Service.Models
         [DataMember]
         [CrmIdField]
         [CrmFieldName("cc_frameworkid")]
-        public Guid Id { get; set; }
+        public override Guid Id { get; set; }
 
         [DataMember]
         [CrmFieldName("_cc_previousframeworkversion_value")]
