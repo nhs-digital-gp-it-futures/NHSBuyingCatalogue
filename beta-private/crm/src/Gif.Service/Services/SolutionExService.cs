@@ -134,7 +134,16 @@ namespace Gif.Service.Services
             var batchData = new List<BatchData>();
             var existingSolution = BySolution(solnEx.Solution.Id.ToString());
 
-            batchData = ComposeDeleteRequests(existingSolution, solnEx, batchData);
+            if (existingSolution != null)
+                batchData = ComposeDeleteRequests(existingSolution, solnEx, batchData);
+
+            batchData.Add(
+                new BatchData
+                {
+                    Id = solnEx.Solution.Id,
+                    Name = solnEx.Solution.EntityName,
+                    EntityData = solnEx.Solution.SerializeToODataPut("cc_solutionid")
+                });
 
             //Sort Evidence/Reviews in order by previous Id
             solnEx.ClaimedCapabilityEvidence = GetInsertionTree(solnEx.ClaimedCapabilityEvidence);
