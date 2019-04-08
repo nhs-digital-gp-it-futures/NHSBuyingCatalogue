@@ -293,7 +293,16 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
         return true;
       }
 
-      var same = !newNotOld.Any() && !oldNotNew.Any();
+      if (oldNotNew.Any() &&
+        oldSolnEx.ClaimedCapabilityEvidence.Count() > newSolnEx.ClaimedCapabilityEvidence.Count() &&
+        IsPendingForEvidence(newSolnEx.Solution.Status))
+      {
+        // removed
+        return true;
+      }
+
+      var same = (!newNotOld.Any() && !oldNotNew.Any()) ||
+        IsPendingForEvidence(newSolnEx.Solution.Status);
       if (!same)
       {
         var msg = new { ErrorMessage = nameof(MustBePendingToChangeClaimedCapabilityEvidence), ExistingValue = oldSolnEx };
@@ -318,7 +327,16 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
         return true;
       }
 
-      var same = !newNotOld.Any() && !oldNotNew.Any();
+      if (oldNotNew.Any() &&
+        oldSolnEx.ClaimedStandardEvidence.Count() > newSolnEx.ClaimedStandardEvidence.Count() &&
+        IsPendingForEvidence(newSolnEx.Solution.Status))
+      {
+        // removed
+        return true;
+      }
+
+      var same = !newNotOld.Any() && !oldNotNew.Any() ||
+        IsPendingForEvidence(newSolnEx.Solution.Status);
       if (!same)
       {
         var msg = new { ErrorMessage = nameof(MustBePendingToChangeClaimedStandardEvidence), ExistingValue = oldSolnEx };

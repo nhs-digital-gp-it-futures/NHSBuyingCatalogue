@@ -665,8 +665,32 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
     }
 
     [Test]
-    public void MustBePendingToChangeClaimedCapabilityEvidence_DifferentEvidence_Fails(
-      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
+    public void MustBePendingToChangeClaimedCapabilityEvidence_Pending_DifferentEvidence_Succeeds(
+      [ValueSource(nameof(SolutionStatusesPendingForEvidence))]SolutionStatus status)
+    {
+      var validator = GetValidator();
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldEv1 = Creator.GetCapabilitiesImplementedEvidence();
+      var oldEv2 = Creator.GetCapabilitiesImplementedEvidence();
+      oldSolnEx.ClaimedCapabilityEvidence = new List<CapabilitiesImplementedEvidence>(new[] { oldEv1, oldEv2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      var newEv1 = Creator.GetCapabilitiesImplementedEvidence();
+      var newEv2 = Creator.GetCapabilitiesImplementedEvidence();
+      newSolnEx.ClaimedCapabilityEvidence = new List<CapabilitiesImplementedEvidence>(new[] { newEv1, newEv2 });
+
+
+      var res = validator.MustBePendingToChangeClaimedCapabilityEvidence(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeTrue();
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedCapabilityEvidence_NotPending_DifferentEvidence_Fails(
+      [ValueSource(nameof(SolutionStatusesNotPendingForEvidence))]SolutionStatus status)
     {
       var validator = GetValidator();
 
@@ -689,8 +713,30 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
     }
 
     [Test]
-    public void MustBePendingToChangeClaimedCapabilityEvidence_RemoveEvidence_Fails(
-      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
+    public void MustBePendingToChangeClaimedCapabilityEvidence_Pending_RemoveEvidence_Succeeds(
+      [ValueSource(nameof(SolutionStatusesPendingForEvidence))]SolutionStatus status)
+    {
+      var validator = GetValidator();
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldEv1 = Creator.GetCapabilitiesImplementedEvidence();
+      var oldEv2 = Creator.GetCapabilitiesImplementedEvidence();
+      oldSolnEx.ClaimedCapabilityEvidence = new List<CapabilitiesImplementedEvidence>(new[] { oldEv1, oldEv2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      newSolnEx.ClaimedCapabilityEvidence = new List<CapabilitiesImplementedEvidence>(new[] { oldEv1.Clone() });
+
+
+      var res = validator.MustBePendingToChangeClaimedCapabilityEvidence(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeTrue();
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedCapabilityEvidence_NotPending_RemoveEvidence_Fails(
+      [ValueSource(nameof(SolutionStatusesNotPendingForEvidence))]SolutionStatus status)
     {
       var validator = GetValidator();
 
@@ -781,8 +827,32 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
     }
 
     [Test]
-    public void MustBePendingToChangeClaimedStandardEvidence_DifferentEvidence_Fails(
-      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
+    public void MustBePendingToChangeClaimedStandardEvidence_Pending_DifferentEvidence_Succeeds(
+      [ValueSource(nameof(SolutionStatusesPendingForEvidence))]SolutionStatus status)
+    {
+      var validator = GetValidator();
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldEv1 = Creator.GetStandardsApplicableEvidence();
+      var oldEv2 = Creator.GetStandardsApplicableEvidence();
+      oldSolnEx.ClaimedStandardEvidence = new List<StandardsApplicableEvidence>(new[] { oldEv1, oldEv2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      var newEv1 = Creator.GetStandardsApplicableEvidence();
+      var newEv2 = Creator.GetStandardsApplicableEvidence();
+      newSolnEx.ClaimedStandardEvidence = new List<StandardsApplicableEvidence>(new[] { newEv1, newEv2 });
+
+
+      var res = validator.MustBePendingToChangeClaimedStandardEvidence(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeTrue();
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedStandardEvidence_NotPending_DifferentEvidence_Fails(
+      [ValueSource(nameof(SolutionStatusesNotPendingForEvidence))]SolutionStatus status)
     {
       var validator = GetValidator();
 
@@ -805,8 +875,30 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
     }
 
     [Test]
-    public void MustBePendingToChangeClaimedStandardEvidence_RemoveEvidence_Fails(
-      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
+    public void MustBePendingToChangeClaimedStandardEvidence_Pending_RemoveEvidence_Succeeds(
+      [ValueSource(nameof(SolutionStatusesPendingForEvidence))]SolutionStatus status)
+    {
+      var validator = GetValidator();
+
+      var oldSolnEx = Creator.GetSolutionEx();
+      var oldEv1 = Creator.GetStandardsApplicableEvidence();
+      var oldEv2 = Creator.GetStandardsApplicableEvidence();
+      oldSolnEx.ClaimedStandardEvidence = new List<StandardsApplicableEvidence>(new[] { oldEv1, oldEv2 });
+
+      var newSoln = Creator.GetSolution(status: status);
+      var newSolnEx = Creator.GetSolutionEx(soln: newSoln);
+      newSolnEx.ClaimedStandardEvidence = new List<StandardsApplicableEvidence>(new[] { oldEv1.Clone() });
+
+
+      var res = validator.MustBePendingToChangeClaimedStandardEvidence(oldSolnEx, newSolnEx);
+
+
+      res.Should().BeTrue();
+    }
+
+    [Test]
+    public void MustBePendingToChangeClaimedStandardEvidence_NotPending_RemoveEvidence_Fails(
+      [ValueSource(nameof(SolutionStatusesNotPendingForEvidence))]SolutionStatus status)
     {
       var validator = GetValidator();
 
