@@ -8,7 +8,7 @@ _paq.push(['enableLinkTracking'])
 _paq.push(['trackVisibleContentImpressions']);
 
 (function () {
-  var u = 'https://test.buyingcatalogue.digital.nhs.uk/analytics'
+  var u = 'https://test.buyingcatalogue.digital.nhs.uk/analytics/'
   _paq.push(['setTrackerUrl', u + 'matomo.php'])
   _paq.push(['setSiteId', '2'])
 
