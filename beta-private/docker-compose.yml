@@ -117,8 +117,8 @@ services:
     ports:
       - "3306:3306"
     environment:
-      - MARIADB_USER=bn_matomo
-      - MARIADB_DATABASE=bitnami_matomo
+      - MARIADB_USER
+      - MARIADB_DATABASE
       - MARIADB_PASSWORD
       - MARIADB_ROOT_PASSWORD
     volumes:
@@ -129,10 +129,10 @@ services:
     networks:
       - beta_network
     environment:
-      - MARIADB_HOST=mariadb
-      - MARIADB_PORT_NUMBER=3306
-      - MATOMO_DATABASE_USER=bn_matomo
-      - MATOMO_DATABASE_NAME=bitnami_matomo
+      - MARIADB_HOST
+      - MARIADB_PORT_NUMBER
+      - MATOMO_DATABASE_USER
+      - MATOMO_DATABASE_NAME
       - MATOMO_DATABASE_PASSWORD
     ports:
       - '80:80'
