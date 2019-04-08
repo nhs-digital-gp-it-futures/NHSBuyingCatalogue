@@ -348,7 +348,7 @@ spec:
         ports:
         - containerPort: 3306
         volumeMounts:
-        - name: mariadb_data
+        - name: mariadbdata
           mountPath: /bitnami/mariadb
         resources:
           requests:
@@ -377,7 +377,7 @@ spec:
               name: bcmariadbsecret
               key: MARIADB_ROOT_PASSWORD
       volumes:
-      - name: mariadb_data
+      - name: mariadbdata
         emptyDir: {}        
 ---  
 apiVersion: apps/v1
