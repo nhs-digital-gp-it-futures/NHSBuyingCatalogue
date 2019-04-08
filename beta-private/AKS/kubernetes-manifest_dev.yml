@@ -348,7 +348,7 @@ spec:
         ports:
         - containerPort: 3306
         volumeMounts:
-        - name: mariadbdata
+        - name: mariadbmatomo-persistent-storage
           mountPath: /bitnami/mariadb
         resources:
           requests:
@@ -377,8 +377,9 @@ spec:
               name: bcmariadbsecret
               key: MARIADB_ROOT_PASSWORD
       volumes:
-      - name: mariadbdata
-        emptyDir: {}        
+        - name: mariadbmatomo-persistent-storage
+          persistentVolumeClaim:
+            claimName: mariadbmatomo-volumeclaim      
 ---  
 apiVersion: apps/v1
 kind: Deployment
@@ -406,6 +407,9 @@ spec:
         image: bitnami/matomo:latest
         ports:
         - containerPort: 80
+        volumeMounts:
+        - name: mariadbmatomo-persistent-storage
+          mountPath: /bitnami/matomo        
         resources:
           requests:
             cpu: 250m
@@ -430,7 +434,11 @@ spec:
           valueFrom:
             secretKeyRef:
               name: bcmariadbsecret
-              key: MATOMO_DATABASE_PASSWORD			  
+              key: MATOMO_DATABASE_PASSWORD
+      volumes:
+        - name: mariadbmatomo-persistent-storage
+          persistentVolumeClaim:
+            claimName: mariadbmatomo-volumeclaim              			  
 ---
 apiVersion: v1
 kind: Service
