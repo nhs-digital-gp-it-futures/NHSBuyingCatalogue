@@ -18,10 +18,28 @@
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=default,es7"></script>
     <script type="text/javascript" src="/js/vendor/modernizr-custom.js"></script>
     <script type="text/javascript" src="/js/vendor/details-element-polyfill.js"></script>
-    <script type="text/javascript" src="/js/vendor/matomo.js"></script>
     <script type="text/javascript" src="/js/app.js"></script>
+    
+    {{#meta.analytics.LOCAL}}
+      <script type="text/javascript" src="/js/analytics/matomo.js"></script>
+    {{/meta.analytics.LOCAL}}
 
-				
+    {{#meta.analytics.DEVELOPMENT}}
+      <script type="text/javascript" src="/js/analytics/matomo.js"></script>
+    {{/meta.analytics.DEVELOPMENT}}
+    
+    {{#meta.analytics.TEST}}
+      <script type="text/javascript" src="/js/analytics/matomo.js"></script>
+    {{/meta.analytics.TEST}}
+    
+    {{#meta.analytics.PREPROD}}
+      <script type="text/javascript" src="/js/analytics/matomo.js"></script>
+    {{/meta.analytics.PREPROD}}
+
+    {{#meta.analytics.PRODUCTION}}
+      <script type="text/javascript" src="/js/analytics/matomo.js"></script>
+    {{/meta.analytics.PRODUCTION}}
+        
   <!-- Start Open Web Analytics Tracker -->
   <script type="text/javascript">
     //<![CDATA[

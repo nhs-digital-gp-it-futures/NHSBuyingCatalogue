@@ -19,6 +19,7 @@ services:
       - SHAREPOINT_PROVIDER_ENV
       - ANTIVIRUS_PROVIDER_ENV
       - DEPLOYED_ENV_LABEL
+      - ANALYTICS_ENV
     restart: always
     depends_on:
       - cache
@@ -134,8 +135,8 @@ services:
       - MATOMO_DATABASE_USER
       - MATOMO_DATABASE_NAME
       - MATOMO_DATABASE_PASSWORD
-    ports:
-      - '80:80'
+    # ports:
+    #   - '80:80'
     volumes:
       - 'matomo_data:/bitnami'
     depends_on:
