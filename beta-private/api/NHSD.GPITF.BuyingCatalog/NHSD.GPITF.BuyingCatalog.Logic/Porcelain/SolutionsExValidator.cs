@@ -6,6 +6,8 @@ using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
@@ -226,12 +228,16 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
         .WithMessage("Must Be Pending To Change Claimed Standard Evidence");
     }
 
-    // can only add/remove ClaimedCapability while pending
-    public bool MustBePendingToChangeClaimedCapability(SolutionEx oldSolnEx, SolutionEx newSolnEx)
+    private static bool MustBePendingToChangeClaim<T>(
+      SolutionStatus newSolnStatus,
+      IEnumerable<T> oldItems,
+      IEnumerable<T> newItems,
+      IEqualityComparer<T> comparer,
+      Action onError
+      ) where T : IHasId
     {
-      var comparer = new CapabilitiesImplementedComparer();
-      var newNotOld = newSolnEx.ClaimedCapability.Except(oldSolnEx.ClaimedCapability, comparer).ToList();
-      var oldNotNew = oldSolnEx.ClaimedCapability.Except(newSolnEx.ClaimedCapability, comparer).ToList();
+      var newNotOld = newItems.Except(oldItems, comparer).ToList();
+      var oldNotNew = oldItems.Except(newItems, comparer).ToList();
       var same = !newNotOld.Any() && !oldNotNew.Any();
 
       if (same)
@@ -241,122 +247,135 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       }
 
       if ((oldNotNew.Any() || newNotOld.Any()) &&
-        !IsPendingForClaims(newSolnEx.Solution.Status))
+        !IsPendingForClaims(newSolnStatus))
       {
-        // Can only add/remove ClaimedCapability while pending
-        var msg = new { ErrorMessage = nameof(MustBePendingToChangeClaimedCapability), ExistingValue = oldSolnEx };
-        _logger.LogError(JsonConvert.SerializeObject(msg));
+        // Can only add/remove Claim while pending
+        onError();
         return false;
       }
 
       return true;
+    }
+
+    // can only add/remove ClaimedCapability while pending
+    public bool MustBePendingToChangeClaimedCapability(SolutionEx oldSolnEx, SolutionEx newSolnEx)
+    {
+      var same = MustBePendingToChangeClaim(
+        newSolnEx.Solution.Status,
+        oldSolnEx.ClaimedCapability,
+        newSolnEx.ClaimedCapability,
+        new CapabilitiesImplementedComparer(),
+        () =>
+        {
+          // Can only add/remove ClaimedCapability while pending
+          var msg = new { ErrorMessage = nameof(MustBePendingToChangeClaimedCapability), ExistingValue = oldSolnEx };
+          _logger.LogError(JsonConvert.SerializeObject(msg));
+        });
+
+      return same;
     }
 
     // can only add/remove ClaimedStandard while pending
     public bool MustBePendingToChangeClaimedStandard(SolutionEx oldSolnEx, SolutionEx newSolnEx)
     {
-      var comparer = new StandardsApplicableComparer();
-      var newNotOld = newSolnEx.ClaimedStandard.Except(oldSolnEx.ClaimedStandard, comparer).ToList();
-      var oldNotNew = oldSolnEx.ClaimedStandard.Except(newSolnEx.ClaimedStandard, comparer).ToList();
-      var same = !newNotOld.Any() && !oldNotNew.Any();
+      var same = MustBePendingToChangeClaim(
+        newSolnEx.Solution.Status,
+        oldSolnEx.ClaimedStandard,
+        newSolnEx.ClaimedStandard,
+        new StandardsApplicableComparer(),
+        () =>
+        {
+          // Can only add/remove ClaimedStandard while pending
+          var msg = new { ErrorMessage = nameof(MustBePendingToChangeClaimedStandard), ExistingValue = oldSolnEx };
+          _logger.LogError(JsonConvert.SerializeObject(msg));
+        });
 
-      if (same)
-      {
-        // no add/remove
-        return true;
-      }
-
-      if ((oldNotNew.Any() || newNotOld.Any()) &&
-        !IsPendingForClaims(newSolnEx.Solution.Status))
-      {
-        // Can only add/remove ClaimedStandard while pending
-        var msg = new { ErrorMessage = nameof(MustBePendingToChangeClaimedStandard), ExistingValue = oldSolnEx };
-        _logger.LogError(JsonConvert.SerializeObject(msg));
-        return false;
-      }
-
-      return true;
+      return same;
     }
 
-    // cannot change/remove ClaimedCapabilityEvidence but can add while pending
-    public bool MustBePendingToChangeClaimedCapabilityEvidence(SolutionEx oldSolnEx, SolutionEx newSolnEx)
+    private static bool MustBePendingToChangeEvidence<T>(
+      SolutionStatus newSolnStatus,
+      IEnumerable<T> oldItems,
+      IEnumerable<T> newItems,
+      IEqualityComparer<T> comparer,
+      Action onError
+      ) where T : IHasId
     {
-      var comparer = new CapabilitiesImplementedEvidenceComparer();
-      var newNotOld = newSolnEx.ClaimedCapabilityEvidence.Except(oldSolnEx.ClaimedCapabilityEvidence, comparer).ToList();
-      var oldNotNew = oldSolnEx.ClaimedCapabilityEvidence.Except(newSolnEx.ClaimedCapabilityEvidence, comparer).ToList();
+      //
+      var newNotOld = newItems.Except(oldItems, comparer).ToList();
+      var oldNotNew = oldItems.Except(newItems, comparer).ToList();
 
       if (newNotOld.Any() &&
-        newSolnEx.ClaimedCapabilityEvidence.Count() > oldSolnEx.ClaimedCapabilityEvidence.Count() &&
-        IsPendingForEvidence(newSolnEx.Solution.Status))
+        newItems.Count() > oldItems.Count() &&
+        IsPendingForEvidence(newSolnStatus))
       {
         // added
         return true;
       }
 
       if (oldNotNew.Any() &&
-        oldSolnEx.ClaimedCapabilityEvidence.Count() > newSolnEx.ClaimedCapabilityEvidence.Count() &&
-        IsPendingForEvidence(newSolnEx.Solution.Status))
+        oldItems.Count() > newItems.Count() &&
+        IsPendingForEvidence(newSolnStatus))
       {
         // removed
         return true;
       }
 
       var same = (!newNotOld.Any() && !oldNotNew.Any()) ||
-        IsPendingForEvidence(newSolnEx.Solution.Status);
+        IsPendingForEvidence(newSolnStatus);
       if (!same)
       {
-        var msg = new { ErrorMessage = nameof(MustBePendingToChangeClaimedCapabilityEvidence), ExistingValue = oldSolnEx };
-        _logger.LogError(JsonConvert.SerializeObject(msg));
+        onError();
       }
 
       return same;
+    }
+
+    // cannot change/remove ClaimedCapabilityEvidence but can add while pending
+    public bool MustBePendingToChangeClaimedCapabilityEvidence(SolutionEx oldSolnEx, SolutionEx newSolnEx)
+    {
+      return MustBePendingToChangeEvidence(
+        newSolnEx.Solution.Status,
+        oldSolnEx.ClaimedCapabilityEvidence,
+        newSolnEx.ClaimedCapabilityEvidence,
+        new CapabilitiesImplementedEvidenceComparer(),
+        () =>
+        {
+          var msg = new { ErrorMessage = nameof(MustBePendingToChangeClaimedCapabilityEvidence), ExistingValue = oldSolnEx };
+          _logger.LogError(JsonConvert.SerializeObject(msg));
+        });
     }
 
     // cannot change/remove ClaimedStandardEvidence but can add while pending
     public bool MustBePendingToChangeClaimedStandardEvidence(SolutionEx oldSolnEx, SolutionEx newSolnEx)
     {
-      var comparer = new StandardsApplicableEvidenceComparer();
-      var newNotOld = newSolnEx.ClaimedStandardEvidence.Except(oldSolnEx.ClaimedStandardEvidence, comparer).ToList();
-      var oldNotNew = oldSolnEx.ClaimedStandardEvidence.Except(newSolnEx.ClaimedStandardEvidence, comparer).ToList();
-
-      if (newNotOld.Any() &&
-        newSolnEx.ClaimedStandardEvidence.Count() > oldSolnEx.ClaimedStandardEvidence.Count() &&
-        IsPendingForEvidence(newSolnEx.Solution.Status))
-      {
-        // added
-        return true;
-      }
-
-      if (oldNotNew.Any() &&
-        oldSolnEx.ClaimedStandardEvidence.Count() > newSolnEx.ClaimedStandardEvidence.Count() &&
-        IsPendingForEvidence(newSolnEx.Solution.Status))
-      {
-        // removed
-        return true;
-      }
-
-      var same = !newNotOld.Any() && !oldNotNew.Any() ||
-        IsPendingForEvidence(newSolnEx.Solution.Status);
-      if (!same)
-      {
-        var msg = new { ErrorMessage = nameof(MustBePendingToChangeClaimedStandardEvidence), ExistingValue = oldSolnEx };
-        _logger.LogError(JsonConvert.SerializeObject(msg));
-      }
-
-      return same;
+      return MustBePendingToChangeEvidence(
+        newSolnEx.Solution.Status,
+        oldSolnEx.ClaimedStandardEvidence,
+        newSolnEx.ClaimedStandardEvidence,
+        new StandardsApplicableEvidenceComparer(),
+        () =>
+        {
+          var msg = new { ErrorMessage = nameof(MustBePendingToChangeClaimedStandardEvidence), ExistingValue = oldSolnEx };
+          _logger.LogError(JsonConvert.SerializeObject(msg));
+        });
     }
 
 
-    // cannot change/remove ClaimedCapabilityReview but can add while pending
-    public bool MustBePendingToChangeClaimedCapabilityReview(SolutionEx oldSolnEx, SolutionEx newSolnEx)
+    private static bool MustBePendingToChangeReview<T>(
+      SolutionStatus newSolnStatus,
+      IEnumerable<T> oldItems,
+      IEnumerable<T> newItems,
+      IEqualityComparer<T> comparer,
+      Action onError
+      ) where T : IHasId
     {
-      var comparer = new CapabilitiesImplementedReviewsComparer();
-      var newNotOld = newSolnEx.ClaimedCapabilityReview.Except(oldSolnEx.ClaimedCapabilityReview, comparer).ToList();
-      var oldNotNew = oldSolnEx.ClaimedCapabilityReview.Except(newSolnEx.ClaimedCapabilityReview, comparer).ToList();
+      var newNotOld = newItems.Except(oldItems, comparer).ToList();
+      var oldNotNew = oldItems.Except(newItems, comparer).ToList();
 
       if (newNotOld.Any() &&
-        newSolnEx.ClaimedCapabilityReview.Count() > oldSolnEx.ClaimedCapabilityReview.Count() &&
-        IsPendingForReview(newSolnEx.Solution.Status))
+        newNotOld.Count() > oldNotNew.Count() &&
+        IsPendingForReview(newSolnStatus))
       {
         // added
         return true;
@@ -365,36 +384,40 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       var same = !newNotOld.Any() && !oldNotNew.Any();
       if (!same)
       {
-        var msg = new { ErrorMessage = nameof(MustBePendingToChangeClaimedCapabilityReview), ExistingValue = oldSolnEx };
-        _logger.LogError(JsonConvert.SerializeObject(msg));
+        onError();
       }
 
       return same;
+    }
+
+    // cannot change/remove ClaimedCapabilityReview but can add while pending
+    public bool MustBePendingToChangeClaimedCapabilityReview(SolutionEx oldSolnEx, SolutionEx newSolnEx)
+    {
+      return MustBePendingToChangeReview(
+        newSolnEx.Solution.Status,
+        oldSolnEx.ClaimedCapabilityReview,
+        newSolnEx.ClaimedCapabilityReview,
+        new CapabilitiesImplementedReviewsComparer(),
+        () =>
+        {
+          var msg = new { ErrorMessage = nameof(MustBePendingToChangeClaimedCapabilityReview), ExistingValue = oldSolnEx };
+          _logger.LogError(JsonConvert.SerializeObject(msg));
+        });
     }
 
     // cannot change/remove ClaimedStandardReview but can add while pending
     public bool MustBePendingToChangeClaimedStandardReview(SolutionEx oldSolnEx, SolutionEx newSolnEx)
     {
-      var comparer = new StandardsApplicableReviewsComparer();
-      var newNotOld = newSolnEx.ClaimedStandardReview.Except(oldSolnEx.ClaimedStandardReview, comparer).ToList();
-      var oldNotNew = oldSolnEx.ClaimedStandardReview.Except(newSolnEx.ClaimedStandardReview, comparer).ToList();
-
-      if (newNotOld.Any() &&
-        newSolnEx.ClaimedStandardReview.Count() > oldSolnEx.ClaimedStandardReview.Count() &&
-        IsPendingForReview(newSolnEx.Solution.Status))
-      {
-        // added
-        return true;
-      }
-
-      var same = !newNotOld.Any() && !oldNotNew.Any();
-      if (!same)
-      {
-        var msg = new { ErrorMessage = nameof(MustBePendingToChangeClaimedStandardReview), ExistingValue = oldSolnEx };
-        _logger.LogError(JsonConvert.SerializeObject(msg));
-      }
-
-      return same;
+      return MustBePendingToChangeReview(
+        newSolnEx.Solution.Status,
+        oldSolnEx.ClaimedStandardReview,
+        newSolnEx.ClaimedStandardReview,
+        new StandardsApplicableReviewsComparer(),
+        () =>
+        {
+          var msg = new { ErrorMessage = nameof(MustBePendingToChangeClaimedStandardReview), ExistingValue = oldSolnEx };
+          _logger.LogError(JsonConvert.SerializeObject(msg));
+        });
     }
 
     // check every ClaimedCapability
@@ -404,13 +427,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
     // check every ClaimedCapabilityReview
     // check every ClaimedStandardReview
 
-    private bool IsPendingForClaims(SolutionStatus status)
+    private static bool IsPendingForClaims(SolutionStatus status)
     {
       return status == SolutionStatus.Draft ||
         status == SolutionStatus.Registered;
     }
 
-    private bool IsPendingForEvidence(SolutionStatus status)
+    private static bool IsPendingForEvidence(SolutionStatus status)
     {
       return
         status == SolutionStatus.Registered ||
@@ -418,7 +441,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
         status == SolutionStatus.StandardsCompliance;
     }
 
-    private bool IsPendingForReview(SolutionStatus status)
+    private static bool IsPendingForReview(SolutionStatus status)
     {
       return status == SolutionStatus.CapabilitiesAssessment ||
         status == SolutionStatus.StandardsCompliance;
