@@ -499,6 +499,8 @@ kind: Service
 metadata:
   name: mariadb
 spec:
+  loadBalancerIP: 51.140.70.80
+  type: LoadBalancer
   ports:
   - port: 3306
   selector:
