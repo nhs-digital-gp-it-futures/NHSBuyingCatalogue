@@ -126,7 +126,9 @@ spec:
             cpu: 500m
         env:
         - name: ANTIVIRUS_PROVIDER_ENV
-          value: "CLAMAV"                  
+          value: "CLAMAV"
+        - name: ANALYTICS_ENV
+          value: "DEVELOPMENT"                                   
         - name: BASE_URL
           value: "http://dev.buyingcatalogue.digital.nhs.uk"
         - name: API_BASE_URL
@@ -317,7 +319,7 @@ spec:
         - name: MAX_SCAN_SIZE
           value: "1024M"
         - name: MAX_FILE_SIZE
-          value: "1024M"                             
+          value: "1024M"
 ---
 apiVersion: v1
 kind: Service
@@ -379,4 +381,4 @@ spec:
   ports:
   - port: 5001
   selector:
-    app: bc-pb-app-crm 
+    app: bc-pb-app-crm

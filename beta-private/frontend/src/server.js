@@ -58,7 +58,8 @@ authentication(app).then(() => {
   app.use('*', (req, res, next) => {
     res.locals.user = req.user
     res.locals.meta = {
-      deployedEnvironment: process.env.DEPLOYED_ENV_LABEL
+      deployedEnvironment: process.env.DEPLOYED_ENV_LABEL,
+      analytics: { [process.env.ANALYTICS_ENV]: true }
     }
     next()
   })
