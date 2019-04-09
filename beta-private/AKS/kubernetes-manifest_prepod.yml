@@ -128,7 +128,9 @@ spec:
             cpu: 500m
         env:
         - name: ANTIVIRUS_PROVIDER_ENV
-          value: "CLAMAV"        
+          value: "CLAMAV"
+        - name: ANALYTICS_ENV
+          value: "PREPROD"                    
         - name: BASE_URL
           value: "https://preprod.buyingcatalogue.digital.nhs.uk"
         - name: API_BASE_URL
