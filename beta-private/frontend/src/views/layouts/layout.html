@@ -19,7 +19,7 @@
     <script type="text/javascript" src="/js/vendor/modernizr-custom.js"></script>
     <script type="text/javascript" src="/js/vendor/details-element-polyfill.js"></script>
     <script type="text/javascript" src="/js/app.js"></script>
-    
+
     {{#meta.analytics.LOCAL}}
       <script type="text/javascript" src="/js/analytics/local_matomo.js"></script>
     {{/meta.analytics.LOCAL}}
@@ -27,11 +27,11 @@
     {{#meta.analytics.DEVELOPMENT}}
       <script type="text/javascript" src="/js/analytics/dev_matomo.js"></script>
     {{/meta.analytics.DEVELOPMENT}}
-    
+
     {{#meta.analytics.TEST}}
       <script type="text/javascript" src="/js/analytics/test_matomo.js"></script>
     {{/meta.analytics.TEST}}
-    
+
     {{#meta.analytics.PREPROD}}
       <script type="text/javascript" src="/js/analytics/preprod_matomo.js"></script>
     {{/meta.analytics.PREPROD}}
@@ -39,27 +39,6 @@
     {{#meta.analytics.PRODUCTION}}
       <script type="text/javascript" src="/js/analytics/prod_matomo.js"></script>
     {{/meta.analytics.PRODUCTION}}
-        
-  <!-- Start Open Web Analytics Tracker -->
-  <script type="text/javascript">
-    //<![CDATA[
-    var owa_baseUrl = 'http://localhost:12345/';
-    var owa_cmds = owa_cmds || [];
-    owa_cmds.push(['setSiteId', '87a70ce46ea04de7c28dd1e4da31904c']);
-    owa_cmds.push(['trackPageView']);
-    owa_cmds.push(['trackClicks']);
-    
-    (function() {
-      var _owa = document.createElement('script'); _owa.type = 'text/javascript'; _owa.async = true;
-      owa_baseUrl = ('https:' == document.location.protocol ? window.owa_baseSecUrl || owa_baseUrl.replace(/http:/, 'https:') : owa_baseUrl );
-      _owa.src = owa_baseUrl + 'modules/base/js/owa.tracker-combined-min.js';
-      var _owa_s = document.getElementsByTagName('script')[0]; _owa_s.parentNode.insertBefore(_owa, _owa_s);
-    }());
-    //]]>
-  </script>
-  <!-- End Open Web Analytics Code -->
-          
-      
 
   </head>
   <body>
