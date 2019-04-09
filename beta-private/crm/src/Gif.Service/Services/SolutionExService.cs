@@ -137,14 +137,6 @@ namespace Gif.Service.Services
             if (existingSolution != null)
                 batchData = ComposeDeleteRequests(existingSolution, solnEx, batchData);
 
-            batchData.Add(
-                new BatchData
-                {
-                    Id = solnEx.Solution.Id,
-                    Name = solnEx.Solution.EntityName,
-                    EntityData = solnEx.Solution.SerializeToODataPut("cc_solutionid")
-                });
-
             //Sort Evidence/Reviews in order by previous Id
             solnEx.ClaimedCapabilityEvidence = GetInsertionTree(solnEx.ClaimedCapabilityEvidence);
             solnEx.ClaimedCapabilityReview = GetInsertionTree(solnEx.ClaimedCapabilityReview);
@@ -227,6 +219,14 @@ namespace Gif.Service.Services
                       EntityData = capabilityReview.SerializeToODataPut("cc_reviewid")
                   });
             }
+
+            batchData.Add(
+                new BatchData
+                {
+                    Id = solnEx.Solution.Id,
+                    Name = solnEx.Solution.EntityName,
+                    EntityData = solnEx.Solution.SerializeToODataPut("cc_solutionid")
+                });
 
             Repository.CreateBatch(batchData);
         }
