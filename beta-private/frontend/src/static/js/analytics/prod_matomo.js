@@ -8,7 +8,7 @@ _paq.push(['enableLinkTracking'])
 _paq.push(['trackVisibleContentImpressions']);
 
 (function () {
-  var u = '//buyingcatalogueanalytics.uksouth.cloudapp.azure.com'
+  var u = 'https://analytics.buyingcatalogue.digital.nhs.uk'
   _paq.push(['setTrackerUrl', u + 'matomo.php'])
   _paq.push(['setSiteId', '5'])
 
