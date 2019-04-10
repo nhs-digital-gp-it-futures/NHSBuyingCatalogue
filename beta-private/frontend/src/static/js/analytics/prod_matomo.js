@@ -8,7 +8,7 @@ _paq.push(['enableLinkTracking'])
 _paq.push(['trackVisibleContentImpressions']);
 
 (function () {
-  var u = 'https://analytics.buyingcatalogue.digital.nhs.uk'
+  var u = 'https://analytics.buyingcatalogue.digital.nhs.uk/'
   _paq.push(['setTrackerUrl', u + 'matomo.php'])
   _paq.push(['setSiteId', '5'])
 
@@ -51,7 +51,6 @@ window.addEventListener('load', function () {
       if (type === 'opt-in' && didConsent) {
         // enable cookies
         _paq.push(['rememberConsentGiven', 24])
-        console.log('STATUS CHANGE CONSENT GIVEN')
       }
     },
 
@@ -60,7 +59,6 @@ window.addEventListener('load', function () {
       if (type === 'opt-in') {
         // disable cookies
         _paq.push(['forgetConsentGiven'])
-        console.log('REVOKE: CONSENT NOT GIVEN')
       }
     }
   })
