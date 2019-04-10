@@ -228,7 +228,7 @@ namespace Gif.Service.Services
                     EntityData = solnEx.Solution.SerializeToODataPut("cc_solutionid")
                 });
 
-            Repository.CreateBatch(batchData);
+            Repository.UpsertBatch(batchData);
         }
 
         public IEnumerable<SolutionEx> ByOrganisation(string organisationId)
