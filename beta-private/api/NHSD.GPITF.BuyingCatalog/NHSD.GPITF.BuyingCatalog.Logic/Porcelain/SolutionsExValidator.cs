@@ -301,7 +301,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       Action onError
       ) where T : IHasId
     {
-      //
       var newNotOld = newItems.Except(oldItems, comparer).ToList();
       var oldNotNew = oldItems.Except(newItems, comparer).ToList();
 

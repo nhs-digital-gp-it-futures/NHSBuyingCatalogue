@@ -229,9 +229,18 @@ namespace Gif.Service.Crm
       }
     }
 
-    public void CreateBatch(List<BatchData> batchData)
+    public void UpsertBatch(List<BatchData> batchData)
     {
-      LogInformation($"[{nameof(CreateBatch)}] --> {JsonConvert.SerializeObject(batchData)}");
+      LogInformation($"[{nameof(UpsertBatch)}] --> {JsonConvert.SerializeObject(batchData)}");
+
+      if (batchData.Count > 100)
+      {
+          var ex = new CrmApiException("Over 100 update requests for the batch run, this is currently unsupported.", HttpStatusCode.BadRequest);
+          _logger.LogError(ex, $"[{ex.HttpStatus}] + [{ex.Message}]");
+          _logger.LogError($"[{nameof(UpsertBatch)}] --> {JsonConvert.SerializeObject(batchData)}");
+          throw ex;
+       }   
+
       ApplyAccessToken();
 
       HttpResponseMessage response;
@@ -279,7 +288,7 @@ namespace Gif.Service.Crm
       {
         var ex = new CrmApiException(response.ReasonPhrase, response.StatusCode);
         _logger.LogError(ex, $"[{ex.HttpStatus}] + [{ex.Message}]");
-        _logger.LogError($"[{nameof(CreateBatch)}] --> {JsonConvert.SerializeObject(batchData)}");
+        _logger.LogError($"[{nameof(UpsertBatch)}] --> {JsonConvert.SerializeObject(batchData)}");
         throw ex;
       }
     }
