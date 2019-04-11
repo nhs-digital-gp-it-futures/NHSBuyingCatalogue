@@ -19,7 +19,7 @@ namespace Gif.Service.Models
     /// An Extended Solution with its corresponding Technical Contacts, ClaimedCapability, ClaimedStandard et al
     /// </summary>
     [DataContract]
-    public partial class SolutionEx : EntityBase //: IEquatable<SolutionEx>
+    public class SolutionEx : EntityBase //: IEquatable<SolutionEx>
     {
         /// <summary>
         /// Solution

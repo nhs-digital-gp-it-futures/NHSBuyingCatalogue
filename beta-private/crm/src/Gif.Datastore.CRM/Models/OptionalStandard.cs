@@ -20,7 +20,7 @@ namespace Gif.Service.Models
     /// A Standard and a flag associated with a Capability through a CapabilityMapping
     /// </summary>
     [DataContract]
-    public partial class OptionalStandard : IEquatable<OptionalStandard>
+    public class OptionalStandard : IEquatable<OptionalStandard>
     { 
         /// <summary>
         /// Unique identifier of Standard

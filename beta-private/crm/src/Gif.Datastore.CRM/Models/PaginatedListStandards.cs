@@ -21,7 +21,7 @@ namespace Gif.Service.Models
     /// A paged list of objects
     /// </summary>
     [DataContract]
-    public partial class PaginatedListStandards : IEquatable<PaginatedListStandards>
+    public class PaginatedListStandards : IEquatable<PaginatedListStandards>
     { 
         /// <summary>
         /// 1-based index of which page this page  Defaults to 1
