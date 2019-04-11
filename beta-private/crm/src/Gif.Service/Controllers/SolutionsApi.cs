@@ -63,7 +63,7 @@ namespace Gif.Service.Controllers
       try
       {
         solutions = _datastore.ByFramework(frameworkId);
-        solutions = solutions.GetPagingValues(pageIndex, pageSize, solutions, out totalPages);
+        solutions = solutions.GetPagingValues(pageIndex, pageSize, out totalPages);
       }
       catch (Crm.CrmApiException ex)
       {
@@ -133,7 +133,7 @@ namespace Gif.Service.Controllers
       try
       {
         solutions = _datastore.ByOrganisation(organisationId);
-        solutions = solutions.GetPagingValues(pageIndex, pageSize, solutions, out totalPages);
+        solutions = solutions.GetPagingValues(pageIndex, pageSize, out totalPages);
 
       }
       catch (Crm.CrmApiException ex)

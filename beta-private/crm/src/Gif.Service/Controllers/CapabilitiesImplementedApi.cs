@@ -91,7 +91,7 @@ namespace Gif.Service.Controllers
       try
       {
         capabilitiesImplemented = _datastore.BySolution(solutionId);
-        capabilitiesImplemented = capabilitiesImplemented.GetPagingValues(pageIndex, pageSize, capabilitiesImplemented, out totalPages);
+        capabilitiesImplemented = capabilitiesImplemented.GetPagingValues(pageIndex, pageSize, out totalPages);
       }
       catch (Crm.CrmApiException ex)
       {

@@ -122,7 +122,7 @@ namespace Gif.Service.Controllers
       try
       {
         contacts = _datastore.ByOrganisation(organisationId);
-        contacts = contacts.GetPagingValues(pageIndex, pageSize, contacts, out totalPages);
+        contacts = contacts.GetPagingValues(pageIndex, pageSize, out totalPages);
       }
       catch (Crm.CrmApiException ex)
       {

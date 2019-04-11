@@ -9,7 +9,7 @@ namespace Gif.Service
 {
   public static class PagingValuesExtensions
   {
-    public static IEnumerable<T> GetPagingValues<T>(this IEnumerable<T> stuff, int? pageIndex, int? pageSize, IEnumerable<T> items, out int totalPages)
+    public static IEnumerable<T> GetPagingValues<T>(this IEnumerable<T> items, int? pageIndex, int? pageSize, out int totalPages)
     {
       var skipPage = Paging.DefaultSkip;
 
