@@ -63,7 +63,7 @@ namespace Gif.Service.Controllers
       try
       {
         standards = _datastore.ByCapability(capabilityId, isOptional);
-        standards = _datastore.GetPagingValues(pageIndex, pageSize, standards, out totalPages);
+        standards = standards.GetPagingValues(pageIndex, pageSize, standards, out totalPages);
 
       }
       catch (Crm.CrmApiException ex)
@@ -103,7 +103,7 @@ namespace Gif.Service.Controllers
       try
       {
         standards = _datastore.ByFramework(frameworkId);
-        standards = _datastore.GetPagingValues(pageIndex, pageSize, standards, out totalPages);
+        standards = standards.GetPagingValues(pageIndex, pageSize, standards, out totalPages);
       }
       catch (Crm.CrmApiException ex)
       {
@@ -198,7 +198,7 @@ namespace Gif.Service.Controllers
       try
       {
         standards = _datastore.GetAll();
-        standards = _datastore.GetPagingValues(pageIndex, pageSize, standards, out totalPages);
+        standards = standards.GetPagingValues(pageIndex, pageSize, standards, out totalPages);
       }
       catch (Crm.CrmApiException ex)
       {

@@ -93,7 +93,7 @@ namespace Gif.Service.Controllers
       try
       {
         reviews = _datastore.ByEvidence(evidenceId);
-        reviews = _datastore.GetPagingValues(pageIndex, pageSize, reviews, out totalPages);
+        reviews = reviews.GetPagingValues(pageIndex, pageSize, reviews, out totalPages);
       }
       catch (Crm.CrmApiException ex)
       {

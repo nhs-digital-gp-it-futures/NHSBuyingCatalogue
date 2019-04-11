@@ -89,7 +89,7 @@ namespace Gif.Service.Controllers
       try
       {
         standardsApplicable = _datastore.BySolution(solutionId);
-        standardsApplicable = _datastore.GetPagingValues(pageIndex, pageSize, standardsApplicable, out totalPages);
+        standardsApplicable = standardsApplicable.GetPagingValues(pageIndex, pageSize, standardsApplicable, out totalPages);
 
         if (standardsApplicable == null)
           return StatusCode(404);

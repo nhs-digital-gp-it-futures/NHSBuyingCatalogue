@@ -59,7 +59,7 @@ namespace Gif.Service.Controllers
       try
       {
         evidences = _datastore.ByClaim(claimId);
-        evidences = _datastore.GetPagingValues(pageIndex, pageSize, evidences, out totalPages);
+        evidences = evidences.GetPagingValues(pageIndex, pageSize, evidences, out totalPages);
 
       }
       catch (Crm.CrmApiException ex)
