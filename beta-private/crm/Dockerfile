@@ -2,9 +2,11 @@ FROM microsoft/dotnet:2.1-sdk
 
 ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
 
-WORKDIR /app/IO.Swagger
-COPY ./src/Gif.Service /app/IO.Swagger
-COPY ./lib/Samc4.CipherUtil.dll /lib/Samc4.CipherUtil.dll
+WORKDIR /crm
+COPY ./GifService.sln /crm
+COPY ./src/Gif.Datastore.CRM /crm/src/Gif.Datastore.CRM
+COPY ./src/Gif.Service /crm/src/Gif.Service
+COPY ./lib/Samc4.CipherUtil.dll /crm/lib/Samc4.CipherUtil.dll
 
 RUN dotnet publish -c Release -o /app
 
