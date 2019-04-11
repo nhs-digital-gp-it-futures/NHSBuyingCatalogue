@@ -37,7 +37,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSD.GPITF.BuyingCatalog.Da
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSD.GPITF.BuyingCatalog.UserInfoResponseCache.Redis", "NHSD.GPITF.BuyingCatalog.UserInfoResponseCache.Redis\NHSD.GPITF.BuyingCatalog.UserInfoResponseCache.Redis.csproj", "{62AB13CB-DCAA-498D-9C1F-9949C89A088B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSD.GPITF.BuyingCatalog.SystemTests", "NHSD.GPITF.BuyingCatalog.SystemTests\NHSD.GPITF.BuyingCatalog.SystemTests.csproj", "{91ED730D-BDD2-4136-8EDF-1BCA3328A0C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSD.GPITF.BuyingCatalog.SystemTests", "NHSD.GPITF.BuyingCatalog.SystemTests\NHSD.GPITF.BuyingCatalog.SystemTests.csproj", "{91ED730D-BDD2-4136-8EDF-1BCA3328A0C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSD.GPITF.BuyingCatalog.Interfaces", "NHSD.GPITF.BuyingCatalog.Interfaces\NHSD.GPITF.BuyingCatalog.Interfaces.csproj", "{374E07EE-DBA2-4982-8041-6E7581715A7D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSD.GPITF.BuyingCatalog.Models", "NHSD.GPITF.BuyingCatalog.Models\NHSD.GPITF.BuyingCatalog.Models.csproj", "{9F070994-7B54-4932-A68C-0FDEE56CAC5C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -117,6 +121,14 @@ Global
 		{91ED730D-BDD2-4136-8EDF-1BCA3328A0C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91ED730D-BDD2-4136-8EDF-1BCA3328A0C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91ED730D-BDD2-4136-8EDF-1BCA3328A0C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{374E07EE-DBA2-4982-8041-6E7581715A7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{374E07EE-DBA2-4982-8041-6E7581715A7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{374E07EE-DBA2-4982-8041-6E7581715A7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{374E07EE-DBA2-4982-8041-6E7581715A7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F070994-7B54-4932-A68C-0FDEE56CAC5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F070994-7B54-4932-A68C-0FDEE56CAC5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F070994-7B54-4932-A68C-0FDEE56CAC5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F070994-7B54-4932-A68C-0FDEE56CAC5C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
