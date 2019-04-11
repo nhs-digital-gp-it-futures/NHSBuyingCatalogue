@@ -86,13 +86,12 @@ namespace Gif.Service.Crm
       return accessToken;
     }
 
-    public JToken RetrieveMultiple(string query, out int? count)
+    public JToken RetrieveMultiple(string query)
     {
       LogInformation($"[{nameof(RetrieveMultiple)}] --> {query}");
       ApplyAccessToken();
 
       JToken jretrieveToken = null;
-      count = null;
 
       HttpResponseMessage retrieveResponse;
       retrieveResponse = _httpClient.GetAsync(query).Result;
@@ -112,11 +111,6 @@ namespace Gif.Service.Crm
       }
 
       jretrieveToken = jretrieveJObject["value"];
-
-      if (jretrieveJObject["@odata.count"] != null)
-      {
-        count = int.Parse(jretrieveJObject["@odata.count"].ToString());
-      }
 
       LogInformation($"  [{retrieveResponse.StatusCode}] --> {jretrieveToken.ToString()}");
       return jretrieveToken;

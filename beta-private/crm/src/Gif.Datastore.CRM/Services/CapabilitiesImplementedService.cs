@@ -23,7 +23,7 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-      var appJson = Repository.RetrieveMultiple(new CapabilityImplemented().GetQueryString(null, filterAttributes), out Count);
+      var appJson = Repository.RetrieveMultiple(new CapabilityImplemented().GetQueryString(null, filterAttributes));
       var capabilityImplementedJson = appJson?.FirstOrDefault();
 
       return (capabilityImplementedJson == null) ? null : new CapabilityImplemented(capabilityImplementedJson);
@@ -39,14 +39,12 @@ namespace Gif.Service.Services
                     new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
                 };
 
-      var appJson = Repository.RetrieveMultiple(new CapabilityImplemented().GetQueryString(null, filterAttributes, true, true), out Count);
+      var appJson = Repository.RetrieveMultiple(new CapabilityImplemented().GetQueryString(null, filterAttributes, true, true));
 
       foreach (var capabilityImplemented in appJson.Children())
       {
         capabilitiesImplemented.Add(new CapabilityImplemented(capabilityImplemented));
       }
-
-      Count = capabilitiesImplemented.Count();
 
       return capabilitiesImplemented;
     }
@@ -68,7 +66,7 @@ namespace Gif.Service.Services
 
       var capabilityEvidence = new CapabilityEvidence();
 
-      var jsonEvidenceParent = Repository.RetrieveMultiple(capabilityEvidence.GetQueryString(null, filterAttributes), out Count);
+      var jsonEvidenceParent = Repository.RetrieveMultiple(capabilityEvidence.GetQueryString(null, filterAttributes));
 
       Repository.Delete(capabilityImplemented.EntityName, capabilityImplemented.Id);
 

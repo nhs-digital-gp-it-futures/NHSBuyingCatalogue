@@ -52,7 +52,7 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new SolutionExFullRetrieve().GetQueryString(null, filterAttributes, true, true), out int? count);
+            var appJson = Repository.RetrieveMultiple(new SolutionExFullRetrieve().GetQueryString(null, filterAttributes, true, true));
             var solutionJson = appJson?.FirstOrDefault();
 
             if (solutionJson == null)

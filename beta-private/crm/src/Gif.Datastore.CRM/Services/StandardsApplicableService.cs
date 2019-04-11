@@ -22,7 +22,7 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-      var appJson = Repository.RetrieveMultiple(new StandardApplicable().GetQueryString(null, filterAttributes), out Count);
+      var appJson = Repository.RetrieveMultiple(new StandardApplicable().GetQueryString(null, filterAttributes));
       var standardApplicable = appJson?.FirstOrDefault();
 
       return (standardApplicable == null) ? null : new StandardApplicable(standardApplicable);
@@ -38,14 +38,12 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-      var appJson = Repository.RetrieveMultiple(new StandardApplicable().GetQueryString(null, filterAttributes, true, true), out Count);
+      var appJson = Repository.RetrieveMultiple(new StandardApplicable().GetQueryString(null, filterAttributes, true, true));
 
       foreach (var standardApplicable in appJson.Children())
       {
         standardsApplicable.Add(new StandardApplicable(standardApplicable));
       }
-
-      Count = standardsApplicable.Count();
 
       return standardsApplicable;
     }

@@ -29,7 +29,7 @@ namespace Gif.Service.Services
         filterAttributes.Add(new CrmFilterAttribute("IsOptional")
         { FilterName = "cc_isoptional", FilterValue = isOptional.ToString().ToLower(), QuotesRequired = false });
 
-      var appJson = Repository.RetrieveMultiple(new CapabilityStandard().GetQueryString(null, filterAttributes, true, true), out Count);
+      var appJson = Repository.RetrieveMultiple(new CapabilityStandard().GetQueryString(null, filterAttributes, true, true));
 
       foreach (var item in appJson)
       {
@@ -40,8 +40,6 @@ namespace Gif.Service.Services
 
         standards.Add(new Standard(capabilitiesJson));
       }
-
-      Count = standards.Count();
 
       return standards;
     }
@@ -56,7 +54,7 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-      var appJson = Repository.RetrieveMultiple(new Framework().GetQueryString(null, filterAttributes, true, true), out Count);
+      var appJson = Repository.RetrieveMultiple(new Framework().GetQueryString(null, filterAttributes, true, true));
 
       var standard = appJson.Children().FirstOrDefault();
 
@@ -67,8 +65,6 @@ namespace Gif.Service.Services
           standards.Add(new Standard(retrievedStandard));
         }
       }
-
-      Count = standards.Count();
 
       return standards;
     }
@@ -81,7 +77,7 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-      var appJson = Repository.RetrieveMultiple(new Standard().GetQueryString(null, filterAttributes), out int? count);
+      var appJson = Repository.RetrieveMultiple(new Standard().GetQueryString(null, filterAttributes));
       var standard = appJson?.FirstOrDefault();
 
       return (standard == null) ? null : new Standard(standard);
@@ -99,15 +95,13 @@ namespace Gif.Service.Services
                     new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
                 };
 
-        var appJson = Repository.RetrieveMultiple(new Standard().GetQueryString(null, filterAttributes, true, true), out Count);
+        var appJson = Repository.RetrieveMultiple(new Standard().GetQueryString(null, filterAttributes, true, true));
 
         var standard = appJson?.FirstOrDefault();
 
         if (standard != null)
           standardList.Add(new Standard(standard));
       }
-
-      Count = standardList.Count();
 
       return standardList;
     }
@@ -121,7 +115,7 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("Statecode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-      var appJson = Repository.RetrieveMultiple(new Standard().GetQueryString(null, filterAttributes, false, true), out Count);
+      var appJson = Repository.RetrieveMultiple(new Standard().GetQueryString(null, filterAttributes, false, true));
 
       foreach (var standard in appJson.Children())
       {

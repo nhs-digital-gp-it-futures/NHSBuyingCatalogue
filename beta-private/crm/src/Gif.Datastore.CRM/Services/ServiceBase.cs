@@ -10,8 +10,6 @@ namespace Gif.Service.Services
   {
     protected IRepository Repository;
 
-    public int? Count;
-
     public ServiceBase(IRepository repository)
     {
       Repository = repository;

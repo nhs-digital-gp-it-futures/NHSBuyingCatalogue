@@ -23,15 +23,12 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-      var appJson = Repository.RetrieveMultiple(new TechnicalContact().GetQueryString(null, filterAttributes, true, true), out Count
-      );
+      var appJson = Repository.RetrieveMultiple(new TechnicalContact().GetQueryString(null, filterAttributes, true, true));
 
       foreach (var contact in appJson.Children())
       {
         contacts.Add(new TechnicalContact(contact));
       }
-
-      Count = contacts.Count();
 
       return contacts;
     }
@@ -44,7 +41,7 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-      var appJson = Repository.RetrieveMultiple(new TechnicalContact().GetQueryString(null, filterAttributes), out int? count);
+      var appJson = Repository.RetrieveMultiple(new TechnicalContact().GetQueryString(null, filterAttributes));
       var tcJson = appJson?.FirstOrDefault();
 
       return (tcJson == null) ? null : new TechnicalContact(tcJson);

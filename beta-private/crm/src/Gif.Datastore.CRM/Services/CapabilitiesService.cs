@@ -26,7 +26,7 @@ namespace Gif.Service.Services
                 };
 
 
-      var appJson = Repository.RetrieveMultiple(new Framework().GetQueryString(null, filterAttributes, true, true), out Count);
+      var appJson = Repository.RetrieveMultiple(new Framework().GetQueryString(null, filterAttributes, true, true));
 
       var framework = appJson.Children().FirstOrDefault();
 
@@ -37,8 +37,6 @@ namespace Gif.Service.Services
           capabilities.Add(new Capability(capability));
         }
       }
-
-      Count = capabilities.Count();
 
       return capabilities;
     }
@@ -53,7 +51,7 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("Statecode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-      var appJson = Repository.RetrieveMultiple(new Capability().GetQueryString(null, filterAttributes), out Count);
+      var appJson = Repository.RetrieveMultiple(new Capability().GetQueryString(null, filterAttributes));
       var capabilityJson = appJson?.FirstOrDefault();
 
       return (capabilityJson == null) ? null : new Capability(capabilityJson);
@@ -71,15 +69,13 @@ namespace Gif.Service.Services
                     new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
                 };
 
-        var appJson = Repository.RetrieveMultiple(new Capability().GetQueryString(null, filterAttributes, false, true), out Count);
+        var appJson = Repository.RetrieveMultiple(new Capability().GetQueryString(null, filterAttributes, false, true));
 
         var capability = appJson?.FirstOrDefault();
 
         if (capability != null)
           capabilityList.Add(new Capability(capability));
       }
-
-      Count = capabilityList.Count();
 
       return capabilityList;
     }
@@ -95,7 +91,7 @@ namespace Gif.Service.Services
                     new CrmFilterAttribute("Statecode") {FilterName = "statecode", FilterValue = "0"},
                 };
 
-      var appJson = Repository.RetrieveMultiple(new CapabilityStandard().GetQueryString(null, filterAttributes, true, true), out Count);
+      var appJson = Repository.RetrieveMultiple(new CapabilityStandard().GetQueryString(null, filterAttributes, true, true));
 
       foreach (var item in appJson)
       {
@@ -106,8 +102,6 @@ namespace Gif.Service.Services
 
         capabilities.Add(new Capability(capabilitiesJson));
       }
-
-      Count = capabilities.Count();
 
       return capabilities;
     }
@@ -121,14 +115,12 @@ namespace Gif.Service.Services
                     new CrmFilterAttribute("Statecode") {FilterName = "statecode", FilterValue = "0"}
                 };
 
-      var appJson = Repository.RetrieveMultiple(new Capability().GetQueryString(null, filterAttributes, false, true), out Count);
+      var appJson = Repository.RetrieveMultiple(new Capability().GetQueryString(null, filterAttributes, false, true));
 
       foreach (var capability in appJson.Children())
       {
         capabilities.Add(new Capability(capability));
       }
-
-      Count = capabilities.Count();
 
       return capabilities;
     }

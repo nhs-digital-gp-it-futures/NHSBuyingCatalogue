@@ -24,7 +24,7 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("Framework") {FilterName = "cc_frameworkid", FilterValue = frameworkId}
             };
 
-      var appJson = Repository.RetrieveMultiple(new Framework().GetQueryString(null, filterAttributes, true, true), out Count);
+      var appJson = Repository.RetrieveMultiple(new Framework().GetQueryString(null, filterAttributes, true, true));
 
       var framework = appJson.Children().FirstOrDefault();
 
@@ -35,8 +35,6 @@ namespace Gif.Service.Services
           solutions.Add(new Solution(solution));
         }
       }
-
-      Count = solutions.Count();
 
       return solutions;
     }
@@ -49,7 +47,7 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-      var appJson = Repository.RetrieveMultiple(new Solution().GetQueryString(null, filterAttributes), out int? count);
+      var appJson = Repository.RetrieveMultiple(new Solution().GetQueryString(null, filterAttributes));
       var solutionJson = appJson?.FirstOrDefault();
 
       return (solutionJson == null) ? null : new Solution(solutionJson);
@@ -65,14 +63,12 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-      var appJson = Repository.RetrieveMultiple(new Solution().GetQueryString(null, filterAttributes, true, true), out Count);
+      var appJson = Repository.RetrieveMultiple(new Solution().GetQueryString(null, filterAttributes, true, true));
 
       foreach (var solution in appJson.Children())
       {
         solutions.Add(new Solution(solution));
       }
-
-      Count = solutions.Count();
 
       return solutions;
     }

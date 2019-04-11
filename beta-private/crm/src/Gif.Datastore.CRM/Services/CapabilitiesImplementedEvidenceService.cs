@@ -33,12 +33,10 @@ namespace Gif.Service.Services
                 { FilterName = "_cc_capabilityimplemented_value", FilterValue = claim.ToString(), MultiConditional = true });
             }
 
-            var jsonEvidenceParent = Repository.RetrieveMultiple(new CapabilityEvidence().GetQueryString(null, filterEvidenceParent, true, true), out Count);
+            var jsonEvidenceParent = Repository.RetrieveMultiple(new CapabilityEvidence().GetQueryString(null, filterEvidenceParent, true, true));
 
             foreach (var evidenceChild in jsonEvidenceParent.Children())
                 AddEvidenceChainToList(evidenceChild, new List<CapabilityEvidence>(), evidenceListList);
-
-            Count = evidenceListList.Count;
 
             return evidenceListList;
         }
@@ -55,13 +53,11 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var jsonEvidenceParent = Repository.RetrieveMultiple(new CapabilityEvidence().GetQueryString(null, filterEvidenceParent, true, true), out Count);
+            var jsonEvidenceParent = Repository.RetrieveMultiple(new CapabilityEvidence().GetQueryString(null, filterEvidenceParent, true, true));
 
             // iterate through all items that are at the end of the chain
             foreach (var evidenceChild in jsonEvidenceParent.Children())
                 AddEvidenceChainToList(evidenceChild, new List<CapabilityEvidence>(), evidenceListList);
-
-            Count = evidenceListList.Count;
 
             return evidenceListList;
         }
@@ -90,7 +86,7 @@ namespace Gif.Service.Services
                     new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
                 };
 
-                var jsonEvidence = Repository.RetrieveMultiple(new CapabilityEvidence().GetQueryString(null, filterEvidence, true, true), out Count);
+                var jsonEvidence = Repository.RetrieveMultiple(new CapabilityEvidence().GetQueryString(null, filterEvidence, true, true));
                 if (jsonEvidence.HasValues)
                 {
                     evidence = new CapabilityEvidence(jsonEvidence.FirstOrDefault());
@@ -110,7 +106,7 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new CapabilityEvidence().GetQueryString(null, filterAttributes), out Count);
+            var appJson = Repository.RetrieveMultiple(new CapabilityEvidence().GetQueryString(null, filterAttributes));
             var evidence = appJson?.FirstOrDefault();
 
             return (evidence == null) ? null : new CapabilityEvidence(evidence);
@@ -136,7 +132,7 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new CapabilityImplemented().GetQueryString(null, filterAttributes), out Count);
+            var appJson = Repository.RetrieveMultiple(new CapabilityImplemented().GetQueryString(null, filterAttributes));
             var capabilityImplemented = appJson?.FirstOrDefault();
 
             return (capabilityImplemented == null) ? null : new CapabilityImplemented(capabilityImplemented);
@@ -152,7 +148,7 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-            var reviewJson = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterAttributes), out Count);
+            var reviewJson = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterAttributes));
             var review = reviewJson?.FirstOrDefault();
 
             if (review != null)

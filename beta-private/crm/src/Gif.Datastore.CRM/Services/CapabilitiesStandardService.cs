@@ -23,14 +23,12 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-      var appJson = Repository.RetrieveMultiple(new CapabilityStandard().GetQueryString(null, filterAttributes, true, true), out Count);
+      var appJson = Repository.RetrieveMultiple(new CapabilityStandard().GetQueryString(null, filterAttributes, true, true));
 
       foreach (var capabilityStandard in appJson.Children())
       {
         capabilitiesStandard.Add(new CapabilityStandard(capabilityStandard));
       }
-
-      Count = capabilitiesStandard.Count();
 
       return capabilitiesStandard;
     }

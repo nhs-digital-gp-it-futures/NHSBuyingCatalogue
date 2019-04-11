@@ -25,7 +25,7 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-      var appJson = Repository.RetrieveMultiple(new Capability().GetQueryString(null, filterAttributes, true, true), out Count);
+      var appJson = Repository.RetrieveMultiple(new Capability().GetQueryString(null, filterAttributes, true, true));
 
       var capability = appJson.Children().FirstOrDefault();
 
@@ -35,8 +35,6 @@ namespace Gif.Service.Services
         {
           frameworks.Add(new Framework(framework));
         }
-
-      Count = frameworks.Count();
 
       return frameworks;
     }
@@ -49,7 +47,7 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-      var appJson = Repository.RetrieveMultiple(new Framework().GetQueryString(null, filterAttributes), out Count);
+      var appJson = Repository.RetrieveMultiple(new Framework().GetQueryString(null, filterAttributes));
       var frameworkJson = appJson?.FirstOrDefault();
 
       return (frameworkJson == null) ? null : new Framework(frameworkJson);
@@ -65,7 +63,7 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-      var appJson = Repository.RetrieveMultiple(new Solution().GetQueryString(null, filterAttributes, true, true), out Count);
+      var appJson = Repository.RetrieveMultiple(new Solution().GetQueryString(null, filterAttributes, true, true));
 
       var solution = appJson.Children().FirstOrDefault();
 
@@ -76,8 +74,6 @@ namespace Gif.Service.Services
           frameworks.Add(new Framework(framework));
         }
       }
-
-      Count = frameworks.Count();
 
       return frameworks;
     }
@@ -92,7 +88,7 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-      var appJson = Repository.RetrieveMultiple(new Standard().GetQueryString(null, filterAttributes, true, true), out Count);
+      var appJson = Repository.RetrieveMultiple(new Standard().GetQueryString(null, filterAttributes, true, true));
 
       var standard = appJson.Children().FirstOrDefault();
 
@@ -103,8 +99,6 @@ namespace Gif.Service.Services
           frameworks.Add(new Framework(framework));
         }
       }
-
-      Count = frameworks.Count();
 
       return frameworks;
     }
@@ -118,7 +112,7 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("Statecode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-      var appJson = Repository.RetrieveMultiple(new Framework().GetQueryString(null, filterAttributes, false, true), out Count);
+      var appJson = Repository.RetrieveMultiple(new Framework().GetQueryString(null, filterAttributes, false, true));
 
       foreach (var framework in appJson.Children())
       {

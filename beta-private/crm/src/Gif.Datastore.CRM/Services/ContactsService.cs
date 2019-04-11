@@ -25,7 +25,7 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("BuyingCatalogueContact") {FilterName = "cc_buyingcataloguecontact", FilterValue = "true"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new Contact().GetQueryString(null, filterAttributes), out Count);
+            var appJson = Repository.RetrieveMultiple(new Contact().GetQueryString(null, filterAttributes));
             var contactJson = appJson?.FirstOrDefault();
 
             return (contactJson == null) ? null : new Contact(contactJson);
@@ -40,7 +40,7 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("BuyingCatalogueContact") {FilterName = "cc_buyingcataloguecontact", FilterValue = "true"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new Contact().GetQueryString(null, filterAttributes), out Count);
+            var appJson = Repository.RetrieveMultiple(new Contact().GetQueryString(null, filterAttributes));
             var contactJson = appJson?.FirstOrDefault();
 
             return (contactJson == null) ? null : new Contact(contactJson);
@@ -57,14 +57,12 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("BuyingCatalogueContact") {FilterName = "cc_buyingcataloguecontact", FilterValue = "true"}
             };
 
-            var appJson = Repository.RetrieveMultiple(new Contact().GetQueryString(null, filterAttributes, true, true), out Count);
+            var appJson = Repository.RetrieveMultiple(new Contact().GetQueryString(null, filterAttributes, true, true));
 
             foreach (var contact in appJson.Children())
             {
                 contacts.Add(new Contact(contact));
             }
-
-            Count = contacts.Count();
 
             return contacts;
         }

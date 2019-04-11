@@ -29,13 +29,11 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-      var jsonReviewParent = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterReviewParent, true, true), out Count);
+      var jsonReviewParent = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterReviewParent, true, true));
 
       // iterate through all items that are at the end of the chain
       foreach (var reviewChild in jsonReviewParent.Children())
         AddReviewChainToList(reviewChild, reviewList, reviewsListList);
-
-      Count = reviewsListList.Count;
 
       return reviewsListList;
     }
@@ -57,12 +55,10 @@ namespace Gif.Service.Services
                 { FilterName = "_cc_evidence_value", FilterValue = evidence.ToString(), MultiConditional = true });
         }
 
-        var jsonEvidenceParent = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterReviewParent, true, true), out Count);
+        var jsonEvidenceParent = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterReviewParent, true, true));
 
         foreach (var reviewChild in jsonEvidenceParent.Children())
             AddReviewChainToList(reviewChild, new List<Review>(), evidenceListList);
-
-        Count = evidenceListList.Count;
 
         return evidenceListList;
      }
@@ -91,7 +87,7 @@ namespace Gif.Service.Services
                     new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
                 };
 
-        var jsonReview = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterReview, true, true), out Count);
+        var jsonReview = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterReview, true, true));
         if (jsonReview.HasValues)
         {
           review = new Review(jsonReview.FirstOrDefault());
@@ -111,7 +107,7 @@ namespace Gif.Service.Services
                 new CrmFilterAttribute("StateCode") {FilterName = "statecode", FilterValue = "0"}
             };
 
-      var appJson = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterAttributes), out Count);
+      var appJson = Repository.RetrieveMultiple(new Review().GetQueryString(null, filterAttributes));
       var review = appJson?.FirstOrDefault();
 
       return (review == null) ? null : new Review(review);
