@@ -1,4 +1,9 @@
-<li tabindex="0" data-cap-id="{{id}}" class="capability {{types}}"{{#if isFirst}} id="{{firstId}}"{{/if}}>
+<li
+  tabindex="0"
+  data-cap-id="{{id}}"
+  class="capability {{types}}"
+  {{#if isFirst}} id="{{firstId}}"{{/if}}
+  data-track-content data-content-name="{{name}}">
   <h3 class="name">{{name}}</h3>
 
   <section class="reveal">
@@ -15,7 +20,7 @@
       <ul>
         {{#standardsByGroup.associated}}
           {{#unless isOptional}}
-          <li><a href="{{url}}" target="_blank">{{name}}</a></li>
+          <li><a href="{{url}}" target="_blank"  data-track-content>{{name}}</a></li>
           {{/unless}}
         {{/standardsByGroup.associated}}
         </ul>
@@ -27,14 +32,14 @@
         <ul>
           {{#standardsByGroup.associated}}
           {{#if isOptional}}
-          <li><a href="{{url}}" target="_blank">{{name}}</a></li>
+          <li><a href="{{url}}" target="_blank"  data-track-content>{{name}}</a></li>
           {{/if}}
         {{/standardsByGroup.associated}}
       </ul>
     </section>
     </div>
 
-    <section class="selection">
+    <section class="selection"  data-track-content>
       <div class="controls">
         <input
           id="select-capability-{{id}}" 
@@ -46,8 +51,8 @@
           data-std-ids="{{standardIds}}">
         <label for="select-capability-{{id}}" class="unchecked button">{{t 'Onboarding.Capabilities.Reveal.Selection.Select'}}</label>
         <label for="select-capability-{{id}}" class="checked">
-          <span class="selected">{{t 'Onboarding.Capabilities.Reveal.Selection.Selected'}}</span>
-          <span class="remove">{{t 'Onboarding.Capabilities.Reveal.Selection.RemoveSelection'}}</span>
+          <span class="selected" data-track-content>{{t 'Onboarding.Capabilities.Reveal.Selection.Selected'}}</span>
+          <span class="remove"  data-track-content>{{t 'Onboarding.Capabilities.Reveal.Selection.RemoveSelection'}}</span>
         </label>
       </div>
       <p class="preamble">{{t 'Onboarding.Capabilities.Reveal.Selection.Preamble'}}</p>

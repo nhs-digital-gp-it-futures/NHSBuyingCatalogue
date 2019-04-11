@@ -19,6 +19,7 @@ services:
       - SHAREPOINT_PROVIDER_ENV
       - ANTIVIRUS_PROVIDER_ENV
       - DEPLOYED_ENV_LABEL
+      - ANALYTICS_ENV
     restart: always
     depends_on:
       - cache
