@@ -1,30 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <Description>IO.Swagger</Description>
     <Copyright>IO.Swagger</Copyright>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PreserveCompilationContext>true</PreserveCompilationContext>
-    <AssemblyName>Gif.Service</AssemblyName>
-    <PackageId>IO.Swagger</PackageId>
     <NoWarn>NU1605;CS1591;NU1603;NU1701;CS1572;CS1573</NoWarn>
     <UserSecretsId>626ab5c7-7b51-49fe-acea-005970d864c3</UserSecretsId>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-    <Optimize>false</Optimize>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <WarningsAsErrors>NU1605</WarningsAsErrors>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="Controllers\ContactApi.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Remove="hosting.json" />
-    <Content Remove="nlog.config" />
-  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="IdentityServer4" Version="2.2.0" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.6.0" />
@@ -48,27 +33,8 @@
     <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="hosting.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="nlog.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Gif.Datastore.CRM\Gif.Datastore.CRM.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="Samc4.CipherUtil">
       <HintPath>..\..\lib\Samc4.CipherUtil.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 </Project>
