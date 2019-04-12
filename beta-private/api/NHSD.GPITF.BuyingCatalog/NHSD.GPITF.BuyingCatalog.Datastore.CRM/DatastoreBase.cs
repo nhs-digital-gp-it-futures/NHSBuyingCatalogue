@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
@@ -138,6 +139,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       if (resp.StatusCode >= HttpStatusCode.BadRequest)
       {
         _logger.LogError(msg);
+        throw new HttpResponseException(resp.StatusCode, resp.Content);
       }
 
       return resp;
