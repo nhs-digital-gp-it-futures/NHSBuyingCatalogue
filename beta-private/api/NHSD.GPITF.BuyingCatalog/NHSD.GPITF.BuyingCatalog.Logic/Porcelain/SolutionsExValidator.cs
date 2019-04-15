@@ -193,12 +193,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
 
     public void CheckUpdateAllowed()
     {
-      SolutionEx oldSolnEx = null;
-
       RuleFor(x => x)
         .Must(newSolnEx =>
         {
-          oldSolnEx = oldSolnEx ?? _datastore.BySolution(newSolnEx.Solution.Id);
+          var oldSolnEx = _datastore.BySolution(newSolnEx.Solution.Id);
           return MustBePendingToChangeClaimedCapability(oldSolnEx, newSolnEx);
         })
         .WithMessage("Must Be Pending To Change Claimed Capability");
@@ -206,7 +204,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       RuleFor(x => x)
         .Must(newSolnEx =>
         {
-          oldSolnEx = oldSolnEx ?? _datastore.BySolution(newSolnEx.Solution.Id);
+          var oldSolnEx = _datastore.BySolution(newSolnEx.Solution.Id);
           return MustBePendingToChangeClaimedStandard(oldSolnEx, newSolnEx);
         })
         .WithMessage("Must Be Pending To Change Claimed Standard");
@@ -214,7 +212,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       RuleFor(x => x)
         .Must(newSolnEx =>
         {
-          oldSolnEx = oldSolnEx ?? _datastore.BySolution(newSolnEx.Solution.Id);
+          var oldSolnEx = _datastore.BySolution(newSolnEx.Solution.Id);
           return MustBePendingToChangeClaimedCapabilityEvidence(oldSolnEx, newSolnEx);
         })
         .WithMessage("Must Be Pending To Change Claimed Capability Evidence");
@@ -222,7 +220,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       RuleFor(x => x)
         .Must(newSolnEx =>
         {
-          oldSolnEx = oldSolnEx ?? _datastore.BySolution(newSolnEx.Solution.Id);
+          var oldSolnEx = _datastore.BySolution(newSolnEx.Solution.Id);
           return MustBePendingToChangeClaimedStandardEvidence(oldSolnEx, newSolnEx);
         })
         .WithMessage("Must Be Pending To Change Claimed Standard Evidence");
