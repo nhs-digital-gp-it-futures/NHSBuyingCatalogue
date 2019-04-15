@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26114.2
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gif.Service", "src\Gif.Service\Gif.Service.csproj", "{C0CB5693-7E66-45E2-9D07-C2287BA3F8C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gif.Service", "Gif.Service\Gif.Service.csproj", "{C0CB5693-7E66-45E2-9D07-C2287BA3F8C7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gif.Datastore.CRM", "src\Gif.Datastore.CRM\Gif.Datastore.CRM.csproj", "{00C5A9C4-C9AC-4B72-82DF-95AE965B35B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gif.Datastore.CRM", "Gif.Datastore.CRM\Gif.Datastore.CRM.csproj", "{00C5A9C4-C9AC-4B72-82DF-95AE965B35B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
