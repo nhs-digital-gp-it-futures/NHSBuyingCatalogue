@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Configuration;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -44,6 +45,7 @@ namespace NHSD.GPITF.BuyingCatalog
         .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
         .AddJsonFile("hosting.json", optional: true, reloadOnChange: true)
         .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+        .AddJsonFile($"autofac.json", optional: true)
         .AddEnvironmentVariables()
         .AddUserSecrets<Program>();
 
@@ -202,6 +204,7 @@ namespace NHSD.GPITF.BuyingCatalog
 
       var assys = assyPaths.Select(filePath => Assembly.LoadFile(filePath)).ToList();
       assys.Add(exeAssy);
+
       builder
         .RegisterAssemblyTypes(assys.ToArray())
         .PublicOnly()
@@ -209,6 +212,10 @@ namespace NHSD.GPITF.BuyingCatalog
         .SingleInstance();
 
       builder.Register(cc => Configuration).As<IConfiguration>();
+
+      // load configuration from autofac.json
+      var module = new ConfigurationModule(Configuration);
+      builder.RegisterModule(module);
 
       ApplicationContainer = builder.Build();
 

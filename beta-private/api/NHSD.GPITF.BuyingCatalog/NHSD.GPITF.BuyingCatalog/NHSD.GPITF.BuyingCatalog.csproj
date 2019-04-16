@@ -34,6 +34,7 @@
   
   <ItemGroup>
     <Content Remove="appsettings.json" />
+    <Content Remove="autofac.json" />
     <Content Remove="hosting.json" />
     <Content Remove="nlog.config" />
   </ItemGroup>
@@ -85,6 +86,9 @@
   <ItemGroup>
     <None Include="..\NHSD.GPITF.BuyingCatalog.snk" Link="NHSD.GPITF.BuyingCatalog.snk" />
     <None Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="autofac.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="hosting.json">

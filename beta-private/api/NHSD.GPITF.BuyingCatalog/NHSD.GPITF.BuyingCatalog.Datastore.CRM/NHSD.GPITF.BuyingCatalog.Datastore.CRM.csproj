@@ -39,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\crm\Gif.Datastore.CRM\Gif.Datastore.CRM.csproj" />
     <ProjectReference Include="..\NHSD.GPITF.BuyingCatalog\NHSD.GPITF.BuyingCatalog.csproj" />
   </ItemGroup>
 </Project>
