@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Gif.Service.Services
 {
-  public class OrganisationsService : ServiceBase<Organisation>, IOrganisationsDatastore
+  public class OrganisationsService : ServiceBase, IOrganisationsDatastore
   {
     public OrganisationsService(IRepository repository) : base(repository)
     {

@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Gif.Service.Services
 {
-  public class StandardsApplicableReviewsService : ServiceBase<Review>, IStandardsApplicableReviewsDatastore
+  public class StandardsApplicableReviewsService : ServiceBase, IStandardsApplicableReviewsDatastore
   {
     public StandardsApplicableReviewsService(IRepository repository) : base(repository)
     {

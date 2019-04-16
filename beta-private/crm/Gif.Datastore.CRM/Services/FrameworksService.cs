@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Gif.Service.Services
 {
-  public class FrameworksService : ServiceBase<Framework>, IFrameworksDatastore
+  public class FrameworksService : ServiceBase, IFrameworksDatastore
   {
     public FrameworksService(IRepository repository) : base(repository)
     {

@@ -6,7 +6,7 @@ using Gif.Service.Contracts;
 
 namespace Gif.Service.Services
 {
-  public abstract class ServiceBase<T> : IDatastoreBase<T>
+  public abstract class ServiceBase
   {
     protected IRepository Repository;
 
@@ -15,10 +15,10 @@ namespace Gif.Service.Services
       Repository = repository;
     }
 
-    protected static List<TOther> GetInsertionTree<TOther>(List<TOther> allNodes) where TOther : IHasPreviousId
+    protected static List<T> GetInsertionTree<T>(List<T> allNodes) where T : IHasPreviousId
     {
       var roots = GetRoots(allNodes);
-      var tree = new List<TOther>(roots);
+      var tree = new List<T>(roots);
 
       var next = GetChildren(roots, allNodes);
       while (next.Any())
@@ -30,12 +30,12 @@ namespace Gif.Service.Services
       return tree;
     }
 
-    private static List<TOther> GetRoots<TOther>(List<TOther> allNodes) where TOther : IHasPreviousId
+    private static List<T> GetRoots<T>(List<T> allNodes) where T : IHasPreviousId
     {
       return allNodes.Where(x => x.PreviousId == null).ToList();
     }
 
-    private static List<TOther> GetChildren<TOther>(List<TOther> parents, List<TOther> allNodes) where TOther : IHasPreviousId
+    private static List<T> GetChildren<T>(List<T> parents, List<T> allNodes) where T : IHasPreviousId
     {
       return parents.SelectMany(parent => allNodes.Where(x => x.PreviousId == parent.Id)).ToList();
     }

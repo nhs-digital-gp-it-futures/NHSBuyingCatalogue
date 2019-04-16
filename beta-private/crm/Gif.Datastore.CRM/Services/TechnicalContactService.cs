@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Gif.Service.Services
 {
-  public class TechnicalContactService : ServiceBase<TechnicalContact>, ITechnicalContactsDatastore
+  public class TechnicalContactService : ServiceBase, ITechnicalContactsDatastore
   {
     public TechnicalContactService(IRepository repository) : base(repository)
     {

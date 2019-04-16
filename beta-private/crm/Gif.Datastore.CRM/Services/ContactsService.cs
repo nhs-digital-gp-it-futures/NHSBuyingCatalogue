@@ -8,7 +8,7 @@ using Contact = Gif.Service.Models.Contact;
 
 namespace Gif.Service.Services
 {
-    public class ContactsService : ServiceBase<Contact>, IContactsDatastore
+    public class ContactsService : ServiceBase, IContactsDatastore
     {
         public ContactsService(IRepository repository) : base(repository)
         {

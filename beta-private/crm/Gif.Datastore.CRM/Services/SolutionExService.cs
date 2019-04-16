@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Gif.Service.Services
 {
-  public class SolutionExService : ServiceBase<SolutionEx>, ISolutionsExDatastore
+  public class SolutionExService : ServiceBase, ISolutionsExDatastore
   {
     private readonly ISolutionsDatastore _solutionsDatastore;
     private readonly ITechnicalContactsDatastore _technicalContactsDatastore;

@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Gif.Service.Services
 {
-  public class StandardsApplicableEvidenceService : ServiceBase<StandardApplicableEvidence>, IStandardsApplicableEvidenceDatastore
+  public class StandardsApplicableEvidenceService : ServiceBase, IStandardsApplicableEvidenceDatastore
   {
     public StandardsApplicableEvidenceService(IRepository repository) : base(repository)
     {

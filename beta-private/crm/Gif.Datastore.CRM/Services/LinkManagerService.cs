@@ -5,7 +5,7 @@ using System;
 
 namespace Gif.Service.Services
 {
-  public class LinkManagerService : ServiceBase<object>, ILinkManagerDatastore
+  public class LinkManagerService : ServiceBase, ILinkManagerDatastore
   {
     public LinkManagerService(IRepository repository) : base(repository)
     {
