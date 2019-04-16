@@ -43,8 +43,6 @@ namespace Gif.Service.Services
 
     public Capability ById(string id)
     {
-      Capability capability = null;
-
       var filterAttributes = new List<CrmFilterAttribute>
             {
                 new CrmFilterAttribute("CapabilityId") {FilterName = "cc_capabilityid", FilterValue = id},
