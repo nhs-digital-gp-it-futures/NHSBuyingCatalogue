@@ -1,17 +1,16 @@
 ﻿#pragma warning disable 1591
-using Gif.Service.Contracts;
-using Gif.Service.Crm;
-using Gif.Service.Models;
-using System.Collections.Generic;
-using System.Linq;
 using Gif.Service.Attributes;
 using Gif.Service.Const;
+using Gif.Service.Contracts;
+using Gif.Service.Crm;
 using Gif.Service.Enums;
-using System.Threading.Tasks;
+using Gif.Service.Models;
 using Gif.Service.Services.Equality;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System;
+using System.Threading.Tasks;
 
 namespace Gif.Service.Services
 {
