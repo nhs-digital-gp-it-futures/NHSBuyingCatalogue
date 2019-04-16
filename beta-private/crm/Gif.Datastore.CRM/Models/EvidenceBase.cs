@@ -51,14 +51,6 @@ namespace Gif.Service.Models
         public string BlobId { get; set; }
 
         [DataMember]
-        [CrmFieldName("createdon")]
-        public new DateTime CreatedOn { get; set; }
-
-        [DataMember]
-        [CrmFieldName("modifiedon")]
-        public new DateTime ModifiedOn { get; set; }
-
-        [DataMember]
         [CrmFieldName("cc_originaldate")]
         public DateTime OriginalDate { get; set; }
 
