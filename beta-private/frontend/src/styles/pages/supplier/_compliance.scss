@@ -59,7 +59,8 @@
 
   details.quick-links {
     color: $color-nhs-blue;
-
+    margin: 0.5em 0em;
+    
     > summary {
       cursor: pointer;
     }

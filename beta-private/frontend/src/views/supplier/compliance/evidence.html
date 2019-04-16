@@ -34,25 +34,15 @@
   {{else}}
   <header class="page-main-heading">
     <h1>{{ claim.standard.name }}</h1>
-    <p>{{t 'CompliancePages.Evidence.Subtitle'}}</p>
   </header>
 
-
-  {{#each (tt 'CompliancePages.Evidence.Preamble')}}
-  <p class="preamble">{{{.}}}</p>
-  {{/each}}
-
-  <details class="quick-links">
-    <summary>{{t 'CompliancePages.Evidence.QuickLinks.Heading'}}</summary>
-    <ul>
-      <li><a href="{{claim.standard.url}}" target="_blank">{{claim.standard.name}}</a></li>
-      {{#claim.capabilities}}
-      <li><a href="{{url}}" target="_blank">{{name}}</a></li>
-      {{/claim.capabilities}}
-    </ul>
-  </details>
-
   {{#if latestFile}}
+    <p>{{t 'CompliancePages.Evidence.Subtitle'}}</p>
+
+    {{#each (tt 'CompliancePages.Evidence.Preamble')}}
+      <p class="preamble">{{{.}}}</p>
+    {{/each}}
+
     <section class="current-file">
       <h2>{{t 'CompliancePages.Evidence.CurrentFile.Heading'}}</h2>
       <section class="has-feedback">
@@ -64,8 +54,9 @@
         <a class="file-download-link" download target="_blank" href="{{latestFile.downloadURL}}">{{latestFile.name}}</a>
       </section>
     </section>
+  {{/if}}
 
-    {{#if allowSubmission}}
+  {{#if allowSubmission}}
     <section class="upload-and-reply">
       <h3>{{t 'CompliancePages.Evidence.Reply.Heading'}}</h3>
       {{#>form encoding="multipart/form-data" form_id=activeForm.id}}
@@ -114,12 +105,21 @@
           class="primary">{{t 'CompliancePages.Evidence.Buttons.Submit'}}</button>
       {{/form}}
     </section>
-    {{else}}
+    {{/if}}
+  <details class="quick-links">
+    <summary>{{t 'CompliancePages.Evidence.QuickLinks.Heading'}}</summary>
+    <ul>
+      <li><a href="{{claim.standard.url}}" target="_blank">{{claim.standard.name}}</a></li>
+      {{#claim.capabilities}}
+      <li><a href="{{url}}" target="_blank">{{name}}</a></li>
+      {{/claim.capabilities}}
+    </ul>
+  </details>
+  {{#unless allowSubmission}}    
     <section>
       <button id="submit-for-compliance" type="submit" class="primary" disabled>{{t 'CompliancePages.Evidence.Buttons.Submit'}}</button>
     </section>
-    {{/if}}
-  {{/if}}
+  {{/unless}}
 {{/if}}
 
 {{#if claim.submissionHistory}}
