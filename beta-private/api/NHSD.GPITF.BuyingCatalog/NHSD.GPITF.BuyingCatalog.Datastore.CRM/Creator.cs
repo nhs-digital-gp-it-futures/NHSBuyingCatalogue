@@ -1,4 +1,5 @@
-﻿using NHSD.GPITF.BuyingCatalog.Models;
+﻿using System;
+using NHSD.GPITF.BuyingCatalog.Models;
 using GifModels = Gif.Service.Models;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
@@ -14,6 +15,16 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
         Name = crm.Name,
         Description = crm.Description
       };
+    }
+
+    internal static TechnicalContacts FromCrm(GifModels.TechnicalContact crm)
+    {
+      throw new NotImplementedException();
+    }
+
+    internal static GifModels.TechnicalContact FromApi(TechnicalContacts api)
+    {
+      throw new NotImplementedException();
     }
   }
 }

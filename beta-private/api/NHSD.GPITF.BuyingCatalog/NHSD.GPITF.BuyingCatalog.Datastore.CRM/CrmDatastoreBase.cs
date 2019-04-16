@@ -22,5 +22,20 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return _policy.Execute(get);
     }
+
+    protected static string UpdateId(string proposedId)
+    {
+      if (Guid.Empty.ToString() == proposedId)
+      {
+        return Guid.NewGuid().ToString();
+      }
+
+      if (string.IsNullOrWhiteSpace(proposedId))
+      {
+        return Guid.NewGuid().ToString();
+      }
+
+      return proposedId;
+    }
   }
 }
