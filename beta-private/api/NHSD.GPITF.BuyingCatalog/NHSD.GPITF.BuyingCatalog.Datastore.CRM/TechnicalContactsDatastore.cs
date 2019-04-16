@@ -48,6 +48,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       GetInternal(() =>
       {
+        _crmDatastore.Delete(Creator.FromApi(techCont));
 
         return 0;
       });
