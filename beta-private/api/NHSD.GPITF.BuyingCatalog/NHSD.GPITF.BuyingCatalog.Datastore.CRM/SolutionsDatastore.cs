@@ -17,6 +17,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       ISyncPolicyFactory policy) :
       base(logger, policy)
     {
+      _crmDatastore = crmDatastore;
     }
 
     public IEnumerable<Solutions> ByFramework(string frameworkId)

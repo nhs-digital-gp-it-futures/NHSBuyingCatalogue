@@ -1,36 +1,37 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
 using System.Linq;
+using GifInt = Gif.Service.Contracts;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
   public sealed class StandardsDatastore : CachedDatastore<Standards>, IStandardsDatastore
   {
+    private readonly GifInt.IStandardsDatastore _crmDatastore;
+
     public StandardsDatastore(
-      IRestClientFactory crmConnectionFactory,
+      GifInt.IStandardsDatastore crmDatastore,
       ILogger<StandardsDatastore> logger,
       ISyncPolicyFactory policy,
       IConfiguration config,
       IDatastoreCache cache) :
-      base(crmConnectionFactory, logger, policy, config, cache)
+      base(logger, policy, config, cache)
     {
+      _crmDatastore = crmDatastore;
     }
-
-    private string ResourceBase { get; } = "/Standards";
 
     public IEnumerable<Standards> ByCapability(string capabilityId, bool isOptional)
     {
       return GetInternal(() =>
       {
-        var request = GetAllRequest($"{ResourceBase}/ByCapability/{capabilityId}");
-        request.AddQueryParameter("isOptional", isOptional.ToString().ToLowerInvariant());
-        var retval = GetResponse<PaginatedList<Standards>>(request);
+        var vals = _crmDatastore
+          .ByCapability(capabilityId, isOptional)
+          .Select(val => Creator.FromCrm(val));
 
-        return retval.Items;
+        return vals;
       });
     }
 
@@ -38,10 +39,11 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        var request = GetAllRequest($"{ResourceBase}/ByFramework/{frameworkId}");
-        var retval = GetResponse<PaginatedList<Standards>>(request);
+        var vals = _crmDatastore
+          .ByFramework(frameworkId)
+          .Select(val => Creator.FromCrm(val));
 
-        return retval.Items;
+        return vals;
       });
     }
 
@@ -57,10 +59,11 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        var request = GetAllPostRequest($"{ResourceBase}/ByIds", ids);
-        var retval = GetResponse<IEnumerable<Standards>>(request);
+        var vals = _crmDatastore
+          .ByIds(ids)
+          .Select(val => Creator.FromCrm(val));
 
-        return retval;
+        return vals;
       });
     }
 
@@ -68,8 +71,22 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        return GetAll($"{ResourceBase}");
+        return GetAll($"/{nameof(Standards)}");
       });
+    }
+
+    protected override Standards GetInternal(string path)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    protected override IEnumerable<Standards> GetAllInternal(string path)
+    {
+      var vals = _crmDatastore
+        .GetAll()
+        .Select(val => Creator.FromCrm(val));
+
+      return vals;
     }
   }
 }

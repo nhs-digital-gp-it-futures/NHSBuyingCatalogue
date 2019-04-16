@@ -1,31 +1,33 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
+using System.Linq;
+using GifInt = Gif.Service.Contracts;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
   public sealed class ContactsDatastore : CachedDatastore<Contacts>, IContactsDatastore
   {
+    private readonly GifInt.IContactsDatastore _crmDatastore;
+
     public ContactsDatastore(
-      IRestClientFactory crmConnectionFactory,
+      GifInt.IContactsDatastore crmDatastore,
       ILogger<ContactsDatastore> logger,
       ISyncPolicyFactory policy,
       IConfiguration config,
       IDatastoreCache cache) :
-      base(crmConnectionFactory, logger, policy, config, cache)
+      base(logger, policy, config, cache)
     {
+      _crmDatastore = crmDatastore;
     }
-
-    private string ResourceBase { get; } = "/Contacts";
 
     public Contacts ByEmail(string email)
     {
       return GetInternal(() =>
       {
-        return Get($"{ResourceBase}/ByEmail/{email}");
+        return Get($"/{nameof(Contacts)}/ByEmail/{email}");
       });
     }
 
@@ -33,10 +35,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        var request = GetRequest($"{ResourceBase}/ById/{id}");
-        var retval = GetResponse<Contacts>(request);
+        var val = _crmDatastore
+          .ById(id);
 
-        return retval;
+        return Creator.FromCrm(val);
       });
     }
 
@@ -44,8 +46,23 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        return GetAll($"{ResourceBase}/ByOrganisation/{organisationId}");
+        var vals = _crmDatastore
+          .ByOrganisation(organisationId)
+          .Select(val => Creator.FromCrm(val));
+
+        return vals;
       });
+    }
+
+    protected override IEnumerable<Contacts> GetAllInternal(string path)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    protected override Contacts GetInternal(string path)
+    {
+      // TODO   GetInternal
+      throw new System.NotImplementedException();
     }
   }
 }
