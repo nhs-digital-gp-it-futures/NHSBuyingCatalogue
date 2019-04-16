@@ -21,7 +21,7 @@ namespace Gif.Service.Crm
   public sealed class Repository : IRepository
   {
     private readonly IConfiguration _config;
-    private readonly ILogger<Repository> _logger;
+    private readonly ILogger<IRepository> _logger;
     private readonly bool _logCRM;
     private HttpClient _httpClient;
     private AuthenticationContext _authContext;
@@ -29,7 +29,7 @@ namespace Gif.Service.Crm
 
     public Repository(
       IConfiguration config,
-      ILogger<Repository> logger)
+      ILogger<IRepository> logger)
     {
       _config = config;
       _logger = logger;
