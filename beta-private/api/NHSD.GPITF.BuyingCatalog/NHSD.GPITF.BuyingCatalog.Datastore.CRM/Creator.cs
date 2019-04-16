@@ -1,8 +1,8 @@
-﻿using System;
+﻿using NHSD.GPITF.BuyingCatalog.Models;
+using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
+using System;
 using System.Linq;
 using System.Reflection;
-using NHSD.GPITF.BuyingCatalog.Models;
-using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 using GifModels = Gif.Service.Models;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
@@ -19,24 +19,44 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 
       foreach (var targetProp in targetProps)
       {
-        var sourceProp = sourceProps.SingleOrDefault(prop => prop.Name.Equals(targetProp.Name, StringComparison.InvariantCultureIgnoreCase));
+        if (!targetProp.CanWrite)
+        {
+          continue;
+        }
 
-        if ((sourceProp?.PropertyType == typeof(Guid) ||
-            sourceProp?.PropertyType == typeof(Guid?)) &&
+        var sourceProp = sourceProps.SingleOrDefault(prop => prop.Name.Equals(targetProp.Name, StringComparison.InvariantCultureIgnoreCase));
+        if (sourceProp == null)
+        {
+          continue;
+        }
+
+        if ((sourceProp.PropertyType == typeof(Guid) ||
+            sourceProp.PropertyType == typeof(Guid?)) &&
           targetProp.PropertyType == typeof(string))
         {
           targetProp.SetValue(target, (sourceProp.GetValue(source) as Guid?)?.ToString());
           continue;
         }
 
-        if (sourceProp?.PropertyType == typeof(string) &&
+        if (sourceProp.PropertyType == typeof(string) &&
           targetProp.PropertyType == typeof(Guid))
         {
           targetProp.SetValue(target, Guid.Parse((string)sourceProp.GetValue(source)));
           continue;
         }
 
-        targetProp.SetValue(target, sourceProp?.GetValue(source));
+        if ((sourceProp.PropertyType.IsEnum ||
+            (Nullable.GetUnderlyingType(sourceProp.PropertyType)?.IsEnum ?? false)) &&
+          targetProp.PropertyType.IsEnum)
+        {
+          var sourceVal = sourceProp.GetValue(source).ToString();
+          var targetVal = Enum.Parse(targetProp.PropertyType, sourceVal);
+
+          targetProp.SetValue(target, targetVal);
+          continue;
+        }
+
+        targetProp.SetValue(target, sourceProp.GetValue(source));
       }
 
       return target;
@@ -89,7 +109,36 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 
     internal static SolutionEx FromCrm(GifModels.SolutionEx crm)
     {
-      return Convert<GifModels.SolutionEx, SolutionEx>(crm);
+      var retval = new SolutionEx
+      {
+        Solution = Convert<GifModels.Solution, Solutions>(crm.Solution),
+
+        ClaimedCapability = crm.ClaimedCapability
+          .Select(claim => Convert<GifModels.CapabilityImplemented, CapabilitiesImplemented>(claim))
+          .ToList(),
+        ClaimedCapabilityEvidence = crm.ClaimedCapabilityEvidence
+          .Select(evidence => Convert<GifModels.CapabilityEvidence, CapabilitiesImplementedEvidence>(evidence))
+          .ToList(),
+        ClaimedCapabilityReview = crm.ClaimedCapabilityReview
+          .Select(review => Convert<GifModels.Review, CapabilitiesImplementedReviews>(review))
+          .ToList(),
+
+        ClaimedStandard = crm.ClaimedStandard
+          .Select(claim => Convert<GifModels.StandardApplicable, StandardsApplicable>(claim))
+          .ToList(),
+        ClaimedStandardEvidence = crm.ClaimedStandardEvidence
+          .Select(evidence => Convert<GifModels.StandardApplicableEvidence, StandardsApplicableEvidence>(evidence))
+          .ToList(),
+        ClaimedStandardReview = crm.ClaimedStandardReview
+          .Select(review => Convert<GifModels.Review, StandardsApplicableReviews>(review))
+          .ToList(),
+
+        TechnicalContact = crm.TechnicalContact
+          .Select(techCont => Convert<GifModels.TechnicalContact, TechnicalContacts>(techCont))
+          .ToList()
+      };
+
+      return retval;
     }
 
     internal static Contacts FromCrm(GifModels.Contact crm)
