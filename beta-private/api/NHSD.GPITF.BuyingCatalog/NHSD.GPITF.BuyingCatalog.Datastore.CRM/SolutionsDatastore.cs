@@ -1,33 +1,33 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
+﻿using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
+using System.Linq;
+using GifInt = Gif.Service.Contracts;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
-  public sealed class SolutionsDatastore : DatastoreBase<Solutions>, ISolutionsDatastore
+  public sealed class SolutionsDatastore : CrmDatastoreBase<Solutions>, ISolutionsDatastore
   {
+    private readonly GifInt.ISolutionsDatastore _crmDatastore;
+
     public SolutionsDatastore(
-      IRestClientFactory crmConnectionFactory,
+      GifInt.ISolutionsDatastore crmDatastore,
       ILogger<SolutionsDatastore> logger,
-      ISyncPolicyFactory policy,
-      IConfiguration config) :
-      base(crmConnectionFactory, logger, policy, config)
+      ISyncPolicyFactory policy) :
+      base(logger, policy)
     {
     }
-
-    private string ResourceBase { get; } = "/Solutions";
 
     public IEnumerable<Solutions> ByFramework(string frameworkId)
     {
       return GetInternal(() =>
       {
-        var request = GetAllRequest($"{ResourceBase}/ByFramework/{frameworkId}");
-        var retval = GetResponse<PaginatedList<Solutions>>(request);
+        var vals = _crmDatastore
+          .ByFramework(frameworkId)
+          .Select(val => Creator.FromCrm(val));
 
-        return retval.Items;
+        return vals;
       });
     }
 
@@ -35,10 +35,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        var request = GetRequest($"{ResourceBase}/ById/{id}");
-        var retval = GetResponse<Solutions>(request);
+        var val = _crmDatastore
+          .ById(id);
 
-        return retval;
+        return Creator.FromCrm(val);
       });
     }
 
@@ -46,10 +46,11 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        var request = GetAllRequest($"{ResourceBase}/ByOrganisation/{organisationId}");
-        var retval = GetResponse<PaginatedList<Solutions>>(request);
+        var vals = _crmDatastore
+          .ByOrganisation(organisationId)
+          .Select(val => Creator.FromCrm(val));
 
-        return retval.Items;
+        return vals;
       });
     }
 
@@ -58,10 +59,11 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       return GetInternal(() =>
       {
         solution.Id = UpdateId(solution.Id);
-        var request = GetPostRequest($"{ResourceBase}", solution);
-        var retval = GetResponse<Solutions>(request);
 
-        return retval;
+        var val = _crmDatastore
+          .Create(Creator.FromApi(solution));
+
+        return Creator.FromCrm(val);
       });
     }
 
@@ -69,8 +71,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       GetInternal(() =>
       {
-        var request = GetPutRequest($"{ResourceBase}", solution);
-        var resp = GetRawResponse(request);
+        _crmDatastore.Update(Creator.FromApi(solution));
 
         return 0;
       });
@@ -80,8 +81,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       GetInternal(() =>
       {
-        var request = GetDeleteRequest($"{ResourceBase}", solution);
-        var resp = GetRawResponse(request);
+        _crmDatastore.Delete(Creator.FromApi(solution));
 
         return 0;
       });
