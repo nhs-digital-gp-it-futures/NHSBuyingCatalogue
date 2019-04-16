@@ -1,67 +1,34 @@
-﻿using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
+﻿using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
+using System.Collections.Generic;
+using System.Linq;
+using GifInt = Gif.Service.Contracts;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
 {
-  public sealed class SolutionsExDatastore : DatastoreBase<SolutionEx>, ISolutionsExDatastore
+  public sealed class SolutionsExDatastore : CrmDatastoreBase<SolutionEx>, ISolutionsExDatastore
   {
-    private string ResourceBase { get; } = "/porcelain/SolutionsEx";
-
-    private readonly ISolutionsDatastore _solutionDatastore;
-    private readonly ITechnicalContactsDatastore _technicalContactDatastore;
-
-    private readonly ICapabilitiesImplementedDatastore _claimedCapabilityDatastore;
-    private readonly ICapabilitiesImplementedEvidenceDatastore _claimedCapabilityEvidenceDatastore;
-    private readonly ICapabilitiesImplementedReviewsDatastore _claimedCapabilityReviewsDatastore;
-
-    private readonly IStandardsApplicableDatastore _claimedStandardDatastore;
-    private readonly IStandardsApplicableEvidenceDatastore _claimedStandardEvidenceDatastore;
-    private readonly IStandardsApplicableReviewsDatastore _claimedStandardReviewsDatastore;
+    private readonly GifInt.ISolutionsExDatastore _crmDatastore;
 
     public SolutionsExDatastore(
-      IRestClientFactory crmConnectionFactory,
+      GifInt.ISolutionsExDatastore crmDatastore,
       ILogger<SolutionsExDatastore> logger,
-      ISyncPolicyFactory policy,
-
-      ISolutionsDatastore solutionDatastore,
-      ITechnicalContactsDatastore technicalContactDatastore,
-
-      ICapabilitiesImplementedDatastore claimedCapabilityDatastore,
-      ICapabilitiesImplementedEvidenceDatastore claimedCapabilityEvidenceDatastore,
-      ICapabilitiesImplementedReviewsDatastore claimedCapabilityReviewsDatastore,
-
-      IStandardsApplicableDatastore claimedStandardDatastore,
-      IStandardsApplicableEvidenceDatastore claimedStandardEvidenceDatastore,
-      IStandardsApplicableReviewsDatastore claimedStandardReviewsDatastore,
-
-      IConfiguration config) :
-      base(crmConnectionFactory, logger, policy, config)
+      ISyncPolicyFactory policy) :
+      base(logger, policy)
     {
-      _solutionDatastore = solutionDatastore;
-      _technicalContactDatastore = technicalContactDatastore;
-
-      _claimedCapabilityDatastore = claimedCapabilityDatastore;
-      _claimedCapabilityEvidenceDatastore = claimedCapabilityEvidenceDatastore;
-      _claimedCapabilityReviewsDatastore = claimedCapabilityReviewsDatastore;
-
-      _claimedStandardDatastore = claimedStandardDatastore;
-      _claimedStandardEvidenceDatastore = claimedStandardEvidenceDatastore;
-      _claimedStandardReviewsDatastore = claimedStandardReviewsDatastore;
+      _crmDatastore = crmDatastore;
     }
 
     public SolutionEx BySolution(string solutionId)
     {
       return GetInternal(() =>
       {
-        var request = GetRequest($"{ResourceBase}/BySolution/{solutionId}");
-        var retval = GetResponse<SolutionEx>(request);
+        var val = _crmDatastore
+          .BySolution(solutionId);
 
-        return retval;
+        return Creator.FromCrm(val);
       });
     }
 
@@ -69,8 +36,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
     {
       GetInternal(() =>
       {
-        var request = GetPutRequest($"{ResourceBase}/Update", solnEx);
-        var resp = GetRawResponse(request);
+        _crmDatastore.Update(Creator.FromApi(solnEx));
 
         return 0;
       });
@@ -80,10 +46,11 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
     {
       return GetInternal(() =>
       {
-        var request = GetRequest($"{ResourceBase}/ByOrganisation/{organisationId}");
-        var retval = GetResponse<IEnumerable<SolutionEx>>(request);
+        var vals = _crmDatastore
+          .ByOrganisation(organisationId)
+          .Select(val => Creator.FromCrm(val));
 
-        return retval;
+        return vals;
       });
     }
   }
