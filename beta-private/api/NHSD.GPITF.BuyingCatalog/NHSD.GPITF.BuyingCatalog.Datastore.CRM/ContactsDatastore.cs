@@ -70,7 +70,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
         return Creator.FromCrm(val);
       }
 
-      throw new ArgumentOutOfRangeException($"{nameof(path)}", path, "Unsupported path");
+      throw new ArgumentOutOfRangeException($"{nameof(path)}", path, "Unsupported cache path");
     }
 
     private static string GetCachePathByEmail(string email)

@@ -21,10 +21,18 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       {
         var sourceProp = sourceProps.SingleOrDefault(prop => prop.Name.Equals(targetProp.Name, StringComparison.InvariantCultureIgnoreCase));
 
-        if (sourceProp?.PropertyType == typeof(Guid) &&
+        if ((sourceProp?.PropertyType == typeof(Guid) ||
+            sourceProp?.PropertyType == typeof(Guid?)) &&
           targetProp.PropertyType == typeof(string))
         {
-          targetProp.SetValue(target, ((Guid)sourceProp.GetValue(source)).ToString());
+          targetProp.SetValue(target, (sourceProp.GetValue(source) as Guid?)?.ToString());
+          continue;
+        }
+
+        if (sourceProp?.PropertyType == typeof(string) &&
+          targetProp.PropertyType == typeof(Guid))
+        {
+          targetProp.SetValue(target, Guid.Parse((string)sourceProp.GetValue(source)));
           continue;
         }
 
