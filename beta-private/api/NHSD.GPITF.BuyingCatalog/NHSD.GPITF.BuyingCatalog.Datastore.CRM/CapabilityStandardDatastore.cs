@@ -40,7 +40,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       return vals;
     }
 
-    protected override CapabilityStandard GetInternal(string path)
+    protected override CapabilityStandard GetInternal(string path, string parameter)
     {
       throw new System.NotImplementedException();
     }

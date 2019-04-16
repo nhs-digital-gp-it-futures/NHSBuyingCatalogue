@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GifInt = Gif.Service.Contracts;
@@ -27,7 +28,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        return Get($"/{nameof(Contacts)}/ByEmail/{email}");
+        return Get(GetCachePathByEmail(email), email);
       });
     }
 
@@ -59,10 +60,22 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       throw new System.NotImplementedException();
     }
 
-    protected override Contacts GetInternal(string path)
+    protected override Contacts GetInternal(string path, string parameter)
     {
-      // TODO   GetInternal
-      throw new System.NotImplementedException();
+      if (path == GetCachePathByEmail(parameter))
+      {
+        var val = _crmDatastore
+          .ByEmail(parameter);
+
+        return Creator.FromCrm(val);
+      }
+
+      throw new ArgumentOutOfRangeException($"{nameof(path)}", path, "Unsupported path");
+    }
+
+    private static string GetCachePathByEmail(string email)
+    {
+      return $"/{nameof(Contacts)}/ByEmail/{email}";
     }
   }
 }

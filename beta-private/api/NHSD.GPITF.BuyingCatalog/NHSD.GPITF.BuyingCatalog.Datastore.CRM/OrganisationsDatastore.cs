@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
+using System;
 using System.Collections.Generic;
 using GifInt = Gif.Service.Contracts;
 
@@ -26,7 +27,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        return Get($"/{nameof(Organisations)}/ByContact/{contactId}");
+        return Get(GetCachePathByContact(contactId), contactId);
       });
     }
 
@@ -46,10 +47,27 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       throw new System.NotImplementedException();
     }
 
-    protected override Organisations GetInternal(string path)
+    protected override Organisations GetInternal(string path, string parameter)
     {
-      // TODO   GetInternal
-      throw new System.NotImplementedException();
+      if (path == GetCachePathByContact(parameter))
+      {
+        var val = _crmDatastore
+          .ByContact(parameter);
+
+        var retval = Creator.FromCrm(val);
+
+        // currently not used but required in data model
+        retval.Status = "Active";
+
+        return retval;
+      }
+
+      throw new ArgumentOutOfRangeException($"{nameof(path)}", path, "Unsupported cache path");
+    }
+
+    private static string GetCachePathByContact(string contactId)
+    {
+      return $"/{nameof(Organisations)}/ByContact/{contactId}";
     }
   }
 }

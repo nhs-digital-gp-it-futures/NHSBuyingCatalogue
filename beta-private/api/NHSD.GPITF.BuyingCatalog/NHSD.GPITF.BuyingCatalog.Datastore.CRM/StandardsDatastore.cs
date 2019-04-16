@@ -75,7 +75,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       });
     }
 
-    protected override Standards GetInternal(string path)
+    protected override Standards GetInternal(string path, string parameter)
     {
       throw new System.NotImplementedException();
     }

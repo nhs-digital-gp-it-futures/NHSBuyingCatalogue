@@ -23,8 +23,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       _cache = cache;
     }
 
-    protected abstract T GetInternal(string path);
-    protected T Get(string path)
+    protected abstract T GetInternal(string path, string parameter);
+    protected T Get(string path, string parameter)
     {
       LogInformation($"[{path}]");
       if (_cache.TryGetValue(path, out string jsonCachedResponse))
@@ -33,7 +33,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
         return JsonConvert.DeserializeObject<T>(jsonCachedResponse);
       }
 
-      var retval = GetInternal(path);
+      var retval = GetInternal(path, parameter);
 
       _cache.SafeAdd(path, JsonConvert.SerializeObject(retval));
 
