@@ -5,3 +5,4 @@ docker-compose.override.yml
 .vscode/
 data/
 /beta-private/frontend/src/static/styles.css
+/beta-private/crm/Gif.Service/tempkey.rsa
