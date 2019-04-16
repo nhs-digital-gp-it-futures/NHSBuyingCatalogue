@@ -74,7 +74,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 
     internal static GifModels.TechnicalContact FromApi(TechnicalContacts api)
     {
-      throw new NotImplementedException();
+      return Convert<TechnicalContacts, GifModels.TechnicalContact>(api);
     }
 
     internal static Solutions FromCrm(GifModels.Solution crm)
@@ -84,7 +84,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 
     internal static GifModels.Solution FromApi(Solutions api)
     {
-      throw new NotImplementedException();
+      return Convert<Solutions, GifModels.Solution>(api);
     }
 
     internal static Capabilities FromCrm(GifModels.Capability crm)
@@ -105,6 +105,11 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     internal static CapabilityStandard FromCrm(GifModels.CapabilityStandard crm)
     {
       return Convert<GifModels.CapabilityStandard, CapabilityStandard>(crm);
+    }
+
+    internal static Contacts FromCrm(GifModels.Contact crm)
+    {
+      return Convert<GifModels.Contact, Contacts>(crm);
     }
 
     internal static SolutionEx FromCrm(GifModels.SolutionEx crm)
@@ -141,13 +146,36 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       return retval;
     }
 
-    internal static Contacts FromCrm(GifModels.Contact crm)
-    {
-      return Convert<GifModels.Contact, Contacts>(crm);
-    }
-
     internal static GifModels.SolutionEx FromApi(SolutionEx api)
     {
+      var retval = new GifModels.SolutionEx
+      {
+        Solution = Convert<Solutions, GifModels.Solution>(api.Solution),
+
+        ClaimedCapability = api.ClaimedCapability
+          .Select(claim => Convert<CapabilitiesImplemented, GifModels.CapabilityImplemented>(claim))
+          .ToList(),
+        ClaimedCapabilityEvidence = api.ClaimedCapabilityEvidence
+          .Select(evidence => Convert<CapabilitiesImplementedEvidence, GifModels.CapabilityEvidence>(evidence))
+          .ToList(),
+        ClaimedCapabilityReview = api.ClaimedCapabilityReview
+          .Select(review => Convert<CapabilitiesImplementedReviews, GifModels.Review>(review))
+          .ToList(),
+
+        ClaimedStandard = api.ClaimedStandard
+          .Select(claim => Convert<StandardsApplicable, GifModels.StandardApplicable>(claim))
+          .ToList(),
+        ClaimedStandardEvidence = api.ClaimedStandardEvidence
+          .Select(evidence => Convert<StandardsApplicableEvidence, GifModels.StandardApplicableEvidence>(evidence))
+          .ToList(),
+        ClaimedStandardReview = api.ClaimedStandardReview
+          .Select(review => Convert<StandardsApplicableReviews, GifModels.Review>(review))
+          .ToList(),
+
+        TechnicalContact = api.TechnicalContact
+          .Select(techCont => Convert<TechnicalContacts, GifModels.TechnicalContact>(techCont))
+          .ToList()
+      };
       throw new NotImplementedException();
     }
   }
