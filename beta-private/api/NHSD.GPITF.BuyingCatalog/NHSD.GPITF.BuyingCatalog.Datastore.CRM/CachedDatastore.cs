@@ -47,7 +47,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       if (_cache.TryGetValue(path, out string jsonCachedResponse))
       {
         LogInformation($"cache[{path}] --> [{jsonCachedResponse}]");
-        return JsonConvert.DeserializeObject<PaginatedList<T>>(jsonCachedResponse).Items;
+        return JsonConvert.DeserializeObject<IEnumerable<T>>(jsonCachedResponse);
       }
 
       var retval = GetAllInternal(path);
