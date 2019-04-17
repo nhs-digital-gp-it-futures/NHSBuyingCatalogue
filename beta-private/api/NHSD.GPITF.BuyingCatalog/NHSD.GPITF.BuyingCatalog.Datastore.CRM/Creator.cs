@@ -62,6 +62,26 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       return target;
     }
 
+    internal static CapabilitiesImplementedEvidence FromCrm(GifModels.CapabilityEvidence crm)
+    {
+      return Convert<GifModels.CapabilityEvidence, CapabilitiesImplementedEvidence>(crm);
+    }
+
+    internal static GifModels.CapabilityEvidence FromApi(CapabilitiesImplementedEvidence api)
+    {
+      return Convert<CapabilitiesImplementedEvidence, GifModels.CapabilityEvidence>(api);
+    }
+
+    internal static GifModels.StandardApplicableEvidence FromApi(StandardsApplicableEvidence api)
+    {
+      return Convert<StandardsApplicableEvidence, GifModels.StandardApplicableEvidence>(api);
+    }
+
+    internal static StandardsApplicableEvidence FromCrm(GifModels.StandardApplicableEvidence crm)
+    {
+      return Convert<GifModels.StandardApplicableEvidence, StandardsApplicableEvidence>(crm);
+    }
+
     internal static GifModels.StandardApplicable FromApi(StandardsApplicable api)
     {
       return Convert<StandardsApplicable, GifModels.StandardApplicable>(api);
@@ -196,7 +216,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
           .Select(techCont => Convert<TechnicalContacts, GifModels.TechnicalContact>(techCont))
           .ToList()
       };
-      throw new NotImplementedException();
+
+      return retval;
     }
   }
 }
