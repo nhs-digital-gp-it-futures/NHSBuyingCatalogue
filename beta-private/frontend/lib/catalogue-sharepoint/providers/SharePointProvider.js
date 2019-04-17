@@ -231,7 +231,6 @@ class SharePointProvider {
     return new Promise((resolve, reject) => {
       magic.detectFile(storagePath, (err, result) => {
         if (err) return reject(err)
-        console.log('\n\n\n\n', result, '\n\n\n\n')
         return resolve(result)
       })
     })
