@@ -29,6 +29,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       {
         retval.Add(vals.Select(val => Creator.FromCrm(val)));
       }
+
       return retval;
     }
 

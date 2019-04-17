@@ -62,6 +62,26 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       return target;
     }
 
+    internal static GifModels.Review FromApi(StandardsApplicableReviews api)
+    {
+      return Convert<StandardsApplicableReviews, GifModels.Review>(api);
+    }
+
+    internal static StandardsApplicableReviews StandardsApplicableReviewsFromCrm(GifModels.Review crm)
+    {
+      return Convert<GifModels.Review, StandardsApplicableReviews>(crm);
+    }
+
+    internal static CapabilitiesImplementedReviews CapabilitiesImplementedReviewsFromCrm(GifModels.Review crm)
+    {
+      return Convert<GifModels.Review, CapabilitiesImplementedReviews>(crm);
+    }
+
+    internal static GifModels.Review FromApi(CapabilitiesImplementedReviews api)
+    {
+      return Convert<CapabilitiesImplementedReviews, GifModels.Review>(api);
+    }
+
     internal static CapabilitiesImplementedEvidence FromCrm(GifModels.CapabilityEvidence crm)
     {
       return Convert<GifModels.CapabilityEvidence, CapabilitiesImplementedEvidence>(crm);

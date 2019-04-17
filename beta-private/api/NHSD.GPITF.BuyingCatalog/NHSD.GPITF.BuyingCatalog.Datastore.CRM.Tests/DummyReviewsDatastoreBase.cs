@@ -1,22 +1,37 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
+﻿using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
+using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Tests
 {
   public sealed class DummyReviewsDatastoreBase : ReviewsDatastoreBase<ReviewsBase>
   {
-    protected override string ResourceBase => "ReviewsBase";
-
     public DummyReviewsDatastoreBase(
-      IRestClientFactory dbConnectionFactory,
       ILogger<ReviewsDatastoreBase<ReviewsBase>> logger,
-      ISyncPolicyFactory policy,
-      IConfiguration config) :
-      base(dbConnectionFactory, logger, policy, config)
+      ISyncPolicyFactory policy) :
+      base(logger, policy)
     {
+    }
+
+    protected override IEnumerable<IEnumerable<ReviewsBase>> ByEvidenceInternal(string evidenceId)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    protected override ReviewsBase ByIdInternal(string id)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    protected override ReviewsBase CreateInternal(ReviewsBase review)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    protected override void DeleteInternal(ReviewsBase review)
+    {
+      throw new System.NotImplementedException();
     }
   }
 }
