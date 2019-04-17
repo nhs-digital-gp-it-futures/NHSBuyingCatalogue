@@ -39,18 +39,25 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
         }
 
         if (sourceProp.PropertyType == typeof(string) &&
-          targetProp.PropertyType == typeof(Guid))
+          (targetProp.PropertyType == typeof(Guid) ||
+            targetProp.PropertyType == typeof(Guid?)))
         {
-          targetProp.SetValue(target, Guid.Parse((string)sourceProp.GetValue(source)));
+          var sourceGuidStr = (string)sourceProp.GetValue(source);
+          if (!string.IsNullOrEmpty(sourceGuidStr))
+          {
+            targetProp.SetValue(target, Guid.Parse(sourceGuidStr));
+          }
           continue;
         }
 
         if ((sourceProp.PropertyType.IsEnum ||
             (Nullable.GetUnderlyingType(sourceProp.PropertyType)?.IsEnum ?? false)) &&
-          targetProp.PropertyType.IsEnum)
+          (targetProp.PropertyType.IsEnum ||
+          (Nullable.GetUnderlyingType(targetProp.PropertyType)?.IsEnum ?? false)))
         {
           var sourceVal = sourceProp.GetValue(source).ToString();
-          var targetVal = Enum.Parse(targetProp.PropertyType, sourceVal);
+          var targetPropType = targetProp.PropertyType.IsEnum ? targetProp.PropertyType : Nullable.GetUnderlyingType(targetProp.PropertyType);
+          var targetVal = Enum.Parse(targetPropType, sourceVal);
 
           targetProp.SetValue(target, targetVal);
           continue;
