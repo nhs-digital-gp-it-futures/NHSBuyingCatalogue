@@ -25,7 +25,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
       _policy = policy.Build(_logger);
     }
 
-    protected string UpdateId(string proposedId)
+    protected static string UpdateId(string proposedId)
     {
       if (Guid.Empty.ToString() == proposedId)
       {
