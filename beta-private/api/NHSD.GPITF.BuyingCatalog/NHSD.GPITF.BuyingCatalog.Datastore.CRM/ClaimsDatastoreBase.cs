@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
-  public abstract class ClaimsDatastoreBase<T> : CrmDatastoreBase<T>, IClaimsDatastore<T> where T : ClaimsBase
+  public abstract class ClaimsDatastoreBase<T> : CrmDatastoreBase<T>, IClaimsDatastore<ClaimsBase> where T : ClaimsBase
   {
     public ClaimsDatastoreBase(
       ILogger<CrmDatastoreBase<T>> logger,
@@ -63,6 +63,31 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 
         return 0;
       });
+    }
+
+    ClaimsBase IClaimsDatastore<ClaimsBase>.ById(string id)
+    {
+      return ById(id);
+    }
+
+    IEnumerable<ClaimsBase> IClaimsDatastore<ClaimsBase>.BySolution(string solutionId)
+    {
+      return BySolution(solutionId);
+    }
+
+    public ClaimsBase Create(ClaimsBase claim)
+    {
+      return Create((T)claim);
+    }
+
+    public void Update(ClaimsBase claim)
+    {
+      Update((T)claim);
+    }
+
+    public void Delete(ClaimsBase claim)
+    {
+      Delete((T)claim);
     }
   }
 }
