@@ -14,7 +14,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new CapabilitiesImplementedDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy, _config));
+      Assert.DoesNotThrow(() => new CapabilitiesImplementedDatastore(DatastoreBaseSetup.CapabilitiesImplementedDatastore, _logger, _policy));
     }
 
     [Test]
@@ -22,7 +22,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     {
       var allSolns = Retriever.GetAllSolutions(_policy);
       var ids = allSolns.Select(soln => soln.Id).Distinct().ToList();
-      var datastore = new CapabilitiesImplementedDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy, _config);
+      var datastore = new CapabilitiesImplementedDatastore(DatastoreBaseSetup.CapabilitiesImplementedDatastore, _logger, _policy);
 
       var datas = ids.SelectMany(id => datastore.BySolution(id)).ToList();
 
@@ -37,7 +37,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
       var contact = Retriever.GetAllContacts(_policy).First();
       var soln = Retriever.GetAllSolutions(_policy).First();
       var cap = Retriever.GetAllCapabilities(_policy).First();
-      var datastore = new CapabilitiesImplementedDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy, _config);
+      var datastore = new CapabilitiesImplementedDatastore(DatastoreBaseSetup.CapabilitiesImplementedDatastore, _logger, _policy);
 
       // create
       var newEnt = Creator.GetCapabilitiesImplemented(solnId:soln.Id, claimId:cap.Id, ownerId: contact.Id);

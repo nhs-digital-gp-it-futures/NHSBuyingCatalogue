@@ -15,20 +15,20 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new StandardsApplicableEvidenceDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy, _config));
+      Assert.DoesNotThrow(() => new StandardsApplicableEvidenceDatastore(DatastoreBaseSetup.StandardsApplicableEvidenceDatastore, _logger, _policy));
     }
 
     [Test]
     public void CRUD_Succeeds()
     {
       var contact = Retriever.GetAllContacts(_policy).First();
-      var orgDatastore = new OrganisationsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<OrganisationsDatastore>>().Object, _policy, _config, new Mock<IDatastoreCache>().Object);
+      var orgDatastore = new OrganisationsDatastore(DatastoreBaseSetup.OrganisationsDatastore, new Mock<ILogger<OrganisationsDatastore>>().Object, _policy, _config, new Mock<IDatastoreCache>().Object);
       var org = orgDatastore.ById(contact.OrganisationId);
-      var solnDatastore = new SolutionsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<SolutionsDatastore>>().Object, _policy, _config);
+      var solnDatastore = new SolutionsDatastore(DatastoreBaseSetup.SolutionsDatastore, new Mock<ILogger<SolutionsDatastore>>().Object, _policy);
       var soln = solnDatastore.ByOrganisation(org.Id).First();
       var std = Retriever.GetAllStandards(_policy).First();
-      var claimDatastore = new StandardsApplicableDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<StandardsApplicableDatastore>>().Object, _policy, _config);
-      var datastore = new StandardsApplicableEvidenceDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy, _config);
+      var claimDatastore = new StandardsApplicableDatastore(DatastoreBaseSetup.StandardsApplicableDatastore, new Mock<ILogger<StandardsApplicableDatastore>>().Object, _policy);
+      var datastore = new StandardsApplicableEvidenceDatastore(DatastoreBaseSetup.StandardsApplicableEvidenceDatastore, _logger, _policy);
 
       var newClaim = Creator.GetStandardsApplicable(solnId: soln.Id, claimId:std.Id, ownerId: contact.Id);
       var createdClaim = claimDatastore.Create(newClaim);

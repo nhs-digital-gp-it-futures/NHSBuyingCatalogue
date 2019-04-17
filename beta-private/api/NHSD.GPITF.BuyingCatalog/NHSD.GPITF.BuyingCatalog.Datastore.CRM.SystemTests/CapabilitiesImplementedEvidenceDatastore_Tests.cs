@@ -15,20 +15,20 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new CapabilitiesImplementedEvidenceDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy, _config));
+      Assert.DoesNotThrow(() => new CapabilitiesImplementedEvidenceDatastore(DatastoreBaseSetup.CapabilitiesImplementedEvidenceDatastore, _logger, _policy));
     }
 
     [Test]
     public void CRUD_Succeeds()
     {
       var contact = Retriever.GetAllContacts(_policy).First();
-      var orgDatastore = new OrganisationsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<OrganisationsDatastore>>().Object, _policy, _config, new Mock<IDatastoreCache>().Object);
+      var orgDatastore = new OrganisationsDatastore(DatastoreBaseSetup.OrganisationsDatastore, new Mock<ILogger<OrganisationsDatastore>>().Object, _policy, _config, new Mock<IDatastoreCache>().Object);
       var org = orgDatastore.ById(contact.OrganisationId);
-      var solnDatastore = new SolutionsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<SolutionsDatastore>>().Object, _policy, _config);
+      var solnDatastore = new SolutionsDatastore(DatastoreBaseSetup.SolutionsDatastore, new Mock<ILogger<SolutionsDatastore>>().Object, _policy);
       var soln = solnDatastore.ByOrganisation(org.Id).First();
       var cap = Retriever.GetAllCapabilities(_policy).First();
-      var claimDatastore = new CapabilitiesImplementedDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<CapabilitiesImplementedDatastore>>().Object, _policy, _config);
-      var datastore = new CapabilitiesImplementedEvidenceDatastore(DatastoreBaseSetup.CrmConnectionFactory, _logger, _policy, _config);
+      var claimDatastore = new CapabilitiesImplementedDatastore(DatastoreBaseSetup.CapabilitiesImplementedDatastore, new Mock<ILogger<CapabilitiesImplementedDatastore>>().Object, _policy);
+      var datastore = new CapabilitiesImplementedEvidenceDatastore(DatastoreBaseSetup.CapabilitiesImplementedEvidenceDatastore, _logger, _policy);
 
       var newClaim = Creator.GetCapabilitiesImplemented(solnId:soln.Id, claimId:cap.Id, ownerId: contact.Id);
       var createdClaim = claimDatastore.Create(newClaim);
