@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
-using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
@@ -23,7 +22,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       _cache = cache;
     }
 
-    protected abstract T GetInternal(string path, string parameter);
+    protected abstract T GetFromSource(string path, string parameter);
     protected T Get(string path, string parameter)
     {
       LogInformation($"[{path}]");
@@ -33,14 +32,14 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
         return JsonConvert.DeserializeObject<T>(jsonCachedResponse);
       }
 
-      var retval = GetInternal(path, parameter);
+      var retval = GetFromSource(path, parameter);
 
       _cache.SafeAdd(path, JsonConvert.SerializeObject(retval));
 
       return retval;
   }
 
-    protected abstract IEnumerable<T> GetAllInternal(string path);
+    protected abstract IEnumerable<T> GetAllFromSource(string path);
     protected IEnumerable<T> GetAll(string path)
     {
       LogInformation($"[{path}]");
@@ -50,7 +49,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
         return JsonConvert.DeserializeObject<IEnumerable<T>>(jsonCachedResponse);
       }
 
-      var retval = GetAllInternal(path);
+      var retval = GetAllFromSource(path);
 
       _cache.SafeAdd(path, JsonConvert.SerializeObject(retval));
 

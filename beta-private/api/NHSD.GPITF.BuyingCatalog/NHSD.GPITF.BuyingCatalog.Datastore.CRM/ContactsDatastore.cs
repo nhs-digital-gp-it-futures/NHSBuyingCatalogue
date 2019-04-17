@@ -55,12 +55,12 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       });
     }
 
-    protected override IEnumerable<Contacts> GetAllInternal(string path)
+    protected override IEnumerable<Contacts> GetAllFromSource(string path)
     {
       throw new System.NotImplementedException();
     }
 
-    protected override Contacts GetInternal(string path, string parameter)
+    protected override Contacts GetFromSource(string path, string parameter)
     {
       if (path == GetCachePathByEmail(parameter))
       {

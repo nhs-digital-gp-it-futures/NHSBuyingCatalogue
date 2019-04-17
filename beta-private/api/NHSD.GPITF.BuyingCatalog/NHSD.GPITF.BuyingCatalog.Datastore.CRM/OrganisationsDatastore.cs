@@ -42,12 +42,12 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       });
     }
 
-    protected override IEnumerable<Organisations> GetAllInternal(string path)
+    protected override IEnumerable<Organisations> GetAllFromSource(string path)
     {
       throw new System.NotImplementedException();
     }
 
-    protected override Organisations GetInternal(string path, string parameter)
+    protected override Organisations GetFromSource(string path, string parameter)
     {
       if (path == GetCachePathByContact(parameter))
       {

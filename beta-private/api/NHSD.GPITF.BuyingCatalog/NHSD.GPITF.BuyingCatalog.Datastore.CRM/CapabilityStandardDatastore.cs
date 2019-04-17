@@ -31,7 +31,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       });
     }
 
-    protected override IEnumerable<CapabilityStandard> GetAllInternal(string path)
+    protected override IEnumerable<CapabilityStandard> GetAllFromSource(string path)
     {
       var vals = _crmDatastore
         .GetAll()
@@ -40,7 +40,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       return vals;
     }
 
-    protected override CapabilityStandard GetInternal(string path, string parameter)
+    protected override CapabilityStandard GetFromSource(string path, string parameter)
     {
       throw new System.NotImplementedException();
     }
