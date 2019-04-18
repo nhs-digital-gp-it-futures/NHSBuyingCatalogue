@@ -6,16 +6,16 @@ using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
-  public abstract class CachedDatastore<T> : CrmDatastoreBase<T>
+  public abstract class CachedDatastoreBase<T> : CrmDatastoreBase<T>
   {
     private readonly bool _logCRM;
-    protected readonly IDatastoreCache _cache;
+    protected readonly ICache _cache;
 
-    public CachedDatastore(
+    public CachedDatastoreBase(
       ILogger<CrmDatastoreBase<T>> logger,
       ISyncPolicyFactory policy,
       IConfiguration config,
-      IDatastoreCache cache) :
+      ICache cache) :
       base(logger, policy)
     {
       _logCRM = Settings.LOG_CRM(config);
@@ -37,10 +37,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       _cache.SafeAdd(path, JsonConvert.SerializeObject(retval));
 
       return retval;
-  }
+    }
 
-    protected abstract IEnumerable<T> GetAllFromSource(string path);
-    protected IEnumerable<T> GetAll(string path)
+    protected abstract IEnumerable<T> GetAllFromSource(string path, string parameter = null);
+    protected IEnumerable<T> GetAll(string path, string parameter = null)
     {
       LogInformation($"[{path}]");
       if (_cache.TryGetValue(path, out string jsonCachedResponse))
@@ -49,7 +49,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
         return JsonConvert.DeserializeObject<IEnumerable<T>>(jsonCachedResponse);
       }
 
-      var retval = GetAllFromSource(path);
+      var retval = GetAllFromSource(path, parameter);
 
       _cache.SafeAdd(path, JsonConvert.SerializeObject(retval));
 

@@ -7,26 +7,24 @@ using System;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
-  public sealed class DatastoreCache : IDatastoreCache
+  public abstract class CacheBase : ICache
   {
     private readonly TimeSpan _expiry;
-    private readonly IConfiguration _config;
-    private readonly ILogger<DatastoreCache> _logger;
+    private readonly ILogger<CacheBase> _logger;
     private readonly ISyncPolicy _policy;
     private readonly ConnectionMultiplexer _redis;
 
-    public DatastoreCache(
+    public CacheBase(
       IConfiguration config,
-      ILogger<DatastoreCache> logger,
+      ILogger<CacheBase> logger,
       ISyncPolicyFactory policy)
     {
-      _config = config;
       _logger = logger;
       _policy = policy.Build(_logger);
 
-      _expiry = TimeSpan.FromMinutes(Settings.CRM_CACHE_EXPIRY_MINS(_config));
+      _expiry = GetCacheExpiry(config);
 
-      var cacheHost = Settings.CACHE_HOST(_config);
+      var cacheHost = Settings.CACHE_HOST(config);
       var cfg = new ConfigurationOptions
       {
         EndPoints =
@@ -37,6 +35,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       };
       _redis = ConnectionMultiplexer.Connect(cfg);
     }
+
+    protected abstract TimeSpan GetCacheExpiry(IConfiguration config);
 
     public void SafeAdd(string path, string jsonCachedResponse)
     {
@@ -55,6 +55,16 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       });
       jsonCachedResponse = cacheVal;
       return cacheVal.HasValue;
+    }
+
+    public void ExpireValue(string path)
+    {
+      GetInternal(() =>
+      {
+        _redis.GetDatabase().KeyDelete(path);
+        return 0;
+      });
+      throw new NotImplementedException();
     }
 
     private TOther GetInternal<TOther>(Func<TOther> get)

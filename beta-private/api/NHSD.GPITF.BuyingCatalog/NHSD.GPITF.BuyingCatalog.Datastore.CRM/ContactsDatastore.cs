@@ -9,7 +9,7 @@ using GifInt = Gif.Service.Contracts;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
-  public sealed class ContactsDatastore : CachedDatastore<Contacts>, IContactsDatastore
+  public sealed class ContactsDatastore : LongTermCachedDatastore<Contacts>, IContactsDatastore
   {
     private readonly GifInt.IContactsDatastore _crmDatastore;
 
@@ -18,7 +18,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       ILogger<ContactsDatastore> logger,
       ISyncPolicyFactory policy,
       IConfiguration config,
-      IDatastoreCache cache) :
+      ILongTermCache cache) :
       base(logger, policy, config, cache)
     {
       _crmDatastore = crmDatastore;
@@ -55,9 +55,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       });
     }
 
-    protected override IEnumerable<Contacts> GetAllFromSource(string path)
+    protected override IEnumerable<Contacts> GetAllFromSource(string path, string parameter)
     {
-      throw new System.NotImplementedException();
+      throw new NotImplementedException();
     }
 
     protected override Contacts GetFromSource(string path, string parameter)
@@ -75,7 +75,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 
     private static string GetCachePathByEmail(string email)
     {
-      return $"/{nameof(Contacts)}/ByEmail/{email}";
+      return $"/{nameof(Contacts)}/{nameof(ByEmail)}/{email}";
     }
   }
 }

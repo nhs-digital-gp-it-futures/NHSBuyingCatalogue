@@ -8,7 +8,7 @@ using GifInt = Gif.Service.Contracts;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
-  public sealed class OrganisationsDatastore : CachedDatastore<Organisations>, IOrganisationsDatastore
+  public sealed class OrganisationsDatastore : LongTermCachedDatastore<Organisations>, IOrganisationsDatastore
   {
     private readonly GifInt.IOrganisationsDatastore _crmDatastore;
 
@@ -17,7 +17,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       ILogger<OrganisationsDatastore> logger,
       ISyncPolicyFactory policy,
       IConfiguration config,
-      IDatastoreCache cache) :
+      ILongTermCache cache) :
       base(logger, policy, config, cache)
     {
       _crmDatastore = crmDatastore;
@@ -42,9 +42,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       });
     }
 
-    protected override IEnumerable<Organisations> GetAllFromSource(string path)
+    protected override IEnumerable<Organisations> GetAllFromSource(string path, string parameter)
     {
-      throw new System.NotImplementedException();
+      throw new NotImplementedException();
     }
 
     protected override Organisations GetFromSource(string path, string parameter)
