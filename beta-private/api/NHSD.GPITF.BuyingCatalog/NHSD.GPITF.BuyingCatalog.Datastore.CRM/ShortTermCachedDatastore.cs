@@ -14,5 +14,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       base(logger, policy, config, cache)
     {
     }
+
+    protected IShortTermCache _shortTermCache => (IShortTermCache)_cache;
   }
 }

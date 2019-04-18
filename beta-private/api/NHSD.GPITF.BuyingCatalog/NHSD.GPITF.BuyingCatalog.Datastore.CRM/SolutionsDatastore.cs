@@ -141,7 +141,5 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return $"/{nameof(Solutions)}/{nameof(ByOrganisation)}/{organisationId}";
     }
-
-    private IShortTermCache _shortTermCache => (IShortTermCache)_cache;
   }
 }
