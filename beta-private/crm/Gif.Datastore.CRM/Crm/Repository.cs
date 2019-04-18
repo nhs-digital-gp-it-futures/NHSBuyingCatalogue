@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using Samc4.CipherUtil;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -88,6 +89,12 @@ namespace Gif.Service.Crm
 
     public JToken RetrieveMultiple(string query)
     {
+      var frame = new StackFrame(1);
+      var method = frame.GetMethod();
+      var type = method.DeclaringType;
+      var name = method.Name;
+      LogInformation($"[{nameof(RetrieveMultiple)}] <-- {type.Name}.{name}");
+
       LogInformation($"[{nameof(RetrieveMultiple)}] --> {query}");
       ApplyAccessToken();
 
@@ -229,11 +236,11 @@ namespace Gif.Service.Crm
 
       if (batchData.Count > 100)
       {
-          var ex = new CrmApiException("Over 100 update requests for the batch run, this is currently unsupported.", HttpStatusCode.BadRequest);
-          _logger.LogError(ex, $"[{ex.HttpStatus}] + [{ex.Message}]");
-          _logger.LogError($"[{nameof(UpsertBatch)}] --> {JsonConvert.SerializeObject(batchData)}");
-          throw ex;
-       }   
+        var ex = new CrmApiException("Over 100 update requests for the batch run, this is currently unsupported.", HttpStatusCode.BadRequest);
+        _logger.LogError(ex, $"[{ex.HttpStatus}] + [{ex.Message}]");
+        _logger.LogError($"[{nameof(UpsertBatch)}] --> {JsonConvert.SerializeObject(batchData)}");
+        throw ex;
+      }
 
       ApplyAccessToken();
 
@@ -261,14 +268,14 @@ namespace Gif.Service.Crm
       AddChangeSet(patchRequests, _httpClient, ref patchChange);
 
       //Add headers add changeset level
-      if(deleteRequests.Any())
+      if (deleteRequests.Any())
         AddHeadersToChangeSets(ref deleteChange);
 
-      if(patchRequests.Any())
+      if (patchRequests.Any())
         AddHeadersToChangeSets(ref patchChange);
 
       // Add the changesets to the batch content
-      if(deleteRequests.Any())
+      if (deleteRequests.Any())
         batchContent.Add(deleteChange);
 
       if (patchRequests.Any())
