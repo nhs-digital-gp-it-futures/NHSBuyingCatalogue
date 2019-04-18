@@ -1,7 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
+using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Models;
+using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +21,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       ILogger<SolutionsDatastore> logger,
       ISyncPolicyFactory policy,
       IConfiguration config,
-      IShortTermCache cache) :
-      base(logger, policy, config, cache)
+      IShortTermCache cache,
+      IServiceProvider serviceProvider) :
+      base(logger, policy, config, cache, serviceProvider)
     {
       _crmDatastore = crmDatastore;
     }
@@ -127,9 +131,13 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 
     private void ExpireCache(Solutions solution)
     {
-      // TODO   expire SolutionsEx cache
+      // expire our cache
       ExpireValue(GetCachePathById(solution.Id));
       ExpireValue(GetCachePathByOrganisation(solution.OrganisationId));
+
+      // expire SolutionsEx cache
+      var other = _serviceProvider.GetService<ISolutionsExDatastore>() as IOtherCache;
+      other?.ExpireOtherValue(solution);
     }
 
     private static string GetCachePathById(string id)
@@ -140,6 +148,16 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     private static string GetCachePathByOrganisation(string organisationId)
     {
       return $"/{nameof(Solutions)}/{nameof(ByOrganisation)}/{organisationId}";
+    }
+
+    public override void ExpireOtherValue(object item)
+    {
+      if (item as SolutionEx != null)
+      {
+        ExpireCache(((SolutionEx)item).Solution);
+      }
+
+      throw new ArgumentOutOfRangeException($"{nameof(item)}", item.GetType(), "Unsupported cache expiry type");
     }
   }
 }
