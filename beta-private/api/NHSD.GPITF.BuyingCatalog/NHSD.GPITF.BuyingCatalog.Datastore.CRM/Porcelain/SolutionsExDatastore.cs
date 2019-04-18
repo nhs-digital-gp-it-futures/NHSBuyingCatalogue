@@ -1,22 +1,26 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GifInt = Gif.Service.Contracts;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
 {
-  public sealed class SolutionsExDatastore : CrmDatastoreBase<SolutionEx>, ISolutionsExDatastore
+  public sealed class SolutionsExDatastore : ShortTermCachedDatastore<SolutionEx>, ISolutionsExDatastore
   {
     private readonly GifInt.ISolutionsExDatastore _crmDatastore;
 
     public SolutionsExDatastore(
       GifInt.ISolutionsExDatastore crmDatastore,
       ILogger<SolutionsExDatastore> logger,
-      ISyncPolicyFactory policy) :
-      base(logger, policy)
+      ISyncPolicyFactory policy,
+      IConfiguration config,
+      IShortTermCache cache) :
+      base(logger, policy, config, cache)
     {
       _crmDatastore = crmDatastore;
     }
@@ -25,10 +29,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
     {
       return GetInternal(() =>
       {
-        var val = _crmDatastore
-          .BySolution(solutionId);
-
-        return Creator.FromCrm(val);
+        return Get(GetCachePathBySolution(solutionId), solutionId);
       });
     }
 
@@ -37,6 +38,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
       GetInternal(() =>
       {
         _crmDatastore.Update(Creator.FromApi(solnEx));
+        ExpireCache(solnEx);
 
         return 0;
       });
@@ -52,6 +54,40 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
 
         return vals;
       });
+    }
+
+    protected override SolutionEx GetFromSource(string path, string parameter)
+    {
+      if (path == GetCachePathBySolution(parameter))
+      {
+        return GetFromSourceBySolution(parameter);
+      }
+
+      throw new ArgumentOutOfRangeException($"{nameof(path)}", path, "Unsupported cache path");
+    }
+
+    private SolutionEx GetFromSourceBySolution(string solutionId)
+    {
+      var val = _crmDatastore
+        .BySolution(solutionId);
+
+      return Creator.FromCrm(val);
+    }
+
+    protected override IEnumerable<SolutionEx> GetAllFromSource(string path, string parameter = null)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    private void ExpireCache(SolutionEx solnEx)
+    {
+      // TODO   expire Solutions cache
+      _shortTermCache.ExpireValue(GetCachePathBySolution(solnEx.Solution.Id));
+    }
+
+    private static string GetCachePathBySolution(string solutionId)
+    {
+      return $"/{nameof(SolutionEx)}/{nameof(BySolution)}/{solutionId}";
     }
   }
 }
