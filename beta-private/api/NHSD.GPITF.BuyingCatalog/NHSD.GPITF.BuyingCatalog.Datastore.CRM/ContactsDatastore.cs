@@ -28,7 +28,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        return Get(GetCachePathByEmail(email), email);
+        return GetFromCache(GetCachePathByEmail(email), email);
       });
     }
 

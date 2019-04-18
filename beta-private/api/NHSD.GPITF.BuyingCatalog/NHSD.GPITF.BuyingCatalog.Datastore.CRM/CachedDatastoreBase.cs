@@ -23,7 +23,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     }
 
     protected abstract T GetFromSource(string path, string parameter);
-    protected T Get(string path, string parameter)
+    protected T GetFromCache(string path, string parameter)
     {
       LogInformation($"[{path}]");
       if (_cache.TryGetValue(path, out string jsonCachedResponse))
@@ -40,7 +40,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     }
 
     protected abstract IEnumerable<T> GetAllFromSource(string path, string parameter = null);
-    protected IEnumerable<T> GetAll(string path, string parameter = null)
+    protected IEnumerable<T> GetAllFromCache(string path, string parameter = null)
     {
       LogInformation($"[{path}]");
       if (_cache.TryGetValue(path, out string jsonCachedResponse))

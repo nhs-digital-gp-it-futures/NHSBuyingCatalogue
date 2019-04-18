@@ -29,7 +29,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
     {
       return GetInternal(() =>
       {
-        return Get(GetCachePathBySolution(solutionId), solutionId);
+        return GetFromCache(GetCachePathBySolution(solutionId), solutionId);
       });
     }
 

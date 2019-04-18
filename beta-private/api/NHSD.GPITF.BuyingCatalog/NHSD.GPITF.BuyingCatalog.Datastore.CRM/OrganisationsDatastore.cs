@@ -27,7 +27,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        return Get(GetCachePathByContact(contactId), contactId);
+        return GetFromCache(GetCachePathByContact(contactId), contactId);
       });
     }
 

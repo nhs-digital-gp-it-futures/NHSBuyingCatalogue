@@ -40,7 +40,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        return Get(GetCachePathById(id), id);
+        return GetFromCache(GetCachePathById(id), id);
       });
     }
 
@@ -48,7 +48,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        return GetAll(GetCachePathByOrganisation(organisationId), organisationId);
+        return GetAllFromCache(GetCachePathByOrganisation(organisationId), organisationId);
       });
     }
 

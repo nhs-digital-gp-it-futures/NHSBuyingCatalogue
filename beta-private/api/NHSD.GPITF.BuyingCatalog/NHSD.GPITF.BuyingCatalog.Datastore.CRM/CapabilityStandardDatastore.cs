@@ -27,7 +27,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        return GetAll($"/{nameof(CapabilityStandard)}");
+        return GetAllFromCache($"/{nameof(CapabilityStandard)}");
       });
     }
 
