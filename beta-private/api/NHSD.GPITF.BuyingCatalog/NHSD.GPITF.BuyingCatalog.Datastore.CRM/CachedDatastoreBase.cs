@@ -9,7 +9,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
   public abstract class CachedDatastoreBase<T> : CrmDatastoreBase<T>
   {
     private readonly bool _logCRM;
-    protected readonly ICache _cache;
+    private readonly ICache _cache;
 
     public CachedDatastoreBase(
       ILogger<CrmDatastoreBase<T>> logger,

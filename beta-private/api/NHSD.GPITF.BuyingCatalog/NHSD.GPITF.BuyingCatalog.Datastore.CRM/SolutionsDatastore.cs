@@ -128,8 +128,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     private void ExpireCache(Solutions solution)
     {
       // TODO   expire SolutionsEx cache
-      _shortTermCache.ExpireValue(GetCachePathById(solution.Id));
-      _shortTermCache.ExpireValue(GetCachePathByOrganisation(solution.OrganisationId));
+      ExpireValue(GetCachePathById(solution.Id));
+      ExpireValue(GetCachePathByOrganisation(solution.OrganisationId));
     }
 
     private static string GetCachePathById(string id)

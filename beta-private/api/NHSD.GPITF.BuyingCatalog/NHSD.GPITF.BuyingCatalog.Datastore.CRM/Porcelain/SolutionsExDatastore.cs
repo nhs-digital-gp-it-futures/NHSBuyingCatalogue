@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
+using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 using System;
 using System.Collections.Generic;
@@ -76,13 +77,18 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
 
     protected override IEnumerable<SolutionEx> GetAllFromSource(string path, string parameter = null)
     {
-      throw new System.NotImplementedException();
+      throw new NotImplementedException();
     }
 
     private void ExpireCache(SolutionEx solnEx)
     {
+      ExpireCache(solnEx.Solution);
+    }
+
+    private void ExpireCache(Solutions soln)
+    {
       // TODO   expire Solutions cache
-      _shortTermCache.ExpireValue(GetCachePathBySolution(solnEx.Solution.Id));
+      ExpireValue(GetCachePathBySolution(soln.Id));
     }
 
     private static string GetCachePathBySolution(string solutionId)

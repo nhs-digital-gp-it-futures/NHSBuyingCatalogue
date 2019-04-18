@@ -6,6 +6,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
   public abstract class ShortTermCachedDatastore<T> : CachedDatastoreBase<T>
   {
+    private readonly IShortTermCache _shortTermCache;
+
     public ShortTermCachedDatastore(
       ILogger<CrmDatastoreBase<T>> logger,
       ISyncPolicyFactory policy,
@@ -13,8 +15,12 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       IShortTermCache cache) :
       base(logger, policy, config, cache)
     {
+      _shortTermCache = cache;
     }
 
-    protected IShortTermCache _shortTermCache => (IShortTermCache)_cache;
+    protected void ExpireValue(string path)
+    {
+      _shortTermCache.ExpireValue(path);
+    }
   }
 }
