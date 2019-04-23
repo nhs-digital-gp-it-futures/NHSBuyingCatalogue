@@ -155,6 +155,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       if (item as SolutionEx != null)
       {
         ExpireCache(((SolutionEx)item).Solution);
+        return;
       }
 
       throw new ArgumentOutOfRangeException($"{nameof(item)}", item.GetType(), "Unsupported cache expiry type");
