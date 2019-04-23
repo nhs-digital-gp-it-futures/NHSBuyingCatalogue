@@ -64,7 +64,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
         _redis.GetDatabase().KeyDelete(path);
         return 0;
       });
-      throw new NotImplementedException();
     }
 
     private TOther GetInternal<TOther>(Func<TOther> get)
