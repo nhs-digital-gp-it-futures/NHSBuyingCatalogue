@@ -90,7 +90,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
       ExpireCache(solnEx.Solution);
 
       // expire Solutions cache
-      var other = _serviceProvider.GetService<ISolutionsExDatastore>() as IOtherCache;
+      var other = _serviceProvider.GetService<ISolutionsDatastore>() as IOtherCache;
       other?.ExpireOtherValue(solnEx);
     }
 
@@ -109,6 +109,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
       if (item as Solutions != null)
       {
         ExpireCache((Solutions)item);
+        return;
       }
 
       throw new ArgumentOutOfRangeException($"{nameof(item)}", item.GetType(), "Unsupported cache expiry type");
