@@ -4,8 +4,8 @@ ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
 
 WORKDIR /crm
 COPY ./GifService.sln /crm
-COPY ./src/Gif.Datastore.CRM /crm/src/Gif.Datastore.CRM
-COPY ./src/Gif.Service /crm/src/Gif.Service
+COPY ./Gif.Datastore.CRM /crm/Gif.Datastore.CRM
+COPY ./Gif.Service /crm/Gif.Service
 
 RUN dotnet publish -c Release -o /app
 
