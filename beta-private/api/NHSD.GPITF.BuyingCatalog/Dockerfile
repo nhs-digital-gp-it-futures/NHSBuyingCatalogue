@@ -2,33 +2,33 @@ FROM microsoft/dotnet:2.1-sdk AS base
 WORKDIR /app
 
 FROM microsoft/dotnet:2.1-sdk AS build
-WORKDIR /src
+WORKDIR /api
 
 COPY . .
 RUN dotnet restore NHSD.GPITF.BuyingCatalog.sln
 
-WORKDIR /src
+WORKDIR /api
 RUN dotnet build --no-incremental NHSD.GPITF.BuyingCatalog.sln -c Release
 
-WORKDIR /src/NHSD.GPITF.BuyingCatalog.Datastore.Database.Tests
+WORKDIR /api/NHSD.GPITF.BuyingCatalog.Datastore.Database.Tests
 RUN dotnet test --no-build -c Release
 
-WORKDIR /src/NHSD.GPITF.BuyingCatalog.Datastore.CRM.Tests
+WORKDIR /api/NHSD.GPITF.BuyingCatalog.Datastore.CRM.Tests
 RUN dotnet test --no-build -c Release
 
-WORKDIR /src/NHSD.GPITF.BuyingCatalog.Logic.Tests
+WORKDIR /api/NHSD.GPITF.BuyingCatalog.Logic.Tests
 RUN dotnet test --no-build -c Release
 
-WORKDIR /src/NHSD.GPITF.BuyingCatalog.Tests
+WORKDIR /api/NHSD.GPITF.BuyingCatalog.Tests
 RUN dotnet test --no-build -c Release
 
-WORKDIR /src/NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.Tests
+WORKDIR /api/NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.Tests
 RUN dotnet test --no-build -c Release
 
-WORKDIR /src/NHSD.GPITF.BuyingCatalog.Search.Tests
+WORKDIR /api/NHSD.GPITF.BuyingCatalog.Search.Tests
 RUN dotnet test --no-build -c Release
 
-WORKDIR /src
+WORKDIR /api
 RUN dotnet build --no-incremental NHSD.GPITF.BuyingCatalog.sln -c Release -o /app
 
 FROM build AS publish

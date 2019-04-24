@@ -43,7 +43,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSD.GPITF.BuyingCatalog.In
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSD.GPITF.BuyingCatalog.Models", "NHSD.GPITF.BuyingCatalog.Models\NHSD.GPITF.BuyingCatalog.Models.csproj", "{9F070994-7B54-4932-A68C-0FDEE56CAC5C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gif.Datastore.CRM", "..\..\crm\Gif.Datastore.CRM\Gif.Datastore.CRM.csproj", "{D0327B36-AB0C-4525-901B-36F547F1AD22}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gif.Datastore.CRM", "crm\Gif.Datastore.CRM\Gif.Datastore.CRM.csproj", "{D0327B36-AB0C-4525-901B-36F547F1AD22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
