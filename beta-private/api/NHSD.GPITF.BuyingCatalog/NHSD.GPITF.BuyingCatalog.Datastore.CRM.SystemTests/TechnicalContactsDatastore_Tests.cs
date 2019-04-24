@@ -1,9 +1,11 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
+using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Logic;
 using NHSD.GPITF.BuyingCatalog.Tests;
 using NUnit.Framework;
+using System;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
@@ -22,7 +24,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     {
       var frameworksDatastore = new FrameworksDatastore(DatastoreBaseSetup.FrameworksDatastore, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
       var frameworks = frameworksDatastore.GetAll().ToList();
-      var solnDatastore = new SolutionsDatastore(DatastoreBaseSetup.SolutionsDatastore, new Mock<ILogger<SolutionsDatastore>>().Object, _policy);
+      var solnDatastore = new SolutionsDatastore(DatastoreBaseSetup.SolutionsDatastore, new Mock<ILogger<SolutionsDatastore>>().Object, _policy, _config, new Mock<IShortTermCache>().Object, new Mock<IServiceProvider>().Object);
       var allSolns = frameworks.SelectMany(fw => solnDatastore.ByFramework(fw.Id)).ToList();
       var datastore = new TechnicalContactsDatastore(DatastoreBaseSetup.TechnicalContactsDatastore, _logger, _policy);
 
@@ -38,7 +40,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     {
       var frameworksDatastore = new FrameworksDatastore(DatastoreBaseSetup.FrameworksDatastore, new Mock<ILogger<FrameworksDatastore>>().Object, _policy);
       var frameworks = frameworksDatastore.GetAll().ToList();
-      var solnDatastore = new SolutionsDatastore(DatastoreBaseSetup.SolutionsDatastore, new Mock<ILogger<SolutionsDatastore>>().Object, _policy);
+      var solnDatastore = new SolutionsDatastore(DatastoreBaseSetup.SolutionsDatastore, new Mock<ILogger<SolutionsDatastore>>().Object, _policy, _config, new Mock<IShortTermCache>().Object, new Mock<IServiceProvider>().Object);
       var soln = frameworks.SelectMany(fw => solnDatastore.ByFramework(fw.Id)).First();
       var datastore = new TechnicalContactsDatastore(DatastoreBaseSetup.TechnicalContactsDatastore, _logger, _policy);
 

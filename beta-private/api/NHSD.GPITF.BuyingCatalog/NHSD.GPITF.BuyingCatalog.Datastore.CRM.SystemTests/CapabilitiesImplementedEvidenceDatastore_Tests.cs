@@ -5,6 +5,7 @@ using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Tests;
 using NUnit.Framework;
+using System;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
@@ -22,9 +23,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     public void CRUD_Succeeds()
     {
       var contact = Retriever.GetAllContacts(_policy).First();
-      var orgDatastore = new OrganisationsDatastore(DatastoreBaseSetup.OrganisationsDatastore, new Mock<ILogger<OrganisationsDatastore>>().Object, _policy, _config, new Mock<IDatastoreCache>().Object);
+      var orgDatastore = new OrganisationsDatastore(DatastoreBaseSetup.OrganisationsDatastore, new Mock<ILogger<OrganisationsDatastore>>().Object, _policy, _config, new Mock<ILongTermCache>().Object);
       var org = orgDatastore.ById(contact.OrganisationId);
-      var solnDatastore = new SolutionsDatastore(DatastoreBaseSetup.SolutionsDatastore, new Mock<ILogger<SolutionsDatastore>>().Object, _policy);
+      var solnDatastore = new SolutionsDatastore(DatastoreBaseSetup.SolutionsDatastore, new Mock<ILogger<SolutionsDatastore>>().Object, _policy, _config, new Mock<IShortTermCache>().Object, new Mock<IServiceProvider>().Object);
       var soln = solnDatastore.ByOrganisation(org.Id).First();
       var cap = Retriever.GetAllCapabilities(_policy).First();
       var claimDatastore = new CapabilitiesImplementedDatastore(DatastoreBaseSetup.CapabilitiesImplementedDatastore, new Mock<ILogger<CapabilitiesImplementedDatastore>>().Object, _policy);

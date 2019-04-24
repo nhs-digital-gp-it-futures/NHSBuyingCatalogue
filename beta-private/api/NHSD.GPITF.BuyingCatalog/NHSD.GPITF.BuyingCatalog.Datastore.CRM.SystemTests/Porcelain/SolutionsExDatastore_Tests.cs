@@ -2,10 +2,12 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain;
+using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Tests;
 using NUnit.Framework;
+using System;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
@@ -31,7 +33,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [SetUp]
     public void Setup()
     {
-      _solutionDatastore = new SolutionsDatastore(DatastoreBaseSetup.SolutionsDatastore, new Mock<ILogger<SolutionsDatastore>>().Object, _policy);
+      _solutionDatastore = new SolutionsDatastore(DatastoreBaseSetup.SolutionsDatastore, new Mock<ILogger<SolutionsDatastore>>().Object, _policy, _config, new Mock<IShortTermCache>().Object, new Mock<IServiceProvider>().Object);
       _technicalContactDatastore = new TechnicalContactsDatastore(DatastoreBaseSetup.TechnicalContactsDatastore, new Mock<ILogger<TechnicalContactsDatastore>>().Object, _policy);
 
       _claimedCapabilityDatastore = new CapabilitiesImplementedDatastore(DatastoreBaseSetup.CapabilitiesImplementedDatastore, new Mock<ILogger<CapabilitiesImplementedDatastore>>().Object, _policy);
@@ -42,7 +44,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
       _claimedStandardEvidenceDatastore = new StandardsApplicableEvidenceDatastore(DatastoreBaseSetup.StandardsApplicableEvidenceDatastore, new Mock<ILogger<StandardsApplicableEvidenceDatastore>>().Object, _policy);
       _claimedStandardReviewsDatastore = new StandardsApplicableReviewsDatastore(DatastoreBaseSetup.StandardsApplicableReviewsDatastore, new Mock<ILogger<StandardsApplicableReviewsDatastore>>().Object, _policy);
 
-      _datastore = new SolutionsExDatastore(DatastoreBaseSetup.SolutionsExDatastore, _logger, _policy);
+      _datastore = new SolutionsExDatastore(DatastoreBaseSetup.SolutionsExDatastore, _logger, _policy, _config, new Mock<IShortTermCache>().Object, new Mock<IServiceProvider>().Object);
 
       var soln = Retriever.GetAllSolutions(_policy).First();
       _solnOrig = _datastore.BySolution(soln.Id);

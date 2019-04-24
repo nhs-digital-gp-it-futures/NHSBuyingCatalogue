@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
+using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Logic;
 using NUnit.Framework;
 using System.Linq;
@@ -13,13 +14,13 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new CapabilityStandardDatastore(DatastoreBaseSetup.CapabilityStandardDatastore, _logger, _policy, _config, _cache));
+      Assert.DoesNotThrow(() => new CapabilityStandardDatastore(DatastoreBaseSetup.CapabilityStandardDatastore, _logger, _policy, _config, new Mock<ILongTermCache>().Object));
     }
 
     [Test]
     public void GetAll_ReturnsData()
     {
-      var datastore = new CapabilityStandardDatastore(DatastoreBaseSetup.CapabilityStandardDatastore, new Mock<ILogger<CapabilityStandardDatastore>>().Object, _policy, _config, _cache);
+      var datastore = new CapabilityStandardDatastore(DatastoreBaseSetup.CapabilityStandardDatastore, new Mock<ILogger<CapabilityStandardDatastore>>().Object, _policy, _config, new Mock<ILongTermCache>().Object);
 
       var datas = datastore.GetAll().ToList();
 
