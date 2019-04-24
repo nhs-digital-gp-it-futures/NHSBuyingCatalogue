@@ -62,7 +62,7 @@ services:
 
   crm:
     build: 
-      context: ./crm
+      context: ./api/NHSD.GPITF.BuyingCatalog/crm/
     image: gpitf/catalogue-crm:private-beta
     ports:
       - "5001:5001"
