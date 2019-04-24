@@ -8,7 +8,7 @@
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <AssemblyName>Gif.Service</AssemblyName>
     <PackageId>IO.Swagger</PackageId>
-    <NoWarn>NU1605;CS1591;NU1603;NU1701;CS1572;CS1573</NoWarn>
+    <NoWarn>NU1605;CS1591;NU1603;NU1701;CS1572;CS1573;CS8002</NoWarn>
     <UserSecretsId>626ab5c7-7b51-49fe-acea-005970d864c3</UserSecretsId>
   </PropertyGroup>
   <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
