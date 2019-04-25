@@ -20,10 +20,10 @@
 ## [PrimaryRole](NHSD.GPITF.BuyingCatalog.Models.PrimaryRole.yml)
 
 # Porcelain
-## [SolutionEx](NHSD.GPITF.BuyingCatalog.Models.SolutionEx.yml)
-## [CapabilityMapping](NHSD.GPITF.BuyingCatalog.Models.CapabilityMapping.yml)
-## [CapabilityMappings](NHSD.GPITF.BuyingCatalog.Models.CapabilityMappings.yml)
-## [OptionalStandard](NHSD.GPITF.BuyingCatalog.Models.OptionalStandard.yml)
+## [SolutionEx](NHSD.GPITF.BuyingCatalog.Models.Porcelain.SolutionEx.yml)
+## [CapabilityMapping](NHSD.GPITF.BuyingCatalog.Models.Porcelain.CapabilityMapping.yml)
+## [CapabilityMappings](NHSD.GPITF.BuyingCatalog.Models.Porcelain.CapabilityMappings.yml)
+## [OptionalStandard](NHSD.GPITF.BuyingCatalog.Models.Porcelain.OptionalStandard.yml)
 
 # Blob Storage
 ## [BlobInfo](NHSD.GPITF.BuyingCatalog.Models.BlobInfo.yml)
@@ -32,7 +32,7 @@
 # Search
 ## [KeywordCount](NHSD.GPITF.BuyingCatalog.Models.KeywordCount.yml)
 ## [KeywordSearchHistory](NHSD.GPITF.BuyingCatalog.Models.KeywordSearchHistory.yml)
-## [SearchResult](NHSD.GPITF.BuyingCatalog.Models.SearchResult.yml)
+## [SearchResult](NHSD.GPITF.BuyingCatalog.Models.Porcelain.SearchResult.yml)
 
 # Linking Entities
 ## [CapabilityFramework](NHSD.GPITF.BuyingCatalog.Models.CapabilityFramework.yml)
@@ -42,15 +42,15 @@
 
 # Miscellaneous
 ## [Log](NHSD.GPITF.BuyingCatalog.Models.Log.yml)
-## [PaginatedList](NHSD.GPITF.BuyingCatalog.Models.PaginatedList.yml)
+## [PaginatedList](NHSD.GPITF.BuyingCatalog.Models.PaginatedList-1.yml)
 
 # Statuses
 
-![BuyingCatalog-Solution-Life-Cycle.png](/images/BuyingCatalog-Solution-Life-Cycle.png "BuyingCatalog-Solution-Life-Cycle.png")
+![BuyingCatalog-Solution-Life-Cycle](/images/BuyingCatalog-Solution-Life-Cycle.png "BuyingCatalog-Solution-Life-Cycle")
 ## [SolutionStatus](NHSD.GPITF.BuyingCatalog.Models.SolutionStatus.yml)
 
-![BuyingCatalog-Capability-Assessment-Life-Cycle.png](/images/BuyingCatalog-Capability-Assessment-Life-Cycle.png "BuyingCatalog-Capability-Assessment-Life-Cycle.png")
+![BuyingCatalog-Capability-Assessment-Life-Cycle](/images/BuyingCatalog-Capability-Assessment-Life-Cycle.png "BuyingCatalog-Capability-Assessment-Life-Cycle")
 ## [CapabilitiesImplementedStatus](NHSD.GPITF.BuyingCatalog.Models.CapabilitiesImplementedStatus.yml)
 
-![BuyingCatalog-Standards-Compliance-Life-Cycle.png](/images/BuyingCatalog-Standards-Compliance-Life-Cycle.png "BuyingCatalog-Standards-Compliance-Life-Cycle.png")
+![BuyingCatalog-Standards-Compliance-Life-Cycle](/images/BuyingCatalog-Standards-Compliance-Life-Cycle.png "BuyingCatalog-Standards-Compliance-Life-Cycle")
 ## [StandardsApplicableStatus](NHSD.GPITF.BuyingCatalog.Models.StandardsApplicableStatus.yml)
