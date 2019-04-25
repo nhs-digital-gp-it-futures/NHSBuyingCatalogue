@@ -1,5 +1,18 @@
 - name: Home
   href: index.md
-- name: API Documentation
+
+- name: Domain Entities
   href: api/
   homepage: api/index.md
+
+- name: Data Storage
+  href: api/
+  homepage: api/Datastore.Interfaces.md
+
+- name: Authentication
+  href: api/
+  homepage: api/Authentication.md
+
+- name: System Configuration
+  href: articles/
+  homepage: articles/README.md
