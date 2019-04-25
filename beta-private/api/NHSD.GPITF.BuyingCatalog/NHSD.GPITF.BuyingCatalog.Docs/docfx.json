@@ -1,0 +1,92 @@
+{
+  "metadata":
+  [
+    {
+      "src":
+      [
+        {
+          "files":
+          [
+            "**NHSD.*.csproj"
+          ],
+          "exclude":
+          [
+            "**/bin/**",
+            "**/obj/**",
+            "**NHSD.*Test*.csproj",
+            "*Example*"
+          ],
+          "src": "../"
+        }
+      ],
+      "dest": "api"
+    }
+  ],
+  "build":
+  {
+    "content":
+    [
+      {
+        "files":
+        [
+          "api/**.yml",
+          "api/index.md"
+        ]
+      },
+      {
+        "files":
+        [
+          "articles/**.md",
+          "articles/**/toc.yml",
+          "toc.yml",
+          "*.md"
+        ]
+      }
+    ],
+    "resource":
+    [
+      {
+        "files":
+        [
+          "images/**"
+        ]
+      }
+    ],
+    "overwrite":
+    [
+      {
+        "files":
+        [
+        ],
+        "exclude":
+        [
+          "obj/**",
+          "_site/**"
+        ]
+      }
+    ],
+    "dest": "_site",
+    "globalMetadataFiles":
+    [
+    ],
+    "fileMetadataFiles":
+    [
+    ],
+    "template":
+    [
+      "default"
+    ],
+    "postProcessors":
+    [
+    ],
+    "globalMetadata":
+    {
+      "_appTitle": "NHSD Buying Catalog API Documentation Website",
+      "_enableSearch": true,
+      "_appLogoPath": "images/nhs-digital.png",
+      "_appFaviconPath": "images/nhs-digital.png"
+    },
+    "markdownEngineName": "markdig",
+    "noLangKeyword": false
+  }
+}
