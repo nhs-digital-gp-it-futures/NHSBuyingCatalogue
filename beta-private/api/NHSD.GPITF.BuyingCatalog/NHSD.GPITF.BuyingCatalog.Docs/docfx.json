@@ -37,7 +37,6 @@
         "files":
         [
           "articles/**.md",
-          "articles/**/toc.yml",
           "toc.yml",
           "*.md"
         ]
@@ -57,6 +56,12 @@
         "files":
         [
           "images/**"
+        ]
+      },
+      {
+        "files":
+        [
+          "articles/**.png"
         ]
       }
     ],
