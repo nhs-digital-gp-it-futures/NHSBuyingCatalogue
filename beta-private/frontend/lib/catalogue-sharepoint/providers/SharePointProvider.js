@@ -8,67 +8,12 @@ const INTERMEDIATE_STORAGE = process.env.UPLOAD_TEMP_FILE_STORE || os.tmpdir()
 const mmm = require('mmmagic')
 const Magic = mmm.Magic
 
-const MIME_WHITELIST = [
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  'application/msword',
-  'application/vnd.oasis.opendocument.text',
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-  'application/vnd.ms-excel',
-  'text/csv',
-  'application/vnd.oasis.opendocument.spreadsheet',
-  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-  'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
-  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-  'application/vnd.oasis.opendocument.presentation',
-  'application/pdf',
-  'application/vnd.ms-outlook',
-  'text/plain',
-  'application/rtf',
-  'image/jpeg',
-  'image/bmp',
-  'image/png',
-  'image/gif',
-  'video/mp4',
-  'video/x-ms-wmv',
-  'video/x-msvideo',
-  'application/json',
-  'text/xml',
-  'application/zip'
-]
-
-const MIME_EXTENSIONS = [
-  '.docx',
-  '.doc',
-  '.odt',
-  '.xlsx',
-  '.xls',
-  '.xlt',
-  '.csv',
-  '.ods',
-  '.pptx',
-  '.ppsx',
-  '.pptx',
-  '.odp',
-  '.pdf',
-  '.msg',
-  '.txt',
-  '.rtf',
-  '.jpg',
-  '.bmp',
-  '.png',
-  '.gif',
-  '.mp4',
-  '.wmv',
-  '.avi',
-  '.json',
-  '.xml',
-  '.zip'
-]
+const WHITELIST = require('../data/whitelist')
 
 const { antivirusProvider } = require('catalogue-antivirus')
 
 class SharePointProvider {
-  constructor (CatalogueApi, intermediateStoragePath) {
+  constructor (CatalogueApi, intermediateStoragePath, whitelist) {
     this.CatalogueApi = CatalogueApi
     this.stdBlobStoreApi = new CatalogueApi.StandardsApplicableEvidenceBlobStoreApi()
     this.capBlobStoreApi = new CatalogueApi.CapabilitiesImplementedEvidenceBlobStoreApi()
@@ -76,25 +21,28 @@ class SharePointProvider {
     this.uuidGenerator = uuidGenerator
     this.av = antivirusProvider
 
+    this.whiteList = whitelist || WHITELIST
+
     this.TIMEOUT = 1200000
     this.capBlobStoreApi.timeout = this.TIMEOUT
     this.stdBlobStoreApi.timeout = this.TIMEOUT
+
   }
 
   getMimeArray () {
-    return MIME_WHITELIST
+    return this.whitelist['mime-types']
   }
 
   getMimeCommaString () {
-    return MIME_WHITELIST.join(', ')
+    return this.whitelist['mime-types'].join(', ')
   }
 
   getMimeExtensions () {
-    return MIME_EXTENSIONS
+    return this.whitelist['mime-extensions']
   }
 
   getMimeExtensionsCommaString () {
-    return MIME_EXTENSIONS.join(', ')
+    return this.whitelist['mime-extensions'].join(', ')
   }
 
   async getCapEvidence (claimID, subFolder, pageIndex = 1) {
@@ -212,14 +160,14 @@ class SharePointProvider {
 
   async stdValidMimeType (fileName) {
     const res = [await this.detectMimeType(fileName)]
-    const whiteList = new Set(MIME_WHITELIST) // await this.stdBlobStoreApi.apiStandardsApplicableEvidenceBlobStoreGetAllowedFileTypes()
+    const whiteList = new Set(this.getMimeArray()) // await this.stdBlobStoreApi.apiStandardsApplicableEvidenceBlobStoreGetAllowedFileTypes()
 
     return res.every((type) => whiteList.has(type))
   }
 
   async capValidMimeType (fileName) {
     const res = [await this.detectMimeType(fileName)]
-    const whiteList = new Set(MIME_WHITELIST) // await this.stdBlobStoreApi.apiStandardsApplicableEvidenceBlobStoreGetAllowedFileTypes()
+    const whiteList = new Set(this.getMimeArray()) // await this.stdBlobStoreApi.apiStandardsApplicableEvidenceBlobStoreGetAllowedFileTypes()
 
     return res.every((type) => whiteList.has(type))
   }
@@ -366,6 +314,7 @@ class SharePointProvider {
    * not be needed at all.
    *
    */
+  /* istanbul ignore next */
   getBearerToken () {
     try {
       return this.CatalogueApi.ApiClient.instance.authentications.oauth2.accessToken
@@ -374,12 +323,25 @@ class SharePointProvider {
     }
   }
 
+  /* istanbul ignore next */
   folderExists (fp) { return fs.existsSync(fp) }
+
+  /* istanbul ignore next */
   createFolder (fp) { fs.mkdirSync(fp) }
+
+  /* istanbul ignore next */
   removeFolder (fp) { fs.rmdirSync(fp) }
+
+  /* istanbul ignore next */
   unlinkFile (fp, cb) { fs.unlink(fp, cb) }
+
+  /* istanbul ignore next */
   writeFile (fp, bf, cb) { fs.writeFile(fp, bf, cb) }
+
+  /* istanbul ignore next */
   createReadStream (fp) { return fs.createReadStream(fp) }
+
+  /* istanbul ignore next */
   async fetchFile (url, options) { return fetch(url, options) }
 }
 

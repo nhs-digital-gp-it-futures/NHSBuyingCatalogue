@@ -339,3 +339,68 @@ describe('uploadCapEvidence', () => {
     await expect(subject.uploadCapEvidence(cm, bf, fn, sb)).resolves.toBe(undefined)
   })
 })
+
+describe('File Types', () => {
+  beforeAll(() => {
+    subject.whitelist = {
+      'mime-types': [
+        'application/json',
+        'application/zip'
+      ],
+      'mime-extensions': [
+        '.json',
+        '.zip'
+      ]
+    }
+  })
+
+  describe('stdValidMimeType', () => {
+
+    it('Should return true if a whitelisted mime-type is detected', () => {
+      subject.detectMimeType = jest.fn(() => { return 'application/json' })
+      expect(subject.capValidMimeType('filename')).resolves.toBe(true)
+    })
+
+    it('Should return false if a non-whitelisted mime-type is detected', () => {
+      subject.detectMimeType = jest.fn(() => { return 'text/xml' })
+      expect(subject.capValidMimeType('filename')).resolves.toBe(false)
+    })
+  })
+
+  describe('capValidMimeType', () => {
+    it('Should return true if a whitelisted mime-type is detected', () => {
+      subject.detectMimeType = jest.fn(() => { return 'application/json' })
+      expect(subject.capValidMimeType('filename')).resolves.toBe(true)
+    })
+
+    it('Should return false if a non-whitelisted mime-type is detected', () => {
+      subject.detectMimeType = jest.fn(() => { return 'text/xml' })
+      expect(subject.capValidMimeType('filename')).resolves.toBe(false)
+    })
+  })
+
+  describe('getMimeArray', () => {
+    it('should return an array of strings', () => {
+      expect(subject.getMimeArray()).toEqual(['application/json', 'application/zip'])
+
+    })
+  })
+
+  describe('getMimeCommaString', () => {
+    it('should return an array of strings of comma seperated values', () => {
+      expect(subject.getMimeCommaString()).toBe('application/json, application/zip')
+    })
+  })
+
+  describe('getMimeExtensions', () => {
+    it('should return an array of strings', () => {
+      expect(subject.getMimeExtensions()).toEqual(['.json', '.zip'])
+    })
+  })
+
+  describe('getMimeExtensionsCommaString', () => {
+    it('should return a single string of comma seperated values', () => {
+      expect(subject.getMimeExtensionsCommaString()).toBe('.json, .zip')
+    })
+  })
+})
