@@ -40,6 +40,10 @@ Binary data (blob) storage is also pluggable and the following implementations a
 # Search
   - [IKeywordSearchHistoryDatastore](NHSD.GPITF.BuyingCatalog.Interfaces.IKeywordSearchHistoryDatastore.yml)
 
+# Linking Entities
+  - [ILinkManagerDatastore](NHSD.GPITF.BuyingCatalog.Interfaces.ILinkManagerDatastore.yml)
+  - [ICapabilityStandardDatastore](NHSD.GPITF.BuyingCatalog.Interfaces.ICapabilityStandardDatastore.yml)
+
 # Cache
   - [ICache](NHSD.GPITF.BuyingCatalog.Interfaces.ICache.yml)
   - [ILongTermCache](NHSD.GPITF.BuyingCatalog.Interfaces.ILongTermCache.yml)
