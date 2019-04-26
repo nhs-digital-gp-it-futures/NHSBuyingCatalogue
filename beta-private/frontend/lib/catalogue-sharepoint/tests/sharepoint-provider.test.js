@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-const { SharePointProvider } = require('./index')
+const { SharePointProvider } = require('../index')
 
 function MockCapBlobStoreApi () {
   this.getCapEvidence = jest.fn()
