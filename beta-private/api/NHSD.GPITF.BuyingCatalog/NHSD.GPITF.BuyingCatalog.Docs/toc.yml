@@ -2,17 +2,13 @@
   href: index.md
 
 - name: Domain Entities
-  href: api/
-  homepage: api/index.md
+  href: api/index.md
 
 - name: Data Storage
-  href: api/
-  homepage: api/Datastore.Interfaces.md
+  href: api/Datastore.Interfaces.md
 
 - name: Authentication
-  href: api/
-  homepage: api/Authentication.md
+  href: api/Authentication.md
 
 - name: System Configuration
-  href: articles/
-  homepage: articles/README.html
+  href: ../../../README.md
