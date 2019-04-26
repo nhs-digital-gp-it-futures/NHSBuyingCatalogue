@@ -38,6 +38,8 @@ Binary data (blob) storage is also pluggable and the following implementations a
   - [IClaimsInfoProvider](NHSD.GPITF.BuyingCatalog.Interfaces.IClaimsInfoProvider.yml)
 
 # Search
+<H1>Search</H1>
+
   - [IKeywordSearchHistoryDatastore](NHSD.GPITF.BuyingCatalog.Interfaces.IKeywordSearchHistoryDatastore.yml)
 
 # Linking Entities

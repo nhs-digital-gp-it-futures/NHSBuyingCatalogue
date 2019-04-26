@@ -30,6 +30,8 @@
  - [ClaimBlobInfoMap](NHSD.GPITF.BuyingCatalog.Models.ClaimBlobInfoMap.yml)
 
 # Search
+<H1>Search</H1>
+
  - [KeywordCount](NHSD.GPITF.BuyingCatalog.Models.KeywordCount.yml)
  - [KeywordSearchHistory](NHSD.GPITF.BuyingCatalog.Models.KeywordSearchHistory.yml)
  - [SearchResult](NHSD.GPITF.BuyingCatalog.Models.Porcelain.SearchResult.yml)
