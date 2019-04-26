@@ -41,6 +41,14 @@
           "toc.yml",
           "*.md"
         ]
+      },
+      {
+        "files":
+        [
+          "README.md"
+        ],
+        "src": "../../../",
+        "dest": "articles"
       }
     ],
     "resource":
