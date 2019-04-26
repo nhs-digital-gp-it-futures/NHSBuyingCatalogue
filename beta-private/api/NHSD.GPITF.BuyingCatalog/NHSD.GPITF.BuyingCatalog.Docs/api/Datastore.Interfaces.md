@@ -35,6 +35,7 @@ Binary data (blob) storage is also pluggable and the following implementations a
   - [IEvidenceBlobStoreDatastore](NHSD.GPITF.BuyingCatalog.Interfaces.IEvidenceBlobStoreDatastore.yml)
   - [ICapabilitiesImplementedEvidenceDatastore](NHSD.GPITF.BuyingCatalog.Interfaces.ICapabilitiesImplementedEvidenceDatastore.yml)
   - [IStandardsApplicableEvidenceDatastore](NHSD.GPITF.BuyingCatalog.Interfaces.IStandardsApplicableEvidenceDatastore.yml)
+  - [IClaimsInfoProvider](NHSD.GPITF.BuyingCatalog.Interfaces.IClaimsInfoProvider.yml)
 
 # Search
   - [IKeywordSearchHistoryDatastore](NHSD.GPITF.BuyingCatalog.Interfaces.IKeywordSearchHistoryDatastore.yml)
