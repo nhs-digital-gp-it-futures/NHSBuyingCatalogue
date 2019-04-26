@@ -54,3 +54,6 @@
 
 ![BuyingCatalog-Standards-Compliance-Life-Cycle](/images/BuyingCatalog-Standards-Compliance-Life-Cycle.png "BuyingCatalog-Standards-Compliance-Life-Cycle")
  - [StandardsApplicableStatus](NHSD.GPITF.BuyingCatalog.Models.StandardsApplicableStatus.yml)
+
+![BuyingCatalog-Solution-Page-Life-Cycle](/images/BuyingCatalog-Solution-Page-Life-Cycle.png "BuyingCatalog-Solution-Page-Life-Cycle")
+ 
