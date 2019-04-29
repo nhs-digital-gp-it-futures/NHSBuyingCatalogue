@@ -58,7 +58,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
       var capEvidenc = _logic.ByClaim(claimId);
       var retval = PaginatedList<IEnumerable<StandardsApplicableEvidence>>.Create(capEvidenc, pageIndex, pageSize);
 
-      return new OkObjectResult(capEvidenc);
+      return new OkObjectResult(retval);
     }
 
     /// <summary>

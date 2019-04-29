@@ -55,7 +55,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
       {
       var logs = _logic.Get(startDate ?? DateTime.Now.AddYears(-10), endDate ?? DateTime.Now.AddYears(10));
       var retval = PaginatedList<KeywordCount>.Create(logs, pageIndex, pageSize);
-      return logs.Count() > 0 ? (IActionResult)new OkObjectResult(retval) : new NotFoundResult();
+      return logs.Any() ? (IActionResult)new OkObjectResult(retval) : new NotFoundResult();
       }
       catch (Exception)
       {
