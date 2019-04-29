@@ -31,12 +31,12 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       });
     }
 
-    public Organisations ById(string id)
+    public Organisations ById(string organisationId)
     {
       return GetInternal(() =>
       {
         var val = _crmDatastore
-          .ById(id);
+          .ById(organisationId);
 
         return Creator.FromCrm(val);
       });
