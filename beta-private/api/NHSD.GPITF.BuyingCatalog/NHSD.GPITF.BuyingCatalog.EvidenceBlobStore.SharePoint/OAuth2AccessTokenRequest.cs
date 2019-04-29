@@ -8,7 +8,7 @@ namespace SharePointPnP.IdentityModel.Extensions.S2S.Protocols.OAuth2
 {
   public sealed class OAuth2AccessTokenRequest : OAuth2Message
   {
-    public static StringCollection TokenResponseParameters = GetTokenResponseParameters();
+    private static readonly StringCollection TokenResponseParameters = GetTokenResponseParameters();
 
     public string Password
     {
