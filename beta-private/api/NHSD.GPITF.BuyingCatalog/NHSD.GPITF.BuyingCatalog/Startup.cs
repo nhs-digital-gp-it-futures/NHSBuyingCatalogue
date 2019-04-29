@@ -264,8 +264,10 @@ namespace NHSD.GPITF.BuyingCatalog
         // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
         app.UseSwaggerUI(opts =>
         {
+#pragma warning disable S1075 // URIs should not be hardcoded
           opts.SwaggerEndpoint("/swagger/v1/swagger.json", "Buying Catalog API V1");
           opts.SwaggerEndpoint("/swagger/porcelain/swagger.json", "Buying Catalog API V1 Porcelain");
+#pragma warning restore S1075 // URIs should not be hardcoded
 
           opts.DocExpansion(DocExpansion.None);
         });
