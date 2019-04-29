@@ -6,8 +6,12 @@ using System.Runtime.Loader;
 namespace NHSD.GPITF.BuyingCatalog
 {
 #pragma warning disable CS1591
-  public static class Program
+  public sealed class Program
   {
+    private Program()
+    {
+    }
+
     public static void Main(string[] args)
     {
       // THIS IS THE MAGIC!
