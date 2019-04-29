@@ -21,7 +21,7 @@ class SharePointProvider {
     this.uuidGenerator = uuidGenerator
     this.av = antivirusProvider
 
-    this.whiteList = whitelist || WHITELIST
+    this.whitelist = whitelist || WHITELIST
 
     this.TIMEOUT = 1200000
     this.capBlobStoreApi.timeout = this.TIMEOUT
