@@ -3,7 +3,7 @@
   /// <summary>
   /// Status of a solution as it goes through various stages in its life cycle
   /// </summary>
-  public enum SolutionStatus : int
+  public enum SolutionStatus
   {
     /// <summary>
     /// <see cref="Solutions"/> has reached an end point
