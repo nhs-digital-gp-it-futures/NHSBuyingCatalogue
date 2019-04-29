@@ -3,6 +3,7 @@ using System.Net;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
+#pragma warning disable S3925 // "ISerializable" should be implemented correctly
   public sealed class HttpResponseException : Exception
   {
     public HttpStatusCode StatusCode { get; }
@@ -13,4 +14,5 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       StatusCode = statusCode;
     }
   }
+#pragma warning restore S3925 // "ISerializable" should be implemented correctly
 }
