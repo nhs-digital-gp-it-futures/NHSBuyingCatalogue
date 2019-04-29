@@ -119,7 +119,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       return vals;
     }
 
-    protected override IEnumerable<Solutions> GetAllFromSource(string path, string parameter)
+    protected override IEnumerable<Solutions> GetAllFromSource(string path, string parameter = null)
     {
       if (path == GetCachePathByOrganisation(parameter))
       {
@@ -152,7 +152,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 
     public override void ExpireOtherValue(object item)
     {
-      if (item as SolutionEx != null)
+#pragma warning disable S3247 // Duplicate casts should not be made
+      if (item is SolutionEx)
+#pragma warning restore S3247 // Duplicate casts should not be made
       {
         ExpireCache(((SolutionEx)item).Solution);
         return;
