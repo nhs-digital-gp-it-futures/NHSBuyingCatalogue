@@ -11,7 +11,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     protected readonly IHttpContextAccessor _context;
     protected readonly ILogger<ValidatorBase<T>> _logger;
 
-    public ValidatorBase(
+    protected ValidatorBase(
       IHttpContextAccessor context,
       ILogger<ValidatorBase<T>> logger)
     {

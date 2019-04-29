@@ -10,7 +10,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     protected readonly ILogger<CrmDatastoreBase<T>> _logger;
     private readonly ISyncPolicy _policy;
 
-    public CrmDatastoreBase(
+    protected CrmDatastoreBase(
       ILogger<CrmDatastoreBase<T>> logger,
       ISyncPolicyFactory policy)
     {

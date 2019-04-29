@@ -10,7 +10,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     private readonly IHttpContextAccessor _context;
     private readonly IContactsDatastore _contacts;
 
-    public ReviewsBaseModifier(
+    protected ReviewsBaseModifier(
       IHttpContextAccessor context,
       IContactsDatastore contacts)
     {

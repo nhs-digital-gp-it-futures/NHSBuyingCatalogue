@@ -19,7 +19,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     protected readonly IStandardsDatastore _standardsDatastore;
     protected readonly IEvidenceBlobStoreValidator _validator;
 
-    public EvidenceBlobStoreLogic(
+    protected EvidenceBlobStoreLogic(
       IEvidenceBlobStoreDatastore evidenceBlobStoreDatastore,
       ISolutionsDatastore solutionsDatastore,
       ICapabilitiesImplementedDatastore capabilitiesImplementedDatastore,

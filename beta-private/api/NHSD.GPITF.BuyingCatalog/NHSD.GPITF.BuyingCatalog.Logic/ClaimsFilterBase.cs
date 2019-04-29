@@ -8,7 +8,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   {
     private readonly ISolutionsDatastore _solutionDatastore;
 
-    public ClaimsFilterBase(
+    protected ClaimsFilterBase(
       IHttpContextAccessor context,
       ISolutionsDatastore solutionDatastore) :
       base(context)

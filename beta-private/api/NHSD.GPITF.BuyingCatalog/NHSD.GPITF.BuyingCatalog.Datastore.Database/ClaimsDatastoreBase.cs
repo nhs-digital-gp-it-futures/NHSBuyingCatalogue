@@ -10,7 +10,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 {
   public abstract class ClaimsDatastoreBase<T> : DatastoreBase<T>, IClaimsDatastore<ClaimsBase> where T : ClaimsBase
   {
-    public ClaimsDatastoreBase(
+    protected ClaimsDatastoreBase(
       IDbConnectionFactory dbConnectionFactory,
       ILogger<ClaimsDatastoreBase<T>> logger,
       ISyncPolicyFactory policy) :

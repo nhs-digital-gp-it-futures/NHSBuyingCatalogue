@@ -14,7 +14,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     private readonly IClaimsDatastore<ClaimsBase> _claimDatastore;
     private readonly ISolutionsDatastore _solutionDatastore;
 
-    public EvidenceValidatorBase(
+    protected EvidenceValidatorBase(
       IEvidenceDatastore<T> evidenceDatastore,
       IClaimsDatastore<ClaimsBase> claimDatastore,
       ISolutionsDatastore solutionDatastore,

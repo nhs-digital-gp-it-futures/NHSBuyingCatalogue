@@ -13,7 +13,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     protected readonly IContactsDatastore _contactsDatastore;
     protected readonly ISolutionsDatastore _solutionsDatastore;
 
-    public ClaimsValidatorBase(
+    protected ClaimsValidatorBase(
       IHttpContextAccessor context,
       ILogger<ClaimsValidatorBase<T>> logger,
       IClaimsDatastore<T> claimDatastore,

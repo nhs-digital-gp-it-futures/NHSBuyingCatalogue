@@ -7,7 +7,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
   public abstract class ClaimsDatastoreBase<T> : CrmDatastoreBase<T>, IClaimsDatastore<ClaimsBase> where T : ClaimsBase
   {
-    public ClaimsDatastoreBase(
+    protected ClaimsDatastoreBase(
       ILogger<CrmDatastoreBase<T>> logger,
       ISyncPolicyFactory policy) :
       base(logger, policy)
