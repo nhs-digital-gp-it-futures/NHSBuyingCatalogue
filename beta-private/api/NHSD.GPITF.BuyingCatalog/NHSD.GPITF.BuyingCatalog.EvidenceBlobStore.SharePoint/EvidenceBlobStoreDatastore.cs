@@ -627,7 +627,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 
     private static string CleanupFileName(string fileName)
     {
-      // Special Characters Not Allowed: ~ " # % & * : < > ? / \ { | }
+      /// Special Characters Not Allowed: ~ " # % & * : < > ? / \ { | }
       if (!string.IsNullOrEmpty(fileName))
       {
         // Regex to Replace the Special Character
