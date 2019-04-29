@@ -3,7 +3,7 @@ using NHSD.GPITF.BuyingCatalog.Models;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
-  public interface IReviewsValidator<T> : IValidatorBase<T> where T : ReviewsBase
+  public interface IReviewsValidator<in T> : IValidatorBase<T> where T : ReviewsBase
   {
   }
 }
