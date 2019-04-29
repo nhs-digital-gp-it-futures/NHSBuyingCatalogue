@@ -32,8 +32,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
     {
       return GetInternal(() =>
       {
-        var other = _serviceProvider.GetService<ISolutionsDatastore>();
-
         return GetFromCache(GetCachePathBySolution(solutionId), solutionId);
       });
     }
@@ -106,7 +104,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
 
     public override void ExpireOtherValue(object item)
     {
-      if (item as Solutions != null)
+#pragma warning disable S3247 // Duplicate casts should not be made
+      if (item is Solutions)
+#pragma warning restore S3247 // Duplicate casts should not be made
       {
         ExpireCache((Solutions)item);
         return;
