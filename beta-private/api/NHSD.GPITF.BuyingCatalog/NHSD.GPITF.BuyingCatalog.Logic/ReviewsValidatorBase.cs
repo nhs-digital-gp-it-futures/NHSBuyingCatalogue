@@ -79,7 +79,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .Must(x =>
         {
           var prevReview = _reviewsDatastore.ById(x.PreviousId);
-          var prevEvidence = _evidenceDatastore.ById(prevReview.EvidenceId);
           return x.EvidenceId == prevReview.EvidenceId;
         })
         .When(x => !string.IsNullOrEmpty(x.PreviousId))
