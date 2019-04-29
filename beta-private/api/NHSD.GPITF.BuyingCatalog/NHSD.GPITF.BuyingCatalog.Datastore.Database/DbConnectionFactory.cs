@@ -26,7 +26,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
       // HACK:  workaround for PostgreSql which puts table+column names in lower case
       if (dbType == DataAccessProviderTypes.PostgreSql)
       {
+#pragma warning disable S2696 // Instance members should not write to "static" fields
         SqlMapperExtensions.TableNameMapper = LowerCaseTableNameMapper;
+#pragma warning restore S2696 // Instance members should not write to "static" fields
       }
 
       var dbFact = DbProviderFactoryUtils.GetDbProviderFactory(dbType);
