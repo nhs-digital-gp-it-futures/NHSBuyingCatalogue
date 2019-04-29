@@ -10,8 +10,8 @@ namespace NHSD.GPITF.BuyingCatalog.Models
   /// <typeparam name="T">type of objects in list</typeparam>
   public sealed class PaginatedList<T>
   {
-    static private int DefaultPageIndex = 1;
-    static private int DefaultPageSize = 20;
+    private const int DefaultPageIndex = 1;
+    private const int DefaultPageSize = 20;
 
     /// <summary>
     /// 1-based index of which page this page
