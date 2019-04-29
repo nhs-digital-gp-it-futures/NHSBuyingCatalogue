@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1556283748887" clover="3.2.0">
-  <project timestamp="1556283748887" name="All files">
-    <metrics statements="295" coveredstatements="202" conditionals="70" coveredconditionals="51" methods="110" coveredmethods="65" elements="475" coveredelements="318" complexity="0" loc="295" ncloc="295" packages="6" files="9" classes="9"/>
+<coverage generated="1556289256807" clover="3.2.0">
+  <project timestamp="1556289256807" name="All files">
+    <metrics statements="292" coveredstatements="202" conditionals="70" coveredconditionals="51" methods="109" coveredmethods="65" elements="471" coveredelements="318" complexity="0" loc="292" ncloc="292" packages="6" files="9" classes="9"/>
     <package name="catalogue-antivirus">
       <metrics statements="3" coveredstatements="3" conditionals="4" coveredconditionals="2" methods="0" coveredmethods="0"/>
       <file name="index.js" path="/home/adam/github/nhsd/NHSBuyingCatalogue/beta-private/frontend/lib/catalogue-antivirus/index.js">
@@ -214,7 +214,7 @@
       </file>
     </package>
     <package name="catalogue-sharepoint.providers">
-      <metrics statements="120" coveredstatements="66" conditionals="27" coveredconditionals="14" methods="45" coveredmethods="19"/>
+      <metrics statements="117" coveredstatements="66" conditionals="27" coveredconditionals="14" methods="44" coveredmethods="19"/>
       <file name="RealSharePointProvider.js" path="/home/adam/github/nhsd/NHSBuyingCatalogue/beta-private/frontend/lib/catalogue-sharepoint/providers/RealSharePointProvider.js">
         <metrics statements="5" coveredstatements="4" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="1"/>
         <line num="1" count="1" type="stmt"/>
@@ -224,7 +224,7 @@
         <line num="16" count="1" type="stmt"/>
       </file>
       <file name="SharePointProvider.js" path="/home/adam/github/nhsd/NHSBuyingCatalogue/beta-private/frontend/lib/catalogue-sharepoint/providers/SharePointProvider.js">
-        <metrics statements="115" coveredstatements="62" conditionals="25" coveredconditionals="12" methods="43" coveredmethods="18"/>
+        <metrics statements="112" coveredstatements="62" conditionals="25" coveredconditionals="12" methods="42" coveredmethods="18"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -336,10 +336,7 @@
         <line num="294" count="0" type="stmt"/>
         <line num="295" count="0" type="stmt"/>
         <line num="302" count="0" type="stmt"/>
-        <line num="318" count="0" type="stmt"/>
-        <line num="319" count="0" type="stmt"/>
-        <line num="321" count="0" type="stmt"/>
-        <line num="347" count="1" type="stmt"/>
+        <line num="348" count="1" type="stmt"/>
       </file>
     </package>
   </project>

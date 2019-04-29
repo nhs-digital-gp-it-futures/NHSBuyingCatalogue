@@ -8,7 +8,7 @@ const INTERMEDIATE_STORAGE = process.env.UPLOAD_TEMP_FILE_STORE || os.tmpdir()
 const mmm = require('mmmagic')
 const Magic = mmm.Magic
 
-const WHITELIST = require('../data/whitelist')
+const WHITELIST = require('./whitelist.json')
 
 const { antivirusProvider } = require('catalogue-antivirus')
 
