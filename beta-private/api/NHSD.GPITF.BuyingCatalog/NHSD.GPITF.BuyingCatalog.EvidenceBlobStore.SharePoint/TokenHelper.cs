@@ -9,6 +9,10 @@ using System.Net;
 
 namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 {
+#pragma warning disable S1075 // URIs should not be hardcoded
+#pragma warning disable S1117 // Local variables should not shadow class fields
+#pragma warning disable S108 // Nested blocks of code should not be left empty
+
   public static class TokenHelper
   {
     #region Properties
@@ -279,4 +283,8 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       return string.Format(CultureInfo.InvariantCulture, "{0}@{1}", principalName, realm);
     }
   }
+
+#pragma warning restore S108 // Nested blocks of code should not be left empty
+#pragma warning restore S1117 // Local variables should not shadow class fields
+#pragma warning restore S1075 // URIs should not be hardcoded
 }

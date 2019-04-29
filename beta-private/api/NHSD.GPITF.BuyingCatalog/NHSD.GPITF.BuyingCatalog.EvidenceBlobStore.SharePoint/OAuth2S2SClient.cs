@@ -4,6 +4,8 @@ using System.Net;
 
 namespace SharePointPnP.IdentityModel.Extensions.S2S.Protocols.OAuth2
 {
+#pragma warning disable S112 // General exceptions should never be thrown
+
   public sealed class OAuth2S2SClient
   {
     public OAuth2Message Issue(string securityTokenServiceUrl, OAuth2AccessTokenRequest oauth2Request)
@@ -23,4 +25,6 @@ namespace SharePointPnP.IdentityModel.Extensions.S2S.Protocols.OAuth2
       return result;
     }
   }
+
+#pragma warning restore S112 // General exceptions should never be thrown
 }

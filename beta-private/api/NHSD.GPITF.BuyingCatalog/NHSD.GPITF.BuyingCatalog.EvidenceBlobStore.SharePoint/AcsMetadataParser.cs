@@ -9,6 +9,10 @@ using System.Text;
 
 namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
 {
+#pragma warning disable S1144 // Unused private types or members should be removed
+#pragma warning disable S112 // General exceptions should never be thrown
+#pragma warning disable S3459 // Unassigned members should be removed
+
   // This class is used to get MetaData document from the global STS endpoint. It contains
   // methods to parse the MetaData document and get endpoints and STS certificate.
   public static class AcsMetadataParser
@@ -137,4 +141,8 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     }
     #endregion
   }
+
+#pragma warning restore S3459 // Unassigned members should be removed
+#pragma warning restore S112 // General exceptions should never be thrown
+#pragma warning restore S1144 // Unused private types or members should be removed
 }
