@@ -42,7 +42,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       });
     }
 
-    protected override IEnumerable<Organisations> GetAllFromSource(string path, string parameter)
+    protected override IEnumerable<Organisations> GetAllFromSource(string path, string parameter = null)
     {
       throw new NotImplementedException();
     }
