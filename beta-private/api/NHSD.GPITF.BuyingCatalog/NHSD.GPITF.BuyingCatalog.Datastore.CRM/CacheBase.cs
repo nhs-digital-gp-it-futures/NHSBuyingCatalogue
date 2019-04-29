@@ -20,7 +20,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       _policy = policy.Build(logger);
 
+#pragma warning disable S1699 // Constructors should only call non-overridable methods
       _expiry = GetCacheExpiry(config);
+#pragma warning restore S1699 // Constructors should only call non-overridable methods
 
       var cacheHost = Settings.CACHE_HOST(config);
       var cfg = new ConfigurationOptions
