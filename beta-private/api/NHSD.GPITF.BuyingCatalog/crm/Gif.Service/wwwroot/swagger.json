@@ -408,7 +408,7 @@
         } ]
       }
     },
-	"/api/CapabilitiesImplementedEvidence/ById/{id}" : {
+  "/api/CapabilitiesImplementedEvidence/ById/{id}" : {
       "get" : {
         "tags" : [ "CapabilitiesImplementedEvidence" ],
         "summary" : "Get a CapabilityImplemented record by evidence Id",
@@ -513,7 +513,7 @@
         } ]
       }
     },
-	"/api/CapabilitiesImplementedReviews/ById/{reviewId}" : {
+  "/api/CapabilitiesImplementedReviews/ById/{reviewId}" : {
       "get" : {
         "tags" : [ "CapabilitiesImplementedReviews" ],
         "summary" : "Get the CapabilityImplemented record for a given review id.",
@@ -1170,7 +1170,7 @@
           "Bearer" : [ ]
         } ]
       },
-	  "delete" : {
+    "delete" : {
         "tags" : [ "Solutions" ],
         "summary" : "Delete an existing solution (will cascade delete to child entities)",
         "operationId" : "ApiSolutionsDelete",
@@ -1198,7 +1198,7 @@
         } ]
       }
     },
-	"/api/porcelain/SolutionsEx/BySolution/{solutionId}" : {
+  "/api/porcelain/SolutionsEx/BySolution/{solutionId}" : {
       "get" : {
         "tags" : [ "SolutionsEx" ],
         "summary" : "Get a Solution with a list of corresponding TechnicalContact, ClaimedCapability, ClaimedStandard et al",
@@ -1210,7 +1210,7 @@
           "in" : "path",
           "description" : "Id of the solution to retrieve.",
           "required" : true,
-		  "type" : "string"
+      "type" : "string"
         } ],
         "responses" : {
           "200" : {
@@ -1662,7 +1662,7 @@
         } ]
       }
     },
-	"/api/StandardsApplicableEvidence/ById/{Id}" : {
+  "/api/StandardsApplicableEvidence/ById/{Id}" : {
       "get" : {
         "tags" : [ "StandardsApplicableEvidence" ],
         "summary" : "Get the standard applicable record by evidence.",
@@ -1767,7 +1767,7 @@
         } ]
       }
     },
-	"/api/StandardsApplicableReviews/ById/{reviewId}" : {
+  "/api/StandardsApplicableReviews/ById/{reviewId}" : {
       "get" : {
         "tags" : [ "StandardsApplicableReviews" ],
         "summary" : "Retrieve StandardsApplicable record for a given review id.",

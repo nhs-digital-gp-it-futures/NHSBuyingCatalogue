@@ -204,7 +204,7 @@ namespace Gif.Service
         .UseSwaggerUI(c =>
         {
           //TODO: Either use the SwaggerGen generated Swagger contract (generated from C# classes)
-          c.SwaggerEndpoint("/spec.json", "Buying Catalog API");
+          c.SwaggerEndpoint("/swagger.json", "Buying Catalog API");
 
           //TODO: Or alternatively use the original Swagger contract that's included in the static files
           // c.SwaggerEndpoint("/swagger-original.json", "Buying Catalog API Original");
