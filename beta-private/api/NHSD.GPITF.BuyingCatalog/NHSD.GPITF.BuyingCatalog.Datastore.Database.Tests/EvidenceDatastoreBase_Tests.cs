@@ -5,6 +5,8 @@ using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NUnit.Framework;
+using System.Data;
+using System.Reflection;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Tests
 {
@@ -37,6 +39,20 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Tests
       var implInt = obj as IEvidenceDatastore<EvidenceBase>;
 
       implInt.Should().NotBeNull();
+    }
+
+    [Test]
+    public void GetSqlCurrent_ContainsAllPublicProperties()
+    {
+      const string TableName = "Evidence";
+
+      var props = typeof(EvidenceBase).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+      var sqlCurrent = DummyEvidenceDatastoreBase.GetSqlCurrent(TableName);
+
+      foreach (var prop in props)
+      {
+        sqlCurrent.Should().Contain($"{TableName}.{prop.Name}");
+      }
     }
   }
 }

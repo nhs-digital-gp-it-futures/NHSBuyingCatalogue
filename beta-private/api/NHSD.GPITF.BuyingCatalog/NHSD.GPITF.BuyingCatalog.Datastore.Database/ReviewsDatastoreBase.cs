@@ -36,38 +36,7 @@ EvidenceId = @evidenceId
         var allCurrent = _dbConnection.Value.Query<T>(sqlAllCurrent, new { evidenceId });
         foreach (var current in allCurrent)
         {
-          var sqlCurrent = $@"
--- get all previous versions from a specified (CurrentId) version
-with recursive Links(CurrentId, Id, PreviousId, EvidenceId, CreatedById, CreatedOn, OriginalDate, Message) as (
-  select
-    Id, Id, PreviousId, EvidenceId, CreatedById, CreatedOn, OriginalDate, Message
-  from {table.Name}
-  where PreviousId is null
-  
-  union all
-  select
-    Id, Id, PreviousId, EvidenceId, CreatedById, CreatedOn, OriginalDate, Message
-  from {table.Name} 
-  where PreviousId is not null
-  
-  union all
-  select
-    Links.CurrentId,
-    {table.Name}.Id,
-    {table.Name}.PreviousId,
-    {table.Name}.EvidenceId,
-    {table.Name}.CreatedById,
-    {table.Name}.CreatedOn,
-    {table.Name}.OriginalDate,
-    {table.Name}.Message
-  from Links
-  join {table.Name}
-  on Links.PreviousId = {table.Name}.Id
-)
-  select Links.Id, Links.PreviousId, Links.EvidenceId, Links.CreatedById, Links.CreatedOn, Links.OriginalDate, Links.Message
-  from Links
-  where CurrentId = @currentId;
-";
+          var sqlCurrent = GetSqlCurrent(table.Name);
           var amendedSql = AmendCommonTableExpression(sqlCurrent);
           var chain = _dbConnection.Value.Query<T>(amendedSql, new { currentId = current.Id });
           chains.Add(chain);
@@ -75,6 +44,43 @@ with recursive Links(CurrentId, Id, PreviousId, EvidenceId, CreatedById, Created
 
         return chains;
       });
+    }
+
+    public static string GetSqlCurrent(string tableName)
+    {
+      return
+$@"
+-- get all previous versions from a specified (CurrentId) version
+with recursive Links(CurrentId, Id, PreviousId, EvidenceId, CreatedById, CreatedOn, OriginalDate, Message) as (
+  select
+    Id, Id, PreviousId, EvidenceId, CreatedById, CreatedOn, OriginalDate, Message
+  from {tableName}
+  where PreviousId is null
+  
+  union all
+  select
+    Id, Id, PreviousId, EvidenceId, CreatedById, CreatedOn, OriginalDate, Message
+  from {tableName} 
+  where PreviousId is not null
+  
+  union all
+  select
+    Links.CurrentId,
+    {tableName}.Id,
+    {tableName}.PreviousId,
+    {tableName}.EvidenceId,
+    {tableName}.CreatedById,
+    {tableName}.CreatedOn,
+    {tableName}.OriginalDate,
+    {tableName}.Message
+  from Links
+  join {tableName}
+  on Links.PreviousId = {tableName}.Id
+)
+  select Links.Id, Links.PreviousId, Links.EvidenceId, Links.CreatedById, Links.CreatedOn, Links.OriginalDate, Links.Message
+  from Links
+  where CurrentId = @currentId;
+";
     }
 
     public T ById(string id)

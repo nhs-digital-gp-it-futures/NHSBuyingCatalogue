@@ -44,40 +44,7 @@ ClaimId = @claimId
         var allCurrent = _dbConnection.Value.Query<T>(sqlAllCurrent, new { claimId });
         foreach (var current in allCurrent)
         {
-          var sqlCurrent = $@"
--- get all previous versions from a specified (CurrentId) version
-with recursive Links(CurrentId, Id, PreviousId, ClaimId, CreatedById, CreatedOn, OriginalDate, Evidence, HasRequestedLiveDemo, BlobId) as (
-  select
-    Id, Id, PreviousId, ClaimId, CreatedById, CreatedOn, OriginalDate, Evidence, HasRequestedLiveDemo, BlobId
-  from {table.Name}
-  where PreviousId is null
-  
-  union all
-  select
-    Id, Id, PreviousId, ClaimId, CreatedById, CreatedOn, OriginalDate, Evidence, HasRequestedLiveDemo, BlobId
-  from {table.Name} 
-  where PreviousId is not null
-  
-  union all
-  select
-    Links.CurrentId,
-    {table.Name}.Id,
-    {table.Name}.PreviousId,
-    {table.Name}.ClaimId,
-    {table.Name}.CreatedById,
-    {table.Name}.CreatedOn,
-    {table.Name}.OriginalDate,
-    {table.Name}.Evidence,
-    {table.Name}.HasRequestedLiveDemo,
-    {table.Name}.BlobId
-  from Links
-  join {table.Name}
-  on Links.PreviousId = {table.Name}.Id
-)
-  select Links.Id, Links.PreviousId, Links.ClaimId, Links.CreatedById, Links.CreatedOn, Links.OriginalDate, Links.Evidence, Links.HasRequestedLiveDemo, Links.BlobId
-  from Links
-  where CurrentId = @currentId;
-";
+          var sqlCurrent = GetSqlCurrent(table.Name);
           var amendedSql = AmendCommonTableExpression(sqlCurrent);
           var chain = _dbConnection.Value.Query<T>(amendedSql, new { currentId = current.Id });
           chains.Add(chain);
@@ -85,6 +52,45 @@ with recursive Links(CurrentId, Id, PreviousId, ClaimId, CreatedById, CreatedOn,
 
         return chains;
       });
+    }
+
+    public static string GetSqlCurrent(string tableName)
+    {
+      return
+ $@"
+-- get all previous versions from a specified (CurrentId) version
+with recursive Links(CurrentId, Id, PreviousId, ClaimId, CreatedById, CreatedOn, OriginalDate, Evidence, HasRequestedLiveDemo, BlobId) as (
+  select
+    Id, Id, PreviousId, ClaimId, CreatedById, CreatedOn, OriginalDate, Evidence, HasRequestedLiveDemo, BlobId
+  from {tableName}
+  where PreviousId is null
+  
+  union all
+  select
+    Id, Id, PreviousId, ClaimId, CreatedById, CreatedOn, OriginalDate, Evidence, HasRequestedLiveDemo, BlobId
+  from {tableName} 
+  where PreviousId is not null
+  
+  union all
+  select
+    Links.CurrentId,
+    {tableName}.Id,
+    {tableName}.PreviousId,
+    {tableName}.ClaimId,
+    {tableName}.CreatedById,
+    {tableName}.CreatedOn,
+    {tableName}.OriginalDate,
+    {tableName}.Evidence,
+    {tableName}.HasRequestedLiveDemo,
+    {tableName}.BlobId
+  from Links
+  join {tableName}
+  on Links.PreviousId = {tableName}.Id
+)
+  select Links.Id, Links.PreviousId, Links.ClaimId, Links.CreatedById, Links.CreatedOn, Links.OriginalDate, Links.Evidence, Links.HasRequestedLiveDemo, Links.BlobId
+  from Links
+  where CurrentId = @currentId;
+";
     }
 
     public T Create(T evidence)
