@@ -14,7 +14,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     private readonly IEvidenceValidator<T> _validator;
     private readonly IEvidenceFilter<IEnumerable<T>> _filter;
 
-    public EvidenceLogicBase(
+    protected EvidenceLogicBase(
       IEvidenceBaseModifier<T> modifier,
       IEvidenceDatastore<T> datastore,
       IContactsDatastore contacts,

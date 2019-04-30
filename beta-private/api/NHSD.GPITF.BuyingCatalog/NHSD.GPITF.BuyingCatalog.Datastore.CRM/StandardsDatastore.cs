@@ -80,7 +80,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       throw new System.NotImplementedException();
     }
 
-    protected override IEnumerable<Standards> GetAllFromSource(string path, string parameter)
+    protected override IEnumerable<Standards> GetAllFromSource(string path, string parameter = null)
     {
       var vals = _crmDatastore
         .GetAll()

@@ -10,19 +10,19 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
   public abstract class CacheBase : ICache
   {
     private readonly TimeSpan _expiry;
-    private readonly ILogger<CacheBase> _logger;
     private readonly ISyncPolicy _policy;
     private readonly ConnectionMultiplexer _redis;
 
-    public CacheBase(
+    protected CacheBase(
       IConfiguration config,
       ILogger<CacheBase> logger,
       ISyncPolicyFactory policy)
     {
-      _logger = logger;
-      _policy = policy.Build(_logger);
+      _policy = policy.Build(logger);
 
+#pragma warning disable S1699 // Constructors should only call non-overridable methods
       _expiry = GetCacheExpiry(config);
+#pragma warning restore S1699 // Constructors should only call non-overridable methods
 
       var cacheHost = Settings.CACHE_HOST(config);
       var cfg = new ConfigurationOptions

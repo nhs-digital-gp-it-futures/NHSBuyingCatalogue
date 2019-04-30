@@ -31,7 +31,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       });
     }
 
-    protected override IEnumerable<CapabilityStandard> GetAllFromSource(string path, string parameter)
+    protected override IEnumerable<CapabilityStandard> GetAllFromSource(string path, string parameter = null)
     {
       var vals = _crmDatastore
         .GetAll()

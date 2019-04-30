@@ -15,7 +15,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     private readonly IClaimsDatastore<ClaimsBase> _claimDatastore;
     private readonly ISolutionsDatastore _solutionDatastore;
 
-    public ReviewsValidatorBase(
+    protected ReviewsValidatorBase(
       IReviewsDatastore<ReviewsBase> reviewsDatastore,
       IEvidenceDatastore<EvidenceBase> evidenceDatastore,
       IClaimsDatastore<ClaimsBase> claimDatastore,
@@ -79,7 +79,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         .Must(x =>
         {
           var prevReview = _reviewsDatastore.ById(x.PreviousId);
-          var prevEvidence = _evidenceDatastore.ById(prevReview.EvidenceId);
           return x.EvidenceId == prevReview.EvidenceId;
         })
         .When(x => !string.IsNullOrEmpty(x.PreviousId))

@@ -18,7 +18,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     protected readonly ILogger<DatastoreBase<T>> _logger;
     private readonly ISyncPolicy _policy;
 
-    public DatastoreBase(IDbConnectionFactory dbConnectionFactory, ILogger<DatastoreBase<T>> logger, ISyncPolicyFactory policy)
+    protected DatastoreBase(IDbConnectionFactory dbConnectionFactory, ILogger<DatastoreBase<T>> logger, ISyncPolicyFactory policy)
     {
       _dbConnection = new Lazy<IDbConnection>(() => dbConnectionFactory.Get());
       _logger = logger;

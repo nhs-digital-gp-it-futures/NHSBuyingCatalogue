@@ -11,7 +11,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 {
   public abstract class EvidenceDatastoreBase<T> : CommonTableExpressionDatastoreBase<T>, IEvidenceDatastore<EvidenceBase> where T : EvidenceBase
   {
-    public EvidenceDatastoreBase(
+    protected EvidenceDatastoreBase(
       IDbConnectionFactory dbConnectionFactory,
       ILogger<EvidenceDatastoreBase<T>> logger,
       ISyncPolicyFactory policy) :

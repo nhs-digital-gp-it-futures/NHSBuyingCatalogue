@@ -11,7 +11,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     private readonly bool _logCRM;
     private readonly ICache _cache;
 
-    public CachedDatastoreBase(
+    protected CachedDatastoreBase(
       ILogger<CrmDatastoreBase<T>> logger,
       ISyncPolicyFactory policy,
       IConfiguration config,

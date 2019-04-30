@@ -6,7 +6,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
   public abstract class LongTermCachedDatastore<T> : CachedDatastoreBase<T>
   {
-    public LongTermCachedDatastore(
+    protected LongTermCachedDatastore(
       ILogger<CrmDatastoreBase<T>> logger,
       ISyncPolicyFactory policy,
       IConfiguration config,

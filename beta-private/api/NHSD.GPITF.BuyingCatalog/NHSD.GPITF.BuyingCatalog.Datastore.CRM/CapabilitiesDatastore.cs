@@ -81,7 +81,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       throw new NotImplementedException();
     }
 
-    protected override IEnumerable<Capabilities> GetAllFromSource(string path, string parameter)
+    protected override IEnumerable<Capabilities> GetAllFromSource(string path, string parameter = null)
     {
       var vals = _crmDatastore
         .GetAll()

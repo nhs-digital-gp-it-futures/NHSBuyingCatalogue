@@ -6,7 +6,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   {
     protected readonly IHttpContextAccessor Context;
 
-    public LogicBase(IHttpContextAccessor context)
+    protected LogicBase(IHttpContextAccessor context)
     {
       Context = context;
     }

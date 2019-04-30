@@ -57,7 +57,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     {
       var evidence = _logic.ByClaim(claimId);
       var retval = PaginatedList<IEnumerable<CapabilitiesImplementedEvidence>>.Create(evidence, pageIndex, pageSize);
-      return evidence.Count() > 0 ? (IActionResult)new OkObjectResult(evidence) : new NotFoundResult();
+      return evidence.Any() ? (IActionResult)new OkObjectResult(retval) : new NotFoundResult();
     }
 
     /// <summary>

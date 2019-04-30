@@ -11,7 +11,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 {
   public abstract class ReviewsDatastoreBase<T> : CommonTableExpressionDatastoreBase<T>, IReviewsDatastore<ReviewsBase> where T : ReviewsBase
   {
-    public ReviewsDatastoreBase(
+    protected ReviewsDatastoreBase(
       IDbConnectionFactory dbConnectionFactory,
       ILogger<ReviewsDatastoreBase<T>> logger,
       ISyncPolicyFactory policy) :

@@ -7,7 +7,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
   public abstract class EvidenceDatastoreBase<T> : CrmDatastoreBase<T>, IEvidenceDatastore<EvidenceBase> where T : EvidenceBase
   {
-    public EvidenceDatastoreBase(
+    protected EvidenceDatastoreBase(
       ILogger<CrmDatastoreBase<T>> logger,
       ISyncPolicyFactory policy) :
       base(logger, policy)

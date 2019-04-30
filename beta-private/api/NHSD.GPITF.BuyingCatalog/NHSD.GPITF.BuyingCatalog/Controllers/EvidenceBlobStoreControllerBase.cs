@@ -13,7 +13,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
   {
     protected readonly IEvidenceBlobStoreLogic _logic;
 
-    public EvidenceBlobStoreControllerBase(IEvidenceBlobStoreLogic logic)
+    protected EvidenceBlobStoreControllerBase(IEvidenceBlobStoreLogic logic)
     {
       _logic = logic;
     }

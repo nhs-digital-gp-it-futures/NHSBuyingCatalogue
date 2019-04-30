@@ -371,7 +371,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       var oldNotNew = oldItems.Except(newItems, comparer).ToList();
 
       if (newNotOld.Any() &&
-        newNotOld.Count() > oldNotNew.Count() &&
+        newNotOld.Count > oldNotNew.Count &&
         IsPendingForReview(newSolnStatus))
       {
         // added

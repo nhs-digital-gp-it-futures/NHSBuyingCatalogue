@@ -10,20 +10,18 @@ namespace NHSD.GPITF.BuyingCatalog.Models
   /// <typeparam name="T">type of objects in list</typeparam>
   public sealed class PaginatedList<T>
   {
-    static private int DefaultPageIndex = 1;
-    static private int DefaultPageSize = 20;
+    private const int DefaultPageIndex = 1;
+    private const int DefaultPageSize = 20;
 
     /// <summary>
     /// 1-based index of which page this page
     /// Defaults to 1
     /// </summary>
-    // TODO   should not be nullable
     public int? PageIndex { get; set; }
 
     /// <summary>
     /// Total number of pages based on <see cref="PageSize"/>
     /// </summary>
-    // TODO   should not be nullable
     public int? TotalPages { get; set; }
 
     /// <summary>
@@ -40,7 +38,6 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     /// <summary>
     /// public constructor required for JSON deserialisation
     /// </summary>
-    // TODO   should be removed - use Create()
     public PaginatedList()
     {
     }

@@ -3,7 +3,7 @@
   /// <summary>
   /// Status of a <see cref="CapabilitiesImplemented"/> as it goes through various stages in its life cycle
   /// </summary>
-  public enum CapabilitiesImplementedStatus : int
+  public enum CapabilitiesImplementedStatus
   {
     /// <summary>
     /// <see cref="CapabilitiesImplemented"/> is being revised by <see cref="Organisations"/>

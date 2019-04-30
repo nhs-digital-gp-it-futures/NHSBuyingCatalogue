@@ -7,7 +7,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
   public abstract class ReviewsDatastoreBase<T> : CrmDatastoreBase<T>, IReviewsDatastore<ReviewsBase> where T : ReviewsBase
   {
-    public ReviewsDatastoreBase(
+    protected ReviewsDatastoreBase(
       ILogger<CrmDatastoreBase<T>> logger,
       ISyncPolicyFactory policy) :
       base(logger, policy)

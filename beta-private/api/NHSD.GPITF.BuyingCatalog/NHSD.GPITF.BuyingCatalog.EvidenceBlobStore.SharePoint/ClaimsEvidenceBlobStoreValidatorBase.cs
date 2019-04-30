@@ -12,7 +12,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     protected readonly IClaimsDatastore<ClaimsBase> _claimsDatastore;
     protected readonly ISolutionsDatastore _solutionsDatastore;
 
-    public ClaimsEvidenceBlobStoreValidatorBase(
+    protected ClaimsEvidenceBlobStoreValidatorBase(
       IHttpContextAccessor context,
       ILogger<ClaimsEvidenceBlobStoreValidatorBase> logger,
       ISolutionsDatastore solutionsDatastore,

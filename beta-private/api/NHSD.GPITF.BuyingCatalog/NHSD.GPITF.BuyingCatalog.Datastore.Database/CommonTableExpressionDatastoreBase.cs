@@ -7,7 +7,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 {
   public abstract class CommonTableExpressionDatastoreBase<T> : DatastoreBase<T>
   {
-    public CommonTableExpressionDatastoreBase(
+    protected CommonTableExpressionDatastoreBase(
       IDbConnectionFactory dbConnectionFactory,
       ILogger<CommonTableExpressionDatastoreBase<T>> logger,
       ISyncPolicyFactory policy) :

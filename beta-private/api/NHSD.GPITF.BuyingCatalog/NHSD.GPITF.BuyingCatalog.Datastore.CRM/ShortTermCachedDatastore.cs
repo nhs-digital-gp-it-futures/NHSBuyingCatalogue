@@ -10,7 +10,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     protected readonly IServiceProvider _serviceProvider;
     private readonly IShortTermCache _shortTermCache;
 
-    public ShortTermCachedDatastore(
+    protected ShortTermCachedDatastore(
       ILogger<CrmDatastoreBase<T>> logger,
       ISyncPolicyFactory policy,
       IConfiguration config,
