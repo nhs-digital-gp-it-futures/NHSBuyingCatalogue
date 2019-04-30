@@ -197,12 +197,6 @@ namespace Gif.Service
       app.UseIdentityServer();
       app.UseAuthentication();
 
-      app
-        .UseStaticFiles()
-        .UseMvc()
-        .UseDefaultFiles();
-
-
       if (env.IsDevelopment())
       {
         app
@@ -219,6 +213,10 @@ namespace Gif.Service
         })
         .UseDeveloperExceptionPage();
       }
+
+      app
+        .UseStaticFiles()
+        .UseMvc();
     }
 
     private void DumpSettings()
