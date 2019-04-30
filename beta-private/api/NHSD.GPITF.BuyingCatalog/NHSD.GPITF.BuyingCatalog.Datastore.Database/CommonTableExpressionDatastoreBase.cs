@@ -29,7 +29,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     /// </summary>
     /// <param name="sql">generic SQL statement containing keyword 'recursive'</param>
     /// <returns>SQL statement for specific database</returns>
-    protected string AmendCommonTableExpression(string sql)
+    private string AmendCommonTableExpression(string sql)
     {
       if (!sql.Contains("recursive"))
       {
