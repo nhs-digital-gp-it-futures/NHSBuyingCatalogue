@@ -45,6 +45,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSD.GPITF.BuyingCatalog.Mo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gif.Datastore.CRM", "crm\Gif.Datastore.CRM\Gif.Datastore.CRM.csproj", "{D0327B36-AB0C-4525-901B-36F547F1AD22}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gif.Service", "crm\Gif.Service\Gif.Service.csproj", "{C363BDA9-D931-4698-AB56-FCD2E1F6805A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,6 +137,10 @@ Global
 		{D0327B36-AB0C-4525-901B-36F547F1AD22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0327B36-AB0C-4525-901B-36F547F1AD22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0327B36-AB0C-4525-901B-36F547F1AD22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C363BDA9-D931-4698-AB56-FCD2E1F6805A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C363BDA9-D931-4698-AB56-FCD2E1F6805A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C363BDA9-D931-4698-AB56-FCD2E1F6805A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C363BDA9-D931-4698-AB56-FCD2E1F6805A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
