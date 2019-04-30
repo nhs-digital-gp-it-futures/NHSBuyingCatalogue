@@ -1,11 +1,15 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Dapper;
+using Dapper.Contrib.Extensions;
+using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 {
-  public abstract class CommonTableExpressionDatastoreBase<T> : DatastoreBase<T>
+  public abstract class CommonTableExpressionDatastoreBase<T> : DatastoreBase<T> where T : IHasId
   {
     protected CommonTableExpressionDatastoreBase(
       IDbConnectionFactory dbConnectionFactory,
@@ -46,6 +50,29 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
         default:
           throw new ArgumentOutOfRangeException($"Untested database: {dbType}");
       }
+    }
+
+    protected abstract string GetAllSqlCurrent(string tableName);
+    public abstract string GetSqlCurrent(string tableName);
+
+    protected IEnumerable<IEnumerable<T>> BySelf(string id)
+    {
+      return GetInternal(() =>
+      {
+        var table = typeof(T).GetCustomAttribute<TableAttribute>(true);
+        var chains = new List<IEnumerable<T>>();
+        var sqlAllCurrent = GetAllSqlCurrent(table.Name);
+        var allCurrent = _dbConnection.Value.Query<T>(sqlAllCurrent, new { id });
+        foreach (var current in allCurrent)
+        {
+          var sqlCurrent = GetSqlCurrent(table.Name);
+          var amendedSql = AmendCommonTableExpression(sqlCurrent);
+          var chain = _dbConnection.Value.Query<T>(amendedSql, new { currentId = current.Id });
+          chains.Add(chain);
+        }
+
+        return chains;
+      });
     }
   }
 }

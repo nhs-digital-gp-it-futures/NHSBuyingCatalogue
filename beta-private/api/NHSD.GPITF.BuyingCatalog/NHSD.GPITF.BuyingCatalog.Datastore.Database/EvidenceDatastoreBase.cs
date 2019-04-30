@@ -1,11 +1,9 @@
-﻿using Dapper;
-using Dapper.Contrib.Extensions;
+﻿using Dapper.Contrib.Extensions;
 using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 {
@@ -29,32 +27,23 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 
     public IEnumerable<IEnumerable<T>> ByClaim(string claimId)
     {
-      return GetInternal(() =>
-      {
-        var table = typeof(T).GetCustomAttribute<TableAttribute>(true);
-        var chains = new List<IEnumerable<T>>();
-        var sqlAllCurrent = $@"
+      return BySelf(claimId);
+    }
+
+    protected override string GetAllSqlCurrent(string tableName)
+    {
+      return
+$@"
 -- select all current versions
-select ev.* from {table.Name} ev where Id not in 
+select ev.* from {tableName} ev where Id not in 
 (
-  select PreviousId from {table.Name} where PreviousId is not null
+  select PreviousId from {tableName} where PreviousId is not null
 ) and
 ClaimId = @claimId
 ";
-        var allCurrent = _dbConnection.Value.Query<T>(sqlAllCurrent, new { claimId });
-        foreach (var current in allCurrent)
-        {
-          var sqlCurrent = GetSqlCurrent(table.Name);
-          var amendedSql = AmendCommonTableExpression(sqlCurrent);
-          var chain = _dbConnection.Value.Query<T>(amendedSql, new { currentId = current.Id });
-          chains.Add(chain);
-        }
-
-        return chains;
-      });
     }
 
-    public static string GetSqlCurrent(string tableName)
+    public override string GetSqlCurrent(string tableName)
     {
       return
  $@"

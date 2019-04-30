@@ -5,7 +5,6 @@ using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NUnit.Framework;
-using System.Data;
 using System.Reflection;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Tests
@@ -47,7 +46,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Tests
       const string TableName = "Evidence";
 
       var props = typeof(EvidenceBase).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-      var sqlCurrent = DummyEvidenceDatastoreBase.GetSqlCurrent(TableName);
+      var datastore = new DummyEvidenceDatastoreBase(_dbConnectionFactory.Object, _logger.Object, _policy.Object);
+
+      var sqlCurrent = datastore.GetSqlCurrent(TableName);
 
       foreach (var prop in props)
       {

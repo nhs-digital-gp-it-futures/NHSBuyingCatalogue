@@ -46,7 +46,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Tests
       const string TableName = "Reviews";
 
       var props = typeof(ReviewsBase).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-      var sqlCurrent = DummyReviewsDatastoreBase.GetSqlCurrent(TableName);
+      var datastore = new DummyReviewsDatastoreBase(_dbConnectionFactory.Object, _logger.Object, _policy.Object);
+
+      var sqlCurrent = datastore.GetSqlCurrent(TableName);
+
 
       foreach (var prop in props)
       {
