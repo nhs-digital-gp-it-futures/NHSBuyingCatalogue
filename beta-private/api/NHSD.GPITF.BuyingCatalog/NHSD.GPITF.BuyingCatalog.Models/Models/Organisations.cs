@@ -10,15 +10,8 @@ namespace NHSD.GPITF.BuyingCatalog.Models
   /// Standard MS Dynamics CRM entity
   /// </summary>
   [Table(nameof(Organisations))]
-  public sealed class Organisations
+  public sealed class Organisations : EntityBase
   {
-    /// <summary>
-    /// Unique identifier of entity
-    /// </summary>
-    [Required]
-    [ExplicitKey]
-    public string Id { get; set; }
-
     /// <summary>
     /// Name of a company, as displayed to the user
     /// </summary>

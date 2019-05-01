@@ -1,20 +1,12 @@
 ﻿using Dapper.Contrib.Extensions;
-using NHSD.GPITF.BuyingCatalog.Interfaces;
 using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace NHSD.GPITF.BuyingCatalog.Models
 {
 #pragma warning disable CS1591
-  public abstract class ClaimsBase : IHasId
+  public abstract class ClaimsBase : EntityBase
   {
-    /// <summary>
-    /// Unique identifier of entity
-    /// </summary>
-    [Required]
-    [ExplicitKey]
-    public string Id { get; set; }
-
     /// <summary>
     /// Unique identifier of solution
     /// </summary>

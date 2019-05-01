@@ -9,7 +9,7 @@ namespace NHSD.GPITF.BuyingCatalog.Models
   /// Generally, only interested in current ‘standard’
   /// </summary>
   [Table(nameof(Standards))]
-  public sealed class Standards : Quality, IHasPreviousId
+  public sealed class Standards : Quality
   {
     /// <summary>
     /// True if this standard applies to all solutions

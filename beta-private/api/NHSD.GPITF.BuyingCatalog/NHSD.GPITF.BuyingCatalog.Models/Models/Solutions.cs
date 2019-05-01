@@ -12,15 +12,8 @@ namespace NHSD.GPITF.BuyingCatalog.Models
   /// Standard MS Dynamics CRM entity
   /// </summary>
   [Table(nameof(Solutions))]
-  public sealed class Solutions : IHasPreviousId
+  public sealed class Solutions : EntityBase, IHasPreviousId
   {
-    /// <summary>
-    /// Unique identifier of entity
-    /// </summary>
-    [Required]
-    [ExplicitKey]
-    public string Id { get; set; }
-
     /// <summary>
     /// Unique identifier of previous version of entity
     /// </summary>

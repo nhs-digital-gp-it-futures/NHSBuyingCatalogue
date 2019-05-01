@@ -1,18 +1,9 @@
-﻿using Dapper.Contrib.Extensions;
-using System.ComponentModel.DataAnnotations;
+﻿using NHSD.GPITF.BuyingCatalog.Interfaces;
 
 namespace NHSD.GPITF.BuyingCatalog.Models
 {
-#pragma warning disable CS1591
-  public abstract class Quality
+  public abstract class Quality : EntityBase, IHasPreviousId
   {
-    /// <summary>
-    /// Unique identifier of entity
-    /// </summary>
-    [Required]
-    [ExplicitKey]
-    public string Id { get; set; }
-
     /// <summary>
     /// Unique identifier of previous version of entity
     /// </summary>
@@ -38,5 +29,4 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     /// </summary>
     public string Type { get; set; }
   }
-#pragma warning restore CS1591
 }
