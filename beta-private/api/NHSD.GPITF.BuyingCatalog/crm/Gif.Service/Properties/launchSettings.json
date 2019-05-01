@@ -1,16 +1,11 @@
 {
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "https://localhost:44365/",
-      "sslPort": 44365
-    }
-  },
-  "profiles": {
-    "web": {
+  "profiles":
+  {
+    "Gif.Service":
+    {
       "commandName": "Project",
-      "environmentVariables": {
+      "environmentVariables":
+      {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "LOG_CRM": "true"
       }
