@@ -28,35 +28,35 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
       return
  $@"
 -- get all previous versions from a specified (CurrentId) version
-with recursive Links(CurrentId, Id, PreviousId, ClaimId, CreatedById, CreatedOn, OriginalDate, Evidence, HasRequestedLiveDemo, BlobId) as (
+with recursive Links(CurrentId, {nameof(EvidenceBase.Id)}, {nameof(EvidenceBase.PreviousId)}, {nameof(EvidenceBase.ClaimId)}, {nameof(EvidenceBase.CreatedById)}, {nameof(EvidenceBase.CreatedOn)}, {nameof(EvidenceBase.OriginalDate)}, {nameof(EvidenceBase.Evidence)}, {nameof(EvidenceBase.HasRequestedLiveDemo)}, {nameof(EvidenceBase.BlobId)}) as (
   select
-    Id, Id, PreviousId, ClaimId, CreatedById, CreatedOn, OriginalDate, Evidence, HasRequestedLiveDemo, BlobId
+    {nameof(EvidenceBase.Id)}, {nameof(EvidenceBase.Id)}, {nameof(EvidenceBase.PreviousId)}, {nameof(EvidenceBase.ClaimId)}, {nameof(EvidenceBase.CreatedById)}, {nameof(EvidenceBase.CreatedOn)}, {nameof(EvidenceBase.OriginalDate)}, {nameof(EvidenceBase.Evidence)}, {nameof(EvidenceBase.HasRequestedLiveDemo)}, {nameof(EvidenceBase.BlobId)}
   from {tableName}
-  where PreviousId is null
+  where {nameof(EvidenceBase.PreviousId)} is null
   
   union all
   select
-    Id, Id, PreviousId, ClaimId, CreatedById, CreatedOn, OriginalDate, Evidence, HasRequestedLiveDemo, BlobId
+    {nameof(EvidenceBase.Id)}, {nameof(EvidenceBase.Id)}, {nameof(EvidenceBase.PreviousId)}, {nameof(EvidenceBase.ClaimId)}, {nameof(EvidenceBase.CreatedById)}, {nameof(EvidenceBase.CreatedOn)}, {nameof(EvidenceBase.OriginalDate)}, {nameof(EvidenceBase.Evidence)}, {nameof(EvidenceBase.HasRequestedLiveDemo)}, {nameof(EvidenceBase.BlobId)}
   from {tableName} 
-  where PreviousId is not null
+  where {nameof(EvidenceBase.PreviousId)} is not null
   
   union all
   select
     Links.CurrentId,
-    {tableName}.Id,
-    {tableName}.PreviousId,
-    {tableName}.ClaimId,
-    {tableName}.CreatedById,
-    {tableName}.CreatedOn,
-    {tableName}.OriginalDate,
-    {tableName}.Evidence,
-    {tableName}.HasRequestedLiveDemo,
-    {tableName}.BlobId
+    {tableName}.{nameof(EvidenceBase.Id)},
+    {tableName}.{nameof(EvidenceBase.PreviousId)},
+    {tableName}.{nameof(EvidenceBase.ClaimId)},
+    {tableName}.{nameof(EvidenceBase.CreatedById)},
+    {tableName}.{nameof(EvidenceBase.CreatedOn)},
+    {tableName}.{nameof(EvidenceBase.OriginalDate)},
+    {tableName}.{nameof(EvidenceBase.Evidence)},
+    {tableName}.{nameof(EvidenceBase.HasRequestedLiveDemo)},
+    {tableName}.{nameof(EvidenceBase.BlobId)}
   from Links
   join {tableName}
-  on Links.PreviousId = {tableName}.Id
+  on Links.{nameof(EvidenceBase.PreviousId)} = {tableName}.Id
 )
-  select Links.Id, Links.PreviousId, Links.ClaimId, Links.CreatedById, Links.CreatedOn, Links.OriginalDate, Links.Evidence, Links.HasRequestedLiveDemo, Links.BlobId
+  select Links.{nameof(EvidenceBase.Id)}, Links.{nameof(EvidenceBase.PreviousId)}, Links.{nameof(EvidenceBase.ClaimId)}, Links.{nameof(EvidenceBase.CreatedById)}, Links.{nameof(EvidenceBase.CreatedOn)}, Links.{nameof(EvidenceBase.OriginalDate)}, Links.{nameof(EvidenceBase.Evidence)}, Links.{nameof(EvidenceBase.HasRequestedLiveDemo)}, Links.{nameof(EvidenceBase.BlobId)}
   from Links
   where CurrentId = @currentId;
 ";

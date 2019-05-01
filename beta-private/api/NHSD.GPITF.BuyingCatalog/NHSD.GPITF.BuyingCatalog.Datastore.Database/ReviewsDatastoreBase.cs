@@ -29,33 +29,33 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
       return
 $@"
 -- get all previous versions from a specified (CurrentId) version
-with recursive Links(CurrentId, Id, PreviousId, EvidenceId, CreatedById, CreatedOn, OriginalDate, Message) as (
+with recursive Links(CurrentId, {nameof(ReviewsBase.Id)}, {nameof(ReviewsBase.PreviousId)}, {nameof(ReviewsBase.EvidenceId)}, {nameof(ReviewsBase.CreatedById)}, {nameof(ReviewsBase.CreatedOn)}, {nameof(ReviewsBase.OriginalDate)}, {nameof(ReviewsBase.Message)}) as (
   select
-    Id, Id, PreviousId, EvidenceId, CreatedById, CreatedOn, OriginalDate, Message
+    {nameof(ReviewsBase.Id)}, {nameof(ReviewsBase.Id)}, {nameof(ReviewsBase.PreviousId)}, {nameof(ReviewsBase.EvidenceId)}, {nameof(ReviewsBase.CreatedById)}, {nameof(ReviewsBase.CreatedOn)}, {nameof(ReviewsBase.OriginalDate)}, {nameof(ReviewsBase.Message)}
   from {tableName}
-  where PreviousId is null
+  where {nameof(ReviewsBase.PreviousId)} is null
   
   union all
   select
-    Id, Id, PreviousId, EvidenceId, CreatedById, CreatedOn, OriginalDate, Message
+    {nameof(ReviewsBase.Id)}, {nameof(ReviewsBase.Id)}, {nameof(ReviewsBase.PreviousId)}, {nameof(ReviewsBase.EvidenceId)}, {nameof(ReviewsBase.CreatedById)}, {nameof(ReviewsBase.CreatedOn)}, {nameof(ReviewsBase.OriginalDate)}, {nameof(ReviewsBase.Message)}
   from {tableName} 
-  where PreviousId is not null
+  where {nameof(ReviewsBase.PreviousId)} is not null
   
   union all
   select
     Links.CurrentId,
-    {tableName}.Id,
-    {tableName}.PreviousId,
-    {tableName}.EvidenceId,
-    {tableName}.CreatedById,
-    {tableName}.CreatedOn,
-    {tableName}.OriginalDate,
-    {tableName}.Message
+    {tableName}.{nameof(ReviewsBase.Id)},
+    {tableName}.{nameof(ReviewsBase.PreviousId)},
+    {tableName}.{nameof(ReviewsBase.EvidenceId)},
+    {tableName}.{nameof(ReviewsBase.CreatedById)},
+    {tableName}.{nameof(ReviewsBase.CreatedOn)},
+    {tableName}.{nameof(ReviewsBase.OriginalDate)},
+    {tableName}.{nameof(ReviewsBase.Message)}
   from Links
   join {tableName}
-  on Links.PreviousId = {tableName}.Id
+  on Links.{nameof(ReviewsBase.PreviousId)} = {tableName}.Id
 )
-  select Links.Id, Links.PreviousId, Links.EvidenceId, Links.CreatedById, Links.CreatedOn, Links.OriginalDate, Links.Message
+  select Links.{nameof(ReviewsBase.Id)}, Links.{nameof(ReviewsBase.PreviousId)}, Links.{nameof(ReviewsBase.EvidenceId)}, Links.{nameof(ReviewsBase.CreatedById)}, Links.{nameof(ReviewsBase.CreatedOn)}, Links.{nameof(ReviewsBase.OriginalDate)}, Links.{nameof(ReviewsBase.Message)}
   from Links
   where CurrentId = @currentId;
 ";
