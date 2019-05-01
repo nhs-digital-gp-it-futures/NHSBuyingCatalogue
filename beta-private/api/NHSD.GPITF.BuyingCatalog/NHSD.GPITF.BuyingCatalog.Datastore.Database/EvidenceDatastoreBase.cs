@@ -18,7 +18,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 
     public IEnumerable<IEnumerable<T>> ByClaim(string claimId)
     {
-      return BySelf(claimId);
+      return ByOwner(claimId);
     }
 
     protected override string GetAllSqlCurrent(string tableName)
@@ -30,7 +30,7 @@ select ev.* from {tableName} ev where Id not in
 (
   select PreviousId from {tableName} where PreviousId is not null
 ) and
-ClaimId = @claimId
+ClaimId = @ownerId
 ";
     }
 

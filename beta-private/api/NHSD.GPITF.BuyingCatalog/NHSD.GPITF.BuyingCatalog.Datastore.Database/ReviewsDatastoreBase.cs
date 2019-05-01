@@ -19,7 +19,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 
     public IEnumerable<IEnumerable<T>> ByEvidence(string evidenceId)
     {
-      return BySelf(evidenceId);
+      return ByOwner(evidenceId);
     }
 
     protected override string GetAllSqlCurrent(string tableName)
@@ -31,7 +31,7 @@ select rev.* from {tableName} rev where Id not in
 (
   select PreviousId from {tableName} where PreviousId is not null
 ) and
-EvidenceId = @evidenceId
+EvidenceId = @ownerId
 ";
     }
 

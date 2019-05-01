@@ -56,14 +56,14 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     protected abstract string GetAllSqlCurrent(string tableName);
     public abstract string GetSqlCurrent(string tableName);
 
-    protected IEnumerable<IEnumerable<T>> BySelf(string id)
+    protected IEnumerable<IEnumerable<T>> ByOwner(string ownerId)
     {
       return GetInternal(() =>
       {
         var table = typeof(T).GetCustomAttribute<TableAttribute>(true);
         var chains = new List<IEnumerable<T>>();
         var sqlAllCurrent = GetAllSqlCurrent(table.Name);
-        var allCurrent = _dbConnection.Value.Query<T>(sqlAllCurrent, new { id });
+        var allCurrent = _dbConnection.Value.Query<T>(sqlAllCurrent, new { ownerId });
         foreach (var current in allCurrent)
         {
           var sqlCurrent = GetSqlCurrent(table.Name);
