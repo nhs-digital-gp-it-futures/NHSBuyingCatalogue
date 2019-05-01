@@ -1,5 +1,4 @@
-﻿using Dapper.Contrib.Extensions;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
@@ -15,14 +14,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
       ISyncPolicyFactory policy) :
       base(dbConnectionFactory, logger, policy)
     {
-    }
-
-    public T ById(string id)
-    {
-      return GetInternal(() =>
-      {
-        return _dbConnection.Value.Get<T>(id);
-      });
     }
 
     public IEnumerable<IEnumerable<T>> ByClaim(string claimId)
@@ -80,21 +71,6 @@ with recursive Links(CurrentId, Id, PreviousId, ClaimId, CreatedById, CreatedOn,
   from Links
   where CurrentId = @currentId;
 ";
-    }
-
-    public T Create(T evidence)
-    {
-      return GetInternal(() =>
-      {
-        using (var trans = _dbConnection.Value.BeginTransaction())
-        {
-          evidence.Id = UpdateId(evidence.Id);
-          _dbConnection.Value.Insert(evidence, trans);
-          trans.Commit();
-
-          return evidence;
-        }
-      });
     }
 
     IEnumerable<IEnumerable<EvidenceBase>> IEvidenceDatastore<EvidenceBase>.ByClaim(string claimId)

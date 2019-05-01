@@ -3,13 +3,14 @@ using Dapper.Contrib.Extensions;
 using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
+using NHSD.GPITF.BuyingCatalog.Models;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 {
-  public abstract class CommonTableExpressionDatastoreBase<T> : DatastoreBase<T> where T : IHasId
+  public abstract class CommonTableExpressionDatastoreBase<T> : DatastoreBase<T> where T : EntityBase
   {
     protected CommonTableExpressionDatastoreBase(
       IDbConnectionFactory dbConnectionFactory,
@@ -72,6 +73,29 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
         }
 
         return chains;
+      });
+    }
+
+    public T ById(string id)
+    {
+      return GetInternal(() =>
+      {
+        return _dbConnection.Value.Get<T>(id);
+      });
+    }
+
+    public T Create(T review)
+    {
+      return GetInternal(() =>
+      {
+        using (var trans = _dbConnection.Value.BeginTransaction())
+        {
+          review.Id = UpdateId(review.Id);
+          _dbConnection.Value.Insert(review, trans);
+          trans.Commit();
+
+          return review;
+        }
       });
     }
   }

@@ -72,29 +72,6 @@ with recursive Links(CurrentId, Id, PreviousId, EvidenceId, CreatedById, Created
 ";
     }
 
-    public T ById(string id)
-    {
-      return GetInternal(() =>
-      {
-        return _dbConnection.Value.Get<T>(id);
-      });
-    }
-
-    public T Create(T review)
-    {
-      return GetInternal(() =>
-      {
-        using (var trans = _dbConnection.Value.BeginTransaction())
-        {
-          review.Id = UpdateId(review.Id);
-          _dbConnection.Value.Insert(review, trans);
-          trans.Commit();
-
-          return review;
-        }
-      });
-    }
-
     public void Delete(T review)
     {
       GetInternal(() =>
