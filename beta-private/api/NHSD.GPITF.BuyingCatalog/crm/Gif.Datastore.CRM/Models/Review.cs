@@ -29,10 +29,10 @@ namespace Gif.Service.Models
         public Guid EvidenceId { get; set; }
 
         [DataMember]
-        [CrmFieldName("_createdby_value")]
-        [CrmFieldNameDataBind("CreatedBy@odata.bind")]
+        [CrmFieldName("_cc_createdbyid_value")]
+        [CrmFieldNameDataBind("cc_CreatedByID@odata.bind")]
         [CrmFieldEntityDataBind("contacts")]
-        public Guid CreatedById { get; set; }
+        public Guid? CreatedById { get; set; }
 
         [DataMember]
         [CrmFieldName("cc_commenthistory")]
