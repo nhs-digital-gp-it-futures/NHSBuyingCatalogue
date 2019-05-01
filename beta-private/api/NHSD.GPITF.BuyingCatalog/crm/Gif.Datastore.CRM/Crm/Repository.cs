@@ -107,6 +107,7 @@ namespace Gif.Service.Crm
       {
         var ex = new CrmApiException(retrieveResponse.ReasonPhrase, retrieveResponse.StatusCode);
         _logger.LogError(ex, $"[{ex.HttpStatus}] + [{ex.Message}]");
+        _logger.LogError($"[Response] --> {retrieveResponse.Content.ReadAsStringAsync().Result}");
         throw ex;
       }
 
@@ -140,6 +141,7 @@ namespace Gif.Service.Crm
       {
         var ex = new CrmApiException(resp.ReasonPhrase, resp.StatusCode);
         _logger.LogError(ex, $"[{ex.HttpStatus}] + [{ex.Message}]");
+        _logger.LogError($"[Response] --> {resp.Content.ReadAsStringAsync().Result}");
         throw ex;
       }
     }
@@ -163,6 +165,7 @@ namespace Gif.Service.Crm
       {
         var ex = new CrmApiException(updateResponse.ReasonPhrase, updateResponse.StatusCode);
         _logger.LogError(ex, $"[{ex.HttpStatus}] + [{ex.Message}]");
+        _logger.LogError($"[Response] --> {updateResponse.Content.ReadAsStringAsync().Result}");
         throw ex;
       }
 
@@ -172,6 +175,7 @@ namespace Gif.Service.Crm
       {
         var ex = new FormatException("Response Entity ID header is empty");
         _logger.LogError(ex, $"[FormatException] + [{ex.Message}]");
+        _logger.LogError($"[Response] --> {updateResponse.Content.ReadAsStringAsync().Result}");
         throw ex;
       }
 
@@ -204,6 +208,7 @@ namespace Gif.Service.Crm
       {
         var ex = new CrmApiException(response.ReasonPhrase, response.StatusCode);
         _logger.LogError(ex, $"[{ex.HttpStatus}] + [{ex.Message}]");
+        _logger.LogError($"[Response] --> {response.Content.ReadAsStringAsync().Result}");
         throw ex;
       }
     }
@@ -226,6 +231,7 @@ namespace Gif.Service.Crm
       {
         var ex = new CrmApiException(response.ReasonPhrase, response.StatusCode);
         _logger.LogError(ex, $"[{ex.HttpStatus}] + [{ex.Message}]");
+        _logger.LogError($"[Response] --> {response.Content.ReadAsStringAsync().Result}");
         throw ex;
       }
     }
@@ -290,6 +296,7 @@ namespace Gif.Service.Crm
         var ex = new CrmApiException(response.ReasonPhrase, response.StatusCode);
         _logger.LogError(ex, $"[{ex.HttpStatus}] + [{ex.Message}]");
         _logger.LogError($"[{nameof(UpsertBatch)}] --> {JsonConvert.SerializeObject(batchData)}");
+        _logger.LogError($"[Response] --> {response.Content.ReadAsStringAsync().Result}");
         throw ex;
       }
     }
