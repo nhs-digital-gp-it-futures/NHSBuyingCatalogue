@@ -22,18 +22,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
       return ByOwner(evidenceId);
     }
 
-    protected override string GetAllSqlCurrent(string tableName)
-    {
-      return
-$@"
--- select all current versions
-select rev.* from {tableName} rev where Id not in 
-(
-  select PreviousId from {tableName} where PreviousId is not null
-) and
-EvidenceId = @ownerId
-";
-    }
+    protected override string OwnerDiscriminator => nameof(ReviewsBase.EvidenceId);
 
     public override string GetSqlCurrent(string tableName)
     {

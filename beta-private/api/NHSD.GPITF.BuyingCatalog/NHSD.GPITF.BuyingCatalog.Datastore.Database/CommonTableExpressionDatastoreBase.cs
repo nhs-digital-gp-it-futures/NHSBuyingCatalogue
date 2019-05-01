@@ -10,7 +10,7 @@ using System.Reflection;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 {
-  public abstract class CommonTableExpressionDatastoreBase<T> : DatastoreBase<T> where T : EntityBase
+  public abstract class CommonTableExpressionDatastoreBase<T> : DatastoreBase<T> where T : EntityBase, IHasPreviousId
   {
     protected CommonTableExpressionDatastoreBase(
       IDbConnectionFactory dbConnectionFactory,
@@ -53,7 +53,20 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
       }
     }
 
-    protected abstract string GetAllSqlCurrent(string tableName);
+    protected abstract string OwnerDiscriminator { get; }
+    private string GetAllSqlCurrent(string tableName)
+    {
+      return
+$@"
+-- select all current versions
+select cte.* from {tableName} cte where {nameof(IHasPreviousId.Id)} not in 
+(
+  select {nameof(IHasPreviousId.PreviousId)} from {tableName} where {nameof(IHasPreviousId.PreviousId)} is not null
+) and
+{OwnerDiscriminator} = @ownerId
+";
+    }
+
     public abstract string GetSqlCurrent(string tableName);
 
     protected IEnumerable<IEnumerable<T>> ByOwner(string ownerId)
