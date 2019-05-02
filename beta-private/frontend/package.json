@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "npm rebuild node-sass; NODE_ENV=development nodemon -L --inspect=0.0.0.0 -w src -w lib src/server.js",
     "start": "NODE_ENV=production node src/server.js",
-    "test": "jest",
+    "test": "jest --coverage",
     "test:e2e": "node tests/e2e/index.js",
     "build": "node-sass --output-style compressed src/styles/styles.scss > src/static/styles.css"
   },
@@ -47,6 +47,11 @@
     "testPathIgnorePatterns": [
       "/node_modules/",
       "<rootDir>/lib/catalogue-api"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "<rootDir>/lib/catalogue-api",
+      "<rootDir>/lib/catalogue-sharepoint/providers/FakeSharePointProvider.js"
     ]
   }
 }

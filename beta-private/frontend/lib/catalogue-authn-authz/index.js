@@ -67,14 +67,25 @@ function authentication (app) {
       })
 
       app.get('/logout', (req, res) => {
-        req.logout()
 
-        if (!process.env.OIDC_ISSUER_URL) {
-          const endSessionUrl = client.endSessionUrl()
-          res.redirect(endSessionUrl)
-        } else {
-          res.redirect('/')
-        }
+        // passport.js 's logout method is 'supposedly' unreliable.
+        // I have not found any solid evidence that this is 100% the case, but numerous people have complained about it
+        //
+        // Open GitHub Issue.
+        // https://github.com/jaredhanson/passport-facebook/issues/202
+        //
+        // StackOverflow discussing a workaround
+        // https://stackoverflow.com/questions/5573256/how-to-end-a-session-in-expressjs
+
+        req.logout()
+        req.session.destroy(() => {
+          if (!process.env.OIDC_ISSUER_URL) {
+            const endSessionUrl = client.endSessionUrl()
+            res.redirect(endSessionUrl)
+          } else {
+            res.redirect('/')
+          }
+        })
       })
     })
     .catch(err => {
