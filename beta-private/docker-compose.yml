@@ -62,7 +62,6 @@ services:
       - LOG_SHAREPOINT
     depends_on:
       - cache
-      - crm
 
   clamav:
     build:
