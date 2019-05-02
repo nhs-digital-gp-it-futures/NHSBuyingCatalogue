@@ -5,6 +5,8 @@ class RealSharePointProvider extends SharePointProvider {
   constructor () {
     super(require('catalogue-api'))
     this.CatalogueApi.ApiClient.instance.basePath = process.env.API_BASE_URL || 'http://api:5100'
+    this.mmm = require('mmmagic')
+    this.Magic = this.mmm.Magic
   }
 
   // support for the authentication layer

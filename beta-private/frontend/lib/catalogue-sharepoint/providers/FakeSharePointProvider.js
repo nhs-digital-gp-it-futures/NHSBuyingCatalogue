@@ -215,6 +215,9 @@ class FakeSharePointProvider extends SharePointProvider {
   constructor () {
     console.info('Mock Sharepoint provider active')
     super(FakeCatalogueAPI)
+
+    this.mmm = require('mmmagic')
+    this.Magic = mmm.Magic
   }
 
   // This overrides the SharePointProvider implementation of DownloadCapEvidence.

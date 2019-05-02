@@ -5,9 +5,6 @@ const os = require('os')
 const uuidGenerator = require('node-uuid-generator')
 const INTERMEDIATE_STORAGE = process.env.UPLOAD_TEMP_FILE_STORE || os.tmpdir()
 
-const mmm = require('mmmagic')
-const Magic = mmm.Magic
-
 const WHITELIST = require('./whitelist.json')
 
 const { antivirusProvider } = require('catalogue-antivirus')
@@ -26,7 +23,6 @@ class SharePointProvider {
     this.TIMEOUT = 1200000
     this.capBlobStoreApi.timeout = this.TIMEOUT
     this.stdBlobStoreApi.timeout = this.TIMEOUT
-
   }
 
   getMimeArray () {
@@ -174,7 +170,7 @@ class SharePointProvider {
 
   detectMimeType (fileName) {
     const storagePath = this.createFileStoragePath(fileName)
-    const magic = new Magic(mmm.MAGIC_MIME_TYPE)
+    const magic = new this.Magic(this.mmm.MAGIC_MIME_TYPE)
 
     return new Promise((resolve, reject) => {
       magic.detectFile(storagePath, (err, result) => {
