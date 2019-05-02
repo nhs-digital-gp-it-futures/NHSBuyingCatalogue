@@ -217,7 +217,7 @@ class FakeSharePointProvider extends SharePointProvider {
     super(FakeCatalogueAPI)
 
     this.mmm = require('mmmagic')
-    this.Magic = mmm.Magic
+    this.Magic = this.mmm.Magic
   }
 
   // This overrides the SharePointProvider implementation of DownloadCapEvidence.
