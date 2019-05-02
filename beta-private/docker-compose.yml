@@ -53,32 +53,16 @@ services:
       - CRM_ACCESSTOKENURI
       - CRM_CLIENTID
       - CRM_CLIENTSECRET
+      - GIF_CRM_AUTHORITY
+      - GIF_CRM_URL
+      - GIF_AZURE_CLIENT_ID
+      - GIF_ENCRYPTED_CLIENT_SECRET
       - USE_CRM
       - LOG_CRM
       - LOG_SHAREPOINT
     depends_on:
       - cache
       - crm
-
-  crm:
-    build: 
-      context: ./api/NHSD.GPITF.BuyingCatalog/crm/
-    image: gpitf/catalogue-crm:private-beta
-    ports:
-      - "5001:5001"
-    networks:
-      - beta_network
-    environment:
-      - ASPNETCORE_ENVIRONMENT
-      - GIF_AUTHORITY_URI
-      - GIF_CRM_AUTHORITY
-      - GIF_CRM_URL
-      - GIF_AZURE_CLIENT_ID
-      - GIF_ENCRYPTED_CLIENT_SECRET
-      - CRM_CLIENTID
-      - CRM_CLIENTSECRET
-      - LOG_CRM
-      - LOG_CONNECTIONSTRING
 
   clamav:
     build:

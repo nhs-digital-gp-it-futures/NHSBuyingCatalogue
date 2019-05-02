@@ -223,9 +223,9 @@ namespace Gif.Service
     {
       Console.WriteLine("Settings:");
       Console.WriteLine($"  GIF:");
+      Console.WriteLine($"    GIF_CRM_URL                 : {Settings.GIF_CRM_URL(Configuration)}");
       Console.WriteLine($"    GIF_AUTHORITY_URI           : {Settings.GIF_AUTHORITY_URI(Configuration)}");
       Console.WriteLine($"    GIF_CRM_AUTHORITY           : {Settings.GIF_CRM_AUTHORITY(Configuration)}");
-      Console.WriteLine($"    GIF_CRM_URL                 : {Settings.GIF_CRM_URL(Configuration)}");
       Console.WriteLine($"    GIF_AZURE_CLIENT_ID         : {Settings.GIF_AZURE_CLIENT_ID(Configuration)}");
       Console.WriteLine($"    GIF_ENCRYPTED_CLIENT_SECRET : {Settings.GIF_ENCRYPTED_CLIENT_SECRET(Configuration)}");
 
