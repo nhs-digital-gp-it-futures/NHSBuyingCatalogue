@@ -22,8 +22,6 @@ namespace NHSD.GPITF.BuyingCatalog
     public static string DATASTORE_CONNECTIONTYPE(IConfiguration config, string connection) => Environment.GetEnvironmentVariable("DATASTORE_CONNECTIONTYPE") ?? config[$"RepositoryDatabase:{connection}:Type"];
     public static string DATASTORE_CONNECTIONSTRING(IConfiguration config, string connection) => (Environment.GetEnvironmentVariable("DATASTORE_CONNECTIONSTRING") ?? config[$"RepositoryDatabase:{connection}:ConnectionString"]);
 
-    public static string CRM_APIURI(IConfiguration config) => Environment.GetEnvironmentVariable("CRM_APIURI") ?? config["CRM:ApiUri"];
-    public static string CRM_ACCESSTOKENURI(IConfiguration config) => Environment.GetEnvironmentVariable("CRM_ACCESSTOKENURI") ?? config["CRM:AccessTokenUri"];
     public static string CRM_CLIENTID(IConfiguration config) => Environment.GetEnvironmentVariable("CRM_CLIENTID") ?? config["CRM:ClientId"];
     public static string CRM_CLIENTSECRET(IConfiguration config) => Environment.GetEnvironmentVariable("CRM_CLIENTSECRET") ?? config["CRM:ClientSecret"];
     public static int CRM_CACHE_EXPIRY_MINS(IConfiguration config) => int.Parse(Environment.GetEnvironmentVariable("CRM_CACHE_EXPIRY_MINS") ?? config["CRM:CacheExpiryMins"] ?? (7*24*60).ToString(CultureInfo.InvariantCulture));
