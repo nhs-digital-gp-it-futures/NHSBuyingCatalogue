@@ -24,7 +24,6 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     /// Derived from calling context
     /// SET ON SERVER
     /// </summary>
-    [Required]
     public string CreatedById { get; set; }
 
     /// <summary>
