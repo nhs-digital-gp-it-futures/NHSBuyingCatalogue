@@ -154,23 +154,27 @@ class SharePointProvider {
     return this.uploadEvidence(uploadMethod, validMimeType, claimID, buffer, filename, subFolder)
   }
 
-  async stdValidMimeType (fileName) {
-    const res = [await this.detectMimeType(fileName)]
+  async stdValidMimeType (buffer) {
+    const res = [await this.detectMimeType(buffer)]
     const whiteList = new Set(this.getMimeArray()) // await this.stdBlobStoreApi.apiStandardsApplicableEvidenceBlobStoreGetAllowedFileTypes()
 
     return res.every((type) => whiteList.has(type))
   }
 
-  async capValidMimeType (fileName) {
-    const res = [await this.detectMimeType(fileName)]
+  async capValidMimeType (buffer) {
+    const res = [await this.detectMimeType(buffer)]
     const whiteList = new Set(this.getMimeArray()) // await this.stdBlobStoreApi.apiStandardsApplicableEvidenceBlobStoreGetAllowedFileTypes()
 
     return res.every((type) => whiteList.has(type))
   }
 
   detectMimeType (buffer) {
-    const type =  this.fileType(buffer)
-    return type.mime
+    const type = this.fileType(buffer)
+    if (type) {
+      return type.mime
+    } else {
+      return
+    }
   }
 
   async uploadEvidence (uploadMethod, mimeTypeChecker, claimID, buffer, filename, subFolder) {
