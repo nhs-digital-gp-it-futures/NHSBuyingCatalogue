@@ -14,13 +14,13 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 {
   public abstract class DatastoreBase<T>
   {
-    protected readonly Lazy<IDbConnection> _dbConnection;
+    protected readonly IDbConnection _dbConnection;
     protected readonly ILogger<DatastoreBase<T>> _logger;
     private readonly ISyncPolicy _policy;
 
     protected DatastoreBase(IDbConnectionFactory dbConnectionFactory, ILogger<DatastoreBase<T>> logger, ISyncPolicyFactory policy)
     {
-      _dbConnection = new Lazy<IDbConnection>(() => dbConnectionFactory.Get());
+      _dbConnection = dbConnectionFactory.Get();
       _logger = logger;
       _policy = policy.Build(_logger);
     }

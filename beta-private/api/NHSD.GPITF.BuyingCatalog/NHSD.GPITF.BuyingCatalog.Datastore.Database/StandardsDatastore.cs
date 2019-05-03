@@ -26,7 +26,7 @@ join CapabilityStandard cs on cs.StandardId = std.Id
 join Capabilities cap on cap.Id = cs.CapabilityId
 where cap.Id = @capabilityId and cs.IsOptional = @isOptional
 ";
-        var retval = _dbConnection.Value.Query<Standards>(sql, new { capabilityId, isOptional = (isOptional ? 1 : 0).ToString()});
+        var retval = _dbConnection.Query<Standards>(sql, new { capabilityId, isOptional = (isOptional ? 1 : 0).ToString()});
         return retval;
       });
     }
@@ -41,7 +41,7 @@ join FrameworkStandard fs on fs.StandardId = std.Id
 join Frameworks frame on frame.Id = fs.FrameworkId
 where frame.Id = @frameworkId
 ";
-        var retval = _dbConnection.Value.Query<Standards>(sql, new { frameworkId });
+        var retval = _dbConnection.Query<Standards>(sql, new { frameworkId });
         return retval;
       });
     }
@@ -50,7 +50,7 @@ where frame.Id = @frameworkId
     {
       return GetInternal(() =>
       {
-        return _dbConnection.Value.Get<Standards>(id);
+        return _dbConnection.Get<Standards>(id);
       });
     }
 
@@ -62,7 +62,7 @@ where frame.Id = @frameworkId
 select * from Standards
 where Id in @ids
 ";
-        var retval = _dbConnection.Value.Query<Standards>(sql, new { ids });
+        var retval = _dbConnection.Query<Standards>(sql, new { ids });
         return retval;
       });
     }
@@ -71,10 +71,10 @@ where Id in @ids
     {
       return GetInternal(() =>
       {
-        using (var trans = _dbConnection.Value.BeginTransaction())
+        using (var trans = _dbConnection.BeginTransaction())
         {
           standard.Id = UpdateId(standard.Id);
-          _dbConnection.Value.Insert(standard, trans);
+          _dbConnection.Insert(standard, trans);
           trans.Commit();
 
           return standard;
@@ -93,7 +93,7 @@ select * from Standards where Id not in
   select PreviousId from Standards where PreviousId is not null
 )
 ";
-        return _dbConnection.Value.Query<Standards>(sql);
+        return _dbConnection.Query<Standards>(sql);
       });
     }
 
@@ -101,9 +101,9 @@ select * from Standards where Id not in
     {
       GetInternal(() =>
       {
-        using (var trans = _dbConnection.Value.BeginTransaction())
+        using (var trans = _dbConnection.BeginTransaction())
         {
-          _dbConnection.Value.Update(standard, trans);
+          _dbConnection.Update(standard, trans);
           trans.Commit();
           return 0;
         }

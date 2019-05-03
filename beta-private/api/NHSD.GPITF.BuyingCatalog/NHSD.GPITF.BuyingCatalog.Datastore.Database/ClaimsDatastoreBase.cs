@@ -22,7 +22,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
       return GetInternal(() =>
       {
-        return _dbConnection.Value.Get<T>(id);
+        return _dbConnection.Get<T>(id);
       });
     }
 
@@ -30,7 +30,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
       return GetInternal(() =>
       {
-        return _dbConnection.Value.GetAll<T>().Where(cc => cc.SolutionId == solutionId);
+        return _dbConnection.GetAll<T>().Where(cc => cc.SolutionId == solutionId);
       });
     }
 
@@ -38,10 +38,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
       return GetInternal(() =>
       {
-        using (var trans = _dbConnection.Value.BeginTransaction())
+        using (var trans = _dbConnection.BeginTransaction())
         {
           claimedcapability.Id = UpdateId(claimedcapability.Id);
-          _dbConnection.Value.Insert(claimedcapability, trans);
+          _dbConnection.Insert(claimedcapability, trans);
           trans.Commit();
 
           return claimedcapability;
@@ -53,9 +53,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
       GetInternal(() =>
       {
-        using (var trans = _dbConnection.Value.BeginTransaction())
+        using (var trans = _dbConnection.BeginTransaction())
         {
-          _dbConnection.Value.Update(claimedcapability, trans);
+          _dbConnection.Update(claimedcapability, trans);
           trans.Commit();
           return 0;
         }
@@ -66,9 +66,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
       GetInternal(() =>
       {
-        using (var trans = _dbConnection.Value.BeginTransaction())
+        using (var trans = _dbConnection.BeginTransaction())
         {
-          _dbConnection.Value.Delete(claimedcapability, trans);
+          _dbConnection.Delete(claimedcapability, trans);
           trans.Commit();
           return 0;
         }

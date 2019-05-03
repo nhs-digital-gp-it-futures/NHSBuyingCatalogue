@@ -89,24 +89,24 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
     {
       GetInternal(() =>
       {
-        using (var trans = _dbConnection.Value.BeginTransaction())
+        using (var trans = _dbConnection.BeginTransaction())
         {
           // update Solution
-          _dbConnection.Value.Update(solnEx.Solution, trans);
+          _dbConnection.Update(solnEx.Solution, trans);
 
           #region ClaimedCapability
           // delete ClaimedCapabilities which will cascade delete Evidence + Reviews
           _claimedCapabilityDatastore
             .BySolution(solnEx.Solution.Id)
             .ToList()
-            .ForEach(cc => _dbConnection.Value.Delete(cc, trans));
+            .ForEach(cc => _dbConnection.Delete(cc, trans));
 
           // re-insert ClaimedCapabilities + Evidence + Reviews
-          solnEx.ClaimedCapability.ForEach(cc => _dbConnection.Value.Insert(cc, trans));
+          solnEx.ClaimedCapability.ForEach(cc => _dbConnection.Insert(cc, trans));
 
           // re-insert each chain, starting at the root ie PreviousId==null
-          GetInsertionTree(solnEx.ClaimedCapabilityEvidence).ForEach(cce => _dbConnection.Value.Insert(cce, trans));
-          GetInsertionTree(solnEx.ClaimedCapabilityReview).ForEach(ccr => _dbConnection.Value.Insert(ccr, trans));
+          GetInsertionTree(solnEx.ClaimedCapabilityEvidence).ForEach(cce => _dbConnection.Insert(cce, trans));
+          GetInsertionTree(solnEx.ClaimedCapabilityReview).ForEach(ccr => _dbConnection.Insert(ccr, trans));
           #endregion
 
           #region ClaimedStandard
@@ -114,22 +114,22 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
           _claimedStandardDatastore
             .BySolution(solnEx.Solution.Id)
             .ToList()
-            .ForEach(cs => _dbConnection.Value.Delete(cs, trans));
+            .ForEach(cs => _dbConnection.Delete(cs, trans));
 
           // re-insert ClaimedStandards + Evidence + Reviews
-          solnEx.ClaimedStandard.ForEach(cs => _dbConnection.Value.Insert(cs, trans));
+          solnEx.ClaimedStandard.ForEach(cs => _dbConnection.Insert(cs, trans));
 
           // re-insert each chain, starting at the root ie PreviousId==null
-          GetInsertionTree(solnEx.ClaimedStandardEvidence).ForEach(cse => _dbConnection.Value.Insert(cse, trans));
-          GetInsertionTree(solnEx.ClaimedStandardReview).ForEach(csr => _dbConnection.Value.Insert(csr, trans));
+          GetInsertionTree(solnEx.ClaimedStandardEvidence).ForEach(cse => _dbConnection.Insert(cse, trans));
+          GetInsertionTree(solnEx.ClaimedStandardReview).ForEach(csr => _dbConnection.Insert(csr, trans));
           #endregion
 
           #region TechnicalContacts
           // delete all TechnicalContact & re-insert
           _technicalContactDatastore
             .BySolution(solnEx.Solution.Id).ToList()
-            .ForEach(tc => _dbConnection.Value.Delete(tc, trans));
-          solnEx.TechnicalContact.ForEach(tc => _dbConnection.Value.Insert(tc, trans));
+            .ForEach(tc => _dbConnection.Delete(tc, trans));
+          solnEx.TechnicalContact.ForEach(tc => _dbConnection.Insert(tc, trans));
           #endregion
 
           trans.Commit();

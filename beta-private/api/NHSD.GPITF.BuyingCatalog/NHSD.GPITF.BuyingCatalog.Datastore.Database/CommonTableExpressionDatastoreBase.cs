@@ -37,7 +37,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
         throw new ArgumentException("SQL Common Table Expression modified - cannot find 'recursive'");
       }
 
-      var dbType = _dbConnection.Value.GetType().ToString();
+      var dbType = _dbConnection.GetType().ToString();
       switch (dbType)
       {
         case "Microsoft.Data.Sqlite.SqliteConnection":
@@ -76,12 +76,12 @@ select cte.* from {tableName} cte where {nameof(IHasPreviousId.Id)} not in
         var table = typeof(T).GetCustomAttribute<TableAttribute>(true);
         var chains = new List<IEnumerable<T>>();
         var sqlAllCurrent = GetAllSqlCurrent(table.Name);
-        var allCurrent = _dbConnection.Value.Query<T>(sqlAllCurrent, new { ownerId });
+        var allCurrent = _dbConnection.Query<T>(sqlAllCurrent, new { ownerId });
         foreach (var current in allCurrent)
         {
           var sqlCurrent = GetSqlCurrent(table.Name);
           var amendedSql = AmendCommonTableExpression(sqlCurrent);
-          var chain = _dbConnection.Value.Query<T>(amendedSql, new { currentId = current.Id });
+          var chain = _dbConnection.Query<T>(amendedSql, new { currentId = current.Id });
           chains.Add(chain);
         }
 
@@ -93,7 +93,7 @@ select cte.* from {tableName} cte where {nameof(IHasPreviousId.Id)} not in
     {
       return GetInternal(() =>
       {
-        return _dbConnection.Value.Get<T>(id);
+        return _dbConnection.Get<T>(id);
       });
     }
 
@@ -101,10 +101,10 @@ select cte.* from {tableName} cte where {nameof(IHasPreviousId.Id)} not in
     {
       return GetInternal(() =>
       {
-        using (var trans = _dbConnection.Value.BeginTransaction())
+        using (var trans = _dbConnection.BeginTransaction())
         {
           review.Id = UpdateId(review.Id);
-          _dbConnection.Value.Insert(review, trans);
+          _dbConnection.Insert(review, trans);
           trans.Commit();
 
           return review;

@@ -27,7 +27,7 @@ join FrameworkSolution fs on fs.SolutionId = soln.Id
 join Frameworks frame on frame.Id = fs.FrameworkId
 where frame.Id = @frameworkId
 ";
-        var retval = _dbConnection.Value.Query<Solutions>(sql, new { frameworkId });
+        var retval = _dbConnection.Query<Solutions>(sql, new { frameworkId });
         return retval;
       });
     }
@@ -36,7 +36,7 @@ where frame.Id = @frameworkId
     {
       return GetInternal(() =>
       {
-        return _dbConnection.Value.Get<Solutions>(id);
+        return _dbConnection.Get<Solutions>(id);
       });
     }
 
@@ -50,7 +50,7 @@ select * from Solutions where Id not in
 (
   select PreviousId from Solutions where PreviousId is not null
 )
-";        return _dbConnection.Value.Query<Solutions>(sql).Where(soln => soln.OrganisationId == organisationId);
+";        return _dbConnection.Query<Solutions>(sql).Where(soln => soln.OrganisationId == organisationId);
       });
     }
 
@@ -58,11 +58,11 @@ select * from Solutions where Id not in
     {
       return GetInternal(() =>
       {
-        using (var trans = _dbConnection.Value.BeginTransaction())
+        using (var trans = _dbConnection.BeginTransaction())
         {
           solution.Id = UpdateId(solution.Id);
           solution.CreatedOn = solution.ModifiedOn = DateTime.UtcNow;
-          _dbConnection.Value.Insert(solution, trans);
+          _dbConnection.Insert(solution, trans);
           trans.Commit();
 
           return solution;
@@ -74,10 +74,10 @@ select * from Solutions where Id not in
     {
       GetInternal(() =>
       {
-        using (var trans = _dbConnection.Value.BeginTransaction())
+        using (var trans = _dbConnection.BeginTransaction())
         {
           solution.ModifiedOn = DateTime.UtcNow;
-          _dbConnection.Value.Update(solution, trans);
+          _dbConnection.Update(solution, trans);
           trans.Commit();
           return 0;
         }
@@ -88,9 +88,9 @@ select * from Solutions where Id not in
     {
       GetInternal(() =>
       {
-        using (var trans = _dbConnection.Value.BeginTransaction())
+        using (var trans = _dbConnection.BeginTransaction())
         {
-          _dbConnection.Value.Delete(solution, trans);
+          _dbConnection.Delete(solution, trans);
           trans.Commit();
           return 0;
         }

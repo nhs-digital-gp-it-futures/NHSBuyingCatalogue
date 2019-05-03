@@ -29,7 +29,7 @@ select log.Timestamp, log.Message as Keyword from Log log
 where Callsite like '{SearchByKeywordCallsite}'
 ";
         // cannot use GetAll() because this requires an explicit key
-        var searchHists = _dbConnection.Value.Query<KeywordSearchHistory>(sql)
+        var searchHists = _dbConnection.Query<KeywordSearchHistory>(sql)
           .Where(x => x.Timestamp >= startDate && x.Timestamp <= endDate);
 
         var retval = from hist in searchHists

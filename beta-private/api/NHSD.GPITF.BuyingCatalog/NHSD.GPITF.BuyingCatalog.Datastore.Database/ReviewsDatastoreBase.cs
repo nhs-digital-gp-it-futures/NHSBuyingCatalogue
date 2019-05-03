@@ -65,9 +65,9 @@ with recursive Links(CurrentId, {nameof(ReviewsBase.Id)}, {nameof(ReviewsBase.Pr
     {
       GetInternal(() =>
       {
-        using (var trans = _dbConnection.Value.BeginTransaction())
+        using (var trans = _dbConnection.BeginTransaction())
         {
-          _dbConnection.Value.Delete(review, trans);
+          _dbConnection.Delete(review, trans);
           trans.Commit();
 
           return 0;

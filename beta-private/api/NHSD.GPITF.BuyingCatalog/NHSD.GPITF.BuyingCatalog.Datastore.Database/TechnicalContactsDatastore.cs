@@ -19,7 +19,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
       return GetInternal(() =>
       {
-        return _dbConnection.Value.GetAll<TechnicalContacts>().Where(tc => tc.SolutionId == solutionId);
+        return _dbConnection.GetAll<TechnicalContacts>().Where(tc => tc.SolutionId == solutionId);
       });
     }
 
@@ -27,10 +27,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
       return GetInternal(() =>
       {
-        using (var trans = _dbConnection.Value.BeginTransaction())
+        using (var trans = _dbConnection.BeginTransaction())
         {
           techCont.Id = UpdateId(techCont.Id);
-          _dbConnection.Value.Insert(techCont, trans);
+          _dbConnection.Insert(techCont, trans);
           trans.Commit();
 
           return techCont;
@@ -42,9 +42,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
       GetInternal(() =>
       {
-        using (var trans = _dbConnection.Value.BeginTransaction())
+        using (var trans = _dbConnection.BeginTransaction())
         {
-          _dbConnection.Value.Update(techCont, trans);
+          _dbConnection.Update(techCont, trans);
           trans.Commit();
           return 0;
         }
@@ -55,9 +55,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
       GetInternal(() =>
       {
-        using (var trans = _dbConnection.Value.BeginTransaction())
+        using (var trans = _dbConnection.BeginTransaction())
         {
-          _dbConnection.Value.Delete(techCont, trans);
+          _dbConnection.Delete(techCont, trans);
           trans.Commit();
           return 0;
         }

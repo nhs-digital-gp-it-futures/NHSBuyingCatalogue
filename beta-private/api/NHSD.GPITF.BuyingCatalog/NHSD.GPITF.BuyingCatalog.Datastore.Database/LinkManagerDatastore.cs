@@ -17,10 +17,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
       GetInternal(() =>
       {
-        using (var trans = _dbConnection.Value.BeginTransaction())
+        using (var trans = _dbConnection.BeginTransaction())
         {
           var entity = new FrameworkSolution { FrameworkId = frameworkId, SolutionId = solutionId };
-          _dbConnection.Value.Insert(entity, trans);
+          _dbConnection.Insert(entity, trans);
           trans.Commit();
           return 0;
         }
