@@ -168,16 +168,10 @@ class SharePointProvider {
     return res.every((type) => whiteList.has(type))
   }
 
-  detectMimeType (fileName) {
-    const storagePath = this.createFileStoragePath(fileName)
-    const magic = new this.Magic(this.mmm.MAGIC_MIME_TYPE)
-
-    return new Promise((resolve, reject) => {
-      magic.detectFile(storagePath, (err, result) => {
-        if (err) return reject(err)
-        return resolve(result)
-      })
-    })
+  detectMimeType (buffer) {
+    const type =  this.fileType(buffer)
+    console.log(type)
+    return type.mime
   }
 
   async uploadEvidence (uploadMethod, mimeTypeChecker, claimID, buffer, filename, subFolder) {

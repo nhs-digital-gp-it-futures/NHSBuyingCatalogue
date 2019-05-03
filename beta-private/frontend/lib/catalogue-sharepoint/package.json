@@ -9,12 +9,12 @@
   "author": "Adam Slack <adam.slack@bjss.com>",
   "license": "ISC",
   "dependencies": {
-    "catalogue-api": "../catalogue-api",
     "catalogue-antivirus": "../catalogue-antivirus",
+    "catalogue-api": "../catalogue-api",
+    "file-type": "^10.11.0",
     "node-fetch": "^2.3.0",
     "node-uuid-generator": "^1.0.0",
-    "stream": "0.0.2",
-    "mmmagic": "0.5.2"
+    "stream": "0.0.2"
   },
   "devDependencies": {
     "jest": "^23.6.0"
