@@ -4,7 +4,7 @@ WORKDIR /home/node/app
 FROM base AS dependencies
 COPY package.json .
 COPY lib ./lib
-RUN npm install
+RUN npm install --verbose
 
 FROM dependencies AS pre-build
 COPY src ./src

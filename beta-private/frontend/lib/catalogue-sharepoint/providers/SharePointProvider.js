@@ -170,7 +170,6 @@ class SharePointProvider {
 
   detectMimeType (buffer) {
     const type =  this.fileType(buffer)
-    console.log(type)
     return type.mime
   }
 
@@ -182,7 +181,7 @@ class SharePointProvider {
     await this.saveBuffer(buffer, fileUUID)
 
     try {
-      const isValidMimeType = await mimeTypeChecker(fileUUID)
+      const isValidMimeType = await mimeTypeChecker(buffer)
 
       if (!isValidMimeType) {
         return { err: 'Invalid File Type', isVirus: false, badMime: true }
