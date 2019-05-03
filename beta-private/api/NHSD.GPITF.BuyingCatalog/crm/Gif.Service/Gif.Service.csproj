@@ -36,8 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="hosting.json" />
-    <Content Remove="nlog.config" />
+    <Content Include="..\..\NHSD.GPITF.BuyingCatalog\hosting.json" Link="hosting.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -63,13 +62,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\..\NHSD.GPITF.BuyingCatalog\nlog.config" Link="nlog.config" />
     <None Include="..\Gif.Crm.snk" Link="Gif.Crm.snk" />
-    <None Include="hosting.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="nlog.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
   <ItemGroup>
