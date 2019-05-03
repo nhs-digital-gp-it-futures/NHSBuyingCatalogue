@@ -281,8 +281,6 @@ namespace NHSD.GPITF.BuyingCatalog
     {
       Console.WriteLine("Settings:");
       Console.WriteLine($"  CRM:");
-      Console.WriteLine($"    CRM_APIURI                        : {Settings.CRM_APIURI(Configuration)}");
-      Console.WriteLine($"    CRM_ACCESSTOKENURI                : {Settings.CRM_ACCESSTOKENURI(Configuration)}");
       Console.WriteLine($"    CRM_CLIENTID                      : {Settings.CRM_CLIENTID(Configuration)}");
       Console.WriteLine($"    CRM_CLIENTSECRET                  : {Settings.CRM_CLIENTSECRET(Configuration)}");
       Console.WriteLine($"    CRM_CACHE_EXPIRY_MINS             : {Settings.CRM_CACHE_EXPIRY_MINS(Configuration)}");
