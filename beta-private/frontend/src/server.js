@@ -91,6 +91,17 @@ authentication(app).then(() => {
     res.render('about', context)
   })
 
+  app.get('/privacy', (req, res) => {
+    const context = {
+      breadcrumbs: [
+        { label: 'HomePage.Breadcrumb', url: '/' },
+        { label: 'Privacy.Title' }
+      ]
+    }
+    res.locals.meta.title = 'About'
+    res.render('privacy', context)
+  })
+
   app.use('/suppliers/', authorisation.suppliersOnly, require('./routes/supplier'))
   //  app.use('/assessment', authorisation.assessmentTeamOnly, require('./routes/assessment'))
 

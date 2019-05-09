@@ -1,0 +1,46 @@
+
+<div><h3>{{t 'Privacy.Custom Sections.Necessary Cookies.Title'}}</h3></div>
+<div class="text">
+    {{#each (tt 'Privacy.Custom Sections.Necessary Cookies.Text')}}
+        <p>{{t .}}</p>
+    {{/each}}
+</div>
+{{#each (tt 'Privacy.Custom Sections.Necessary Cookies.Sections')}}
+<div class="support-process-overview">
+    <div><h3>{{t Title}}</h3></div>
+    <div class="text">
+        {{#Text}}
+            <p>{{t .}}</p>
+        {{/Text}}
+    </div>
+    <table class="two-columns">
+        <thead>
+            <th>
+                {{t Titles.Left}}
+            </th>
+            <th>
+                {{t Titles.Right}}
+            </th>
+        </thead>
+        {{#Rows}}
+        <tr>
+            <td>
+                {{#Text.Left}}
+                    <p>{{t .}}</p>
+                {{/Text.Left}}
+            </td>
+            <td>
+                {{#Text.Right}}
+                    <p>{{t .}}</p>
+                {{/Text.Right}}
+            </td>
+        </tr>
+        {{/Rows}}
+    </table>
+    <div class="post-text">
+        {{#PostText}}
+            <p>{{t .}}</p>
+        {{/PostText}}
+    </div>
+</div>
+{{/each}}

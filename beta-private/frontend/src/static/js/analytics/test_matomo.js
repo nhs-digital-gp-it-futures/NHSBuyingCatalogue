@@ -35,6 +35,18 @@ window.addEventListener('load', function () {
         'text': '#005EB8'
       }
     },
+    'content': {
+      'header': 'Cookies used on the website!',
+      'message': 'This site puts small files called cookies on your device. Some cookies are essential to the functioning of this site. Other cookies are optional but help us make this site better.',
+      'dismiss': 'Got it!',
+      'allow': 'Accept',
+      'deny': 'Decline',
+      'link': 'Privacy and cookie policy',
+      'href': '/privacy',
+      'close': '&#x274c;',
+      'policy': 'Privacy and cookie Policy',
+      'target': '_blank',
+    },
     'type': 'opt-in',
     onInitialise: function (status) {
       var type = this.options.type

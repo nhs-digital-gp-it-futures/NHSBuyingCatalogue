@@ -96,6 +96,222 @@
       ]
     }
   },
+  "Privacy": {
+    "Title": "Cookies and Privacy Policy",
+    "Nav Title": "Page contents",
+    "Sections": [
+      {
+        "Title": "Summary",
+        "Nav Title": "Summary",
+        "Text": [
+          "A description of the personal information $t(NHS.Name) may collect about you as part of our normal business. We want you to understand why we hold and process this information, and your choices. Find out how to request a copy of the information we hold about you."
+        ],
+        "Subsections": []
+      },
+      {
+        "Title": "Personal information",
+        "Nav Title": "Personal information",
+        "Text": [
+          "At NHS Digital, we collect personal information for two main reasons:",
+          "• because of our official role as the safe haven for patient data in England",
+          "• as part of our normal business",
+          "You can read more about our role in health and care, and why we collect personal information from medical records. Those pages contain important information on your choices about your confidential patient information.",
+          "This page is about the personal information we may collect about you as part of our normal business. We want you to understand why we hold and process this information, and your choices.",
+          "We always collect, hold and process information securely and legally."
+        ],
+        "Subsections": []
+      },
+      {
+        "Title": "Visiting our website",
+        "Nav Title": "Visiting our website",
+        "Text":[],
+        "Subsections": [
+          {
+            "Title": "Our use of cookies",
+            "Text": [
+              "Cookies are small text files that are placed on your computer by websites that you visit. They are widely used in order to make websites work, or work more efficiently, as well as to provide information to the owners of the site.",
+              "Most web browsers allow some control of cookies through the browser settings. To find out more about cookies, including how to see what have been set and how to manage and delete them, visit www.allaboutcookies.org.",
+              "If you do nothing other than read pages or download information, we will capture and store some information about your visit. This information will not identify you, it relates to:",
+              " • the internet domain (such as www.bbc.co.uk) and anonymised IP address from which you access the website",
+              " • the type of browser (Internet Explorer or Firefox etc) and operating system you use (Windows, Mac OS, UNIX)",
+              " • the date and time of your visit",
+              " • the pages you visit",
+              " • the address of the web site from which you linked to us (if applicable)",
+              "This information is not shared with anyone and we do not merge this information with other data."
+            ]
+          },
+          {
+            "Title": "What do we use the information for?",
+            "Text": [
+              "We use this information to add value to each visit and to provide us with information to help improve our service. We do not know (and do not wish to know) the identities of the individuals who visit our website."
+            ]
+          },
+          {
+            "Title": "Cookies we set",
+            "Text": [
+              "We use an authentication provider which requires a cookie to function correctly. Our NHS hosted web analytics tool also requires cookies for it to effectively do its job, you can choose to opt-out of these web analytics cookies."
+            ]
+          },
+          {
+            "Custom": "necessary-cookies-we-set"
+          },
+          {
+            "Custom": "analytics-cookies-we-set"
+          }
+        ]
+      },
+      {
+        "Title": "Embedded content and managing cookies",
+        "Nav Title": "Embedded content",
+        "Text": [
+          "On some pages we embed video such as YouTube, charts such as PowerBI or provide links to popular social media sites such as Twitter and LinkedIn. These services may set cookies on your device. These cookies are called ‘third party cookies’ and are beyond the control of NHS Digital."
+        ]
+      },
+      {
+        "Title": "Other websites",
+        "Nav Title": "Other websites",
+        "Text": [
+          "Our privacy notice only relates to information that we obtain from you.",
+          "If you visit a website operated by a third party through a link included on this website, your information may be used differently by the operator of the linked website.",
+          "When you are moving to another site you are advised to read the privacy notice relating to that website."
+        ],
+        "Subsections": []
+      },
+      {
+        "Title": "Contacting us by email, phone or post",
+        "Nav Title": "Contacting us",
+        "Text": [
+          "When you email <a href='mailto&#58;enquiries@nhsdigital.nhs.uk' target='_blank'>enquiries@nhsdigital.nhs.uk</a>, call <a href='tel&#58;0300 303 5678' target='_blank'>0300 303 5678</a>, or write to us, your enquiry will be answered by our contact centre.",
+          "We collect the information that you give us, and use it to help resolve your query, to contact you about your query, and to improve our services."
+        ],
+        "Subsections": []
+      },
+      {
+        "Title": "Asking to see the information we hold about you",
+        "Nav Title": "Information requests",
+        "Text": [
+          "You have the legal right to request a copy of the information we hold about you, in line with the General Data Protection Regulation (GDPR). You can do this by making a subject access request"
+        ],
+        "Subsections": []
+      }
+    ],
+    "Custom Sections": {
+      "Necessary Cookies": {
+        "Title": "Necessary Cookies",
+        "Text": [
+          "These cookies enable basic functions like page navigation and access to secure areas of the website. Our website cannot function properly without these cookies.",
+          "All of our necessary cookies are provided by <a href='mailto&#58;buyingcatalogue.digital.nhs.uk' target='_blank'>buyingcatalogue.digital.nhs.uk</a>"
+        ],
+        "Sections": [
+          {
+            "Titles": {
+              "Left": "Name",
+              "Right": "Purpose"
+            },
+            "Rows": [
+              {
+                "Text":{
+                  "Left": [
+                    "connect.sid"
+                  ],
+                  "Right": [
+                    "Preserves the visitor's session state across page requests."
+                  ]
+                }
+              },
+              {
+                "Text":{
+                  "Left": [
+                    "cookieconsent_status"
+                  ],
+                  "Right": [
+                    "Remembers your choice on handling of cookies on our domain for one year"
+                  ]
+                }
+              },
+              {
+                "Text":{
+                  "Left": [
+                    "mtm_consent"
+                  ],
+                  "Right": [
+                    "Remembers your choice on allowing web analytics"
+                  ]
+                }
+              },
+              {
+                "Text":{
+                  "Left": [
+                    "mtm_consent_removed"
+                  ],
+                  "Right": [
+                    "Remembers your choice on rejecting web analytics"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "Analytics Cookies": {
+        "Title": "Analytics Cookies",
+        "Text": [
+          "These cookies let us understand how visitors interact with our website by collecting and reporting information anonymously. If you choose not to allow cookies, then these cookies will not be stored on your device.",
+          "All of our analytics cookies are provided by <a href='mailto&#58;buyingcatalogue.digital.nhs.uk' target='_blank'>buyingcatalogue.digital.nhs.uk</a>"
+        ],
+        "Sections": [
+          {
+            "Titles": {
+              "Left": "Name",
+              "Right": "Purpose"
+            },
+            "Rows": [
+              {
+                "Text":{
+                  "Left": [
+                    "_pk_id"
+                  ],
+                  "Right": [
+                    "This allows us to recognise returning visitors"
+                  ]
+                }
+              },
+              {
+                "Text":{
+                  "Left": [
+                    "_pk_ref"
+                  ],
+                  "Right": [
+                    "These cookies hold information about your referrer."
+                  ]
+                }
+              },
+              {
+                "Text":{
+                  "Left": [
+                    "_pk_ses"
+                  ],
+                  "Right": [
+                    "A session cookie is responsible for keeping the session active for 30 minutes after last tracked action"
+                  ]
+                }
+              },
+              {
+                "Text":{
+                  "Left": [
+                    "_pk_cvar"
+                  ],
+                  "Right": [
+                    "Used to implement custom tracking of page elements."
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
   "Onboarding": {
     "Title": "Adding a $t(Solution)",
     "Subtitle": {

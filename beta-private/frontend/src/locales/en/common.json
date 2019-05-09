@@ -132,7 +132,7 @@
     "Legal": {
       "Text":  [
         "Legal &nbsp;",
-        "<a href='https://digital.nhs.uk/about-nhs-digital/privacy-and-cookies' target='_blank'>Privacy and cookies</a> &nbsp;",
+        "<a href='/privacy' target='_blank'>Privacy and cookies</a> &nbsp;",
         "See Acceptable Use Policy in <a href='//nhsdigital.bravosolution.co.uk/' target='_blank'>Bravo</a>"
       ]
     }
