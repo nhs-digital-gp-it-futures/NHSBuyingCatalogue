@@ -4,7 +4,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 {
   public abstract class PassThroughFilterBase<T> : FilterBase<T>
   {
-    public PassThroughFilterBase(IHttpContextAccessor context) :
+    protected PassThroughFilterBase(IHttpContextAccessor context) :
       base(context)
     {
     }

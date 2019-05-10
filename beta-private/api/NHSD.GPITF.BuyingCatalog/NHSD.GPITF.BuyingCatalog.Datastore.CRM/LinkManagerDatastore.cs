@@ -1,29 +1,28 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
+﻿using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
+using System;
+using GifInt = Gif.Service.Contracts;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
-  public sealed class LinkManagerDatastore : DatastoreBase<object>, ILinkManagerDatastore
+  public sealed class LinkManagerDatastore : CrmDatastoreBase<object>, ILinkManagerDatastore
   {
-    public LinkManagerDatastore(
-      IRestClientFactory crmConnectionFactory,
-      ILogger<LinkManagerDatastore> logger,
-      ISyncPolicyFactory policy,
-      IConfiguration config) :
-      base(crmConnectionFactory, logger, policy, config)
-    {
-    }
+    private readonly GifInt.ILinkManagerDatastore _crmDatastore;
 
-    private string ResourceBase { get; } = "/LinkManager";
+    public LinkManagerDatastore(
+      GifInt.ILinkManagerDatastore crmDatastore,
+      ILogger<LinkManagerDatastore> logger,
+      ISyncPolicyFactory policy) :
+      base(logger, policy)
+    {
+      _crmDatastore = crmDatastore;
+    }
 
     public void FrameworkSolutionCreate(string frameworkId, string solutionId)
     {
       GetInternal(() =>
       {
-        var request = GetPostRequest($"{ResourceBase}/FrameworkSolution/Create/{frameworkId}/{solutionId}", null);
-        var resp = GetRawResponse(request);
+        _crmDatastore.FrameworkSolutionAssociate(Guid.Parse(frameworkId), Guid.Parse(solutionId));
 
         return 0;
       });

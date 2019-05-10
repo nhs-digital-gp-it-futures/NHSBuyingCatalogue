@@ -25,7 +25,7 @@ join CapabilityFramework cf on cf.CapabilityId = cap.Id
 join Frameworks frame on frame.Id = cf.FrameworkId
 where frame.Id = @frameworkId
 ";
-        var retval = _dbConnection.Value.Query<Capabilities>(sql, new { frameworkId });
+        var retval = _dbConnection.Query<Capabilities>(sql, new { frameworkId });
         return retval;
       });
     }
@@ -34,7 +34,7 @@ where frame.Id = @frameworkId
     {
       return GetInternal(() =>
       {
-        return _dbConnection.Value.Get<Capabilities>(id);
+        return _dbConnection.Get<Capabilities>(id);
       });
     }
 
@@ -46,7 +46,7 @@ where frame.Id = @frameworkId
 select * from Capabilities
 where Id in @ids";
 
-        var retval = _dbConnection.Value.Query<Capabilities>(sql, new { ids });
+        var retval = _dbConnection.Query<Capabilities>(sql, new { ids });
         return retval;
       });
     }
@@ -61,7 +61,7 @@ join CapabilityStandard cs on cs.CapabilityId = cap.Id
 join Standards std on std.Id = cs.StandardId
 where std.Id = @standardId and cs.IsOptional = @isOptional
 ";
-        var retval = _dbConnection.Value.Query<Capabilities>(sql, new { standardId, isOptional = (isOptional ? 1 : 0).ToString() });
+        var retval = _dbConnection.Query<Capabilities>(sql, new { standardId, isOptional = (isOptional ? 1 : 0).ToString() });
         return retval;
       });
     }
@@ -77,7 +77,7 @@ select * from Capabilities where Id not in
   select PreviousId from Capabilities where PreviousId is not null
 )
 ";
-        return _dbConnection.Value.Query<Capabilities>(sql);
+        return _dbConnection.Query<Capabilities>(sql);
       });
     }
   }

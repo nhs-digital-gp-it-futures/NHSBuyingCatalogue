@@ -9,7 +9,7 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
   public interface IEvidenceBlobStoreDatastore
   {
     void PrepareForSolution(IClaimsInfoProvider claimsInfoProvider, string solutionId);
-    string AddEvidenceForClaim(IClaimsInfoProvider claimsInfoProvider, string claimId, Stream file, string filename, string subFolder = null);
+    string AddEvidenceForClaim(IClaimsInfoProvider claimsInfoProvider, string claimId, Stream file, string fileName, string subFolder = null);
     FileStreamResult GetFileStream(IClaimsInfoProvider claimsInfoProvider, string claimId, string uniqueId);
     IEnumerable<BlobInfo> EnumerateFolder(IClaimsInfoProvider claimsInfoProvider, string claimId, string subFolder = null);
     IEnumerable<ClaimBlobInfoMap> EnumerateClaimFolderTree(IClaimsInfoProvider claimsInfoProvider, string solutionId);

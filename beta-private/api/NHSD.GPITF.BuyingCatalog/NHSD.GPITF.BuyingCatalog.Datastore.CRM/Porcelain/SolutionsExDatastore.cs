@@ -1,67 +1,38 @@
-﻿using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
+using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using GifInt = Gif.Service.Contracts;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
 {
-  public sealed class SolutionsExDatastore : DatastoreBase<SolutionEx>, ISolutionsExDatastore
+  public sealed class SolutionsExDatastore : ShortTermCachedDatastore<SolutionEx>, ISolutionsExDatastore
   {
-    private string ResourceBase { get; } = "/porcelain/SolutionsEx";
-
-    private readonly ISolutionsDatastore _solutionDatastore;
-    private readonly ITechnicalContactsDatastore _technicalContactDatastore;
-
-    private readonly ICapabilitiesImplementedDatastore _claimedCapabilityDatastore;
-    private readonly ICapabilitiesImplementedEvidenceDatastore _claimedCapabilityEvidenceDatastore;
-    private readonly ICapabilitiesImplementedReviewsDatastore _claimedCapabilityReviewsDatastore;
-
-    private readonly IStandardsApplicableDatastore _claimedStandardDatastore;
-    private readonly IStandardsApplicableEvidenceDatastore _claimedStandardEvidenceDatastore;
-    private readonly IStandardsApplicableReviewsDatastore _claimedStandardReviewsDatastore;
+    private readonly GifInt.ISolutionsExDatastore _crmDatastore;
 
     public SolutionsExDatastore(
-      IRestClientFactory crmConnectionFactory,
+      GifInt.ISolutionsExDatastore crmDatastore,
       ILogger<SolutionsExDatastore> logger,
       ISyncPolicyFactory policy,
-
-      ISolutionsDatastore solutionDatastore,
-      ITechnicalContactsDatastore technicalContactDatastore,
-
-      ICapabilitiesImplementedDatastore claimedCapabilityDatastore,
-      ICapabilitiesImplementedEvidenceDatastore claimedCapabilityEvidenceDatastore,
-      ICapabilitiesImplementedReviewsDatastore claimedCapabilityReviewsDatastore,
-
-      IStandardsApplicableDatastore claimedStandardDatastore,
-      IStandardsApplicableEvidenceDatastore claimedStandardEvidenceDatastore,
-      IStandardsApplicableReviewsDatastore claimedStandardReviewsDatastore,
-
-      IConfiguration config) :
-      base(crmConnectionFactory, logger, policy, config)
+      IConfiguration config,
+      IShortTermCache cache,
+      IServiceProvider serviceProvider) :
+      base(logger, policy, config, cache, serviceProvider)
     {
-      _solutionDatastore = solutionDatastore;
-      _technicalContactDatastore = technicalContactDatastore;
-
-      _claimedCapabilityDatastore = claimedCapabilityDatastore;
-      _claimedCapabilityEvidenceDatastore = claimedCapabilityEvidenceDatastore;
-      _claimedCapabilityReviewsDatastore = claimedCapabilityReviewsDatastore;
-
-      _claimedStandardDatastore = claimedStandardDatastore;
-      _claimedStandardEvidenceDatastore = claimedStandardEvidenceDatastore;
-      _claimedStandardReviewsDatastore = claimedStandardReviewsDatastore;
+      _crmDatastore = crmDatastore;
     }
 
     public SolutionEx BySolution(string solutionId)
     {
       return GetInternal(() =>
       {
-        var request = GetRequest($"{ResourceBase}/BySolution/{solutionId}");
-        var retval = GetResponse<SolutionEx>(request);
-
-        return retval;
+        return GetFromCache(GetCachePathBySolution(solutionId), solutionId);
       });
     }
 
@@ -69,8 +40,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
     {
       GetInternal(() =>
       {
-        var request = GetPutRequest($"{ResourceBase}/Update", solnEx);
-        var resp = GetRawResponse(request);
+        _crmDatastore.Update(Creator.FromApi(solnEx));
+        ExpireCache(solnEx);
 
         return 0;
       });
@@ -80,11 +51,68 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
     {
       return GetInternal(() =>
       {
-        var request = GetRequest($"{ResourceBase}/ByOrganisation/{organisationId}");
-        var retval = GetResponse<IEnumerable<SolutionEx>>(request);
+        var vals = _crmDatastore
+          .ByOrganisation(organisationId)
+          .Select(val => Creator.FromCrm(val));
 
-        return retval;
+        return vals;
       });
+    }
+
+    protected override SolutionEx GetFromSource(string path, string parameter)
+    {
+      if (path == GetCachePathBySolution(parameter))
+      {
+        return GetFromSourceBySolution(parameter);
+      }
+
+      throw new ArgumentOutOfRangeException($"{nameof(path)}", path, "Unsupported cache path");
+    }
+
+    private SolutionEx GetFromSourceBySolution(string solutionId)
+    {
+      var val = _crmDatastore
+        .BySolution(solutionId);
+
+      return Creator.FromCrm(val);
+    }
+
+    protected override IEnumerable<SolutionEx> GetAllFromSource(string path, string parameter = null)
+    {
+      throw new NotImplementedException();
+    }
+
+    private void ExpireCache(SolutionEx solnEx)
+    {
+      // expire our cache
+      ExpireCache(solnEx.Solution);
+
+      // expire Solutions cache
+      var other = _serviceProvider.GetService<ISolutionsDatastore>() as IOtherCache;
+      other?.ExpireOtherValue(solnEx);
+    }
+
+    private void ExpireCache(Solutions soln)
+    {
+      ExpireValue(GetCachePathBySolution(soln.Id));
+    }
+
+    private static string GetCachePathBySolution(string solutionId)
+    {
+      return $"/{nameof(SolutionEx)}/{nameof(BySolution)}/{solutionId}";
+    }
+
+    public override void ExpireOtherValue(object item)
+    {
+#pragma warning disable S3247 // Duplicate casts should not be made
+      if (item is Solutions)
+#pragma warning restore S3247 // Duplicate casts should not be made
+      {
+        ExpireCache((Solutions)item);
+        return;
+      }
+
+      throw new ArgumentOutOfRangeException($"{nameof(item)}", item.GetType(), "Unsupported cache expiry type");
     }
   }
 }

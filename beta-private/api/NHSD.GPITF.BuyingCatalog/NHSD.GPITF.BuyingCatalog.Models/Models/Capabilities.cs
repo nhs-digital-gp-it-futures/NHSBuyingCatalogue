@@ -14,7 +14,7 @@ namespace NHSD.GPITF.BuyingCatalog.Models
   /// Generally, only interested in current ‘capability’
   /// </summary>
   [Table(nameof(Capabilities))]
-  public sealed class Capabilities : Quality, IHasPreviousId
+  public sealed class Capabilities : Quality
   {
   }
 }

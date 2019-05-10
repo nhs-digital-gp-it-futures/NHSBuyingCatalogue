@@ -3,7 +3,7 @@
   /// <summary>
   /// Status of a <see cref="StandardsApplicable"/> as it goes through various stages in its life cycle
   /// </summary>
-  public enum StandardsApplicableStatus : int
+  public enum StandardsApplicableStatus
   {
     /// <summary>
     /// Supplier has not added any evidence to support their claims

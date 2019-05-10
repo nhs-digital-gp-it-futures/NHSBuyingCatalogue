@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Configuration;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -44,6 +45,7 @@ namespace NHSD.GPITF.BuyingCatalog
         .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
         .AddJsonFile("hosting.json", optional: true, reloadOnChange: true)
         .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+        .AddJsonFile($"autofac.json", optional: true)
         .AddEnvironmentVariables()
         .AddUserSecrets<Program>();
 
@@ -202,6 +204,7 @@ namespace NHSD.GPITF.BuyingCatalog
 
       var assys = assyPaths.Select(filePath => Assembly.LoadFile(filePath)).ToList();
       assys.Add(exeAssy);
+
       builder
         .RegisterAssemblyTypes(assys.ToArray())
         .PublicOnly()
@@ -209,6 +212,10 @@ namespace NHSD.GPITF.BuyingCatalog
         .SingleInstance();
 
       builder.Register(cc => Configuration).As<IConfiguration>();
+
+      // load configuration from autofac.json
+      var module = new ConfigurationModule(Configuration);
+      builder.RegisterModule(module);
 
       ApplicationContainer = builder.Build();
 
@@ -257,8 +264,10 @@ namespace NHSD.GPITF.BuyingCatalog
         // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
         app.UseSwaggerUI(opts =>
         {
+#pragma warning disable S1075 // URIs should not be hardcoded
           opts.SwaggerEndpoint("/swagger/v1/swagger.json", "Buying Catalog API V1");
           opts.SwaggerEndpoint("/swagger/porcelain/swagger.json", "Buying Catalog API V1 Porcelain");
+#pragma warning restore S1075 // URIs should not be hardcoded
 
           opts.DocExpansion(DocExpansion.None);
         });
@@ -272,11 +281,16 @@ namespace NHSD.GPITF.BuyingCatalog
     {
       Console.WriteLine("Settings:");
       Console.WriteLine($"  CRM:");
-      Console.WriteLine($"    CRM_APIURI              : {Settings.CRM_APIURI(Configuration)}");
-      Console.WriteLine($"    CRM_ACCESSTOKENURI      : {Settings.CRM_ACCESSTOKENURI(Configuration)}");
-      Console.WriteLine($"    CRM_CLIENTID            : {Settings.CRM_CLIENTID(Configuration)}");
-      Console.WriteLine($"    CRM_CLIENTSECRET        : {Settings.CRM_CLIENTSECRET(Configuration)}");
-      Console.WriteLine($"    CRM_CACHE_EXPIRY_MINS   : {Settings.CRM_CACHE_EXPIRY_MINS(Configuration)}");
+      Console.WriteLine($"    CRM_CLIENTID                      : {Settings.CRM_CLIENTID(Configuration)}");
+      Console.WriteLine($"    CRM_CLIENTSECRET                  : {Settings.CRM_CLIENTSECRET(Configuration)}");
+      Console.WriteLine($"    CRM_CACHE_EXPIRY_MINS             : {Settings.CRM_CACHE_EXPIRY_MINS(Configuration)}");
+      Console.WriteLine($"    CRM_SHORT_TERM_CACHE_EXPIRY_SECS  : {Settings.CRM_SHORT_TERM_CACHE_EXPIRY_SECS(Configuration)}");
+
+      Console.WriteLine($"  GIF:");
+      Console.WriteLine($"    GIF_CRM_URL                 : {Settings.GIF_CRM_URL(Configuration)}");
+      Console.WriteLine($"    GIF_AUTHORITY_URI           : {Settings.GIF_AUTHORITY_URI(Configuration)}");
+      Console.WriteLine($"    GIF_AZURE_CLIENT_ID         : {Settings.GIF_AZURE_CLIENT_ID(Configuration)}");
+      Console.WriteLine($"    GIF_ENCRYPTED_CLIENT_SECRET : {Settings.GIF_ENCRYPTED_CLIENT_SECRET(Configuration)}");
 
       Console.WriteLine($"  USE_CRM:");
       Console.WriteLine($"    USE_CRM : {Settings.USE_CRM(Configuration)}");

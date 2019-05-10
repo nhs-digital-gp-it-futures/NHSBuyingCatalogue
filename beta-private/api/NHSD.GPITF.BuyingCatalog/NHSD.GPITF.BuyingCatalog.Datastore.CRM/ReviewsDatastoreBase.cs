@@ -1,65 +1,54 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
+﻿using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
-  public abstract class ReviewsDatastoreBase<T> : DatastoreBase<T>, IReviewsDatastore<ReviewsBase> where T : ReviewsBase
+  public abstract class ReviewsDatastoreBase<T> : CrmDatastoreBase<T>, IReviewsDatastore<ReviewsBase> where T : ReviewsBase
   {
-    protected abstract string ResourceBase { get; }
-
-    public ReviewsDatastoreBase(
-      IRestClientFactory crmFactory, 
-      ILogger<DatastoreBase<T>> logger, 
-      ISyncPolicyFactory policy,
-      IConfiguration config) : 
-      base(crmFactory, logger, policy, config)
+    protected ReviewsDatastoreBase(
+      ILogger<CrmDatastoreBase<T>> logger,
+      ISyncPolicyFactory policy) :
+      base(logger, policy)
     {
     }
 
+    protected abstract IEnumerable<IEnumerable<T>> ByEvidenceInternal(string evidenceId);
     public IEnumerable<IEnumerable<T>> ByEvidence(string evidenceId)
     {
       return GetInternal(() =>
       {
-        var request = GetAllRequest($"{ResourceBase}/ByEvidence/{evidenceId}");
-        var retval = GetResponse<PaginatedList<IEnumerable<T>>>(request);
-
-        return retval.Items;
+        return ByEvidenceInternal(evidenceId);
       });
     }
 
+    protected abstract T ByIdInternal(string id);
     public T ById(string id)
     {
       return GetInternal(() =>
       {
-        var request = GetRequest($"{ResourceBase}/ById/{id}");
-        var retval = GetResponse<T>(request);
-
-        return retval;
+        return ByIdInternal(id);
       });
     }
 
+    protected abstract T CreateInternal(T review);
     public T Create(T review)
     {
       return GetInternal(() =>
       {
         review.Id = UpdateId(review.Id);
-        var request = GetPostRequest($"{ResourceBase}", review);
-        var retval = GetResponse<T>(request);
 
-        return retval;
+        return CreateInternal(review);
       });
     }
 
+    protected abstract void DeleteInternal(T review);
     public void Delete(T review)
     {
       GetInternal(() =>
       {
-        var request = GetDeleteRequest($"{ResourceBase}", review);
-        var resp = GetRawResponse(request);
+        DeleteInternal(review);
 
         return 0;
       });

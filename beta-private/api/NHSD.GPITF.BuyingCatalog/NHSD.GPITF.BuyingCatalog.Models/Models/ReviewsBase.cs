@@ -6,15 +6,8 @@ using System.ComponentModel.DataAnnotations;
 namespace NHSD.GPITF.BuyingCatalog.Models
 {
 #pragma warning disable CS1591
-  public abstract class ReviewsBase : IHasPreviousId
+  public abstract class ReviewsBase : EntityBase, IHasPreviousId
   {
-    /// <summary>
-    /// Unique identifier of entity
-    /// </summary>
-    [Required]
-    [ExplicitKey]
-    public string Id { get; set; }
-
     /// <summary>
     /// Unique identifier of previous version of entity
     /// </summary>
@@ -31,7 +24,6 @@ namespace NHSD.GPITF.BuyingCatalog.Models
     /// Derived from calling context
     /// SET ON SERVER
     /// </summary>
-    [Required]
     public string CreatedById { get; set; }
 
     /// <summary>

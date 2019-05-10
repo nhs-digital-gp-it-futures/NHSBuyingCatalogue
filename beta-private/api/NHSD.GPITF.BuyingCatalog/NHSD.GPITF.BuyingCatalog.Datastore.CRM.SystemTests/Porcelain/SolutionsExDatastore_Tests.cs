@@ -2,10 +2,12 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain;
+using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Tests;
 using NUnit.Framework;
+using System;
 using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
@@ -31,34 +33,18 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.SystemTests.Porcelain
     [SetUp]
     public void Setup()
     {
-      _solutionDatastore = new SolutionsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<SolutionsDatastore>>().Object, _policy, _config);
-      _technicalContactDatastore = new TechnicalContactsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<TechnicalContactsDatastore>>().Object, _policy, _config);
+      _solutionDatastore = new SolutionsDatastore(DatastoreBaseSetup.SolutionsDatastore, new Mock<ILogger<SolutionsDatastore>>().Object, _policy, _config, new Mock<IShortTermCache>().Object, new Mock<IServiceProvider>().Object);
+      _technicalContactDatastore = new TechnicalContactsDatastore(DatastoreBaseSetup.TechnicalContactsDatastore, new Mock<ILogger<TechnicalContactsDatastore>>().Object, _policy);
 
-      _claimedCapabilityDatastore = new CapabilitiesImplementedDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<CapabilitiesImplementedDatastore>>().Object, _policy, _config);
-      _claimedCapabilityEvidenceDatastore = new CapabilitiesImplementedEvidenceDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<CapabilitiesImplementedEvidenceDatastore>>().Object, _policy, _config);
-      _claimedCapabilityReviewsDatastore = new CapabilitiesImplementedReviewsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<CapabilitiesImplementedReviewsDatastore>>().Object, _policy, _config);
+      _claimedCapabilityDatastore = new CapabilitiesImplementedDatastore(DatastoreBaseSetup.CapabilitiesImplementedDatastore, new Mock<ILogger<CapabilitiesImplementedDatastore>>().Object, _policy);
+      _claimedCapabilityEvidenceDatastore = new CapabilitiesImplementedEvidenceDatastore(DatastoreBaseSetup.CapabilitiesImplementedEvidenceDatastore, new Mock<ILogger<CapabilitiesImplementedEvidenceDatastore>>().Object, _policy);
+      _claimedCapabilityReviewsDatastore = new CapabilitiesImplementedReviewsDatastore(DatastoreBaseSetup.CapabilitiesImplementedReviewsDatastore, new Mock<ILogger<CapabilitiesImplementedReviewsDatastore>>().Object, _policy);
 
-      _claimedStandardDatastore = new StandardsApplicableDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<StandardsApplicableDatastore>>().Object, _policy, _config);
-      _claimedStandardEvidenceDatastore = new StandardsApplicableEvidenceDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<StandardsApplicableEvidenceDatastore>>().Object, _policy, _config);
-      _claimedStandardReviewsDatastore = new StandardsApplicableReviewsDatastore(DatastoreBaseSetup.CrmConnectionFactory, new Mock<ILogger<StandardsApplicableReviewsDatastore>>().Object, _policy, _config);
+      _claimedStandardDatastore = new StandardsApplicableDatastore(DatastoreBaseSetup.StandardsApplicableDatastore, new Mock<ILogger<StandardsApplicableDatastore>>().Object, _policy);
+      _claimedStandardEvidenceDatastore = new StandardsApplicableEvidenceDatastore(DatastoreBaseSetup.StandardsApplicableEvidenceDatastore, new Mock<ILogger<StandardsApplicableEvidenceDatastore>>().Object, _policy);
+      _claimedStandardReviewsDatastore = new StandardsApplicableReviewsDatastore(DatastoreBaseSetup.StandardsApplicableReviewsDatastore, new Mock<ILogger<StandardsApplicableReviewsDatastore>>().Object, _policy);
 
-      _datastore = new SolutionsExDatastore(
-        DatastoreBaseSetup.CrmConnectionFactory,
-        _logger,
-        _policy,
-
-        _solutionDatastore,
-        _technicalContactDatastore,
-
-        _claimedCapabilityDatastore,
-        _claimedCapabilityEvidenceDatastore,
-        _claimedCapabilityReviewsDatastore,
-
-        _claimedStandardDatastore,
-        _claimedStandardEvidenceDatastore,
-        _claimedStandardReviewsDatastore,
-        
-        _config);
+      _datastore = new SolutionsExDatastore(DatastoreBaseSetup.SolutionsExDatastore, _logger, _policy, _config, new Mock<IShortTermCache>().Object, new Mock<IServiceProvider>().Object);
 
       var soln = Retriever.GetAllSolutions(_policy).First();
       _solnOrig = _datastore.BySolution(soln.Id);

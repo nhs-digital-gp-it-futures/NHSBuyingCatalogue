@@ -2,7 +2,7 @@
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
-  public interface IValidatorBase<T> : IValidator<T>
+  public interface IValidatorBase<in T> : IValidator<T>
   {
     void ValidateAndThrowEx(T instance, string ruleSet = null);
   }

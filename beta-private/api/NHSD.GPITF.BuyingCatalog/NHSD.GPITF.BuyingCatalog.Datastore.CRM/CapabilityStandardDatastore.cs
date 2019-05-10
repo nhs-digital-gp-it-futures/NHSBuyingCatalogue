@@ -1,32 +1,48 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
+using System.Linq;
+using GifInt = Gif.Service.Contracts;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
-  public sealed class CapabilityStandardDatastore : CachedDatastore<CapabilityStandard>, ICapabilityStandardDatastore
+  public sealed class CapabilityStandardDatastore : LongTermCachedDatastore<CapabilityStandard>, ICapabilityStandardDatastore
   {
+    private readonly GifInt.ICapabilityStandardDatastore _crmDatastore;
+
     public CapabilityStandardDatastore(
-      IRestClientFactory crmFactory,
-      ILogger<DatastoreBase<CapabilityStandard>> logger,
+      GifInt.ICapabilityStandardDatastore crmDatastore,
+      ILogger<CapabilityStandardDatastore> logger,
       ISyncPolicyFactory policy,
       IConfiguration config,
-      IDatastoreCache cache) :
-      base(crmFactory, logger, policy, config, cache)
+      ILongTermCache cache) :
+      base(logger, policy, config, cache)
     {
+      _crmDatastore = crmDatastore;
     }
-
-    private string ResourceBase { get; } = "/CapabilityStandards";
 
     public IEnumerable<CapabilityStandard> GetAll()
     {
       return GetInternal(() =>
       {
-        return GetAll($"{ResourceBase}");
+        return GetAllFromCache($"/{nameof(CapabilityStandard)}");
       });
+    }
+
+    protected override IEnumerable<CapabilityStandard> GetAllFromSource(string path, string parameter = null)
+    {
+      var vals = _crmDatastore
+        .GetAll()
+        .Select(val => Creator.FromCrm(val));
+
+      return vals;
+    }
+
+    protected override CapabilityStandard GetFromSource(string path, string parameter)
+    {
+      throw new System.NotImplementedException();
     }
   }
 }

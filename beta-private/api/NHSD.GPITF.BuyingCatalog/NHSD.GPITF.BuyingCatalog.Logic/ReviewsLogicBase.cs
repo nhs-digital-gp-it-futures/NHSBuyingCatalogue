@@ -14,7 +14,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     private readonly IReviewsValidator<T> _validator;
     private readonly IReviewsFilter<IEnumerable<T>> _filter;
 
-    public ReviewsLogicBase(
+    protected ReviewsLogicBase(
       IReviewsBaseModifier<T> modifier,
       IReviewsDatastore<T> datastore,
       IContactsDatastore contacts,

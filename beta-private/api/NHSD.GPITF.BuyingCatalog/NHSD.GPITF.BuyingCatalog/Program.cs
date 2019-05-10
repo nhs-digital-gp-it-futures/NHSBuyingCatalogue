@@ -8,6 +8,10 @@ namespace NHSD.GPITF.BuyingCatalog
 #pragma warning disable CS1591
   public sealed class Program
   {
+    private Program()
+    {
+    }
+
     public static void Main(string[] args)
     {
       // THIS IS THE MAGIC!

@@ -1,0 +1,14 @@
+- name: Home
+  href: index.md
+
+- name: Domain Entities
+  href: api/index.md
+
+- name: Data Storage
+  href: api/Datastore.Interfaces.md
+
+- name: Authentication
+  href: api/Authentication.md
+
+- name: System Configuration
+  href: ../../../README.md

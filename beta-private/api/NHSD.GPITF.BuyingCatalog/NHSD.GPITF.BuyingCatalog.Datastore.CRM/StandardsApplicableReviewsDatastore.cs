@@ -1,22 +1,58 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Logging;
-using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
+using GifInt = Gif.Service.Contracts;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
   public sealed class StandardsApplicableReviewsDatastore : ReviewsDatastoreBase<StandardsApplicableReviews>, IStandardsApplicableReviewsDatastore
   {
-    protected override string ResourceBase { get; } = "/StandardsApplicableReviews";
+    private readonly GifInt.IStandardsApplicableReviewsDatastore _crmDatastore;
 
     public StandardsApplicableReviewsDatastore(
-      IRestClientFactory crmFactory,
-      ILogger<DatastoreBase<StandardsApplicableReviews>> logger,
-      ISyncPolicyFactory policy,
-      IConfiguration config) :
-      base(crmFactory, logger, policy, config)
+      GifInt.IStandardsApplicableReviewsDatastore crmDatastore,
+      ILogger<CrmDatastoreBase<StandardsApplicableReviews>> logger,
+      ISyncPolicyFactory policy) :
+      base(logger, policy)
     {
+      _crmDatastore = crmDatastore;
+    }
+
+    protected override IEnumerable<IEnumerable<StandardsApplicableReviews>> ByEvidenceInternal(string evidenceId)
+    {
+      var retval = new List<IEnumerable<StandardsApplicableReviews>>();
+      var allVals = _crmDatastore
+        .ByEvidence(evidenceId);
+      foreach (var vals in allVals)
+      {
+        retval.Add(vals.Select(val => Creator.StandardsApplicableReviewsFromCrm(val)));
+      }
+
+      return retval;
+    }
+
+    protected override StandardsApplicableReviews ByIdInternal(string id)
+    {
+      var val = _crmDatastore
+        .ById(id);
+
+      return Creator.StandardsApplicableReviewsFromCrm(val);
+    }
+
+    protected override StandardsApplicableReviews CreateInternal(StandardsApplicableReviews review)
+    {
+      var val = _crmDatastore
+        .Create(Creator.FromApi(review));
+
+      return Creator.StandardsApplicableReviewsFromCrm(val);
+    }
+
+    protected override void DeleteInternal(StandardsApplicableReviews review)
+    {
+      _crmDatastore
+        .Delete(Creator.FromApi(review));
     }
   }
 }

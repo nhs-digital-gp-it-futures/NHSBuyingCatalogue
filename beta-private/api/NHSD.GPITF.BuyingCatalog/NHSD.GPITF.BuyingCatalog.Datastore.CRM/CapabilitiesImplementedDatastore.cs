@@ -1,22 +1,58 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
+﻿using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
+using System.Collections.Generic;
+using System.Linq;
+using GifInt = Gif.Service.Contracts;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
-  public sealed class CapabilitiesImplementedDatastore : ClaimsDatastoreBase<CapabilitiesImplemented>, ICapabilitiesImplementedDatastore, IClaimsDatastore<ClaimsBase>
+  public sealed class CapabilitiesImplementedDatastore : ClaimsDatastoreBase<CapabilitiesImplemented>, ICapabilitiesImplementedDatastore
   {
-    protected override string ResourceBase { get; } = "/CapabilitiesImplemented";
+    private readonly GifInt.ICapabilitiesImplementedDatastore _crmDatastore;
 
     public CapabilitiesImplementedDatastore(
-      IRestClientFactory crmConnectionFactory,
+      GifInt.ICapabilitiesImplementedDatastore crmDatastore,
       ILogger<CapabilitiesImplementedDatastore> logger,
-      ISyncPolicyFactory policy,
-      IConfiguration config) :
-      base(crmConnectionFactory, logger, policy, config)
+      ISyncPolicyFactory policy) :
+      base(logger, policy)
     {
+      _crmDatastore = crmDatastore;
+    }
+
+    protected override CapabilitiesImplemented ByIdInternal(string id)
+    {
+      var val = _crmDatastore
+        .ById(id);
+
+      return Creator.FromCrm(val);
+    }
+
+    protected override IEnumerable<CapabilitiesImplemented> BySolutionInternal(string solutionId)
+    {
+      var vals = _crmDatastore
+        .BySolution(solutionId)
+        .Select(val => Creator.FromCrm(val));
+
+      return vals;
+    }
+
+    protected override CapabilitiesImplemented CreateInternal(CapabilitiesImplemented claim)
+    {
+      var val = _crmDatastore
+        .Create(Creator.FromApi(claim));
+
+      return Creator.FromCrm(val);
+    }
+
+    protected override void DeleteInternal(CapabilitiesImplemented claim)
+    {
+      _crmDatastore.Delete(Creator.FromApi(claim));
+    }
+
+    protected override void UpdateInternal(CapabilitiesImplemented claim)
+    {
+      _crmDatastore.Update(Creator.FromApi(claim));
     }
   }
 }

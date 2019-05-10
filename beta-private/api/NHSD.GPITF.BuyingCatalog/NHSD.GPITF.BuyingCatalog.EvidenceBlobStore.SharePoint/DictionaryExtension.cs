@@ -14,11 +14,11 @@ namespace SharePointPnP.IdentityModel.Extensions.S2S
 
     public const char DefaultKeyValueSeparator = '=';
 
-    public static Encoder DefaultDecoder = new Encoder(HttpUtility.UrlDecode);
+    public static readonly Encoder DefaultDecoder = new Encoder(HttpUtility.UrlDecode);
 
-    public static Encoder DefaultEncoder = new Encoder(HttpUtility.UrlEncode);
+    public static readonly Encoder DefaultEncoder = new Encoder(HttpUtility.UrlEncode);
 
-    public static Encoder NullEncoder = new Encoder(NullEncode);
+    public static readonly Encoder NullEncoder = new Encoder(NullEncode);
 
     private static string NullEncode(string value) => value;
 

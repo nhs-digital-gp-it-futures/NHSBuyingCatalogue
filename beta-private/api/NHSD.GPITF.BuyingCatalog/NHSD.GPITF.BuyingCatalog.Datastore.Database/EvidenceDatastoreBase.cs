@@ -1,17 +1,14 @@
-﻿using Dapper;
-using Dapper.Contrib.Extensions;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 {
   public abstract class EvidenceDatastoreBase<T> : CommonTableExpressionDatastoreBase<T>, IEvidenceDatastore<EvidenceBase> where T : EvidenceBase
   {
-    public EvidenceDatastoreBase(
+    protected EvidenceDatastoreBase(
       IDbConnectionFactory dbConnectionFactory,
       ILogger<EvidenceDatastoreBase<T>> logger,
       ISyncPolicyFactory policy) :
@@ -19,87 +16,50 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
     }
 
-    public T ById(string id)
-    {
-      return GetInternal(() =>
-      {
-        return _dbConnection.Value.Get<T>(id);
-      });
-    }
-
     public IEnumerable<IEnumerable<T>> ByClaim(string claimId)
     {
-      return GetInternal(() =>
-      {
-        var table = typeof(T).GetCustomAttribute<TableAttribute>(true);
-        var chains = new List<IEnumerable<T>>();
-        var sqlAllCurrent = $@"
--- select all current versions
-select ev.* from {table.Name} ev where Id not in 
-(
-  select PreviousId from {table.Name} where PreviousId is not null
-) and
-ClaimId = @claimId
-";
-        var allCurrent = _dbConnection.Value.Query<T>(sqlAllCurrent, new { claimId });
-        foreach (var current in allCurrent)
-        {
-          var sqlCurrent = $@"
+      return ByOwner(claimId);
+    }
+
+    protected override string OwnerDiscriminator => nameof(EvidenceBase.ClaimId);
+
+    public override string GetSqlCurrent(string tableName)
+    {
+      return
+ $@"
 -- get all previous versions from a specified (CurrentId) version
-with recursive Links(CurrentId, Id, PreviousId, ClaimId, CreatedById, CreatedOn, OriginalDate, Evidence, HasRequestedLiveDemo, BlobId) as (
+with recursive Links(CurrentId, {nameof(EvidenceBase.Id)}, {nameof(EvidenceBase.PreviousId)}, {nameof(EvidenceBase.ClaimId)}, {nameof(EvidenceBase.CreatedById)}, {nameof(EvidenceBase.CreatedOn)}, {nameof(EvidenceBase.OriginalDate)}, {nameof(EvidenceBase.Evidence)}, {nameof(EvidenceBase.HasRequestedLiveDemo)}, {nameof(EvidenceBase.BlobId)}) as (
   select
-    Id, Id, PreviousId, ClaimId, CreatedById, CreatedOn, OriginalDate, Evidence, HasRequestedLiveDemo, BlobId
-  from {table.Name}
-  where PreviousId is null
+    {nameof(EvidenceBase.Id)}, {nameof(EvidenceBase.Id)}, {nameof(EvidenceBase.PreviousId)}, {nameof(EvidenceBase.ClaimId)}, {nameof(EvidenceBase.CreatedById)}, {nameof(EvidenceBase.CreatedOn)}, {nameof(EvidenceBase.OriginalDate)}, {nameof(EvidenceBase.Evidence)}, {nameof(EvidenceBase.HasRequestedLiveDemo)}, {nameof(EvidenceBase.BlobId)}
+  from {tableName}
+  where {nameof(EvidenceBase.PreviousId)} is null
   
   union all
   select
-    Id, Id, PreviousId, ClaimId, CreatedById, CreatedOn, OriginalDate, Evidence, HasRequestedLiveDemo, BlobId
-  from {table.Name} 
-  where PreviousId is not null
+    {nameof(EvidenceBase.Id)}, {nameof(EvidenceBase.Id)}, {nameof(EvidenceBase.PreviousId)}, {nameof(EvidenceBase.ClaimId)}, {nameof(EvidenceBase.CreatedById)}, {nameof(EvidenceBase.CreatedOn)}, {nameof(EvidenceBase.OriginalDate)}, {nameof(EvidenceBase.Evidence)}, {nameof(EvidenceBase.HasRequestedLiveDemo)}, {nameof(EvidenceBase.BlobId)}
+  from {tableName} 
+  where {nameof(EvidenceBase.PreviousId)} is not null
   
   union all
   select
     Links.CurrentId,
-    {table.Name}.Id,
-    {table.Name}.PreviousId,
-    {table.Name}.ClaimId,
-    {table.Name}.CreatedById,
-    {table.Name}.CreatedOn,
-    {table.Name}.OriginalDate,
-    {table.Name}.Evidence,
-    {table.Name}.HasRequestedLiveDemo,
-    {table.Name}.BlobId
+    {tableName}.{nameof(EvidenceBase.Id)},
+    {tableName}.{nameof(EvidenceBase.PreviousId)},
+    {tableName}.{nameof(EvidenceBase.ClaimId)},
+    {tableName}.{nameof(EvidenceBase.CreatedById)},
+    {tableName}.{nameof(EvidenceBase.CreatedOn)},
+    {tableName}.{nameof(EvidenceBase.OriginalDate)},
+    {tableName}.{nameof(EvidenceBase.Evidence)},
+    {tableName}.{nameof(EvidenceBase.HasRequestedLiveDemo)},
+    {tableName}.{nameof(EvidenceBase.BlobId)}
   from Links
-  join {table.Name}
-  on Links.PreviousId = {table.Name}.Id
+  join {tableName}
+  on Links.{nameof(EvidenceBase.PreviousId)} = {tableName}.Id
 )
-  select Links.Id, Links.PreviousId, Links.ClaimId, Links.CreatedById, Links.CreatedOn, Links.OriginalDate, Links.Evidence, Links.HasRequestedLiveDemo, Links.BlobId
+  select Links.{nameof(EvidenceBase.Id)}, Links.{nameof(EvidenceBase.PreviousId)}, Links.{nameof(EvidenceBase.ClaimId)}, Links.{nameof(EvidenceBase.CreatedById)}, Links.{nameof(EvidenceBase.CreatedOn)}, Links.{nameof(EvidenceBase.OriginalDate)}, Links.{nameof(EvidenceBase.Evidence)}, Links.{nameof(EvidenceBase.HasRequestedLiveDemo)}, Links.{nameof(EvidenceBase.BlobId)}
   from Links
   where CurrentId = @currentId;
 ";
-          var amendedSql = AmendCommonTableExpression(sqlCurrent);
-          var chain = _dbConnection.Value.Query<T>(amendedSql, new { currentId = current.Id });
-          chains.Add(chain);
-        }
-
-        return chains;
-      });
-    }
-
-    public T Create(T evidence)
-    {
-      return GetInternal(() =>
-      {
-        using (var trans = _dbConnection.Value.BeginTransaction())
-        {
-          evidence.Id = UpdateId(evidence.Id);
-          _dbConnection.Value.Insert(evidence, trans);
-          trans.Commit();
-
-          return evidence;
-        }
-      });
     }
 
     IEnumerable<IEnumerable<EvidenceBase>> IEvidenceDatastore<EvidenceBase>.ByClaim(string claimId)

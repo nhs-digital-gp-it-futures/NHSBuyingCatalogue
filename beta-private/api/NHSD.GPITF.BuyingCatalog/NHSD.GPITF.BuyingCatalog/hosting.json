@@ -5,6 +5,11 @@
 
   "UseCRM": false,
 
+  "GIF":
+  {
+    "Authority_Uri": "http://crm:5001"
+  },
+
   "Log":
   {
     "CRM": true,
@@ -14,6 +19,6 @@
 
   "Cache":
   {
-    "Host" : "localhost"
+    "Host": "localhost"
   }
 }

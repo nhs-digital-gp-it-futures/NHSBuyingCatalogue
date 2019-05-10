@@ -13,7 +13,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     protected readonly IClaimsValidator<T> _validator;
     protected readonly IClaimsFilter<T> _filter;
 
-    public ClaimsLogicBase(
+    protected ClaimsLogicBase(
       IClaimsBaseModifier<T> modifier,
       IClaimsDatastore<T> datastore,
       IClaimsValidator<T> validator,

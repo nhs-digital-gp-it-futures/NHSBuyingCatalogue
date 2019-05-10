@@ -34,6 +34,7 @@
   
   <ItemGroup>
     <Content Remove="appsettings.json" />
+    <Content Remove="autofac.json" />
     <Content Remove="hosting.json" />
     <Content Remove="nlog.config" />
   </ItemGroup>
@@ -51,7 +52,8 @@
     <PackageReference Include="FluentValidation" Version="7.5.2" />
     <PackageReference Include="Flurl" Version="2.8.0" />
     <PackageReference Include="IdentityModel" Version="3.7.0" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.8" AllowExplicitVersion="true" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.4" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="2.0.1" />
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="2.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.2" />
@@ -85,6 +87,9 @@
   <ItemGroup>
     <None Include="..\NHSD.GPITF.BuyingCatalog.snk" Link="NHSD.GPITF.BuyingCatalog.snk" />
     <None Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="autofac.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="hosting.json">

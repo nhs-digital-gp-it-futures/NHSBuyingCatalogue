@@ -1,33 +1,42 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NHSD.GPITF.BuyingCatalog.Datastore.CRM.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
+using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Models;
+using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using GifInt = Gif.Service.Contracts;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
-  public sealed class SolutionsDatastore : DatastoreBase<Solutions>, ISolutionsDatastore
+  public sealed class SolutionsDatastore : ShortTermCachedDatastore<Solutions>, ISolutionsDatastore
   {
+    private readonly GifInt.ISolutionsDatastore _crmDatastore;
+
     public SolutionsDatastore(
-      IRestClientFactory crmConnectionFactory,
+      GifInt.ISolutionsDatastore crmDatastore,
       ILogger<SolutionsDatastore> logger,
       ISyncPolicyFactory policy,
-      IConfiguration config) :
-      base(crmConnectionFactory, logger, policy, config)
+      IConfiguration config,
+      IShortTermCache cache,
+      IServiceProvider serviceProvider) :
+      base(logger, policy, config, cache, serviceProvider)
     {
+      _crmDatastore = crmDatastore;
     }
-
-    private string ResourceBase { get; } = "/Solutions";
 
     public IEnumerable<Solutions> ByFramework(string frameworkId)
     {
       return GetInternal(() =>
       {
-        var request = GetAllRequest($"{ResourceBase}/ByFramework/{frameworkId}");
-        var retval = GetResponse<PaginatedList<Solutions>>(request);
+        var vals = _crmDatastore
+          .ByFramework(frameworkId)
+          .Select(val => Creator.FromCrm(val));
 
-        return retval.Items;
+        return vals;
       });
     }
 
@@ -35,10 +44,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        var request = GetRequest($"{ResourceBase}/ById/{id}");
-        var retval = GetResponse<Solutions>(request);
-
-        return retval;
+        return GetFromCache(GetCachePathById(id), id);
       });
     }
 
@@ -46,10 +52,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       return GetInternal(() =>
       {
-        var request = GetAllRequest($"{ResourceBase}/ByOrganisation/{organisationId}");
-        var retval = GetResponse<PaginatedList<Solutions>>(request);
-
-        return retval.Items;
+        return GetAllFromCache(GetCachePathByOrganisation(organisationId), organisationId);
       });
     }
 
@@ -58,10 +61,12 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       return GetInternal(() =>
       {
         solution.Id = UpdateId(solution.Id);
-        var request = GetPostRequest($"{ResourceBase}", solution);
-        var retval = GetResponse<Solutions>(request);
 
-        return retval;
+        var val = _crmDatastore
+          .Create(Creator.FromApi(solution));
+        ExpireCache(solution);
+
+        return Creator.FromCrm(val);
       });
     }
 
@@ -69,8 +74,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       GetInternal(() =>
       {
-        var request = GetPutRequest($"{ResourceBase}", solution);
-        var resp = GetRawResponse(request);
+        _crmDatastore.Update(Creator.FromApi(solution));
+        ExpireCache(solution);
 
         return 0;
       });
@@ -80,11 +85,82 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       GetInternal(() =>
       {
-        var request = GetDeleteRequest($"{ResourceBase}", solution);
-        var resp = GetRawResponse(request);
+        _crmDatastore.Delete(Creator.FromApi(solution));
+        ExpireCache(solution);
 
         return 0;
       });
+    }
+
+    protected override Solutions GetFromSource(string path, string parameter)
+    {
+      if (path == GetCachePathById(parameter))
+      {
+        return GetFromSourceById(parameter);
+      }
+
+      throw new ArgumentOutOfRangeException($"{nameof(path)}", path, "Unsupported cache path");
+    }
+
+    private Solutions GetFromSourceById(string id)
+    {
+      var val = _crmDatastore
+        .ById(id);
+
+      return Creator.FromCrm(val);
+    }
+
+    private IEnumerable<Solutions> GetFromSourceByOrganisation(string organisationId)
+    {
+      var vals = _crmDatastore
+        .ByOrganisation(organisationId)
+        .Select(val => Creator.FromCrm(val));
+
+      return vals;
+    }
+
+    protected override IEnumerable<Solutions> GetAllFromSource(string path, string parameter = null)
+    {
+      if (path == GetCachePathByOrganisation(parameter))
+      {
+        return GetFromSourceByOrganisation(parameter);
+      }
+
+      throw new ArgumentOutOfRangeException($"{nameof(path)}", path, "Unsupported cache path");
+    }
+
+    private void ExpireCache(Solutions solution)
+    {
+      // expire our cache
+      ExpireValue(GetCachePathById(solution.Id));
+      ExpireValue(GetCachePathByOrganisation(solution.OrganisationId));
+
+      // expire SolutionsEx cache
+      var other = _serviceProvider.GetService<ISolutionsExDatastore>() as IOtherCache;
+      other?.ExpireOtherValue(solution);
+    }
+
+    private static string GetCachePathById(string id)
+    {
+      return $"/{nameof(Solutions)}/{nameof(ById)}/{id}";
+    }
+
+    private static string GetCachePathByOrganisation(string organisationId)
+    {
+      return $"/{nameof(Solutions)}/{nameof(ByOrganisation)}/{organisationId}";
+    }
+
+    public override void ExpireOtherValue(object item)
+    {
+#pragma warning disable S3247 // Duplicate casts should not be made
+      if (item is SolutionEx)
+#pragma warning restore S3247 // Duplicate casts should not be made
+      {
+        ExpireCache(((SolutionEx)item).Solution);
+        return;
+      }
+
+      throw new ArgumentOutOfRangeException($"{nameof(item)}", item.GetType(), "Unsupported cache expiry type");
     }
   }
 }

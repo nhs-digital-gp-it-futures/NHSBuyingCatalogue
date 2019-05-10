@@ -8,15 +8,8 @@ namespace NHSD.GPITF.BuyingCatalog.Models
   /// in the context of a Solution
   /// </summary>
   [Table(nameof(TechnicalContacts))]
-  public sealed class TechnicalContacts
+  public sealed class TechnicalContacts : EntityBase
   {
-    /// <summary>
-    /// Unique identifier of entity
-    /// </summary>
-    [Required]
-    [ExplicitKey]
-    public string Id { get; set; }
-
     /// <summary>
     /// Unique identifier of Solution
     /// </summary>

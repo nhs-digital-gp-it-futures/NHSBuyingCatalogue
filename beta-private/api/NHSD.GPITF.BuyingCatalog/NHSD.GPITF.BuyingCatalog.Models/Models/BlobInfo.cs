@@ -6,13 +6,8 @@ namespace NHSD.GPITF.BuyingCatalog.Models
   /// Information about a folder or file in blob datastore,
   /// typically SharePoint
   /// </summary>
-  public sealed class BlobInfo
+  public sealed class BlobInfo : EntityBase
   {
-    /// <summary>
-    /// Unique identifier of entity
-    /// </summary>
-    public string Id { get; set; }
-
     /// <summary>
     /// Unique identifier of parent/owner of this entity
     /// Will be null if this is the root entity

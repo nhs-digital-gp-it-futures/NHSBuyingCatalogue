@@ -8,7 +8,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   {
     protected readonly IHttpContextAccessor _context;
 
-    public FilterBase(IHttpContextAccessor context)
+    protected FilterBase(IHttpContextAccessor context)
     {
       _context = context;
     }

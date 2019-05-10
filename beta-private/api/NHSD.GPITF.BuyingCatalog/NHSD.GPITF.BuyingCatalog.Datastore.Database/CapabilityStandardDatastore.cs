@@ -25,7 +25,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
         const string sql = @"
 select cs.* from CapabilityStandard cs
 ";
-        var retval = _dbConnection.Value.Query<CapabilityStandard>(sql);
+        var retval = _dbConnection.Query<CapabilityStandard>(sql);
         return retval;
       });
     }

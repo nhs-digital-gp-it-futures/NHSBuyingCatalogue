@@ -19,7 +19,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
       return GetInternal(() =>
       {
-        return _dbConnection.Value.Get<Contacts>(id);
+        return _dbConnection.Get<Contacts>(id);
       });
     }
 
@@ -27,7 +27,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
       return GetInternal(() =>
       {
-        return _dbConnection.Value.GetAll<Contacts>().Where(c => c.OrganisationId == organisationId);
+        return _dbConnection.GetAll<Contacts>().Where(c => c.OrganisationId == organisationId);
       });
     }
 
@@ -35,7 +35,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
       return GetInternal(() =>
       {
-        return _dbConnection.Value.GetAll<Contacts>().SingleOrDefault(c => c.EmailAddress1.ToLowerInvariant() == email.ToLowerInvariant());
+        return _dbConnection.GetAll<Contacts>().SingleOrDefault(c => c.EmailAddress1.ToLowerInvariant() == email.ToLowerInvariant());
       });
     }
   }

@@ -23,7 +23,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
 select org.* from Organisations org
 join Contacts cont on cont.OrganisationId = org.Id
 where cont.Id = @contactId";
-        var retval = _dbConnection.Value.Query<Organisations>(sql, new { contactId }).SingleOrDefault();
+        var retval = _dbConnection.Query<Organisations>(sql, new { contactId }).SingleOrDefault();
         return retval;
       });
     }
@@ -32,7 +32,7 @@ where cont.Id = @contactId";
     {
       return GetInternal(() =>
       {
-        return _dbConnection.Value.Get<Organisations>(organisationId);
+        return _dbConnection.Get<Organisations>(organisationId);
       });
     }
   }

@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
-  public abstract class EvidenceFilterBase<T> : FilterBase<T>, IFilter<T> where T : IEnumerable<EvidenceBase>
+  public abstract class EvidenceFilterBase<T> : FilterBase<T> where T : IEnumerable<EvidenceBase>
   {
     private readonly IClaimsDatastore<ClaimsBase> _claimDatastore;
     private readonly ISolutionsDatastore _solutionDatastore;
 
-    public EvidenceFilterBase(
+    protected EvidenceFilterBase(
       IClaimsDatastore<ClaimsBase> claimDatastore,
       ISolutionsDatastore solutionDatastore,
       IHttpContextAccessor context) :

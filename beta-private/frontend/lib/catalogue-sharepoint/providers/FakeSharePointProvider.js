@@ -215,6 +215,7 @@ class FakeSharePointProvider extends SharePointProvider {
   constructor () {
     console.info('Mock Sharepoint provider active')
     super(FakeCatalogueAPI)
+    this.fileType = require('file-type')
   }
 
   // This overrides the SharePointProvider implementation of DownloadCapEvidence.

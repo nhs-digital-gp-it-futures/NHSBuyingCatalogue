@@ -45,18 +45,15 @@ namespace NHSD.GPITF.BuyingCatalog.Authentications
         return Task.CompletedTask;
       }
 
-      var primaryRoleId = string.Empty;
       var email = string.Empty;
       switch (context.UserName)
       {
         case Roles.Admin:
         case Roles.Buyer:
-          primaryRoleId = PrimaryRole.GovernmentDepartment;
           email = "buying.catalogue.assessment@gmail.com";
           break;
 
         case Roles.Supplier:
-          primaryRoleId = PrimaryRole.ApplicationServiceProvider;
           email = "buying.catalogue.supplier@gmail.com";
           break;
 

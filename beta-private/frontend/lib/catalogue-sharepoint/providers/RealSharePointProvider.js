@@ -4,7 +4,8 @@ const SharePointProvider = require('./SharePointProvider')
 class RealSharePointProvider extends SharePointProvider {
   constructor () {
     super(require('catalogue-api'))
-    this.CatalogueApi.ApiClient.instance.basePath = process.env.API_BASE_URL || 'http://api:5100'
+    this.CatalogueApi.ApiClient.instance.basePath = process.env.API_BASE_URL || 'http://api:5100' 
+    this.fileType = require('file-type')
   }
 
   // support for the authentication layer

@@ -1,0 +1,14 @@
+{
+  "profiles":
+  {
+    "Gif.Service":
+    {
+      "commandName": "Project",
+      "environmentVariables":
+      {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "LOG_CRM": "true"
+      }
+    }
+  }
+}

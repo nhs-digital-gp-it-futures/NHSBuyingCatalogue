@@ -45,12 +45,10 @@ namespace NHSD.GPITF.BuyingCatalog.Attributes
       {
         var attributeInstance = parameter.GetCustomAttribute(attributeData.AttributeType);
 
-        if (attributeInstance is ValidationAttribute validationAttribute)
+        if (attributeInstance is ValidationAttribute validationAttribute &&
+          !validationAttribute.IsValid(args))
         {
-          if (!(bool)validationAttribute.IsValid(args))
-          {
-            modelState.AddModelError(parameter.Name, validationAttribute.FormatErrorMessage(parameter.Name));
-          }
+          modelState.AddModelError(parameter.Name, validationAttribute.FormatErrorMessage(parameter.Name));
         }
       }
     }

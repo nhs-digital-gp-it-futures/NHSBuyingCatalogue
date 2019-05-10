@@ -25,7 +25,7 @@ join CapabilityFramework cf on cf.FrameworkId = frame.Id
 join Capabilities cap on cap.Id = cf.CapabilityId
 where cap.Id = @capabilityId
 ";
-        var retval = _dbConnection.Value.Query<Frameworks>(sql, new { capabilityId });
+        var retval = _dbConnection.Query<Frameworks>(sql, new { capabilityId });
         return retval;
       });
     }
@@ -34,7 +34,7 @@ where cap.Id = @capabilityId
     {
       return GetInternal(() =>
       {
-        return _dbConnection.Value.Get<Frameworks>(id);
+        return _dbConnection.Get<Frameworks>(id);
       });
     }
 
@@ -48,7 +48,7 @@ join FrameworkSolution fs on fs.FrameworkId = frame.Id
 join Solutions soln on soln.Id = fs.SolutionId
 where soln.Id = @solutionId
 ";
-        var retval = _dbConnection.Value.Query<Frameworks>(sql, new { solutionId });
+        var retval = _dbConnection.Query<Frameworks>(sql, new { solutionId });
         return retval;
       });
     }
@@ -63,7 +63,7 @@ join FrameworkStandard fs on fs.FrameworkId = frame.Id
 join Standards std on std.Id = fs.StandardId
 where std.Id = @standardId
 ";
-        var retval = _dbConnection.Value.Query<Frameworks>(sql, new { standardId });
+        var retval = _dbConnection.Query<Frameworks>(sql, new { standardId });
         return retval;
       });
     }
@@ -79,7 +79,7 @@ select * from Frameworks where Id not in
   select PreviousId from Frameworks where PreviousId is not null
 )
 ";
-        return _dbConnection.Value.Query<Frameworks>(sql);
+        return _dbConnection.Query<Frameworks>(sql);
       });
     }
   }

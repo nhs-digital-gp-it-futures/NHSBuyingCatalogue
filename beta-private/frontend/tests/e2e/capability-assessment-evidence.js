@@ -122,7 +122,7 @@ test('Uploading a virus should be rejected and communicated via the standard err
   // we'll add evidence for "GP Resource Management"
   const capSection = Selector('fieldset.collapsible#C3')
 
-  await uploadFileWithMessage(t, capSection, 'eicar.com', 'Automation testing message sent with file containing test virus, file is not saved though..')
+  await uploadFileWithMessage(t, capSection, 'test_zipped_virus.zip', 'Automation testing message sent with file containing test virus, file is not saved though..')
     .click(capabilityEvidencePage.globalSaveButton)
     .expect(Selector('#errors').exists).ok()
     .expect(Selector('#errors li:nth-child(1)').textContent).contains('Prescription Ordering - Citizen : The file uploaded for this Capability has failed our antivirus scan.')

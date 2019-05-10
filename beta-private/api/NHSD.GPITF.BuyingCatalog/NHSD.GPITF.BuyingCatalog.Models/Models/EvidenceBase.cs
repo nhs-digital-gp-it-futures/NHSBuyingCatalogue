@@ -6,15 +6,8 @@ using System.ComponentModel.DataAnnotations;
 namespace NHSD.GPITF.BuyingCatalog.Models
 {
 #pragma warning disable CS1591
-  public abstract class EvidenceBase : IHasPreviousId
+  public abstract class EvidenceBase : EntityBase, IHasPreviousId
   {
-    /// <summary>
-    /// Unique identifier of entity
-    /// </summary>
-    [Required]
-    [ExplicitKey]
-    public string Id { get; set; }
-
     /// <summary>
     /// Unique identifier of previous version of entity
     /// </summary>

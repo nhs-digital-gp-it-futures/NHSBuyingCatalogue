@@ -5,9 +5,6 @@ const os = require('os')
 const uuidGenerator = require('node-uuid-generator')
 const INTERMEDIATE_STORAGE = process.env.UPLOAD_TEMP_FILE_STORE || os.tmpdir()
 
-const mmm = require('mmmagic')
-const Magic = mmm.Magic
-
 const WHITELIST = require('./whitelist.json')
 
 const { antivirusProvider } = require('catalogue-antivirus')
@@ -26,7 +23,6 @@ class SharePointProvider {
     this.TIMEOUT = 1200000
     this.capBlobStoreApi.timeout = this.TIMEOUT
     this.stdBlobStoreApi.timeout = this.TIMEOUT
-
   }
 
   getMimeArray () {
@@ -158,30 +154,27 @@ class SharePointProvider {
     return this.uploadEvidence(uploadMethod, validMimeType, claimID, buffer, filename, subFolder)
   }
 
-  async stdValidMimeType (fileName) {
-    const res = [await this.detectMimeType(fileName)]
+  async stdValidMimeType (buffer) {
+    const res = [await this.detectMimeType(buffer)]
     const whiteList = new Set(this.getMimeArray()) // await this.stdBlobStoreApi.apiStandardsApplicableEvidenceBlobStoreGetAllowedFileTypes()
 
     return res.every((type) => whiteList.has(type))
   }
 
-  async capValidMimeType (fileName) {
-    const res = [await this.detectMimeType(fileName)]
+  async capValidMimeType (buffer) {
+    const res = [await this.detectMimeType(buffer)]
     const whiteList = new Set(this.getMimeArray()) // await this.stdBlobStoreApi.apiStandardsApplicableEvidenceBlobStoreGetAllowedFileTypes()
 
     return res.every((type) => whiteList.has(type))
   }
 
-  detectMimeType (fileName) {
-    const storagePath = this.createFileStoragePath(fileName)
-    const magic = new Magic(mmm.MAGIC_MIME_TYPE)
-
-    return new Promise((resolve, reject) => {
-      magic.detectFile(storagePath, (err, result) => {
-        if (err) return reject(err)
-        return resolve(result)
-      })
-    })
+  detectMimeType (buffer) {
+    const type = this.fileType(buffer)
+    if (type) {
+      return type.mime
+    } else {
+      return
+    }
   }
 
   async uploadEvidence (uploadMethod, mimeTypeChecker, claimID, buffer, filename, subFolder) {
@@ -192,7 +185,7 @@ class SharePointProvider {
     await this.saveBuffer(buffer, fileUUID)
 
     try {
-      const isValidMimeType = await mimeTypeChecker(fileUUID)
+      const isValidMimeType = await mimeTypeChecker(buffer)
 
       if (!isValidMimeType) {
         return { err: 'Invalid File Type', isVirus: false, badMime: true }

@@ -4,6 +4,9 @@ using System.Net;
 
 namespace SharePointPnP.IdentityModel.Extensions.S2S.Protocols.OAuth2
 {
+#pragma warning disable S3925 // "ISerializable" should be implemented correctly
+#pragma warning disable S2933 // Fields that are only assigned in the constructor should be "readonly"
+
   public sealed class OAuth2WebRequest : WebRequest
   {
     private static readonly TimeSpan DefaultTimeout = TimeSpan.FromMinutes(10.0);
@@ -33,4 +36,7 @@ namespace SharePointPnP.IdentityModel.Extensions.S2S.Protocols.OAuth2
       return _innerRequest.GetResponse();
     }
   }
+
+#pragma warning restore S2933 // Fields that are only assigned in the constructor should be "readonly"
+#pragma warning restore S3925 // "ISerializable" should be implemented correctly
 }
