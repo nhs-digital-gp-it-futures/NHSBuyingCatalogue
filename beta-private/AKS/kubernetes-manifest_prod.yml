@@ -92,6 +92,26 @@ spec:
             secretKeyRef:
               name: bcdbsecret
               key: LOG_CONNECTIONSTRING
+        - name: GIF_CRM_URL
+          valueFrom:
+            secretKeyRef:
+              name: bccrmazuresecret
+              key: GIF_CRM_URL
+        - name: GIF_CRM_AUTHORITY
+          valueFrom:
+            secretKeyRef:
+              name: bccrmazuresecret
+              key: GIF_CRM_AUTHORITY       
+        - name: GIF_AZURE_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: bccrmazuresecret
+              key: GIF_AZURE_CLIENT_ID
+        - name: GIF_ENCRYPTED_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: bccrmazuresecret
+              key: GIF_ENCRYPTED_CLIENT_SECRET              
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -126,7 +146,9 @@ spec:
             cpu: 500m
         env:
         - name: ANTIVIRUS_PROVIDER_ENV
-          value: "CLAMAV"        
+          value: "CLAMAV"
+        - name: ANALYTICS_ENV
+          value: "PRODUCTION"                    
         - name: BASE_URL
           value: "https://buyingcatalogue.digital.nhs.uk"
         - name: API_BASE_URL
@@ -144,77 +166,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: bcoidcsecret
-              key: OIDC_CLIENT_SECRET
----  
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: bc-pb-deployment-crm
-spec:
-  replicas: 1
-  strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
-  minReadySeconds: 5
-  selector:
-    matchLabels:
-      app: bc-pb-app-crm   
-  template:
-    metadata:
-      labels:
-        app: bc-pb-app-crm
-    spec:
-      imagePullSecrets:
-      - name: regcred
-      containers:
-      - name: bc-private-beta-crm
-        image: bcprodacr.azurecr.io/gpitf/catalogue-crm:#{Build.BuildId}#
-        ports:
-        - containerPort: 5001
-        resources:
-          requests:
-            cpu: 500m
-          limits:
-            cpu: 1
-        env:
-        - name: CRM_CLIENTID
-          valueFrom:
-            secretKeyRef:
-              name: bccrmsecret
-              key: CRM_CLIENTID
-        - name: CRM_CLIENTSECRET
-          valueFrom:
-            secretKeyRef:
-              name: bccrmsecret
-              key: CRM_CLIENTSECRET                    
-        - name: GIF_CRM_URL
-          valueFrom:
-            secretKeyRef:
-              name: bccrmazuresecret
-              key: GIF_CRM_URL
-        - name: GIF_CRM_AUTHORITY
-          valueFrom:
-            secretKeyRef:
-              name: bccrmazuresecret
-              key: GIF_CRM_AUTHORITY       
-        - name: GIF_AZURE_CLIENT_ID
-          valueFrom:
-            secretKeyRef:
-              name: bccrmazuresecret
-              key: GIF_AZURE_CLIENT_ID
-        - name: GIF_ENCRYPTED_CLIENT_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: bccrmazuresecret
-              key: GIF_ENCRYPTED_CLIENT_SECRET
-        - name: LOG_CRM
-          value: "true"
-        - name: LOG_CONNECTIONSTRING
-          valueFrom:
-            secretKeyRef:
-              name: bcdbsecret
-              key: LOG_CONNECTIONSTRING                           
+              key: OIDC_CLIENT_SECRET                        
 ---  
 apiVersion: apps/v1
 kind: Deployment
@@ -370,13 +322,3 @@ spec:
   - port: 3310
   selector:
     app: bc-pb-app-clamav
----      
-apiVersion: v1
-kind: Service
-metadata:
-  name: crm
-spec:
-  ports:
-  - port: 5001
-  selector:
-    app: bc-pb-app-crm 
