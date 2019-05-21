@@ -1,5 +1,6 @@
 ﻿using Microsoft.Owin.Hosting;
 using System;
+using System.Threading;
 
 namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.App
 {
@@ -16,11 +17,11 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.App
         var config = Utils.GetConfiguration();
         var baseAddress = Settings.SHAREPOINT_FILE_DOWNLOAD_BASE_URL(config);
 
-        // Start OWIN host 
+        // Start OWIN host
         using (WebApp.Start<Startup>(url: baseAddress))
         {
-          Console.WriteLine("Press any key to exit");
-          Console.ReadKey();
+          Console.WriteLine("Press CTRL-C to exit");
+          Thread.Sleep(Timeout.Infinite);
         }
       }
       finally
