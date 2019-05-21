@@ -42,6 +42,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
         var result = _logic.GetFileStream(claimId, uniqueId);
         var memory = new MemoryStream();
 
+        result.FileStream.Position = 0;
         result.FileStream.CopyTo(memory);
         memory.Position = 0;
 

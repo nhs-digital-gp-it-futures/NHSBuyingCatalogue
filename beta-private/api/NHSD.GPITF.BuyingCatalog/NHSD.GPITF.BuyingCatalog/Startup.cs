@@ -319,6 +319,7 @@ namespace NHSD.GPITF.BuyingCatalog
       Console.WriteLine($"    SHAREPOINT_LOGIN                    : {Settings.SHAREPOINT_LOGIN(Configuration)}");
       Console.WriteLine($"    SHAREPOINT_PASSWORD                 : {Settings.SHAREPOINT_PASSWORD(Configuration)}");
       Console.WriteLine($"    SHAREPOINT_PROVIDER_FAKE            : {Settings.SHAREPOINT_PROVIDER_FAKE(Configuration)}");
+      Console.WriteLine($"    SHAREPOINT_FILE_DOWNLOAD_BASE_URL   : {Settings.SHAREPOINT_FILE_DOWNLOAD_SERVER_URL(Configuration)}");
 
       Console.WriteLine($"  CACHE:");
       Console.WriteLine($"    CACHE_HOST : {Settings.CACHE_HOST(Configuration)}");

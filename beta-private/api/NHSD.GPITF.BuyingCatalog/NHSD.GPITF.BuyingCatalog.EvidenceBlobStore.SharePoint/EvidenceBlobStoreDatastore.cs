@@ -8,6 +8,7 @@ using Microsoft.SharePoint.Client.NetCore.Runtime;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using Polly;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -42,6 +43,7 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     private readonly string SharePoint_ClientSecret;
     private readonly string SharePoint_Login;
     private readonly string SharePoint_Password;
+    private readonly string SharePoint_FileDownloadServerUrl;
 
     public EvidenceBlobStoreDatastore(
       IHostingEnvironment env,
@@ -78,14 +80,15 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       SharePoint_ClientSecret = Settings.SHAREPOINT_CLIENT_SECRET(config);
       SharePoint_Login = Settings.SHAREPOINT_LOGIN(config);
       SharePoint_Password = Settings.SHAREPOINT_PASSWORD(config);
+      SharePoint_FileDownloadServerUrl = Settings.SHAREPOINT_FILE_DOWNLOAD_SERVER_URL(config);
 
       if (string.IsNullOrWhiteSpace(SharePoint_BaseUrl) ||
         string.IsNullOrWhiteSpace(SharePoint_OrganisationsRelativeUrl) ||
         string.IsNullOrWhiteSpace(SharePoint_ClientId) ||
         string.IsNullOrWhiteSpace(SharePoint_ClientSecret) ||
         string.IsNullOrWhiteSpace(SharePoint_Login) ||
-        string.IsNullOrWhiteSpace(SharePoint_Password)
-        )
+        string.IsNullOrWhiteSpace(SharePoint_Password) ||
+        string.IsNullOrWhiteSpace(SharePoint_FileDownloadServerUrl))
       {
         throw new ConfigurationErrorsException("Missing SharePoint configuration - check UserSecrets or environment variables");
       }
@@ -476,22 +479,23 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
         context.ExecuteQuery();
         LogInformation($"GetFileStream: retrieved info for {file.Name}");
 
-        return
-          // File.OpenBinaryDirect will only work with a username/password context as CSOM uses basic authentication.
-          // For an add-in context, CSOM does not set the authentication.
-          // This probably because SP uses WebDAV as the underlying protocol and this will allow SP
-          // to determine the calling user's permissions.
-          //
-          // An add-in should use:
-          //    File.OpenBinaryStream
-          // but this is broken for Dot Net Core CSOM (but works for .NET CSOM).
-          // It may be possible to directly call the SP restful API:
-          //    https://docs.microsoft.com/en-us/previous-versions/office/developer/sharepoint-rest-reference/dn450841%28v%3doffice.15%29
-          // but I (TDE) couldn't get it working.
-          new FileStreamResult(Microsoft.SharePoint.Client.NetCore.File.OpenBinaryDirect(context, file.ServerRelativeUrl)?.Stream, GetContentType(file.Name))
-          {
-            FileDownloadName = Path.GetFileName(file.Name)
-          };
+        var client = new RestClient(SharePoint_FileDownloadServerUrl);
+        var request = new RestRequest(@"/api/EvidenceBlobStore/Download")
+        {
+          Method = Method.POST
+        };
+        request.AddHeader("Content-Type", "application/json");
+        request.AddJsonBody(file.ServerRelativeUrl);
+        byte[] response = client.DownloadData(request);
+        var ms = new MemoryStream();
+        ms.Write(response, 0, response.Length);
+        var retval = new FileStreamResult(ms, GetContentType(file.Name))
+        {
+          FileDownloadName = Path.GetFileName(file.Name)
+        };
+        LogInformation($"GetFileStream: retrieved binary data for {file.Name}");
+
+        return retval;
       });
     }
 
