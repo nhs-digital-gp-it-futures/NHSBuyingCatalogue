@@ -11,6 +11,6 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.App
     public static string SHAREPOINT_BASEURL(IConfiguration config) => Environment.GetEnvironmentVariable("SHAREPOINT_BASEURL") ?? config["SharePoint:BaseUrl"];
     public static string SHAREPOINT_CLIENT_ID(IConfiguration config) => Environment.GetEnvironmentVariable("SHAREPOINT_CLIENT_ID") ?? config["SharePoint:ClientId"];
     public static string SHAREPOINT_CLIENT_SECRET(IConfiguration config) => Environment.GetEnvironmentVariable("SHAREPOINT_CLIENT_SECRET") ?? config["SharePoint:ClientSecret"];
-    public static string SHAREPOINT_FILE_DOWNLOAD_BASE_URL(IConfiguration config) => Environment.GetEnvironmentVariable("SHAREPOINT_FILE_DOWNLOAD_BASE_URL") ?? config["SharePoint:FileDownloadBaseUrl"] ?? "http://localhost:9000/";
+    public static string SHAREPOINT_FILE_DOWNLOAD_BASE_URL(IConfiguration config) => Environment.GetEnvironmentVariable("SHAREPOINT_FILE_DOWNLOAD_BASE_URL") ?? config["SharePoint:FileDownloadBaseUrl"] ?? "http://*:9000/";
   }
 }
