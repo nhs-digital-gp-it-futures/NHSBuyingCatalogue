@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using System.Reflection;
 
@@ -27,3 +28,5 @@ using System.Reflection;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 [assembly: UserSecretsId("ff108045-7917-4b80-b4b0-1a51e2881e04")]
+[assembly: ComVisible(false)]
+
