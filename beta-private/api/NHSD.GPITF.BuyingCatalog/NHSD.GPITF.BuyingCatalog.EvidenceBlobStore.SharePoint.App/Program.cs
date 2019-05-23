@@ -6,11 +6,9 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.App
 {
   public sealed class Program
   {
-    private Program()
-    {
-    }
+    private readonly AutoResetEvent _event = new AutoResetEvent(false);
 
-    static void Main()
+    public void Start()
     {
       try
       {
@@ -20,8 +18,11 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.App
         // Start OWIN host
         using (WebApp.Start<Startup>(url: baseAddress))
         {
+          // route CTRL-C through stop code for console operation
+          Console.CancelKeyPress += (s, e) => Stop();
+
           Console.WriteLine("Press CTRL-C to exit");
-          Thread.Sleep(Timeout.Infinite);
+          _event.WaitOne(Timeout.Infinite);
         }
       }
       finally
@@ -29,6 +30,16 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint.App
         // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
         NLog.LogManager.Shutdown();
       }
+    }
+
+    public void Stop()
+    {
+      _event.Set();
+    }
+
+    static void Main()
+    {
+      new Program().Start();
     }
   }
 }
