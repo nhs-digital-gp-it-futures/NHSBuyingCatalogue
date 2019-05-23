@@ -11,3 +11,10 @@ which will allow you to browse the [documentation](http://localhost:8086/index.h
 
 ## High Level System Architecture
 There is a snapshot of the high level system documentation [here](articles/SystemArchitecture.md)
+
+## [High Level Design](articles/BuyingCatalog-HLD.md)
+
+## [Low Level Design API](articles/BuyingCatalog-LLD-API.md)
+
+## [Low Level Design SharePoint](articles/BuyingCatalog-LLD-SharePoint.md)
+
