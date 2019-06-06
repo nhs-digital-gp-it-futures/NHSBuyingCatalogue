@@ -5,10 +5,10 @@ namespace BuyingCatalogueTests.utils.EnvData
     interface IEnvironment
     {
         string CatalogueUrl { get; set; }
-        List<User> Users { get; set; }
+        List<IUser> Users { get; set; }
         string CrmUrl { get; set; }
-        User CrmUser { get; set; }
+        IUser CrmUser { get; set; }
         string SharepointUrl { get; set; }
-        User SharepointUser { get; set; }
+        IUser SharepointUser { get; set; }
     }
 }

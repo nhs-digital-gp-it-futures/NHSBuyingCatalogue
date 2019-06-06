@@ -8,8 +8,8 @@ namespace BuyingCatalogueTests.utils.EnvData
 {
     internal class EnvironmentService
     {
-        internal Environment environment;
-        internal User user;
+        internal IEnvironment environment;
+        internal IUser user;
 
         public EnvironmentService()
         {
