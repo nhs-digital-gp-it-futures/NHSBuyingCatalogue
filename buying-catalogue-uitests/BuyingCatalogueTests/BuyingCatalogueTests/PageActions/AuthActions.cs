@@ -7,7 +7,7 @@ using System;
 
 namespace BuyingCatalogueTests.PageActions
 {
-    internal class AuthActions : Initialize
+    internal sealed class AuthActions : Initialize
     {
         int retries = 0;
 

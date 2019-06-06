@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace BuyingCatalogueTests.PageActions
 {
-    internal class SolutionsOnboardingActions : Initialize
+    internal sealed class SolutionsOnboardingActions : Initialize
     {
         public SolutionsOnboardingActions(IWebDriver driver) : base(driver)
         {
@@ -23,6 +23,17 @@ namespace BuyingCatalogueTests.PageActions
             stage.FindElement(By.CssSelector(".action a")).Click();
 
             _wait.Until(ExpectedConditions.ElementToBeClickable(basicDetailsObjects.SolutionName));
+        }
+
+        internal void SolutionCapabilitiesStartClick()
+        {
+            _wait.Until(ExpectedConditions.ElementToBeClickable(GetByOnboardingObject(nameof(onboardingObjects.OnboardingStages))));
+
+            var stage = onboardingObjects.OnboardingStages[1];
+
+            stage.FindElement(By.CssSelector(".action a")).Click();
+
+            _wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector("#capability-assessment-form fieldset.collapsible")));
         }
 
         internal void VerifySolutionName(string solutionName)

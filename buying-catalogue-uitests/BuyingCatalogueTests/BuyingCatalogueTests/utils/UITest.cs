@@ -24,6 +24,7 @@ namespace BuyingCatalogueTests.utils
         internal PageActions.SolutionsOnboardingActions onboardingActions;
         internal PageActions.SolutionsBasicDetailsActions basicDetailsActions;
         internal PageActions.AddCapabilitiesActions addCapabilitiesActions;
+        internal PageActions.CapabilitiesEvidenceActions capEvidenceActions;
 
         internal PageActions.CommonActions commonActions;
 
@@ -135,6 +136,7 @@ namespace BuyingCatalogueTests.utils
             onboardingActions = new PageActions.SolutionsOnboardingActions(_driver);
             basicDetailsActions = new PageActions.SolutionsBasicDetailsActions(_driver);
             addCapabilitiesActions = new PageActions.AddCapabilitiesActions(_driver);
+            capEvidenceActions = new PageActions.CapabilitiesEvidenceActions(_driver);
 
             commonActions = new PageActions.CommonActions(_driver);
         }

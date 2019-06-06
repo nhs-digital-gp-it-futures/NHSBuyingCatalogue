@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace BuyingCatalogueTests.Objects
 {
-    internal class HomePageObjects : Initialization
+    internal sealed class HomePageObjects : Initialization
     {
         public HomePageObjects(IWebDriver driver) : base(driver)
         {

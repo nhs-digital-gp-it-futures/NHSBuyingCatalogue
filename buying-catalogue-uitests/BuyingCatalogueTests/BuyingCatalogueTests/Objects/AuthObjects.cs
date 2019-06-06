@@ -5,7 +5,7 @@ using SeleniumExtras.PageObjects;
 
 namespace BuyingCatalogueTests.Objects
 {
-    internal class AuthObjects : Initialization
+    internal sealed class AuthObjects : Initialization
     {
         public AuthObjects(IWebDriver driver) : base(driver)
         {

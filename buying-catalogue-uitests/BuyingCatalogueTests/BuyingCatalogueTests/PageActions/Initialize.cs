@@ -16,6 +16,7 @@ namespace BuyingCatalogueTests.PageActions
         internal Objects.SolutionsOnboardingObjects onboardingObjects;
         internal Objects.SolutionBasicDetailsObjects basicDetailsObjects;
         internal Objects.AddCapabilitiesObjects addCapabilitiesObjects;
+        internal Objects.CapabilitiesEvidenceObjects capEvidenceObjects;
 
         internal Objects.CommonObjects commonObjects;
 
@@ -37,6 +38,7 @@ namespace BuyingCatalogueTests.PageActions
             onboardingObjects = new Objects.SolutionsOnboardingObjects(_driver);
             basicDetailsObjects = new Objects.SolutionBasicDetailsObjects(_driver);
             addCapabilitiesObjects = new Objects.AddCapabilitiesObjects(_driver);
+            capEvidenceObjects = new Objects.CapabilitiesEvidenceObjects(_driver);
 
             commonObjects = new Objects.CommonObjects(_driver);
         }
@@ -48,5 +50,6 @@ namespace BuyingCatalogueTests.PageActions
         internal By GetByCommonObject(string obj) => TestUtils.GetByPageFactory(typeof(Objects.CommonObjects), obj);
         internal By GetByAuthObject(string obj) => TestUtils.GetByPageFactory(typeof(Objects.AuthObjects), obj);
         internal By GetByAddCapabilitiesObject(string obj) => TestUtils.GetByPageFactory(typeof(Objects.AddCapabilitiesObjects), obj);
+        internal By GetByCapEvidenceObject(string obj) => TestUtils.GetByPageFactory(typeof(Objects.CapabilitiesEvidenceObjects), obj);
     }
 }

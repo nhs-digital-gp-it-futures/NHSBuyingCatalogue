@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace BuyingCatalogueTests.PageActions
 {
-    internal class SolutionsBasicDetailsActions : Initialize
+    internal sealed class SolutionsBasicDetailsActions : Initialize
     {
         public SolutionsBasicDetailsActions(IWebDriver driver) : base(driver)
         {

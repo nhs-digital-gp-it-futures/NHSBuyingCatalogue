@@ -10,7 +10,7 @@ namespace BuyingCatalogueTests.utils
         Chrome, Edge, IE11
     }
 
-    internal class DriverConfig
+    internal sealed class DriverConfig
     {
         internal IWebDriver Driver { get; set; }
 

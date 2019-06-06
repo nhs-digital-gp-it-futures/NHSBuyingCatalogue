@@ -5,7 +5,7 @@ using TechTalk.SpecFlow;
 
 namespace BuyingCatalogueTests.Gherkin.Steps
 {
-    public partial class SpecFlowSteps
+    public sealed partial class SpecFlowSteps
     {
         List<string> standards;
 

@@ -6,7 +6,7 @@ using SeleniumExtras.WaitHelpers;
 
 namespace BuyingCatalogueTests.PageActions
 {
-    internal class CommonActions : Initialize
+    internal sealed class CommonActions : Initialize
     {
         public CommonActions(IWebDriver driver) : base(driver)
         {

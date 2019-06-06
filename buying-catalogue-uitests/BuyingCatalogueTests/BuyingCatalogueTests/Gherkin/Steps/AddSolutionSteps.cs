@@ -8,7 +8,7 @@ using TechTalk.SpecFlow;
 namespace BuyingCatalogueTests.Gherkin.Steps
 {
     [Binding]
-    public partial class SpecFlowSteps
+    public sealed partial class SpecFlowSteps
     {
         #region Givens
         [Given(@"I click the `Add a solution` button")]

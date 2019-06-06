@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace BuyingCatalogueTests.Objects
 {
-    internal class SolutionBasicDetailsObjects : Initialization
+    internal sealed class SolutionBasicDetailsObjects : Initialization
     {
         public SolutionBasicDetailsObjects(IWebDriver driver) : base(driver)
         {

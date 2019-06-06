@@ -6,7 +6,7 @@ using TechTalk.SpecFlow;
 
 namespace BuyingCatalogueTests.Gherkin.Steps
 {
-    public partial class SpecFlowSteps
+    public sealed partial class SpecFlowSteps
     {
         [Given(@"I complete all basic details")]
         public void GivenICompleteAllBasicDetails()
@@ -36,8 +36,7 @@ namespace BuyingCatalogueTests.Gherkin.Steps
         [Then(@"I should see the onboarding page with the name of the solution")]
         public void ThenIShouldSeeTheOnboardingPageWithTheNameOfTheSolution()
         {
-            onboardingActions.VerifySolutionName(solutionName);
+            onboardingActions.VerifySolutionName(solutionName);            
         }
-
     }
 }

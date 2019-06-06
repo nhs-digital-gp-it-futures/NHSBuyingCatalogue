@@ -6,10 +6,10 @@ using YamlDotNet.Serialization;
 
 namespace BuyingCatalogueTests.utils.EnvData
 {
-    internal class EnvironmentService
+    internal sealed class EnvironmentService
     {
-        internal Environment environment;
-        internal User user;
+        internal IEnvironment environment;
+        internal IUser user;
 
         public EnvironmentService()
         {
@@ -19,7 +19,7 @@ namespace BuyingCatalogueTests.utils.EnvData
             {
                 using (var yamlReader = new StreamReader(yamlStream, Encoding.UTF8, true))
                 {
-                    environment = dse.Deserialize<Environment>(yamlReader);
+                    environment = dse.Deserialize<IEnvironment>(yamlReader);
                 }
             }
 
@@ -29,7 +29,7 @@ namespace BuyingCatalogueTests.utils.EnvData
 
         private string GetDataFile()
         {
-            return TestContext.Parameters.Get("envData", $"{AppContext.BaseDirectory}utils\\EnvData\\Data\\Test.yml");
+            return TestContext.Parameters.Get("envData", Path.Combine(AppContext.BaseDirectory,"utils", "EnvData", "Data","Test.yml"));
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace BuyingCatalogueTests.PageActions
 {
-    internal class HomePageActions : Initialize
+    internal sealed class HomePageActions : Initialize
     {
         public HomePageActions(IWebDriver driver) : base(driver)
         {

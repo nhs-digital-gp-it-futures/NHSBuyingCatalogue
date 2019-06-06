@@ -6,7 +6,7 @@ using TechTalk.SpecFlow;
 
 namespace BuyingCatalogueTests.Gherkin.Steps
 {
-    public partial class SpecFlowSteps : UITest
+    public sealed partial class SpecFlowSteps : UITest
     {
         string errorMessage;
         string solutionName;

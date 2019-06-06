@@ -90,11 +90,15 @@
     <Compile Include="Gherkin\Steps\AddCapabilitiesSteps.cs" />
     <Compile Include="Gherkin\Steps\AddSolutionSteps.cs" />
     <Compile Include="Gherkin\Steps\AuthorizationSteps.cs" />
+    <Compile Include="Gherkin\Steps\CapabilityEvidenceSteps.cs" />
     <Compile Include="Gherkin\Steps\CommonSteps.cs" />
     <Compile Include="Gherkin\Steps\E2ESteps.cs" />
     <Compile Include="Gherkin\Steps\ExistingSolutionSteps.cs" />
     <Compile Include="Objects\AddCapabilitiesObjects.cs" />
+    <Compile Include="Objects\CapabilitiesEvidenceObjects.cs" />
     <Compile Include="PageActions\AddCapabilitiesActions.cs" />
+    <Compile Include="PageActions\CapabilitiesEvidenceActions.cs" />
+    <Compile Include="utils\DriverExtensions.cs" />
     <Compile Include="utils\E2ETest.cs" />
     <Compile Include="utils\SpecTest.cs" />
     <Compile Include="Objects\AuthObjects.cs" />
@@ -127,6 +131,7 @@
   <ItemGroup>
     <None Include="Gherkin\Features\AddCapabilites.feature" />
     <None Include="Gherkin\Features\AddNewSolution.feature" />
+    <None Include="Gherkin\Features\CapabilityEvidence.feature" />
     <None Include="Gherkin\Features\CompleteBasicDetailsAndCaps.feature" />
     <None Include="Gherkin\Features\ExistingSolutions.feature" />
     <None Include="README.md" />

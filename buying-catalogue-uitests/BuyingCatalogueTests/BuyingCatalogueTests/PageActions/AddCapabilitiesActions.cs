@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace BuyingCatalogueTests.PageActions
 {
-    internal class AddCapabilitiesActions : Initialize
+    internal sealed class AddCapabilitiesActions : Initialize
     {
         List<string> capabilities;
 

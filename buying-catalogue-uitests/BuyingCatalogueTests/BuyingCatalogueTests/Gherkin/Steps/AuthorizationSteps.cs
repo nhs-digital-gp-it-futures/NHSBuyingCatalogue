@@ -3,7 +3,7 @@ using TechTalk.SpecFlow;
 
 namespace BuyingCatalogueTests.Gherkin.Steps
 {
-    public partial class SpecFlowSteps
+    public sealed partial class SpecFlowSteps
     {
         [Given(@"I enter my username and password and click login")]
         public void GivenIEnterMyUsernameAndPasswordAndClickLogin()

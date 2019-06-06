@@ -3,7 +3,7 @@ using SeleniumExtras.PageObjects;
 
 namespace BuyingCatalogueTests.Objects
 {
-    internal class CommonObjects : Initialization
+    internal sealed class CommonObjects : Initialization
     {
         public CommonObjects(IWebDriver driver) : base(driver)
         {

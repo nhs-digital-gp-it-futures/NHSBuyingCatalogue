@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace BuyingCatalogueTests.Objects
 {
-    internal class AddCapabilitiesObjects : Initialization
+    internal sealed class AddCapabilitiesObjects : Initialization
     {
         public AddCapabilitiesObjects(IWebDriver driver) : base(driver)
         {

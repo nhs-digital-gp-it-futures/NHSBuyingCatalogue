@@ -6,13 +6,13 @@ using System.Collections.Generic;
 
 namespace BuyingCatalogueTests.Objects
 {
-    internal class SolutionsOnboardingObjects : Initialization
+    internal sealed class SolutionsOnboardingObjects : Initialization
     {
         public SolutionsOnboardingObjects(IWebDriver driver) : base(driver)
         {
         }
 
-        [FindsBy(How = How.ClassName, Using = "onboarding-stages")]
+        [FindsBy(How = How.CssSelector, Using = "ol.onboarding-stages li")]
         public IList<IWebElement> OnboardingStages { get; set; }
 
         [FindsBy(How = How.CssSelector, Using = "nav.active-form span.title")]
