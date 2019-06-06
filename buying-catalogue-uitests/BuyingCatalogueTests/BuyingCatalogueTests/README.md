@@ -51,7 +51,7 @@ bubble up to each of the places it is used in the actions section
 2. Ensure the following element is added to the `PATH` environment variable: `C:\Users\{CurrentUser}\.nuget\packages\nunit.consolerunner\3.10.0\tools`
 3. Add the following environment variables:
 	- CatalogueUrl
-	- CatalogueUsers (in the form {username},{password};{username},{password};)
+	- CatalogueUsers (in the form {username},{password};{username},{password})
 4. Build the solution
 5. Execute the commands below to run the regression pack
 
