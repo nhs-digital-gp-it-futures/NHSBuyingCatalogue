@@ -11,27 +11,25 @@ namespace BuyingCatalogueTests.Gherkin.Steps
         string errorMessage;
         string solutionName;
         string editView;
-        readonly Faker faker;
+        readonly Faker faker = new Faker("en_GB");
         List<string> errors;
         string[] nameVersion;
 
         public SpecFlowSteps()
         {
             login = true;
-            faker = new Faker("en_GB");
         }
 
         [BeforeScenario]
         public void BeforeRun()
         {
-            login = true;
             DriverInitialize();
         }
 
         [AfterScenario]
         public void AfterRun()
         {
-            if (login) PostTestReset();
+            PostTestReset();
             DriverCleanup();
         }
     }

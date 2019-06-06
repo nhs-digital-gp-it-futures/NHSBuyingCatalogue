@@ -100,7 +100,6 @@
     <Compile Include="PageActions\CapabilitiesEvidenceActions.cs" />
     <Compile Include="utils\DriverExtensions.cs" />
     <Compile Include="utils\E2ETest.cs" />
-    <Compile Include="utils\SpecTest.cs" />
     <Compile Include="Objects\AuthObjects.cs" />
     <Compile Include="Objects\CommonObjects.cs" />
     <Compile Include="Objects\HomePageObjects.cs" />
@@ -135,13 +134,7 @@
     <None Include="Gherkin\Features\CompleteBasicDetailsAndCaps.feature" />
     <None Include="Gherkin\Features\ExistingSolutions.feature" />
     <None Include="README.md" />
-    <None Include="utils\EnvData\Data\Test.yml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="xmlToMD.ps1" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="utils\EnvData\Data\EnvExample.yml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="E2E Tests\" />

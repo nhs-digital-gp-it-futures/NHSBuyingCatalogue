@@ -12,7 +12,7 @@ namespace BuyingCatalogueTests.utils
 
     internal sealed class DriverConfig
     {
-        internal IWebDriver Driver { get; set; }
+        internal readonly IWebDriver Driver;
 
         public DriverConfig(BrowserOptions browser)
         {

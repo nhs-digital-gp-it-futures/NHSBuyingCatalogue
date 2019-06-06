@@ -1,6 +1,8 @@
 ﻿using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using YamlDotNet.Serialization;
 
@@ -13,23 +15,31 @@ namespace BuyingCatalogueTests.utils.EnvData
 
         public EnvironmentService()
         {
-            var dse = new Deserializer();
-
-            using (var yamlStream = File.OpenRead(GetDataFile()))
+            environment = new Environment()
             {
-                using (var yamlReader = new StreamReader(yamlStream, Encoding.UTF8, true))
-                {
-                    environment = dse.Deserialize<IEnvironment>(yamlReader);
-                }
-            }
+                CatalogueUrl = GetUrlFromEnv(),
+                Users = GetUsersFromEnv().ToList()
+            };
 
             // Get the user to be used in each test
             user = environment.Users[new Random().Next(environment.Users.Count)];
         }
 
-        private string GetDataFile()
+        private string GetUrlFromEnv()
         {
-            return TestContext.Parameters.Get("envData", Path.Combine(AppContext.BaseDirectory,"utils", "EnvData", "Data","Test.yml"));
+            return System.Environment.GetEnvironmentVariable("CatalogueUrl", EnvironmentVariableTarget.User) ?? throw new ArgumentNullException("'CatalogueUrl' not found");
+        }
+
+        private IEnumerable<IUser> GetUsersFromEnv()
+        {
+            var userString = System.Environment.GetEnvironmentVariable("CatalogueUsers", EnvironmentVariableTarget.User) ?? throw new ArgumentNullException("'CatalogueUsers' not found");
+
+            var userList = userString.Split(';');
+
+            return userList.Select(s => {
+                var splitUser = s.Split(',');
+                return new User { UserName = splitUser[0].Trim(), Password = splitUser[1].Trim() };
+            });            
         }
     }
 }

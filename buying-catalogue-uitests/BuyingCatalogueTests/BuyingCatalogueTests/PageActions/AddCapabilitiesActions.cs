@@ -3,17 +3,17 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace BuyingCatalogueTests.PageActions
 {
     internal sealed class AddCapabilitiesActions : Initialize
     {
-        List<string> capabilities;
+        List<string> capabilities = new List<string>();
 
         public AddCapabilitiesActions(IWebDriver driver) : base(driver)
         {
-            capabilities = new List<string>();
         }
 
         internal void WaitForCapabilities()
@@ -33,14 +33,7 @@ namespace BuyingCatalogueTests.PageActions
 
             capabilities.Add(capability.FindElement(By.TagName("h3")).Text);
 
-            List<string> standards = new List<string>();
-
-            var standardsList = capability.FindElements(By.CssSelector("section.standards ul:nth-child(1) li a"));
-
-            foreach (var item in standardsList)
-            {
-                standards.Add(item.Text);
-            }
+            var standards = capability.FindElements(By.CssSelector("section.standards ul:nth-child(1) li a")).Select(s => s.Text).ToList();
 
             return standards;
         }
@@ -50,15 +43,10 @@ namespace BuyingCatalogueTests.PageActions
             return int.Parse(addCapabilitiesObjects.CapabilitiesSelectedCounter.Text);
         }
 
-        internal List<string> GetAddedCapabilitiesStandards()
+        internal IEnumerable<string> GetAddedCapabilitiesStandards()
         {
             addCapabilitiesObjects.AssociatedStandards = new Objects.AddCapabilitiesObjects(_driver).AssociatedStandards;
-            List<string> standards = new List<string>();
-
-            foreach (var item in addCapabilitiesObjects.AssociatedStandards)
-            {
-                standards.Add(item.Text);
-            }
+            List<string> standards = addCapabilitiesObjects.AssociatedStandards.Select(s => s.Text).ToList();
 
             return standards;
         }
@@ -73,16 +61,7 @@ namespace BuyingCatalogueTests.PageActions
 
             capabilities.Add(capability.FindElement(By.TagName("h3")).Text);
 
-            List<string> standards = new List<string>();
-
-            var standardsList = capability.FindElements(By.CssSelector("section.standards ul:nth-child(1) li a"));
-
-            foreach (var item in standardsList)
-            {
-                standards.Add(item.Text);
-            }
-
-            return standards;
+            return capability.FindElements(By.CssSelector("section.standards ul:nth-child(1) li a")).Select(s => s.Text).ToList();
         }
 
         internal string GetErrorMessage()
@@ -99,11 +78,7 @@ namespace BuyingCatalogueTests.PageActions
         {
             addCapabilitiesObjects.AddedCapabilities = new Objects.AddCapabilitiesObjects(_driver).AddedCapabilities;
 
-            List<string> added = new List<string>();
-            foreach (var item in addCapabilitiesObjects.AddedCapabilities)
-            {
-                added.Add(item.Text);
-            }
+            var added = addCapabilitiesObjects.AddedCapabilities.Select(s => s.Text);           
 
             added.Should().Contain(capabilities);
         }
