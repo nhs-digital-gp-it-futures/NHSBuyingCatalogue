@@ -33,11 +33,8 @@ namespace BuyingCatalogueTests.PageActions
 
             capabilities.Add(capability.FindElement(By.TagName("h3")).Text);
 
-            var standards = capability.FindElements(By.CssSelector("section.standards ul:nth-child(1) li a")).Select(s => s.Text).ToList();
-
-            return standards;
+            return capability.FindElements(By.CssSelector("section.standards ul:nth-child(1) li a")).Select(s => s.Text).ToList();
         }
-
         internal int GetCounter()
         {
             return int.Parse(addCapabilitiesObjects.CapabilitiesSelectedCounter.Text);

@@ -4,6 +4,7 @@ using BuyingCatalogueTests.utils.EnvData;
 using OpenQA.Selenium;
 using SeleniumExtras.WaitHelpers;
 using System;
+using BuyingCatalogueTests.utils;
 
 namespace BuyingCatalogueTests.PageActions
 {
@@ -26,10 +27,23 @@ namespace BuyingCatalogueTests.PageActions
             {
                 authObjects.LogInOutLink.Click();
 
-                _wait.Until(s => _driver.Title == "Sign In with Auth0");
+                _wait.Until(s => _driver.Title == "Sign In with Auth0");                
             }
 
-            _wait.Until(ExpectedConditions.ElementToBeClickable(authObjects.EmailInput));
+            _wait.Until(ExpectedConditions.ElementToBeClickable(By.ClassName("auth0-lock-header-logo")));
+
+            try
+            {
+                _wait.Until(ExpectedConditions.ElementToBeClickable(authObjects.EmailInput));
+            }
+            catch
+            {
+                if (_driver.GetType().ToString().Contains("EdgeDriver") && _driver.FindElements(By.CssSelector("input[type=email]")).Count == 0)
+                {
+                    authObjects.NotYourAccountLink.Click();
+                    _wait.Until(ExpectedConditions.ElementToBeClickable(authObjects.EmailInput));
+                }
+            }            
 
             authObjects.EmailInput.SendKeys(user.UserName);
             authObjects.PasswordInput.SendKeys(user.Password);

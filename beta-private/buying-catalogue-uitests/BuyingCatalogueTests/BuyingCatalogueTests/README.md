@@ -52,6 +52,7 @@ bubble up to each of the places it is used in the actions section
 3. Add the following environment variables:
 	- CatalogueUrl
 	- CatalogueUsers (in the form {username},{password};{username},{password})
+	- CatalogueBrowser (enter either "Chrome" or "Edge")
 4. Build the solution
 5. Execute the commands below to run the regression pack
 
@@ -63,10 +64,10 @@ Use the following command to run all the tests in the selenium regression pack
 
 ### Example CLI command
 
-The below command will run the selenium tests from the command line against the environment specified in our environment variable using the Edge browser with a transform applied to 
+The below command will run the selenium tests from the command line against the environment specified in our environment variables with a transform applied to 
 the result file to give an HTML report
 
-```nunit3-console .\bin\Debug\BuyingCatalogueTests.dll --result "TestResults.html;transform=NunitToHTML.xslt" -tp browser=edge```
+```nunit3-console .\bin\Debug\BuyingCatalogueTests.dll --result "TestResults.html;transform=NunitToHTML.xslt"```
 
 ### Parameters
 

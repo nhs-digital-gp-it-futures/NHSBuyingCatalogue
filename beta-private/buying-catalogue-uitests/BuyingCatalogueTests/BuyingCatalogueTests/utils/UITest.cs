@@ -38,11 +38,12 @@ namespace BuyingCatalogueTests.utils
 
         internal void DriverInitialize()
         {
-            // Get browser choice from env variable (defaults to Chrome if null or not set)
-            string browserChoice = TestContext.Parameters.Get("browser");
-            BrowserOptions browser = !string.IsNullOrEmpty(browserChoice) ? GetBrowser(browserChoice) : BrowserOptions.Chrome;
-
             var service = new EnvironmentService();
+
+            // Get browser choice from env variable (defaults to Chrome if null or not set)            
+            BrowserOptions browser = GetBrowser(service.Browser);
+            
+            // Get the randomly chosen user
             user = service.user;
 
             //Initialize driver
@@ -56,21 +57,11 @@ namespace BuyingCatalogueTests.utils
             InitPageActions();
 
             // Ensure the login page is displayed
-            authActions.WaitForLoginPage();
+            authActions.WaitForLoginPage();            
 
             // If a test requires authentication, do that now
             if (login)
             {
-                // Ensure a consistent state accounting for cookie saving of sessions in Edge
-                if (browser == BrowserOptions.Edge)
-                {
-                    try
-                    {
-                        authActions.ClickNotAccount();
-                    }
-                    catch { }
-                }
-
                 authActions.Login(service.user);
 
                 try
@@ -92,12 +83,12 @@ namespace BuyingCatalogueTests.utils
                 Screenshot screenShot = ((ITakesScreenshot)_driver).GetScreenshot();
 
                 // Check if folder exists, create it if not
-                string folderPath = $"{AppContext.BaseDirectory}Results\\Screenshots\\{DateTime.Today.ToString("yyyyMMdd")}\\{TestContext.CurrentContext.Test.ClassName.Replace(" ", "")}";
+                var folderPath = Path.Combine(AppContext.BaseDirectory, "Results", "Screenshots", DateTime.Today.ToString("yyyyMMdd"), TestContext.CurrentContext.Test.ClassName.Replace(" ", ""));
                 Directory.CreateDirectory(folderPath);
 
                 // Save screenshot to folder
-                string filePath = $"{ folderPath }\\{DateTime.Now.ToString("yyyyMMddHHmmss")}.png";
-                screenShot.SaveAsFile($"{filePath}", ScreenshotImageFormat.Png);
+                var filePath = Path.Combine(folderPath, DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
+                screenShot.SaveAsFile(filePath, ScreenshotImageFormat.Png);
 
                 // Put the path to the file in the console
                 TestContext.Out.WriteLine(filePath);
@@ -161,7 +152,7 @@ namespace BuyingCatalogueTests.utils
                 case "IE11":
                     return BrowserOptions.IE11;
                 default:
-                    return BrowserOptions.Edge;
+                    return BrowserOptions.Chrome;
             }
         }
     }

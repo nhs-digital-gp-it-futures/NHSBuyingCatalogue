@@ -16,5 +16,11 @@ namespace BuyingCatalogueTests.utils
             builder.DragAndDrop(source, target);
             builder.Build().Perform();
         }
+
+        internal static void DeleteAllCookiesAndHardRefresh(this IWebDriver driver)
+        {
+            driver.Manage().Cookies.DeleteAllCookies();
+            driver.Navigate().Refresh();
+        }
     }
 }

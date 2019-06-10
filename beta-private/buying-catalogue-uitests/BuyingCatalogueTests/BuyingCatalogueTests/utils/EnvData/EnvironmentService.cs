@@ -1,10 +1,6 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using YamlDotNet.Serialization;
 
 namespace BuyingCatalogueTests.utils.EnvData
 {
@@ -12,14 +8,18 @@ namespace BuyingCatalogueTests.utils.EnvData
     {
         internal IEnvironment environment;
         internal IUser user;
+        internal string Browser;
 
         public EnvironmentService()
         {
             environment = new Environment()
             {
                 CatalogueUrl = GetUrlFromEnv(),
-                Users = GetUsersFromEnv().ToList()
+                Users = GetUsersFromEnv().ToList()                
             };
+
+            // Get the browser to run the tests against
+            Browser = GetBrowserFromEnv();
 
             // Get the user to be used in each test
             user = environment.Users[new Random().Next(environment.Users.Count)];
@@ -40,6 +40,11 @@ namespace BuyingCatalogueTests.utils.EnvData
                 var splitUser = s.Split(',');
                 return new User { UserName = splitUser[0].Trim(), Password = splitUser[1].Trim() };
             });            
+        }
+
+        private string GetBrowserFromEnv()
+        {
+            return System.Environment.GetEnvironmentVariable("CatalogueBrowser", EnvironmentVariableTarget.User) ?? throw new ArgumentNullException("'CatalogueBrowser' not found");
         }
     }
 }

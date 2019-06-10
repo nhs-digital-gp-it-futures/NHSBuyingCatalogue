@@ -64,8 +64,6 @@ namespace BuyingCatalogueTests.PageActions
 
             firstCap.FindElements(By.TagName("label")).Single(s => s.Text == labelText).Click();
 
-            //_wait.Until(ExpectedConditions.ElementToBeClickable(firstCap.FindElement(By.CssSelector("fieldset.evidence-field h3"))));
-
             contactMessage = firstCap.FindElement(By.CssSelector("fieldset.evidence-field legend")).Text;
         }
 
