@@ -25,6 +25,18 @@ namespace BuyingCatalogueTests.PageActions
             _wait.Until(ExpectedConditions.ElementToBeClickable(basicDetailsObjects.SolutionName));
         }
 
+        internal void StandardsEvidenceStartClick()
+        {
+            // Reinitialize the list of onboarding stages
+            onboardingObjects.OnboardingStages = new Objects.SolutionsOnboardingObjects(_driver).OnboardingStages;
+
+            var stage = onboardingObjects.OnboardingStages.Single(s => s.FindElement(By.ClassName("title")).Text.Contains("Solution's Standards"));
+
+            stage.FindElement(By.CssSelector(".action a")).Click();
+
+            _wait.Until(ExpectedConditions.ElementToBeClickable(standardsEvidenceObjects.PageHeader));
+        }
+
         internal void SolutionCapabilitiesStartClick()
         {
             _wait.Until(ExpectedConditions.ElementToBeClickable(GetByOnboardingObject(nameof(onboardingObjects.OnboardingStages))));

@@ -10,7 +10,7 @@ namespace BuyingCatalogueTests.PageActions
 {
     internal sealed class AddCapabilitiesActions : Initialize
     {
-        List<string> capabilities = new List<string>();
+        readonly List<string> capabilities = new List<string>();
 
         public AddCapabilitiesActions(IWebDriver driver) : base(driver)
         {
@@ -44,6 +44,14 @@ namespace BuyingCatalogueTests.PageActions
         {
             addCapabilitiesObjects.AssociatedStandards = new Objects.AddCapabilitiesObjects(_driver).AssociatedStandards;
             List<string> standards = addCapabilitiesObjects.AssociatedStandards.Select(s => s.Text).ToList();
+
+            return standards;
+        }
+
+        internal IList<string> GetAllStandards()
+        {
+            addCapabilitiesObjects.AddedStandards = new Objects.AddCapabilitiesObjects(_driver).AddedStandards;
+            var standards = addCapabilitiesObjects.AddedStandards.Select(s => s.Text).ToList();
 
             return standards;
         }
@@ -86,6 +94,8 @@ namespace BuyingCatalogueTests.PageActions
 
             new Actions(_driver).Click().Build().Perform();
 
+            // TODO: Replace
+            // Don't like this, must find a better way
             Thread.Sleep(1000);
 
             element.FindElement(By.CssSelector("div.controls label.unchecked.button")).Click();

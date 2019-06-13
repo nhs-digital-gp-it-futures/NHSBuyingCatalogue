@@ -20,7 +20,7 @@ namespace BuyingCatalogueTests.Objects
         [FindsBy(How = How.CssSelector, Using = "input[type=password]")]
         internal IWebElement PasswordInput { get; set; }
 
-        [FindsBy(How = How.CssSelector, Using = "button.auth0-lock-submit")]
+        [FindsBy(How = How.CssSelector, Using = "button[type=submit]")]
         internal IWebElement LoginButton { get; set; }
 
         [FindsBy(How = How.ClassName, Using = "auth0-lock-alternative-link")]

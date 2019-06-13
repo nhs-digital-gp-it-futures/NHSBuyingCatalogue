@@ -12,7 +12,7 @@ namespace BuyingCatalogueTests.Objects
     {
         public CapabilitiesEvidenceObjects(IWebDriver driver) : base(driver)
         {
-        }
+        }        
 
         [FindsBy(How = How.CssSelector, Using = "#capability-assessment-form fieldset.collapsible")]
         internal IList<IWebElement> CapabilitiesAccordian { get; set; }
@@ -22,5 +22,11 @@ namespace BuyingCatalogueTests.Objects
 
         [FindsBy(How = How.CssSelector, Using = "#capability-assessment-form button")]
         internal IWebElement SaveAndReviewButton { get; set; }
+
+        [FindsBy(How = How.CssSelector, Using = "#capability-submission-confirmation header h1")]
+        internal IWebElement ReviewPageTitle { get; set; }
+
+        [FindsBy(How = How.CssSelector, Using = "#capability-assessment-form button[type=submit]")]
+        internal IWebElement ReviewPageSubmit { get; set; }
     }
 }

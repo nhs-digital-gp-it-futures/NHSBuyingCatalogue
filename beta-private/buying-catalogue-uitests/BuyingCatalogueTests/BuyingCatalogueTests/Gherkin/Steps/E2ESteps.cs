@@ -36,7 +36,7 @@ namespace BuyingCatalogueTests.Gherkin.Steps
         [Then(@"I should see the onboarding page with the name of the solution")]
         public void ThenIShouldSeeTheOnboardingPageWithTheNameOfTheSolution()
         {
-            onboardingActions.VerifySolutionName(solutionName);            
+            onboardingActions.VerifySolutionName(solutionName);
         }
     }
 }
