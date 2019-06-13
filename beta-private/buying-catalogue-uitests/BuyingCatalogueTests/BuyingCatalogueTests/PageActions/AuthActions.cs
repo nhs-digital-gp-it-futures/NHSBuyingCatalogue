@@ -28,8 +28,6 @@ namespace BuyingCatalogueTests.PageActions
                 authObjects.LogInOutLink.Click();
             }
 
-            //_wait.Until(ExpectedConditions.ElementToBeClickable(By.ClassName("auth0-lock-header-logo")));
-
             try
             {
                 _wait.Until(ExpectedConditions.ElementToBeClickable(authObjects.EmailInput));
