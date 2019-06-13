@@ -26,11 +26,9 @@ namespace BuyingCatalogueTests.PageActions
             if (retries == 0)
             {
                 authObjects.LogInOutLink.Click();
-
-                _wait.Until(s => _driver.Title == "Sign In with Auth0");                
             }
 
-            _wait.Until(ExpectedConditions.ElementToBeClickable(By.ClassName("auth0-lock-header-logo")));
+            //_wait.Until(ExpectedConditions.ElementToBeClickable(By.ClassName("auth0-lock-header-logo")));
 
             try
             {
@@ -72,6 +70,11 @@ namespace BuyingCatalogueTests.PageActions
         public void Logout()
         {
             authObjects.LogInOutLink.Click();
+
+            if (_driver.Url.Contains("localhost"))
+            {
+                _driver.FindElement(By.CssSelector("body > div > button:nth-of-type(1)")).Click();
+            }
 
             try
             {
