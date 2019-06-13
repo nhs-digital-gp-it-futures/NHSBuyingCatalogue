@@ -17,7 +17,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <DocumentationFile>bin\Debug\BuyingCatalogueTests.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -86,6 +86,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\..\BuyingCatalogueTests\BuyingCatalogueTests\Gherkin\Steps\StandardsEvidenceSteps.cs">
+      <Link>Gherkin\Steps\StandardsEvidenceSteps.cs</Link>
+    </Compile>
     <Compile Include="Gherkin\Steps\AddCapabilitiesSteps.cs" />
     <Compile Include="Gherkin\Steps\AddSolutionSteps.cs" />
     <Compile Include="Gherkin\Steps\AuthorizationSteps.cs" />
@@ -95,8 +98,10 @@
     <Compile Include="Gherkin\Steps\ExistingSolutionSteps.cs" />
     <Compile Include="Objects\AddCapabilitiesObjects.cs" />
     <Compile Include="Objects\CapabilitiesEvidenceObjects.cs" />
+    <Compile Include="Objects\StandardsEvidenceObjects.cs" />
     <Compile Include="PageActions\AddCapabilitiesActions.cs" />
     <Compile Include="PageActions\CapabilitiesEvidenceActions.cs" />
+    <Compile Include="PageActions\StandardsEvidenceActions.cs" />
     <Compile Include="utils\DriverExtensions.cs" />
     <Compile Include="utils\E2ETest.cs" />
     <Compile Include="Objects\AuthObjects.cs" />
@@ -132,6 +137,7 @@
     <None Include="Gherkin\Features\CapabilityEvidence.feature" />
     <None Include="Gherkin\Features\CompleteBasicDetailsAndCaps.feature" />
     <None Include="Gherkin\Features\ExistingSolutions.feature" />
+    <None Include="Gherkin\Features\StandardsEvidence.feature" />
     <None Include="README.md" />
     <None Include="xmlToMD.ps1" />
   </ItemGroup>

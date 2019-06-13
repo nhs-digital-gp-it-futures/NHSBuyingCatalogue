@@ -137,7 +137,7 @@ namespace BuyingCatalogueTests.PageActions
                 _driver.FindElement(By.Id($"solution.contacts[{i + 1}].emailAddress")).SendKeys(details.EmailAddress);
                 _driver.FindElement(By.Id($"solution.contacts[{i + 1}].phoneNumber")).SendKeys(details.PhoneNumber);
 
-                new Actions(_driver).MoveToElement(_driver.FindElement(By.LinkText("Bravo"))).Build().Perform();
+                //new Actions(_driver).MoveToElement(_driver.FindElement(By.LinkText("Bravo"))).Build().Perform();
             }
         }
 

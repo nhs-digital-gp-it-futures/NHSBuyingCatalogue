@@ -7,7 +7,7 @@ namespace BuyingCatalogueTests.Gherkin.Steps
 {
     public sealed partial class SpecFlowSteps
     {
-        List<string> standards;
+        readonly List<string> standards = new List<string>();
 
         [Given(@"The list of capabilities is displayed")]
         public void GivenTheListOfCapabilitiesIsDisplayed()
@@ -36,13 +36,13 @@ namespace BuyingCatalogueTests.Gherkin.Steps
         [When(@"I select a foundational capability and save its standards")]
         public void WhenISelectAFoundationalCapabilityAndSaveItsStandards()
         {
-            standards = addCapabilitiesActions.SelectRandomFoundationCapability();
+            standards.AddRange(addCapabilitiesActions.SelectRandomFoundationCapability());
         }
 
         [When(@"I select an Other capability and save its standards")]
         public void WhenISelectAnOtherCapabilityAndSaveItsStandards()
         {
-            standards = addCapabilitiesActions.SelectRandomOtherCapability();
+            standards.AddRange(addCapabilitiesActions.SelectRandomOtherCapability());
         }
 
         [Then(@"The list of standards contains the standards from the capability")]

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using OpenQA.Selenium;
 using SeleniumExtras.WaitHelpers;
+using System;
+using System.Linq;
 
 namespace BuyingCatalogueTests.PageActions
 {
@@ -31,22 +28,23 @@ namespace BuyingCatalogueTests.PageActions
         {
             capEvidenceObjects.CapabilitiesAccordian = new Objects.CapabilitiesEvidenceObjects(_driver).CapabilitiesAccordian;
 
-            var firstCap = capEvidenceObjects.CapabilitiesAccordian[0];
+            for (int i = 0; i < capEvidenceObjects.CapabilitiesAccordian.Count; i++)
+            {
+                var capability = capEvidenceObjects.CapabilitiesAccordian[i];
 
-            firstCap.FindElements(By.TagName("label")).Single(s => s.Text == labelText).Click();
+                if (i > 0) capability.Click();                
 
-            _wait.Until(ExpectedConditions.ElementToBeClickable(firstCap.FindElement(By.CssSelector("fieldset.evidence-field h3"))));
-
-            if(capEvidenceObjects.CapabilitiesAccordian.Count > 1)
-            { 
-                for(int i = 1; i < capEvidenceObjects.CapabilitiesAccordian.Count; i++)
-                {
-                    var capability = capEvidenceObjects.CapabilitiesAccordian[i];
-                    capability.Click();
-                    capability.FindElements(By.TagName("label")).Single(s => s.Text == labelText).Click();
-                    _wait.Until(ExpectedConditions.ElementToBeClickable(capability.FindElement(By.CssSelector("fieldset.evidence-field h3"))));
-                }
+                capability.FindElements(By.TagName("label")).Single(s => s.Text == labelText).Click();
             }
+        }
+
+        internal void SubmitEvidence()
+        {
+            _wait.Until(ExpectedConditions.ElementToBeClickable(capEvidenceObjects.ReviewPageTitle));
+
+            capEvidenceObjects.ReviewPageSubmit.Click();
+
+            _wait.Until(ExpectedConditions.ElementToBeClickable(onboardingObjects.SolutionName));
         }
 
         internal void VerifyCorrectErrorMessagesDisplayed()

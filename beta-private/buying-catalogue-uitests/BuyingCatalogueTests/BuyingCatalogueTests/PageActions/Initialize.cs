@@ -17,6 +17,7 @@ namespace BuyingCatalogueTests.PageActions
         internal Objects.SolutionBasicDetailsObjects basicDetailsObjects;
         internal Objects.AddCapabilitiesObjects addCapabilitiesObjects;
         internal Objects.CapabilitiesEvidenceObjects capEvidenceObjects;
+        internal Objects.StandardsEvidenceObjects standardsEvidenceObjects;
 
         internal Objects.CommonObjects commonObjects;
 
@@ -39,6 +40,7 @@ namespace BuyingCatalogueTests.PageActions
             basicDetailsObjects = new Objects.SolutionBasicDetailsObjects(_driver);
             addCapabilitiesObjects = new Objects.AddCapabilitiesObjects(_driver);
             capEvidenceObjects = new Objects.CapabilitiesEvidenceObjects(_driver);
+            standardsEvidenceObjects = new Objects.StandardsEvidenceObjects(_driver);
 
             commonObjects = new Objects.CommonObjects(_driver);
         }

@@ -25,6 +25,9 @@ namespace BuyingCatalogueTests.Objects
         [FindsBy(How = How.CssSelector, Using = "section.capabilities ul.capabilities li.selected")]
         internal IList<IWebElement> AddedCapabilities { get; set; }
 
+        [FindsBy(How = How.CssSelector, Using = "section.standards li.selected a")]
+        internal IList<IWebElement> AddedStandards { get; set; }
+
         [FindsBy(How = How.CssSelector, Using = "div#submit-controls input")]
         internal IWebElement SaveAndComplete { get; set; }
 
