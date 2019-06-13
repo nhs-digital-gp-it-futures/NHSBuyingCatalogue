@@ -2,6 +2,10 @@
 
 This is Private Repository for Buying Catalogue Development during Beta phase of GP IT Futures.
 
+## Setup
+
+For a brief guide for how to get started developing the Catalogue see the [DevSetup](DevSetup.md)
+
 ## Environment Variables
 
 over time the number of environment variables used by the system slowly grew. Here is a comprehensive list of the variables this system uses, as well as a table providing a example values and usages for each variable.
