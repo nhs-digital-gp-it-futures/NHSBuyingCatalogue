@@ -17,7 +17,7 @@ The following steps should enable you to get a dev environment set up for the Bu
 6. ssh onto sql server container using the command below
     - `docker exec -it beta-private_db_1 /bin/bash`
 7. in the ssh session, navigate to /tmp/Data
-8. Execute the below script to setup the db (see troubleshooting #1 below if this doesn't work)
+8. Execute the below script to setup the db (see troubleshooting 1 below if this doesn't work)
     `sh FromScratch.MSSQLServer.sh`
 9. Verify the install has worked - navigate to `http://localhost:5100/swagger` and try one of the queries listed. if you need credentials for the query, ask a Dev for those
 
