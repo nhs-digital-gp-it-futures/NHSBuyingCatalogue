@@ -28,3 +28,4 @@ If this occurs, copy the contents from the `/api/NHSD.GPITF.BuyingCatalog/Data/F
 
 ## Common Issues
 - Sometimes, you may need to run `npm install` in the `frontend` folder for the dockerfile to find all the requisite packages
+- Errors may occur on subsequent restarts of windows. In this case, just restart Docker and try again.
