@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -25,6 +26,22 @@ namespace BuyingCatalogueTests.PageActions
         {
             standardsEvidenceObjects.OverarchingStandards = new Objects.StandardsEvidenceObjects(_driver).OverarchingStandards;
             return standardsEvidenceObjects.OverarchingStandards.Select(s => s.FindElement(By.ClassName("name")).Text).ToList();
+        }
+
+        internal double GetStandardsTables()
+        {
+            standardsEvidenceObjects.StandardsTables = new Objects.StandardsEvidenceObjects(_driver).StandardsTables;
+            return standardsEvidenceObjects.StandardsTables.Count;
+        }
+
+        internal void RevealHelpContents()
+        {
+            standardsEvidenceObjects.HelpRevealTitle.Click();
+        }
+
+        internal string GetHelpContents()
+        {
+            return standardsEvidenceObjects.HelpRevealContent.Text;
         }
     }
 }
