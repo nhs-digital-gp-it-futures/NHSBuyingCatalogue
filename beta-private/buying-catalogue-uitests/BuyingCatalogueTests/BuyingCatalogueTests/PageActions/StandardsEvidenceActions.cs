@@ -43,5 +43,22 @@ namespace BuyingCatalogueTests.PageActions
         {
             return standardsEvidenceObjects.HelpRevealContent.Text;
         }
+
+        internal string ClickStandard()
+        {
+            standardsEvidenceObjects.AssociatedStandards = new Objects.StandardsEvidenceObjects(_driver).AssociatedStandards;
+
+            var standard = standardsEvidenceObjects.AssociatedStandards[new Random().Next(standardsEvidenceObjects.AssociatedStandards.Count)].FindElement(By.ClassName("name"));
+            var title = standard.Text;
+
+            standard.Click();
+
+            return title;
+        }
+
+        internal string GetStandardTitle()
+        {
+            return standardsEvidenceObjects.StandardTitle.Text;
+        }
     }
 }

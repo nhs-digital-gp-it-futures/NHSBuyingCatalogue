@@ -10,6 +10,9 @@ namespace BuyingCatalogueTests.Objects
         {
         }
 
+        [FindsBy(How = How.CssSelector, Using = "#compliance header h1")]
+        internal IWebElement StandardTitle { get; set; }
+
         [FindsBy(How = How.CssSelector, Using = "#compliance table:nth-of-type(1) tr.standard")]
         internal IList<IWebElement> AssociatedStandards { get; set; }
 
