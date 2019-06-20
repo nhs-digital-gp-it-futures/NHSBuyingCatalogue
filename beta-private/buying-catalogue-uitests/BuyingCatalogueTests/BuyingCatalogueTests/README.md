@@ -12,17 +12,11 @@ Tests <-- Actions <-- Objects
 Utils
 ```
 
-Tests are made of various actions, actions use the Objects stored. Utils are included where generic functionality can be leveraged rather than 
+Tests are made of various actions, actions use the objects stored. Utils are included where generic functionality can be leveraged rather than 
 repeat in multiple places
 
 ### Tests
-The tests are written in a semi-business language manner, as shown below:
-
-```
-authPage.Login(user);
-
-homePage.AddSolution();
-```
+The tests are written using Specflow. This allows direct translation between business requirements and automated tests
 
 ### Actions
 The actions are the logic flow of the particular user action on the page, as shown in the simple example below:
