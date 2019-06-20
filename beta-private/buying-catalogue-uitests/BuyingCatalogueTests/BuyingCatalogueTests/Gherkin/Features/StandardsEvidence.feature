@@ -20,3 +20,8 @@ Scenario: The help reveal contains the correct details
 	Given I click the Start button below the Standards Evidence section
 	When I click the Help - What are the associated Standards link
 	Then the help text should be correct
+
+Scenario: Clicking a standard opens the correct page
+	Given I click the Start button below the Standards Evidence section
+	When I click on a standard
+	Then the correct standard page should be displayed

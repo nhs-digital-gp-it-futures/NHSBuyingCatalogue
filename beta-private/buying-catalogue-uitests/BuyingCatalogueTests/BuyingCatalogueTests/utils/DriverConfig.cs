@@ -50,16 +50,10 @@ namespace BuyingCatalogueTests.utils
             }
             else
             {
-                options.AddArguments("--headless", "--disable-gpu");
+                options.AddArguments("--headless", "--disable-gpu", "window-size=1920,1080");
             }
 
-            IWebDriver driver = new ChromeDriver(options);
-            if (!System.Diagnostics.Debugger.IsAttached)
-            {
-                driver.Manage().Window.Size = new System.Drawing.Size(1920, 1080);
-            }
-
-            return driver;
+            return new ChromeDriver(options);
         }
 
         private IWebDriver SetupEdgeDriver()
