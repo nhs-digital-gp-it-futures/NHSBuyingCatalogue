@@ -32,7 +32,6 @@ namespace Gif.Service
           .Build();
 
         host.Run();
-
       }
       finally
       {
