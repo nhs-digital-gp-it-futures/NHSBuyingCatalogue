@@ -68,15 +68,7 @@ namespace BuyingCatalogueTests.PageActions
 
             var standards = capability.FindElements(By.CssSelector("section.standards ul:nth-of-type(1) li"));
 
-            List<string> standardsText = new List<string>();
-
-            foreach(var text in standards)
-            {
-                Console.WriteLine(text);
-                standardsText.Add(text.Text);
-            }
-
-            return standardsText;
+            return standards.Select(x => x.Text).ToList();
         }
 
         internal string GetErrorMessage()
