@@ -79,7 +79,6 @@ namespace Gif.Service.Controllers
       }
       finally
       {
-
         foreach (var solutionFramework in solutionFrameworks)
         {
           _linkManagerDatastore.FrameworkSolutionAssociate(solutionFramework.Id, solnEx.Solution.Id);

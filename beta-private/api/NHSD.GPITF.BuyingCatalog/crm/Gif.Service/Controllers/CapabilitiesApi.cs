@@ -38,10 +38,10 @@ namespace Gif.Service.Controllers
     /// <response code="200">Success</response>
     /// <response code="404">Framework not found in CRM</response>
     [HttpGet]
-  [Route("/api/Capabilities/ByFramework/{frameworkId}")]
-  [ValidateModelState]
-  [SwaggerOperation("ApiCapabilitiesByFrameworkByFrameworkIdGet")]
-  [SwaggerResponse(statusCode: 200, type: typeof(PaginatedListCapabilities), description: "Success")]
+    [Route("/api/Capabilities/ByFramework/{frameworkId}")]
+    [ValidateModelState]
+    [SwaggerOperation("ApiCapabilitiesByFrameworkByFrameworkIdGet")]
+    [SwaggerResponse(statusCode: 200, type: typeof(PaginatedListCapabilities), description: "Success")]
     public virtual IActionResult ApiCapabilitiesByFrameworkByFrameworkIdGet([FromRoute][Required]string frameworkId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
       IEnumerable<Capability> capabilities;
