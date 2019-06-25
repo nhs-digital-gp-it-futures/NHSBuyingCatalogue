@@ -67,11 +67,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\NHSD.GPITF.BuyingCatalog\nlog.config" Link="nlog.config" />
+    <None Include="..\..\NHSD.GPITF.BuyingCatalog\nlog.config" Link="nlog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\Gif.Crm.snk" Link="Gif.Crm.snk" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\NHSD.GPITF.BuyingCatalog.Models\NHSD.GPITF.BuyingCatalog.Models.csproj" />
     <ProjectReference Include="..\Gif.Datastore.CRM\Gif.Datastore.CRM.csproj" />
   </ItemGroup>
 

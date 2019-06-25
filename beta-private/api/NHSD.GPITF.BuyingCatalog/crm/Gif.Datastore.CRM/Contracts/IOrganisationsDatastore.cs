@@ -1,4 +1,5 @@
 ﻿using Gif.Service.Models;
+using System.Collections.Generic;
 
 namespace Gif.Service.Contracts
 {
@@ -7,6 +8,7 @@ namespace Gif.Service.Contracts
   {
     Organisation ByContact(string contactId);
     Organisation ById(string organisationId);
+    IEnumerable<Organisation> GetAll();
   }
 #pragma warning restore CS1591
 }

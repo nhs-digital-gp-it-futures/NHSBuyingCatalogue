@@ -38,4 +38,8 @@
   <ItemGroup>
     <None Include="..\Gif.Crm.snk" Link="Gif.Crm.snk" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\NHSD.GPITF.BuyingCatalog.Models\NHSD.GPITF.BuyingCatalog.Models.csproj" />
+  </ItemGroup>
 </Project>
