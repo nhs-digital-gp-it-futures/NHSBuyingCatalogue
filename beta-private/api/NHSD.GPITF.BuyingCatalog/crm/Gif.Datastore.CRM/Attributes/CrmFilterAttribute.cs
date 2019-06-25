@@ -1,52 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Gif.Service.Attributes
 {
-    [AttributeUsage(AttributeTargets.Class)]
-    public class CrmFilterAttribute : Attribute
+  [AttributeUsage(AttributeTargets.Class)]
+  public sealed class CrmFilterAttribute : Attribute
+  {
+    public string Name { get; }
+    public string FilterName { get; set; }
+    public string FilterValue { get; set; }
+    public bool? QuotesRequired { get; set; }
+    public bool? MultiConditional { get; set; }
+
+    public CrmFilterAttribute(string name)
     {
-        public virtual string Name
-        {
-            get { return name; }
-        }
-
-        public virtual string FilterName
-        {
-            get { return filterName; }
-            set { filterName = value; }
-        }
-
-        public virtual string FilterValue
-        {
-            get { return filterValue; }
-            set { filterValue = value; }
-        }
-
-        public virtual bool? QuotesRequired
-        {
-            get { return quotesRequired; }
-            set { quotesRequired = value; }
-        }
-
-        public virtual bool? MultiConditional
-        {
-            get { return quotesRequired; }
-            set { quotesRequired = value; }
-        }
-
-        private string name;
-        private string filterName;
-        private string filterValue;
-        private bool? quotesRequired;
-        private bool? multiConditionl;
-
-        public CrmFilterAttribute(string name)
-        {
-            this.name = name;
-        }
+      Name = name;
     }
-    
+  }
+
 }
