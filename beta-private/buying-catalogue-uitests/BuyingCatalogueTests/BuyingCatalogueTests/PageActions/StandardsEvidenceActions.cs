@@ -28,7 +28,7 @@ namespace BuyingCatalogueTests.PageActions
             return standardsEvidenceObjects.OverarchingStandards.Select(s => s.FindElement(By.ClassName("name")).Text).ToList();
         }
 
-        internal double GetStandardsTables()
+        internal double GetStandardsTablesCount()
         {
             standardsEvidenceObjects.StandardsTables = new Objects.StandardsEvidenceObjects(_driver).StandardsTables;
             return standardsEvidenceObjects.StandardsTables.Count;
@@ -49,7 +49,7 @@ namespace BuyingCatalogueTests.PageActions
             standardsEvidenceObjects.AssociatedStandards = new Objects.StandardsEvidenceObjects(_driver).AssociatedStandards;
 
             var standard = standardsEvidenceObjects.AssociatedStandards[new Random().Next(standardsEvidenceObjects.AssociatedStandards.Count)].FindElement(By.ClassName("name"));
-            var title = standard.Text;
+            var title = standard.Text.Replace("interop ", "");
 
             standard.Click();
 

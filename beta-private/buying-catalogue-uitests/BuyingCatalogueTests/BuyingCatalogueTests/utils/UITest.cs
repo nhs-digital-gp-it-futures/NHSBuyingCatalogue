@@ -30,7 +30,7 @@ namespace BuyingCatalogueTests.utils
         internal PageActions.CommonActions commonActions;
 
         // Check for if a test needs to authenticate before the body of the test
-        internal bool login;
+        internal readonly bool login;
 
         public UITest(bool login = true)
         {
