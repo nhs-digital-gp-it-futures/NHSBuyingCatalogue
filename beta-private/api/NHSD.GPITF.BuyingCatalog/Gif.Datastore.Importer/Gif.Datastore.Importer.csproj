@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <StartupObject>Gif.Datastore.Importer.Program</StartupObject>
+    <UserSecretsId>626ab5c7-7b51-49fe-acea-005970d864c3</UserSecretsId>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\NHSD.GPITF.BuyingCatalog.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  
+
+  <ItemGroup>
+    <None Include="..\NHSD.GPITF.BuyingCatalog\hosting.json" Link="hosting.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!-- Exclude the project from analysis -->
+    <SonarQubeExclude>true</SonarQubeExclude>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\crm\Gif.Datastore.CRM\Gif.Datastore.CRM.csproj" />
+    <ProjectReference Include="..\NHSD.GPITF.BuyingCatalog.Datastore.Database\NHSD.GPITF.BuyingCatalog.Datastore.Database.csproj" />
+    <ProjectReference Include="..\NHSD.GPITF.BuyingCatalog.Interfaces\NHSD.GPITF.BuyingCatalog.Interfaces.csproj" />
+    <ProjectReference Include="..\NHSD.GPITF.BuyingCatalog.Models\NHSD.GPITF.BuyingCatalog.Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\NHSD.GPITF.BuyingCatalog.snk" Link="NHSD.GPITF.BuyingCatalog.snk" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.2.0" />
+  </ItemGroup>
+
+</Project>
