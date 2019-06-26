@@ -7,7 +7,7 @@ using GifModels = Gif.Service.Models;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
-  internal static class Creator
+  public static class Creator
   {
     private static TTarget Convert<TSource, TTarget>(TSource source) where TTarget : new()
     {
@@ -69,117 +69,117 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       return target;
     }
 
-    internal static GifModels.Review FromApi(StandardsApplicableReviews api)
+    public static GifModels.Review FromApi(StandardsApplicableReviews api)
     {
       return Convert<StandardsApplicableReviews, GifModels.Review>(api);
     }
 
-    internal static StandardsApplicableReviews StandardsApplicableReviewsFromCrm(GifModels.Review crm)
+    public static StandardsApplicableReviews StandardsApplicableReviewsFromCrm(GifModels.Review crm)
     {
       return Convert<GifModels.Review, StandardsApplicableReviews>(crm);
     }
 
-    internal static CapabilitiesImplementedReviews CapabilitiesImplementedReviewsFromCrm(GifModels.Review crm)
+    public static CapabilitiesImplementedReviews CapabilitiesImplementedReviewsFromCrm(GifModels.Review crm)
     {
       return Convert<GifModels.Review, CapabilitiesImplementedReviews>(crm);
     }
 
-    internal static GifModels.Review FromApi(CapabilitiesImplementedReviews api)
+    public static GifModels.Review FromApi(CapabilitiesImplementedReviews api)
     {
       return Convert<CapabilitiesImplementedReviews, GifModels.Review>(api);
     }
 
-    internal static CapabilitiesImplementedEvidence FromCrm(GifModels.CapabilityEvidence crm)
+    public static CapabilitiesImplementedEvidence FromCrm(GifModels.CapabilityEvidence crm)
     {
       return Convert<GifModels.CapabilityEvidence, CapabilitiesImplementedEvidence>(crm);
     }
 
-    internal static GifModels.CapabilityEvidence FromApi(CapabilitiesImplementedEvidence api)
+    public static GifModels.CapabilityEvidence FromApi(CapabilitiesImplementedEvidence api)
     {
       return Convert<CapabilitiesImplementedEvidence, GifModels.CapabilityEvidence>(api);
     }
 
-    internal static GifModels.StandardApplicableEvidence FromApi(StandardsApplicableEvidence api)
+    public static GifModels.StandardApplicableEvidence FromApi(StandardsApplicableEvidence api)
     {
       return Convert<StandardsApplicableEvidence, GifModels.StandardApplicableEvidence>(api);
     }
 
-    internal static StandardsApplicableEvidence FromCrm(GifModels.StandardApplicableEvidence crm)
+    public static StandardsApplicableEvidence FromCrm(GifModels.StandardApplicableEvidence crm)
     {
       return Convert<GifModels.StandardApplicableEvidence, StandardsApplicableEvidence>(crm);
     }
 
-    internal static GifModels.StandardApplicable FromApi(StandardsApplicable api)
+    public static GifModels.StandardApplicable FromApi(StandardsApplicable api)
     {
       return Convert<StandardsApplicable, GifModels.StandardApplicable>(api);
     }
 
-    internal static StandardsApplicable FromCrm(GifModels.StandardApplicable crm)
+    public static StandardsApplicable FromCrm(GifModels.StandardApplicable crm)
     {
       return Convert<GifModels.StandardApplicable, StandardsApplicable>(crm);
     }
 
-    internal static GifModels.CapabilityImplemented FromApi(CapabilitiesImplemented api)
+    public static GifModels.CapabilityImplemented FromApi(CapabilitiesImplemented api)
     {
       return Convert<CapabilitiesImplemented, GifModels.CapabilityImplemented>(api);
     }
 
-    internal static CapabilitiesImplemented FromCrm(GifModels.CapabilityImplemented crm)
+    public static CapabilitiesImplemented FromCrm(GifModels.CapabilityImplemented crm)
     {
       return Convert<GifModels.CapabilityImplemented, CapabilitiesImplemented>(crm);
     }
 
-    internal static Frameworks FromCrm(GifModels.Framework crm)
+    public static Frameworks FromCrm(GifModels.Framework crm)
     {
       return Convert<GifModels.Framework, Frameworks>(crm);
     }
 
-    internal static TechnicalContacts FromCrm(GifModels.TechnicalContact crm)
+    public static TechnicalContacts FromCrm(GifModels.TechnicalContact crm)
     {
       return Convert<GifModels.TechnicalContact, TechnicalContacts>(crm);
     }
 
-    internal static GifModels.TechnicalContact FromApi(TechnicalContacts api)
+    public static GifModels.TechnicalContact FromApi(TechnicalContacts api)
     {
       return Convert<TechnicalContacts, GifModels.TechnicalContact>(api);
     }
 
-    internal static Solutions FromCrm(GifModels.Solution crm)
+    public static Solutions FromCrm(GifModels.Solution crm)
     {
       return Convert<GifModels.Solution, Solutions>(crm);
     }
 
-    internal static GifModels.Solution FromApi(Solutions api)
+    public static GifModels.Solution FromApi(Solutions api)
     {
       return Convert<Solutions, GifModels.Solution>(api);
     }
 
-    internal static Capabilities FromCrm(GifModels.Capability crm)
+    public static Capabilities FromCrm(GifModels.Capability crm)
     {
       return Convert<GifModels.Capability, Capabilities>(crm);
     }
 
-    internal static Standards FromCrm(GifModels.Standard crm)
+    public static Standards FromCrm(GifModels.Standard crm)
     {
       return Convert<GifModels.Standard, Standards>(crm);
     }
 
-    internal static Organisations FromCrm(GifModels.Organisation crm)
+    public static Organisations FromCrm(GifModels.Organisation crm)
     {
       return Convert<GifModels.Organisation, Organisations>(crm);
     }
 
-    internal static CapabilityStandard FromCrm(GifModels.CapabilityStandard crm)
+    public static CapabilityStandard FromCrm(GifModels.CapabilityStandard crm)
     {
       return Convert<GifModels.CapabilityStandard, CapabilityStandard>(crm);
     }
 
-    internal static Contacts FromCrm(GifModels.Contact crm)
+    public static Contacts FromCrm(GifModels.Contact crm)
     {
       return Convert<GifModels.Contact, Contacts>(crm);
     }
 
-    internal static SolutionEx FromCrm(GifModels.SolutionEx crm)
+    public static SolutionEx FromCrm(GifModels.SolutionEx crm)
     {
       var retval = new SolutionEx
       {
@@ -213,7 +213,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       return retval;
     }
 
-    internal static GifModels.SolutionEx FromApi(SolutionEx api)
+    public static GifModels.SolutionEx FromApi(SolutionEx api)
     {
       var retval = new GifModels.SolutionEx
       {

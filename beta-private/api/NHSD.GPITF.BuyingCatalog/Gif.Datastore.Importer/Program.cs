@@ -1,10 +1,13 @@
-﻿using Gif.Service.Crm;
+﻿using Dapper.Contrib.Extensions;
+using Gif.Service.Crm;
 using Gif.Service.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NHSD.GPITF.BuyingCatalog.Datastore.CRM;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database;
 using System;
+using System.Linq;
 
 namespace Gif.Datastore.Importer
 {
@@ -35,7 +38,9 @@ namespace Gif.Datastore.Importer
       DumpSettings();
       Console.WriteLine();
 
+      Console.WriteLine($"Connecting to CRM...");
       _repo = new Repository(_config, logger);
+      Console.WriteLine();
     }
 
     private void Run()
@@ -43,41 +48,132 @@ namespace Gif.Datastore.Importer
       var dbConnFact = new DbConnectionFactory(_config);
       using (var conn = dbConnFact.Get())
       {
-        Console.WriteLine($"Importing");
+        Console.WriteLine($"Importing data:");
         Console.WriteLine($"  from:  {Settings.GIF_CRM_URL(_config)}");
         Console.WriteLine($"  into:  {conn.ConnectionString}");
+        Console.WriteLine();
 
-        // NHSD data
-        // TODO   Frameworks
+        Console.WriteLine($"Retrieving data from CRM:");
+
+        #region NHSD data
+        Console.WriteLine($"  Frameworks...");
         var frameworksSvc = new FrameworksService(_repo);
-        var frameworks = frameworksSvc.GetAll();
+        var frameworks = frameworksSvc
+          .GetAll().Select(x => Creator.FromCrm(x))
+          .ToList();
 
-        // TODO   Capabilities
-        var capabilitiesSvc = new CapabilitiesService(_repo);
-        var capabilities = capabilitiesSvc.GetAll();
+        Console.WriteLine($"  Capabilities...");
+        var capsSvc = new CapabilitiesService(_repo);
+        var caps = capsSvc
+          .GetAll().Select(x => Creator.FromCrm(x))
+          .ToList();
 
-        // TODO   Standards
-        var standardsSvc = new StandardsService(_repo);
-        var standards = standardsSvc.GetAll();
+        Console.WriteLine($"  Standards...");
+        var stdsSvc = new StandardsService(_repo);
+        var stds = stdsSvc
+          .GetAll().Select(x => Creator.FromCrm(x))
+          .ToList();
 
-        // TODO   CapabilityFramework
-        // TODO   FrameworkStandard
-        // TODO   CapabilityStandard
+        Console.WriteLine($"  TODO   CapabilityFramework...");
+        Console.WriteLine($"  TODO   FrameworkStandard...");
+        Console.WriteLine($"  TODO   CapabilityStandard...");
+        #endregion
 
-        // supplier data
-        // TODO   Organisations
-        // TODO   Contacts
-        // TODO   Solutions
-        // TODO   FrameworkSolution
-        // TODO   ClaimedCapability
-        // TODO   ClaimedStandard
-        // TODO   ClaimedCapabilityEvidence
-        // TODO   ClaimedStandardEvidence
-        // TODO   ClaimedCapabilityReview
-        // TODO   ClaimedStandardReview
-        // TODO   TechnicalContact
+        #region Supplier data
+        Console.WriteLine($"  Organisations...");
+        var orgsSvc = new OrganisationsService(_repo);
+        var orgs = orgsSvc
+          .GetAll().Select(x => Creator.FromCrm(x))
+          .ToList();
+
+        Console.WriteLine($"  Contacts...");
+        var contactsSvc = new ContactsService(_repo);
+        var contacts = orgs
+          .SelectMany(org => contactsSvc.ByOrganisation(org.Id))
+          .Select(cont => Creator.FromCrm(cont))
+          .ToList();
+
+        Console.WriteLine($"  Solutions...");
+        var solnsSvc = new SolutionsService(_repo);
+        var solns = orgs
+          .SelectMany(org => solnsSvc.ByOrganisation(org.Id))
+          .Select(cont => Creator.FromCrm(cont))
+          .ToList();
+
+        Console.WriteLine($"  TechnicalContact...");
+        var techContSvc = new TechnicalContactService(_repo);
+        var techConts = solns
+          .SelectMany(soln => techContSvc.BySolution(soln.Id))
+          .Select(techCont => Creator.FromCrm(techCont))
+          .ToList();
+
+        Console.WriteLine($"  TODO   FrameworkSolution...");
+
+        Console.WriteLine($"  ClaimedCapability...");
+        var claimedCapsSvc = new CapabilitiesImplementedService(_repo);
+        var claimedCaps = solns
+          .SelectMany(soln => claimedCapsSvc.BySolution(soln.Id))
+          .Select(cont => Creator.FromCrm(cont))
+          .ToList();
+
+        Console.WriteLine($"  ClaimedStandard...");
+        var claimedStdsSvc = new StandardsApplicableService(_repo);
+        var claimedStds = solns
+          .SelectMany(soln => claimedStdsSvc.BySolution(soln.Id))
+          .Select(cont => Creator.FromCrm(cont))
+          .ToList();
+
+        Console.WriteLine($"  ClaimedCapabilityEvidence...");
+        var claimedCapsEvSvc = new CapabilitiesImplementedEvidenceService(_repo);
+        var claimedCapsEv = claimedCaps
+          .SelectMany(claim => claimedCapsEvSvc.ByClaim(claim.Id).SelectMany(x => x))
+          .Select(ev => Creator.FromCrm(ev))
+          .ToList();
+
+        Console.WriteLine($"  ClaimedStandardEvidence...");
+        var claimedStdsEvSvc = new StandardsApplicableEvidenceService(_repo);
+        var claimedStdsEv = claimedStds
+          .SelectMany(claim => claimedStdsEvSvc.ByClaim(claim.Id).SelectMany(x => x))
+          .Select(ev => Creator.FromCrm(ev))
+          .ToList();
+
+        Console.WriteLine($"  ClaimedCapabilityReview...");
+        var claimedCapsRevSvc = new CapabilitiesImplementedReviewsService(_repo);
+        var claimedCapsRev = claimedCapsEv
+          .SelectMany(ev => claimedCapsRevSvc.ByEvidence(ev.Id).SelectMany(x => x))
+          .Select(rev => Creator.CapabilitiesImplementedReviewsFromCrm(rev))
+          .ToList();
+
+        Console.WriteLine($"  ClaimedStandardReview...");
+        var claimedStdsRevSvc = new StandardsApplicableReviewsService(_repo);
+        var claimedStdsRev = claimedStdsEv
+          .SelectMany(ev => claimedStdsRevSvc.ByEvidence(ev.Id).SelectMany(x => x))
+          .Select(rev => Creator.StandardsApplicableReviewsFromCrm(rev))
+          .ToList();
+        #endregion
+
         using (var trans = conn.BeginTransaction())
         {
+          // NHSD data
+          conn.Insert(frameworks, trans);
+          conn.Insert(caps, trans);
+          conn.Insert(stds, trans);
+
+          // supplier data
+          conn.Insert(orgs, trans);
+          conn.Insert(contacts, trans);
+          conn.Insert(solns, trans);
+          conn.Insert(techConts, trans);
+
+          conn.Insert(claimedCaps, trans);
+          conn.Insert(claimedStds, trans);
+
+          conn.Insert(claimedCapsEv, trans);
+          conn.Insert(claimedStdsEv, trans);
+
+          conn.Insert(claimedCapsRev, trans);
+          conn.Insert(claimedStdsRev, trans);
+
           trans.Commit();
         }
         Console.WriteLine("Finished!");
