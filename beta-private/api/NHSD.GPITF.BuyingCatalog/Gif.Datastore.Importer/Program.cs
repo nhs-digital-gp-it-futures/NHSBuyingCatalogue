@@ -61,52 +61,62 @@ namespace Gif.Datastore.Importer
         Console.WriteLine($"  Frameworks...");
         var frameworksSvc = new FrameworksService(_repo);
         var frameworks = frameworksSvc
-          .GetAll().Select(x => Creator.FromCrm(x))
+          .GetAll()
+          .Select(x => Creator.FromCrm(x))
           .ToList();
 
         Console.WriteLine($"  Capabilities...");
         var capsSvc = new CapabilitiesService(_repo);
         var caps = capsSvc
-          .GetAll().Select(x => Creator.FromCrm(x))
+          .GetAll()
+          .Select(x => Creator.FromCrm(x))
           .ToList();
 
         Console.WriteLine($"  Standards...");
         var stdsSvc = new StandardsService(_repo);
         var stds = stdsSvc
-          .GetAll().Select(x => Creator.FromCrm(x))
+          .GetAll()
+          .Select(x => Creator.FromCrm(x))
           .ToList();
 
         Console.WriteLine($"  TODO   CapabilityFramework...");
         Console.WriteLine($"  TODO   FrameworkStandard...");
-        Console.WriteLine($"  TODO   CapabilityStandard...");
+
+        Console.WriteLine($"  CapabilityStandard...");
+        var capsStdsSvc = new CapabilitiesStandardService(_repo);
+        var capsStds = capsStdsSvc
+          .GetAll()
+          .Select(x => Creator.FromCrm(x))
+          .ToList();
         #endregion
 
         #region Supplier data
         Console.WriteLine($"  Organisations...");
         var orgsSvc = new OrganisationsService(_repo);
         var orgs = orgsSvc
-          .GetAll().Select(x => Creator.FromCrm(x))
+          .GetAll()
+          .Select(x => Creator.FromCrm(x))
           .ToList();
 
         Console.WriteLine($"  Contacts...");
         var contactsSvc = new ContactsService(_repo);
         var contacts = orgs
           .SelectMany(org => contactsSvc.ByOrganisation(org.Id))
-          .Select(cont => Creator.FromCrm(cont))
+          .Select(x => Creator.FromCrm(x))
           .ToList();
 
         Console.WriteLine($"  Solutions...");
         var solnsSvc = new SolutionsService(_repo);
         var solns = orgs
           .SelectMany(org => solnsSvc.ByOrganisation(org.Id))
-          .Select(cont => Creator.FromCrm(cont))
+          .Select(x => Creator.FromCrm(x))
           .ToList();
 
         Console.WriteLine($"  TechnicalContact...");
         var techContSvc = new TechnicalContactService(_repo);
         var techConts = solns
           .SelectMany(soln => techContSvc.BySolution(soln.Id))
-          .Select(techCont => Creator.FromCrm(techCont))
+          .Select(x => Creator.FromCrm(x))
           .ToList();
 
         Console.WriteLine($"  TODO   FrameworkSolution...");
@@ -115,42 +125,42 @@ namespace Gif.Datastore.Importer
         var claimedCapsSvc = new CapabilitiesImplementedService(_repo);
         var claimedCaps = solns
           .SelectMany(soln => claimedCapsSvc.BySolution(soln.Id))
-          .Select(cont => Creator.FromCrm(cont))
+          .Select(x => Creator.FromCrm(x))
           .ToList();
 
         Console.WriteLine($"  ClaimedStandard...");
         var claimedStdsSvc = new StandardsApplicableService(_repo);
         var claimedStds = solns
           .SelectMany(soln => claimedStdsSvc.BySolution(soln.Id))
-          .Select(cont => Creator.FromCrm(cont))
+          .Select(x => Creator.FromCrm(x))
           .ToList();
 
         Console.WriteLine($"  ClaimedCapabilityEvidence...");
         var claimedCapsEvSvc = new CapabilitiesImplementedEvidenceService(_repo);
         var claimedCapsEv = claimedCaps
           .SelectMany(claim => claimedCapsEvSvc.ByClaim(claim.Id).SelectMany(x => x))
-          .Select(ev => Creator.FromCrm(ev))
+          .Select(x => Creator.FromCrm(x))
           .ToList();
 
         Console.WriteLine($"  ClaimedStandardEvidence...");
         var claimedStdsEvSvc = new StandardsApplicableEvidenceService(_repo);
         var claimedStdsEv = claimedStds
           .SelectMany(claim => claimedStdsEvSvc.ByClaim(claim.Id).SelectMany(x => x))
-          .Select(ev => Creator.FromCrm(ev))
+          .Select(x => Creator.FromCrm(x))
           .ToList();
 
         Console.WriteLine($"  ClaimedCapabilityReview...");
         var claimedCapsRevSvc = new CapabilitiesImplementedReviewsService(_repo);
         var claimedCapsRev = claimedCapsEv
           .SelectMany(ev => claimedCapsRevSvc.ByEvidence(ev.Id).SelectMany(x => x))
-          .Select(rev => Creator.CapabilitiesImplementedReviewsFromCrm(rev))
+          .Select(x => Creator.CapabilitiesImplementedReviewsFromCrm(x))
           .ToList();
 
         Console.WriteLine($"  ClaimedStandardReview...");
         var claimedStdsRevSvc = new StandardsApplicableReviewsService(_repo);
         var claimedStdsRev = claimedStdsEv
           .SelectMany(ev => claimedStdsRevSvc.ByEvidence(ev.Id).SelectMany(x => x))
-          .Select(rev => Creator.StandardsApplicableReviewsFromCrm(rev))
+          .Select(x => Creator.StandardsApplicableReviewsFromCrm(x))
           .ToList();
         #endregion
 
@@ -163,8 +173,9 @@ namespace Gif.Datastore.Importer
           conn.Insert(frameworks, trans);
           conn.Insert(caps, trans);
           conn.Insert(stds, trans);
+          conn.Insert(capsStds, trans);
 
-          // supplier data
+          // Supplier data
           conn.Insert(orgs, trans);
           conn.Insert(contacts, trans);
           conn.Insert(solns, trans);
@@ -181,6 +192,7 @@ namespace Gif.Datastore.Importer
 
           trans.Commit();
         }
+
         Console.WriteLine("Finished!");
       }
     }
