@@ -25,14 +25,14 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       var val = _crmDatastore
         .ById(id);
 
-      return Creator.FromCrm(val);
+      return Converter.FromCrm(val);
     }
 
     protected override IEnumerable<StandardsApplicable> BySolutionInternal(string solutionId)
     {
       var vals = _crmDatastore
         .BySolution(solutionId)
-        .Select(val => Creator.FromCrm(val));
+        .Select(val => Converter.FromCrm(val));
 
       return vals;
     }
@@ -40,19 +40,19 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     protected override StandardsApplicable CreateInternal(StandardsApplicable claim)
     {
       var val = _crmDatastore
-        .Create(Creator.FromApi(claim));
+        .Create(Converter.FromApi(claim));
 
-      return Creator.FromCrm(val);
+      return Converter.FromCrm(val);
     }
 
     protected override void DeleteInternal(StandardsApplicable claim)
     {
-      _crmDatastore.Delete(Creator.FromApi(claim));
+      _crmDatastore.Delete(Converter.FromApi(claim));
     }
 
     protected override void UpdateInternal(StandardsApplicable claim)
     {
-      _crmDatastore.Update(Creator.FromApi(claim));
+      _crmDatastore.Update(Converter.FromApi(claim));
     }
   }
 }

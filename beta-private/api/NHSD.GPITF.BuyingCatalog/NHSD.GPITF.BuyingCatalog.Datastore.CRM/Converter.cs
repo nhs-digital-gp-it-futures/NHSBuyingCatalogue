@@ -7,7 +7,7 @@ using GifModels = Gif.Service.Models;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
 {
-  public static class Creator
+  public static class Converter
   {
     private static TTarget Convert<TSource, TTarget>(TSource source) where TTarget : new()
     {

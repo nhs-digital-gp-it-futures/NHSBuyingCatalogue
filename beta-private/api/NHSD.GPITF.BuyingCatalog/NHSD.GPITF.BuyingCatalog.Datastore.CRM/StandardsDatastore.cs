@@ -29,7 +29,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       {
         var vals = _crmDatastore
           .ByCapability(capabilityId, isOptional)
-          .Select(val => Creator.FromCrm(val));
+          .Select(val => Converter.FromCrm(val));
 
         return vals;
       });
@@ -41,7 +41,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       {
         var vals = _crmDatastore
           .ByFramework(frameworkId)
-          .Select(val => Creator.FromCrm(val));
+          .Select(val => Converter.FromCrm(val));
 
         return vals;
       });
@@ -61,7 +61,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       {
         var vals = _crmDatastore
           .ByIds(ids)
-          .Select(val => Creator.FromCrm(val));
+          .Select(val => Converter.FromCrm(val));
 
         return vals;
       });
@@ -84,7 +84,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       var vals = _crmDatastore
         .GetAll()
-        .Select(val => Creator.FromCrm(val));
+        .Select(val => Converter.FromCrm(val));
 
       return vals;
     }

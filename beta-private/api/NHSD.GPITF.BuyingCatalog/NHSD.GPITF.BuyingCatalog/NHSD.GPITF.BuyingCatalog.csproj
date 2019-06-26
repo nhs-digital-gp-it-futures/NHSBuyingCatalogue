@@ -104,6 +104,7 @@
     <ProjectReference Include="..\Microsoft.SharePoint.Client.NetCore\Microsoft.SharePoint.Client.NetCore.csproj" />
     <ProjectReference Include="..\NHSD.GPITF.BuyingCatalog.Interfaces\NHSD.GPITF.BuyingCatalog.Interfaces.csproj" />
     <ProjectReference Include="..\NHSD.GPITF.BuyingCatalog.Models\NHSD.GPITF.BuyingCatalog.Models.csproj" />
+    <ProjectReference Include="..\NHSD.GPITF.BuyingCatalog.Settings\NHSD.GPITF.BuyingCatalog.Settings.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -27,7 +27,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
         .ByEvidence(evidenceId);
       foreach (var vals in allVals)
       {
-        retval.Add(vals.Select(val => Creator.StandardsApplicableReviewsFromCrm(val)));
+        retval.Add(vals.Select(val => Converter.StandardsApplicableReviewsFromCrm(val)));
       }
 
       return retval;
@@ -38,21 +38,21 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       var val = _crmDatastore
         .ById(id);
 
-      return Creator.StandardsApplicableReviewsFromCrm(val);
+      return Converter.StandardsApplicableReviewsFromCrm(val);
     }
 
     protected override StandardsApplicableReviews CreateInternal(StandardsApplicableReviews review)
     {
       var val = _crmDatastore
-        .Create(Creator.FromApi(review));
+        .Create(Converter.FromApi(review));
 
-      return Creator.StandardsApplicableReviewsFromCrm(val);
+      return Converter.StandardsApplicableReviewsFromCrm(val);
     }
 
     protected override void DeleteInternal(StandardsApplicableReviews review)
     {
       _crmDatastore
-        .Delete(Creator.FromApi(review));
+        .Delete(Converter.FromApi(review));
     }
   }
 }

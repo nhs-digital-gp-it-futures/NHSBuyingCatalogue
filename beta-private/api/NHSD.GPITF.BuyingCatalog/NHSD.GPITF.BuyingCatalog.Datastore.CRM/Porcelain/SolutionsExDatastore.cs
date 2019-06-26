@@ -40,7 +40,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
     {
       GetInternal(() =>
       {
-        _crmDatastore.Update(Creator.FromApi(solnEx));
+        _crmDatastore.Update(Converter.FromApi(solnEx));
         ExpireCache(solnEx);
 
         return 0;
@@ -53,7 +53,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
       {
         var vals = _crmDatastore
           .ByOrganisation(organisationId)
-          .Select(val => Creator.FromCrm(val));
+          .Select(val => Converter.FromCrm(val));
 
         return vals;
       });
@@ -74,7 +74,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM.Porcelain
       var val = _crmDatastore
         .BySolution(solutionId);
 
-      return Creator.FromCrm(val);
+      return Converter.FromCrm(val);
     }
 
     protected override IEnumerable<SolutionEx> GetAllFromSource(string path, string parameter = null)

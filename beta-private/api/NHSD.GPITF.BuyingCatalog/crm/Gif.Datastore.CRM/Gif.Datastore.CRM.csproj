@@ -41,5 +41,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\NHSD.GPITF.BuyingCatalog.Models\NHSD.GPITF.BuyingCatalog.Models.csproj" />
+    <ProjectReference Include="..\..\NHSD.GPITF.BuyingCatalog.Settings\NHSD.GPITF.BuyingCatalog.Settings.csproj" />
   </ItemGroup>
 </Project>

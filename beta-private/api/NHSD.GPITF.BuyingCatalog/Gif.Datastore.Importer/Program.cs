@@ -4,6 +4,7 @@ using Gif.Service.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NHSD.GPITF.BuyingCatalog;
 using NHSD.GPITF.BuyingCatalog.Datastore.CRM;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
@@ -51,7 +52,7 @@ namespace Gif.Datastore.Importer
       using (var conn = dbConnFact.Get())
       {
         Console.WriteLine($"Importing data:");
-        Console.WriteLine($"  from:  {Settings.GIF_CRM_URL(_config)}");
+        Console.WriteLine($"  from:  {NHSD.GPITF.BuyingCatalog.Settings.GIF_CRM_URL(_config)}");
         Console.WriteLine($"  into:  {conn.ConnectionString}");
         Console.WriteLine();
 
@@ -62,21 +63,21 @@ namespace Gif.Datastore.Importer
         var frameworksSvc = new FrameworksService(_repo);
         var frameworks = frameworksSvc
           .GetAll()
-          .Select(x => Creator.FromCrm(x))
+          .Select(x => Converter.FromCrm(x))
           .ToList();
 
         Console.WriteLine($"  Capabilities...");
         var capsSvc = new CapabilitiesService(_repo);
         var caps = capsSvc
           .GetAll()
-          .Select(x => Creator.FromCrm(x))
+          .Select(x => Converter.FromCrm(x))
           .ToList();
 
         Console.WriteLine($"  Standards...");
         var stdsSvc = new StandardsService(_repo);
         var stds = stdsSvc
           .GetAll()
-          .Select(x => Creator.FromCrm(x))
+          .Select(x => Converter.FromCrm(x))
           .ToList();
 
         Console.WriteLine($"  TODO   CapabilityFramework...");
@@ -86,7 +87,7 @@ namespace Gif.Datastore.Importer
         var capsStdsSvc = new CapabilitiesStandardService(_repo);
         var capsStds = capsStdsSvc
           .GetAll()
-          .Select(x => Creator.FromCrm(x))
+          .Select(x => Converter.FromCrm(x))
           .ToList();
         #endregion
 
@@ -95,28 +96,28 @@ namespace Gif.Datastore.Importer
         var orgsSvc = new OrganisationsService(_repo);
         var orgs = orgsSvc
           .GetAll()
-          .Select(x => Creator.FromCrm(x))
+          .Select(x => Converter.FromCrm(x))
           .ToList();
 
         Console.WriteLine($"  Contacts...");
         var contactsSvc = new ContactsService(_repo);
         var contacts = orgs
           .SelectMany(org => contactsSvc.ByOrganisation(org.Id))
-          .Select(x => Creator.FromCrm(x))
+          .Select(x => Converter.FromCrm(x))
           .ToList();
 
         Console.WriteLine($"  Solutions...");
         var solnsSvc = new SolutionsService(_repo);
         var solns = orgs
           .SelectMany(org => solnsSvc.ByOrganisation(org.Id))
-          .Select(x => Creator.FromCrm(x))
+          .Select(x => Converter.FromCrm(x))
           .ToList();
 
         Console.WriteLine($"  TechnicalContact...");
         var techContSvc = new TechnicalContactService(_repo);
         var techConts = solns
           .SelectMany(soln => techContSvc.BySolution(soln.Id))
-          .Select(x => Creator.FromCrm(x))
+          .Select(x => Converter.FromCrm(x))
           .ToList();
 
         Console.WriteLine($"  TODO   FrameworkSolution...");
@@ -125,42 +126,42 @@ namespace Gif.Datastore.Importer
         var claimedCapsSvc = new CapabilitiesImplementedService(_repo);
         var claimedCaps = solns
           .SelectMany(soln => claimedCapsSvc.BySolution(soln.Id))
-          .Select(x => Creator.FromCrm(x))
+          .Select(x => Converter.FromCrm(x))
           .ToList();
 
         Console.WriteLine($"  ClaimedStandard...");
         var claimedStdsSvc = new StandardsApplicableService(_repo);
         var claimedStds = solns
           .SelectMany(soln => claimedStdsSvc.BySolution(soln.Id))
-          .Select(x => Creator.FromCrm(x))
+          .Select(x => Converter.FromCrm(x))
           .ToList();
 
         Console.WriteLine($"  ClaimedCapabilityEvidence...");
         var claimedCapsEvSvc = new CapabilitiesImplementedEvidenceService(_repo);
         var claimedCapsEv = claimedCaps
           .SelectMany(claim => claimedCapsEvSvc.ByClaim(claim.Id).SelectMany(x => x))
-          .Select(x => Creator.FromCrm(x))
+          .Select(x => Converter.FromCrm(x))
           .ToList();
 
         Console.WriteLine($"  ClaimedStandardEvidence...");
         var claimedStdsEvSvc = new StandardsApplicableEvidenceService(_repo);
         var claimedStdsEv = claimedStds
           .SelectMany(claim => claimedStdsEvSvc.ByClaim(claim.Id).SelectMany(x => x))
-          .Select(x => Creator.FromCrm(x))
+          .Select(x => Converter.FromCrm(x))
           .ToList();
 
         Console.WriteLine($"  ClaimedCapabilityReview...");
         var claimedCapsRevSvc = new CapabilitiesImplementedReviewsService(_repo);
         var claimedCapsRev = claimedCapsEv
           .SelectMany(ev => claimedCapsRevSvc.ByEvidence(ev.Id).SelectMany(x => x))
-          .Select(x => Creator.CapabilitiesImplementedReviewsFromCrm(x))
+          .Select(x => Converter.CapabilitiesImplementedReviewsFromCrm(x))
           .ToList();
 
         Console.WriteLine($"  ClaimedStandardReview...");
         var claimedStdsRevSvc = new StandardsApplicableReviewsService(_repo);
         var claimedStdsRev = claimedStdsEv
           .SelectMany(ev => claimedStdsRevSvc.ByEvidence(ev.Id).SelectMany(x => x))
-          .Select(x => Creator.StandardsApplicableReviewsFromCrm(x))
+          .Select(x => Converter.StandardsApplicableReviewsFromCrm(x))
           .ToList();
         #endregion
 

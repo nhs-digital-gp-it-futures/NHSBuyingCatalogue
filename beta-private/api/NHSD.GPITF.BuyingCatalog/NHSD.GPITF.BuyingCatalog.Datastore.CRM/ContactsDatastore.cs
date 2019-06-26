@@ -39,7 +39,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
         var val = _crmDatastore
           .ById(id);
 
-        return Creator.FromCrm(val);
+        return Converter.FromCrm(val);
       });
     }
 
@@ -49,7 +49,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       {
         var vals = _crmDatastore
           .ByOrganisation(organisationId)
-          .Select(val => Creator.FromCrm(val));
+          .Select(val => Converter.FromCrm(val));
 
         return vals;
       });
@@ -67,7 +67,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
         var val = _crmDatastore
           .ByEmail(parameter);
 
-        return Creator.FromCrm(val);
+        return Converter.FromCrm(val);
       }
 
       throw new ArgumentOutOfRangeException($"{nameof(path)}", path, "Unsupported cache path");

@@ -35,7 +35,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       var vals = _crmDatastore
         .GetAll()
-        .Select(val => Creator.FromCrm(val));
+        .Select(val => Converter.FromCrm(val));
 
       return vals;
     }

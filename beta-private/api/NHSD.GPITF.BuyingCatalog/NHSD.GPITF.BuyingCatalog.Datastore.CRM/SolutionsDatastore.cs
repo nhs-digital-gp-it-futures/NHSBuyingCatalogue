@@ -34,7 +34,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       {
         var vals = _crmDatastore
           .ByFramework(frameworkId)
-          .Select(val => Creator.FromCrm(val));
+          .Select(val => Converter.FromCrm(val));
 
         return vals;
       });
@@ -63,10 +63,10 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
         solution.Id = UpdateId(solution.Id);
 
         var val = _crmDatastore
-          .Create(Creator.FromApi(solution));
+          .Create(Converter.FromApi(solution));
         ExpireCache(solution);
 
-        return Creator.FromCrm(val);
+        return Converter.FromCrm(val);
       });
     }
 
@@ -74,7 +74,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       GetInternal(() =>
       {
-        _crmDatastore.Update(Creator.FromApi(solution));
+        _crmDatastore.Update(Converter.FromApi(solution));
         ExpireCache(solution);
 
         return 0;
@@ -85,7 +85,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       GetInternal(() =>
       {
-        _crmDatastore.Delete(Creator.FromApi(solution));
+        _crmDatastore.Delete(Converter.FromApi(solution));
         ExpireCache(solution);
 
         return 0;
@@ -107,14 +107,14 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       var val = _crmDatastore
         .ById(id);
 
-      return Creator.FromCrm(val);
+      return Converter.FromCrm(val);
     }
 
     private IEnumerable<Solutions> GetFromSourceByOrganisation(string organisationId)
     {
       var vals = _crmDatastore
         .ByOrganisation(organisationId)
-        .Select(val => Creator.FromCrm(val));
+        .Select(val => Converter.FromCrm(val));
 
       return vals;
     }

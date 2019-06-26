@@ -1,5 +1,6 @@
 ﻿using IdentityServer4.Models;
 using Microsoft.Extensions.Configuration;
+using NHSD.GPITF.BuyingCatalog;
 using System.Collections.Generic;
 
 namespace Gif.Service

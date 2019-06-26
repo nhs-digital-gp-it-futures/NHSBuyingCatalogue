@@ -27,7 +27,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
         .ByClaim(claimId);
       foreach (var vals in allVals)
       {
-        retval.Add(vals.Select(val => Creator.FromCrm(val)));
+        retval.Add(vals.Select(val => Converter.FromCrm(val)));
       }
 
       return retval;
@@ -38,15 +38,15 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       var val = _crmDatastore
         .ById(id);
 
-      return Creator.FromCrm(val);
+      return Converter.FromCrm(val);
     }
 
     protected override CapabilitiesImplementedEvidence CreateInternal(CapabilitiesImplementedEvidence evidence)
     {
       var val = _crmDatastore
-        .Create(Creator.FromApi(evidence));
+        .Create(Converter.FromApi(evidence));
 
-      return Creator.FromCrm(val);
+      return Converter.FromCrm(val);
     }
   }
 }

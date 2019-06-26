@@ -38,7 +38,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
         var val = _crmDatastore
           .ById(organisationId);
 
-        return Creator.FromCrm(val);
+        return Converter.FromCrm(val);
       });
     }
 
@@ -54,7 +54,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
         var val = _crmDatastore
           .ByContact(parameter);
 
-        var retval = Creator.FromCrm(val);
+        var retval = Converter.FromCrm(val);
 
         // currently not used but required in data model
         retval.Status = "Active";

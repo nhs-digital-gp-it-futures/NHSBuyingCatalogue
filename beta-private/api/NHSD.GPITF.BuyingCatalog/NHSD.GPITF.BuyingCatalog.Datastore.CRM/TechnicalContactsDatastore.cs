@@ -26,7 +26,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       {
         var vals = _crmDatastore
           .BySolution(solutionId)
-          .Select(val => Creator.FromCrm(val));
+          .Select(val => Converter.FromCrm(val));
 
         return vals;
       });
@@ -38,9 +38,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       {
         techCont.Id = UpdateId(techCont.Id);
 
-        var val = _crmDatastore.Create(Creator.FromApi(techCont));
+        var val = _crmDatastore.Create(Converter.FromApi(techCont));
 
-        return Creator.FromCrm(val);
+        return Converter.FromCrm(val);
       });
     }
 
@@ -48,7 +48,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       GetInternal(() =>
       {
-        _crmDatastore.Delete(Creator.FromApi(techCont));
+        _crmDatastore.Delete(Converter.FromApi(techCont));
 
         return 0;
       });
@@ -58,7 +58,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
     {
       GetInternal(() =>
       {
-        _crmDatastore.Update(Creator.FromApi(techCont));
+        _crmDatastore.Update(Converter.FromApi(techCont));
 
         return 0;
       });

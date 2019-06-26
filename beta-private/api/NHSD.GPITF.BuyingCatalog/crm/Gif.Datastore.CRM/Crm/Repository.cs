@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NHSD.GPITF.BuyingCatalog;
 using Samc4.CipherUtil;
 using System;
 using System.Collections.Generic;

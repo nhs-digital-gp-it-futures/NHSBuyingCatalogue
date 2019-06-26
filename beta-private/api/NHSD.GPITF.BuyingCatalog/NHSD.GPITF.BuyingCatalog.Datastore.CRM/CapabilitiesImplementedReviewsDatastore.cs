@@ -27,7 +27,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
         .ByEvidence(evidenceId);
       foreach (var vals in allVals)
       {
-        retval.Add(vals.Select(val => Creator.CapabilitiesImplementedReviewsFromCrm(val)));
+        retval.Add(vals.Select(val => Converter.CapabilitiesImplementedReviewsFromCrm(val)));
       }
 
       return retval;
@@ -38,21 +38,21 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.CRM
       var val = _crmDatastore
         .ById(id);
 
-      return Creator.CapabilitiesImplementedReviewsFromCrm(val);
+      return Converter.CapabilitiesImplementedReviewsFromCrm(val);
     }
 
     protected override CapabilitiesImplementedReviews CreateInternal(CapabilitiesImplementedReviews review)
     {
       var val = _crmDatastore
-        .Create(Creator.FromApi(review));
+        .Create(Converter.FromApi(review));
 
-      return Creator.CapabilitiesImplementedReviewsFromCrm(val);
+      return Converter.CapabilitiesImplementedReviewsFromCrm(val);
     }
 
     protected override void DeleteInternal(CapabilitiesImplementedReviews review)
     {
       _crmDatastore
-        .Delete(Creator.FromApi(review));
+        .Delete(Converter.FromApi(review));
     }
   }
 }
