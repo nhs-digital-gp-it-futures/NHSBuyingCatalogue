@@ -150,7 +150,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
       });
     }
 
-    private static List<T> GetInsertionTree<T>(List<T> allNodes) where T : IHasPreviousId
+    public static List<T> GetInsertionTree<T>(List<T> allNodes) where T : IHasPreviousId
     {
       var roots = GetRoots(allNodes);
       var tree = new List<T>(roots);

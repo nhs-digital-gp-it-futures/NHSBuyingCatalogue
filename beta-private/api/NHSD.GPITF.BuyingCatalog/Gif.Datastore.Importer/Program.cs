@@ -6,7 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.CRM;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database;
+using NHSD.GPITF.BuyingCatalog.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Gif.Datastore.Importer
@@ -152,6 +154,9 @@ namespace Gif.Datastore.Importer
           .ToList();
         #endregion
 
+        Console.WriteLine();
+
+        Console.WriteLine($"Importing data into datastore...");
         using (var trans = conn.BeginTransaction())
         {
           // NHSD data
@@ -168,16 +173,21 @@ namespace Gif.Datastore.Importer
           conn.Insert(claimedCaps, trans);
           conn.Insert(claimedStds, trans);
 
-          conn.Insert(claimedCapsEv, trans);
-          conn.Insert(claimedStdsEv, trans);
+          conn.Insert(GetInsertionTree(claimedCapsEv), trans);
+          conn.Insert(GetInsertionTree(claimedStdsEv), trans);
 
-          conn.Insert(claimedCapsRev, trans);
-          conn.Insert(claimedStdsRev, trans);
+          conn.Insert(GetInsertionTree(claimedCapsRev), trans);
+          conn.Insert(GetInsertionTree(claimedStdsRev), trans);
 
           trans.Commit();
         }
         Console.WriteLine("Finished!");
       }
+    }
+
+    private static List<T> GetInsertionTree<T>(List<T> allNodes) where T : IHasPreviousId
+    {
+      return NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain.SolutionsExDatastore.GetInsertionTree(allNodes);
     }
 
     private void DumpSettings()
