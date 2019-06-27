@@ -1,16 +1,14 @@
-﻿using NHSD.GPITF.BuyingCatalog.Interfaces.Interfaces;
+﻿using Microsoft.Extensions.Configuration;
+using NHSD.GPITF.BuyingCatalog.Interfaces.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Notifiers
 {
-  public sealed class SolutionChangeNotifier : ISolutionsChangeNotifier
+  public sealed class SolutionChangeNotifier :ChangeNotifierBase<Solutions>, ISolutionsChangeNotifier
   {
-    public void Notify(ChangeRecord<Solutions> record)
+    public SolutionChangeNotifier(IConfiguration config) :
+      base(config)
     {
-      throw new NotImplementedException();
     }
   }
 }

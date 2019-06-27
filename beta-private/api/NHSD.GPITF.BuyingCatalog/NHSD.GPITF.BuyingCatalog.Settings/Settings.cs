@@ -42,5 +42,7 @@ namespace NHSD.GPITF.BuyingCatalog
     public static bool SHAREPOINT_PROVIDER_FAKE(IConfiguration config) => SHAREPOINT_PROVIDER_ENV(config) == "test";
 
     public static string CACHE_HOST(IConfiguration config) => Environment.GetEnvironmentVariable("CACHE_HOST") ?? config["Cache:Host"] ?? "localhost";
+
+    public static string AMQP_CONNECTION_STRING(IConfiguration config) => Environment.GetEnvironmentVariable("AMQP_CONNECTION_STRING") ?? config["AMQP:ConnectionString"] ?? "amqp://admin:admin@localhost:5672";
   }
 }
