@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
+using NHSD.GPITF.BuyingCatalog.Interfaces.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     private readonly ISolutionsValidator _validator;
     private readonly ISolutionsFilter _filter;
     private readonly IEvidenceBlobStoreLogic _evidenceBlobStoreLogic;
+    private readonly ISolutionsChangeNotifier _notifier;
 
     public SolutionsLogic(
       ISolutionsModifier modifier,
@@ -22,7 +24,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       IHttpContextAccessor context,
       ISolutionsValidator validator,
       ISolutionsFilter filter,
-      IEvidenceBlobStoreLogic evidenceBlobStoreLogic) :
+      IEvidenceBlobStoreLogic evidenceBlobStoreLogic,
+      ISolutionsChangeNotifier notifier) :
       base(context)
     {
       _modifier = modifier;
@@ -31,6 +34,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _validator = validator;
       _filter = filter;
       _evidenceBlobStoreLogic = evidenceBlobStoreLogic;
+      _notifier = notifier;
     }
 
     public IEnumerable<Solutions> ByFramework(string frameworkId)
@@ -66,6 +70,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       var oldSoln = _datastore.ById(solution.Id);
 
       _datastore.Update(solution);
+
+      var record = new ChangeRecord<Solutions>(Context.Email(), oldSoln, solution);
+      _notifier.Notify(record);
 
       // create SharePoint folder structure
       if (solution.Status == SolutionStatus.Registered)
