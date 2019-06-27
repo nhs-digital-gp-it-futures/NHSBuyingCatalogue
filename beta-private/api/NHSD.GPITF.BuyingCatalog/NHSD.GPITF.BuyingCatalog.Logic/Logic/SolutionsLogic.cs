@@ -63,6 +63,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
       _modifier.ForUpdate(solution);
 
+      var oldSoln = _datastore.ById(solution.Id);
+
       _datastore.Update(solution);
 
       // create SharePoint folder structure
