@@ -9,17 +9,17 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Notifiers
 {
   public abstract class ChangeNotifierBase<T>
   {
-    private readonly string _connectionString;
+    private readonly Address _address;
 
     protected ChangeNotifierBase(IConfiguration config)
     {
-      _connectionString = Settings.AMQP_CONNECTION_STRING(config);
+      var connStr = Settings.AMQP_CONNECTION_STRING(config);
+      _address = new Address(connStr);
     }
 
     public void Notify(ChangeRecord<T> record)
     {
-      var addr = new Address(_connectionString);
-      var connection = new Connection(addr);
+      var connection = new Connection(_address);
       var session = new Session(connection);
       var sender = new SenderLink(session, GetType().Name, $"topic://{typeof(T).Name}");
       var json = JsonConvert.SerializeObject(record);
