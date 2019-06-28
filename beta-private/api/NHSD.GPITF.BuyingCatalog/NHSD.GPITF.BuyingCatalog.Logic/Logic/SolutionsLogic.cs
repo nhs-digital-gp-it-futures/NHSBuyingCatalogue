@@ -71,7 +71,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
       _datastore.Update(solution);
 
-      var record = new ChangeRecord<Solutions>(Context.Email(), oldSoln, solution);
+      var contact = _contacts.ByEmail(Context.Email());
+      var record = new ChangeRecord<Solutions>(contact.Id, oldSoln, solution);
       _notifier.Notify(record);
 
       // TODO   put this into a separate ChangeReceiver

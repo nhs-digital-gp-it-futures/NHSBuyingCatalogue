@@ -4,7 +4,7 @@
   public sealed class ChangeRecord<T>
   {
     /// <summary>
-    /// Email address of person making change
+    /// Unique identifier of Contact making change
     /// </summary>
     public string ModifierId { get; }
 
