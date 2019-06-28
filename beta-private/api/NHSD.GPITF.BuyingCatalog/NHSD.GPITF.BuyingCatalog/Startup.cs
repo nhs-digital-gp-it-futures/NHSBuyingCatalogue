@@ -201,7 +201,11 @@ namespace NHSD.GPITF.BuyingCatalog
 
       if (Settings.USE_AMQP(Configuration))
       {
-        // TODO
+        assyPaths = assyPaths.Where(x => !x.Contains("Null"));
+      }
+      else
+      {
+        assyPaths = assyPaths.Where(x => !x.Contains("AMQP"));
       }
 
       // exclude test assys which are placed here by Docker build
