@@ -64,7 +64,7 @@ LOG_SHAREPOINT | Boolean value to record calls to SharePoint API | `true`, `fals
 LOG_BEARERAUTH | Boolean value to record calls to bearer authentication failures | `true`, `false`
 LOG_CONNECTIONSTRING | .NET database connection string for nLog database target | `Data Source=docker.for.win.localhost;Initial Catalog=BuyingCatalog;User Id=BuyingCatalog;Password=ABCDEFG1234567;`
 USE_AMQP | Boolean value to use AMQP message queue, otherwise use `null` queue | `true`, `false`
-AMQP_CONNECTION_STRING | AMQP database connection string for message queue | `amqp://admin:admin@localhost:5672`
+AMQP_CONNECTION_STRING | AMQP connection string for message queue | `amqp://admin:admin@localhost:5672`
 AMQP_TTL_MINS | How many minutes change notification should remain in queue | `10080` (7 days)
 
 #### Notes
