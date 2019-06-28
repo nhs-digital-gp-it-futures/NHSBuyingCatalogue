@@ -44,5 +44,6 @@ namespace NHSD.GPITF.BuyingCatalog
     public static string CACHE_HOST(IConfiguration config) => Environment.GetEnvironmentVariable("CACHE_HOST") ?? config["Cache:Host"] ?? "localhost";
 
     public static string AMQP_CONNECTION_STRING(IConfiguration config) => Environment.GetEnvironmentVariable("AMQP_CONNECTION_STRING") ?? config["AMQP:ConnectionString"] ?? "amqp://admin:admin@localhost:5672";
+    public static bool USE_AMQP(IConfiguration config) => bool.Parse(Environment.GetEnvironmentVariable("USE_AMQP") ?? config["AMQP:UseAMQP"] ?? false.ToString());
   }
 }

@@ -47,9 +47,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gif.Datastore.CRM", "crm\Gi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gif.Service", "crm\Gif.Service\Gif.Service.csproj", "{C363BDA9-D931-4698-AB56-FCD2E1F6805A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gif.Datastore.Importer", "Gif.Datastore.Importer\Gif.Datastore.Importer.csproj", "{1FD59559-B74C-4D2B-ADF6-0080E5A3329D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gif.Datastore.Importer", "Gif.Datastore.Importer\Gif.Datastore.Importer.csproj", "{1FD59559-B74C-4D2B-ADF6-0080E5A3329D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSD.GPITF.BuyingCatalog.Settings", "NHSD.GPITF.BuyingCatalog.Settings\NHSD.GPITF.BuyingCatalog.Settings.csproj", "{32479C61-833D-4721-89E2-8274F945241E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSD.GPITF.BuyingCatalog.Settings", "NHSD.GPITF.BuyingCatalog.Settings\NHSD.GPITF.BuyingCatalog.Settings.csproj", "{32479C61-833D-4721-89E2-8274F945241E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSD.GPITF.BuyingCatalog.Notifier.AMQP", "NHSD.GPITF.BuyingCatalog.Notifier.AMQP\NHSD.GPITF.BuyingCatalog.Notifier.AMQP.csproj", "{17F8BB73-C072-4F6F-ADCE-968E723238C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSD.GPITF.BuyingCatalog.Notifier.Null", "NHSD.GPITF.BuyingCatalog.Notifier.Null\NHSD.GPITF.BuyingCatalog.Notifier.Null.csproj", "{4399F845-8942-4841-8D76-17F6F99339E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -153,6 +157,14 @@ Global
 		{32479C61-833D-4721-89E2-8274F945241E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32479C61-833D-4721-89E2-8274F945241E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32479C61-833D-4721-89E2-8274F945241E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17F8BB73-C072-4F6F-ADCE-968E723238C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17F8BB73-C072-4F6F-ADCE-968E723238C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17F8BB73-C072-4F6F-ADCE-968E723238C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17F8BB73-C072-4F6F-ADCE-968E723238C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4399F845-8942-4841-8D76-17F6F99339E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4399F845-8942-4841-8D76-17F6F99339E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4399F845-8942-4841-8D76-17F6F99339E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4399F845-8942-4841-8D76-17F6F99339E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

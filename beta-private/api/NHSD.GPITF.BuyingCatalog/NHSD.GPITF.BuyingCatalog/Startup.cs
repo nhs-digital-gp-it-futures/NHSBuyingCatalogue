@@ -199,6 +199,11 @@ namespace NHSD.GPITF.BuyingCatalog
         assyPaths = assyPaths.Where(x => !x.Contains("CRM"));
       }
 
+      if (Settings.USE_AMQP(Configuration))
+      {
+        // TODO
+      }
+
       // exclude test assys which are placed here by Docker build
       assyPaths = assyPaths.Where(x => !x.Contains("Test"));
 
@@ -324,7 +329,8 @@ namespace NHSD.GPITF.BuyingCatalog
       Console.WriteLine($"    CACHE_HOST : {Settings.CACHE_HOST(Configuration)}");
 
       Console.WriteLine($"  AMQP:");
-      Console.WriteLine($"    AMQP_CONNECTION_STRING : {Settings.AMQP_CONNECTION_STRING(Configuration)}");
+      Console.WriteLine($"    USE_AMQP                : {Settings.USE_AMQP(Configuration)}");
+      Console.WriteLine($"    AMQP_CONNECTION_STRING  : {Settings.AMQP_CONNECTION_STRING(Configuration)}");
     }
   }
 }

@@ -22,7 +22,7 @@
     <DocumentationFile>bin\Release\netcoreapp2.1\NHSD.GPITF.BuyingCatalog.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <NoWarn>1701;1702;1705;8002;</NoWarn>
+    <NoWarn>1701;1702;1705;8002;1605;</NoWarn>
   </PropertyGroup>
   
   <ItemGroup>
