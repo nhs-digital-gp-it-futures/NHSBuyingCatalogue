@@ -189,8 +189,7 @@ namespace NHSD.GPITF.BuyingCatalog
       var exeAssyDir = Path.GetDirectoryName(exeAssyPath);
       var assyPaths = Directory.EnumerateFiles(exeAssyDir, "NHSD.*.dll");
 
-      var useCRM = Settings.USE_CRM(Configuration);
-      if (useCRM)
+      if (Settings.USE_CRM(Configuration))
       {
         assyPaths = assyPaths.Where(x => !x.Contains("Database"));
       }
