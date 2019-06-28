@@ -63,6 +63,8 @@ LOG_CRM | Boolean value to record calls to GIF.Service | `true`, `false`
 LOG_SHAREPOINT | Boolean value to record calls to SharePoint API | `true`, `false`
 LOG_BEARERAUTH | Boolean value to record calls to bearer authentication failures | `true`, `false`
 LOG_CONNECTIONSTRING | .NET database connection string for nLog database target | `Data Source=docker.for.win.localhost;Initial Catalog=BuyingCatalog;User Id=BuyingCatalog;Password=ABCDEFG1234567;`
+AMQP_CONNECTION_STRING | AMQP database connection string for message queue | `amqp://admin:admin@localhost:5672`
+USE_AMQP | Boolean value to use AMQP message queue, otherwise use `null` queue | `true`, `false`
 
 #### Notes
 * enable `Development` mode by setting env var:  
