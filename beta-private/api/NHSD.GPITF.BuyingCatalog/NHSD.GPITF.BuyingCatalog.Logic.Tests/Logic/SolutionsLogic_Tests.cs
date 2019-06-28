@@ -168,7 +168,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var logic = Create();
       var soln = Creator.GetSolution();
       var ctx = Creator.GetContext();
+      var contact = Creator.GetContact();
       _context.Setup(c => c.HttpContext).Returns(ctx);
+      _contacts.Setup(c => c.ByEmail(ctx.Email())).Returns(contact);
 
       var valres = new ValidationResult();
       _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
@@ -176,6 +178,80 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       logic.Update(soln);
 
       _modifier.Verify(x => x.ForUpdate(soln), Times.Once);
+    }
+
+    [Test]
+    public void Update_Calls_Notifier_Once()
+    {
+      var logic = Create();
+      var soln = Creator.GetSolution();
+      var ctx = Creator.GetContext();
+      var contact = Creator.GetContact();
+      _context.Setup(c => c.HttpContext).Returns(ctx);
+      _contacts.Setup(c => c.ByEmail(ctx.Email())).Returns(contact);
+
+      var valres = new ValidationResult();
+      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
+
+      logic.Update(soln);
+
+      _notifier.Verify(x => x.Notify(It.IsAny<ChangeRecord<Solutions>>()), Times.Once);
+    }
+
+    [Test]
+    public void Update_Calls_Notifier_With_Contact()
+    {
+      var logic = Create();
+      var soln = Creator.GetSolution();
+      var ctx = Creator.GetContext();
+      var contact = Creator.GetContact();
+      _context.Setup(c => c.HttpContext).Returns(ctx);
+      _contacts.Setup(c => c.ByEmail(ctx.Email())).Returns(contact);
+
+      var valres = new ValidationResult();
+      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
+
+      logic.Update(soln);
+
+      _notifier.Verify(x => x.Notify(It.Is<ChangeRecord<Solutions>>(cr => cr.ModifierId == contact.Id)), Times.Once);
+    }
+
+    [Test]
+    public void Update_Calls_Notifier_With_OldEntity()
+    {
+      var logic = Create();
+      var oldSoln = Creator.GetSolution();
+      var soln = Creator.GetSolution();
+      var ctx = Creator.GetContext();
+      var contact = Creator.GetContact();
+      _context.Setup(c => c.HttpContext).Returns(ctx);
+      _contacts.Setup(c => c.ByEmail(ctx.Email())).Returns(contact);
+      _datastore.Setup(ds => ds.ById(soln.Id)).Returns(oldSoln);
+
+      var valres = new ValidationResult();
+      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
+
+      logic.Update(soln);
+
+      _notifier.Verify(x => x.Notify(It.Is<ChangeRecord<Solutions>>(cr => cr.OldVersion == oldSoln)), Times.Once);
+    }
+
+    [Test]
+    public void Update_Calls_Notifier_With_NewEntity()
+    {
+      var logic = Create();
+      var soln = Creator.GetSolution();
+      var ctx = Creator.GetContext();
+      var contact = Creator.GetContact();
+      _context.Setup(c => c.HttpContext).Returns(ctx);
+      _contacts.Setup(c => c.ByEmail(ctx.Email())).Returns(contact);
+
+      var valres = new ValidationResult();
+      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
+
+      logic.Update(soln);
+
+      _notifier.Verify(x => x.Notify(It.Is<ChangeRecord<Solutions>>(cr => cr.NewVersion == soln)), Times.Once);
     }
 
     private SolutionsLogic Create()
