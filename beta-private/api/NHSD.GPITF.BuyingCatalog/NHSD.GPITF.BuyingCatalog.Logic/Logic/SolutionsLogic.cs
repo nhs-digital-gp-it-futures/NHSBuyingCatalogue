@@ -74,6 +74,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       var record = new ChangeRecord<Solutions>(Context.Email(), oldSoln, solution);
       _notifier.Notify(record);
 
+      // TODO   put this into a separate ChangeReceiver
       // create SharePoint folder structure
       if (solution.Status == SolutionStatus.Registered)
       {
