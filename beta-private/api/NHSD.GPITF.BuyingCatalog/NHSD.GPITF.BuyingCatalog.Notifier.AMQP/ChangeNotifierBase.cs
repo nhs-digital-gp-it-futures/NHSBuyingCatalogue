@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Interfaces;
 using System.Text;
 
-namespace NHSD.GPITF.BuyingCatalog.Logic.Notifiers
+namespace NHSD.GPITF.BuyingCatalog.Notifier.AMQP
 {
   public abstract class ChangeNotifierBase<T>
   {
