@@ -8,8 +8,8 @@ namespace NHSD.GPITF.BuyingCatalog
   {
     public static string CRM_CLIENTID(IConfiguration config) => Environment.GetEnvironmentVariable("CRM_CLIENTID") ?? config["CRM:ClientId"];
     public static string CRM_CLIENTSECRET(IConfiguration config) => Environment.GetEnvironmentVariable("CRM_CLIENTSECRET") ?? config["CRM:ClientSecret"];
-    public static int CRM_CACHE_EXPIRY_MINS(IConfiguration config) => int.Parse(Environment.GetEnvironmentVariable("CRM_CACHE_EXPIRY_MINS") ?? config["CRM:CacheExpiryMins"] ?? (7*24*60).ToString(CultureInfo.InvariantCulture));
-    public static int CRM_SHORT_TERM_CACHE_EXPIRY_SECS(IConfiguration config) => int.Parse(Environment.GetEnvironmentVariable("CRM_SHORT_TERM_CACHE_EXPIRY_SECS") ?? config["CRM:ShortTermCacheExpirySecs"] ?? (10).ToString(CultureInfo.InvariantCulture));
+    public static uint CRM_CACHE_EXPIRY_MINS(IConfiguration config) => uint.Parse(Environment.GetEnvironmentVariable("CRM_CACHE_EXPIRY_MINS") ?? config["CRM:CacheExpiryMins"] ?? (7*24*60).ToString(CultureInfo.InvariantCulture));
+    public static uint CRM_SHORT_TERM_CACHE_EXPIRY_SECS(IConfiguration config) => uint.Parse(Environment.GetEnvironmentVariable("CRM_SHORT_TERM_CACHE_EXPIRY_SECS") ?? config["CRM:ShortTermCacheExpirySecs"] ?? (10).ToString(CultureInfo.InvariantCulture));
 
     public static string GIF_CRM_URL(IConfiguration config) => Environment.GetEnvironmentVariable("GIF_CRM_URL") ?? config["CrmUrl"];
     public static string GIF_CRM_AUTHORITY(IConfiguration config) => Environment.GetEnvironmentVariable("GIF_CRM_AUTHORITY") ?? config["CrmAuthority"];
@@ -44,6 +44,7 @@ namespace NHSD.GPITF.BuyingCatalog
     public static string CACHE_HOST(IConfiguration config) => Environment.GetEnvironmentVariable("CACHE_HOST") ?? config["Cache:Host"] ?? "localhost";
 
     public static string AMQP_CONNECTION_STRING(IConfiguration config) => Environment.GetEnvironmentVariable("AMQP_CONNECTION_STRING") ?? config["AMQP:ConnectionString"] ?? "amqp://admin:admin@localhost:5672";
+    public static uint AMQP_TTL_MINS(IConfiguration config) => uint.Parse(Environment.GetEnvironmentVariable("AMQP_TTL_MINS") ?? config["AMQP:TtlMins"] ?? (7*24*60).ToString(CultureInfo.InvariantCulture));
     public static bool USE_AMQP(IConfiguration config) => bool.Parse(Environment.GetEnvironmentVariable("USE_AMQP") ?? config["AMQP:UseAMQP"] ?? false.ToString());
   }
 }

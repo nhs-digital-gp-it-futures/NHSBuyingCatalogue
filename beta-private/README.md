@@ -56,15 +56,16 @@ CRM_APIURI | URL and port to deployed CRM container API | `http://crm:5001/api/`
 CRM_ACCESSTOKENURI | URL and port to deployed CRM container bearer authentication endpoint | `http://crm:5001/connect/token`
 CRM_CLIENTID | CRM client ID | `ABCDEFG1234567`
 CRM_CLIENTSECRET | CRM client secret | `ABCDEFG1234567`
-CRM_CACHE_EXPIRY_MINS | Cache expiry in minutes for long lived CRM data eg Standards, Capabilities | `1080` (7 days)
+CRM_CACHE_EXPIRY_MINS | Cache expiry in minutes for long lived CRM data eg Standards, Capabilities | `10080` (7 days)
 CRM_SHORT_TERM_CACHE_EXPIRY_SECS| Cache expiry in seconds for very short lived CRM data eg Solutions | `10` (10 seconds)
 USE_CRM | Boolean value to use CRM datastore | `true`, `false`
 LOG_CRM | Boolean value to record calls to GIF.Service | `true`, `false`
 LOG_SHAREPOINT | Boolean value to record calls to SharePoint API | `true`, `false`
 LOG_BEARERAUTH | Boolean value to record calls to bearer authentication failures | `true`, `false`
 LOG_CONNECTIONSTRING | .NET database connection string for nLog database target | `Data Source=docker.for.win.localhost;Initial Catalog=BuyingCatalog;User Id=BuyingCatalog;Password=ABCDEFG1234567;`
-AMQP_CONNECTION_STRING | AMQP database connection string for message queue | `amqp://admin:admin@localhost:5672`
 USE_AMQP | Boolean value to use AMQP message queue, otherwise use `null` queue | `true`, `false`
+AMQP_CONNECTION_STRING | AMQP database connection string for message queue | `amqp://admin:admin@localhost:5672`
+AMQP_TTL_MINS | How many minutes change notification should remain in queue | `10080` (7 days)
 
 #### Notes
 * enable `Development` mode by setting env var:  

@@ -10,11 +10,13 @@ namespace NHSD.GPITF.BuyingCatalog.Notifier.AMQP
   public abstract class ChangeNotifierBase<T>
   {
     private readonly Address _address;
+    private readonly uint _ttlMins;
 
     protected ChangeNotifierBase(IConfiguration config)
     {
       var connStr = Settings.AMQP_CONNECTION_STRING(config);
       _address = new Address(connStr);
+      _ttlMins = Settings.AMQP_TTL_MINS(config);
     }
 
     public void Notify(ChangeRecord<T> record)
@@ -29,6 +31,10 @@ namespace NHSD.GPITF.BuyingCatalog.Notifier.AMQP
       };
       var msg = new Message
       {
+        Header = new Header
+        {
+          Ttl = _ttlMins * 60 * 1000
+        },
         BodySection = data
       };
 

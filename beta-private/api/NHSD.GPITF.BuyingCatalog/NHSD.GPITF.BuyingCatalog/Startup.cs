@@ -335,6 +335,7 @@ namespace NHSD.GPITF.BuyingCatalog
       Console.WriteLine($"  AMQP:");
       Console.WriteLine($"    USE_AMQP                : {Settings.USE_AMQP(Configuration)}");
       Console.WriteLine($"    AMQP_CONNECTION_STRING  : {Settings.AMQP_CONNECTION_STRING(Configuration)}");
+      Console.WriteLine($"    AMQP_TTL_MINS           : {Settings.AMQP_TTL_MINS(Configuration)}");
     }
   }
 }
