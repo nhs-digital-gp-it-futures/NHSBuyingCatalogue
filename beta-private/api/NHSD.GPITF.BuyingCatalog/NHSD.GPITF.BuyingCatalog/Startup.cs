@@ -333,7 +333,11 @@ namespace NHSD.GPITF.BuyingCatalog
 
       Console.WriteLine($"  AMQP:");
       Console.WriteLine($"    USE_AMQP                : {Settings.USE_AMQP(Configuration)}");
-      Console.WriteLine($"    AMQP_CONNECTION_STRING  : {Settings.AMQP_CONNECTION_STRING(Configuration)}");
+      Console.WriteLine($"    AMQP_PROTOCOL           : {Settings.AMQP_PROTOCOL(Configuration)}");
+      Console.WriteLine($"    AMQP_POLICY_NAME        : {Settings.AMQP_POLICY_NAME(Configuration)}");
+      Console.WriteLine($"    AMQP_POLICY_KEY         : {Settings.AMQP_POLICY_KEY(Configuration)}");
+      Console.WriteLine($"    AMQP_NAMESPACE_URL      : {Settings.AMQP_NAMESPACE_URL(Configuration)}");
+      Console.WriteLine($"    AMQP_TOPIC_PREFIX       : {Settings.AMQP_TOPIC_PREFIX(Configuration)}");
       Console.WriteLine($"    AMQP_TTL_MINS           : {Settings.AMQP_TTL_MINS(Configuration)}");
     }
   }

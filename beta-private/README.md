@@ -64,8 +64,12 @@ LOG_SHAREPOINT | Boolean value to record calls to SharePoint API | `true`, `fals
 LOG_BEARERAUTH | Boolean value to record calls to bearer authentication failures | `true`, `false`
 LOG_CONNECTIONSTRING | .NET database connection string for nLog database target | `Data Source=docker.for.win.localhost;Initial Catalog=BuyingCatalog;User Id=BuyingCatalog;Password=ABCDEFG1234567;`
 USE_AMQP | Boolean value to use AMQP message queue, otherwise use `null` queue | `true`, `false`
-AMQP_CONNECTION_STRING | AMQP connection string for message queue | `amqp://admin:admin@localhost:5672`
-AMQP_TTL_MINS | How many minutes change notification should remain in queue | `10080` (7 days)
+AMQP_PROTOCOL | Protocol to use for AMQP server| `amqp` _Apache ActiveMQ_, <br>`amqps` _Azure Service Bus_
+AMQP_POLICY_NAME | Policy name aka user name | `admin`, `BuyingCatalogueSas` <br>_not URL encoded_
+AMQP_POLICY_KEY | Policy key aka password | `admin`, `[Azure policy key]` <br>_not URL encoded_
+AMQP_NAMESPACE_URL | Url of AMQP server | `localhost:5672`, `buyingcatalogue.servicebus.windows.net`
+AMQP_TOPIC_PREFIX | String to prefix topic | `topic://` _Apache ActiveMQ_ <br>`[blank]` _Azure Service Bus_
+AMQP_TTL_MINS | How many minutes change notification should remain in before being automatically removed | `10080` (7 days)
 
 #### Notes
 * enable `Development` mode by setting env var:  

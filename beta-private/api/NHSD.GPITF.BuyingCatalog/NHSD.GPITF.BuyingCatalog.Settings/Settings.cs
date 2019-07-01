@@ -43,8 +43,12 @@ namespace NHSD.GPITF.BuyingCatalog
 
     public static string CACHE_HOST(IConfiguration config) => Environment.GetEnvironmentVariable("CACHE_HOST") ?? config["Cache:Host"] ?? "localhost";
 
-    public static string AMQP_CONNECTION_STRING(IConfiguration config) => Environment.GetEnvironmentVariable("AMQP_CONNECTION_STRING") ?? config["AMQP:ConnectionString"] ?? "amqp://admin:admin@localhost:5672";
-    public static uint AMQP_TTL_MINS(IConfiguration config) => uint.Parse(Environment.GetEnvironmentVariable("AMQP_TTL_MINS") ?? config["AMQP:TtlMins"] ?? (7*24*60).ToString(CultureInfo.InvariantCulture));
     public static bool USE_AMQP(IConfiguration config) => bool.Parse(Environment.GetEnvironmentVariable("USE_AMQP") ?? config["AMQP:UseAMQP"] ?? false.ToString());
+    public static string AMQP_PROTOCOL(IConfiguration config) => Environment.GetEnvironmentVariable("AMQP_PROTOCOL") ?? config["AMQP:Protocol"] ?? "amqp";
+    public static string AMQP_POLICY_NAME(IConfiguration config) => Environment.GetEnvironmentVariable("AMQP_POLICY_NAME") ?? config["AMQP:PolicyName"] ?? "admin";
+    public static string AMQP_POLICY_KEY(IConfiguration config) => Environment.GetEnvironmentVariable("AMQP_POLICY_KEY") ?? config["AMQP:PolicyKey"] ?? "admin";
+    public static string AMQP_NAMESPACE_URL(IConfiguration config) => Environment.GetEnvironmentVariable("AMQP_NAMESPACE_URL") ?? config["AMQP:NamespaceUrl"] ?? "localhost:5672";
+    public static string AMQP_TOPIC_PREFIX(IConfiguration config) => Environment.GetEnvironmentVariable("AMQP_TOPIC_PREFIX") ?? config["AMQP:TopicPrefix"] ?? "topic://";
+    public static uint AMQP_TTL_MINS(IConfiguration config) => uint.Parse(Environment.GetEnvironmentVariable("AMQP_TTL_MINS") ?? config["AMQP:TtlMins"] ?? (7*24*60).ToString(CultureInfo.InvariantCulture));
   }
 }

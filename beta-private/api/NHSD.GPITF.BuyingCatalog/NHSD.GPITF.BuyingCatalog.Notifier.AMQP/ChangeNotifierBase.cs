@@ -11,19 +11,25 @@ namespace NHSD.GPITF.BuyingCatalog.Notifier.AMQP
   {
     private readonly Address _address;
     private readonly uint _ttlMins;
+    private readonly string _topicPrefix;
 
     protected ChangeNotifierBase(IConfiguration config)
     {
-      var connStr = Settings.AMQP_CONNECTION_STRING(config);
+      var protocol = Settings.AMQP_PROTOCOL(config);
+      var policyName = Settings.AMQP_POLICY_NAME(config);
+      var policyKey = Settings.AMQP_POLICY_KEY(config);
+      var namespaceUrl = Settings.AMQP_NAMESPACE_URL(config);
+      var connStr = $"{protocol}://{policyName}:{policyKey}@{namespaceUrl}/";
       _address = new Address(connStr);
       _ttlMins = Settings.AMQP_TTL_MINS(config);
+      _topicPrefix = Settings.AMQP_TOPIC_PREFIX(config);
     }
 
     public void Notify(ChangeRecord<T> record)
     {
       var connection = new Connection(_address);
       var session = new Session(connection);
-      var sender = new SenderLink(session, GetType().Name, $"topic://{typeof(T).Name}");
+      var sender = new SenderLink(session, GetType().Name, $"{_topicPrefix}{typeof(T).Name}");
       var json = JsonConvert.SerializeObject(record);
       var data = new Data
       {
