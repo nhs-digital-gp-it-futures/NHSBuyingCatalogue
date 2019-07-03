@@ -51,9 +51,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gif.Datastore.Importer", "G
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSD.GPITF.BuyingCatalog.Settings", "NHSD.GPITF.BuyingCatalog.Settings\NHSD.GPITF.BuyingCatalog.Settings.csproj", "{32479C61-833D-4721-89E2-8274F945241E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSD.GPITF.BuyingCatalog.Notifier.AMQP", "NHSD.GPITF.BuyingCatalog.Notifier.AMQP\NHSD.GPITF.BuyingCatalog.Notifier.AMQP.csproj", "{17F8BB73-C072-4F6F-ADCE-968E723238C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSD.GPITF.BuyingCatalog.Notifier.AMQP", "NHSD.GPITF.BuyingCatalog.Notifier.AMQP\NHSD.GPITF.BuyingCatalog.Notifier.AMQP.csproj", "{17F8BB73-C072-4F6F-ADCE-968E723238C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSD.GPITF.BuyingCatalog.Notifier.Null", "NHSD.GPITF.BuyingCatalog.Notifier.Null\NHSD.GPITF.BuyingCatalog.Notifier.Null.csproj", "{4399F845-8942-4841-8D76-17F6F99339E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSD.GPITF.BuyingCatalog.Notifier.Null", "NHSD.GPITF.BuyingCatalog.Notifier.Null\NHSD.GPITF.BuyingCatalog.Notifier.Null.csproj", "{4399F845-8942-4841-8D76-17F6F99339E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSD.GPITF.BuyingCatalog.Receiver.AMQP", "NHSD.GPITF.BuyingCatalog.Receiver.AMQP\NHSD.GPITF.BuyingCatalog.Receiver.AMQP.csproj", "{F6B27C58-CCBA-4EDE-9B7E-B769E3BF8FCE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -165,6 +167,10 @@ Global
 		{4399F845-8942-4841-8D76-17F6F99339E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4399F845-8942-4841-8D76-17F6F99339E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4399F845-8942-4841-8D76-17F6F99339E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6B27C58-CCBA-4EDE-9B7E-B769E3BF8FCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6B27C58-CCBA-4EDE-9B7E-B769E3BF8FCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6B27C58-CCBA-4EDE-9B7E-B769E3BF8FCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6B27C58-CCBA-4EDE-9B7E-B769E3BF8FCE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
