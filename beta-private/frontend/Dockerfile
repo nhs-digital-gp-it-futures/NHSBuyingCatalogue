@@ -4,6 +4,7 @@ WORKDIR /home/node/app
 FROM base AS dependencies
 COPY package.json .
 COPY lib ./lib
+RUN npm install -g nodemon
 RUN npm install --verbose
 
 FROM dependencies AS pre-build
