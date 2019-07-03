@@ -15,9 +15,11 @@ namespace BuyingCatalogueTests.Gherkin.Steps
         List<string> errors;
         string[] nameVersion;
 
-        public SpecFlowSteps()
+        ScenarioContext _context;
+
+        public SpecFlowSteps(ScenarioContext context)
         {
-            login = true;
+            this._context = context;
         }
 
         [BeforeScenario]

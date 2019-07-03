@@ -86,9 +86,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\..\..\BuyingCatalogueTests\BuyingCatalogueTests\Gherkin\Steps\StandardsEvidenceSteps.cs">
-      <Link>Gherkin\Steps\StandardsEvidenceSteps.cs</Link>
-    </Compile>
     <Compile Include="Gherkin\Steps\AddCapabilitiesSteps.cs" />
     <Compile Include="Gherkin\Steps\AddSolutionSteps.cs" />
     <Compile Include="Gherkin\Steps\AuthorizationSteps.cs" />
@@ -96,6 +93,7 @@
     <Compile Include="Gherkin\Steps\CommonSteps.cs" />
     <Compile Include="Gherkin\Steps\E2ESteps.cs" />
     <Compile Include="Gherkin\Steps\ExistingSolutionSteps.cs" />
+    <Compile Include="Gherkin\Steps\StandardsEvidenceSteps.cs" />
     <Compile Include="Objects\AddCapabilitiesObjects.cs" />
     <Compile Include="Objects\CapabilitiesEvidenceObjects.cs" />
     <Compile Include="Objects\StandardsEvidenceObjects.cs" />

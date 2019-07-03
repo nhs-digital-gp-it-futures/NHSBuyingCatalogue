@@ -9,19 +9,19 @@ namespace BuyingCatalogueTests.PageActions
 {
     internal class Initialize
     {
-        internal IWebDriver _driver;
+        protected IWebDriver _driver;
 
-        internal Objects.AuthObjects authObjects;
-        internal Objects.HomePageObjects homePageObjects;
-        internal Objects.SolutionsOnboardingObjects onboardingObjects;
-        internal Objects.SolutionBasicDetailsObjects basicDetailsObjects;
-        internal Objects.AddCapabilitiesObjects addCapabilitiesObjects;
-        internal Objects.CapabilitiesEvidenceObjects capEvidenceObjects;
-        internal Objects.StandardsEvidenceObjects standardsEvidenceObjects;
+        protected Objects.AuthObjects authObjects;
+        protected Objects.HomePageObjects homePageObjects;
+        protected Objects.SolutionsOnboardingObjects onboardingObjects;
+        protected Objects.SolutionBasicDetailsObjects basicDetailsObjects;
+        protected Objects.AddCapabilitiesObjects addCapabilitiesObjects;
+        protected Objects.CapabilitiesEvidenceObjects capEvidenceObjects;
+        protected Objects.StandardsEvidenceObjects standardsEvidenceObjects;
 
-        internal Objects.CommonObjects commonObjects;
+        protected Objects.CommonObjects commonObjects;
 
-        internal WebDriverWait _wait;
+        protected WebDriverWait _wait;
 
         public Initialize(IWebDriver driver)
         {

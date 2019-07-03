@@ -7,7 +7,7 @@ namespace BuyingCatalogueTests.Gherkin.Steps
 {
     public sealed partial class SpecFlowSteps
     {
-        readonly List<string> standards = new List<string>();
+        List<string> standards = new List<string>();
 
         [Given(@"The list of capabilities is displayed")]
         public void GivenTheListOfCapabilitiesIsDisplayed()

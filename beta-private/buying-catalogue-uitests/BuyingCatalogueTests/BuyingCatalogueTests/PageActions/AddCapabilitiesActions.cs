@@ -56,7 +56,7 @@ namespace BuyingCatalogueTests.PageActions
             return standards;
         }
 
-        internal List<string> SelectRandomOtherCapability()
+        internal IList<string> SelectRandomOtherCapability()
         {
             int index = new Random().Next(addCapabilitiesObjects.OtherCapabilities.Count);
 
@@ -66,7 +66,9 @@ namespace BuyingCatalogueTests.PageActions
 
             capabilities.Add(capability.FindElement(By.TagName("h3")).Text);
 
-            return capability.FindElements(By.CssSelector("section.standards ul:nth-child(1) li a")).Select(s => s.Text).ToList();
+            var standards = capability.FindElements(By.CssSelector("section.standards ul:nth-of-type(1) li"));
+
+            return standards.Select(x => x.Text).ToList();
         }
 
         internal string GetErrorMessage()
