@@ -64,6 +64,7 @@ LOG_SHAREPOINT | Boolean value to record calls to SharePoint API | `true`, `fals
 LOG_BEARERAUTH | Boolean value to record calls to bearer authentication failures | `true`, `false`
 LOG_CONNECTIONSTRING | .NET database connection string for nLog database target | `Data Source=docker.for.win.localhost;Initial Catalog=BuyingCatalog;User Id=BuyingCatalog;Password=ABCDEFG1234567;`
 USE_AMQP | Boolean value to use AMQP message queue, otherwise use `null` queue | `true`, `false`
+USE_AZURE_SERVICE_BUS | Boolean value to use _Azure Service Bus_, otherwise use _Apache ActiveMQ_ | `true`, `false`
 AMQP_PROTOCOL | Protocol to use for AMQP server| `amqp` _Apache ActiveMQ_, <br>`amqps` _Azure Service Bus_
 AMQP_POLICY_NAME | Policy name aka user name | `admin`, `BuyingCatalogueSas` <br>_not URL encoded_
 AMQP_POLICY_KEY | Policy key aka password | `admin`, `[Azure policy key]` <br>_not URL encoded_

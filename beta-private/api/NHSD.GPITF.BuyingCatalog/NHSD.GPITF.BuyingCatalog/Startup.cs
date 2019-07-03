@@ -333,6 +333,7 @@ namespace NHSD.GPITF.BuyingCatalog
 
       Console.WriteLine($"  AMQP:");
       Console.WriteLine($"    USE_AMQP                : {Settings.USE_AMQP(Configuration)}");
+      Console.WriteLine($"    USE_AZURE_SERVICE_BUS   : {Settings.USE_AZURE_SERVICE_BUS(Configuration)}");
       Console.WriteLine($"    AMQP_PROTOCOL           : {Settings.AMQP_PROTOCOL(Configuration)}");
       Console.WriteLine($"    AMQP_POLICY_NAME        : {Settings.AMQP_POLICY_NAME(Configuration)}");
       Console.WriteLine($"    AMQP_POLICY_KEY         : {Settings.AMQP_POLICY_KEY(Configuration)}");
