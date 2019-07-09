@@ -31,16 +31,17 @@ namespace NHSD.GPITF.BuyingCatalog.Notifier.AMQP
       var session = new Session(connection);
       var sender = new SenderLink(session, GetType().Name, $"{_topicPrefix}{typeof(T).Name}");
       var json = JsonConvert.SerializeObject(record);
+      var header = new Header
+      {
+        Ttl = _ttlMins * 60 * 1000
+      };
       var data = new Data
       {
         Binary = Encoding.UTF8.GetBytes(json)
       };
       var msg = new Message
       {
-        Header = new Header
-        {
-          Ttl = _ttlMins * 60 * 1000
-        },
+        Header = header,
         BodySection = data
       };
 
