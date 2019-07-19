@@ -40,6 +40,7 @@ namespace NHSD.GPITF.BuyingCatalog
     public static string SHAREPOINT_PASSWORD(IConfiguration config) => Environment.GetEnvironmentVariable("SHAREPOINT_PASSWORD") ?? config["SharePoint:Password"];
     public static string SHAREPOINT_PROVIDER_ENV(IConfiguration config) => Environment.GetEnvironmentVariable("SHAREPOINT_PROVIDER_ENV");
     public static bool SHAREPOINT_PROVIDER_FAKE(IConfiguration config) => SHAREPOINT_PROVIDER_ENV(config) == "test";
+    public static string SHAREPOINT_FILE_DOWNLOAD_SERVER_URL(IConfiguration config) => Environment.GetEnvironmentVariable("SHAREPOINT_FILE_DOWNLOAD_SERVER_URL") ?? config["SharePoint:FileDownloadServerUrl"] ?? "http://localhost:9000/";
 
     public static string CACHE_HOST(IConfiguration config) => Environment.GetEnvironmentVariable("CACHE_HOST") ?? config["Cache:Host"] ?? "localhost";
 

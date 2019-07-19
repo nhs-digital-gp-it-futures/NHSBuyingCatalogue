@@ -189,22 +189,14 @@ namespace NHSD.GPITF.BuyingCatalog
       var exeAssyDir = Path.GetDirectoryName(exeAssyPath);
       var assyPaths = Directory.EnumerateFiles(exeAssyDir, "NHSD.*.dll");
 
-      if (Settings.USE_CRM(Configuration))
+      var useCRM = Settings.USE_CRM(Configuration);
+      if (useCRM)
       {
         assyPaths = assyPaths.Where(x => !x.Contains("Database"));
       }
       else
       {
         assyPaths = assyPaths.Where(x => !x.Contains("CRM"));
-      }
-
-      if (Settings.USE_AMQP(Configuration))
-      {
-        assyPaths = assyPaths.Where(x => !x.Contains("Null"));
-      }
-      else
-      {
-        assyPaths = assyPaths.Where(x => !x.Contains("AMQP"));
       }
 
       // exclude test assys which are placed here by Docker build
@@ -327,19 +319,10 @@ namespace NHSD.GPITF.BuyingCatalog
       Console.WriteLine($"    SHAREPOINT_LOGIN                    : {Settings.SHAREPOINT_LOGIN(Configuration)}");
       Console.WriteLine($"    SHAREPOINT_PASSWORD                 : {Settings.SHAREPOINT_PASSWORD(Configuration)}");
       Console.WriteLine($"    SHAREPOINT_PROVIDER_FAKE            : {Settings.SHAREPOINT_PROVIDER_FAKE(Configuration)}");
+      Console.WriteLine($"    SHAREPOINT_FILE_DOWNLOAD_BASE_URL   : {Settings.SHAREPOINT_FILE_DOWNLOAD_SERVER_URL(Configuration)}");
 
       Console.WriteLine($"  CACHE:");
       Console.WriteLine($"    CACHE_HOST : {Settings.CACHE_HOST(Configuration)}");
-
-      Console.WriteLine($"  AMQP:");
-      Console.WriteLine($"    USE_AMQP                : {Settings.USE_AMQP(Configuration)}");
-      Console.WriteLine($"    USE_AZURE_SERVICE_BUS   : {Settings.USE_AZURE_SERVICE_BUS(Configuration)}");
-      Console.WriteLine($"    AMQP_PROTOCOL           : {Settings.AMQP_PROTOCOL(Configuration)}");
-      Console.WriteLine($"    AMQP_POLICY_NAME        : {Settings.AMQP_POLICY_NAME(Configuration)}");
-      Console.WriteLine($"    AMQP_POLICY_KEY         : {Settings.AMQP_POLICY_KEY(Configuration)}");
-      Console.WriteLine($"    AMQP_NAMESPACE_URL      : {Settings.AMQP_NAMESPACE_URL(Configuration)}");
-      Console.WriteLine($"    AMQP_TOPIC_PREFIX       : {Settings.AMQP_TOPIC_PREFIX(Configuration)}");
-      Console.WriteLine($"    AMQP_TTL_MINS           : {Settings.AMQP_TTL_MINS(Configuration)}");
     }
   }
 }
