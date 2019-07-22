@@ -49,11 +49,8 @@ SHAREPOINT_BASEURL | URL to SharePoint document store root | `http://SharePoint.
 SHAREPOINT_ORGANISATIONSRELATIVEURL | SharePoint URL, relative to `SHAREPOINT_BASEURL`, to hold supplier documents | `Shared Documents/Buying Catalog/Supplier`
 SHAREPOINT_CLIENT_ID | SharePoint add-in client ID | `ABCDEFG1234567`
 SHAREPOINT_CLIENT_SECRET | SharePoint add-in client secret | `ABCDEFG1234567`
-SHAREPOINT_LOGIN | SharePoint user account | BuyingCatalog@SharePoint.com
-SHAREPOINT_PASSWORD | Unencrypted SharePoint user password | `ABCDEFG1234567`
 SHAREPOINT_PROVIDER_FAKE | Boolean value to use dummy SharePoint filestore| `true`, `false`
-SHAREPOINT_FILE_DOWNLOAD_BASE_URL | allowed client URLs for (Windows container) server for downloading files from SharePoint | http://*:9000/
-SHAREPOINT_FILE_DOWNLOAD_SERVER_URL | URL of (Windows container) server for downloading files from SharePoint | http://localhost:9000/
+SHAREPOINT_FILE_DOWNLOAD_SERVER_URL | URL of (Windows container) server for downloading files from SharePoint | `https://buyingcatalog.uksouth.logic.azure.com:443/workflows/[magic number]/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=[other magic number]`
 CRM_APIURI | URL and port to deployed CRM container API | `http://crm:5001/api/`
 CRM_ACCESSTOKENURI | URL and port to deployed CRM container bearer authentication endpoint | `http://crm:5001/connect/token`
 CRM_CLIENTID | CRM client ID | `ABCDEFG1234567`

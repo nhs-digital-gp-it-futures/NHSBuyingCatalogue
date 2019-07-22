@@ -41,8 +41,6 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     private readonly string SharePoint_OrganisationsRelativeUrl;
     private readonly string SharePoint_ClientId;
     private readonly string SharePoint_ClientSecret;
-    private readonly string SharePoint_Login;
-    private readonly string SharePoint_Password;
     private readonly string SharePoint_FileDownloadServerUrl;
 
     public EvidenceBlobStoreDatastore(
@@ -78,16 +76,12 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       SharePoint_OrganisationsRelativeUrl = Settings.SHAREPOINT_ORGANISATIONSRELATIVEURL(config);
       SharePoint_ClientId = Settings.SHAREPOINT_CLIENT_ID(config);
       SharePoint_ClientSecret = Settings.SHAREPOINT_CLIENT_SECRET(config);
-      SharePoint_Login = Settings.SHAREPOINT_LOGIN(config);
-      SharePoint_Password = Settings.SHAREPOINT_PASSWORD(config);
       SharePoint_FileDownloadServerUrl = Settings.SHAREPOINT_FILE_DOWNLOAD_SERVER_URL(config);
 
       if (string.IsNullOrWhiteSpace(SharePoint_BaseUrl) ||
         string.IsNullOrWhiteSpace(SharePoint_OrganisationsRelativeUrl) ||
         string.IsNullOrWhiteSpace(SharePoint_ClientId) ||
         string.IsNullOrWhiteSpace(SharePoint_ClientSecret) ||
-        string.IsNullOrWhiteSpace(SharePoint_Login) ||
-        string.IsNullOrWhiteSpace(SharePoint_Password) ||
         string.IsNullOrWhiteSpace(SharePoint_FileDownloadServerUrl))
       {
         throw new ConfigurationErrorsException("Missing SharePoint configuration - check UserSecrets or environment variables");
@@ -473,19 +467,16 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
       {
         LogInformation($"GetFileStream: claimId: {claimId} | uniqueId: {uniqueId}");
 
-        var context = CreateClientContextByUserNamePassword();
+        var context = GetClientContext();
         var file = context.Web.GetFileById(Guid.Parse(uniqueId));
         context.Load(file);
         context.ExecuteQuery();
         LogInformation($"GetFileStream: retrieved info for {file.Name}");
 
         var client = new RestClient(SharePoint_FileDownloadServerUrl);
-        var request = new RestRequest(@"/api/EvidenceBlobStore/Download")
-        {
-          Method = Method.POST
-        };
+        var request = new RestRequest(Method.POST);
         request.AddHeader("Content-Type", "application/json");
-        request.AddJsonBody(file.ServerRelativeUrl);
+        request.AddJsonBody(new { path = file.ServerRelativeUrl });
         byte[] response = client.DownloadData(request);
         var ms = new MemoryStream();
         ms.Write(response, 0, response.Length);
@@ -534,24 +525,6 @@ namespace NHSD.GPITF.BuyingCatalog.EvidenceBlobStore.SharePoint
     private ClientContext CreateClientContext()
     {
       return _authMgr.GetAppOnlyAuthenticatedContext(SharePoint_BaseUrl, SharePoint_ClientId, SharePoint_ClientSecret);
-    }
-
-    private ClientContext CreateClientContextByUserNamePassword()
-    {
-      var securePassword = new SecureString();
-      foreach (char item in SharePoint_Password)
-      {
-        securePassword.AppendChar(item);
-      }
-
-      var encodedUrl = Uri.EscapeUriString(SharePoint_BaseUrl);
-      var onlineCredentials = new SharePointOnlineCredentials(SharePoint_Login, securePassword);
-      var context = new ClientContext(encodedUrl)
-      {
-        Credentials = onlineCredentials
-      };
-
-      return context;
     }
 
     private TOther GetInternal<TOther>(Func<TOther> get)
