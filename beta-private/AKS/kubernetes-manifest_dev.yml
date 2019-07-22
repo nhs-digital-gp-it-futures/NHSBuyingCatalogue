@@ -70,6 +70,11 @@ spec:
             secretKeyRef:
               name: bcspsecret
               key: SHAREPOINT_CLIENT_SECRET
+        - name: SHAREPOINT_FILE_DOWNLOAD_SERVER_URL
+          valueFrom:
+            secretKeyRef:
+              name: bcspsecret
+              key: SHAREPOINT_FILE_DOWNLOAD_SERVER_URL              
         - name: DATASTORE_CONNECTIONTYPE
           value: "SqlServer"
         - name: DATASTORE_CONNECTIONSTRING
