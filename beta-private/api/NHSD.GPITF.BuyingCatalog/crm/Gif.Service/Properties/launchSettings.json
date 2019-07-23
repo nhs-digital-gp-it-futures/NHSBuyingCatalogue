@@ -1,11 +1,9 @@
 {
-  "profiles":
-  {
-    "Gif.Service":
-    {
+  "profiles": {
+    "Gif.Service": {
       "commandName": "Project",
-      "environmentVariables":
-      {
+      "workingDirectory": "C:\\Dev\\NHSBuyingCatalogue\\beta-private\\api\\NHSD.GPITF.BuyingCatalog\\crm\\Gif.Service\\bin\\Debug\\netcoreapp2.1",
+      "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "LOG_CRM": "true"
       }

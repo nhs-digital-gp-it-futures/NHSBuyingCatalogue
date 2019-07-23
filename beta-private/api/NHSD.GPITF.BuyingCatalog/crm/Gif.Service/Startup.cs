@@ -30,20 +30,16 @@ namespace Gif.Service
   /// </summary>
   public class Startup
   {
-    private readonly IHostingEnvironment _hostingEnv;
-
     private IServiceProvider ServiceProvider { get; set; }
     private IConfiguration Configuration { get; set; }
+    private IHostingEnvironment CurrentEnvironment { get; }
 
-    /// <summary>
-    /// Constructor
-    /// </summary>
-    /// <param name="env"></param>
     public Startup(IHostingEnvironment env)
     {
-      _hostingEnv = env;
+      CurrentEnvironment = env;
 
       var builder = new ConfigurationBuilder()
+        .SetBasePath(env.ContentRootPath)
         .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
         .AddJsonFile("hosting.json", optional: true, reloadOnChange: true)
         .AddEnvironmentVariables()
@@ -63,6 +59,7 @@ namespace Gif.Service
     /// <param name="services"></param>
     public void ConfigureServices(IServiceCollection services)
     {
+      #region dependency injection
       services.AddSingleton(sp => Configuration);
       services.AddSingleton<IBasicAuthentication, BasicAuthentication>();
       services.AddSingleton<IRepository, Repository>();
@@ -82,6 +79,7 @@ namespace Gif.Service
       services.AddSingleton<IStandardsApplicableEvidenceDatastore, StandardsApplicableEvidenceService>();
       services.AddSingleton<IStandardsApplicableReviewsDatastore, StandardsApplicableReviewsService>();
       services.AddSingleton<ITechnicalContactsDatastore, TechnicalContactService>();
+      #endregion
 
       // Add framework services.
       services
@@ -98,33 +96,29 @@ namespace Gif.Service
         });
 
 
-      if (_hostingEnv.IsDevelopment())
+      if (CurrentEnvironment.IsDevelopment())
       {
         services
-          .AddSwaggerGen(c =>
+          .AddSwaggerGen(options =>
           {
-            c.SwaggerDoc("v1.0", new Info
-            {
-              Version = "v1.0",
-              Title = "Buying Catalog API",
-              Description = "Buying Catalog API (ASP.NET Core 2.0)",
-              Contact = new Contact()
+            options.SwaggerDoc("v1.0",
+              new Info
               {
-                Name = "Swagger Codegen Contributors",
-                Url = "https://github.com/swagger-api/swagger-codegen",
-                Email = ""
-              },
-              TermsOfService = ""
-            });
-            c.CustomSchemaIds(type => type.FriendlyId(true));
-            c.DescribeAllEnumsAsStrings();
-            c.IncludeXmlComments($"{AppContext.BaseDirectory}{Path.DirectorySeparatorChar}{_hostingEnv.ApplicationName}.xml");
-            // Sets the basePath property in the Swagger document generated
-            c.DocumentFilter<BasePathFilter>("/sie");
+                Title = "Buying Catalog GIF API",
+                Version = "v1.0",
+                Description = "Buying Catalog GIF API (ASP.NET Core 2.0)"
+              });
+
+            options.CustomSchemaIds(type => type.FriendlyId(true));
+
+            // Set the comments path for the Swagger JSON and UI.
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, "NHSD.GPITF.BuyingCatalog.xml");
+            options.IncludeXmlComments(xmlPath);
+            options.DescribeAllEnumsAsStrings();
 
             // Include DataAnnotation attributes on Controller Action parameters as Swagger validation rules (e.g required, pattern, ..)
             // Use [ValidateModelState] on Actions to actually validate it in C# as well!
-            c.OperationFilter<GeneratePathParamsValidationFilter>();
+            options.OperationFilter<GeneratePathParamsValidationFilter>();
           });
       }
 
@@ -165,15 +159,15 @@ namespace Gif.Service
         });
     }
 
-    /// <summary>
-    /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    /// </summary>
-    /// <param name="app"></param>
-    /// <param name="env"></param>
-    /// <param name="loggerFactory"></param>
+    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
     {
       ServiceProvider = app.ApplicationServices;
+
+      if (CurrentEnvironment.IsDevelopment())
+      {
+        app.UseDeveloperExceptionPage();
+      }
 
       app.UseExceptionHandler(options =>
       {
@@ -200,24 +194,18 @@ namespace Gif.Service
 
       if (env.IsDevelopment())
       {
-        app
-        .UseSwagger()
-        .UseSwaggerUI(c =>
+        app.UseSwagger();
+
+        app.UseSwaggerUI(opts =>
         {
-          //TODO: Either use the SwaggerGen generated Swagger contract (generated from C# classes)
-          c.SwaggerEndpoint("/swagger.json", "Buying Catalog API");
+          opts.SwaggerEndpoint("/swagger/v1.0/swagger.json", "Buying Catalog GIF API");
 
-          //TODO: Or alternatively use the original Swagger contract that's included in the static files
-          // c.SwaggerEndpoint("/swagger-original.json", "Buying Catalog API Original");
-
-          c.DocExpansion(DocExpansion.None);
-        })
-        .UseDeveloperExceptionPage();
+          opts.DocExpansion(DocExpansion.None);
+        });
       }
 
-      app
-        .UseStaticFiles()
-        .UseMvc();
+      app.UseStaticFiles();
+      app.UseMvc();
     }
 
     private void DumpSettings()

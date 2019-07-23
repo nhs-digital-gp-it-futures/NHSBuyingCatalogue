@@ -13,15 +13,14 @@ namespace Gif.Service
     {
       try
       {
-        var configuration = new ConfigurationBuilder()
+        var config = new ConfigurationBuilder()
+          .SetBasePath(Directory.GetCurrentDirectory())
           .AddJsonFile("hosting.json")
-          .AddEnvironmentVariables()
           .Build();
 
         var host = new WebHostBuilder()
+          .UseConfiguration(config)
           .UseKestrel()
-          .UseContentRoot(Directory.GetCurrentDirectory())
-          .UseConfiguration(configuration)
           .UseStartup<Startup>()
           .ConfigureLogging(logging =>
           {
