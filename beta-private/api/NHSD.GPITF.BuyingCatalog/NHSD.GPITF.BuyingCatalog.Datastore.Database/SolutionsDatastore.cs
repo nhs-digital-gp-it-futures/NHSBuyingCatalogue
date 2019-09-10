@@ -50,7 +50,8 @@ select * from Solutions where Id not in
 (
   select PreviousId from Solutions where PreviousId is not null
 )
-";        return _dbConnection.Query<Solutions>(sql).Where(soln => soln.OrganisationId == organisationId);
+";
+        return _dbConnection.Query<Solutions>(sql).Where(soln => soln.OrganisationId == organisationId);
       });
     }
 
