@@ -4,7 +4,7 @@ using Gif.Service.Contracts;
 
 namespace Gif.Service.Services.Equality
 {
-    public abstract class EqualityCompareBase<T> : IEqualityComparer<T> where T : IHasId
+    public abstract class EqualityComparatorBase<T> : IEqualityComparer<T> where T : IHasId
     {
 
         public bool Equals(T x, T y)
