@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Gif.Service.Contracts;
 using System.Collections.Generic;
-using Gif.Service.Contracts;
 
 namespace Gif.Service.Services.Equality
 {
-    public abstract class EqualityIdComparatorBase<T> : IEqualityComparer<T> where T : IHasId
+  public class EqualityIdComparatorBase<T> : IEqualityComparer<T> where T : IHasId
     {
 
         public bool Equals(T x, T y)
