@@ -70,7 +70,14 @@ namespace Gif.Service.Models
 
         if (field != null)
         {
-          p.SetValue(this, record[field].ToObject(p.PropertyType));
+          if (((JValue)record[field]).Value == null && p.PropertyType == typeof(DateTime))
+          {
+            p.SetValue(this, DateTime.UnixEpoch);
+          }
+          else
+          {
+            p.SetValue(this, record[field].ToObject(p.PropertyType));
+          }
           continue;
         }
 
