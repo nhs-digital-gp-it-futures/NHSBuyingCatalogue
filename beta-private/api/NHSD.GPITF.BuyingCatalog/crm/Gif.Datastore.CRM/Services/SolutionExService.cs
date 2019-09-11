@@ -139,7 +139,6 @@ namespace Gif.Service.Services
       if (existingSolution != null)
         batchData = ComposeDeleteRequests(existingSolution, solnEx, batchData);
 
-
       // work out new and changed items
       var newChangedClaimedCap = GetNewChangedItems(existingSolution?.ClaimedCapability, solnEx.ClaimedCapability);
       var newChangedClaimedStd = GetNewChangedItems(existingSolution?.ClaimedStandard, solnEx.ClaimedStandard);
@@ -149,14 +148,13 @@ namespace Gif.Service.Services
       var newChangedClaimedStdRev = GetNewChangedItems(existingSolution?.ClaimedStandardReview, solnEx.ClaimedStandardReview);
       var newChangedTechCont = GetNewChangedItems(existingSolution?.TechnicalContact, solnEx.TechnicalContact);
 
+      // Sort Evidence/Reviews in order by previous Id
+      newChangedClaimedCapEv = GetInsertionTree(newChangedClaimedCapEv);
+      newChangedClaimedCapRev = GetInsertionTree(newChangedClaimedCapRev);
+      newChangedClaimedStdEv = GetInsertionTree(newChangedClaimedStdEv);
+      newChangedClaimedStdRev = GetInsertionTree(newChangedClaimedStdRev);
 
-      //Sort Evidence/Reviews in order by previous Id
-      solnEx.ClaimedCapabilityEvidence = GetInsertionTree(solnEx.ClaimedCapabilityEvidence);
-      solnEx.ClaimedCapabilityReview = GetInsertionTree(solnEx.ClaimedCapabilityReview);
-      solnEx.ClaimedStandardEvidence = GetInsertionTree(solnEx.ClaimedStandardEvidence);
-      solnEx.ClaimedStandardReview = GetInsertionTree(solnEx.ClaimedStandardReview);
-
-      foreach (var technicalContact in solnEx.TechnicalContact)
+      foreach (var technicalContact in newChangedTechCont)
       {
         batchData.Add(
           new BatchData
@@ -167,7 +165,7 @@ namespace Gif.Service.Services
           });
       }
 
-      foreach (var standardApplicable in solnEx.ClaimedStandard)
+      foreach (var standardApplicable in newChangedClaimedStd)
       {
         batchData.Add(
           new BatchData
@@ -178,7 +176,7 @@ namespace Gif.Service.Services
           });
       }
 
-      foreach (var capabilityImplemented in solnEx.ClaimedCapability)
+      foreach (var capabilityImplemented in newChangedClaimedCap)
       {
         batchData.Add(
           new BatchData
@@ -189,7 +187,7 @@ namespace Gif.Service.Services
           });
       }
 
-      foreach (var standardEvidence in solnEx.ClaimedStandardEvidence)
+      foreach (var standardEvidence in newChangedClaimedStdEv)
       {
         batchData.Add(
           new BatchData
@@ -200,7 +198,7 @@ namespace Gif.Service.Services
           });
       }
 
-      foreach (var capabilityEvidence in solnEx.ClaimedCapabilityEvidence)
+      foreach (var capabilityEvidence in newChangedClaimedCapEv)
       {
         batchData.Add(
           new BatchData
@@ -211,7 +209,7 @@ namespace Gif.Service.Services
           });
       }
 
-      foreach (var standardReview in solnEx.ClaimedStandardReview)
+      foreach (var standardReview in newChangedClaimedStdRev)
       {
         batchData.Add(
           new BatchData
@@ -222,7 +220,7 @@ namespace Gif.Service.Services
           });
       }
 
-      foreach (var capabilityReview in solnEx.ClaimedCapabilityReview)
+      foreach (var capabilityReview in newChangedClaimedCapRev)
       {
         batchData.Add(
           new BatchData
