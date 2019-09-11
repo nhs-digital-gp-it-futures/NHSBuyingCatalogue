@@ -274,15 +274,9 @@ namespace Gif.Service.Services
 
     private List<BatchData> ComposeDeleteRequests(SolutionEx existingSolution, SolutionEx updatedSolution, List<BatchData> batchData)
     {
-      var claimedCapabilityComparator = new ClaimedCapabilityIdComparator();
-      var claimedStandardComparator = new ClaimedStandardIdComparator();
-      var techContactComparator = new TechnicalContactIdComparator();
-
-      var claimedCapabilityDeletes =
-          existingSolution.ClaimedCapability.Except(updatedSolution.ClaimedCapability, claimedCapabilityComparator);
-      var claimedStandardDeletes =
-          existingSolution.ClaimedStandard.Except(updatedSolution.ClaimedStandard, claimedStandardComparator);
-      var technicalContactDeletes = existingSolution.TechnicalContact.Except(updatedSolution.TechnicalContact, techContactComparator);
+      var claimedCapabilityDeletes = existingSolution.ClaimedCapability.Except(updatedSolution.ClaimedCapability, new ClaimedCapabilityIdComparator());
+      var claimedStandardDeletes = existingSolution.ClaimedStandard.Except(updatedSolution.ClaimedStandard, new ClaimedStandardIdComparator());
+      var technicalContactDeletes = existingSolution.TechnicalContact.Except(updatedSolution.TechnicalContact, new TechnicalContactIdComparator());
 
       batchData.AddRange(claimedCapabilityDeletes.Select(claimedCapability => new BatchData { Id = claimedCapability.Id, Name = claimedCapability.EntityName, Type = BatchTypeEnum.Delete, EntityData = "{}" }));
       batchData.AddRange(claimedStandardDeletes.Select(claimedStandard => new BatchData { Id = claimedStandard.Id, Name = claimedStandard.EntityName, Type = BatchTypeEnum.Delete, EntityData = "{}" }));
@@ -291,7 +285,7 @@ namespace Gif.Service.Services
       return batchData;
     }
 
-    private IEnumerable<T> GetNewChangedItems<T>(IEnumerable<T> existingItems, IEnumerable<T> proposedItems) where T : IHasId
+    private List<T> GetNewChangedItems<T>(List<T> existingItems, List<T> proposedItems) where T : IHasId
     {
       if (existingItems == null)
       {
@@ -309,7 +303,7 @@ namespace Gif.Service.Services
       var newItems = proposedItems.Except(existingItems, new EqualityIdComparatorBase<T>());
       var newChangedItems = changedItems.Union(newItems);
 
-      return newChangedItems;
+      return newChangedItems.ToList();
     }
   }
 
