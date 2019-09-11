@@ -29,7 +29,7 @@ namespace Gif.Datastore.CRM.Services.Equality
       var dateProps = obj
         .GetType()
         .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-        .Where(prop => prop.PropertyType == typeof(DateTime))
+        .Where(prop => prop.PropertyType == typeof(DateTime) || prop.PropertyType == typeof(DateTime?))
         .ToList();
       var jobj = JObject.FromObject(obj);
       dateProps.ForEach(dt => jobj.Remove(dt.Name));
