@@ -1,4 +1,5 @@
 ﻿#pragma warning disable 1591
+using Gif.Datastore.CRM.Services.Equality;
 using Gif.Service.Attributes;
 using Gif.Service.Const;
 using Gif.Service.Contracts;
@@ -138,6 +139,17 @@ namespace Gif.Service.Services
       if (existingSolution != null)
         batchData = ComposeDeleteRequests(existingSolution, solnEx, batchData);
 
+
+      // work out new and changed items
+      var newChangedClaimedCap = GetNewChangedItems(existingSolution?.ClaimedCapability, solnEx.ClaimedCapability);
+      var newChangedClaimedStd = GetNewChangedItems(existingSolution?.ClaimedStandard, solnEx.ClaimedStandard);
+      var newChangedClaimedCapEv = GetNewChangedItems(existingSolution?.ClaimedCapabilityEvidence, solnEx.ClaimedCapabilityEvidence);
+      var newChangedClaimedStdEv = GetNewChangedItems(existingSolution?.ClaimedStandardEvidence, solnEx.ClaimedStandardEvidence);
+      var newChangedClaimedCapRev = GetNewChangedItems(existingSolution?.ClaimedCapabilityReview, solnEx.ClaimedCapabilityReview);
+      var newChangedClaimedStdRev = GetNewChangedItems(existingSolution?.ClaimedStandardReview, solnEx.ClaimedStandardReview);
+      var newChangedTechCont = GetNewChangedItems(existingSolution?.TechnicalContact, solnEx.TechnicalContact);
+
+
       //Sort Evidence/Reviews in order by previous Id
       solnEx.ClaimedCapabilityEvidence = GetInsertionTree(solnEx.ClaimedCapabilityEvidence);
       solnEx.ClaimedCapabilityReview = GetInsertionTree(solnEx.ClaimedCapabilityReview);
@@ -262,9 +274,9 @@ namespace Gif.Service.Services
 
     private List<BatchData> ComposeDeleteRequests(SolutionEx existingSolution, SolutionEx updatedSolution, List<BatchData> batchData)
     {
-      var claimedCapabilityComparator = new ClaimedCapabilityComparator();
-      var claimedStandardComparator = new ClaimedStandardComparator();
-      var techContactComparator = new TechnicalContactComparator();
+      var claimedCapabilityComparator = new ClaimedCapabilityIdComparator();
+      var claimedStandardComparator = new ClaimedStandardIdComparator();
+      var techContactComparator = new TechnicalContactIdComparator();
 
       var claimedCapabilityDeletes =
           existingSolution.ClaimedCapability.Except(updatedSolution.ClaimedCapability, claimedCapabilityComparator);
@@ -277,6 +289,27 @@ namespace Gif.Service.Services
       batchData.AddRange(technicalContactDeletes.Select(technicalContact => new BatchData { Id = technicalContact.Id, Name = technicalContact.EntityName, Type = BatchTypeEnum.Delete, EntityData = "{}" }));
 
       return batchData;
+    }
+
+    private IEnumerable<T> GetNewChangedItems<T>(IEnumerable<T> existingItems, IEnumerable<T> proposedItems) where T : IHasId
+    {
+      if (existingItems == null)
+      {
+        // new insertion
+        return proposedItems;
+      }
+
+      var commonItemIds = proposedItems
+        .Intersect(existingItems, new EqualityIdComparatorBase<T>())
+        .Select(x => x.Id);
+      var existCommonItems = existingItems.Where(x => commonItemIds.Contains(x.Id));
+      var propCommonItems = proposedItems.Where(x => commonItemIds.Contains(x.Id));
+      var comparer = new EqualityComparerBase<T>();
+      var changedItems = propCommonItems.Where(x => !comparer.Equals(x, existCommonItems.Single(eci => eci.Id == x.Id)));
+      var newItems = proposedItems.Except(existingItems, new EqualityIdComparatorBase<T>());
+      var newChangedItems = changedItems.Union(newItems);
+
+      return newChangedItems;
     }
   }
 
